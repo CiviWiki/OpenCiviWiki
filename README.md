@@ -12,28 +12,27 @@ Why CiviWiki?
 For Developers.
 ---------------
 
-**Setup**: *Setup requires certain environment variables on your machine to be set in order for the application to access secret values, these values are listed below.*
+**Setup**: _Setup requires certain environment variables on your machine to be set in order for the application to access secret values, these values are listed below._
 * Clone or Fork our repository.
 * Create a [virtual environment](http://docs.python-guide.org/en/latest/dev/virtualenvs/).
 * `pip install -r requirements.txt`.
-* `python civiwiki/manage.py runserver --settings=civiwiki.settings.local`
-*to run the application with your local database credentials*
-* `python civiwiki/manage.py runserver --settings=civiwiki.settings.dev` *to run the application on a development server you have hosted*
-* `python civiwiwiki/manage.py runserver --settings=civiwiki.settings.production` *to run the application on a production server. **Warning: Debug is set to false**.*
+* `python civiwiki/manage.py runserver --settings=civiwiki.settings.local` _to run the application with your local database credentials_
+* `python civiwiki/manage.py runserver --settings=civiwiki.settings.dev` _to run the application on a development server you have hosted_
+* `python civiwiwiki/manage.py runserver --settings=civiwiki.settings.production` _to run the application on a production server. **Warning: Debug is set to false**._
 
-***Below is a list of enviornment variables expected to be present when you run your server.** The application does not manage how you keep track of these variables ( a recommended [solution](http://stackoverflow.com/a/11134336) ) and only checks for variables that are needed at the time. So production enviornment variables do not need to be present if running locally for example.*
-* DJANGO_SECRET_KEY: ***This value must be in the list of enviornment variables.** Information on the Django Secret Key can be found [here](https://docs.djangoproject.com/en/1.8/ref/settings/#secret-key), information on generating a key can be found in this StackOverflow [post](http://stackoverflow.com/questions/4664724/distributing-django-projects-with-unique-secret-keys/16630719#16630719).*
-* CIVIWIKI_LOCAL_NAME: *name of database to be used when searching your localhost databases*
-* CIVIWIKI_LOCAL_USERNAME: *username the application should use to access your localhost database*
-* CIVWIKI_LOCAL_PASSWORD: *password the user needs to log into your localhost database*
-* CIVIWIKI_DEV_HOST: *address where development database is hosted*
-* CIVIWIKI_DEV_PORT: *port number to access database to (5432 if unsure)*
-* CIVIWIKI_DEV_NAME: *name of database to be used when accessing databases on your server*
-* CIVIWIKI_DEV_ENGINE: *set to **'django.db.backends.postgresql_psycopg2'**.*
-* CIVIWKIKI_DEV_USERNAME: *username that application should use to access your localhost database*
-* CIVIWIKI_DEV_PASSWORD: *password the user needs to log into your localhost database*
+_**Below is a list of enviornment variables expected to be present when you run your server.** The application does not manage how you keep track of these variables ( a recommended [solution](http://stackoverflow.com/a/11134336) ) and only checks for variables that are needed at the time. So production enviornment variables do not need to be present if running locally for example._
+* DJANGO_SECRET_KEY: _**This value must be in the list of enviornment variables.** Information on the Django Secret Key can be found [here](https://docs.djangoproject.com/en/1.8/ref/settings/#secret-key), information on generating a key can be found in this StackOverflow [post](http://stackoverflow.com/questions/4664724/distributing-django-projects-with-unique-secret-keys/16630719#16630719)._
+* CIVIWIKI_LOCAL_NAME: _name of database to be used when searching your localhost databases_
+* CIVIWIKI_LOCAL_USERNAME: _username the application should use to access your localhost database_
+* CIVWIKI_LOCAL_PASSWORD: _password the user needs to log into your localhost database_
+* CIVIWIKI_DEV_HOST: _address where development database is hosted_
+* CIVIWIKI_DEV_PORT: _port number to access database to (5432 if unsure)_
+* CIVIWIKI_DEV_NAME: _name of database to be used when accessing databases on your server_
+* CIVIWIKI_DEV_ENGINE: _set to **django.db.backends.postgresql_psycopg2**._
+* CIVIWKIKI_DEV_USERNAME: _username that application should use to access your localhost database_
+* CIVIWIKI_DEV_PASSWORD: _password the user needs to log into your localhost database_
 
-*Production settings are configured to be run on an Amazon AWS Instance connecting to their RDS services.*
+_Production settings are configured to be run on an Amazon AWS Instance connecting to their RDS services._
 
 
 
