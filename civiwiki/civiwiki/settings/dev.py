@@ -9,7 +9,7 @@ variables set.
 import os
 from django.core.exceptions import ImproperlyConfigured
 
-def get_env_variable(environment_variable, optional):
+def get_env_variable(environment_variable, optional=False):
     """Get the environment variable or return exception"""
     try:
         return os.environ[environment_variable]
