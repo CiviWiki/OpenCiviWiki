@@ -1,0 +1,94 @@
+<!doctype html>
+
+<head>
+    {% load staticfiles %}
+    <link type="text/css" rel="stylesheet/less" href="{% static "less/add_civi.less" %}"/>
+
+    {% include "basics/links.html" %}
+
+    <title>CiviWiki</title>
+</head>
+
+<script>
+    var categoriesCollection = new Backbone.Collection({{categories|safe}}),
+        topicsCollection = new Backbone.Collection({{topics|safe}});
+</script>
+
+<script id="add-civi-template" type="text/template">
+
+        {% include "basics/nav.html" %}
+
+        <div class="container">
+            <div>
+                <div class="row">
+                    <div class="page-header">
+                        <h5>
+                            Add a New Civi
+                        </h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <form class="col s12">
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <input placeholder="Title" id="title" type="text" class="validate title">
+                                <label for="title">Title</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label>Category</label>
+                            <select class="browser-default category">
+                                <option value="" disabled selected>Category</option>
+                                <% _.each(categories, function(category) { %>
+                                    <option value="<%= category.id %>"><%- category.name %></option>
+                                <% }); %>
+                            </select>
+                        </div>
+                        <div class="row">
+                            <label>Topic</label>
+                            <select class="browser-default topic">
+                                <option value="" disabled selected>Topic</option>
+                                <% _.each(topics, function(topic) { %>
+                                    <option value="<%= topic.id %>"><%- topic.topic %></option>
+                                <% }); %>
+                            </select>
+                        </div>
+                        <div class="row">
+                            <label>Issue, Cause, or Solution</label>
+                            <select class="browser-default ics">
+                                <option value="" disabled selected>I, C, S</option>
+                                <option value="I">Issue</option>
+                                <option value="C">Cause</option>
+                                <option value="S">Solution</option>
+                            </select>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <textarea id="body" class="materialize-textarea validate body" length="120"></textarea>
+                                <label for="body">Body</label>
+                            </div>
+                        </div>
+                        <a class="waves-effect waves-light btn submit-civi">Submit</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+</script>
+
+<body>
+    <div id="add-civi">
+
+    </div>
+</body>
+
+<!-- Backbone Views File -->
+<script src="/static/views/add_civi_view.js" type="text/javascript"></script>
+
+<script>
+    var addCiviView = new AddCiviView({
+        categories: categoriesCollection,
+        topics: topicsCollection
+    });
+</script>
+</html>

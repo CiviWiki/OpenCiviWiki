@@ -1,0 +1,88 @@
+<!doctype html>
+
+<head>
+    {% load staticfiles %}
+    <script type="text/javascript" src="{% static "js/jquery-2.1.4.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/underscore.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/backbone-min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/materialize.min.js" %}"></script>
+    <link type="text/css" rel="stylesheet" href="{% static "css/materialize.min.css" %}">
+    <link type="text/css" rel="stylesheet/less" href="{% static "less/basic_classes.less" %}"/>
+    <link type="text/css" rel="stylesheet/less" href="{% static "less/dbview.less" %}"/>
+    <script src="{% static "js/less.min.js" type="text/javascript" %}"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <title>CiviWiki</title>
+</head>
+
+<script>
+    var categoriesCollection = new Backbone.Collection({{result|safe}});
+</script>
+
+<script id="categories-template" type="text/template">
+    <div class="db-list purple-right-border">
+        <% _.each(categories, function(cat) { %>
+            <div class="db-list-item purple-text valign-wrapper categories-item" data-id="<%= cat.id %>">
+                <h6 class="valign"><%- cat.name %></h6>
+            </div>
+        <% }); %>
+    </div>
+</script>
+
+<script id="topics-template" type="text/template">
+    <div class="db-list blue-right-border">
+        <% _.each(topics, function(topic) { %>
+            <div class="db-list-item blue-text valign-wrapper topics-item" data-id="<%= topic.id %>">
+                <h6 class="valign"><%- topic.topic %></h6>
+            </div>
+        <% }); %>
+    </div>
+</script>
+
+<script id="issues-template" type="text/template">
+    <div class="col s6 db-list issues-list">
+        <% _.each(issues, function(issue) { %>
+            <div class="issues-item" data-id="<%= issue.id %>">
+                <h6 class="orange-text"><%- issue.title %></h6>
+                <p class="gray-text"><%- issue.shortened %></p>
+            </div>
+        <% }); %>
+    </div>
+    <div class="col s6 db-list issues-list">
+        <% _.each(issuesSecond, function(issue) { %>
+            <div class="issues-item" data-id="<%= issue.id %>">
+                <h6 class="orange-text"><%- issue.title %></h6>
+                <p class="gray-text"><%- issue.shortened %></p>
+            </div>
+        <% }); %>
+    </div>
+</script>
+
+<body>
+    <div class="row no-margins">
+        <div id="dbview">
+            <div class="col s3 categories-holder no-padding">
+
+            </div>
+            <div class="col s3 topics-holder no-padding">
+
+            </div>
+            <div class="col s6 issues-holder no-padding">
+
+            </div>
+        </div>
+    </div>
+</body>
+
+<!-- Backbone Views File -->
+<script src="/static/models/civiModel.js" type="text/javascript"></script>
+<script src="/static/collections/civiCollection.js" type="text/javascript"></script>
+<script src="/static/views/dbView.js" type="text/javascript"></script>
+
+<script>
+    var databaseView = new DatabaseView({
+        categories: categoriesCollection
+    });
+</script>
+
+</html>

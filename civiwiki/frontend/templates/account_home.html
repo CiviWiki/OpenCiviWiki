@@ -1,0 +1,76 @@
+<!doctype html>
+
+<head>
+    {% load staticfiles %}
+    <link type="text/css" rel="stylesheet/less" href="{% static "less/account_base.less" %}"/>
+
+    {% include "basics/links.html" %}
+
+    <title>CiviWiki</title>
+</head>
+
+<script id="base-template" type="text/template">
+    {% include "basics/nav.html" %}
+    <div class="base-template-inner">
+        <div class="row">
+            <div class="col s3">
+                <div class="center-align">
+                    <span class="user-name">
+                        <%- user.first_name %> <%- user.last_name %>
+                    </span>
+                </div>
+                <div class="center-align">
+                    <img class="user-profile-pic" src="<%= user.profile_image %>">
+                </div>
+                <div class="center-align">
+                    <span class="user-description">
+                        A little about me...
+                        <!-- <%- user.description %> -->
+                    </span>
+                </div>
+            </div>
+            <div class="col s9">
+                <ul class="tabs purple-text">
+                    <li class="tab col s3"><a class="active purple-text" href="#following">Following</a></li>
+                    <li class="tab col s3"><a class="purple-text" href="#friends">Friends</a></li>
+                    <li class="tab col s3"><a class="purple-text" href="#interests">Interests</a></li>
+                    <li class="tab col s3"><a class="purple-text" href="#groups">Groups</a></li>
+                    <li class="tab col s3"><a class="purple-text" href="#user_data">Your Account</a></li>
+                    <div class="indicator purple-background" style="z-index:1"></div>
+                </ul>
+            </div>
+            <div id="following" class="col s9">
+
+            </div>
+            <div id="friends" class="col s9">
+
+            </div>
+            <div id="interests" class="col s9">
+
+            </div>
+            <div id="groups" class="col s9">
+
+            </div>
+            <div id="user_data" class="col s9">
+
+            </div>
+        </div>
+    </div>
+</script>
+
+<body>
+    <div id="account-base">
+    </div>
+</body>
+
+<!-- Backbone Views File -->
+<script src="/static/views/account_base_view.js" type="text/javascript"></script>
+
+<script>
+    var userModel = new Backbone.Model({{result|safe}});
+    var accountBaseView = new AccountBaseView({
+        userModel: userModel
+    });
+</script>
+
+</html>
