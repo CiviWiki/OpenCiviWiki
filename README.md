@@ -16,9 +16,10 @@ For Developers.
 * Clone or Fork our repository.
 * Create a [virtual environment](http://docs.python-guide.org/en/latest/dev/virtualenvs/).
 * `pip install -r requirements.txt`.
-* `python civiwiki/manage.py runserver --settings=civiwiki.settings.local` _to run the application with your local database credentials_
-* `python civiwiki/manage.py runserver --settings=civiwiki.settings.dev` _to run the application on a development server you have hosted_
-* `python civiwiwiki/manage.py runserver --settings=civiwiki.settings.production` _to run the application on a production server._ **WARNING: Debug is False**.
+* It is required when running `python manage.py <function>` that you explicitly state what settings module you are using.
+  * Use `--settings=civiwiki.settings.local` to run the application with your local database credentials.
+  * Use `--settings=civiwiki.settings.dev` to run the application on a development server you have hosted.
+  * Use `--settings=civiwiki.settings.production` to run the application on a production server. **WARNING: Debug is False**.
 
 **Below is a list of environment variables expected to be present when you run your server.** The application does not manage how you keep track of these variables ( a recommended [solution](http://stackoverflow.com/a/11134336) ) and only checks for variables that are needed at the time. For example, production database environment variables do not need to be present if developing locally.
 * **DJANGO_SECRET_KEY**: _This value **must** be in the list of environment variables._ Information on the Django Secret Key can be found [here](https://docs.djangoproject.com/en/1.8/ref/settings/#secret-key), information on generating a key can be found in this StackOverflow [post](http://stackoverflow.com/questions/4664724/distributing-django-projects-with-unique-secret-keys/16630719#16630719).
