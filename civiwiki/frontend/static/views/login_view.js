@@ -40,7 +40,7 @@ var LoginView = Backbone.View.extend({
 
             $.ajax({
                 type: 'POST',
-                url: 'api/login',
+                url: 'auth/login',
                 data: {
                     username: username,
                     password: password
@@ -49,7 +49,7 @@ var LoginView = Backbone.View.extend({
                       window.location.href = _this.findURLParameter('next');
                 },
                 error: function (data) {
-                  
+
                   if (data.status === 400) {
                       Materialize.toast(data.statusText, 2000);
                   } else if(data.status === 500 && data.statusText == "inactive account"){
@@ -95,7 +95,7 @@ var LoginView = Backbone.View.extend({
 
             $.ajax({
                 type: 'POST',
-                url: 'api/register',
+                url: 'auth/register',
                 data: {
                     email: email,
                     username: username,
