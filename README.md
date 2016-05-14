@@ -20,8 +20,8 @@ For Developers.
 * `python civiwiki/manage.py runserver --settings=civiwiki.settings.dev` _to run the application on a development server you have hosted_
 * `python civiwiwiki/manage.py runserver --settings=civiwiki.settings.production` _to run the application on a production server. **Warning: Debug is set to false**._
 
-_**Below is a list of enviornment variables expected to be present when you run your server.** The application does not manage how you keep track of these variables ( a recommended [solution](http://stackoverflow.com/a/11134336) ) and only checks for variables that are needed at the time. So production enviornment variables do not need to be present if running locally for example._
-* DJANGO_SECRET_KEY: _**This value must be in the list of enviornment variables.** Information on the Django Secret Key can be found [here](https://docs.djangoproject.com/en/1.8/ref/settings/#secret-key), information on generating a key can be found in this StackOverflow [post](http://stackoverflow.com/questions/4664724/distributing-django-projects-with-unique-secret-keys/16630719#16630719)._
+_**Below is a list of environment variables expected to be present when you run your server.** The application does not manage how you keep track of these variables ( a recommended [solution](http://stackoverflow.com/a/11134336) ) and only checks for variables that are needed at the time. So production environment variables do not need to be present if running locally for example._
+* DJANGO_SECRET_KEY: _**This value must be in the list of environment variables.** Information on the Django Secret Key can be found [here](https://docs.djangoproject.com/en/1.8/ref/settings/#secret-key), information on generating a key can be found in this StackOverflow [post](http://stackoverflow.com/questions/4664724/distributing-django-projects-with-unique-secret-keys/16630719#16630719)._
 * CIVIWIKI_LOCAL_NAME: _name of database to be used when searching your localhost databases_
 * CIVIWIKI_LOCAL_USERNAME: _username the application should use to access your localhost database_
 * CIVWIKI_LOCAL_PASSWORD: _password the user needs to log into your localhost database_
