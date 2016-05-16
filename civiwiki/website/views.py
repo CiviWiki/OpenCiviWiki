@@ -13,6 +13,7 @@ def login_view(request):
 
 	return TemplateResponse(request, 'login.html', {})
 
+@login_required
 def beta_view(request):
 	return TemplateResponse(request, 'beta_blocker.html', {})
 
@@ -39,6 +40,7 @@ def does_not_exist(request):
 def support_us_view(request):
 	return TemplateResponse(request, 'supportus.html', {})
 
+@login_required
 def dbview(request):
 	result = [{'id': c.id, 'name': c.name} for c in Category.objects.all()]
 
@@ -52,6 +54,7 @@ def account_home(request):
 	acc = Account.objects.get(user_id=request.user.id)
 	return TemplateResponse(request, 'account_home.html', {'result': json.dumps(Account.objects.serialize(acc))})
 
+@login_required
 def add_civi(request):
 	categories = [{'id': c.id, 'name': c.name} for c in Category.objects.all()]
 	topics = [{'id': c.id, 'topic': c.topic} for c in Topic.objects.all()]

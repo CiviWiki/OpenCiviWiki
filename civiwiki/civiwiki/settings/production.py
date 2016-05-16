@@ -83,7 +83,7 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
-LOGIIN_URL = '/login'
+LOGIN_URL = '/login'
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
