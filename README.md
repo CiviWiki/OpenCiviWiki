@@ -23,6 +23,7 @@ For Developers.
 
 **Below is a list of environment variables expected to be present when you run your server.** The application does not manage how you keep track of these variables ( a recommended [solution](http://stackoverflow.com/a/11134336) ) and only checks for variables that are needed at the time. For example, production database environment variables do not need to be present if developing locally.
 * **DJANGO_SECRET_KEY**: _This value **must** be in the list of environment variables._ Information on the Django Secret Key can be found [here](https://docs.djangoproject.com/en/1.8/ref/settings/#secret-key), information on generating a key can be found in this StackOverflow [post](http://stackoverflow.com/questions/4664724/distributing-django-projects-with-unique-secret-keys/16630719#16630719).
+* **SUNLIGHT_API_KEY**: _This value **must** be in the list of environment variables._ Information on retrieving a [Sunlight API](https://sunlightfoundation.com/api) Key can be found [here](https://sunlightfoundation.com/api/accounts/register/).
 * **CIVIWIKI_LOCAL_NAME:** name of database to be used when searching your localhost databases.
 * **CIVIWIKI_LOCAL_USERNAME:** username the application should use to access your localhost database.
 * **CIVWIKI_LOCAL_PASSWORD:** password the user needs to log into your localhost database.
