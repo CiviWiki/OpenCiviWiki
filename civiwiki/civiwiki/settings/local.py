@@ -20,6 +20,7 @@ def get_env_variable(environment_variable, optional=False):
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = get_env_variable("DJANGO_SECRET_KEY")
+SUNLIGHT_API_KEY = get_env_variable("SUNLIGHT_API_KEY")
 DEBUG = True
 ALLOWED_HOSTS = []
 

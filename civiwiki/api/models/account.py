@@ -1,11 +1,16 @@
 from __future__ import unicode_literals
-from django.db import models
 import json
 import datetime
+
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
+from django.db import models
+
 from group import Group
 from civi import Civi
+
+from legislation.functions import (get_bill_information_from_preferences,
+    get_legislator_and_district_from_zip)
 
 class AccountManager(models.Manager):
 
@@ -50,8 +55,19 @@ class AccountManager(models.Manager):
             return {filter: data[filter]}
         return data
 
-    def retrieve(self, user):
-        return self.find(user=user)[0]
+    def friends(self):
+        friends = [self.summarize(a) for a in account.friends.all()]
+        requests = [self.summarize(a) for a in self.filter(pk__in=account.friend_requests)]
+        return dict(friends=friends, requests=requests)
+
+
+    def bills(self):
+        return get_bill_information_from_preferences(self)
+
+    def legislators(self):
+        data = get_legislator_and_district_from_zip(self.zip_code)
+        return data['legislators']
+
 
 class Account(models.Model):
     '''
