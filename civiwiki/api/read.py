@@ -1,9 +1,13 @@
+import sys, json, random, hashlib
+
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponseBadRequest
-from utils.custom_decorators import require_post_params
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+
 from models import Account, Topic, Attachment, Category, Civi, Comment, Hashtag
-import sys, json, random, hashlib
+from utils.custom_decorators import require_post_params
+from legislation import sunlightapi as sun
 
 
 # Create your views here.
@@ -50,7 +54,7 @@ def getUser(request):
 	'''
 	try:
 		a = Account.objects.get(id=request.POST.get("id", -1))
-		return JsonResponse({"result":Account.objects.serialize(a)})
+		return JsonResponse({"result":Account.objects.summarize(a)})
 	except Account.DoesNotExist as e:
 		return HttpResponseBadRequest(reason=str(e))
 
