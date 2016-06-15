@@ -35,7 +35,7 @@ def create_group(request):
 
 
 def does_not_exist(request):
-	return TemplateResponse(request, '404.html', {})
+	return TemplateResponse(request, 'base/404.html', {})
 
 def support_us_view(request):
 	return TemplateResponse(request, 'supportus.html', {})
