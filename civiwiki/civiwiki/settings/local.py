@@ -35,7 +35,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'authentication',
     'api',
-    'website',
+    'frontend_views',
 
 )
 

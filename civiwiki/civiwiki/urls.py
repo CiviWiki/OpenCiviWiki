@@ -20,13 +20,13 @@ from django.conf.urls.static import static
 from django.views.static import serve
 from api import urls as api
 from authentication import urls as auth
-from website import urls as website
+from frontend_views import urls as frontend_views
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api/', include(api)),
     url(r'^auth/', include(auth)),
-    url(r'^', include(website))
+    url(r'^', include(frontend_views))
 ]
 
 urlpatterns += [

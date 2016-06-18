@@ -34,7 +34,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'api',
     'auth',
-    'website'
+    'frontend_views'
 )
 
 MIDDLEWARE_CLASSES = (
