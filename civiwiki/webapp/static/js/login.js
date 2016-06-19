@@ -42,11 +42,7 @@ cw.LoginView = BB.View.extend({
                     password: password
                 },
                 success: function (data) {
-                    if (data.status_code === 200) {
-                        window.location.replace('/');
-                    } else {
-                        Materialize.toast(data.statusText, 2000);
-                    }
+                    window.location.replace('/');
                 },
                 error: function (data) {
                     if (data.status === 400) {
@@ -95,11 +91,7 @@ cw.LoginView = BB.View.extend({
                     zip_code: zipCode
                 },
                 success: function (data) {
-                    if (data.status_code === 200) {
-                        window.location.replace('/');
-                    } else {
-                        Materialize.toast(data.statusText, 2000);
-                    }
+                    window.location.replace('/');
                 },
                 error: function (data) {
                     if (data.status_code === 400) {
