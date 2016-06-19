@@ -28,7 +28,7 @@ def beta_blocker(func):
     @wraps(func)
     def inner(request, *args, **kwargs):
         a = Account.objects.get(user=request.user)
-        if not a.beta:
+        if not a.beta_access:
             return HttpResponseRedirect('/beta')
         return func(request, *args, **kwargs)
     return inner
