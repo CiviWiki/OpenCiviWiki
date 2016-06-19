@@ -5,4 +5,4 @@ from category import Category
 from civi import Civi
 from comment import Comment
 from hashtag import Hashtag
-from group import Group
+from group_meta import GroupMeta

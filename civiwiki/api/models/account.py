@@ -55,17 +55,16 @@ class AccountManager(models.Manager):
             return {filter: data[filter]}
         return data
 
-    def friends(self):
+    def friends(self, account):
         friends = [self.summarize(a) for a in account.friends.all()]
         requests = [self.summarize(a) for a in self.filter(pk__in=account.friend_requests)]
         return dict(friends=friends, requests=requests)
 
+    def bills(self, account):
+        return get_bill_information_from_preferences(account)
 
-    def bills(self):
-        return get_bill_information_from_preferences(self)
-
-    def legislators(self):
-        data = get_legislator_and_district_from_zip(self.zip_code)
+    def legislators(self, account):
+        data = get_legislator_and_district_from_zip(account.zip_code)
         return data['legislators']
 
 
@@ -81,6 +80,7 @@ class Account(models.Model):
     last_login = models.DateTimeField(auto_now=True)
     about_me = models.CharField(max_length=511, blank=True)
     valid = models.BooleanField(default=False)
+    beta_access = models.BooleanField(default=False)
     profile_image = models.CharField(max_length=255)
     cover_image = models.CharField(max_length=255)
     statistics = models.TextField(blank=True)
