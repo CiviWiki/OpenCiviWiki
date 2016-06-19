@@ -9,8 +9,8 @@ from django.db import models
 from group import Group
 from civi import Civi
 
-from legislation.sunlightapi import (get_bill_information_from_preferences,
-    get_legislator_and_district_from_zip)
+from legislation.sunlightapi import (get_bill_information,
+    get_legislator_and_district)
 
 class AccountManager(models.Manager):
 
@@ -61,10 +61,10 @@ class AccountManager(models.Manager):
         return dict(friends=friends, requests=requests)
 
     def bills(self, account):
-        return get_bill_information_from_preferences(account)
+        return get_bill_information(account)
 
     def legislators(self, account):
-        data = get_legislator_and_district_from_zip(account.zip_code)
+        data = get_legislator_and_district(account.zip_code)
         return data['legislators']
 
 
