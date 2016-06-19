@@ -17,7 +17,7 @@ def get_bill_information(account):
     bill_data = []
     preferences = {}
     preferences['state'] = account.state
-    preferences['per_page'] = 20 / len(account.interests) # I want to return a max of 50 bills from this function
+    preferences['per_page'] = 20 / max(len(account.interests), 1) # I want to return a max of 50 bills from this function
     for interest in account.interests:
         preferences['q'] = interest
         bill_data += sunlight.openstates.bills(**preferences)
