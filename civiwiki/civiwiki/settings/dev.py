@@ -54,7 +54,7 @@ ROOT_URLCONF = 'civiwiki.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, "../frontend/templates")],
+        'DIRS': [os.path.join(BASE_DIR, "../webapp/templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -89,7 +89,7 @@ LOGIN_URL = '/login'
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "../frontend/static"),
+    os.path.join(BASE_DIR, "../webapp/static"),
 )
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
