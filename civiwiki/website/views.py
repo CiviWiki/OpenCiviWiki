@@ -2,12 +2,10 @@ import json
 
 from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
-from django.contrib.auth.decorators import login_required, permission_required
 from api.models import Category, Account, Topic
 
 from legislation import sunlightapi as sun
-from utils.custom_decorators import beta_blocker
-
+from utils.custom_decorators import beta_blocker, login_required
 
 @login_required
 @beta_blocker
@@ -23,16 +21,19 @@ def account_home(request):
 				bills=sun.get_bill_information(a)))
 
 @login_required
+@beta_blocker
 def create_group(request):
 	return TemplateResponse(request, 'newgroup.html', {})
 
 @login_required
+@beta_blocker
 def dbview(request):
 	result = [{'id': c.id, 'name': c.name} for c in Category.objects.all()]
 
 	return TemplateResponse(request, 'dbview.html', {'result': json.dumps(result)})
 
 @login_required
+@beta_blocker
 def add_civi(request):
 	categories = [{'id': c.id, 'name': c.name} for c in Category.objects.all()]
 	topics = [{'id': c.id, 'topic': c.topic} for c in Topic.objects.all()]
