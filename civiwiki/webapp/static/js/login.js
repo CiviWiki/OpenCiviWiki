@@ -30,8 +30,6 @@ cw.LoginView = BB.View.extend({
     },
 
     login: function () {
-        var _this = this;
-
         var username = this.$el.find('#username').val(),
             password = this.$el.find('#password').val();
 
@@ -43,7 +41,7 @@ cw.LoginView = BB.View.extend({
                     username: username,
                     password: password
                 },
-                success: function () {
+                success: function (data) {
                     if (data.status_code === 200) {
                         window.location.replace('/');
                     } else {
@@ -76,8 +74,6 @@ cw.LoginView = BB.View.extend({
     },
 
     register: function () {
-        var _this = this;
-
         var email = this.$el.find('#email').val(),
             username = this.$el.find('#username').val(),
             password = this.$el.find('#password').val(),
