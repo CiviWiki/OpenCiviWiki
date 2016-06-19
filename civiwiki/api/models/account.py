@@ -9,7 +9,7 @@ from django.db import models
 from group import Group
 from civi import Civi
 
-from legislation.functions import (get_bill_information_from_preferences,
+from legislation.sunlightapi import (get_bill_information_from_preferences,
     get_legislator_and_district_from_zip)
 
 class AccountManager(models.Manager):
