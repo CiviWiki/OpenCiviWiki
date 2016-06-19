@@ -18,17 +18,13 @@ def cw_login(request):
 
 	user = authenticate(username=username, password=password)
 	if user is not None:
-		if user.is_active:
-			if remember == 'false':
-				request.session.set_expiry(0)
+		if remember == 'false':
+			request.session.set_expiry(0)
 
-			u = login(request, user)
+		u = login(request, user)
 
-			# Redirect to a success page.
-			return HttpResponse()
-		else:
-			# Return a 'disabled account' error message
-			return HttpResponseServerError(reason='inactive account')
+		# Redirect to a success page.
+		return HttpResponse()
 	else:
 	# Return an 'invalid login' error message.
 		return HttpResponseBadRequest(reason='invalid username / password combination')
