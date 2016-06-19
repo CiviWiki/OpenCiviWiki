@@ -1,5 +1,5 @@
 import os, sys, json, pdb, random, hashlib
-from models import Account, Topic, Attachment, Category, Civi, Comment, Hashtag, Group
+from models import Account, Topic, Attachment, Category, Civi, Comment, Hashtag, GroupMeta
 from django.http import JsonResponse, HttpResponse, HttpResponseServerError
 from utils.custom_decorators import require_post_params
 from django.contrib.auth.decorators import login_required

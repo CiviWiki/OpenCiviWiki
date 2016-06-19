@@ -1,6 +1,11 @@
 from functools import wraps
 from django.utils.decorators import available_attrs
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponseBadRequest, HttpResponseRedirect
+from django.contrib.auth.views import redirect_to_login
+from django.shortcuts import resolve_url
+
+from api.models import Account
+
 '''
 USAGE:
     @require_post_params(params=['we', 'are', 'required'])
@@ -18,3 +23,20 @@ def require_post_params(params):
             return func(request, *args, **kwargs)
         return inner
     return decorator
+
+def beta_blocker(func):
+    @wraps(func)
+    def inner(request, *args, **kwargs):
+        a = Account.objects.get(user=request.user)
+        if not a.beta:
+            return HttpResponseRedirect('/beta')
+        return func(request, *args, **kwargs)
+    return inner
+
+def login_required(func):
+    @wraps(func)
+    def inner(request, *args, **kwargs):
+        if not request.user.is_authenticated():
+            return HttpResponseRedirect('/login')
+        return func(request, *args, **kwargs)
+    return inner

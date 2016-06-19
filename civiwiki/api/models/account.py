@@ -1,11 +1,16 @@
 from __future__ import unicode_literals
-from django.db import models
 import json
 import datetime
+
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
+from django.db import models
+
 from group import Group
 from civi import Civi
+
+from legislation.sunlightapi import (get_bill_information,
+    get_legislator_and_district)
 
 class AccountManager(models.Manager):
 
@@ -50,8 +55,18 @@ class AccountManager(models.Manager):
             return {filter: data[filter]}
         return data
 
-    def retrieve(self, user):
-        return self.find(user=user)[0]
+    def friends(self, account):
+        friends = [self.summarize(a) for a in account.friends.all()]
+        requests = [self.summarize(a) for a in self.filter(pk__in=account.friend_requests)]
+        return dict(friends=friends, requests=requests)
+
+    def bills(self, account):
+        return get_bill_information(account)
+
+    def legislators(self, account):
+        data = get_legislator_and_district(account.zip_code)
+        return data['legislators']
+
 
 class Account(models.Model):
     '''
@@ -65,6 +80,7 @@ class Account(models.Model):
     last_login = models.DateTimeField(auto_now=True)
     about_me = models.CharField(max_length=511, blank=True)
     valid = models.BooleanField(default=False)
+    beta_access = models.BooleanField(default=False)
     profile_image = models.CharField(max_length=255)
     cover_image = models.CharField(max_length=255)
     statistics = models.TextField(blank=True)
