@@ -41,7 +41,7 @@ cw.LoginView = BB.View.extend({
                     username: username,
                     password: password
                 },
-                success: function (data) {
+                success: function () {
                     window.location.replace('/');
                 },
                 error: function (data) {
@@ -90,7 +90,7 @@ cw.LoginView = BB.View.extend({
                     last_name: lastName,
                     zip_code: zipCode
                 },
-                success: function (data) {
+                success: function () {
                     window.location.replace('/');
                 },
                 error: function (data) {
