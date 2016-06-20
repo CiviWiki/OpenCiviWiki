@@ -55,7 +55,7 @@ cw.LoginView = BB.View.extend({
                 }
             });
         } else {
-            Materialize.toast('Please input your username and password', 3000);
+            Materialize.toast('<span class="subtitle-lato white-text">Please input your username and password</span>', 2000);
         }
     },
 
@@ -103,7 +103,7 @@ cw.LoginView = BB.View.extend({
             });
 
         } else {
-            Materialize.toast('Please fill all the fields!', 3000);
+            Materialize.toast('<span class="subtitle-lato white-text">Please fill all the fields</span>', 3000);
         }
     }
 });
