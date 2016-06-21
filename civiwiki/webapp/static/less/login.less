@@ -29,6 +29,16 @@ html {
                 padding-left: 0;
             }
 
+            @media (max-width: 600px) {
+                .input-field {
+                    padding-left: 0;
+                }
+
+                .input-field input, .input-field label {
+                    left: 0;
+                }
+            }
+
             .input-field input:focus + label {
                 color: @blue;
             }
