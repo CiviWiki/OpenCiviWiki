@@ -13,11 +13,9 @@ cw.LoginView = BB.View.extend({
     render: function () {
         if (this.register) {
             this.$el.empty().append(this.registerTemplate());
-            this.$el.find('.register-wrapper').height($(window).height()/2);
             this.$el.find('.register-wrapper').css({'margin-top': $(window).height()/4});
         } else {
             this.$el.empty().append(this.loginTemplate());
-            this.$el.find('.login-wrapper').height($(window).height()/2);
             this.$el.find('.login-wrapper').css({'margin-top': $(window).height()/4});
         }
     },
