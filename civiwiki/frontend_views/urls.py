@@ -10,6 +10,6 @@ urlpatterns = [
     url(r'^about$', v.about_view, name='about'),
     url(r'^account$', v.account_home, name='account home'),
     url(r'^add_civi$', v.add_civi, name='add civi'),
-    url(r'^$', v.account_home, name='home'),
+    url(r'^$', v.feed, name='feed'),
     url(r'', v.does_not_exist, name='404')
 ]

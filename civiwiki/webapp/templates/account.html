@@ -1,0 +1,28 @@
+<!doctype html>
+
+<head>
+    {% load staticfiles %}
+    <link type="text/css" rel="stylesheet/less" href="{% static "less/account.less" %}"/>
+    {% include "base/links.html" %}
+</head>
+
+<script id="account-template" type="text/template">
+    <div class="container">
+
+    </div>
+</script>
+
+<body>
+    <div id="account">
+
+    </div>
+</body>
+
+<script type="text/javascript" src="{% static "js/account.js" %}"></script>
+<script type="text/javascript">
+    var accountData = {{result|safe}};
+
+    var accountView = new cw.AccountView();
+</script>
+
+</html>
