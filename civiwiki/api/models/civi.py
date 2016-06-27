@@ -105,7 +105,6 @@ class Civi(models.Model):
             polarity : ( positive2 / visits ) + ( .5 * positive / visits ) + (.5 * negative / visits ) + ( negative2 / visits )
             polarity takes a value between 0 and 1, approaching 0 as votes cluster around neutral, and approach one as votes
             cluster amoung stronger alignments.
-
         '''
         polarity = ( self.votes_positive2 + self.votes_negative1 + .5 * ( self.votes_positive1 + self.votes_negative2 ) )
         polarity /= self.visits

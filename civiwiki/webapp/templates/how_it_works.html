@@ -1,2 +1,82 @@
 <!DOCTYPE HTML>
 <!-- How it Works -->
+<head>
+    {% load staticfiles %}
+    <link type="text/css" rel="stylesheet/less" href="{% static "less/how_it_works.less" %}"/>
+    <link type="text/css" rel="stylesheet/less" href="{% static "less/static_nav.less" %}"/>
+    {% include "base/links.html" %}
+</head>
+
+<title>CiviWiki</title>
+
+<script id="howitworks-template" type="text/template">
+    <div class="content-header center">
+        <div class="container section">
+            <h2 class="title">How CiviWiki Works</h2>
+            <p class="description">Digital Democracy in Action</p>
+        </div>
+    </div>
+    <div class="container">
+        <div class="center">
+          <div class="row hide-on-med-and-down">
+            <div class="center">
+              <img class="infographic z-depth-2" src="{% static "img/civiwiki_infographic_l.png" %}" width="100%">
+            </div>
+          </div>
+          <div class="row hide-on-large-only">
+            <div class="center">
+              <img class="infographic z-depth-2" src="{% static "img/civiwiki_infographic_md.png" %}" width="100%">
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="unsatisfied grey lighten-5 cushion">
+        <div class="container section center">
+            <div class="row">
+                <h4 class="dark-purple">Still not sure about something in CiviWiki?</h4>
+                <a href="contact" class="btn btn-question">Shoot Us a Question!</a>
+            </div>
+        </div>
+    </div>
+    <footer class="page-footer static-footer">
+        <div class="container">
+            <div class="row center">
+                <div class="footer-logo grey-text text-darken-3">
+                    <object class="logo-img" type="image/svg+xml" data="{% static "img/civiwiki-tree-white.svg" %}" height="64px">
+                        <img class="logo-img" src="{% static "img/tree_small.png" %}" alt="civitree" height="64px">
+                    </object><span class="wordmark">CiviWiki</span>
+                </div>
+                <div class="external-links">
+                    <a class="grey-text text-darken-1" href="mailto:mitchell@civiwiki.org">(Email)</a>
+                    <a class="grey-text text-darken-1" href="https://www.facebook.com/CiviWiki/"  target="_blank">(Facebook)</a>
+                    <a class="grey-text text-darken-1" href="https://twitter.com/civiwiki"  target="_blank">(Twitter)</a>
+                    <a class="grey-text text-darken-1" href="https://github.com/CiviWikiorg/CiviWiki"  target="_blank">(GitHub)</a>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="footer-copyright">
+            <div class="container">
+                <div class="grey-text text-darken-1">© 2016 Copyright CiviWiki
+                    <div class="footer-right right">
+                        <a class="grey-text" href="policy">Privacy Policy</a> |
+                        <a class="grey-text" href="contact">Contact Us</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</script>
+
+<body>
+    {% include "base/static_nav.html" %}
+    <div id="howitworks"></div>
+</body>
+
+<!-- Backbone Views File -->
+<script src="/static/js/how_it_works.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var howitworksView = new cw.HowItWorksView();
+    $(document).ready(function() {});
+</script>

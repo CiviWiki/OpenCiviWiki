@@ -1,2 +1,24 @@
 <!DOCTYPE HTML>
 <!-- Navbar for static pages -->
+{% load staticfiles %}
+
+<nav class="static-nav transparent">
+    <div class="nav-wrapper">
+        <a href="landing" class="brand-logo">
+            <object class="logo-img" type="image/svg+xml" data="{% static "img/civiwiki-tree-white.svg" %}" height="36px">
+                <img class="logo-img" src="{% static "img/tree_small.png" %}" alt="civitree" height="32px">
+            </object>
+            CiviWiki
+        </a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down ">
+            <li><a class="dark-white-text menu-text" href="howitworks">how it works</a></li>
+            <li><a class="dark-white-text menu-text" href="about">about us</a></li>
+            <li><a class="dark-white-text menu-text" href="support_us">support us</a></li>
+            <li><a href="login" class="waves-effect waves-light btn login-btn">Login / Sign Up</a></li>
+        </ul>
+    </div>
+</nav>
+
+<script type="text/javascript">
+    $(document).ready(function() {});
+</script>

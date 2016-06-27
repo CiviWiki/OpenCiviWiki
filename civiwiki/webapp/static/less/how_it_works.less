@@ -1,0 +1,67 @@
+@import "base";
+
+@muted-purple: #473273;
+@dark-purple-gray: #302f34;
+
+.content-header {
+    background-color: @dark-purple;
+
+    background:  #0E0038 linear-gradient(to bottom,
+        #130c25 0%, #130c25 70%,
+        #160f2d 70%, #160f2d 75%,
+        #1a1134 75%, #1a1134 80%,
+        #1E143C 80%, #1E143C 85%,
+        #221643 85%, #221643 90%,
+        #26194b 90%, #26194b 100%);
+
+    margin-top: -100px;
+    padding-top: 100px;
+    height: 400px;
+
+    .title {
+        color: @white;
+    }
+
+    .description {
+        color: @dark-white;
+    }
+}
+.infographic {
+    margin-top: -120px;
+}
+
+.unsatisfied {
+    margin-top: -80px;
+    padding: 90px 0 60px 0;
+    .btn-question {
+        background-color: @muted-purple;
+        &:hover {
+            background-color: darken(@muted-purple, 10%);
+        }
+    }
+}
+
+@media screen and (max-width:600px){
+    .infographic {
+        margin-top: -80px;
+    }
+}
+
+.page-footer.static-footer {
+   margin-top: 0;
+   background-color: @dark-purple-gray;
+   .footer-logo{
+       font-size: 40px;
+       font-weight: 700;
+       letter-spacing: 0.05em;
+       .logo-img {
+           opacity: 0.1;
+       }
+       .wordmark {
+           vertical-align: top;
+       }
+   }
+   .footer-copyright {
+       background-color: darken(@dark-purple-gray, 2%);
+   }
+}
