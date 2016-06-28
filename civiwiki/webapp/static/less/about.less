@@ -1,8 +1,5 @@
 @import "base";
 
-@muted-purple: #473273;
-@dark-purple-gray: #302f34;
-
 .content-header {
     background-color: @dark-purple;
 
@@ -26,25 +23,10 @@
         color: @dark-white;
     }
 }
-.infographic {
-    margin-top: -120px;
-}
 
-.unsatisfied {
-    margin-top: -80px;
-    padding: 90px 0 60px 0;
-    .btn-question {
-        background-color: @muted-purple;
-        &:hover {
-            background-color: darken(@muted-purple, 10%);
-        }
-    }
-}
-
-@media screen and (max-width:600px){
-    .infographic {
-        margin-top: -80px;
-    }
+.title {
+    font-weight: 600;
+    color: @dark-purple;
 }
 
 .page-footer.static-footer {

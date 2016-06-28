@@ -136,11 +136,14 @@
         linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
         background-size: 15px 15px, 15px 15px;
+
         .text-highlight{
             color: @yellow;
         }
-        .card-panel {
-            background: @dark-purple;
+        .card-panel{
+            background: @white;
+            box-sizing: border-box;
+            border: dotted 5px @dark-white;
             background-size: contain;
             background-position: center;
             height: 100px;
@@ -148,7 +151,8 @@
 
             .card-text{
                 font-weight: 700;
-                color: white;
+                color: @purple-gray;
+
             }
 
             &:hover{
@@ -157,41 +161,42 @@
 
         }
     }
-    .conclusion {
+    .lastcall {
         background-color: @off-white;
+        background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.3)), url("../img/bg-landing-lastcall.jpg");
+        background-size: cover;
+        background-position: center;
+        text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
 
         .text-call {
             font-weight:300;
-            color: darken(@muted-purple, 10%);
+            color:@dark-white;
         }
         .btn{
-            background-color: @dark-purple;
+            color: @dark-white;
+            background-color: transparent;
+            border: 2px solid @dark-white;
+            line-height: 50px;
             &:hover {
-                background-color: darken(@dark-purple, 1%);
+                background-color: fade(@muted-purple, 50%);
             }
         }
-    }
-    .in-development {
-
     }
 }
 
  .page-footer.static-footer {
     margin-top: 0;
-    background-color: @dark-purple-gray;
-    .footer-logo{
-        font-size: 40px;
-        font-weight: 700;
-        letter-spacing: 0.05em;
+    background-color: @dark-gray;
+    .footer-copyright {
         .logo-img {
-            opacity: 0.1;
+            opacity: 0.3;
+            vertical-align: middle;
         }
         .wordmark {
-            vertical-align: top;
+            font-weight: 700;
+            letter-spacing: 0.05em;
         }
-    }
-    .footer-copyright {
-        background-color: darken(@dark-purple-gray, 2%);
+        background-color: darken(@dark-gray, 1%);
     }
 }
 .cushion {
@@ -199,7 +204,7 @@
 }
 .video {
     background-color: @dark-purple;
-    background: url("../img/tile.svg"), @dark-purple;
+    background: url("../img/bg-tile-cube.svg"), @dark-purple;
     background-size: 100px;
     background-repeat: repeat;
 }

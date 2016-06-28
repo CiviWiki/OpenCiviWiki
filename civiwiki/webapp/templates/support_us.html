@@ -15,21 +15,21 @@
         <div class="section">
             <div class="container">
                 <br><br>
-                <h1 class="header center white-text">Support Us</h1>
+                <h1 class="header center">Support Us</h1>
                 <div class="row center">
-                    <h5 class="header col s12 light grey-text text-lighten-3"> Give your support and help CiviWiki grow</h5>
+                    <h5 class="header col s12 light"> Give us your support and help CiviWiki grow</h5>
                 </div>
             </div>
         </div>
-        <div class="parallax"><img src="{% static "img/supportus_main.png" %}"></div> <!-- TODO: Image NEEDS to be replaced -->
+        <div class="parallax"><img src="{% static "img/bg-supportus-main.png" %}"></div> <!-- TODO: Image NEEDS to be replaced -->
     </div>
 
 
     <!-- Main Donation Message -->
-    <div class="support_message section deep-purple darken-1">
+    <div class="support_message section">
         <div class="row container">
           <h3 class="support_message_title header deep-purple-text text-lighten-5 center">Help us build better democracy for the internet age</h3>
-          <p class="support_message_text deep-purple-text text-lighten-3 center">CiviWiki is a non-profit organization working to break down the wall between politicians and their constituencies though an online communication platform which allows communities to discuss problems, discover solutions, and enact policy change. With your support we can build the tools necessary to educate citizens on the issues that matter and empower them to hold government accountable. Together we can build better democracy for the internet age.</p>
+          <p class="support_message_text center">CiviWiki is a non-profit organization working to break down the wall between politicians and their constituencies though an online communication platform which allows communities to discuss problems, discover solutions, and enact policy change. With your support we can build the tools necessary to educate citizens on the issues that matter and empower them to hold government accountable. Together we can build better democracy for the internet age.</p>
         </div>
     </div>
 
@@ -42,9 +42,9 @@
             <p class="center">CiviWiki was incorporated only a few months ago, in November of 2015. Since that time we have received the support of the Gephard Institute, have advanced in the Hult Prize competition and expect to begin closed beta-testing within the next month. Become a part of our start-up story and watch how your support allows us to grow!</p>
         </div>
     </div>
-    <div class="deep-purple">
+    <div class="redirect-team">
         <div class="section row container center">
-          <a class="deep-purple-text text-lighten-5" href="about">Meet the team behind CiviWiki →</a>
+          <a class="redirect-team-text" href="about#team">MEET THE TEAM BEHIND CIVIWIKI →</a>
         </div>
     </div>
 
@@ -95,11 +95,11 @@
         <div class="row  center">
 
                 <a href="https://www.facebook.com/sharer/sharer.php?u=civiwiki.org" target="_blank">
-                    <img class="share-button" src="{% static "img/logo_facebook.png" %}">
+                    <img class="share-button" src="{% static "img/logo-social-facebook.png" %}">
                 </a>
 
                 <a href="https://twitter.com/share" data-url="http://civiwiki.org" data-text="Check out this site" data-size="large">
-                    <img class="share-button" src="{% static "img/logo_twitter.png" %}">
+                    <img class="share-button" src="{% static "img/logo-social-twitter.png" %}">
                 </a>
 
         </div>
@@ -115,6 +115,29 @@
             </div>
         </div>
     </div>
+    <footer class="page-footer static-footer">
+        <div class="container">
+            <div class="row center">
+                <div class="external-links">
+                    <a class="grey-text text-darken-1" href="mailto:mitchell@civiwiki.org">(Email)</a>
+                    <a class="grey-text text-darken-1" href="https://www.facebook.com/CiviWiki/"  target="_blank">(Facebook)</a>
+                    <a class="grey-text text-darken-1" href="https://twitter.com/civiwiki"  target="_blank">(Twitter)</a>
+                    <a class="grey-text text-darken-1" href="https://github.com/CiviWikiorg/CiviWiki"  target="_blank">(GitHub)</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="container">
+                <div class="grey-text text-darken-1">
+                    <object class="logo-img" type="image/svg+xml" data="{% static "img/logo-civiwiki-tree-white.svg" %}" height="32px"></object><span class="wordmark">CiviWiki</span>
+                    <div class="footer-right right">
+                        <a class="grey-text" href="policy">Privacy Policy</a> |
+                        <a class="grey-text" href="contact">Contact Us</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
 </script>
 
 <body>

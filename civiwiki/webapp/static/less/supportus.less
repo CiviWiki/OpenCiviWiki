@@ -1,3 +1,10 @@
+@import "base";
+
+@off-white: #eeecf1;
+@muted-purple: #473273;
+@text-gray: #bdc3c7;
+@purple-gray: #56535c;
+@dark-purple-gray: #302f34;
 /*
 	Main Parallax Image container presentation
  */
@@ -13,32 +20,51 @@ div.parallax-container {
 		filter: brightness(30%);
 	}
 }
-
+#supportus {
+    font-size-adjust: 0.5;
+    letter-spacing: 0.005em;
+}
 
 /*
 	Font Size & Weight Adjustments
  */
 .header {
-	font-weight: 500;
+	font-weight: 600;
+	color: @white;
 }
-.support_message_text {
-	font-size: 1.5em;
+.support_message {
+	background-color: @muted-purple;
+	.support_message_text {
+		font-size: 1.2em;
+		color: @dark-white;
+		font-weight: 300;
+	}
 }
+
 .donate_title {
 	font-size: 1.1em;
 	font-weight: 500;
 }
 
+.redirect-team {
+	background-color: @dark-white;
+	.redirect-team-text {
+		color: @dark-purple;
+		&:hover {
+			color: @purple;
+		}
+	}
+}
 
 /*
 	Border lines to separate content
  */
 .supportus_divider {
 	height: .1em;
-	border-bottom: 1px solid #e2e2e2;
+	border-bottom: 1px solid @dark-gray;
 }
 .title {
-	border-bottom: 2px solid #5e35b1;
+	border-bottom: 2px solid @purple;
 }
 
 
@@ -70,4 +96,20 @@ div.parallax-container {
 */
 .share-button{
 	max-width: 150px;
+}
+
+.page-footer.static-footer {
+   margin-top: 0;
+   background-color: @dark-gray;
+   .footer-copyright {
+       .logo-img {
+           opacity: 0.3;
+           vertical-align: middle;
+       }
+       .wordmark {
+           font-weight: 700;
+           letter-spacing: 0.05em;
+       }
+       background-color: darken(@dark-gray, 1%);
+   }
 }
