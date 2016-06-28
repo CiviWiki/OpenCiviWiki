@@ -20,7 +20,7 @@ def account_home(request):
 
     result = dict(friends=friend_data_dictionary['friends'],
                   requests=friend_data_dictionary['requests'],
-                  profile=Account.objects.serialize(a),
+                  profile=Account.objects.summarize(a),
                   legislator=sun.get_legislator_and_district(a),
                   bills=sun.get_bill_information(a))
 
