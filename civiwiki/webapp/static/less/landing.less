@@ -84,7 +84,7 @@
         font-weight: 300;
         font-size: 1.6em;
         line-height: 2.25em;
-        color: @muted-purple;
+        color: @purple;
         text-shadow: 0 1px 0 black;
     }
     .brand-logo {
@@ -140,23 +140,16 @@
         .text-highlight{
             color: @yellow;
         }
-        .card-panel{
-            background: @white;
-            box-sizing: border-box;
-            border: dotted 5px @dark-white;
-            background-size: contain;
-            background-position: center;
-            height: 100px;
-            box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
-
-            .card-text{
-                font-weight: 700;
-                color: @purple-gray;
-
-            }
-
+        .btn{
+            overflow: hidden;
+            background-color: transparent;
+            border: solid 2px white;
+            font-size: 30px;
+            line-height: 50px;
             &:hover{
-                box-shadow: 0 16px 28px 0 rgba(0,0,0,0.22),0 25px 55px 0 rgba(0,0,0,0.21);
+                border: solid 2px @yellow;
+                color: @yellow;
+
             }
 
         }
