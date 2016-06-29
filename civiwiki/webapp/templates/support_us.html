@@ -55,7 +55,8 @@
                 <h4 class="center">Donate</h4>
             </div>
         </div>
-        <div class="row container">
+        <div class="container">
+        <div class="row ">
             <div class="col s6 center">
                 <i class="large material-icons deep-purple-text text-lighten-2">local_atm</i>
                 <p class="donate_title center">One-Time Donation</p>
@@ -67,22 +68,25 @@
                 <p class="donate_text">Give a monthly donation to CiviWIki. Your sustaining donation will keep our servers running and ensure we have the resources necessary to continue building the tools of better democracy</p>
             </div>
         </div>
-        <div class="row container">
-            <!-- The two buttons are same for now; will be updated after payment APIs are implemented -->
-            <div class="col s6 center">
-                <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-                <input type="hidden" name="cmd" value="_s-xclick">
-                <input type="hidden" name="hosted_button_id" value="QKJYQPLX4VUCG">
-                <button type="submit" class="waves-effect waves-light btn deep-purple darken-1" name="submit" alt="PayPal - The safer, easier way to pay online!">Donate Once</button>
-                </form>
+        </div>
+        <div class="container">
+            <div class="row">
+                <!-- The two buttons are same for now; will be updated after payment APIs are implemented -->
+                <div class="col s6 center">
+                    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+                    <input type="hidden" name="cmd" value="_s-xclick">
+                    <input type="hidden" name="hosted_button_id" value="QKJYQPLX4VUCG">
+                    <button type="submit" class="waves-effect waves-light btn deep-purple darken-1" name="submit" alt="PayPal - The safer, easier way to pay online!">Donate Once</button>
+                    </form>
 
-            </div>
-            <div class="col s6 center">
-                <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-                <input type="hidden" name="cmd" value="_s-xclick">
-                <input type="hidden" name="hosted_button_id" value="QKJYQPLX4VUCG">
-                <button type="submit" class="waves-effect waves-light btn deep-purple darken-1" name="submit" alt="PayPal - The safer, easier way to pay online!">Give Monthly</button>
-                </form>
+                </div>
+                <div class="col s6 center">
+                    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+                    <input type="hidden" name="cmd" value="_s-xclick">
+                    <input type="hidden" name="hosted_button_id" value="QKJYQPLX4VUCG">
+                    <button type="submit" class="waves-effect waves-light btn deep-purple darken-1" name="submit" alt="PayPal - The safer, easier way to pay online!">Give Monthly</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
