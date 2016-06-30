@@ -1,31 +1,14 @@
 @import "base";
+@import "static_common";
 
-@off-white: #eeecf1;
-@muted-purple: #473273;
-@text-gray: #bdc3c7;
-@purple-gray: #56535c;
-@dark-purple-gray: #302f34;
-
-// Text Helpers// ----------------------------------------------------
-.light {
-    font-weight: 300;
-}
-.normal {
-    font-weight: 400;
-}
-.semi-bold {
-    font-weight: 600;
-}
-.bold {
-    font-weight: 700;
-}
-// Main View Block // --------------------------------------------------
+// Font Adjustments // ---------------------------------------------------------
 .landing {
     font-size-adjust: 0.5;
     letter-spacing: 0.005em;
     color: @text;
 }
-
+// Main Header View Block // ---------------------------------------------------
+// Header Background
 .landing-bg {
     // Positioning and Size
     width: 100%;
@@ -46,10 +29,8 @@
     background-repeat: no-repeat;
     background-position: center;
     background-size: 100% auto;
-
-
 }
-
+// Header Background for Mobile
 @media screen and (max-width:992px){
     .landing-bg {
         // Positioning and Size
@@ -72,7 +53,7 @@
         background-size: canvas;
     }
 }
-
+// Header Text
 .landing-title {
     .landing-title-text {
         font-weight: 300;
@@ -111,9 +92,9 @@
         }
     }
 }
+
+// Landing Content// ----------------------------------------------------
 .landing-content {
-
-
     .content-title {
         color: @muted-purple;
     }
@@ -131,14 +112,46 @@
         width: 200px;
         border-bottom: 3px solid @yellow;
     }
+    // Video Block
+    .video {
+        background-color: @dark-purple;
+        background: url("../img/bg-tile-cube.svg"), @dark-purple;
+        background-size: 100px;
+        background-repeat: repeat;
+    }
+
+    // "Why Civiwiki" Block
     .why-civiwiki {
-        i{
+        i {
             padding: 50px 0 50px 0;
             font-size: 20em;
             color: @muted-purple;
         }
     }
 
+    // Last call to action (Sign up)
+    .lastcall {
+        background-color: @off-white;
+        background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.3)), url("../img/bg-landing-lastcall.jpg");
+        background-size: cover;
+        background-position: center;
+        text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+        .text-call {
+            font-weight:300;
+            color:@dark-white;
+        }
+        .btn{
+            color: @dark-white;
+            background-color: transparent;
+            border: 2px solid @dark-white;
+            line-height: 50px;
+            &:hover {
+                background-color: fade(@muted-purple, 50%);
+            }
+        }
+    }
+
+    // "We're still in development" Block
     .in-development {
         color: white;
         background-color: #0d367a;
@@ -162,57 +175,9 @@
             &:hover{
                 border: solid 2px @yellow;
                 color: @yellow;
-
-            }
-
-        }
-    }
-    .lastcall {
-        background-color: @off-white;
-        background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.3)), url("../img/bg-landing-lastcall.jpg");
-        background-size: cover;
-        background-position: center;
-        text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
-
-        .text-call {
-            font-weight:300;
-            color:@dark-white;
-        }
-        .btn{
-            color: @dark-white;
-            background-color: transparent;
-            border: 2px solid @dark-white;
-            line-height: 50px;
-            &:hover {
-                background-color: fade(@muted-purple, 50%);
             }
         }
     }
-}
-
- .page-footer.static-footer {
-    margin-top: 0;
-    background-color: @dark-gray;
-    .footer-copyright {
-        .logo-img {
-            opacity: 0.3;
-            vertical-align: middle;
-        }
-        .wordmark {
-            font-weight: 700;
-            letter-spacing: 0.05em;
-        }
-        background-color: darken(@dark-gray, 1%);
-    }
-}
-.cushion {
-    padding: 90px 0 60px 0;
-}
-.video {
-    background-color: @dark-purple;
-    background: url("../img/bg-tile-cube.svg"), @dark-purple;
-    background-size: 100px;
-    background-repeat: repeat;
 }
 
 // Media Wrappers // --------------------------------------------------
@@ -231,37 +196,4 @@
     	width: 100%;
     	height: 100%;
     }
-}
-
-// General Content Formatting // ------------------------------------------
-h1 {
-    font-size: 3.6em;
-    line-height: 1em;
-}
-
-h2 {
-    font-size: 2.45em;
-    line-height: 1.469em;
-}
-
-h3 {
-    font-size: 2.0em;
-    line-height: 1.8em;
-    margin-top: 2.0em;
-}
-
-h4 {
-    font-size: 1.8em;
-    line-height: 2.0em;
-}
-
-h5,
-h6 {
-    font-size: 1.6em;
-    line-height: 2.25em;
-}
-
-p {
-    font-size: 1.2em;
-    line-height: 1.5;
 }

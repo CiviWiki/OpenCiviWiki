@@ -53,16 +53,16 @@ def declaration(request):
 	return TemplateResponse(request, 'declaration.html', {})
 
 def landing_view(request):
-	return TemplateResponse(request, 'landing.html', {})
+	return TemplateResponse(request, 'static_templates/landing.html', {})
 
 def how_it_works_view(request):
-	return TemplateResponse(request, 'how_it_works.html', {})
+	return TemplateResponse(request, 'static_templates/how_it_works.html', {})
 
 def about_view(request):
-	return TemplateResponse(request, 'about.html', {})
+	return TemplateResponse(request, 'static_templates/about.html', {})
 
 def support_us_view(request):
-	return TemplateResponse(request, 'support_us.html', {})
+	return TemplateResponse(request, 'static_templates/support_us.html', {})
 
 def does_not_exist(request):
 	return TemplateResponse(request, '404.html', {})
