@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 from django.db import models
 from hashtag import Hashtag
-from groups import Group
+from group import Group
 from django.contrib.postgres.fields import ArrayField
 from operator import itemgetter
 import math, json

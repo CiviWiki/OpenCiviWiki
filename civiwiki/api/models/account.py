@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
-from groups import Group
+from group import Group
 from civi import Civi
 
 from legislation.sunlightapi import (get_bill_information,
