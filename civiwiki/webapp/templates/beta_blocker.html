@@ -2,8 +2,7 @@
 <!doctype html>
 
 {% load staticfiles %}
-<link type="text/css" rel="stylesheet/less" href="{% static "less/beta.less" %}"/>
-{% include "basics/links.html" %}
+{% include "base/links.html" %}
 
 <title>Sorry!</title>
 
@@ -18,12 +17,13 @@
 </script>
 
 <body id="beta_wrapper">
-    {% include "basics/nav.html" %}
-
     <div id="beta">
     </div>
 </body>
 
 <!-- Backbone Views File -->
-<script src="/static/views/beta_view.js" type="text/javascript"></script>
+<script src="/static/js/beta_view.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var betaView = new cw.BetaView();
+</script>
 </html>
