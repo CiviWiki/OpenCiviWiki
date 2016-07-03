@@ -1,0 +1,194 @@
+<!DOCTYPE HTML>
+<!-- About -->
+<head>
+    {% load staticfiles %}
+    <link type="text/css" rel="stylesheet/less" href="{% static "less/about.less" %}"/>
+    {% include "base/links.html" %}
+    <title>About Us</title>
+</head>
+
+<script id="about-template" type="text/template">
+    <div class="content-header center">
+        <div class="container section">
+            <h2 class="title">About Us</h2>
+            <p class="description">The team that is bringing you civiwiki</p>
+        </div>
+    </div>
+
+
+    <div class="section white">
+        <div class="container">
+            <div class="row">
+                <div class="col s12 center">
+                    <h3 class="title">Our Mission</h3>
+                    <div class="divider"></div>
+                    <div class="col s12 m8 l10 offset-m2 offset-l1">
+                        <h5 class="center">
+                            At CiviWiki we believe democracy works best when citizens are educated on issues and participate in the democratic process. We are a non-profit, non-partisan, community; working to build an open-source platform where citizens discuss the problems they face, discover solutions, and petition their representative to enact change.
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="section grey lighten-4">
+        <div class="row">
+            <div class="col s12 m8 l10 offset-m2 offset-l1 center">
+              <h3 class="title">Our Goals</h3>
+              <div class="divider"></div>
+                <ul class="collapsible white" data-collapsible="accordion">
+                  <li>
+                    <div class='collapsible-header'>
+                      <h5>A Problem Solving Machine</h5>
+                    </div>
+                    <div class='collapsible-body container'>
+                      <p class='grey-text  text-darken-2'>We are building a novel, multi-post, discussion platform which allows users to debate issues: why they should care about the issue; what causes the issue; and what policy solutions could solve it. This discussion is then filtered through the community, allowing everyone to rate their agreement with each piece of the debate. Then, the best solutions trend and foster an environment for community consensus to form. </p>
+                    </div>
+                  </li>
+                  <li>
+                    <div class='collapsible-header'>
+                      <h5>Networked Leadership</h5>
+                    </div>
+                    <div class='collapsible-body container'>
+                      <p class='grey-text  text-darken-2'>Anyone can join the debate, but most people just want a trustworthy place to learn about the issues. If you find an editor you tend to agree with, you can follow their account, starting to form your own political coalition, and helping to elevate the voices of community leaders. In time, these leaders may even earn the support necessary to become your representatives in government.</p>
+                    </div>
+                  </li>
+                  <li>
+                    <div class='collapsible-header'>
+                      <h5>Smart Petitioning</h5>
+                    </div>
+                    <div class='collapsible-body container'>
+                      <p class='grey-text  text-darken-2'>Engaging CiviWiki’s discussion is more than simply becoming informed on the issues. We automatically package your support with other likeminded users and use that collective power to petition your representatives. Your representative then has the opportunity to respond to your petition with a voting statement that you can rate. </p>
+                    </div>
+                  </li>
+                  <li>
+                    <div class='collapsible-header'>
+                      <h5>Vote with Confidence</h5>
+                    </div>
+                    <div class='collapsible-body container'>
+                      <p class='grey-text  text-darken-2'>Your rating history, including why you supported a policy, what policies you supported, and your rating of voting statements are all saved to your account. When elections approach, we compare your CiviWiki history to all potential candidates, helping you make an informed vote. </p>
+                    </div>
+                  </li>
+                  <li>
+                    <div class='collapsible-header'>
+                      <h5>The Power of CiviWiki</h5>
+                    </div>
+                    <div class='collapsible-body container'>
+                      <p class='grey-text  text-darken-2'>With traditional voting and petitioning, you vote for the candidate that you believe lines up with your values, and you hope they listen to reasonable petitions. In this process you give away your political power and only recover it the next election cycle. With CiviWiki, you make a credible claim of what factors will influence your next vote. And, since CiviWiki ensures you are reminded of these factors, you retain your voting power between elections. In other words, rather than trusting a politician to make choices for you, CiviWiki allows you to trust that your representative will listen to you.  We are better democracy for the internet age.</p>
+                    </div>
+                  </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+<div class="section white meet_team" id="team">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 center">
+                <h3 class="title">The Team</h3>
+                <div class="divider"></div>
+                <h4 class="subtitle">Co Founders</h4>
+                <div class="row section">
+                    <div class="col s12 m6">
+                        <div class="row">
+                            <div class="col s6">
+                                <img class="profile-photo responsive-img" src="{% static "img/team/mitchell.png" %}">
+                                <h5 class="grey-text text-darken-3">Mitchell West</h5>
+                                <div class="team-title">Executive Director</div>
+                                <p class="grey-text text-lighten-1">mitchell@civiwiki.org</p>
+                            </div>
+                            <div class="col s6">
+                                    <img class="profile-photo responsive-img" src="{% static "img/team/darius.png" %}">
+                                <h5 class="grey-text text-darken-3">Darius Calliet</h5>
+                                <div class="team-title">Lead Back-end</div>
+                                <p class="grey-text text-lighten-1">darius@civiwiki.org</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s12 m6">
+                        <div class="row">
+                            <div class="col s6">
+
+                                    <img class="profile-photo responsive-img" src="{% static "img/team/dan.png" %}">
+
+                                <h5 class="grey-text text-darken-3">Dan Borstelmann</h5>
+                                <div class="team-title">Lead Front-end</div>
+                                <p class="grey-text text-lighten-1">dan@civiwiki.org</p>
+                            </div>
+                            <div class="col s6">
+
+                                    <img class="profile-photo responsive-img" src="{% static "img/team/joohee.png" %}">
+
+                                <h5 class="grey-text text-darken-3">JooHee Lee</h5>
+                                <div class="team-title">Lead Design</div>
+                                <p class="grey-text text-lighten-1">joohee@civiwiki.org</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row section">
+                    <div class="col s12 m6">
+                        <h4 class="subtitle">Board of Directors</h4>
+                        <ul>
+                            <li>Laura Rosenbury</li>
+                            <li>Tom Marvin</li>
+                            <li>John Tao</li>
+                            <li>Beth Dunklau</li>
+                            <li>Paul Scheid</li>
+                            <li>Kevin Jackobsen</li>
+                        </ul>
+                    </div>
+                    <div class="col s12 m6">
+                        <h4 class="subtitle">Contributors</h4>
+                        <ul>
+                            <li>Jon Sheldon</li>
+                            <li>Dylan Reese</li>
+                        </ul>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="section grey lighten-4">
+        <div class="container section">
+            <div class="col s12 center">
+                <h3 class="title">Sponsors</h3>
+                <div class="divider"></div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col s8 offset-s2">
+                            <img class="center sponsor_logos responsive-img" src="{% static "img/logo-sponsor-gephardt.png" %}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s8 offset-s2">
+                            <img class="center sponsor_logos responsive-img" src="{% static "img/logo-sponsor-skandalaris.png" %}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s8 offset-s2">
+                            <img class="center sponsor_logos responsive-img" src="{% static "img/logo-sponsor-gusf.png" %}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<body>
+    {% include "static_templates/static_nav.html" %}
+    <div id="about"></div>
+    {% include "static_templates/static_footer.html" %}
+</body>
+
+<!-- Backbone Views File -->
+<script src="/static/js/about_view.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var aboutView = new cw.AboutView();
+
+</script>
