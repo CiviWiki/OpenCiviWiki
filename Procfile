@@ -1,1 +1,1 @@
-web: gunicorn civiwiki:app --preload
+web: gunicorn gettingstarted.wsgi --log-file -

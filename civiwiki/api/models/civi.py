@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 from django.db import models
 from hashtag import Hashtag
-from group import Group
+# from group import Group
 from django.contrib.postgres.fields import ArrayField
 from operator import itemgetter
 import math, json
@@ -11,7 +11,7 @@ class CiviManager(models.Manager):
         return {
             "id": civi.id,
             "title": civi.title,
-            "group": Group.objects.summarize(civi.group),
+            # "group": Group.objects.summarize(civi.group),
             "body": civi.body[0:150]
         }
 
@@ -28,9 +28,9 @@ class CiviManager(models.Manager):
             "type": civi.type,
             "id": civi.id,
             "REF": civi.reference_id,
-            "AT": getChain(civi.at_id),
-            "AND_NEGATIVE": getChain(civi.and_negative_id),
-            "AND_POSITIVE": getChain(civi.and_positive_id)
+            #"AT": getChain(civi.at_id),
+            #"AND_NEGATIVE": getChain(civi.and_negative_id),
+            #"AND_POSITIVE": getChain(civi.and_positive_id)
 	    }
 
         if filter and filter in data:

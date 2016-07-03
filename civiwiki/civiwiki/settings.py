@@ -32,7 +32,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'api',
-    'auth',
+    'authentication',
     'frontend_views'
 )
 
@@ -85,10 +85,12 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 LOGIN_URL = '/login'
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "../webapp/static"),
+    os.path.normpath(os.path.join(BASE_DIR, 'webapp/static')),
 )
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
