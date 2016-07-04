@@ -189,7 +189,7 @@ def editUser(request):
 		Account.objects.filter(id=account.id).update(**data)
 		account.refresh_from_db()
 
-		return JsonResponse({"result":Account.objects.serialize(account)})
+		return JsonResponse(Account.objects.serialize(account))
 	except Exception as e:
 		return HttpResponseServerError(reason=str(e))
 
