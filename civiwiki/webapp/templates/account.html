@@ -18,7 +18,7 @@
                 <div class="card-content">
                     <div class="description">
                         <div class="white-background-input-field input-field col s12">
-                            <textarea id="about-me" class="materialize-textarea" length="255">{{this.model.get('profile').about_me}}</textarea>
+                            <textarea id="about_me" class="save-account materialize-textarea" length="255">{{this.model.get('profile').about_me}}</textarea>
                             <label for="about-me">About Me</label>
                         </div>
                     </div>
@@ -28,23 +28,23 @@
                 <div class="card-content">
                     <div class="profile-info">
                         <div class="white-background-input-field input-field col s12">
-                            <input id="first-name" type="text" value="{{this.model.get('profile').first_name}}">
+                            <input class="save-account" id="first_name" type="text" value="{{this.model.get('profile').first_name}}">
                             <label for="first-name">First Name</label>
                         </div>
                         <div class="white-background-input-field input-field col s12">
-                            <input id="last-name" type="text" value="{{this.model.get('profile').last_name}}">
+                            <input class="save-account" id="last_name" type="text" value="{{this.model.get('profile').last_name}}">
                             <label for="last-name">Last Name</label>
                         </div>
                         <div class="white-background-input-field input-field col s12">
-                            <input id="email" type="email" value="{{this.model.get('profile').email}}">
+                            <input class="save-account" id="email" type="email" value="{{this.model.get('profile').email}}">
                             <label for="email">Email</label>
                         </div>
                         <div class="white-background-input-field input-field col s12">
-                            <input id="password" type="text" value="This card doesn't show if different user">
+                            <input class="save-account" id="password" type="text" value="This card doesn't show if different user">
                             <label for="password">Password</label>
                         </div>
                         <div class="white-background-input-field input-field col s12">
-                            <input id="zipcode" type="text" value="{{this.model.get('profile').zip_code}}">
+                            <input class="save-account" id="zip_code" type="text" value="{{this.model.get('profile').zip_code}}">
                             <label for="zipcode">Zip Code</label>
                         </div>
                     </div>
