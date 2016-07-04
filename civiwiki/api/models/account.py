@@ -20,6 +20,9 @@ class AccountManager(models.Manager):
             "first_name": account.first_name,
             "last_name": account.last_name,
             "profile_image": account.profile_image,
+            "about_me": account.about_me,
+            "email": account.email,
+            "zip_code": account.zip_code,
             "id": account.id
         }
 
