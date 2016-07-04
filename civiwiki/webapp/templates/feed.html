@@ -1,0 +1,27 @@
+<!doctype html>
+
+<head>
+    {% load staticfiles %}
+    <link type="text/css" rel="stylesheet/less" href="{% static "less/feed.less" %}"/>
+    {% include "base/links.html" %}
+</head>
+
+<script id="feed-template" type="text/template">
+    <div class="container">
+        <button class="account-button btn waves-effect" type="submit" name="action">Account
+        </button>
+    </div>
+</script>
+
+<body>
+    <div id="feed">
+
+    </div>
+</body>
+
+<script type="text/javascript" src="{% static "js/feed.js" %}"></script>
+<script type="text/javascript">
+    var feedView = new cw.FeedView();
+</script>
+
+</html>

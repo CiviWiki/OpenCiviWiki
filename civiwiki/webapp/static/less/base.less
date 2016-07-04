@@ -107,15 +107,39 @@ html {
 }
 
 // Custom Input Colors
-.input-field input:focus {
-    border-bottom: 1px solid @blue !important;
-    box-shadow: 0 1px 0 0 @blue !important;
+.white-background-input-field input:focus, .white-background-input-field textarea:focus {
+    border-bottom: 1px solid @purple !important;
+    box-shadow: 0 1px 0 0 @purple !important;
 }
-.input-field input.invalid {
+.white-background-input-field input.invalid {
     border-bottom: 1px solid @yellow !important;
     box-shadow: 0 1px 0 0 @yellow !important;
 }
-.input-field input.valid {
+.white-background-input-field input.valid {
+    border-bottom: 1px solid @purple !important;
+    box-shadow: 0 1px 0 0 @purple !important;
+}
+.white-background-input-field input:focus + label, .white-background-input-field textarea:focus + label {
+    color: @purple !important;
+}
+
+.dark-background-input-field input:focus, .dark-background-input-field textarea:focus {
     border-bottom: 1px solid @blue !important;
     box-shadow: 0 1px 0 0 @blue !important;
+}
+.dark-background-input-field input.invalid {
+    border-bottom: 1px solid @yellow !important;
+    box-shadow: 0 1px 0 0 @yellow !important;
+}
+.dark-background-input-field input.valid {
+    border-bottom: 1px solid @blue !important;
+    box-shadow: 0 1px 0 0 @blue !important;
+}
+.dark-background-input-field input:focus + label, .dark-background-input-field textarea:focus + label {
+    color: @blue !important;
+}
+
+//Scroll Divs
+.scroll-col {
+    overflow: scroll;
 }

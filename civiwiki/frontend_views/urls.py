@@ -12,6 +12,6 @@ urlpatterns = [
     url(r'^howitworks$', v.how_it_works_view, name='how it works'),
     url(r'^account$', v.account_home, name='account home'),
     url(r'^add_civi$', v.add_civi, name='add civi'),
-    url(r'^$', v.account_home, name='home'),
+    url(r'^$', v.feed, name='feed'),
     url(r'', v.does_not_exist, name='404')
 ]
