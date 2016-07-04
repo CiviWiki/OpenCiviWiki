@@ -9,22 +9,16 @@ from utils.custom_decorators import beta_blocker, login_required
 
 @login_required
 @beta_blocker
-def feed(request):
-	return TemplateResponse(request, 'feed.html', {})
-
-@login_required
-@beta_blocker
 def account_home(request):
-    a = Account.objects.get(user=request.user)
-    friend_data_dictionary = Account.objects.friends(a)
+	a = Account.objects.get(user=request.user)
+	friend_data_dictionary = Account.objects.friends(a)
 
-    result = dict(friends=friend_data_dictionary['friends'],
-                  requests=friend_data_dictionary['requests'],
-                  profile=Account.objects.summarize(a),
-                  legislator=sun.get_legislator_and_district(a),
-                  bills=sun.get_bill_information(a))
-
-    return TemplateResponse(request, 'account.html', {'result': json.dumps(result)})
+	return TemplateResponse(request, 'home.html',
+			dict(friends=friend_data_dictionary['friends'],
+				requests=friend_data_dictionary['requests'],
+				profile=Account.objects.summarize(a),
+				legislator=sun.get_legislator_and_district(a),
+				bills=sun.get_bill_information(a)))
 
 @login_required
 @beta_blocker

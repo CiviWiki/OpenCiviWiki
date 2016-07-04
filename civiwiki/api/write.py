@@ -134,7 +134,7 @@ def editUser(request):
 	:return: (200, ok) (500, error)
 
 	'''
-	r = request.POST
+	r = json.loads(dict(request.POST)['data'][0])
 	user = request.user
 	account = Account.objects.get(user=user)
 	interests = r.get('interests', False)
