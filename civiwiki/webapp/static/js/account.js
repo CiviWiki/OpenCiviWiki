@@ -15,14 +15,7 @@ cw.AccountView = BB.View.extend({
 
     events: {
         'blur .save-account': 'saveAccount',
-        'keypress .save-account': 'calcKey'
-    },
-
-    calcKey: function (e) {
-        if (e.which == 13 && !e.shiftKey) {
-            e.preventDefault();
-            $(e.target).blur();
-        }
+        'keypress .save-account': cw.checkForEnter
     },
 
     saveAccount: function (e) {
@@ -31,9 +24,13 @@ cw.AccountView = BB.View.extend({
             changeVal = $this.val(),
             apiData = {};
 
+        if (this.model.get('profile')[changeKey] === changeVal) {
+            return;
+        }
+
         apiData[changeKey] = changeVal;
 
-        $.ajax({
+        this.model.fetch({
             url: 'api/edituser',
             type: 'POST',
             data: apiData
