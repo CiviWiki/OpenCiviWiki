@@ -1,0 +1,66 @@
+{% verbatim %}
+<div class="row">
+    <div class="col s3 scroll-col account-settings">
+        <div class="card">
+            <div class="card-image">
+                <img src="http://162.209.109.174/2016-06-28_04-52-28I9LM7O.png">
+                <span class="card-title">{{this.model.get('first_name')}} {{this.model.get('last_name')}}</span>
+            </div>
+            <div class="card-content">
+                <div class="description">
+                    <div class="white-background-input-field input-field col s12">
+                        <textarea id="about_me" class="save-account materialize-textarea" length="255">{{this.model.get('about_me')}}</textarea>
+                        <label for="about-me">About Me</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-content">
+                <div class="profile-info">
+                    <div class="white-background-input-field input-field col s12">
+                        <input class="save-account" id="first_name" type="text" value="{{this.model.get('first_name')}}">
+                        <label for="first-name">First Name</label>
+                    </div>
+                    <div class="white-background-input-field input-field col s12">
+                        <input class="save-account" id="last_name" type="text" value="{{this.model.get('last_name')}}">
+                        <label for="last-name">Last Name</label>
+                    </div>
+                    <div class="white-background-input-field input-field col s12">
+                        <input class="save-account" id="email" type="email" value="{{this.model.get('email')}}">
+                        <label for="email">Email</label>
+                    </div>
+                    <div class="white-background-input-field input-field col s12">
+                        <input class="save-account" id="password" type="text" value="This card doesn't show if different user">
+                        <label for="password">Password</label>
+                    </div>
+                    <div class="white-background-input-field input-field col s12">
+                        <input class="save-account" id="zip_code" type="text" value="{{this.model.get('zip_code')}}">
+                        <label for="zipcode">Zip Code</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col s9 scroll-col account-tabs">
+        <div class="card">
+            <div class="card-content">
+                <div class="row">
+                    <div class="col s12">
+                        <ul class="tabs">
+                            <li class="tab col s3"><a class="active" href="#your-feed">Your Feed</a></li>
+                            <li class="tab col s3"><a href="#groups">Groups</a></li>
+                            <li class="tab col s3"><a href="#friends">Friends</a></li>
+                            <li class="tab col s3"><a href="#interests">Interests</a></li>
+                        </ul>
+                    </div>
+                    <div id="your-feed" class="col s12">Feeeeed me</div>
+                    <div id="groups" class="col s12">Groups</div>
+                    <div id="friends" class="col s12">Friends</div>
+                    <div id="interests" class="col s12">Interests</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endverbatim %}

@@ -1,11 +1,24 @@
 cw = cw || {};
 
+cw.AccountModel = BB.Model.extend({
+    url: function () {
+            if (! this.user ) {
+                throw new Error("This is a race condition! and why we can't have nice things :(");
+            }
+            return '/api/account_data/' + this.user + '/';
+    },
+
+    initialize: function (model, options) {
+        this.user = options.user;
+    }
+});
+
 cw.AccountView = BB.View.extend({
     el: '#account',
     template: _.template($('#account-template').html()),
 
     initialize: function () {
-        this.render();
+        this.listenTo(this.model, 'sync', this.render);
     },
 
     render: function () {
@@ -22,18 +35,26 @@ cw.AccountView = BB.View.extend({
         var $this = $(e.target),
             changeKey = $this.attr('id'),
             changeVal = $this.val(),
-            apiData = {};
+            apiData = {}
+            _this = this;
 
-        if (this.model.get('profile')[changeKey] === changeVal) {
+        if (this.model.get([changeKey]) === changeVal) {
             return;
         }
 
         apiData[changeKey] = changeVal;
 
-        this.model.fetch({
-            url: 'api/edituser',
+        $.ajax({
+            url: '/api/edituser/',
             type: 'POST',
-            data: apiData
+            data: apiData,
+            success: function () {
+                _this.model.fetch({
+                    success: function () {
+                        Materialize.toast('Saved!', 3000);
+                    }
+                });
+            }
         });
     },
 
