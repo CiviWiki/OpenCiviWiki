@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
-from group import Group
+from group_meta import GroupMeta
 from civi import Civi
 
 from legislation.sunlightapi import (get_bill_information,
@@ -51,7 +51,7 @@ class AccountManager(models.Manager):
             "country": account.country,
             "address1": account.address1,
             "address2": account.address2,
-            "groups": [Group.objects.summarize(g) for g in account.groups.all()],
+            "groups": [GroupMeta.objects.summarize(g) for g in account.groups.all()],
             "friends": [self.summarize(a) for a in account.friends.all()]
         }
         if filter and filter in data:
@@ -98,5 +98,5 @@ class Account(models.Model):
     city = models.CharField(max_length=63, blank=True)
     address1 = models.CharField(max_length=255, blank=True)
     address2 = models.CharField(max_length=255, blank=True)
-    groups = models.ManyToManyField('Group', related_name='user_groups')
+    groups = models.ManyToManyField('GroupMeta', related_name='user_groups')
     friends = models.ManyToManyField('Account', related_name='friended_account')

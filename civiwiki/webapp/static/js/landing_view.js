@@ -17,5 +17,13 @@ cw.LandingView = BB.View.extend({
                 return (_.max([$(this).height(), $(window).height()]) + "px");
             }
         );
+
+        this.setupStaticNav();
     },
+
+    setupStaticNav: function () {
+        $('.button-collapse').sideNav();
+        $('.collapsible').collapsible();
+        $('.sideNav').css('display', 'inherit');
+    }
 });

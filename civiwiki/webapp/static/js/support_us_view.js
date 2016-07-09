@@ -10,5 +10,12 @@ cw.SupportusView = BB.View.extend({
 
     render: function () {
         this.$el.empty().append(this.supportusTemplate());
+        this.setupStaticNav();
     },
+
+    setupStaticNav: function () {
+        $('.button-collapse').sideNav();
+        $('.collapsible').collapsible();
+        $('.sideNav').css('display', 'inherit');
+    }
 });
