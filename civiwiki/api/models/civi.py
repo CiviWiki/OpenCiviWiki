@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 from django.db import models
 from hashtag import Hashtag
-from group_meta import GroupMeta
+from group import Group
 from django.contrib.postgres.fields import ArrayField
 from operator import itemgetter
 import math, json
@@ -11,7 +11,7 @@ class CiviManager(models.Manager):
         return {
             "id": civi.id,
             "title": civi.title,
-            "group": GroupMeta.objects.summarize(civi.group),
+            "group": Group.objects.summarize(civi.group),
             "body": civi.body[0:150]
         }
 
@@ -67,7 +67,7 @@ class Civi(models.Model):
     implementation but it simplifies things such as searching.
     '''
     objects = CiviManager()
-    group = models.ForeignKey('GroupMeta', default=None, null=True)
+    group = models.ForeignKey('Group', default=None, null=True)
     creator = models.ForeignKey('Account', default=None, null=True)
     category = models.ForeignKey('Category', default=None, null=True)
     topic = models.ForeignKey('Topic', default=None, null=True)
