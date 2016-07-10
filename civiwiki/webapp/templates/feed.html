@@ -4,14 +4,12 @@
     {% load staticfiles %}
     <link type="text/css" rel="stylesheet/less" href="{% static "less/feed.less" %}"/>
     {% include "base/links.html" %}
-</head>
 
-<script id="feed-template" type="text/template">
-    <div class="container">
-        <button class="account-button btn waves-effect" type="submit" name="action">Account
-        </button>
-    </div>
-</script>
+    <script id="feed-template" type="text/template">
+        {% include "partials/feed/feed_base.html" %}
+        {% include "partials/utils/account_nav_button.html" %}
+    </script>
+</head>
 
 <body>
     <div id="feed">
