@@ -36,7 +36,7 @@ cw.AccountView = BB.View.extend({
         var $this = $(e.target),
             changeKey = $this.attr('id'),
             changeVal = $this.val(),
-            apiData = {}
+            apiData = {},
             _this = this;
 
         if (this.model.get([changeKey]) === changeVal) {
