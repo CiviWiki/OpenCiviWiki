@@ -2,14 +2,14 @@
 
 <head>
     {% load staticfiles %}
-    <link type="text/css" rel="stylesheet/less" href="{% static "less/account.less" %}"/>
     {% include "base/links.html" %}
-
-    <script id="account-template" type="text/template">
-        {% include "partials/account/account_base.html" %}
-        {% include "partials/utils/feed_nav_button.html" %}
-    </script>
+    {% include "base/less_headers/account_less.html" %}
 </head>
+
+<script id="account-template" type="text/template">
+    {% include "partials/account/account_base.html" %}
+    {% include "partials/utils/feed_nav_button.html" %}
+</script>
 
 <body>
     <div id="account">

@@ -24,6 +24,7 @@ cw.AccountView = BB.View.extend({
     render: function () {
         this.$el.empty().append(this.template());
         this.$el.find('.scroll-col').height($(window).height());
+        cw.materializeShit();
     },
 
     events: {
@@ -49,11 +50,8 @@ cw.AccountView = BB.View.extend({
             type: 'POST',
             data: apiData,
             success: function () {
-                _this.model.fetch({
-                    success: function () {
-                        Materialize.toast('Saved!', 3000);
-                    }
-                });
+                Materialize.toast('Saved!', 3000);
+                _this.model.fetch();
             }
         });
     },

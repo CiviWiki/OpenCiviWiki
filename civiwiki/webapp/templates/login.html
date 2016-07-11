@@ -2,90 +2,16 @@
 
 <head>
     {% load staticfiles %}
-    <link type="text/css" rel="stylesheet/less" href="{% static "less/login.less" %}"/>
     {% include "base/links.html" %}
+    {% include "base/less_headers/login_less.html" %}
 </head>
 
 <script id="login-template" type="text/template">
-    <div class="container">
-        <div class="row">
-            <div class="col s8 offset-s2">
-                <div class="card wrapper login-wrapper">
-                    <div class="card-content">
-                        <div class="title-lato dark-white-text">
-                            Log in to CiviWiki
-                        </div>
-                        <div class="start-area">
-                            <span class="body-lato dark-white-text">don't have an account?</span>
-                            <span class="dark-link-lato register-link linkz">register here <i class="mini material-icons">call_made</i></span>
-                        </div>
-                        <div class="input-area">
-                            <div class="dark-background-input-field left-input-field input-field col s12">
-                                <input id="username" type="text" class="validate">
-                                <label for="username">Username</label>
-                            </div>
-                            <div class="dark-background-input-field left-input-field input-field col s12">
-                                <input id="password" type="password" class="validate">
-                                <label for="password">Password</label>
-                            </div>
-                            <button class="login-button btn waves-effect" type="submit" name="action">Log In
-                                <i class="material-icons right">send</i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    {% include "partials/login/login_base.html" %}
 </script>
 
 <script id="register-template" type="text/template">
-    <div class="container">
-        <div class="row">
-            <div class="col s8 offset-s2">
-                <div class="card wrapper register-wrapper">
-                    <div class="card-content">
-                        <div class="title-lato dark-white-text">
-                            Register with CiviWiki
-                        </div>
-                        <div class="start-area">
-                            <span class="body-lato dark-white-text">already have an account?</span>
-                            <span class="dark-link-lato login-link linkz">log in here <i class="mini material-icons">call_made</i></span>
-                        </div>
-                        <div class="input-area">
-                            <div class="dark-background-input-field left-input-field input-field col s12 m6">
-                                <input id="first-name" type="text" class="validate">
-                                <label for="first-name">First Name</label>
-                            </div>
-                            <div class="dark-background-input-field input-field col s12 m6">
-                                <input id="last-name" type="text" class="validate">
-                                <label for="last-name">Last Name</label>
-                            </div>
-                            <div class="dark-background-input-field left-input-field input-field col s12 m6">
-                                <input id="email" type="email" class="validate">
-                                <label for="email">Email</label>
-                            </div>
-                            <div class="dark-background-input-field input-field col s12 m6">
-                                <input id="password" type="password" class="validate">
-                                <label for="password">Password</label>
-                            </div>
-                            <div class="dark-background-input-field left-input-field input-field col s12 m6">
-                                <input id="username" type="text" class="validate">
-                                <label for="username">Username</label>
-                            </div>
-                            <div class="dark-background-input-field input-field col s12 m6">
-                                <input id="zipcode" type="text" class="validate">
-                                <label for="zipcode">Zip Code</label>
-                            </div>
-                            <button class="register-button btn waves-effect" type="submit" name="action">Register
-                                <i class="material-icons right">send</i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    {% include "partials/login/register_base.html" %}
 </script>
 
 <body>
