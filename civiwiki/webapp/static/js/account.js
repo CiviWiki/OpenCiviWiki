@@ -16,15 +16,28 @@ cw.AccountModel = BB.Model.extend({
 cw.AccountView = BB.View.extend({
     el: '#account',
     template: _.template($('#account-template').html()),
+    settingsTemplate: _.template($('#settings-template').html()),
 
     initialize: function () {
+        this.isSave = false;
+
         this.listenTo(this.model, 'sync', this.render);
     },
 
     render: function () {
-        this.$el.empty().append(this.template());
-        this.$el.find('.scroll-col').height($(window).height());
+        if (this.isSave) {
+            this.postRender();
+        } else {
+            this.$el.empty().append(this.template());
+            this.$el.find('.scroll-col').height($(window).height());
+            this.postRender();
+        }
+    },
+
+    postRender: function () {
+        this.$el.find('.account-settings').empty().append(this.settingsTemplate());
         cw.materializeShit();
+        this.isSave = false;
     },
 
     events: {
@@ -51,6 +64,8 @@ cw.AccountView = BB.View.extend({
             data: apiData,
             success: function () {
                 Materialize.toast('Saved!', 3000);
+
+                _this.isSave = true;
                 _this.model.fetch();
             }
         });
