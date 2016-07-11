@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 
 from models import Account, Topic, Attachment, Category, Civi, Comment, Hashtag
+from django.contrib.auth.models import User
 from utils.custom_decorators import require_post_params
 from legislation import sunlightapi as sun
 
@@ -47,16 +48,14 @@ def getTopics(request):
 	return JsonResponse({"result":result})
 
 
-@require_post_params(params=['id'])
-def getUser(request):
-	'''
-		Takes in a user ID, returns a user object.
-	'''
-	try:
-		a = Account.objects.get(id=request.POST.get("id", -1))
-		return JsonResponse({"result":Account.objects.summarize(a)})
-	except Account.DoesNotExist as e:
-		return HttpResponseBadRequest(reason=str(e))
+def getUser(request, user):
+    try:
+        u = User.objects.get(username=user)
+        a = Account.objects.get(user=u)
+
+        return JsonResponse(Account.objects.summarize(a))
+    except Account.DoesNotExist as e:
+        return HttpResponseBadRequest(reason=str(e))
 
 @require_post_params(params=['username'])
 def getIdByUsername(request):
