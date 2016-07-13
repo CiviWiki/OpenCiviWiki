@@ -19,7 +19,7 @@ def get_env_variable(environment_variable, optional=False):
             error = "environment variable '{ev}' not found.".format(ev=environment_variable)
             raise ImproperlyConfigured(error)
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = get_env_variable("DJANGO_SECRET_KEY")
 SUNLIGHT_API_KEY = get_env_variable("SUNLIGHT_API_KEY")
 ALLOWED_HOSTS = [".herokuapp.com", ".civiwiki.org"]
