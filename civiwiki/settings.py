@@ -53,9 +53,34 @@ MIDDLEWARE_CLASSES = (
 CORS_ORIGIN_ALLOW_ALL = True
 ROOT_URLCONF = 'civiwiki.urls'
 
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, "webapp/templates")],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
 WSGI_APPLICATION = 'civiwiki.wsgi.application'
 
+STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'webapp/static'),
+)
+
+
 if 'CIVIWIKI_LOCAL_NAME' not in os.environ:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
     DATABASES = {
         'default': {
             'HOST': get_env_variable("RDS_DB_NAME"),
@@ -84,29 +109,3 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 LOGIN_URL = '/login'
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-STATIC_ROOT = os.path.join(BASE_DIR, 'webapp/static')
-STATIC_URL = '/static/'
-
-STATICFILES_DIRS = (
-    os.path.normpath(os.path.join(BASE_DIR, 'webapp/static')),
-)
-
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, "webapp/templates")],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
-]
-
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-MEDIA_ROOT_URL = '/media/'
