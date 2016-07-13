@@ -11,7 +11,6 @@ class CiviManager(models.Manager):
         return {
             "id": civi.id,
             "title": civi.title,
-            # "group": Group.objects.summarize(civi.group),
             "body": civi.body[0:150]
         }
 
@@ -28,9 +27,6 @@ class CiviManager(models.Manager):
             "type": civi.type,
             "id": civi.id,
             "REF": civi.reference_id,
-            #"AT": getChain(civi.at_id),
-            #"AND_NEGATIVE": getChain(civi.and_negative_id),
-            #"AND_POSITIVE": getChain(civi.and_positive_id)
 	    }
 
         if filter and filter in data:
@@ -67,7 +63,6 @@ class Civi(models.Model):
     implementation but it simplifies things such as searching.
     '''
     objects = CiviManager()
-    group = models.ForeignKey('Group', default=None, null=True)
     creator = models.ForeignKey('Account', default=None, null=True)
     category = models.ForeignKey('Category', default=None, null=True)
     topic = models.ForeignKey('Topic', default=None, null=True)
