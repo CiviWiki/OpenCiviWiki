@@ -108,8 +108,9 @@ STATIC_URL = '/static/'
 
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, '../webapp/static'),
+    os.path.join(BASE_DIR, 'webapp/static'),
 )
+
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_ROOT_URL = '/media/'
