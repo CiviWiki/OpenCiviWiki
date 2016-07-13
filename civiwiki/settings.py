@@ -71,7 +71,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'civiwiki.wsgi.application'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'webapp/static'),
@@ -79,6 +78,9 @@ STATICFILES_DIRS = (
 
 
 if 'CIVIWIKI_LOCAL_NAME' not in os.environ:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
     DATABASES = {
         'default': {
             'HOST': get_env_variable("RDS_DB_NAME"),
