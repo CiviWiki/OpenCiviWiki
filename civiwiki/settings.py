@@ -101,11 +101,8 @@ USE_L10N = True
 USE_TZ = True
 LOGIN_URL = '/login'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'collected_static')
+STATIC_ROOT = os.path.join(os.path.abspath(os.path.dirname(__file__)), '../collected_static')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'webapp/static'),
+    os.path.join(os.path.abspath(os.path.dirname(__file__)), '../webapp/static'),
 )
-
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-MEDIA_ROOT_URL = '/media/'

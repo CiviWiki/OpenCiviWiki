@@ -31,8 +31,5 @@ urlpatterns = [
 urlpatterns += [
     url(r'^static/(?P<path>.*)$', serve, {
         'document_root': settings.STATIC_ROOT, 'show_indexes': settings.DEBUG
-    }),
-    url(r'^media/(?P<path>.*)$', serve, {
-        'document_root': settings.MEDIA_ROOT, 'show_indexes': settings.DEBUG
     })
 ]
