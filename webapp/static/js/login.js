@@ -96,6 +96,8 @@ cw.LoginView = BB.View.extend({
                         Materialize.toast(data.message, 3000);
                     } else if (data.status_code === 500) {
                         Materialize.toast('Internal Server Error', 3000);
+                    } else {
+                        Materialize.toast(data.statusText, 2000);
                     }
                 }
             });
