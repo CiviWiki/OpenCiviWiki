@@ -2,8 +2,7 @@
 Django settings for civiwiki project.
 Darius Calliet May 12, 2016
 
-Development database settings file. Enure you have the proper environment
-variables set.
+Production settings file to select proper environment variables.
 """
 
 import os
@@ -23,7 +22,6 @@ def get_env_variable(environment_variable, optional=False):
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = get_env_variable("DJANGO_SECRET_KEY")
 SUNLIGHT_API_KEY = get_env_variable("SUNLIGHT_API_KEY")
-DEBUG = True
 ALLOWED_HOSTS = []
 
 INSTALLED_APPS = (
@@ -34,7 +32,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'api',
-    'auth',
+    'authentication',
     'frontend_views'
 )
 
@@ -72,12 +70,12 @@ WSGI_APPLICATION = 'civiwiki.wsgi.application'
 
 DATABASES = {
     'default': {
-        'HOST':get_env_variable("CIVIWIKI_DEV_HOST"),
-        'PORT': get_env_variable("CIVIWIKI_DEV_PORT"),
-        'NAME': get_env_variable("CIVIWIKI_DEV_NAME"),
-        'ENGINE': get_env_variable("CIVIWIKI_DEV_ENGINE"),
-        'USER': get_env_variable("CIVIWIKI_DEV_USERNAME"),
-        'PASSWORD': get_env_variable("CIVIWIKI_DEV_PASSWORD"),
+        'HOST': get_env_variable("RDS_DB_NAME"),
+        'PORT': get_env_variable("RDS_PORT"),
+        'NAME': get_env_variable("RDS_DB_NAME"),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'USER': get_env_variable("RDS_USERNAME"),
+        'PASSWORD': get_env_variable("RDS_PASSWORD"),
     },
 }
 
@@ -87,10 +85,13 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 LOGIN_URL = '/login'
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "../webapp/static"),
+    os.path.normpath(os.path.join(BASE_DIR, 'webapp/static')),
 )
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT_URL = '/media/'

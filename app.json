@@ -1,0 +1,16 @@
+{
+  "name": "CiviWiki",
+  "scripts": {
+  },
+  "env": {
+    "WEB_CONCURRENCY": "3"
+  },
+  "formation": {
+  },
+  "addons": [
+
+  ],
+  "buildpacks": [
+
+  ]
+}

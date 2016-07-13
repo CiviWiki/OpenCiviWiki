@@ -6,11 +6,11 @@ from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
-from group import Group
+#from group import Group
 from civi import Civi
 
-from legislation.sunlightapi import (get_bill_information,
-    get_legislator_and_district)
+#from legislation.sunlightapi import (get_bill_information,
+#    get_legislator_and_district)
 
 class AccountManager(models.Manager):
 
@@ -51,7 +51,7 @@ class AccountManager(models.Manager):
             "country": account.country,
             "address1": account.address1,
             "address2": account.address2,
-            "groups": [Group.objects.summarize(g) for g in account.groups.all()],
+            #"groups": [Group.objects.summarize(g) for g in account.groups.all()],
             "friends": [self.summarize(a) for a in account.friends.all()]
         }
         if filter and filter in data:
@@ -63,12 +63,12 @@ class AccountManager(models.Manager):
         requests = [self.summarize(a) for a in self.filter(pk__in=account.friend_requests)]
         return dict(friends=friends, requests=requests)
 
-    def bills(self, account):
-        return get_bill_information(account)
+#    def bills(self, account):
+#        return get_bill_information(account)
 
-    def legislators(self, account):
-        data = get_legislator_and_district(account.zip_code)
-        return data['legislators']
+#   def legislators(self, account):
+#        data = get_legislator_and_district(account.zip_code)
+#        return data['legislators']
 
 
 class Account(models.Model):
