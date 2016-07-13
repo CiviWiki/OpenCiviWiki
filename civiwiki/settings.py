@@ -85,7 +85,7 @@ else:
     DEBUG = True
     DATABASES = {
         'default': {
-            'HOST':'localhost',
+            'HOST': 'localhost',
             'PORT': '5432',
             'NAME': get_env_variable("CIVIWIKI_LOCAL_NAME"),
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -103,6 +103,7 @@ LOGIN_URL = '/login'
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
+ALLOWED_HOSTS = [".herokuapp.com", ".civiwiki.org"]
 
 STATICFILES_DIRS = (
     os.path.normpath(os.path.join(BASE_DIR, 'webapp/static')),
