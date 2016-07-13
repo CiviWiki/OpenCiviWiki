@@ -33,3 +33,5 @@ urlpatterns += [
         'document_root': settings.STATIC_ROOT, 'show_indexes': settings.DEBUG
     })
 ]
+
+print(urlpatterns)
