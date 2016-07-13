@@ -111,6 +111,8 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'webapp/static'),
 )
 
+print(BASE_DIR)
+
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_ROOT_URL = '/media/'
