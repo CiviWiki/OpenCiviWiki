@@ -92,7 +92,7 @@ else:
             'PASSWORD': get_env_variable("CIVIWIKI_LOCAL_PASSWORD"),
         },
     }
-
+DEBUG = True
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
