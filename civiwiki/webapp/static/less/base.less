@@ -1,0 +1,145 @@
+@purple: #501CB5;
+@light-purple: #B1B2F4;
+@dark-purple: #0E0038;
+@blue: #74edd6;
+@dark-blue: #1acbab;
+@yellow: #F7CE4A;
+@light-yellow: #FCEBB7;
+
+@white: #fff;
+@black: #000;
+@dark-white: #ddd;
+@dark-gray: #333;
+@deep-gray: #181818;
+@text: #333;
+
+html {
+    font-family: 'Lato', sans-serif;
+}
+
+// Body Text
+.body-lato {
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    color: @text;
+}
+
+// Subtitles
+.subtitle-lato {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: 19px;
+    color: @purple;
+}
+
+// Titles
+.title-lato {
+    font-family: 'Lato', sans-serif;
+    font-weight: 600;
+    font-size: 30px;
+    color: @purple;
+}
+
+// Links
+.link-lato {
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    color: @purple;
+}
+
+// Dark Background Links
+.dark-link-lato {
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    color: @blue;
+}
+
+// Should be rarely used
+.purple-background {
+    background-color: @purple;
+}
+
+// For all major dark themed color blocks
+.dark-purple-background {
+    background-color: @dark-purple;
+}
+
+// For highlight color blocks
+.yellow-background {
+    background-color: @yellow;
+}
+
+// For buttons
+.blue-background {
+    background-color: @blue;
+}
+
+// For buttons
+.dark-blue-background {
+    background-color: @dark-blue;
+}
+
+// Non-body text--Use this sparingly, the classes above should be used for text
+.purple-text {
+    color: @purple;
+}
+
+// Dark background text should be this color, or dark-white
+.blue-text {
+    color: @blue;
+}
+
+// Dark background text
+.dark-white-text {
+    color: @dark-white;
+}
+
+.white-text {
+    color: @white;
+}
+
+// This is because all text should be dark gray, not black
+.black-text {
+    color: @text;
+}
+
+// Custom Input Colors
+.white-background-input-field input:focus, .white-background-input-field textarea:focus {
+    border-bottom: 1px solid @purple !important;
+    box-shadow: 0 1px 0 0 @purple !important;
+}
+.white-background-input-field input.invalid {
+    border-bottom: 1px solid @yellow !important;
+    box-shadow: 0 1px 0 0 @yellow !important;
+}
+.white-background-input-field input.valid {
+    border-bottom: 1px solid @purple !important;
+    box-shadow: 0 1px 0 0 @purple !important;
+}
+.white-background-input-field input:focus + label, .white-background-input-field textarea:focus + label {
+    color: @purple !important;
+}
+
+.dark-background-input-field input:focus, .dark-background-input-field textarea:focus {
+    border-bottom: 1px solid @blue !important;
+    box-shadow: 0 1px 0 0 @blue !important;
+}
+.dark-background-input-field input.invalid {
+    border-bottom: 1px solid @yellow !important;
+    box-shadow: 0 1px 0 0 @yellow !important;
+}
+.dark-background-input-field input.valid {
+    border-bottom: 1px solid @blue !important;
+    box-shadow: 0 1px 0 0 @blue !important;
+}
+.dark-background-input-field input:focus + label, .dark-background-input-field textarea:focus + label {
+    color: @blue !important;
+}
+
+//Scroll Divs
+.scroll-col {
+    overflow: scroll;
+}

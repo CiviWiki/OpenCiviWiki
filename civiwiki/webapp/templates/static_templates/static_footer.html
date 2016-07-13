@@ -1,0 +1,28 @@
+<!-- Footer for static pages -->
+{% load staticfiles %}
+
+<footer class="page-footer static-footer">
+    <!-- Top block for external links -->
+    <div class="container">
+        <div class="row center">
+            <div class="external-links grey-text text-darken-2">
+                <a class="grey-text text-darken-1" href="mailto:mitchell@civiwiki.org">Email</a> |
+                <a class="grey-text text-darken-1" href="https://www.facebook.com/CiviWiki/"  target="_blank">Facebook</a> |
+                <a class="grey-text text-darken-1" href="https://twitter.com/civiwiki"  target="_blank">Twitter</a> |
+                <a class="grey-text text-darken-1" href="https://github.com/CiviWikiorg/CiviWiki"  target="_blank">GitHub</a>
+            </div>
+        </div>
+    </div>
+    <!-- Bottom block -->
+    <div class="footer-copyright">
+        <div class="container">
+            <div class="grey-text text-darken-1">
+                <object class="logo-img" type="image/svg+xml" data="{% static "img/logo-civiwiki-tree-white.svg" %}" height="32px"></object><span class="wordmark">CiviWiki</span>
+                <div class="footer-right right">
+                    <!-- TODO: <a class="grey-text" href="policy">Privacy Policy</a> | -->
+                    <a class="grey-text" href="mailto:mitchell@civiwiki.org">Contact Us (mitchell@civiwiki.org)</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>

@@ -1,0 +1,29 @@
+<!--This is what the beta page would look like (it doesn't have full functionality) if it's a separate page-->
+<!doctype html>
+
+{% load staticfiles %}
+{% include "base/links.html" %}
+
+<title>Sorry!</title>
+
+<script id="beta-template" type="text/template">
+
+
+    <div id="beta-section" class="center">
+        <h1>Sorry!</h1>
+        <p>If you were sent here by a member of CiviWiki contact them with the email address used to register!</p>
+        <p>Otherwise, please come back as soon as we advance to open beta!</p>
+    </div>
+</script>
+
+<body id="beta_wrapper">
+    <div id="beta">
+    </div>
+</body>
+
+<!-- Backbone Views File -->
+<script src="/static/js/beta_view.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var betaView = new cw.BetaView();
+</script>
+</html>

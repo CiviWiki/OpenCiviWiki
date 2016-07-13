@@ -1,0 +1,63 @@
+@import 'base';
+
+html {
+    background-color: @dark-purple;
+}
+
+.container {
+    .wrapper {
+        background-color: @dark-purple;
+        box-shadow: none;
+
+        .start-area {
+            margin-top: 6px;
+
+            .linkz {
+                margin-left: 4px;
+                cursor: pointer;
+
+                .mini {
+                    font-size: 12px;
+                }
+            }
+        }
+
+        .input-area {
+            margin-top: 10px;
+
+            .left-input-field {
+                padding-left: 0;
+            }
+
+            @media (max-width: 600px) {
+                .input-field {
+                    padding-left: 0;
+                }
+
+                .input-field input, .input-field label {
+                    left: 0;
+                }
+            }
+
+            .input-field input, .input-field label {
+                color: @dark-white;
+            }
+
+            .left-input-field input, .left-input-field label {
+                left: 0;
+            }
+
+            .input-field input {
+                border-bottom: 1px solid @dark-white;
+                box-shadow: 0 1px 0 0 @dark-white;
+            }
+
+            .login-button {
+                margin-top: 20px;
+            }
+            .register-button {
+                margin-top: 20px;
+            }
+        }
+    }
+}

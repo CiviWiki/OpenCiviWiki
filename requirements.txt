@@ -1,0 +1,12 @@
+args==0.1.0
+clint==0.5.1
+Django==1.8.5
+django-cors-headers==1.1.0
+docutils==0.12
+gunicorn==19.6.0
+jmespath==0.9.0
+psycopg2==2.6.1
+python-dateutil==2.4.2
+requests==2.8.1
+six==1.10.0
+sunlight==1.2.9

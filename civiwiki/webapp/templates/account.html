@@ -1,0 +1,37 @@
+<!doctype html>
+
+<head>
+    {% load staticfiles %}
+    {% include "base/links.html" %}
+    {% include "base/less_headers/account_less.html" %}
+</head>
+
+<script id="account-template" type="text/template">
+    {% include "partials/account/account_base.html" %}
+    {% include "partials/utils/feed_nav_button.html" %}
+</script>
+
+<script id="settings-template" type="text/template">
+    {% include "partials/account/account_settings.html" %}
+</script>
+
+<body>
+    <div id="account">
+
+    </div>
+</body>
+
+<script type="text/javascript" src="{% static "js/account.js" %}"></script>
+<script type="text/javascript">
+    var username = '{{user.username}}';
+    var accountModel = new cw.AccountModel({}, {
+        user: username
+    });
+    accountModel.fetch();
+
+    var accountView = new cw.AccountView({
+        model: accountModel
+    });
+</script>
+
+</html>

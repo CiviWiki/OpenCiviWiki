@@ -1,0 +1,28 @@
+<!doctype html>
+
+<head>
+    {% load staticfiles %}
+    {% include "base/links.html" %}
+    {% include "base/less_headers/login_less.html" %}
+</head>
+
+<script id="login-template" type="text/template">
+    {% include "partials/login/login_base.html" %}
+</script>
+
+<script id="register-template" type="text/template">
+    {% include "partials/login/register_base.html" %}
+</script>
+
+<body>
+    <div id="login">
+
+    </div>
+</body>
+
+<script type="text/javascript" src="{% static "js/login.js" %}"></script>
+<script type="text/javascript">
+    var loginView = new cw.LoginView();
+</script>
+
+</html>
