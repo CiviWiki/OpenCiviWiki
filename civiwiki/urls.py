@@ -30,8 +30,5 @@ urlpatterns = [
 
 urlpatterns += [
     url(r'^static/(?P<path>.*)$', serve, {
-        'document_root': settings.STATIC_ROOT, 'show_indexes': settings.DEBUG
-    })
+        'document_root': settings.STATIC_ROOT
 ]
-
-print(urlpatterns)
