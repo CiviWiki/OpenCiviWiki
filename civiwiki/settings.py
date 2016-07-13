@@ -77,7 +77,7 @@ else:
             'PASSWORD': get_env_variable("CIVIWIKI_LOCAL_PASSWORD"),
         },
     }
-    
+
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
@@ -85,12 +85,14 @@ USE_L10N = True
 USE_TZ = True
 LOGIN_URL = '/login'
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'webapp/static')
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
     os.path.normpath(os.path.join(BASE_DIR, 'webapp/static')),
 )
+
+print(STATIC_ROOT + ' ++++++ STATIC_ROOT')
 
 TEMPLATES = [
     {
