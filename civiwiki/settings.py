@@ -92,8 +92,6 @@ STATICFILES_DIRS = (
     os.path.normpath(os.path.join(BASE_DIR, 'webapp/static')),
 )
 
-print(STATIC_ROOT + ' ++++++ STATIC_ROOT')
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
