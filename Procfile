@@ -1,1 +1,1 @@
-web: gunicorn --log-file=- --pythonpath civiwiki civiwiki.wsgi
+web: gunicorn civiwiki.wsgi --log-file-
