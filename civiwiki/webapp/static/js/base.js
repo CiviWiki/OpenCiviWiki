@@ -17,3 +17,8 @@ cw.checkForEnter = function (e) {
         $(e.target).blur();
     }
 };
+
+cw.materializeShit = function () {
+    Materialize.updateTextFields();
+    $('ul.tabs').tabs();
+};
