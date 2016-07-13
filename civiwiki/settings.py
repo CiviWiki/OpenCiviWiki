@@ -71,6 +71,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'civiwiki.wsgi.application'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'webapp/static'),
+)
+
+
 if 'CIVIWIKI_LOCAL_NAME' not in os.environ:
     DATABASES = {
         'default': {
@@ -100,9 +107,3 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 LOGIN_URL = '/login'
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = '/static/'
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'webapp/static'),
-)
