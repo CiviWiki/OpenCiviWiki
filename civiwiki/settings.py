@@ -22,7 +22,7 @@ def get_env_variable(environment_variable, optional=False):
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = get_env_variable("DJANGO_SECRET_KEY")
 SUNLIGHT_API_KEY = get_env_variable("SUNLIGHT_API_KEY")
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [".herokuapp.com", ".civiwiki.org"]
 
 INSTALLED_APPS = (
     'django.contrib.admin',
@@ -82,7 +82,6 @@ if 'CIVIWIKI_LOCAL_NAME' not in os.environ:
         }
     }
 else:
-    DEBUG = True
     DATABASES = {
         'default': {
             'HOST': 'localhost',
@@ -103,7 +102,6 @@ LOGIN_URL = '/login'
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
-ALLOWED_HOSTS = [".herokuapp.com", ".civiwiki.org"]
 
 STATICFILES_DIRS = (
     os.path.normpath(os.path.join(BASE_DIR, 'webapp/static')),
