@@ -5,7 +5,7 @@
     {% load staticfiles %}
     {% include "base/links.html" %}
     <link type="text/css" rel="stylesheet/less" href="{% static "less/landing.less" %}"/>
-    <script src="{% static "dependencies/less.min.js" type="text/javascript" %}"></script>
+    <script src="{% static "dependencies/less.min.js" %}" type="text/javascript"></script>
 </head>
 
 <title>CiviWiki</title>
@@ -171,7 +171,7 @@
 </body>
 
 <!-- Backbone Views File -->
-<script src="/static/js/landing_view.js" type="text/javascript"></script>
+<script src="{% static "js/landing_view.js" %}" type="text/javascript"></script>
 <script type="text/javascript">
     var landingView = new cw.LandingView();
 </script>
