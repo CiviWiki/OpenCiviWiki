@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
 <!-- Support Us -->
+<html>
 <head>
     {% load staticfiles %}
     {% include "base/links.html" %}
@@ -21,7 +22,7 @@
                 </div>
             </div>
         </div>
-        <div class="parallax"><img src="{% static "img/bg-supportus-main.png" %}"></div> <!-- TODO: Image NEEDS to be replaced -->
+        <div class="parallax"><img src="{% static "img/bg-supportus-main.png" %}"></div>
     </div>
 
 
@@ -131,13 +132,10 @@
 <!-- Backbone Views File -->
 <script src="/static/js/support_us_view.js" type="text/javascript"></script>
 <script type="text/javascript">
-$(document).ready(function(){
     var supportusView = new cw.SupportusView();
-    // Following initializes parallax, an effect where the background moves slower than the foreground
-    $('.parallax').parallax();
+    $(document).ready(function(){
 
-    // Code to configure twitter sharing from the twitter website
-    !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+
 });
 </script>
 </html>

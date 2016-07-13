@@ -10,5 +10,12 @@ cw.AboutView = BB.View.extend({
 
     render: function () {
         this.$el.empty().append(this.aboutTemplate());
+        this.setupStaticNav();
     },
+
+    setupStaticNav: function () {
+        $('.button-collapse').sideNav();
+        $('.collapsible').collapsible();
+        $('.sideNav').css('display', 'inherit');
+    }
 });

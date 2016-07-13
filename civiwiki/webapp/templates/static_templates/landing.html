@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <!-- Landing Page -->
-
+<html>
 <head>
     {% load staticfiles %}
     {% include "base/links.html" %}
@@ -12,7 +12,7 @@
 
 <script id="landing-template" type="text/template">
 <header>
-    <div class="landing-bg valign-wrapper">
+    <div class="landing-bg valign-wrapper full-height">
         <div class="container landing-title">
             <div class="row">
                 <div class="landing-title-text">Discuss <span class="normal">Problems</span></div>
@@ -21,8 +21,16 @@
                 <div class="landing-title-subtext">Building a Better Democracy for the Internet Age</div>
             </div>
             <div class="row">
+            <div class="col s8 m6">
+            <div class="row">
+                <div class="col s12 m6">
                 <a href="login" class="btn-large waves-effect dark-blue-background  landing-title-button">Join CiviWiki</a>
+                </div>
+                <div class="col s12 m6">
                 <a href="#learnmore" class="btn-large waves-effect landing-title-button border-button">Learn More</a>
+                </div>
+            </div>
+            </div>
             </div>
         </div>
     </div>
@@ -30,8 +38,8 @@
 <main>
 <div class="landing-content">
     <div class="white" id="learnmore">
-        <div class="introduction">
-            <div class="container section center content-1">
+        <div class="introduction full-height valign-wrapper">
+            <div class="container section center content-1 valign">
                 <div class="row">
                     <div class="white cushion">
                         <div class="container section">
@@ -47,8 +55,8 @@
                 </div>
             </div>
         </div>
-        <div class="video cushion">
-            <div class="container section">
+        <div class="video full-height valign-wrapper">
+            <div class="container section valign">
                 <h4 class="section center white-text">Check out our short video describing CiviWiki...</h4>
                 <p class="center"></p>
                 <div class="videoWrapper">
@@ -80,7 +88,7 @@
                 </div>
 
             </div>
-            <div class=" section">
+            <div class="section">
                 <div class="row">
                     <div class="col s12 m6 push-m6 center">
                         <i class="large material-icons">web</i>
@@ -166,5 +174,5 @@
 <script src="/static/js/landing_view.js" type="text/javascript"></script>
 <script type="text/javascript">
     var landingView = new cw.LandingView();
-    $(document).ready(function() {});
 </script>
+</html>
