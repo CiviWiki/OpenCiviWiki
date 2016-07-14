@@ -7,6 +7,7 @@ Production settings file to select proper environment variables.
 
 import os
 from django.core.exceptions import ImproperlyConfigured
+import dj_database_url
 
 
 def get_env_variable(environment_variable, optional=False):
@@ -82,14 +83,7 @@ if 'CIVIWIKI_LOCAL_NAME' not in os.environ:
     STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
     DATABASES = {
-        'default': {
-            'HOST': get_env_variable("RDS_DB_NAME"),
-            'PORT': get_env_variable("RDS_PORT"),
-            'NAME': get_env_variable("RDS_DB_NAME"),
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'USER': get_env_variable("RDS_USERNAME"),
-            'PASSWORD': get_env_variable("RDS_PASSWORD"),
-        }
+        'default': dj_database_url.parse(get_env_variable("DATABASE_URL"))
     }
 else:
     DATABASES = {

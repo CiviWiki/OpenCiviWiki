@@ -11,3 +11,4 @@ requests==2.8.1
 six==1.10.0
 sunlight==1.2.9
 whitenoise==3.2
+dj-database-url==0.4.1
