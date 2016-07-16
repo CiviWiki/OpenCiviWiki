@@ -50,16 +50,15 @@ def cw_register(request):
 	try:
 		User.objects.create_user(username, email, password)
 		user = authenticate(username=username, password=password)
-		user.is_active = False
-		user.save()
+		account = Account(user=user, email=email, first_name=first_name, last_name=last_name, zip_code=zip_code)
+		account.save()
 	except Exception as e:
 		return HttpResponseServerError(reason=str(e))
 
 	try:
-		account = Account(user=user, email=email, first_name=first_name, last_name=last_name, zip_code=zip_code)
-		account.save()
+		user.is_active = False
+		user.save()
 		login(request, user)
 		return HttpResponse()
 	except Exception as e:
-		user.delete()
 		return HttpResponseServerError(reason=str(e))
