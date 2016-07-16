@@ -53,12 +53,15 @@ def cw_register(request):
 		account = Account(user=user, email=email, first_name=first_name, last_name=last_name, zip_code=zip_code)
 		account.save()
 	except Exception as e:
+		print str(e)
 		return HttpResponseServerError(reason=str(e))
 
 	try:
 		user.is_active = False
 		user.save()
 		login(request, user)
+		print "Should be good at this point?"
 		return HttpResponse()
 	except Exception as e:
+		print str(e)
 		return HttpResponseServerError(reason=str(e))
