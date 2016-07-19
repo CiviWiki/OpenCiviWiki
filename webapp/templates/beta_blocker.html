@@ -1,28 +1,27 @@
 <!--This is what the beta page would look like (it doesn't have full functionality) if it's a separate page-->
 <!doctype html>
+<head>
+    {% load staticfiles %}
+    {% include "base/links.html" %}
+    <link type="text/css" rel="stylesheet/less" href="{% static "less/beta.less" %}"/>
+    <script src="{% static "dependencies/less.min.js" type="text/javascript" %}"></script>
+    <title>Sorry!</title>
+</head>
 
-{% load staticfiles %}
-{% include "base/links.html" %}
-<link type="text/css" rel="stylesheet/less" href="{% static "less/beta.less" %}"/>
-<script src="{% static "dependencies/less.min.js" type="text/javascript" %}"></script>
-
-
-<title>Sorry!</title>
-<style>
-
-</style>
 <script id="beta-template" type="text/template">
-    <div id="beta-section" class="centered center z-depth-1">
-        <h1>Sorry!</h1>
-        <img src="{% static "img/image-beta-indevelopment.gif" %}" height="300px">
-        <h4>CiviWiki is still in development!</h4>
-        <div class="container">
-            <h6 class="light grey-text">
-                If you were sent here by a member of CiviWiki contact them with the email address used to register! Otherwise, please come back as soon as we advance to open beta!
-            </h6>
-        </div>
-        <div class="section">
-            <a class="btn" href="landing">Back to Main</a>
+    <div id="beta-section" class=" center container section">
+        <div class="info section z-depth-1">
+            <h1 class="sorry">Sorry!</h1>
+            <img src="{% static "img/image-beta-indevelopment.gif" %}" height="300px">
+            <h4 class="light black-text">We are still in development!</h4>
+            <div class="container">
+                <p class="grey-text container">
+                    If you were sent here by a member of CiviWiki contact them with the email address used to register! Otherwise, please come back as soon as we advance to open beta!
+                </p>
+            </div>
+            <div class="section">
+                <a class="btn dark-blue-btn" href="landing">Back to Main</a>
+            </div>
         </div>
     </div>
 </script>

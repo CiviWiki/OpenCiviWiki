@@ -1,10 +1,20 @@
 @import 'base';
 
+
 #beta{
-    .centered {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%); //TODO: apply prefixes
+    .info {
+        background-color: @white;
+
+        .sorry {
+            color: @dark-blue;
+        }
+
+        .dark-blue-btn{
+            background-color: @dark-blue;
+            &:hover {
+                background-color: lighten(@dark-blue, 5%);
+            }
+        }
     }
+
 }
