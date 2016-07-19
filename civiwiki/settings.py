@@ -7,7 +7,7 @@ Production settings file to select proper environment variables.
 
 import os
 from django.core.exceptions import ImproperlyConfigured
-#import dj_database_url
+import dj_database_url
 
 
 def get_env_variable(environment_variable, optional=False):
