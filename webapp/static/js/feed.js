@@ -4,7 +4,9 @@ cw.FeedView = BB.View.extend({
     el: '#feed',
     template: _.template($('#feed-template').html()),
 
-    initialize: function () {
+    initialize: function (options) {
+        this.username = options.username;
+
         this.render();
     },
 
@@ -13,10 +15,10 @@ cw.FeedView = BB.View.extend({
     },
 
     events: {
-        'click .account-button': 'goToAccount'
+        'click .account-nav-button': 'goToAccount'
     },
 
     goToAccount: function () {
-        window.location.href = '/account';
+        window.location.href = '/profile/' + username;
     }
 });
