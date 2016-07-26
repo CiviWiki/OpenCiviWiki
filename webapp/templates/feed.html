@@ -19,7 +19,10 @@
 
 <script type="text/javascript" src="{% static "js/feed.js" %}"></script>
 <script type="text/javascript">
-    var feedView = new cw.FeedView();
+    var username = '{{user.username}}',
+        feedView = new cw.FeedView({
+            username: username
+        });
 </script>
 
 </html>
