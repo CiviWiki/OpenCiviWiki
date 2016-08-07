@@ -12,6 +12,9 @@ def base_view(request):
 	if not request.user.is_authenticated():
 		return TemplateResponse(request, 'static_templates/landing.html', {})
 
+	a = Account.objects.get(user=request.user)
+	if not a.beta_access:
+		return HttpResponseRedirect('/beta')
 	return TemplateResponse(request, 'feed.html', {})
 
 
