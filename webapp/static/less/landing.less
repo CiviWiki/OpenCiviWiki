@@ -1,8 +1,16 @@
 @import "base";
 @import "static_common";
 
-
+body {
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+}
 #landing{
+
+.full-height {
+    min-height: 100vh;
+}
 // Font Adjustments // ---------------------------------------------------------
 .landing {
     font-size-adjust: 0.5;
@@ -12,13 +20,6 @@
 // Main Header View Block // ---------------------------------------------------
 // Header Background
 .landing-bg {
-    // Positioning and Size
-    width: 100%;
-    margin-top: -100px;
-    margin-bottom: -70px;
-    padding-top: 100px;
-    min-height: 300px;
-    max-height: 900px;
 
     // Image with gradient
     background: url("../img/bg-landing-tree.svg"), #0E0038 linear-gradient(to bottom,
@@ -36,11 +37,6 @@
 // Header Background for Mobile
 @media screen and (max-width:992px){
     .landing-bg {
-        // Positioning and Size
-        width: 100%;
-        margin-top: -100px;
-        padding-top: 100px;
-        min-height: 700px;
 
         // Image with gradient
         background: url("../img/bg-landing-tree.svg"), #0E0038 linear-gradient(to bottom,
