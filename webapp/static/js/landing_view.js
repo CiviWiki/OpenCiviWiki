@@ -11,13 +11,6 @@ cw.LandingView = BB.View.extend({
     render: function () {
         this.$el.empty().append(this.landingTemplate());
 
-        // Adjusts the height of a div to the window size if larger than default
-        this.$el.find('.full-height').height(
-            function(){
-                return (_.max([$(this).height(), $(window).height()]) + "px");
-            }
-        );
-
         this.setupStaticNav();
     },
 
