@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^categories$', read.getCategories, name='get categories'),
     url(r'^useridbyusername$', read.getIdByUsername, name='get id by username'),
     url(r'^account_data/(?P<user>\w+)/$', read.getUser, name='get user'),
+    url(r'^thread_data/(?P<thread_id>\w+)/$', read.getThread, name='get thread'),
     url(r'^getblock$', read.getBlock, name='get block'),
     url(r'^creategroup$', write.createGroup, name='add group'),
     url(r'^createcivi$', write.createCivi, name='add civi'),

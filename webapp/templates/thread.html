@@ -1,0 +1,37 @@
+<!doctype html>
+
+<head>
+    {% load staticfiles %}
+    {% include "base/links.html" %}
+    {% include "base/less_headers/thread_less.html" %}
+</head>
+
+<script id="thread-template" type="text/template">
+    {% include "partials/thread/thread_base.html" %}
+    {% include "partials/utils/feed_nav_button.html" %}
+</script>
+
+<body>
+    <div id="thread">
+
+    </div>
+</body>
+
+<script type="text/javascript" src="{% static "js/thread.js" %}"></script>
+<script type="text/javascript">
+
+    var username = '{{user.username}}',
+        threadId = '{{thread_id}}';
+
+    var threadModel = new cw.ThreadModel({}, {
+        threadId: threadId
+    });
+    threadModel.fetch();
+
+    var threadView = new cw.ThreadView({
+            username: username,
+            model: threadModel
+        });
+</script>
+
+</html>

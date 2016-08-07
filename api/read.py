@@ -57,6 +57,25 @@ def getUser(request, user):
     except Account.DoesNotExist as e:
         return HttpResponseBadRequest(reason=str(e))
 
+def getThread(request, thread_id):
+    try:
+        # t = Thread.objects.get(id=thread_id)
+        t = {
+            'title': 'Police Use of Deadly Force',
+            'category': 'Public Safety',
+            'topic': 'Policing',
+            'summary': 'skdjlfhsld khlsdfj lksd jslkjdflksd jklsdfj lksdj klsd',
+            'facts': ['sdlkfjhklsd;', 'sdlkfhj sd', 'sldkfjhlksd'],
+            'contributors': ['dan', 'darius', 'yo mama'],
+            'num_views': '243',
+            'num_civis': '17',
+            'num_responses': '42',
+        }
+
+        return JsonResponse(t)
+    except Exception as e:
+        return HttpResponseBadRequest(reason=str(e))
+
 @require_post_params(params=['username'])
 def getIdByUsername(request):
 	'''
