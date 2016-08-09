@@ -16,15 +16,25 @@ cw.ThreadModel = BB.Model.extend({
 cw.ThreadView = BB.View.extend({
     el: '#thread',
     template: _.template($('#thread-template').html()),
+    wikiTemplate: _.template($('#thread-wiki-template').html()),
+    profileButtonTemplate: _.template($('#profile-button-template').html()),
 
     initialize: function (options) {
         this.username = options.username;
 
-        this.listenTo(this.model, 'sync', this.render);
+        this.listenTo(this.model, 'sync', this.wikiRender);
+
+        this.render();
     },
 
     render: function () {
         this.$el.empty().append(this.template());
+    },
+
+    wikiRender: function () {
+        if (this.$('.thread-wiki-holder').length) {
+            this.$('.thread-wiki-holder').empty().append(this.wikiTemplate());
+        }
     },
 
     events: {
