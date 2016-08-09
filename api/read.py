@@ -5,7 +5,7 @@ from django.http import JsonResponse, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 
-from models import Account, Topic, Attachment, Category, Civi, Comment, Hashtag
+from models import Account, Topic, Attachment, Category, Civi, Comment, Hashtag, Thread
 from django.contrib.auth.models import User
 from utils.custom_decorators import require_post_params
 from legislation import sunlightapi as sun
@@ -59,7 +59,7 @@ def getUser(request, user):
 
 def getThread(request, thread_id):
     try:
-        # t = Thread.objects.get(id=thread_id)
+        t = Thread.objects.filter(id=thread_id)
         t = {
             'title': 'Police Use of Deadly Force',
             'category': 'Public Safety',
