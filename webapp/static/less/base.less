@@ -9,9 +9,13 @@
 @white: #fff;
 @black: #000;
 @dark-white: #ddd;
+@light-gray: #aaa;
+@lightish-gray: #999;
+@gray: #666;
 @dark-gray: #333;
 @deep-gray: #181818;
 @text: #333;
+@box-shadow-gray: rgba(0,0,0,0.26);
 
 html {
     font-family: 'Lato', sans-serif;
@@ -57,6 +61,11 @@ html {
     color: @blue;
 }
 
+// All bold text
+.bold-text {
+    font-weight: 600;
+}
+
 // Should be rarely used
 .purple-background {
     background-color: @purple;
@@ -90,6 +99,16 @@ html {
 // Dark background text should be this color, or dark-white
 .blue-text {
     color: @blue;
+}
+
+//For subtitles
+.gray-text {
+    color: @gray;
+}
+
+//For subtitles on dark backgrounds
+.light-gray-text {
+    color: @light-gray;
 }
 
 // Dark background text

@@ -1,1 +1,118 @@
 @import 'base';
+
+#thread {
+    .thread-wiki-holder {
+        padding: 0;
+    }
+
+    .thread-wiki {
+        .wiki-banner {
+            height: 30vh;
+            background-color: @dark-purple;
+            box-shadow: 0 2px 5px @box-shadow-gray;
+
+            .wiki-title {
+                padding-top: 17vh;
+            }
+
+            .wiki-stats {
+                padding-top: 10px;
+
+                .wiki-stat {
+                    margin-right: 4px;
+                }
+            }
+        }
+
+        .wiki-body {
+            min-height: 70vh;
+
+            .wiki-body-header {
+                padding-top: 24px;
+                font-size: 17px;
+
+                .wiki-header-inner {
+                    margin-right: 6px;
+                    font-size: 17px;
+                }
+
+                .wiki-header-category {
+                    margin-right: 20px;
+                }
+            }
+
+            .wiki-body-summary {
+                padding-top: 20px;
+
+                .wiki-body-summary-title {
+                    padding-bottom: 4px;
+                    font-size: 17px;
+                    border-bottom: 1px solid @dark-white;
+                }
+
+                .wiki-body-summary-text {
+                    padding-top: 10px;
+                    line-height: 25px;
+                    font-size: 14px;
+                }
+            }
+
+            .wiki-contributors {
+                padding-top: 20px;
+
+                .wiki-contributors-title {
+                    font-size: 15px;
+                    font-weight: 500;
+                }
+
+                .wiki-contributors-list {
+                    margin-top: 10px;
+
+                    .s3 {
+                        text-align: center;
+
+                        .wiki-contributors-name {
+                            font-size: 13px;
+                        }
+                    }
+
+                    .s12 {
+                        margin-top: -4px;
+                    }
+
+                    .wiki-contributors-more {
+                        font-size: 13px;
+                    }
+                }
+            }
+
+            .wiki-facts {
+                padding-top: 20px;
+
+                .wiki-facts-title {
+                    padding-bottom: 4px;
+                    font-size: 17px;
+                    border-bottom: 1px solid @dark-white;
+                }
+
+                .wiki-facts-list {
+                    padding-top: 10px;
+                    font-size: 13px;
+                    line-height: 22px;
+                }
+            }
+        }
+
+        .wiki-image {
+            position: absolute;
+            right: 15%;
+            top: 5vh;
+
+            img {
+                max-width: 40vw;
+                max-height: 30vh;
+                box-shadow: 0 0 4px 2px @box-shadow-gray;
+            }
+        }
+    }
+}
