@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 from django.db import models
 from hashtag import Hashtag
-# from group import Group
 from django.contrib.postgres.fields import ArrayField
 from operator import itemgetter
 import math, json
@@ -33,6 +32,38 @@ class CiviManager(models.Manager):
             return json.dumps({filter: data[filter]})
         return json.dumps(data)
 
+    def calcPolarity(self, civi):
+        '''
+            polarity : ( positive2 / visits ) + ( .5 * positive / visits ) + (.5 * negative / visits ) + ( negative2 / visits )
+            polarity takes a value between 0 and 1, approaching 0 as votes cluster around neutral, and approach one as votes
+            cluster amoung stronger alignments.
+
+        '''
+        polarity = ( civi.votes_positive2 + civi.votes_negative1 + .5 * ( civi.votes_positive1 + civi.votes_negative2 ) )
+        polarity /= civi.visits
+        return polarity
+
+
+    def aveVote(self, civi):
+        '''
+            average vote ranges between 0 and 5. Scaled like this so it can be used as a direct multiplier for score and ignore votes with heavily negative weights.
+        '''
+        ave = -1 * ( civi.votes_negative1 + 2 * civi.votes_negative2 ) + ( 2 * civi.votes_positive2 + civi.votes_positive1 )
+        ave /= civi.visits
+        return ave + 5
+
+    def aveScore(self, civi):
+        '''
+            Average score is a summation of the vote values recieved,
+            - moved onto a logarithmic scale
+            - lastly scaled by amplifier to allow an integer effect by the Polarity.
+        '''
+        score = -1 * ( civi.votes_negative1 + 2 * civi.votes_negative2 ) + ( 2 * civi.votes_positive2 + civi.votes_positive1 )
+        log_shift = math.log(civi.visits)
+        amplifier = math.pow(10,10)
+
+        return score * log_shift * amplifier
+
     def getChain(self, id_list):
         if len(id_list):
             return [self.serialize(self.get(id)) for id in id_list]
@@ -55,21 +86,31 @@ class CiviManager(models.Manager):
         ids = [a['id'] for a in id_and_score]
         return [self.summarize(civi) for civi in self.filter(id__in=ids)]
 
-class Civi(models.Model):
-    '''
-    This is the model schema for the primary object in
-    the application. Hold an id field and does not hold
-    references to other objects. Maybe not the fastest
-    implementation but it simplifies things such as searching.
-    '''
+class Response(models.Model):
     objects = CiviManager()
     creator = models.ForeignKey('Account', default=None, null=True)
-    category = models.ForeignKey('Category', default=None, null=True)
-    topic = models.ForeignKey('Topic', default=None, null=True)
+
+    title = models.CharField(max_length=63)
+    body = models.TextField(max_length=4095)
+    sources = ArrayField(models.CharField(max_length=127, blank=True), default=[], blank=True)
+
+    votes_negative2 = models.IntegerField(default=0)
+    votes_negative1 = models.IntegerField(default=0)
+    votes_neutral = models.IntegerField(default=0)
+    votes_positive1 = models.IntegerField(default=0)
+    votes_positive2 = models.IntegerField(default=0)
+
+class Civi(models.Model):
+    objects = CiviManager()
+    creator = models.ForeignKey('Account', default=None, null=True)
+    thread = models.ForeignKey('Thread', default=None, null=True)
+    response = models.ManyToManyField(Response)
+
     hashtags = models.ManyToManyField(Hashtag)
 
     title = models.CharField(max_length=63)
     body = models.TextField(max_length=4095)
+    sources = ArrayField(models.CharField(max_length=127, blank=True), default=[], blank=True)
 
     votes_negative2 = models.IntegerField(default=0)
     votes_negative1 = models.IntegerField(default=0)
@@ -78,51 +119,7 @@ class Civi(models.Model):
     votes_positive2 = models.IntegerField(default=0)
 
     visits = models.IntegerField(default=0)
-    type = models.CharField(max_length=2, default='I')#Possible values of I, C, or S for
-    #issue, cause, and solution
-    reference = ArrayField(models.CharField(max_length=127, blank=True), default=[], blank=True)
-    at = ArrayField(models.CharField(max_length=127, blank=True), default=[], blank=True)
-    and_negative = ArrayField(models.CharField(max_length=127, blank=True), default=[], blank=True)
-    and_positive = ArrayField(models.CharField(max_length=127, blank=True), default=[], blank=True)
 
-
-    NEG2_WEIGHT = 2
-    NEG1_WEIGHT = 1
-    NEUTRAL_WEIGHT = 0
-    POS1_WEIGHT = 1
-    POS2_WEIGHT = 2
-    SCALE_POLARITY = 2
-
-    RANK_CUTOFF = -1
-
-    def calcPolarity(self):
-        '''
-            polarity : ( positive2 / visits ) + ( .5 * positive / visits ) + (.5 * negative / visits ) + ( negative2 / visits )
-            polarity takes a value between 0 and 1, approaching 0 as votes cluster around neutral, and approach one as votes
-            cluster amoung stronger alignments.
-
-        '''
-        polarity = ( self.votes_positive2 + self.votes_negative1 + .5 * ( self.votes_positive1 + self.votes_negative2 ) )
-        polarity /= self.visits
-        return polarity
-
-
-    def aveVote(self):
-        '''
-            average vote ranges between 0 and 5. Scaled like this so it can be used as a direct multiplier for score and ignore votes with heavily negative weights.
-        '''
-        ave = -1 * ( self.votes_negative1 + 2 * self.votes_negative2 ) + ( 2 * self.votes_positive2 + self.votes_positive1 )
-        ave /= self.visits
-        return ave + 5
-
-    def aveScore(self):
-        '''
-            Average score is a summation of the vote values recieved,
-            - moved onto a logarithmic scale
-            - lastly scaled by amplifier to allow an integer effect by the Polarity.
-        '''
-        score = -1 * ( self.votes_negative1 + 2 * self.votes_negative2 ) + ( 2 * self.votes_positive2 + self.votes_positive1 )
-        log_shift = math.log(self.visits)
-        amplifier = math.pow(10,10)
-
-        return score * log_shift * amplifier
+    bill_source = models.CharField(max_length=127, default=None, null=True)
+    bill_for = models.IntegerField(default=0, null=True)
+    bill_against = models.IntegerField(default=0, null=True)
