@@ -2,6 +2,7 @@
 
 #thread {
     .thread-wiki-holder {
+        min-height: 100vh;
         padding: 0;
     }
 
@@ -25,8 +26,6 @@
         }
 
         .wiki-body {
-            min-height: 70vh;
-
             .wiki-body-header {
                 padding-top: 24px;
                 font-size: 17px;
@@ -68,16 +67,8 @@
                 .wiki-contributors-list {
                     margin-top: 10px;
 
-                    .s3 {
-                        text-align: center;
-
-                        .wiki-contributors-name {
-                            font-size: 13px;
-                        }
-                    }
-
-                    .s12 {
-                        margin-top: -4px;
+                    .profile-button-wrapper {
+                        margin-bottom: 12px;
                     }
 
                     .wiki-contributors-more {
@@ -88,6 +79,7 @@
 
             .wiki-facts {
                 padding-top: 20px;
+                margin-bottom: 20px;
 
                 .wiki-facts-title {
                     padding-bottom: 4px;
@@ -114,5 +106,13 @@
                 box-shadow: 0 0 4px 2px @box-shadow-gray;
             }
         }
+    }
+
+    .thread-body-holder {
+        padding: 0;
+    }
+
+    .thread-body {
+        
     }
 }
