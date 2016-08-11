@@ -66,7 +66,7 @@ def getThread(request, thread_id):
             'topic': 'Policing',
             'summary': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             'facts': ['sdlkfjhklsdklfu sldjf klssdfsdfssdf sdf sdfsd dfssdf dfsdfsdfs dfsdfsd', 'sdlkfhjsdf sdf sdf sdfsdfsd  sd', 'sldksdfsd sdf sdf sdf sdf fjhlksd', 'sdlkfhjsdsdfsdfsdf sdf sd  fsdf sdf sdfsdf sd sdff sdf sdf sdfsdfsd  sd', 'sldksdfsd sdf sdf sdf sdf fjhlksd'],
-            'contributors': ['dan', 'darius', 'yo mama', '4', '5', '6', '7', '8', '9', '10'],
+            'contributors': ['dsd sdfsd sd sdan', 'darius', 'yo mamsd dsd sd sd sd a', '4', '5', '6', '7', '8', '9', '10'],
             'num_views': '243',
             'num_civis': '17',
             'num_responses': '42',
