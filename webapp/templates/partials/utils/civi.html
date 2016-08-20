@@ -1,0 +1,33 @@
+{% verbatim %}
+<div class="civi-card" data-id="">
+    <div class="civi-header">
+        <div class="civi-type gray-text">
+            {{type}}
+        </div>
+        <div class="civi-title">
+            {{title}}
+        </div>
+    </div>
+    <div class="civi-body">
+        <div class="civi-body-inner">
+            {{body}}
+        </div>
+        <div class="attachments">
+            <div class="attachments-title gray-text">
+                ATTACHMENTS ({{attachments.length}})
+            </div>
+            {{# _.each(attachments, function (a) { }}
+                <span>{{a}}</span>
+            {{# }); }}
+        </div>
+        <div class="rating">
+            Rating
+        </div>
+    </div>
+    <div class="civi-footer">
+        <div>
+            {{author}}
+        </div>
+    </div>
+</div>
+{% endverbatim %}

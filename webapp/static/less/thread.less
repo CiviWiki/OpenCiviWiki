@@ -1,5 +1,9 @@
 @import 'base';
 
+// body {
+//     overflow: hidden;
+// }
+
 #thread {
     .thread-wiki-holder {
         min-height: 100vh;
@@ -8,12 +12,13 @@
 
     .thread-wiki {
         .wiki-banner {
-            height: 30vh;
+            min-height: 30vh;
             background-color: @dark-purple;
             box-shadow: 0 2px 5px @box-shadow-gray;
 
             .wiki-title {
-                padding-top: 17vh;
+                padding-top: 40%;
+                line-height: 35px;
             }
 
             .wiki-stats {
@@ -106,13 +111,137 @@
                 box-shadow: 0 0 4px 2px @box-shadow-gray;
             }
         }
+
+        .wiki-enter-body {
+            margin: 20px 0;
+
+            .enter-body {
+                background-color: @purple;
+            }
+        }
     }
 
     .thread-body-holder {
+        height: 100vh;
         padding: 0;
     }
 
     .thread-body {
-        
+        button {
+            background-color: @purple;
+        }
+
+        .body-banner {
+            background-color: @dark-purple;
+            box-shadow: 0 2px 5px @box-shadow-gray;
+
+            .category-topic {
+                font-size: 13px;
+
+                i {
+                    position: relative;
+                    top: 6px;
+                }
+            }
+
+            .thread-title {
+                margin-top: 10px;
+                font-size: 20px;
+            }
+
+            .thread-header, .response-header {
+                font-size: 18px;
+                margin-top: 30px;
+
+                button {
+                    margin-right: 20px;
+                    margin-top: -4px;
+                    margin-bottom: 10px;
+                    font-size: 14px;
+                    padding: 0 20px 0 18px;
+
+                    i {
+                        margin-right: 4px;
+                    }
+                }
+            }
+        }
+
+        .nav-column {
+            box-shadow: 2px 0 5px @box-shadow-gray;
+
+            .background-info-link {
+                background-color: @dark-purple;
+                margin: 0 -0.75rem;
+                padding: 6px 0.75rem 16px 0.75rem;
+
+                .enter-wiki {
+                    font-size: 13px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    color: @blue;
+
+                    i {
+                        position: relative;
+                        top: 2px;
+                    }
+                }
+            }
+
+            .issue-outline {
+                .issue-outline-header {
+                    margin: 10px 15px 0 15px;
+                    padding-bottom: 4px;
+                    border-bottom: 1px solid #ddd;
+
+                    i {
+                        cursor: pointer;
+
+                        &.expanded {
+                            color: @dark-blue;
+                        }
+                    }
+                }
+
+                .civi-outline {
+                    overflow-y: scroll;
+
+                    .civi-nav-header {
+                        margin: 10px 15px 0 15px;
+
+                        .civi-nav-title {
+                            font-size: 18px;
+                        }
+
+                        .civi-nav-count {
+                            border-radius: 25px;
+                            background-color: @dark-blue;
+                            padding: 0 10px;
+                        }
+                    }
+
+                    .civi-nav-wrapper {
+                        margin: 0 15px 14px 15px;
+                        display: none;
+
+                        .civi-nav-indiv {
+                            font-size: 14px;
+                            margin: 4px 0 10px 0;
+                            line-height: 16px;
+                        }
+                    }
+                }
+            }
+        }
+
+        .main-thread {
+            overflow-y: scroll;
+            padding: 15px 15px 0 15px;
+        }
+
+        .responses {
+            overflow-y: scroll;
+            padding: 15px;
+        }
     }
 }
