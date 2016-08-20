@@ -1,9 +1,102 @@
 {% verbatim %}
 <div class="thread-body">
-    <div class="body-banner">
-
+    <div class="row body-banner dark-white-text" style="margin: 0;">
+        <div class="col s3">
+            <div class="category-topic">
+                <span class="body-category">{{this.model.get('category')}}</span>
+                <i class="mini material-icons">keyboard_arrow_right</i>
+                <span class="body-topic">{{this.model.get('topic')}}</span>
+            </div>
+            <div class="thread-title dark-white-text">
+                {{this.model.get('title')}}
+            </div>
+        </div>
+        <div class="col s5">
+            <div class="thread-header">
+                Main Thread
+                <button class="add-civi btn waves-effect right">
+                    <i class="material-icons left">note_add</i>
+                    Add Civi
+                </button>
+            </div>
+        </div>
+        <div class="col s4">
+            <div class="response-header">
+                Responses
+                <button class="add-civi btn waves-effect right">
+                    <i class="material-icons left">comment</i>
+                    Add Response
+                </button>
+            </div>
+        </div>
     </div>
-    <div class="body-main">
+    <div class="col s3 nav-column">
+        <div class="background-info-link dark-white-text">
+            <span class="enter-wiki">
+                <i class="tiny material-icons">assignment</i>
+                Background Information
+            </span>
+        </div>
+        <div class="issue-outline">
+            <div class="issue-outline-header gray-text bold-text">
+                <span class="issue-outline-title">ISSUE OUTLINE</span>
+                <i class="expand-nav material-icons right">keyboard_arrow_down</i>
+            </div>
+            <div class="civi-outline">
+                <div class="problem-nav">
+                    <div class="civi-nav-header">
+                        <span class="civi-nav-title bold-text">Problem</span>
+                        <span class="civi-nav-count right white-text">{{this.model.get('problems').length}}</span>
+                    </div>
+                    <div class="problem-nav-wrapper civi-nav-wrapper">
+                        {{# _.each(this.model.get('problems'), function (p) { }}
+                            <div class="problem-nav-indiv civi-nav-indiv">
+                                {{p.title}}
+                            </div>
+                        {{# }); }}
+                    </div>
+                </div>
+                <div class="cause-nav">
+                    <div class="civi-nav-header">
+                        <span class="civi-nav-title bold-text">Cause</span>
+                        <span class="civi-nav-count right white-text">{{this.model.get('causes').length}}</span>
+                    </div>
+                    <div class="cause-nav-wrapper civi-nav-wrapper">
+                        {{# _.each(this.model.get('causes'), function (c) { }}
+                            <div class="cause-nav-indiv civi-nav-indiv">
+                                {{c.title}}
+                            </div>
+                        {{# }); }}
+                    </div>
+                </div>
+                <div class="solution-nav">
+                    <div class="civi-nav-header">
+                        <span class="civi-nav-title bold-text">Solution</span>
+                        <span class="civi-nav-count right white-text">{{this.model.get('solutions').length}}</span>
+                    </div>
+                    <div class="solution-nav-wrapper civi-nav-wrapper">
+                        {{# _.each(this.model.get('solutions'), function (s) { }}
+                            <div class="solution-nav-indiv civi-nav-indiv">
+                                {{s.title}}
+                            </div>
+                        {{# }); }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col s5 main-thread">
+        {{# _.each(this.model.get('problems'), function (p) { }}
+            {{= cw.underscorePartial('civi-template', p)}}
+        {{# }, this); }}
+        {{# _.each(this.model.get('causes'), function (p) { }}
+            {{= cw.underscorePartial('civi-template', p)}}
+        {{# }, this); }}
+        {{# _.each(this.model.get('solutions'), function (p) { }}
+            {{= cw.underscorePartial('civi-template', p)}}
+        {{# }, this); }}
+    </div>
+    <div class="col s4 responses">
 
     </div>
 </div>
