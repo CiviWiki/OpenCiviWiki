@@ -24,7 +24,6 @@ cw.ThreadView = BB.View.extend({
 
         this.listenTo(this.model, 'sync', function () {
             this.threadWikiRender();
-            this.threadBodyRender();
         });
 
         this.render();
@@ -37,24 +36,22 @@ cw.ThreadView = BB.View.extend({
     threadWikiRender: function () {
         if (this.$('.thread-wiki-holder').length) {
             this.$('.thread-wiki-holder').empty().append(this.wikiTemplate());
+
+            this.threadBodyRender();
         }
     },
 
     threadBodyRender: function () {
         if (this.$('.thread-body-holder').length) {
             this.$('.thread-body-holder').empty().append(this.bodyTemplate());
-
-            var $civiNavScroll = this.$('.civi-outline');
-            $civiNavScroll.css({height: $('body').height() - $civiNavScroll.offset().top + 8});
-            var $civiThreadScroll = this.$('.main-thread');
-            $civiThreadScroll.css({height: $('body').height() - $civiThreadScroll.offset().top - 72});
         }
     },
 
     events: {
         'click .enter-body': 'scrollToBody',
         'click .enter-wiki': 'scrollToWiki',
-        'click .expand-nav': 'expandNav'
+        'click .expand-nav': 'expandNav',
+        'scroll .main-thread': 'threadScroll'
     },
 
     scrollToBody: function () {
@@ -64,6 +61,13 @@ cw.ThreadView = BB.View.extend({
         $('body').animate({
             scrollTop: $('.thread-body-holder').offset().top
         }, 1000);
+
+        var $civiNavScroll = this.$('.civi-outline');
+        $civiNavScroll.css({height: $('body').height() - $civiNavScroll.offset().top});
+        var $civiThreadScroll = this.$('.main-thread');
+        $civiThreadScroll.css({height: $('body').height() - $civiThreadScroll.offset().top});
+        var $civiResponseScroll = this.$('.responses');
+        $civiResponseScroll.css({height: $('body').height() - $civiResponseScroll.offset().top});
     },
 
     scrollToWiki: function () {
@@ -87,6 +91,10 @@ cw.ThreadView = BB.View.extend({
             $('.civi-nav-wrapper').slideDown();
             $this.addClass('expanded');
         }
+    },
+
+    threadScroll: function () {
+        //TODO Change nav on scroll of main
     }
 
 });

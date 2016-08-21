@@ -34,7 +34,7 @@
 }
 
 .civi-card {
-    box-shadow: 1px 1px 5px @box-shadow-gray;
+    box-shadow: 0px 0px 5px @box-shadow-gray;
     border-radius: 2px;
     border: 1px solid #ddd;
     margin-bottom: 15px;
@@ -43,15 +43,33 @@
         border-bottom: 1px solid #ddd;
         padding: 12px 20px 4px 20px;
         margin-bottom: 10px;
+        background-color: @barely-not-white;
 
-        .civi-type {
-            font-size: 13px;
-            font-weight: 300;
-            text-transform: capitalize;
+        .civi-title-outer {
+            display: inline-block;
+            vertical-align: middle;
+
+            .civi-type {
+                font-size: 12px;
+                font-weight: 300;
+                text-transform: uppercase;
+            }
+
+            .civi-title {
+                font-weight: 500;
+            }
         }
 
-        .civi-title {
-            font-weight: 500;
+        .civi-header-actions {
+            display: inline-block;
+            color: @purple;
+            line-height: 40px;
+
+            i {
+                cursor: pointer;
+                margin-left: 6px;
+                vertical-align: middle;
+            }
         }
     }
 
@@ -71,6 +89,7 @@
             margin-bottom: 8px;
 
             .attachments-title {
+                font-size: 12px;
                 font-weight: 300;
             }
         }
@@ -81,6 +100,49 @@
     }
 
     .civi-footer {
+        background-color: @barely-not-white;
         padding: 8px 20px;
+
+        .author-photo-holder {
+            display: inline-block;
+            width: 34px;
+            vertical-align: middle;
+
+            .author-photo {
+                width: 100%;
+                height: 34px;
+                border-radius: 50px;
+                background-color: @purple;
+            }
+        }
+
+        .author-info {
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 10px;
+
+            .author-name {
+                font-size: 12px;
+                line-height: 14px;
+            }
+
+            .created {
+                font-weight: 300;
+                font-size: 12px;
+                line-height: 14px;
+            }
+        }
+
+        .civi-footer-actions {
+            display: inline-block;
+            color: @purple;
+            line-height: 34px;
+
+            i {
+                cursor: pointer;
+                margin-left: 6px;
+                vertical-align: middle;
+            }
+        }
     }
 }
