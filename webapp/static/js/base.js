@@ -22,3 +22,30 @@ cw.materializeShit = function () {
     Materialize.updateTextFields();
     $('ul.tabs').tabs();
 };
+
+cw.initGlobalNav = function () {
+    var $floaty = $('.floaty'),
+        $logout = $('.svg-logout'),
+        $feed = $('.svg-feed'),
+        $account = $('.svg-account');
+
+    $floaty.on('mouseover', function() {
+        $floaty.addClass('is-active');
+    });
+
+    $floaty.on('mouseout', function() {
+        $floaty.removeClass('is-active');
+    });
+
+    $logout.on('click', function () {
+        window.location.href = '/auth/logout';
+    });
+
+    $feed.on('click', function () {
+        window.location.href = '/';
+    });
+
+    $account.on('click', function () {
+        window.location.href = '/profile/' + username;
+    });
+};
