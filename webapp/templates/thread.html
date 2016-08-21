@@ -8,7 +8,6 @@
 
 <script id="thread-template" type="text/template">
     {% include "partials/thread/thread_base.html" %}
-    {% include "partials/utils/feed_nav_button.html" %}
 </script>
 
 <script id="thread-wiki-template" type="text/template">
@@ -28,6 +27,7 @@
 </script>
 
 <body>
+    {% include "partials/utils/global_nav.html" %}
     <div id="thread">
 
     </div>
@@ -48,6 +48,7 @@
         username: username,
         model: threadModel
     });
+
 </script>
 
 </html>
