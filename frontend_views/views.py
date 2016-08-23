@@ -23,7 +23,8 @@ def base_view(request):
 @beta_blocker
 def user_profile(request, username=None):
 	if not username:
-		user = request.user
+		return HttpResponseRedirect('/profile/{0}'.format(request.user))
+
 	else:
 		try:
 			user = User.objects.get(username=username)
@@ -38,7 +39,7 @@ def user_profile(request, username=None):
 				  profile=Account.objects.summarize(a),
 				  bills=sun.get_bill_information(a))
 
-	return TemplateResponse(request, 'account.html', {'result': json.dumps(result)})
+	return TemplateResponse(request, 'account.html', {'username': user, 'result': json.dumps(result)})
 
 
 @login_required

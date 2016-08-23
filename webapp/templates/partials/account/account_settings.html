@@ -1,19 +1,27 @@
 {% verbatim %}
 <div class="card">
     <div class="card-image">
-        <img src="http://162.209.109.174/2016-06-28_04-52-28I9LM7O.png">
-        <span class="card-title">{{this.model.get('first_name')}} {{this.model.get('last_name')}}</span>
+        <img src="http://placehold.it/500">
+        <!-- <span class="card-title">{{this.model.get('first_name')}} {{this.model.get('last_name')}}</span> -->
     </div>
     <div class="card-content">
         <div class="row">
-            <div class="white-background-input-field input-field col s12">
+            <!-- <div class="white-background-input-field input-field col s12">
                 <textarea id="about_me" class="save-account materialize-textarea" length="255">{{this.model.get('about_me')}}</textarea>
                 <label for="about-me">About Me</label>
-            </div>
+            </div> -->
+
+            <div class="red-text">{{this.model.get('first_name')}} {{this.model.get('last_name')}}</div>
+            <div class="green-text">@{{username}}</div>
+            <div class="blue-text">{{this.model.get('email')}}</div>
+            <p><i class="mini material-icons grey-text text-lighten-3">place</i>{{this.model.get('zip_code')}}</p>
+
+
+            <p>{{this.model.get('about_me')}}</p>
         </div>
     </div>
 </div>
-<div class="card">
+<!-- <div class="card">
     <div class="card-content">
         <div class="row">
             <div class="profile-info">
@@ -40,5 +48,5 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 {% endverbatim %}

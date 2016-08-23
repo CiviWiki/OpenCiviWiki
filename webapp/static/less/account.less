@@ -4,7 +4,7 @@ html {
     overflow: hidden;
 }
 body {
-    background-color: #fafafa;
+    background-color: @barely-not-white;
 }
 
 #account {
@@ -12,20 +12,30 @@ body {
     .account-tabs {
         .tabs .tab {
             a {
-                color: @dark-white;
+                color: @light-purple;
                 text-transform: capitalize;
                 font-size: 12px;
             }
             .active {
+                font-size: 14px;
+                font-weight: 700;
                 color: @purple;
+            }
+            i {
+                vertical-align: middle;
+                margin: 5px;
             }
 
         }
 
-
-
         .tabs .indicator {
             background-color: @purple;
+            height: 4px;
+        }
+    }
+    .account-settings {
+        .card-image img {
+
         }
     }
 }
