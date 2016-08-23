@@ -1,26 +1,25 @@
 {% verbatim %}
 <div class="card">
     <div class="card-image">
-        <img src="http://placehold.it/500">
+        <img src="http://placehold.it/500/501cb5/8460cb">
         <!-- <span class="card-title">{{this.model.get('first_name')}} {{this.model.get('last_name')}}</span> -->
     </div>
     <div class="card-content">
-        <div class="row">
-            <!-- <div class="white-background-input-field input-field col s12">
-                <textarea id="about_me" class="save-account materialize-textarea" length="255">{{this.model.get('about_me')}}</textarea>
-                <label for="about-me">About Me</label>
-            </div> -->
-
-            <div class="red-text">{{this.model.get('first_name')}} {{this.model.get('last_name')}}</div>
-            <div class="green-text">@{{username}}</div>
-            <div class="blue-text">{{this.model.get('email')}}</div>
-            <p><i class="mini material-icons grey-text text-lighten-3">place</i>{{this.model.get('zip_code')}}</p>
-
-
-            <p>{{this.model.get('about_me')}}</p>
+        <div class="section">
+            <div class="full-name">{{this.model.get('first_name')}} {{this.model.get('last_name')}}</div>
+            <div class="username">@{{username}}</div>
+        </div>
+        <!-- TODO: swap zipcode with city and state with google api -->
+        <div class="location-info">
+            <div class="location"><i class="mini material-icons">place</i>{{this.model.get('zip_code')}}</div>
+        </div>
+        <div class="section">
+            <div class="about-me">{{this.model.get('about_me')}}</div>
         </div>
     </div>
 </div>
+
+<!-- TODO: Content swipes up for edit functions -->
 <!-- <div class="card">
     <div class="card-content">
         <div class="row">

@@ -18,6 +18,13 @@ cw.AccountView = BB.View.extend({
     template: _.template($('#account-template').html()),
     settingsTemplate: _.template($('#settings-template').html()),
 
+    // Account Tabs Templates
+    mycivisTemplate: _.template($('#my-civis-template').html()),
+    followersTemplate: _.template($('#followers-template').html()),
+    followingTemplate: _.template($('#following-template').html()),
+    myissuesTemplate: _.template($('#my-issues-template').html()),
+    myrepsTemplate: _.template($('#my-reps-template').html()),
+
     initialize: function () {
         this.isSave = false;
 
@@ -29,13 +36,23 @@ cw.AccountView = BB.View.extend({
             this.postRender();
         } else {
             this.$el.empty().append(this.template());
+            this.$el.find('.account-settings').pushpin({ top: $('.account-settings').offset().top });
             this.$el.find('.scroll-col').height($(window).height());
             this.postRender();
         }
     },
 
+    tabsRender: function () {
+        this.$('#civis').empty().append(this.mycivisTemplate());
+        this.$('#followers').empty().append(this.followersTemplate());
+        this.$('#following').empty().append(this.followingTemplate());
+        this.$('#issues').empty().append(this.myissuesTemplate());
+        this.$('#myreps').empty().append(this.myrepsTemplate());
+    },
+
     postRender: function () {
         this.$el.find('.account-settings').empty().append(this.settingsTemplate());
+        this.tabsRender();
         cw.materializeShit();
         this.isSave = false;
     },
