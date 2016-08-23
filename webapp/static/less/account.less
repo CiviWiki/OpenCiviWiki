@@ -3,12 +3,26 @@
 html {
     overflow: hidden;
 }
+body {
+    background-color: #fafafa;
+}
 
 #account {
+
     .account-tabs {
-        .tabs .tab a {
-            color: @purple;
+        .tabs .tab {
+            a {
+                color: @dark-white;
+                text-transform: capitalize;
+                font-size: 12px;
+            }
+            .active {
+                color: @purple;
+            }
+
         }
+
+
 
         .tabs .indicator {
             background-color: @purple;
