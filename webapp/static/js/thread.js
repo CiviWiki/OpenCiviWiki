@@ -42,8 +42,59 @@ cw.ThreadView = BB.View.extend({
     },
 
     threadBodyRender: function () {
+        var _this = this;
+
         if (this.$('.thread-body-holder').length) {
             this.$('.thread-body-holder').empty().append(this.bodyTemplate());
+
+            this.$('.main-thread').on('scroll', function (e) {
+                _this.changeNavScroll(e.target.scrollTop);
+            });
+        }
+    },
+
+    changeNavScroll: function (scrollPosition, firstTime, navChange) {
+        var _this = this;
+
+        if (firstTime) {
+            var $newNavCivi = _this.$('[data-civi-nav-id="' + _this.civiLocations[0].id + '"]');
+            $newNavCivi.addClass('current');
+
+            if (!_this.navExpanded) {
+                $($newNavCivi.closest('.civi-nav-wrapper').siblings()[0]).addClass('current');
+            }
+
+            _this.currentNavCivi = _this.civiLocations[0].id;
+            return;
+        } else if (navChange) {
+            var $currentNavCivi = _this.$('[data-civi-nav-id="' + _this.currentNavCivi + '"]');
+
+            if (this.navExpanded) {
+                $($currentNavCivi.closest('.civi-nav-wrapper').siblings()[0]).removeClass('current');
+            } else {
+                $($currentNavCivi.closest('.civi-nav-wrapper').siblings()[0]).addClass('current');
+            }
+            return;
+        }
+
+        var newCivi = _.find(_this.civiLocations, function (l) {
+            return scrollPosition > l.top - 16 && scrollPosition < l.bottom + 2;
+        }).id;
+
+        if (_this.currentNavCivi !== newCivi) {
+            var $currentNavCivi = _this.$('[data-civi-nav-id="' + _this.currentNavCivi + '"]'),
+                $newNavCivi = _this.$('[data-civi-nav-id="' + newCivi + '"]');
+
+            $currentNavCivi.removeClass('current');
+            $newNavCivi.addClass('current');
+
+            if (!_this.navExpanded) {
+                $($currentNavCivi.closest('.civi-nav-wrapper').siblings()[0]).removeClass('current');
+                $($newNavCivi.closest('.civi-nav-wrapper').siblings()[0]).addClass('current');
+            }
+
+            _this.currentNavCivi = newCivi;
+            _this.currentScroll = scrollPosition;
         }
     },
 
@@ -51,10 +102,13 @@ cw.ThreadView = BB.View.extend({
         'click .enter-body': 'scrollToBody',
         'click .enter-wiki': 'scrollToWiki',
         'click .expand-nav': 'expandNav',
-        'scroll .main-thread': 'threadScroll'
+        'click .civi-nav-link': 'goToCivi',
+        'click .civi-header': 'drilldownCivi'
     },
 
     scrollToBody: function () {
+        var _this = this;
+
         this.$('.thread-body-holder').css({display: 'block'});
         $('body').css({overflow: 'hidden'});
 
@@ -68,6 +122,18 @@ cw.ThreadView = BB.View.extend({
         $civiThreadScroll.css({height: $('body').height() - $civiThreadScroll.offset().top});
         var $civiResponseScroll = this.$('.responses');
         $civiResponseScroll.css({height: $('body').height() - $civiResponseScroll.offset().top});
+
+        var threadPos = this.$('.main-thread').position().top;
+        this.civiLocations = [];
+        this.$('.civi-card').each(function (idx, civi) {
+            var $civi = $(civi),
+                $civiTop = $civi.position().top - threadPos;
+            _this.civiLocations.push({top: $civiTop, bottom: $civiTop + $civi.height(), id: $civi.attr('data-civi-id')});
+        });
+
+        this.currentScroll = 0;
+
+        _this.changeNavScroll(_this.currentScroll, true);
     },
 
     scrollToWiki: function () {
@@ -82,19 +148,47 @@ cw.ThreadView = BB.View.extend({
     },
 
     expandNav: function (e) {
-        var $this = $(e.target);
+        var _this = this,
+            $this = $(e.target);
 
         if ($this.hasClass('expanded')) {
             $('.civi-nav-wrapper').slideUp();
             $this.removeClass('expanded');
+            _this.navExpanded = false;
+            _this.changeNavScroll(_this.currentScroll, false, true);
         } else {
             $('.civi-nav-wrapper').slideDown();
             $this.addClass('expanded');
+            _this.navExpanded = true;
+            _this.changeNavScroll(_this.currentScroll, false, true);
         }
     },
 
-    threadScroll: function () {
-        //TODO Change nav on scroll of main
+    goToCivi: function (e) {
+        var $link = $(e.target).closest('.civi-nav-link');
+        this.$('.main-thread').animate({scrollTop: _.findWhere(this.civiLocations, {id: $link.attr('data-civi-nav-id')}).top}, 800);
+    },
+
+    drilldownCivi: function (e) {
+        var $this = $(e.target);
+
+        if (!$this.hasClass('civi-header-actions') && !$this.hasClass('material-icons')) {
+            var $currentCivi = this.$('[data-civi-id="' + this.currentCivi + '"]'),
+                $newCivi = $this.closest('.civi-card');
+
+            if (this.currentCivi !== $newCivi.attr('data-civi-id')) {
+                $currentCivi.removeClass('current');
+                $newCivi.addClass('current');
+
+                this.currentCivi = $newCivi.attr('data-civi-id');
+                //TODO ADD RESPONSES
+            } else {
+                $currentCivi.removeClass('current');
+
+                this.currentCivi = null;
+                //TODO REMOVE RESPONSES
+            }
+        }
     }
 
 });
