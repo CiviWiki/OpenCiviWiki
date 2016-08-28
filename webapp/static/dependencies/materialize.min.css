@@ -2751,6 +2751,10 @@ i.tiny {
   font-size: 1rem;
 }
 
+i.tiny-for-button {
+  font-size: 1rem !important;
+}
+
 i.mini {
   font-size: 1.3rem;
 }
