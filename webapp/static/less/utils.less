@@ -94,6 +94,22 @@
         }
     }
 
+    .civi-header:hover {
+        background-color: @purple;
+
+        .civi-type {
+            color: @light-gray;
+        }
+
+        .civi-title {
+            color: @dark-white;
+        }
+
+        .civi-header-actions {
+            color: @white;
+        }
+    }
+
     .civi-body {
         padding: 0 20px;
         border-bottom: 1px solid #ddd;
@@ -117,6 +133,23 @@
 
         .rating {
             margin-bottom: 10px;
+
+            .rating-button {
+                background-color: @dark-white !important;
+                color: @purple;
+                height: 30px;
+                padding: 0 10px;
+                margin-right: 6px;
+
+                i {
+                    line-height: 1rem;
+                }
+
+                &.current {
+                    background-color: @purple !important;
+                    color: @white;
+                }
+            }
         }
     }
 

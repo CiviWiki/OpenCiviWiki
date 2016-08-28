@@ -103,7 +103,8 @@ cw.ThreadView = BB.View.extend({
         'click .enter-wiki': 'scrollToWiki',
         'click .expand-nav': 'expandNav',
         'click .civi-nav-link': 'goToCivi',
-        'click .civi-header': 'drilldownCivi'
+        'click .civi-header': 'drilldownCivi',
+        'click .rating-button': 'clickRating'
     },
 
     scrollToBody: function () {
@@ -166,7 +167,7 @@ cw.ThreadView = BB.View.extend({
 
     goToCivi: function (e) {
         var $link = $(e.target).closest('.civi-nav-link');
-        this.$('.main-thread').animate({scrollTop: _.findWhere(this.civiLocations, {id: $link.attr('data-civi-nav-id')}).top}, 800);
+        this.$('.main-thread').animate({scrollTop: _.findWhere(this.civiLocations, {id: $link.attr('data-civi-nav-id')}).top - 15}, 800);
     },
 
     drilldownCivi: function (e) {
@@ -189,6 +190,13 @@ cw.ThreadView = BB.View.extend({
                 //TODO REMOVE RESPONSES
             }
         }
+    },
+
+    clickRating: function (e) {
+        var $this = $(e.target).closest('.rating-button');
+
+        $this.addClass('current');
+        $this.siblings().removeClass('current');
     }
 
 });
