@@ -25,10 +25,15 @@ cw.AccountView = BB.View.extend({
     myissuesTemplate: _.template($('#my-issues-template').html()),
     myrepsTemplate: _.template($('#my-reps-template').html()),
 
-    initialize: function () {
+    initialize: function (options) {
         this.isSave = false;
 
-        this.listenTo(this.model, 'sync', this.render);
+        this.listenTo(this.model, 'sync', function(){
+            console.log(this.model);
+            this.postRender();
+        });
+
+        this.render();
     },
 
     render: function () {
@@ -38,7 +43,8 @@ cw.AccountView = BB.View.extend({
             this.$el.empty().append(this.template());
             this.$el.find('.account-settings').pushpin({ top: $('.account-settings').offset().top });
             this.$el.find('.scroll-col').height($(window).height());
-            this.postRender();
+
+
         }
     },
 

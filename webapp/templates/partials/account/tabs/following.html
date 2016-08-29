@@ -1,12 +1,16 @@
 {% verbatim %}
-<div class="row">
-    <div class="col s12 title-lato">People I'm following</div>
-</div>
-<!-- Populate Civi list -->
-<div class="row">
-    <div class="card">
-        <div class="card-content">
-            content
+<div class="people">
+    <div class="row">
+        <div class="col s12 title-lato">People I'm following</div>
+    </div>
+    <!-- Populate Civi list -->
+    <div class="row">
+        <div class="card">
+            <div class="card-content">
+                {{# _.each(Array(40).fill("Civiwiki User"), function (u) { }}
+                    {{= cw.underscorePartial('people-template', u)}}
+                {{# }, this); }}
+            </div>
         </div>
     </div>
 </div>

@@ -9,6 +9,7 @@ class CiviManager(models.Manager):
     def summarize(self, civi):
         return {
             "id": civi.id,
+            "type": civi.type,
             "title": civi.title,
             "body": civi.body[0:150]
         }
@@ -16,17 +17,34 @@ class CiviManager(models.Manager):
     def serialize(self, civi, filter=None):
         from account import Account
         data = {
+            "type": civi.type,
             "title": civi.title,
             "body": civi.body,
-            "group": Account.objects.summarize(civi.group),
             "creator": Account.objects.summarize(civi.creator),
             "visits": civi.visits,
-            "topic": civi.topic,
             "hashtags": [h.title for h in civi.hashtags.all()],
-            "type": civi.type,
-            "id": civi.id,
-            "REF": civi.reference_id,
+            "id": civi.id
 	    }
+
+        if filter and filter in data:
+            return json.dumps({filter: data[filter]})
+        return json.dumps(data)
+
+    def profileSerialize(self, civi, filter=None):
+        from account import Account
+        data = {
+            "type": civi.type,
+            "title": civi.title,
+            "body": civi.body,
+            "visits": civi.visits,
+            "attachments": [],
+            "author": Account.objects.summarize(civi.creator)["username"],
+            "hashtags": [h.title for h in civi.hashtags.all()],
+            "created": str(civi.date_edited),
+            "score": int(self.aveScore(civi) * self.calcPolarity(civi)),
+            "id": civi.id
+	    }
+
 
         if filter and filter in data:
             return json.dumps({filter: data[filter]})
@@ -119,7 +137,11 @@ class Civi(models.Model):
     votes_positive2 = models.IntegerField(default=0)
 
     visits = models.IntegerField(default=0)
+    type = models.CharField(max_length=15, default='Problem')
 
     bill_source = models.CharField(max_length=127, default=None, null=True)
     bill_for = models.IntegerField(default=0, null=True)
     bill_against = models.IntegerField(default=0, null=True)
+
+    date_created = models.DateField()
+    date_edited = models.DateField()

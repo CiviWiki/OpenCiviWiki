@@ -3,7 +3,7 @@ import json
 from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.contrib.auth.models import User
-from api.models import Category, Account, Topic
+from api.models import Category, Account, Topic, Civi
 
 from legislation import sunlightapi as sun
 from utils.custom_decorators import beta_blocker, login_required
@@ -32,14 +32,16 @@ def user_profile(request, username=None):
 			return HttpResponseRedirect('/404')
 
 	a = Account.objects.get(user=user)
+
 	friend_data_dictionary = Account.objects.friends(a)
+	#
+	# result = dict(friends=friend_data_dictionary['friends'],
+	# 			  requests=friend_data_dictionary['requests'],
+	# 			  profile=Account.objects.summarize(a),
+	# 			  bills=sun.get_bill_information(a)
+	# 			  )
 
-	result = dict(friends=friend_data_dictionary['friends'],
-				  requests=friend_data_dictionary['requests'],
-				  profile=Account.objects.summarize(a),
-				  bills=sun.get_bill_information(a))
-
-	return TemplateResponse(request, 'account.html', {'username': user, 'result': json.dumps(result)})
+	return TemplateResponse(request, 'account.html', {'username': user})
 
 
 @login_required

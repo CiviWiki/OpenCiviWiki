@@ -6,12 +6,39 @@
     {% include "base/less_headers/account_less.html" %}
 </head>
 
-<script id="account-template" type="text/template">
-    {% include "partials/account/account_base.html" %}
+
+<!-- Util Partials -->
+<script id="civi-template" type="text/template">
+    {% include "partials/utils/civi.html" %}
 </script>
 
-<script id="settings-template" type="text/template">
-    {% include "partials/account/account_settings.html" %}
+<script id="people-template" type="text/template">
+    <div class="chip"><img src="http://placehold.it/50/501cb5" alt="Contact Person">{{username}}</div>
+</script>
+
+<script id="issue-template" type="text/template">
+        <div class="card">
+            <div class="card-content">
+                {{issue}}"Example Issue that the User probably cares about"
+                <div class="right civi-footer-actions">
+                    <div>
+                        <i class="mini material-icons">link</i>
+                        <i class="mini material-icons">comment</i>
+                    </div>
+                </div>
+            </div>
+        </div>
+</script>
+
+<script id="rep-template" type="text/template">
+    <div class="col s6 m3">
+        <div class="card">
+            <div class="card-content">
+        <img src="http://placehold.it/100/501cb5" alt="" height="100">
+        <div class="subtitle-lato">Representative Name</div>
+    </div>
+</div>
+    </div>
 </script>
 
 <!-- account tab templates -->
@@ -31,6 +58,14 @@
     {% include "partials/account/tabs/my_reps.html" %}
 </script>
 
+<script id="account-template" type="text/template">
+    {% include "partials/account/account_base.html" %}
+</script>
+
+<script id="settings-template" type="text/template">
+    {% include "partials/account/account_settings.html" %}
+</script>
+
 
 <body>
     {% include "partials/utils/global_nav.html" %}
@@ -39,6 +74,8 @@
     </div>
 </body>
 
+
+
 <script type="text/javascript" src="{% static "js/account.js" %}"></script>
 <script type="text/javascript">
     var username = '{{username}}';
@@ -46,10 +83,10 @@
         user: username
     });
     accountModel.fetch();
-
     var accountView = new cw.AccountView({
         model: accountModel
     });
+
 </script>
 
 </html>

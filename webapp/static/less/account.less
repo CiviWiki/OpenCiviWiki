@@ -2,62 +2,121 @@
 
 html {
     overflow: hidden;
+    -webkit-font-smoothing: antialiased;
 }
 body {
     background-color: @barely-not-white;
 }
 
 #account {
-
-    .account-tabs {
-        .tabs .tab {
-            a {
-                color: @light-purple;
-                text-transform: capitalize;
-                font-size: 12px;
-            }
-            .active {
-                font-size: 14px;
-                font-weight: 700;
-                color: @purple;
-            }
-            i {
-                vertical-align: middle;
-                margin: 5px;
-            }
-
-        }
-
-        .tabs .indicator {
-            background-color: @purple;
-            height: 4px;
+    .people {
+        .chip {
+            margin: 20px;
         }
     }
-    .account-settings {
-        margin-top: -50px;
-
-        .card-content {
-            padding: 10px;
-            text-align: center;
-
-            .full-name {
-                font-size: 20px;
-                font-weight: 600;
-            }
-            .username {
-                color: @light-gray;
-                font-weight: 300;
-            }
-            .location {
-                font-size: 12px;
-                i {
-                    color: @light-purple;
-                    vertical-align: bottom;
+    .top-bar {
+        margin-bottom: 0px;
+        .logo {
+            margin-left: 20px;
+            text-align: left;
+            font-size: 30px;
+            font-weight: 700;
+            color: @white;
+            letter-spacing: 0.01em;
+        }
+        .account-tabs {
+            .tabs .tab {
+                a {
+                    color: @white;
+                    text-transform: capitalize;
+                    font-size: 12px;
+                    &:hover {
+                        color: @light-purple;
+                    }
                 }
-            }
-            .about-me {
-                font-size: 12px;
+                .active {
+                    font-size: 14px;
+                    font-weight: 600;
+                    color: @light-purple;
+                }
+                i {
+                    vertical-align: middle;
+                    margin: 5px;
+                }
 
+            }
+
+            .tabs .indicator {
+                background-color: @light-purple;
+                height: 3px;
+            }
+        }
+    }
+    .content {
+
+        .account-settings {
+            margin-top: 20px;
+            .card-image {
+                text-align: center;
+                min-height: 100px;
+
+                img {
+                    //border-top: 5px @purple solid;
+                }
+                .card-title {
+                    font-size: 24px;
+                    font-weight: 600;
+                    padding-bottom: 30px;
+                    color: @white;
+                    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+                }
+                .card-subtitle {
+                    color: @light-gray;
+                    font-weight: 300;
+                    font-size: 16px;
+                    padding-top: 10px;
+                    padding-bottom: 15px;
+                }
+
+            }
+            .card-content {
+                padding: 20px;
+
+                .section-title {
+                    font-size: 12px;
+                    font-weight: 400;
+                    color: @light-gray;
+                }
+
+                .divider {
+                    margin-bottom: 5px;
+                }
+                .user-info {
+                    text-align: center;
+                    margin-bottom: 10px;
+
+                    .full-name {
+                        font-size: 20px;
+                        font-weight: 600;
+                    }
+                    .username {
+                        color: @light-gray;
+                        font-weight: 300;
+                    }
+                }
+
+                .location {
+                    font-size: 12px;
+                    i {
+                        color: @light-purple;
+                        vertical-align: bottom;
+                    }
+                }
+
+                .about-me {
+                    font-size: 12px;
+
+                }
             }
         }
     }

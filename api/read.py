@@ -52,8 +52,8 @@ def getUser(request, user):
     try:
         u = User.objects.get(username=user)
         a = Account.objects.get(user=u)
-
-        return JsonResponse(Account.objects.summarize(a))
+        return JsonResponse(Account.objects.profileSummarize(a))
+		
     except Account.DoesNotExist as e:
         return HttpResponseBadRequest(reason=str(e))
 
