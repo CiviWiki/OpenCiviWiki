@@ -221,9 +221,10 @@
         right: 0;
     }
     .floaty-list {
-        margin: 0 0 20px;
-        padding: 0 0 0 8px;
+        margin: 8px 0 0 0;
+        padding: 0;
         list-style: none;
+        display: inline-block;
         opacity: 0;
         transition: opacity .2s ease-out;
     }
@@ -234,7 +235,8 @@
         position: relative;
         width: 40px;
         height: 40px;
-        margin: 15px 0;
+        margin: 0 8px;
+        display: inline-block;
         cursor: pointer;
         background-color: #f0f0f0;
         border-radius: 50%;
@@ -257,8 +259,9 @@
     }
     .floaty-list-item-label {
         position: absolute;
-        top: 8px;
-        right: 120%;
+        left: 50%;
+        bottom: 46px;
+        transform: translate(-50%, 0);
         padding: 4px 8px;
         font-size: 14px;
         color: #fff;
@@ -274,10 +277,11 @@
     }
     .floaty-btn {
         position: relative;
+        display: inline-block;
         width: 56px;
         height: 56px;
         float: right;
-        margin-right: 15px;
+        margin: 0 15px 0 8px;
         cursor: pointer;
         background-color: @purple;
         border-radius: 50%;
@@ -304,18 +308,18 @@
         transition: all .2s;
     }
     .floaty-btn-icon-plus {
-        -webkit-transform: rotate(45deg);
-        transform: rotate(45deg);
+        -webkit-transform: rotate(-45deg);
+        transform: rotate(-45deg);
     }
     .floaty.is-active .floaty-btn-icon-plus {
         opacity: 0;
-        -webkit-transform: rotate(13deg);
-        transform: rotate(130deg);
+        -webkit-transform: rotate(-130deg);
+        transform: rotate(-130deg);
     }
     .floaty-btn-icon-create {
         opacity: 0;
-        -webkit-transform: rotate(-60deg);
-        transform: rotate(-60deg);
+        -webkit-transform: rotate(60deg);
+        transform: rotate(60deg);
     }
     .floaty.is-active .floaty-btn-icon-create {
         opacity: 1;
