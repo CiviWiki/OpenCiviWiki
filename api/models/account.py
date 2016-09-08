@@ -15,8 +15,8 @@ class Account(models.Model):
     zip_code = models.CharField(max_length=10, blank=True)
     state = models.CharField(max_length=63, blank=True)
 
-    fed_district = models.CharField(max_length=63)
-    state_district = models.CharField(max_length=63)
+    fed_district = models.CharField(max_length=63, default=None, null=True)
+    state_district = models.CharField(max_length=63, default=None, null=True)
 
     # profile_image = models.CharField(max_length=255)
 
