@@ -22,8 +22,8 @@ class Account(models.Model):
 
     beta_access = models.BooleanField(default=False)
 
-    interests = models.ManyToManyField(Hashtag)
-    ai_interests = models.ManyToManyField(Hashtag)
+    interests = models.ManyToManyField(Hashtag, related_name='interests')
+    ai_interests = models.ManyToManyField(Hashtag, related_name='ai_interests')
 
     followers = models.ManyToManyField('self', related_name='follower')
     following = models.ManyToManyField('self', related_name='following')
