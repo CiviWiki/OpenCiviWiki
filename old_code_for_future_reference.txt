@@ -82,3 +82,58 @@ def block(self, topic, start=0, end=0):
 
 
 ------------
+
+
+ACCOUNT -------------
+
+class AccountManager(models.Manager):
+
+    def summarize(self, account):
+
+        return {
+            "first_name": account.first_name,
+            "last_name": account.last_name,
+            "profile_image": account.profile_image,
+            "about_me": account.about_me,
+            "email": account.email,
+            "zip_code": account.zip_code,
+            "id": account.id
+        }
+
+    def serialize(self, account, filter=None):
+
+        data = {
+            "username": account.user.username,
+            "first_name": account.first_name,
+            "last_name": account.last_name,
+            "email": account.email,
+            "last_login": str(account.last_login),
+            "about_me": account.about_me,
+            "valid": account.valid,
+            "profile_image": account.profile_image,
+            "cover_image": account.cover_image,
+            "statistics": account.statistics,
+            "interests": account.interests,
+            "pins": [Civi.objects.summarize(c) for c in Civi.objects.filter(pk__in=account.civi_pins)],
+            "history": [Civi.objects.summarize(c) for c in Civi.objects.filter(pk__in=account.civi_history)],
+            "friend_requests": [self.summarize(a) for a in self.filter(pk__in=account.friend_requests)],
+            "awards": [award for a in account.award_list],
+            "zip_code": account.zip_code,
+            "country": account.country,
+            "state": account.state,
+            "city": account.city,
+            "country": account.country,
+            "address1": account.address1,
+            "address2": account.address2,
+            "friends": [self.summarize(a) for a in account.friends.all()]
+        }
+        if filter and filter in data:
+            return {filter: data[filter]}
+        return data
+
+    def friends(self, account):
+        friends = [self.summarize(a) for a in account.friends.all()]
+        requests = [self.summarize(a) for a in self.filter(pk__in=account.friend_requests)]
+        return dict(friends=friends, requests=requests)
+
+----------------------

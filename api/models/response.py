@@ -1,7 +1,7 @@
 from django.db import models
 from account import Account
 from civi import Civi
-from django.contrib.postgres.fields import ArrayField
+# from django.contrib.postgres.fields import ArrayField
 
 
 class Response(models.Model):

@@ -1,8 +1,10 @@
 from django.db import models
 
 
-class Category(models.Model):
-    name = models.CharField(max_length=63)
+class Fact(models.Model):
+    body = models.CharField(max_length=511)
+
+    # sources = ArrayField(models.CharField(max_length=127, blank=True), default=[], blank=True)
 
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     last_modified = models.DateTimeField(auto_now=True, blank=True, null=True)
