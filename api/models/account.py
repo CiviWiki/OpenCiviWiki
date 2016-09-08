@@ -25,5 +25,5 @@ class Account(models.Model):
     interests = models.ManyToManyField(Hashtag)
     ai_interests = models.ManyToManyField(Hashtag)
 
-    followers = models.ManyToManyField(Account, related_name='follower')
-    following = models.ManyToManyField(Account, related_name='following')
+    followers = models.ManyToManyField('self', related_name='follower')
+    following = models.ManyToManyField('self', related_name='following')
