@@ -1,6 +1,5 @@
 from django.contrib.auth.models import User
 from django.db import models
-from account import Account
 from hashtag import Hashtag
 # from django.contrib.postgres.fields import ArrayField
 
