@@ -3,7 +3,7 @@ from account import Account
 from thread import Thread
 from bill import Bill
 from hashtag import Hashtag
-from django.contrib.postgres.fields import ArrayField
+# from django.contrib.postgres.fields import ArrayField
 
 
 class Civi(models.Model):
