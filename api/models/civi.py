@@ -20,31 +20,14 @@ class CiviManager(models.Manager):
             "type": civi.type,
             "title": civi.title,
             "body": civi.body,
-            "creator": Account.objects.summarize(civi.creator),
-            "visits": civi.visits,
-            "hashtags": [h.title for h in civi.hashtags.all()],
-            "id": civi.id
-	    }
-
-        if filter and filter in data:
-            return json.dumps({filter: data[filter]})
-        return json.dumps(data)
-
-    def profileSerialize(self, civi, filter=None):
-        from account import Account
-        data = {
-            "type": civi.type,
-            "title": civi.title,
-            "body": civi.body,
             "visits": civi.visits,
             "attachments": [],
-            "author": Account.objects.summarize(civi.creator)["username"],
+            "author": civi.creator.user.username,
             "hashtags": [h.title for h in civi.hashtags.all()],
             "created": str(civi.date_edited),
             "score": int(self.aveScore(civi) * self.calcPolarity(civi)),
             "id": civi.id
 	    }
-
 
         if filter and filter in data:
             return json.dumps({filter: data[filter]})

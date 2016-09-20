@@ -5,7 +5,7 @@ cw.AccountModel = BB.Model.extend({
             if (! this.user ) {
                 throw new Error("This is a race condition! and why we can't have nice things :(");
             }
-            return '/api/account_data/' + this.user + '/';
+            return '/api/account_profile/' + this.user + '/';
     },
 
     initialize: function (model, options) {

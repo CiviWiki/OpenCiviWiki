@@ -20,20 +20,11 @@ class AccountManager(models.Manager):
             "profile_image": account.profile_image,
             "about_me": account.about_me,
             "zip_code": account.zip_code,
-            "id": account.id
-        }
-
-    def profileSummarize(self, account):
-        return {
-            "first_name": account.first_name,
-            "last_name": account.last_name,
-            "profile_image": account.profile_image,
-            "about_me": account.about_me,
-            "zip_code": account.zip_code,
             "id": account.id,
-            "history": [Civi.objects.profileSerialize(c) for c in Civi.objects.filter(creator_id=account.id).order_by('-date_edited')],
+            "history": [Civi.objects.serialize(c) for c in Civi.objects.filter(creator_id=account.id).order_by('-date_edited')],
             "friends": [self.summarize(a) for a in account.friends.all()]
         }
+
 
     def serialize(self, account, filter=None):
 
@@ -50,9 +41,7 @@ class AccountManager(models.Manager):
             "statistics": account.statistics,
             "interests": account.interests,
             "pins": [Civi.objects.summarize(c) for c in Civi.objects.filter(pk__in=account.civi_pins)],
-            #"history": [Civi.objects.profileSerialize(c) for c in Civi.objects.filter(pk__in=account.civi_history)],
-            #TODO: change into primary key reference
-            "history": [Civi.objects.profileSerialize(c) for c in Civi.objects.filter(creator_id=account.id).order_by('-date_edited')],
+            "history": [Civi.objects.serialize(c) for c in Civi.objects.filter(creator_id=account.id).order_by('-date_edited')],
             "friend_requests": [self.summarize(a) for a in self.filter(pk__in=account.friend_requests)],
             "awards": [award for a in account.award_list],
             "zip_code": account.zip_code,
