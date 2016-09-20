@@ -51,7 +51,9 @@
                     <div class="problem-nav-wrapper civi-nav-wrapper">
                         {{# _.each(this.model.get('problems'), function (p) { }}
                             <div class="problem-nav-indiv civi-nav-indiv">
-                                {{p.title}}
+                                <div class="civi-nav-link" data-civi-nav-id="{{p.id}}">
+                                    <span>{{p.title}}</span>
+                                </div>
                             </div>
                         {{# }); }}
                     </div>
@@ -64,7 +66,9 @@
                     <div class="cause-nav-wrapper civi-nav-wrapper">
                         {{# _.each(this.model.get('causes'), function (c) { }}
                             <div class="cause-nav-indiv civi-nav-indiv">
-                                {{c.title}}
+                                <div class="civi-nav-link" data-civi-nav-id="{{c.id}}">
+                                    <span>{{c.title}}</span>
+                                </div>
                             </div>
                         {{# }); }}
                     </div>
@@ -77,7 +81,9 @@
                     <div class="solution-nav-wrapper civi-nav-wrapper">
                         {{# _.each(this.model.get('solutions'), function (s) { }}
                             <div class="solution-nav-indiv civi-nav-indiv">
-                                {{s.title}}
+                                <div class="civi-nav-link" data-civi-nav-id="{{s.id}}">
+                                    <span>{{s.title}}</span>
+                                </div>
                             </div>
                         {{# }); }}
                     </div>

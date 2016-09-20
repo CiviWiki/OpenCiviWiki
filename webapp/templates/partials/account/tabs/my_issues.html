@@ -2,10 +2,9 @@
 <div class="row">
     <div class="col s12 title-lato">Issues I care about</div>
 </div>
-<!-- Populate Civi list -->
 <div class="row">
     {{# _.each(Array(20).fill("Example Issue that the User probably cares about"), function (i) { }}
-        {{= cw.underscorePartial('issue-template', i)}}
+        {{= cw.underscorePartial('issue-template', {category: "category", issue:i })}}
     {{# }, this); }}
 </div>
 {% endverbatim %}

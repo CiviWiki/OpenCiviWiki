@@ -1,17 +1,13 @@
 {% verbatim %}
 <div class="people">
     <div class="row">
-        <div class="col s12 title-lato">People I'm following</div>
+        <div class="col s12 title-lato">My following</div>
     </div>
     <!-- Populate Civi list -->
     <div class="row">
-        <div class="card">
-            <div class="card-content">
-                {{# _.each(Array(40).fill("Civiwiki User"), function (u) { }}
-                    {{= cw.underscorePartial('people-template', u)}}
-                {{# }, this); }}
-            </div>
-        </div>
+        {{# _.each(Array(10).fill("cividus"), function (u) { }}
+            {{= cw.underscorePartial('people-template', {profile_image: "http://placehold.it/4/"+Math.floor(Math.random()*16777215).toString(16), username:u, first_name:"Cividus", last_name:"Wikir"})}}
+        {{# }, this); }}
     </div>
 </div>
 {% endverbatim %}

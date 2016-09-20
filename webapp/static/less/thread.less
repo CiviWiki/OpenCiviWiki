@@ -208,6 +208,8 @@
                     overflow-y: scroll;
 
                     .civi-nav-header {
+                        border-left: 3px solid #fff;
+                        padding-left: 6px;
                         margin: 10px 15px 0 15px;
 
                         .civi-nav-title {
@@ -218,6 +220,11 @@
                             border-radius: 25px;
                             background-color: @dark-blue;
                             padding: 0 10px;
+                        }
+
+                        &.current {
+                            color: @dark-blue;
+                            border-color: @dark-blue;
                         }
                     }
 
@@ -230,6 +237,18 @@
                             font-size: 14px;
                             margin: 4px 0 10px 0;
                             line-height: 16px;
+
+                            .civi-nav-link {
+                                cursor: pointer;
+                                border-left: 3px solid #fff;
+                                padding-left: 6px;
+
+                                &.current {
+                                    color: @dark-blue;
+                                    border-color: @dark-blue;
+                                    font-weight: 500;
+                                }
+                            }
                         }
                     }
                 }

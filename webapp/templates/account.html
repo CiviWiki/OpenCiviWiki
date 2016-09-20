@@ -11,34 +11,14 @@
 <script id="civi-template" type="text/template">
     {% include "partials/account/utils/account_civi.html" %}
 </script>
-
 <script id="people-template" type="text/template">
-    <div class="chip"><img src="http://placehold.it/50/501cb5" alt="Contact Person">{{username}}</div>
+    {% include "partials/account/utils/user_chip.html" %}
 </script>
-
 <script id="issue-template" type="text/template">
-        <div class="card">
-            <div class="card-content">
-                {{issue}}"Example Issue that the User probably cares about"
-                <div class="right civi-footer-actions">
-                    <div>
-                        <i class="mini material-icons">link</i>
-                        <i class="mini material-icons">comment</i>
-                    </div>
-                </div>
-            </div>
-        </div>
+    {% include "partials/account/utils/account_issue.html" %}
 </script>
-
 <script id="rep-template" type="text/template">
-    <div class="col s6 m3">
-        <div class="card">
-            <div class="card-content">
-        <img src="http://placehold.it/100/501cb5" alt="" height="100">
-        <div class="subtitle-lato">Representative Name</div>
-    </div>
-</div>
-    </div>
+    {% include "partials/account/utils/representative_card.html" %}
 </script>
 
 <!-- account tab templates -->
@@ -58,10 +38,10 @@
     {% include "partials/account/tabs/my_reps.html" %}
 </script>
 
+<!-- account base templates -->
 <script id="account-template" type="text/template">
     {% include "partials/account/account_base.html" %}
 </script>
-
 <script id="settings-template" type="text/template">
     {% include "partials/account/account_settings.html" %}
 </script>
@@ -69,11 +49,8 @@
 
 <body>
     {% include "partials/utils/global_nav.html" %}
-    <div id="account">
-
-    </div>
+    <div id="account"></div>
 </body>
-
 
 
 <script type="text/javascript" src="{% static "js/account.js" %}"></script>
@@ -88,5 +65,3 @@
     });
 
 </script>
-
-</html>

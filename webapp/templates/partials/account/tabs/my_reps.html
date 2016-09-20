@@ -5,14 +5,14 @@
 <!-- Populate Civi list -->
 <div class="col s12 title-lato">Federal</div>
 <div class="row">
-    {{# _.each(Array(3).fill("Example Representative"), function (i) { }}
-        {{= cw.underscorePartial('rep-template', i)}}
+    {{# _.each(Array(3).fill("Example Representative"), function (r) { }}
+        {{= cw.underscorePartial('rep-template',{profile_image: "http://placehold.it/4/"+Math.floor(Math.random()*16777215).toString(16), username: "rep", first_name:"Example", last_name: "Rep", r, alignment: Math.floor(Math.random()*100)})}}
     {{# }, this); }}
 </div>
 <div class="col s12 title-lato">State</div>
 <div class="row">
-    {{# _.each(Array(5).fill("Example Representative"), function (i) { }}
-        {{= cw.underscorePartial('rep-template', i)}}
+    {{# _.each(Array(5).fill("Example Representative"), function (r) { }}
+        {{= cw.underscorePartial('rep-template', {profile_image: "http://placehold.it/4/"+Math.floor(Math.random()*16777215).toString(16), username: "rep", first_name:"Example", last_name: "Rep", r, alignment: Math.floor(Math.random()*100) })}}
     {{# }, this); }}
 </div>
 {% endverbatim %}

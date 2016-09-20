@@ -1,6 +1,19 @@
 cw = cw || {};
 
 cw.AccountModel = BB.Model.extend({
+    defaults: function() {
+        return {
+            username: "",
+            first_name: "",
+            last_name: "",
+            about_me: "",
+            zip_code: "",
+            history: [],
+            followers: [],
+            following: [],
+            representatives: []
+        };
+    },
     url: function () {
             if (! this.user ) {
                 throw new Error("This is a race condition! and why we can't have nice things :(");
@@ -10,6 +23,8 @@ cw.AccountModel = BB.Model.extend({
 
     initialize: function (model, options) {
         this.user = options.user;
+        this.followers = Array(5).fill("Example");
+        this.following = Array(5).fill("Example");
     }
 });
 
@@ -43,8 +58,6 @@ cw.AccountView = BB.View.extend({
             this.$el.empty().append(this.template());
             this.$el.find('.account-settings').pushpin({ top: $('.account-settings').offset().top });
             this.$el.find('.scroll-col').height($(window).height());
-
-
         }
     },
 

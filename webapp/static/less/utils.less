@@ -39,8 +39,33 @@
     border: 1px solid #ddd;
     margin-bottom: 15px;
 
+    &.current {
+        border: 1px solid @purple;
+
+        .civi-header {
+            background-color: @purple;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+
+            .civi-type {
+                color: @light-gray;
+            }
+
+            .civi-title {
+                color: @dark-white;
+            }
+
+            .civi-header-actions {
+                color: @white;
+            }
+        }
+    }
+
     .civi-header {
+        cursor: pointer;
         border-bottom: 1px solid #ddd;
+        border-top-left-radius: 2px;
+        border-top-right-radius: 2px;
         padding: 12px 20px 4px 20px;
         margin-bottom: 10px;
         background-color: @barely-not-white;
@@ -73,6 +98,22 @@
         }
     }
 
+    .civi-header:hover {
+        background-color: @purple;
+
+        .civi-type {
+            color: @light-gray;
+        }
+
+        .civi-title {
+            color: @dark-white;
+        }
+
+        .civi-header-actions {
+            color: @white;
+        }
+    }
+
     .civi-body {
         padding: 0 20px;
         border-bottom: 1px solid #ddd;
@@ -96,6 +137,23 @@
 
         .rating {
             margin-bottom: 10px;
+
+            .rating-button {
+                background-color: @dark-white !important;
+                color: @purple;
+                height: 30px;
+                padding: 0 10px;
+                margin-right: 6px;
+
+                i {
+                    line-height: 1rem;
+                }
+
+                &.current {
+                    background-color: @purple !important;
+                    color: @white;
+                }
+            }
         }
     }
 
@@ -163,9 +221,10 @@
         right: 0;
     }
     .floaty-list {
-        margin: 0 0 20px;
-        padding: 0 0 0 8px;
+        margin: 8px 0 0 0;
+        padding: 0;
         list-style: none;
+        display: inline-block;
         opacity: 0;
         transition: opacity .2s ease-out;
     }
@@ -176,7 +235,8 @@
         position: relative;
         width: 40px;
         height: 40px;
-        margin: 15px 0;
+        margin: 0 8px;
+        display: inline-block;
         cursor: pointer;
         background-color: #f0f0f0;
         border-radius: 50%;
@@ -199,8 +259,9 @@
     }
     .floaty-list-item-label {
         position: absolute;
-        top: 8px;
-        right: 120%;
+        left: 50%;
+        bottom: 46px;
+        transform: translate(-50%, 0);
         padding: 4px 8px;
         font-size: 14px;
         color: #fff;
@@ -216,10 +277,11 @@
     }
     .floaty-btn {
         position: relative;
+        display: inline-block;
         width: 56px;
         height: 56px;
         float: right;
-        margin-right: 15px;
+        margin: 0 15px 0 8px;
         cursor: pointer;
         background-color: @purple;
         border-radius: 50%;
@@ -246,18 +308,18 @@
         transition: all .2s;
     }
     .floaty-btn-icon-plus {
-        -webkit-transform: rotate(45deg);
-        transform: rotate(45deg);
+        -webkit-transform: rotate(-45deg);
+        transform: rotate(-45deg);
     }
     .floaty.is-active .floaty-btn-icon-plus {
         opacity: 0;
-        -webkit-transform: rotate(13deg);
-        transform: rotate(130deg);
+        -webkit-transform: rotate(-130deg);
+        transform: rotate(-130deg);
     }
     .floaty-btn-icon-create {
         opacity: 0;
-        -webkit-transform: rotate(-60deg);
-        transform: rotate(-60deg);
+        -webkit-transform: rotate(60deg);
+        transform: rotate(60deg);
     }
     .floaty.is-active .floaty-btn-icon-create {
         opacity: 1;
