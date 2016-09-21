@@ -3,6 +3,7 @@ cw = cw || {};
 cw.AccountModel = BB.Model.extend({
     defaults: function() {
         return {
+            profile_image: "",
             username: "",
             first_name: "",
             last_name: "",
@@ -11,6 +12,7 @@ cw.AccountModel = BB.Model.extend({
             history: [],
             followers: [],
             following: [],
+            issues: [],
             representatives: []
         };
     },
@@ -23,8 +25,6 @@ cw.AccountModel = BB.Model.extend({
 
     initialize: function (model, options) {
         this.user = options.user;
-        this.followers = Array(5).fill("Example");
-        this.following = Array(5).fill("Example");
     }
 });
 

@@ -10,8 +10,6 @@
             </div>
         </div>
         <div class="right civi-header-actions">
-            <i class="mini material-icons">edit</i>
-            <i class="mini material-icons">flag</i>
         </div>
     </div>
     <div class="civi-body">
@@ -27,7 +25,9 @@
             {{# }); }}
         </div>
         <div class="rating">
-            Rating
+            {{# _.each(ratings, function (r) { }}
+                <span>{{r}}</span>
+            {{# }) }}
         </div>
     </div>
     <div class="civi-footer">
@@ -46,9 +46,7 @@
         </div>
         <div class="right civi-footer-actions">
             <div>
-                <i class="mini material-icons">star_border</i>
-                <i class="mini material-icons">link</i>
-                <i class="mini material-icons">comment</i>
+                Go to context<i class="mini material-icons">launch</i>
             </div>
         </div>
     </div>

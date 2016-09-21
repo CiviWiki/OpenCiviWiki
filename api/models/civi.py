@@ -3,7 +3,7 @@ from account import Account
 from thread import Thread
 from bill import Bill
 from hashtag import Hashtag
-import json
+import json, random as r
 # from django.contrib.postgres.fields import ArrayField
 
 class CiviManager(models.Manager):
@@ -24,6 +24,7 @@ class CiviManager(models.Manager):
             "author": civi.author.user.username,
             "hashtags": [h.title for h in civi.hashtags.all()],
             "created": str(civi.created),
+            "ratings": [r.randint(0,50) for x in range(5)], #TODO: real points
             "id": civi.id
 	    }
 
@@ -34,7 +35,7 @@ class CiviManager(models.Manager):
 
 class Civi(models.Model):
     objects = CiviManager()
-    
+
     author = models.ForeignKey(Account, default=None, null=True)
     thread = models.ForeignKey(Thread, default=None, null=True)
     bill = models.ForeignKey(Bill, default=None, null=True) # null if not solution

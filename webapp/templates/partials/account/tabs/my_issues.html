@@ -3,8 +3,8 @@
     <div class="col s12 title-lato">Issues I care about</div>
 </div>
 <div class="row">
-    {{# _.each(Array(20).fill("Example Issue that the User probably cares about"), function (i) { }}
-        {{= cw.underscorePartial('issue-template', {category: "category", issue:i })}}
+    {{# _.each(this.model.get('issues'), function (i) { }}
+        {{= cw.underscorePartial('issue-template', JSON.parse(i))}}
     {{# }, this); }}
 </div>
 {% endverbatim %}

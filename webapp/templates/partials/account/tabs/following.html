@@ -5,8 +5,8 @@
     </div>
     <!-- Populate Civi list -->
     <div class="row">
-        {{# _.each(Array(10).fill("cividus"), function (u) { }}
-            {{= cw.underscorePartial('people-template', {profile_image: "http://placehold.it/4/"+Math.floor(Math.random()*16777215).toString(16), username:u, first_name:"Cividus", last_name:"Wikir"})}}
+        {{# _.each(this.model.get('following'), function (u) { }}
+            {{= cw.underscorePartial('people-template', JSON.parse(u))}}
         {{# }, this); }}
     </div>
 </div>
