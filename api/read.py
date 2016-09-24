@@ -44,7 +44,7 @@ from django.contrib.auth.models import User
 # 	return JsonResponse({"result":result})
 
 
-def getUser(request, user):
+def get_user(request, user):
     try:
         u = User.objects.get(username=user)
         a = Account.objects.get(user=u)
@@ -53,7 +53,7 @@ def getUser(request, user):
     except Account.DoesNotExist as e:
         return HttpResponseBadRequest(reason=str(e))
 
-def getThread(request, thread_id):
+def get_thread(request, thread_id):
     try:
         t = Thread.objects.filter(id=thread_id)
         t = {
@@ -72,6 +72,15 @@ def getThread(request, thread_id):
         }
 
         return JsonResponse(t)
+    except Exception as e:
+        return HttpResponseBadRequest(reason=str(e))
+
+def get_responses(request, thread_id, civi_id):
+    try:
+        t = Thread.objects.filter(id=thread_id)
+        t = [{'id': 'one', 'type': 'response', 'title': 'Use of deadly force against the mentally ill people', 'body': 'Amnesty International noted the problem of police using deadly force against mentally ill or disturbed people who could have been subdued through less extreme measures. Further cases have been reported since then, including suicidal individuals shot by police after they had harmed themselves but not attacked other people. For example, in February 1999 Ricardo Clos is reported to have died after being shot at 38 times by Los Angeles sheriffs deputies who had responded to a call for help from his wife after he had cut himself in the neck. Police reportedly opened fire after he threw the knife towards them (missing them).', 'attachments': ['hi', 'hello'], 'author': 'Author Name', 'created': 'September 20, 2016'}, {'id': 'two', 'type': 'response', 'title': 'Use of deadly force against the mentally ill people', 'body': 'Amnesty International noted the problem of police using deadly force against mentally ill or disturbed people who could have been subdued through less extreme measures. Further cases have been reported since then, including suicidal individuals shot by police after they had harmed themselves but not attacked other people. For example, in February 1999 Ricardo Clos is reported to have died after being shot at 38 times by Los Angeles sheriffs deputies who had responded to a call for help from his wife after he had cut himself in the neck. Police reportedly opened fire after he threw the knife towards them (missing them).', 'attachments': ['hi', 'hello'], 'author': 'Author Name', 'created': 'September 20, 2016'}, {'id': 'three', 'type': 'response', 'title': 'Use of deadly force against the mentally ill people', 'body': 'Amnesty International noted the problem of police using deadly force against mentally ill or disturbed people who could have been subdued through less extreme measures. Further cases have been reported since then, including suicidal individuals shot by police after they had harmed themselves but not attacked other people. For example, in February 1999 Ricardo Clos is reported to have died after being shot at 38 times by Los Angeles sheriffs deputies who had responded to a call for help from his wife after he had cut himself in the neck. Police reportedly opened fire after he threw the knife towards them (missing them).', 'attachments': ['hi', 'hello'], 'author': 'Author Name', 'created': 'September 20, 2016'}, {'id': 'four', 'type': 'response', 'title': 'Use of deadly force against the mentally ill people', 'body': 'Amnesty International noted the problem of police using deadly force against mentally ill or disturbed people who could have been subdued through less extreme measures. Further cases have been reported since then, including suicidal individuals shot by police after they had harmed themselves but not attacked other people. For example, in February 1999 Ricardo Clos is reported to have died after being shot at 38 times by Los Angeles sheriffs deputies who had responded to a call for help from his wife after he had cut himself in the neck. Police reportedly opened fire after he threw the knife towards them (missing them).', 'attachments': ['hi', 'hello'], 'author': 'Author Name', 'created': 'September 20, 2016'}, {'id': 'five', 'type': 'response', 'title': 'Use of deadly force against the mentally ill people', 'body': 'Amnesty International noted the problem of police using deadly force against mentally ill or disturbed people who could have been subdued through less extreme measures. Further cases have been reported since then, including suicidal individuals shot by police after they had harmed themselves but not attacked other people. For example, in February 1999 Ricardo Clos is reported to have died after being shot at 38 times by Los Angeles sheriffs deputies who had responded to a call for help from his wife after he had cut himself in the neck. Police reportedly opened fire after he threw the knife towards them (missing them).', 'attachments': ['hi', 'hello'], 'author': 'Author Name', 'created': 'September 20, 2016'}]
+
+        return JsonResponse(t, safe=False)
     except Exception as e:
         return HttpResponseBadRequest(reason=str(e))
 

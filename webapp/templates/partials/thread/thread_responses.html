@@ -1,0 +1,5 @@
+{% verbatim %}
+{{# _.each(this.responseCollection.toJSON(), function (r) { }}
+    {{= cw.underscorePartial('civi-template', r)}}
+{{# }, this); }}
+{% endverbatim %}

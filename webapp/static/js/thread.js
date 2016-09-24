@@ -2,14 +2,28 @@ cw = cw || {};
 
 cw.ThreadModel = BB.Model.extend({
     url: function () {
-            if (! this.threadId ) {
-                throw new Error("This is a race condition! and why we can't have nice things :(");
-            }
-            return '/api/thread_data/' + this.threadId + '/';
+        if (! this.threadId ) {
+            throw new Error("This is a race condition! and why we can't have nice things :(");
+        }
+        return '/api/thread_data/' + this.threadId + '/';
     },
 
     initialize: function (model, options) {
         this.threadId = options.threadId;
+    }
+});
+
+cw.ResponseCollection = BB.Collection.extend({
+    url: function () {
+        if (! this.threadId ) {
+            throw new Error("This is a race condition! and why we can't have nice things :(");
+        }
+        return '/api/response_data/' + this.threadId + '/' + this.civiId + '/';
+    },
+
+    initialize: function (model, options) {
+        this.threadId = options.threadId;
+        this.civiId = null;
     }
 });
 
@@ -18,13 +32,20 @@ cw.ThreadView = BB.View.extend({
     template: _.template($('#thread-template').html()),
     wikiTemplate: _.template($('#thread-wiki-template').html()),
     bodyTemplate: _.template($('#thread-body-template').html()),
+    responseWrapper: _.template($('#thread-response-template').html()),
 
     initialize: function (options) {
         this.username = options.username;
 
+        this.responseCollection = new cw.ResponseCollection({}, {
+            threadId: this.model.threadId
+        });
+
         this.listenTo(this.model, 'sync', function () {
             this.threadWikiRender();
         });
+
+        this.listenTo(this.responseCollection, 'sync', this.renderResponses);
 
         this.render();
     },
@@ -51,6 +72,10 @@ cw.ThreadView = BB.View.extend({
                 _this.changeNavScroll(e.target.scrollTop);
             });
         }
+    },
+
+    renderResponses: function () {
+        this.$('.responses').empty().append(this.responseWrapper());
     },
 
     changeNavScroll: function (scrollPosition, firstTime, navChange) {
@@ -182,12 +207,14 @@ cw.ThreadView = BB.View.extend({
                 $newCivi.addClass('current');
 
                 this.currentCivi = $newCivi.attr('data-civi-id');
-                //TODO ADD RESPONSES
+
+                this.responseCollection.civiId = this.currentCivi
+                this.responseCollection.fetch();
             } else {
                 $currentCivi.removeClass('current');
 
                 this.currentCivi = null;
-                //TODO REMOVE RESPONSES
+                this.$('.responses').empty();
             }
         }
     },
