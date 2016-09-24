@@ -12,3 +12,4 @@ six==1.10.0
 sunlight==1.2.9
 whitenoise==3.2
 dj-database-url==0.4.1
+Pillow==3.3.1

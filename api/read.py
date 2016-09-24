@@ -66,8 +66,8 @@ def getProfile(request, user):
         result = Account.objects.summarize(a)
 
         # Test data:
-        result['followers'] = ['''{"profile_image": "http://placehold.it/4/", "username":"test", "first_name":"test", "last_name":"test"}''']*20
-        result['following'] = ['''{"profile_image": "http://placehold.it/4/", "username":"test", "first_name":"test", "last_name":"test"}''']*20
+        # result['followers'] = ['''{"profile_image": "http://placehold.it/4/", "username":"test", "first_name":"test", "last_name":"test"}''']*20
+        #result['following'] = ['''{"profile_image": "http://placehold.it/4/", "username":"test", "first_name":"test", "last_name":"test"}''']*20
         result['representatives'] = ['''{"profile_image": "http://placehold.it/4/", "username": "rep", "first_name":"Example", "last_name": "Rep", "alignment": 87}''']*10
         result['issues'] = ['''{"category": "category", "issue":"Example Issue that the User probably cares about" }''']*20
         return JsonResponse(result)

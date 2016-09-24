@@ -32,16 +32,16 @@
     </div>
     <div class="civi-footer">
         <div class="author-photo-holder">
-            <div class="author-photo">
-
+            <div class="author-photo white">
+                <img src="{{author.profile_image}}" height="34px">
             </div>
         </div>
         <div class="author-info">
             <div class="author-name purple-text bold-text">
-                {{author}}
+                {{author.username}}
             </div>
             <div class="created gray-text">
-                {{created}}
+                {{ created }}
             </div>
         </div>
         <div class="right civi-footer-actions">

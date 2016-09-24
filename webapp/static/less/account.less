@@ -11,44 +11,63 @@ body {
 #account {
     .people {
         .chip {
-            margin: 20px;
-        }
-    }
-    .top-bar {
-        margin-bottom: 0px;
-        .logo {
-            margin-left: 20px;
-            text-align: left;
-            font-size: 30px;
-            font-weight: 700;
-            color: @white;
-            letter-spacing: 0.01em;
-        }
-        .account-tabs {
-            .tabs .tab {
-                a {
-                    color: @white;
-                    text-transform: capitalize;
-                    font-size: 12px;
-                    &:hover {
-                        color: @light-purple;
-                    }
-                }
-                .active {
-                    font-size: 14px;
+            margin: 5px;
+            .name {
+                font-weight: 400;
+                &:hover {
                     font-weight: 600;
-                    color: @light-purple;
                 }
-                i {
-                    vertical-align: middle;
-                    margin: 5px;
-                }
-
             }
 
-            .tabs .indicator {
-                background-color: @light-purple;
-                height: 3px;
+        }
+
+    }
+    .top-bar {
+        // height: 35px;
+        margin-bottom: 0px;
+        .logo-container {
+            text-align: center;
+            .logo {
+                // margin-left: 20px;
+
+                margin-top: 5px;
+                text-align: center;
+                font-size: 26px;
+                font-weight: 700;
+                color: @white;
+                letter-spacing: 0.01em;
+            }
+        }
+
+        .account-tabs {
+            // height: inherit;
+            .tabs {
+                // height: inherit;
+                .tab {
+                    // height: 35px;
+                    a {
+                        color: @white;
+                        text-transform: capitalize;
+                        font-size: 12px;
+                        &:hover {
+                            color: @light-purple;
+                        }
+                    }
+                    .active {
+                        font-size: 14px;
+                        color: @light-purple;
+                    }
+                    i {
+                        vertical-align: middle;
+                        margin: 5px;
+                    }
+
+                }
+
+                 .indicator {
+                    background-color: @light-purple;
+                    height: 3px;
+                }
             }
         }
     }
@@ -79,31 +98,39 @@ body {
                 }
 
             }
-            .card-content {
-                padding: 20px;
+            .user-info {
+                text-align: center;
+                margin-bottom: 10px;
 
+                .full-name {
+                    font-size: 20px;
+                    font-weight: 600;
+                }
+                .username {
+                    color: @light-gray;
+                    font-weight: 300;
+                }
+            }
+            .card-content {
+                text-align: left;
+                padding: 5px;
+                .profile-options{
+                    margin: 10px;
+                    a.btn {
+                        width: 10px;
+                        text-align:center;
+                    }
+                }
                 .section-title {
                     font-size: 12px;
                     font-weight: 400;
-                    color: @light-gray;
+                    color: @lightish-gray;
                 }
 
                 .divider {
                     margin-bottom: 5px;
                 }
-                .user-info {
-                    text-align: center;
-                    margin-bottom: 10px;
 
-                    .full-name {
-                        font-size: 20px;
-                        font-weight: 600;
-                    }
-                    .username {
-                        color: @light-gray;
-                        font-weight: 300;
-                    }
-                }
 
                 .location {
                     font-size: 12px;

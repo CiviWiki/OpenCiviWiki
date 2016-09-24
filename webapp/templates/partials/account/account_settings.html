@@ -1,17 +1,23 @@
-{% verbatim %}
-<div class="card transparent">
-    <div class="card-image">
-        <img src="http://placehold.it/400/501cb5/dddddd?text={{username}}">
-        <!-- <span class="card-title">{{this.model.get('first_name')}} {{this.model.get('last_name')}}</span>
-        <span class="card-title card-subtitle">@{{username}}</span> -->
-    </div>
 
-    <div class="card-content white">
-        <div class="user-info">
-            <div class="full-name">{{this.model.get('first_name')}} {{this.model.get('last_name')}}</div>
-            <div class="username">@{{username}}</div>
-        </div>
+{% verbatim %}
+
+<div class="profile-image">
+    <img class="circle responsive-img z-depth-1" src={{this.model.get('profile_image')}}>
+</div>
+<div class="user-info">
+    <div class="full-name">{{this.model.get('first_name')}} {{this.model.get('last_name')}}</div>
+    <div class="username">@{{username}}</div>
+</div>
+<div class=" transparent">
+    <div class="card-content">
         <!-- TODO: swap zipcode with city and state with google api -->
+        <div class="profile-options">
+            <div class="row">
+                <a class="btn follow"><i class="material-icons">person_add</i>Follow</a>
+                <a class="settings"><i class="material-icons">person_add</i>Settings</a>
+            </div>
+
+        </div>
         <div class="location-info">
             <div class="section-title">MY INFO</div>
             <div class="divider"></div>

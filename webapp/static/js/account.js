@@ -24,6 +24,7 @@ cw.AccountModel = BB.Model.extend({
     },
 
     initialize: function (model, options) {
+        options = options || {};
         this.user = options.user;
     }
 });
