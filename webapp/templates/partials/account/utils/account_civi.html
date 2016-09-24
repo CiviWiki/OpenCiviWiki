@@ -24,9 +24,13 @@
                 <span>{{a}}</span>
             {{# }); }}
         </div>
-        <div class="rating">
-            {{# _.each(ratings, function (r) { }}
-                <span>{{r}}</span>
+        <div class="rating row">
+            {{# _.each(ratings, function (r, index) { }}
+                <div class="col s1">
+                <div class="rating-score r-{{index}}">{{r}}</div>
+                <div class="rating-percent r-{{index}}">{{ (Math.floor( 100 * r/ (_.reduce(ratings, function(sum,num){ return sum + num }, 0 )) ))}}<span class="percent">%</span></div>
+                <div class="rating-name">{{['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'][index]}}</div>
+                </div>
             {{# }) }}
         </div>
     </div>

@@ -23,10 +23,12 @@ body {
 
     }
     .top-bar {
-        // height: 35px;
+        height: 35px;
         margin-bottom: 0px;
         .logo-container {
+            height: inherit;
             text-align: center;
+            line-height: 24px;
             .logo {
                 // margin-left: 20px;
 
@@ -40,14 +42,16 @@ body {
         }
 
         .account-tabs {
-            // height: inherit;
+            height: inherit;
             .tabs {
-                // height: inherit;
+                height: inherit;
                 .tab {
-                    // height: 35px;
+                    height: inherit;
+                    line-height: 34px;
                     a {
                         color: @white;
                         text-transform: capitalize;
+                        font-weight: 700;
                         font-size: 12px;
                         &:hover {
                             color: @light-purple;
@@ -66,7 +70,7 @@ body {
 
                  .indicator {
                     background-color: @light-purple;
-                    height: 3px;
+                    height: 2px;
                 }
             }
         }
@@ -143,6 +147,45 @@ body {
                 .about-me {
                     font-size: 12px;
 
+                }
+            }
+        }
+        .civi-card{
+            .rating{
+                text-align:center;
+                .rating-score{
+                    font-size: 20px;
+                    color: @light-purple;
+                    display: none;
+                }
+                .rating-percent{
+                    font-size: 20px;
+                    color: @light-purple;
+                    .percent {
+                        color: @lightish-gray;
+                        font-size: .75em;
+                    }
+                }
+                .r-0{
+                    color: @dark-gray;
+                }
+                .r-1{
+                    color: @dark-gray;
+                }
+                .r-2{
+                    color: @lightish-gray;
+                }
+                .r-3{
+                    color: @light-purple;
+                }
+                .r-4{
+                    color: @light-purple;
+                }
+                .rating-name{
+                    font-size: 9px;
+                    text-transform: uppercase;
+                    color: @lightish-gray;
+                    line-height: 1;
                 }
             }
         }

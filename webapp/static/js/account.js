@@ -46,8 +46,11 @@ cw.AccountView = BB.View.extend({
 
         this.listenTo(this.model, 'sync', function(){
             console.log(this.model);
+            document.title = this.model.get("first_name") +" "+ this.model.get("last_name") +" (@"+this.model.get("username")+")";
             this.postRender();
         });
+
+
 
         this.render();
     },
