@@ -128,7 +128,7 @@ cw.ThreadView = BB.View.extend({
         'click .enter-wiki': 'scrollToWiki',
         'click .expand-nav': 'expandNav',
         'click .civi-nav-link': 'goToCivi',
-        'click .civi-header': 'drilldownCivi',
+        'click .civi-click': 'drilldownCivi',
         'click .rating-button': 'clickRating'
     },
 
