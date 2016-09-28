@@ -73,13 +73,13 @@ TEMPLATES = [
 WSGI_APPLICATION = 'civiwiki.wsgi.application'
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'webapp/static'),
 )
 
 
 if 'CIVIWIKI_LOCAL_NAME' not in os.environ:
-    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
     STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
     DATABASES = {

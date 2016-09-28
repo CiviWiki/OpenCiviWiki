@@ -27,6 +27,43 @@ cw.ResponseCollection = BB.Collection.extend({
     }
 });
 
+cw.NewCiviView = BB.View.extend({
+    el: '.new-civi-modal-holder',
+    template: _.template($('#new-civi-template').html()),
+
+    initialize: function () {
+        this.listenTo(Backbone, 'openNewCivi', this.show);
+        this.listenTo(Backbone, 'closeNewCivi', this.hide);
+
+        this.render();
+    },
+
+    render: function () {
+        this.$el.empty().append(this.template());
+    },
+
+    show: function () {
+        this.$('.new-civi-modal').openModal();
+    },
+
+    hide: function () {
+        this.$('.new-civi-modal').closeModal();
+    },
+
+    events: {
+        'click .cancel-new-civi': 'cancelCivi',
+        'click .create-new-civi': 'createCivi'
+    },
+
+    cancelCivi: function () {
+        this.hide();
+    },
+
+    createCivi: function () {
+        this.hide();
+    }
+});
+
 cw.ThreadView = BB.View.extend({
     el: '#thread',
     template: _.template($('#thread-template').html()),
@@ -52,6 +89,10 @@ cw.ThreadView = BB.View.extend({
 
     render: function () {
         this.$el.empty().append(this.template());
+
+        this.newCiviView = new cw.NewCiviView({
+            model: this.model
+        });
     },
 
     threadWikiRender: function () {
@@ -129,7 +170,10 @@ cw.ThreadView = BB.View.extend({
         'click .expand-nav': 'expandNav',
         'click .civi-nav-link': 'goToCivi',
         'click .civi-click': 'drilldownCivi',
-        'click .rating-button': 'clickRating'
+        'click .rating-button': 'clickRating',
+        'click .favorite': 'clickFavorite',
+        'click .civi-grab-link': 'grabLink',
+        'click .add-civi': 'openNewCiviModal'
     },
 
     scrollToBody: function () {
@@ -224,6 +268,24 @@ cw.ThreadView = BB.View.extend({
 
         $this.addClass('current');
         $this.siblings().removeClass('current');
+    },
+
+    clickFavorite: function (e) {
+        var $this = $(e.target);
+
+        if ($this.text() === 'star_border') {
+            $this.text('star');
+        } else {
+            $this.text('star_border');
+        }
+    },
+
+    grabLink: function () {
+        Materialize.toast('Civi link copied to clipboard.', 1500);
+    },
+
+    openNewCiviModal: function () {
+        this.newCiviView.show();
     }
 
 });
