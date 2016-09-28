@@ -4735,7 +4735,7 @@
         "created": null
     },
     "model": "api.topic",
-    "pk": 0
+    "pk": 1
 },
 {
     "fields": {
@@ -4745,7 +4745,7 @@
         "title": "Local Taco Place Issues",
         "created": null,
         "summary": "The local taco place has been the local buzz lately. There are bound to be issues with this many tacos involved. Discussion must happen on this very important issue",
-        "topic": 0,
+        "topic": 1,
         "last_modified": null,
         "facts": []
     },
