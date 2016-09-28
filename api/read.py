@@ -3,7 +3,7 @@ from django.http import JsonResponse, HttpResponseBadRequest
 from models import Account, Thread
 #  Topic, Attachment, Category, Civi, Comment, Hashtag,
 from django.contrib.auth.models import User
-
+import json
 # from utils.custom_decorators import require_post_params
 # from legislation import sunlightapi as sun
 
@@ -60,6 +60,29 @@ def getUser(request, user):
         return HttpResponseBadRequest(reason=str(e))
 
 def getProfile(request, user):
+    if user in ['W000812', 'C001049', 'B000575', 'M001170']:
+        json_data = open('fixtures/data/{}.json'.format(user))
+        data = json.load(json_data)
+        json_data.close()
+
+        bills_json = open('fixtures/data/sample_bills.json')
+        bill_data = json.load(bills_json)
+        bills_json.close()
+        rep_data = dict(
+            chamber= data['chamber'],
+            bills= [json.dumps(bill) for bill in bill_data['results'] if bill['chamber']==data['chamber']]
+        )
+        result = dict(
+            profile_image = "https://theunitedstates.io/images/congress/450x550/{}.jpg".format(user),
+            username= user,
+            first_name= data['first_name'],
+            last_name= data['last_name'],
+            about_me= "Contact me by email at: " + data['oc_email'],
+            zip_code= data['state_name'],
+            rep_data = rep_data
+        )
+        return JsonResponse(result)
+
     try:
         u = User.objects.get(username=user)
         a = Account.objects.get(user=u)
@@ -68,7 +91,27 @@ def getProfile(request, user):
         # Test data:
         # result['followers'] = ['''{"profile_image": "http://placehold.it/4/", "username":"test", "first_name":"test", "last_name":"test"}''']*20
         #result['following'] = ['''{"profile_image": "http://placehold.it/4/", "username":"test", "first_name":"test", "last_name":"test"}''']*20
-        result['representatives'] = ['''{"profile_image": "http://placehold.it/4/", "username": "rep", "first_name":"Example", "last_name": "Rep", "alignment": 87}''']*10
+
+
+        reps = ['W000812', 'C001049', 'B000575', 'M001170']
+        rep_list = []
+        for rep in reps:
+            json_data = open('fixtures/data/{}.json'.format(rep))
+            data = json.load(json_data)
+            r = dict(
+                profile_image = "https://theunitedstates.io/images/congress/450x550/{}.jpg".format(rep),
+                username= rep,
+                title= data['title'],
+                first_name= data['first_name'],
+                last_name= data['last_name'],
+                party= "Republican" if data['party']=="R" else "Democrat",
+                alignment= 0
+            )
+            json_data.close()
+            rep_list.append(json.dumps(r))
+
+        # result['representatives'] = ['''{"profile_image": "http://placehold.it/4/", "username": "rep", "first_name":"Example", "last_name": "Rep", "alignment": 87}''']*10
+        result['representatives'] = rep_list
         result['issues'] = ['''{"category": "category", "issue":"Example Issue that the User probably cares about" }''']*20
         return JsonResponse(result)
 

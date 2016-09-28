@@ -20,6 +20,9 @@
 <script id="rep-template" type="text/template">
     {% include "partials/account/utils/representative_card.html" %}
 </script>
+<script id="bill-template" type="text/template">
+    {% include "partials/account/utils/account_bill.html" %}
+</script>
 
 <!-- account tab templates -->
 <script id="my-civis-template" type="text/template">
@@ -37,10 +40,17 @@
 <script id="my-reps-template" type="text/template">
     {% include "partials/account/tabs/my_reps.html" %}
 </script>
+<script id="my-bills-template" type="text/template">
+    {% include "partials/account/tabs/my_bills.html" %}
+</script>
+
 
 <!-- account base templates -->
 <script id="account-template" type="text/template">
     {% include "partials/account/account_base.html" %}
+</script>
+<script id="sidebar-template" type="text/template">
+    {% include "partials/account/account_sidebar.html" %}
 </script>
 <script id="settings-template" type="text/template">
     {% include "partials/account/account_settings.html" %}
@@ -49,18 +59,21 @@
 
 <body>
     {% include "partials/utils/global_nav.html" %}
+
     <div id="account"></div>
 </body>
 
 <script type="text/javascript" src="{% static "js/account.js" %}"></script>
 <script type="text/javascript">
     var username = '{{username}}';
+    var request_user = '{{request.user}}'
+    var current_user = '{{request.user.username}}'
     var accountModel = new cw.AccountModel({}, {
         user: username
     });
     accountModel.fetch();
     var accountView = new cw.AccountView({
-        model: accountModel
+        model: accountModel,
+        current_user: current_user
     });
-
 </script>

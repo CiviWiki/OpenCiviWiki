@@ -26,6 +26,10 @@ def user_profile(request, username=None):
         return HttpResponseRedirect('/profile/{0}'.format(request.user))
 
     else:
+        #start temp rep rendering TODO: REMOVE THIS
+        if username in ['W000812', 'C001049', 'B000575', 'M001170']:
+            return TemplateResponse(request, 'account.html', {'username': username, 'representative':True })
+        #end temp rep rendering
         try:
             user = User.objects.get(username=username)
         except User.DoesNotExist:

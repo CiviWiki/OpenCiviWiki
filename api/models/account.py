@@ -17,7 +17,7 @@ class AccountManager(models.Manager):
             "about_me": account.about_me,
             "zip_code": account.zip_code,
             "id": account.id,
-            "history": [Civi.objects.serialize(c) for c in Civi.objects.filter(author_id=3).order_by('-created')],
+            "history": [Civi.objects.serialize(c) for c in Civi.objects.filter(author_id=account.id).order_by('-created')],
             "profile_image": account.profile_image.url,
             "followers": [self.follow_summarize(a) for a in account.followers.all()],
             "following": [self.follow_summarize(a) for a in account.following.all()],

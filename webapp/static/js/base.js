@@ -46,6 +46,6 @@ cw.initGlobalNav = function () {
     });
 
     $account.on('click', function () {
-        window.location.href = '/profile/' + username;
+        window.location.href = '/profile/' + current_user; //TODO: username is not current loggedin user
     });
 };

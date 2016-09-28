@@ -1,5 +1,7 @@
 @import 'base';
 
+@vote-green: #64B972;
+@vote-red: #cc5856;
 html {
     overflow: hidden;
     -webkit-font-smoothing: antialiased;
@@ -8,7 +10,43 @@ body {
     background-color: @barely-not-white;
 }
 
+.floaty {
+    z-index: 100; // Temporary fix for now
+}
+.big-image-cropper{
+    border: 5px solid white;
+    width: 171px;
+    height: 171px;
+    overflow: hidden;
+    border-radius: 50%;
+}
+.image-cropper {
+    width: 120px;
+    height: 120px;
+    overflow: hidden;
+    border-radius: 50%;
+
+
+
+//     img {
+//     display: inline;
+//     height: 100%;
+//     width: auto;
+// }
+}
 #account {
+    .no-state {
+        background-color: @white;
+        border: 2px @lightish-gray;
+        border-radius: 2px;
+        .text {
+            color: @light-gray;
+        }
+    }
+    .tab-title {
+        margin-bottom: 5px;
+        margin-top: 10px;
+    }
     .people {
         .chip {
             margin: 5px;
@@ -79,6 +117,21 @@ body {
 
         .account-settings {
             margin-top: 20px;
+            .profile-options{
+                text-align: center;
+                margin: 5px;
+
+                a.btn{
+                    font-size: 13px;
+                    background-color: @dark-blue;
+                    &:hover {
+                        background-color: @blue;
+                    }
+                    i {
+                        margin-right: 5px;
+                    }
+                }
+            }
             .card-image {
                 text-align: center;
                 min-height: 100px;
@@ -118,13 +171,6 @@ body {
             .card-content {
                 text-align: left;
                 padding: 5px;
-                .profile-options{
-                    margin: 10px;
-                    a.btn {
-                        width: 10px;
-                        text-align:center;
-                    }
-                }
                 .section-title {
                     font-size: 12px;
                     font-weight: 400;
@@ -150,43 +196,117 @@ body {
                 }
             }
         }
+        .civi-cover {
+
+            .cover-content{
+                background-color:@light-purple;
+                padding-top: 10px;
+                padding-left: 5px;
+                padidng-bottom: -10px;
+            }
+        }
+
         .civi-card{
-            .rating{
-                text-align:center;
-                .rating-score{
-                    font-size: 20px;
-                    color: @light-purple;
-                    display: none;
-                }
-                .rating-percent{
-                    font-size: 20px;
-                    color: @light-purple;
-                    .percent {
-                        color: @lightish-gray;
-                        font-size: .75em;
+            display: inline-block;
+            // margin: 20px 0 0 5px;
+
+            .civi-header-account {
+                cursor: pointer;
+                border-bottom: 1px solid #ddd;
+                border-top-left-radius: 2px;
+                border-top-right-radius: 2px;
+                padding: 12px 20px 4px 20px;
+                margin-bottom: 10px;
+                background-color: @barely-not-white;
+
+                .civi-title-outer {
+                    display: inline-block;
+                    vertical-align: middle;
+
+                    .civi-type {
+                        font-size: 12px;
+                        font-weight: 300;
+                        text-transform: uppercase;
+                    }
+
+                    .civi-title {
+                        font-weight: 500;
                     }
                 }
-                .r-0{
-                    color: @dark-gray;
+            }
+            .rating{
+                width: 200px;
+                height: 43px;
+                display: inline-block;
+                text-align:center;
+                overflow: hidden;
+                border: solid 1px #dddddd;
+                border-radius: 2px;
+                vertical-align: top;
+                .rating-box{
+                    display: inline-block;
+                    text-align:center;
+                    width: 30px;
+                    vertical-align: top;
+                    .vote-icon{
+                        i {
+                            font-size:10px;
+                            line-height: 20px;
+                            vertical-align: top;
+                        }
+                    }
+                    .double-icon{
+                        i{
+                            font-size:10px;
+                            line-height: 16px;
+                        }
+                        .double-icon-1{
+                            vertical-align: middle;
+                        }
+                        .double-icon-2{
+                            vertical-align: top;
+                        }
+                    }
+                    .rating-score{
+                        font-size: 14px;
+                        line-height: 18px;
+                        font-weight: 700;
+                        color: @light-purple;
+                    }
+                    .rating-percent{
+                        font-size: 16px;
+                        font-weight: 700;
+                        color: @light-purple;
+                        .percent {
+                            color: @lightish-gray;
+                            font-size: .75em;
+                        }
+                    }
+                    .r-0{
+                        color: @vote-red;
+                    }
+                    .r-1{
+                        color: @vote-red;
+                    }
+                    .r-2{
+                        color: @lightish-gray;
+                    }
+                    .r-3{
+                        color: @vote-green;
+                    }
+                    .r-4{
+                        color: @vote-green;
+                    }
+                    .rating-name{
+                        font-size: 8px;
+                        text-transform: uppercase;
+                        color: @gray;
+                        line-height: 1;
+                        vertical-align: middle;
+                        text-align:center;
+                    }
                 }
-                .r-1{
-                    color: @dark-gray;
-                }
-                .r-2{
-                    color: @lightish-gray;
-                }
-                .r-3{
-                    color: @light-purple;
-                }
-                .r-4{
-                    color: @light-purple;
-                }
-                .rating-name{
-                    font-size: 9px;
-                    text-transform: uppercase;
-                    color: @lightish-gray;
-                    line-height: 1;
-                }
+
             }
         }
     }
