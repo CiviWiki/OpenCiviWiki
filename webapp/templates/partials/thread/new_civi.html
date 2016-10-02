@@ -1,17 +1,31 @@
 <div class="modal new-civi-modal">
     <div class="modal-content">
-        <h5 class="purple-text">What type of civi would you like to add?</h5>
-        <span>Choose One</span>
-        <div class="civi-types">
-            <button class="btn waves-effect civi-type-button">
-                PROBLEM
-            </button>
-            <button class="btn waves-effect civi-type-button">
-                CAUSE
-            </button>
-            <button class="btn waves-effect civi-type-button">
-                SOLUTION
-            </button>
+        <div class="new-civi-type new-civi-container">
+            <div class="subtitle-lato new-civi-title">What type of civi would you like to add?</div>
+            <div class="header-lato new-civi-header">Choose One:</div>
+            <div class="civi-types">
+                <button class="btn waves-effect civi-type-button">
+                    PROBLEM
+                </button>
+                <button class="btn waves-effect civi-type-button">
+                    CAUSE
+                </button>
+                <button class="btn waves-effect civi-type-button">
+                    SOLUTION
+                </button>
+            </div>
+        </div>
+        <div class="new-civi-contention new-civi-container">
+            <div class="input-field white-background-input-field left-input-field">
+                <input id="civi-title" type="text" length="120">
+                <label for="civi-title">What is the argument you want to make?</label>
+            </div>
+        </div>
+        <div class="new-civi-body white-background-input-field new-civi-container">
+            <div class="input-field left-input-field">
+                <textarea id="civi-body" type="text" class="materialize-textarea" length="4000"></textarea>
+                <label for="civi-body">Expand on your argument with facts and details</label>
+            </div>
         </div>
     </div>
     <div class="modal-footer">
