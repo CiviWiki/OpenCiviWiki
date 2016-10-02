@@ -15,10 +15,5 @@ cw.FeedView = BB.View.extend({
     },
 
     events: {
-        'click .account-nav-button': 'goToAccount'
     },
-
-    goToAccount: function () {
-        window.location.href = '/profile/' + username;
-    }
 });

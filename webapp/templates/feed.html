@@ -3,15 +3,15 @@
 <head>
     {% load staticfiles %}
     {% include "base/links.html" %}
-    {% include "base/less_headers/account_less.html" %}
+    {% include "base/less_headers/feed_less.html" %}
 </head>
 
 <script id="feed-template" type="text/template">
     {% include "partials/feed/feed_base.html" %}
-    {% include "partials/utils/account_nav_button.html" %}
 </script>
 
 <body>
+    {% include "partials/utils/global_nav.html" %}
     <div id="feed">
 
     </div>

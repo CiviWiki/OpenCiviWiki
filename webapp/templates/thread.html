@@ -1,0 +1,66 @@
+<!doctype html>
+
+<head>
+    {% load staticfiles %}
+    {% include "base/links.html" %}
+    {% include "base/less_headers/thread_less.html" %}
+</head>
+
+<script id="thread-template" type="text/template">
+    {% include "partials/thread/thread_base.html" %}
+</script>
+
+<script id="thread-wiki-template" type="text/template">
+    {% include "partials/thread/thread_wiki.html" %}
+</script>
+
+<script id="thread-body-template" type="text/template">
+    {% include "partials/thread/thread_body.html" %}
+</script>
+
+<script id="thread-response-template" type="text/template">
+    {% include "partials/thread/thread_responses.html" %}
+</script>
+
+<script id="profile-button-template" type="text/template">
+    {% include "partials/utils/profile_button.html" %}
+</script>
+
+<script id="civi-template" type="text/template">
+    {% include "partials/utils/civi.html" %}
+</script>
+
+<script id="response-template" type="text/template">
+    {% include "partials/utils/response.html" %}
+</script>
+
+<script id="new-civi-template" type="text/template">
+    {% include "partials/thread/new_civi.html" %}
+</script>
+
+<body>
+    {% include "partials/utils/global_nav.html" %}
+    <div id="thread">
+
+    </div>
+</body>
+
+<script type="text/javascript" src="{% static "js/thread.js" %}"></script>
+<script type="text/javascript">
+
+    var username = '{{user.username}}',
+        threadId = '{{thread_id}}';
+
+    var threadModel = new cw.ThreadModel({}, {
+        threadId: threadId
+    });
+    threadModel.fetch();
+
+    var threadView = new cw.ThreadView({
+        username: username,
+        model: threadModel
+    });
+
+</script>
+
+</html>

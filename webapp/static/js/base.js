@@ -7,9 +7,9 @@ _.templateSettings = {
     escape: /\{\{(?!#|=)(.+?)\}\}/g
 };
 
-// cw.underscorePartial = function (templateString, data) {
-//     return _.template()
-// }
+cw.underscorePartial = function (templateSelector, data) {
+    return _.template($('#' + templateSelector).html())(data);
+};
 
 cw.checkForEnter = function (e) {
     if (e.which == 13 && !e.shiftKey) {
@@ -21,4 +21,31 @@ cw.checkForEnter = function (e) {
 cw.materializeShit = function () {
     Materialize.updateTextFields();
     $('ul.tabs').tabs();
+};
+
+cw.initGlobalNav = function () {
+    var $floaty = $('.floaty'),
+        $logout = $('.svg-logout'),
+        $feed = $('.svg-feed'),
+        $account = $('.svg-account');
+
+    $floaty.on('mouseover', function() {
+        $floaty.addClass('is-active');
+    });
+
+    $floaty.on('mouseout', function() {
+        $floaty.removeClass('is-active');
+    });
+
+    $logout.on('click', function () {
+        window.location.href = '/auth/logout';
+    });
+
+    $feed.on('click', function () {
+        window.location.href = '/';
+    });
+
+    $account.on('click', function () {
+        window.location.href = '/profile/' + username;
+    });
 };

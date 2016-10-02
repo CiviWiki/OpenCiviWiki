@@ -18,7 +18,6 @@ def base_view(request):
 	return TemplateResponse(request, 'feed.html', {})
 
 
-
 @login_required
 @beta_blocker
 def user_profile(request, username=None):
@@ -39,6 +38,18 @@ def user_profile(request, username=None):
 				  bills=sun.get_bill_information(a))
 
 	return TemplateResponse(request, 'account.html', {'result': json.dumps(result)})
+
+
+@login_required
+@beta_blocker
+def issue_thread(request, thread_id=None):
+    if not thread_id:
+        return HttpResponseRedirect('/404')
+
+    # t = Thread.objects.get(id=thread_id)
+
+    return TemplateResponse(request, 'thread.html', {'thread_id': thread_id})
+
 
 @login_required
 @beta_blocker
@@ -85,4 +96,4 @@ def support_us_view(request):
 	return TemplateResponse(request, 'static_templates/support_us.html', {})
 
 def does_not_exist(request):
-	return TemplateResponse(request, '404.html', {})
+	return TemplateResponse(request, 'base/404.html', {})

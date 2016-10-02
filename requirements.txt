@@ -1,6 +1,6 @@
 args==0.1.0
 clint==0.5.1
-Django==1.8.5
+Django==1.8.7
 django-cors-headers==1.1.0
 docutils==0.12
 gunicorn==19.6.0

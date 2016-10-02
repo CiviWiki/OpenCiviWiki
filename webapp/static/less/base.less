@@ -3,18 +3,25 @@
 @dark-purple: #0E0038;
 @blue: #74edd6;
 @dark-blue: #1acbab;
+@dark-yellow: #deb942;
 @yellow: #F7CE4A;
 @light-yellow: #FCEBB7;
 
 @white: #fff;
 @black: #000;
-@dark-white: #ddd;
+@dark-white: #eee;
+@barely-not-white: #f5f5f5;
+@light-gray: #aaa;
+@lightish-gray: #999;
+@gray: #666;
 @dark-gray: #333;
 @deep-gray: #181818;
 @text: #333;
+@box-shadow-gray: rgba(0,0,0,0.26);
 
 html {
     font-family: 'Lato', sans-serif;
+    color: @text;
 }
 
 // Body Text
@@ -57,6 +64,11 @@ html {
     color: @blue;
 }
 
+// All bold text
+.bold-text {
+    font-weight: 600;
+}
+
 // Should be rarely used
 .purple-background {
     background-color: @purple;
@@ -84,12 +96,22 @@ html {
 
 // Non-body text--Use this sparingly, the classes above should be used for text
 .purple-text {
-    color: @purple;
+    color: @purple !important;
 }
 
 // Dark background text should be this color, or dark-white
 .blue-text {
     color: @blue;
+}
+
+//For subtitles
+.gray-text, .grey-text {
+    color: @gray;
+}
+
+//For subtitles on dark backgrounds
+.light-gray-text {
+    color: @light-gray;
 }
 
 // Dark background text
@@ -103,7 +125,7 @@ html {
 
 // This is because all text should be dark gray, not black
 .black-text {
-    color: @text;
+    color: @text !important;
 }
 
 // Custom Input Colors
@@ -142,4 +164,10 @@ html {
 //Scroll Divs
 .scroll-col {
     overflow: scroll;
+}
+
+.col {
+    .no-pads {
+        padding: 0;
+    }
 }

@@ -1,0 +1,83 @@
+{% verbatim %}
+<div class="thread-wiki">
+    <div class="wiki-banner">
+        <div class="container">
+            <div class="col s5">
+                <div class="wiki-title title-lato dark-white-text">
+                    {{this.model.get('title')}}
+                </div>
+                <div class="wiki-stats light-gray-text">
+                    <span class="wiki-stat">{{this.model.get('num_views')}} Views</span>
+                    <span class="wiki-stat">{{this.model.get('num_civis')}} Civis</span>
+                    <span class="wiki-stat">{{this.model.get('num_responses')}} Responses</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="wiki-body">
+        <div class="container">
+            <div class="col s12">
+                <div class="wiki-body-header">
+                    <span class="wiki-header-category gray-text"><span class="black-text bold-text wiki-header-inner">Category:</span>{{this.model.get('category')}}</span>
+                    <span class="wiki-header-topic gray-text"><span class="black-text bold-text wiki-header-inner">Topic:</span>{{this.model.get('topic')}}</span>
+                </div>
+            </div>
+            <div class="col s8">
+                <div class="wiki-body-summary">
+                    <div class="black-text bold-text wiki-body-summary-title">
+                        Summary
+                    </div>
+                    <div class="gray-text wiki-body-summary-text">
+                        {{this.model.get('summary')}}
+                    </div>
+                </div>
+            </div>
+            <div class="col s4">
+                <div class="wiki-contributors">
+                    <div class="gray-text wiki-contributors-title">
+                        Top Contributors
+                    </div>
+                    <div class="wiki-contributors-list">
+                        <div class="row" style="padding: 0;">
+                            {{# _.each(this.model.get('contributors'), function (c, idx) { }}
+                                {{# if (idx > 7) { return; } else { }}
+                                    <div class="profile-button-wrapper col l3 m6 s12">
+                                        {{= cw.underscorePartial('profile-button-template', {name: c})}}
+                                    </div>
+                                {{# } }}
+                            {{# }, this); }}
+                            {{# if (this.model.get('contributors').length > 8) { }}
+                                <div class="col s12">
+                                    <span class="gray-text wiki-contributors-more">+{{this.model.get('contributors').length - 8}} more</span>
+                                </div>
+                            {{# } }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12">
+                <div class="wiki-facts">
+                    <div class="black-text bold-text wiki-facts-title">
+                        Facts related to this thread:
+                    </div>
+                    <div class="gray-text wiki-facts-list">
+                        {{# _.each(this.model.get('facts'), function (fact) { }}
+                            <div class="wiki-fact">&mdash; {{fact}}</div>
+                        {{# }); }}
+                    </div>
+                </div>
+            </div>
+            <div class="col s12">
+                <div class="wiki-enter-body">
+                    <button class="enter-body btn waves-effect">Enter Thread
+                        <i class="material-icons right">keyboard_arrow_down</i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="wiki-image">
+        <img src="http://media.salon.com/2014/06/riot_police-620x4121.jpg" alt="">
+    </div>
+</div>
+{% endverbatim %}

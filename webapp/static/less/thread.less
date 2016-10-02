@@ -1,1 +1,278 @@
 @import 'base';
+
+// body {
+//     overflow: hidden;
+// }
+
+#thread {
+    .new-civi-modal-holder {
+        .modal-footer {
+            .btn {
+                margin-right: 6px;
+            }
+        }
+    }
+
+    .thread-wiki-holder {
+        min-height: 100vh;
+        padding: 0;
+    }
+
+    .thread-wiki {
+        .wiki-banner {
+            min-height: 30vh;
+            background-color: @dark-purple;
+            box-shadow: 0 2px 5px @box-shadow-gray;
+
+            .wiki-title {
+                padding-top: 40%;
+                line-height: 35px;
+            }
+
+            .wiki-stats {
+                padding-top: 10px;
+
+                .wiki-stat {
+                    margin-right: 4px;
+                }
+            }
+        }
+
+        .wiki-body {
+            .wiki-body-header {
+                padding-top: 24px;
+                font-size: 17px;
+
+                .wiki-header-inner {
+                    margin-right: 6px;
+                    font-size: 17px;
+                }
+
+                .wiki-header-category {
+                    margin-right: 20px;
+                }
+            }
+
+            .wiki-body-summary {
+                padding-top: 20px;
+
+                .wiki-body-summary-title {
+                    padding-bottom: 4px;
+                    font-size: 17px;
+                    border-bottom: 1px solid @dark-white;
+                }
+
+                .wiki-body-summary-text {
+                    padding-top: 10px;
+                    line-height: 25px;
+                    font-size: 14px;
+                }
+            }
+
+            .wiki-contributors {
+                padding-top: 20px;
+
+                .wiki-contributors-title {
+                    font-size: 15px;
+                    font-weight: 500;
+                }
+
+                .wiki-contributors-list {
+                    margin-top: 10px;
+
+                    .profile-button-wrapper {
+                        margin-bottom: 12px;
+                    }
+
+                    .wiki-contributors-more {
+                        font-size: 13px;
+                    }
+                }
+            }
+
+            .wiki-facts {
+                padding-top: 20px;
+                margin-bottom: 20px;
+
+                .wiki-facts-title {
+                    padding-bottom: 4px;
+                    font-size: 17px;
+                    border-bottom: 1px solid @dark-white;
+                }
+
+                .wiki-facts-list {
+                    padding-top: 10px;
+                    font-size: 13px;
+                    line-height: 22px;
+                }
+            }
+        }
+
+        .wiki-image {
+            position: absolute;
+            right: 15%;
+            top: 5vh;
+
+            img {
+                max-width: 40vw;
+                max-height: 30vh;
+                box-shadow: 0 0 4px 2px @box-shadow-gray;
+            }
+        }
+
+        .wiki-enter-body {
+            margin: 20px 0;
+
+            .enter-body {
+                background-color: @purple;
+            }
+        }
+    }
+
+    .thread-body-holder {
+        height: 100vh;
+        padding: 0;
+    }
+
+    .thread-body {
+        button {
+            background-color: @purple;
+        }
+
+        .body-banner {
+            background-color: @dark-purple;
+            box-shadow: 0 2px 5px @box-shadow-gray;
+
+            .category-topic {
+                margin-top: 4px;
+                font-size: 13px;
+
+                i {
+                    position: relative;
+                    top: 6px;
+                }
+            }
+
+            .thread-title {
+                margin-top: 10px;
+                font-size: 20px;
+            }
+
+            .thread-header, .response-header {
+                font-size: 18px;
+                margin-top: 30px;
+
+                button {
+                    margin-right: 20px;
+                    margin-top: -4px;
+                    margin-bottom: 10px;
+                    font-size: 14px;
+                    padding: 0 20px 0 18px;
+
+                    i {
+                        margin-right: 4px;
+                    }
+                }
+            }
+        }
+
+        .nav-column {
+            box-shadow: 2px 0 5px @box-shadow-gray;
+
+            .background-info-link {
+                background-color: @dark-purple;
+                margin: 0 -0.75rem;
+                padding: 6px 0.75rem 16px 0.75rem;
+
+                .enter-wiki {
+                    font-size: 13px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    color: @blue;
+
+                    i {
+                        position: relative;
+                        top: 2px;
+                    }
+                }
+            }
+
+            .issue-outline {
+                .issue-outline-header {
+                    margin: 10px 15px 0 15px;
+                    padding-bottom: 4px;
+                    border-bottom: 1px solid #ddd;
+
+                    i {
+                        cursor: pointer;
+
+                        &.expanded {
+                            color: @dark-blue;
+                        }
+                    }
+                }
+
+                .civi-outline {
+                    overflow-y: scroll;
+
+                    .civi-nav-header {
+                        border-left: 3px solid #fff;
+                        padding-left: 6px;
+                        margin: 10px 15px 0 15px;
+
+                        .civi-nav-title {
+                            font-size: 18px;
+                        }
+
+                        .civi-nav-count {
+                            border-radius: 25px;
+                            background-color: @dark-blue;
+                            padding: 0 10px;
+                        }
+
+                        &.current {
+                            color: @dark-blue;
+                            border-color: @dark-blue;
+                        }
+                    }
+
+                    .civi-nav-wrapper {
+                        margin: 0 15px 10px 15px;
+                        height: 100%;
+                        display: none;
+
+                        .civi-nav-indiv {
+                            font-size: 14px;
+                            margin: 4px 0 10px 0;
+                            line-height: 16px;
+
+                            .civi-nav-link {
+                                cursor: pointer;
+                                border-left: 3px solid #fff;
+                                padding-left: 6px;
+
+                                &.current {
+                                    color: @dark-blue;
+                                    border-color: @dark-blue;
+                                    font-weight: 500;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .main-thread {
+            overflow-y: scroll;
+            padding: 15px 15px 0 15px;
+        }
+
+        .responses {
+            overflow-y: scroll;
+            padding: 15px 15px 0 15px;
+            // border-left: 1px solid #ddd;
+            box-shadow: 0 2px 5px @box-shadow-gray;
+        }
+    }
+}
