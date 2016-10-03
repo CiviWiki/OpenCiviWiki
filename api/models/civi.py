@@ -13,7 +13,7 @@ class Civi(models.Model):
 
     hashtags = models.ManyToManyField(Hashtag)
 
-    parents = models.ManyToManyField('self') # 0 if c_type == problem
+    links = models.ManyToManyField('self')
 
     title = models.CharField(max_length=127)
     body = models.CharField(max_length=4095)
