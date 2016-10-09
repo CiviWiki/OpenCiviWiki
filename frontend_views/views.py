@@ -22,6 +22,26 @@ def base_view(request):
         categories=categories
     )
 
+    c = Category(name='Agriculture')
+    c = Category(name='Energy')
+    c = Category(name='Public Health')
+    c = Category(name='Public Safety')
+    c = Category(name='Taxes and Spending')
+    c = Category(name='Economic Issues')
+    c = Category(name='Foreign Policy')
+    c = Category(name='Education')
+    c = Category(name='Defense')
+    c = Category(name='Communications')
+    c = Category(name='Native American Affairs')
+    c = Category(name='Immigration')
+    c = Category(name='Infrastructure')
+    c = Category(name='Science & Technology')
+    c = Category(name='Civil Rights')
+    c = Category(name='Governance')
+    c = Category(name='Women’s Issues')
+    c = Category(name='LGBTQIA Issues')
+    c = Category(name='Worker’s Rights')
+    c = Category(name='Other')
     return TemplateResponse(request, 'feed.html', {'data': json.dumps(data)})
 
 
