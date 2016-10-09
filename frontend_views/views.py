@@ -3,19 +3,26 @@ import json
 from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.contrib.auth.models import User
-from api.models import Category, Account, Topic
+from api.models import Category, Account
 
 from legislation import sunlightapi as sun
 from utils.custom_decorators import beta_blocker, login_required
 
 def base_view(request):
-	if not request.user.is_authenticated():
-		return TemplateResponse(request, 'static_templates/landing.html', {})
+    if not request.user.is_authenticated():
+        return TemplateResponse(request, 'static_templates/landing.html', {})
 
-	a = Account.objects.get(user=request.user)
-	if not a.beta_access:
-		return HttpResponseRedirect('/beta')
-	return TemplateResponse(request, 'feed.html', {})
+    a = Account.objects.get(user=request.user)
+    if not a.beta_access:
+        return HttpResponseRedirect('/beta')
+
+    categories = [{'id': c.id, 'name': c.name} for c in Category.objects.all()]
+
+    data = dict(
+        categories=categories
+    )
+
+    return TemplateResponse(request, 'feed.html', {'data': json.dumps(data)})
 
 
 

@@ -1,0 +1,32 @@
+{% verbatim %}
+<div class="modal new-thread-modal">
+    <div class="modal-content">
+        <div class="new-thread-contention new-thread-container">
+            <div class="input-field white-background-input-field left-input-field">
+                <input id="thread-title" type="text" length="120">
+                <label for="thread-title">Title</label>
+            </div>
+        </div>
+        <div class="new-thread-body white-background-input-field new-thread-container">
+            <div class="input-field left-input-field">
+                <textarea id="thread-body" type="text" class="materialize-textarea" length="4000"></textarea>
+                <label for="thread-body">Summary</label>
+            </div>
+        </div>
+        <div class="new-thread-category-selection white-background-input-field">
+            <div class="input-field left-input-field">
+                <select id="thread-category">
+                    <option value="" disabled selected>Choose your category</option>
+                    {{# _.each(this.options.categories, function (c) { }}
+                        <option value="{{c.id}}">{{c.name}}</option>
+                    {{# }); }}
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="create-new-thread waves-effect btn">Add Thread</a>
+        <button class="cancel-new-thread waves-effect btn">Cancel</a>
+    </div>
+</div>
+{% endverbatim %}

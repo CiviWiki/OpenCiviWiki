@@ -32,9 +32,6 @@ cw.NewCiviView = BB.View.extend({
     template: _.template($('#new-civi-template').html()),
 
     initialize: function () {
-        this.listenTo(Backbone, 'openNewCivi', this.show);
-        this.listenTo(Backbone, 'closeNewCivi', this.hide);
-
         this.render();
     },
 

@@ -21,6 +21,7 @@ cw.checkForEnter = function (e) {
 cw.materializeShit = function () {
     Materialize.updateTextFields();
     $('ul.tabs').tabs();
+    $('select').material_select();
 };
 
 cw.initGlobalNav = function () {
