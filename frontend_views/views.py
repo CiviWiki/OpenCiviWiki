@@ -38,7 +38,7 @@ def base_view(request):
     c = Category(name='Science & Technology')
     c = Category(name='Civil Rights')
     c = Category(name='Governance')
-    c = Category(name='Women’s Issues')
+    c = Category(name="Women's Issues")
     c = Category(name='LGBTQIA Issues')
     c = Category(name='Worker’s Rights')
     c = Category(name='Other')
