@@ -17,7 +17,7 @@ from django.contrib.auth.decorators import login_required
 @require_post_params(params=['title', 'summary', 'category_id'])
 def new_thread(request):
 
-    t = Thread(title=request.POST['title'], summary=request.POST['summary'], category_id=request.POST['category_id'])
+    t = Thread(title=request.POST['title'], summary=request.POST['summary'], category_id=request.POST['category_id'], author_id=request.user.id)
     t.save()
 
     return JsonResponse({'data': 'success'})

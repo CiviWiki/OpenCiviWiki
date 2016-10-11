@@ -22,46 +22,6 @@ def base_view(request):
         categories=categories
     )
 
-    # c = Category(name='Agriculture')
-    # c.save()
-    # c = Category(name='Energy')
-    # c.save()
-    # c = Category(name='Public Health')
-    # c.save()
-    # c = Category(name='Public Safety')
-    # c.save()
-    # c = Category(name='Taxes and Spending')
-    # c.save()
-    # c = Category(name='Economic Issues')
-    # c.save()
-    # c = Category(name='Foreign Policy')
-    # c.save()
-    # c = Category(name='Education')
-    # c.save()
-    # c = Category(name='Defense')
-    # c.save()
-    # c = Category(name='Communications')
-    # c.save()
-    # c = Category(name='Native American Affairs')
-    # c.save()
-    # c = Category(name='Immigration')
-    # c.save()
-    # c = Category(name='Infrastructure')
-    # c.save()
-    # c = Category(name='Science & Technology')
-    # c.save()
-    # c = Category(name='Civil Rights')
-    # c.save()
-    # c = Category(name='Governance')
-    # c.save()
-    # c = Category(name="Women's Issues")
-    # c.save()
-    # c = Category(name='LGBTQIA Issues')
-    # c.save()
-    # c = Category(name="Worker's Rights")
-    # c.save()
-    # c = Category(name='Other')
-    # c.save()
     return TemplateResponse(request, 'feed.html', {'data': json.dumps(data)})
 
 
@@ -69,23 +29,23 @@ def base_view(request):
 @login_required
 @beta_blocker
 def user_profile(request, username=None):
-	if not username:
-		user = request.user
-	else:
-		try:
-			user = User.objects.get(username=username)
-		except User.DoesNotExist:
-			return HttpResponseRedirect('/404')
+    if not username:
+        user = request.user
+    else:
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return HttpResponseRedirect('/404')
 
-	a = Account.objects.get(user=user)
-	friend_data_dictionary = Account.objects.friends(a)
+    a = Account.objects.get(user=user)
+    friend_data_dictionary = Account.objects.friends(a)
 
-	result = dict(friends=friend_data_dictionary['friends'],
-				  requests=friend_data_dictionary['requests'],
-				  profile=Account.objects.summarize(a),
-				  bills=sun.get_bill_information(a))
+    result = dict(friends=friend_data_dictionary['friends'],
+                  requests=friend_data_dictionary['requests'],
+                  profile=Account.objects.summarize(a),
+                  bills=sun.get_bill_information(a))
 
-	return TemplateResponse(request, 'account.html', {'result': json.dumps(result)})
+    return TemplateResponse(request, 'account.html', {'result': json.dumps(result)})
 
 
 @login_required
@@ -93,8 +53,6 @@ def user_profile(request, username=None):
 def issue_thread(request, thread_id=None):
     if not thread_id:
         return HttpResponseRedirect('/404')
-
-    # t = Thread.objects.get(id=thread_id)
 
     return TemplateResponse(request, 'thread.html', {'thread_id': thread_id})
 
