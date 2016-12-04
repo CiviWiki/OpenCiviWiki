@@ -1,5 +1,4 @@
 from django.http import JsonResponse, HttpResponseBadRequest
-
 from models import Account, Thread, Civi
 #  Topic, Attachment, Category, Civi, Comment, Hashtag,
 from django.contrib.auth.models import User
@@ -51,7 +50,7 @@ def get_user(request, user):
         u = User.objects.get(username=user)
         a = Account.objects.get(user=u)
 
-        return JsonResponse(Account.objects.summarize(a))
+        return JsonResponse(model_to_dict(a))
     except Account.DoesNotExist as e:
         return HttpResponseBadRequest(reason=str(e))
 

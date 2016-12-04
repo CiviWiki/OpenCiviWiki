@@ -37,12 +37,10 @@ def user_profile(request, username=None):
             return HttpResponseRedirect('/404')
 
     a = Account.objects.get(user=user)
-    friend_data_dictionary = Account.objects.friends(a)
+    # friend_data_dictionary = Account.objects.followers(a)
 
-    result = dict(friends=friend_data_dictionary['friends'],
-                  requests=friend_data_dictionary['requests'],
-                  profile=Account.objects.summarize(a),
-                  bills=sun.get_bill_information(a))
+    result = dict(friends=[],
+                  requests=[])
 
     return TemplateResponse(request, 'account.html', {'result': json.dumps(result)})
 
