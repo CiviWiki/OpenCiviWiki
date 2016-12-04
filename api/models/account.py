@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.utils.deconstruct import deconstructible
 from django.db import models
 from django.conf import settings
 from hashtag import Hashtag
@@ -15,7 +16,7 @@ class AccountManager(models.Manager):
             "last_name": account.last_name,
             "about_me": account.about_me,
             "location": account.get_location(),
-            "history": [Civi.objects.serialize(c) for c in Civi.objects.filter(author_id=account.id).order_by('-created')],
+            "history": [json.dumps(c) for c in Civi.objects.filter(author_id=account.id).order_by('-created')],
             "profile_image": account.profile_image.url,
             "followers": self.followers(account),
             "following": self.following(account),
@@ -40,12 +41,19 @@ class AccountManager(models.Manager):
     def following(self, account):
         return [self.follow_summarize(a) for a in account.following.all()]
 
-def path_and_rename(path):
-    def wrapper(instance, filename):
+
+
+@deconstructible
+class PathAndRename(object):
+    def __init__(self, sub_path):
+        self.sub_path = sub_path
+
+    def __call__(self, instance, filename):
         ext = filename.split('.')[-1]
         filename = '{}.{}'.format(instance.user.username, ext)
-        return os.path.join(path, filename)
-    return wrapper
+        return os.path.join(self.sub_path, filename)
+
+profile_upload_path = PathAndRename('profile/')
 
 class Account(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -82,4 +90,4 @@ class Account(models.Model):
         "Returns the person's full name."
         return '{first_name} {last_name}'.format(first_name=self.first_name, last_name=self.last_name)
 
-    profile_image = models.ImageField(upload_to=path_and_rename('profile/'), blank=True, null=True, default ='profile/happy.png')
+    profile_image = models.ImageField(upload_to=profile_upload_path, blank=True, null=True, default ='profile/happy.png')

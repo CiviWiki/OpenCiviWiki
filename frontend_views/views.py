@@ -3,7 +3,7 @@ import json
 from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.contrib.auth.models import User
-from api.models import Category, Account, Topic
+from api.models import Category, Account
 from api.forms import UpdateProfileImage
 from django.conf import settings
 
@@ -101,7 +101,7 @@ def login_view(request):
         else:
             return HttpResponseRedirect('/setup')
 
-	return TemplateResponse(request, 'login.html', {})
+    return TemplateResponse(request, 'login.html', {})
 
 def beta_view(request):
 	return TemplateResponse(request, 'beta_blocker.html', {})
