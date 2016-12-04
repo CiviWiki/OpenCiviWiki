@@ -99,8 +99,6 @@ def login_view(request):
     if request.user.is_authenticated():
         if request.user.is_active:
             return HttpResponseRedirect('/')
-        else:
-            return HttpResponseRedirect('/setup')
 
     return TemplateResponse(request, 'login.html', {})
 
