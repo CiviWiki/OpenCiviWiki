@@ -54,10 +54,6 @@ def issue_thread(request, thread_id=None):
         return HttpResponseRedirect('/404')
 
     return TemplateResponse(request, 'thread.html', {'thread_id': thread_id})
-<<<<<<< HEAD
-
-=======
->>>>>>> final-push
 
 @login_required
 @beta_blocker
