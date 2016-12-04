@@ -5,6 +5,7 @@ from bill import Bill
 from hashtag import Hashtag
 import random as r
 import json
+from django.core.serializers.json import DjangoJSONEncoder
 from calendar import month_name
 
 class CiviManager(models.Manager):

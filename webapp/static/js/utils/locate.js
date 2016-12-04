@@ -234,7 +234,7 @@ cw.MapView = BB.View.extend({
         });
 
         var fullAddress = {
-            address : components.street_number + components.route,
+            address : (components.street_number + " " + components.route).trim(),
             city: components.locality,
             state: components.administrative_area_level_1,
             zipcode: components.postal_code
