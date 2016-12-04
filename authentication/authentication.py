@@ -8,60 +8,61 @@ from utils.custom_decorators import require_post_params
 
 @require_post_params(params=['username', 'password'])
 def cw_login(request):
-	'''
-	USAGE:
+    '''
+    USAGE:
 
-	'''
-	username = request.POST.get('username', '')
-	password = request.POST.get('password', '')
-	remember = request.POST.get('remember', 'false')
+    '''
+    username = request.POST.get('username', '')
+    password = request.POST.get('password', '')
+    remember = request.POST.get('remember', 'false')
 
-	user = authenticate(username=username, password=password)
-	if user is not None:
-		if remember == 'false':
-			request.session.set_expiry(0)
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        if remember == 'false':
+            request.session.set_expiry(0)
 
-		u = login(request, user)
+        login(request, user)
 
-		# Redirect to a success page.
-		return HttpResponse()
-	else:
-	# Return an 'invalid login' error message.
-		return HttpResponseBadRequest(reason='Invalid username or password')
+        if user.is_active:
+            # Redirect to a success page.
+            return HttpResponse()
+        else:
+            return HttpResponseBadRequest(reason='Inactive user')
+    else:
+        # Return an 'invalid login' error message.
+        return HttpResponseBadRequest(reason='Invalid username or password')
 
 def cw_logout(request):
-	logout(request)
-	return HttpResponseRedirect('/')
+    logout(request)
+    return HttpResponseRedirect('/')
 
-@require_post_params(params=['username', 'password', 'email', 'first_name', 'last_name', 'zip_code'])
+@require_post_params(params=['username', 'password', 'email'])
 def cw_register(request):
-	username = request.POST.get('username', '')
-	password = request.POST.get('password', '')
-	email = request.POST.get('email', '')
-	first_name = request.POST.get('first_name', '')
-	last_name = request.POST.get('last_name', '')
-	zip_code = request.POST.get('zip_code', '')
-	if User.objects.filter(email=email).exists():
-		return HttpResponseBadRequest(reason='An account exists for this email address.')
+    username = request.POST.get('username', '')
+    password = request.POST.get('password', '')
+    email = request.POST.get('email', '')
 
-	if User.objects.filter(username=username).exists():
-		return HttpResponseBadRequest(reason='Sorry, this username is taken.')
+    if User.objects.filter(email=email).exists():
+        return HttpResponseBadRequest(reason='An account exists for this email address.')
 
-	try:
-		User.objects.create_user(username, email, password)
-		user = authenticate(username=username, password=password)
-		account = Account(user=user, email=email, first_name=first_name, last_name=last_name, zip_code=zip_code)
-		account.save()
-	except Exception as e:
-		print str(e)
-		return HttpResponseServerError(reason=str(e))
+    if User.objects.filter(username=username).exists():
+        return HttpResponseBadRequest(reason='Sorry, this username is taken.')
 
-	try:
-		user.is_active = False
-		user.save()
-		login(request, user)
-		print "Should be good at this point?"
-		return HttpResponse()
-	except Exception as e:
-		print str(e)
-		return HttpResponseServerError(reason=str(e))
+    try:
+        User.objects.create_user(username, email, password)
+        user = authenticate(username=username, password=password)
+        account = Account(user=user)
+        account.save()
+    except Exception as e:
+        print str(e)
+        return HttpResponseServerError(reason=str(e))
+
+    try:
+        user.is_active = True
+        user.save()
+        login(request, user)
+        return HttpResponse()
+
+    except Exception as e:
+        print str(e)
+        return HttpResponseServerError(reason=str(e))

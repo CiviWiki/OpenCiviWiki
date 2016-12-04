@@ -3,10 +3,12 @@ import json
 from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.contrib.auth.models import User
-from api.models import Category, Account, Topic, Civi
+from api.models import Category, Account, Topic
+from api.forms import UpdateProfileImage
+from django.conf import settings
 
 from legislation import sunlightapi as sun
-from utils.custom_decorators import beta_blocker, login_required
+from utils.custom_decorators import beta_blocker, login_required, full_account
 
 def base_view(request):
     if not request.user.is_authenticated():
@@ -15,12 +17,14 @@ def base_view(request):
     a = Account.objects.get(user=request.user)
     if not a.beta_access:
         return HttpResponseRedirect('/beta')
+    if not a.full_account:
+        return HttpResponseRedirect('/setup')
+
     return TemplateResponse(request, 'feed.html', {})
-
-
 
 @login_required
 @beta_blocker
+@full_account
 def user_profile(request, username=None):
     if not username:
         return HttpResponseRedirect('/profile/{0}'.format(request.user))
@@ -35,11 +39,29 @@ def user_profile(request, username=None):
         except User.DoesNotExist:
             return HttpResponseRedirect('/404')
 
-    return TemplateResponse(request, 'account.html', {'username': user})
+    return TemplateResponse(request, 'account.html', {'username': user,
+                                                    'profile_image_form': UpdateProfileImage,
+                                                    'google_map_api_key': settings.GOOGLE_API_KEY,
+                                                    'sunlight_api_key': settings.SUNLIGHT_API_KEY })
+
+@login_required
+@beta_blocker
+def user_setup(request):
+    a = Account.objects.get(user=request.user)
+    if a.full_account:
+        return HttpResponseRedirect('/')
+        #start temp rep rendering TODO: REMOVE THIS
+    else:
+        return TemplateResponse(request, 'user-setup.html', {'username': request.user.username,
+                                                            'email': request.user.email,
+                                                            'google_map_api_key': settings.GOOGLE_API_KEY,
+                                                            'sunlight_api_key': settings.SUNLIGHT_API_KEY })
+
 
 
 @login_required
 @beta_blocker
+@full_account
 def issue_thread(request, thread_id=None):
     if not thread_id:
         return HttpResponseRedirect('/404')
@@ -50,11 +72,13 @@ def issue_thread(request, thread_id=None):
 
 @login_required
 @beta_blocker
+@full_account
 def create_group(request):
     return TemplateResponse(request, 'newgroup.html', {})
 
 @login_required
 @beta_blocker
+@full_account
 def dbview(request):
     result = [{'id': c.id, 'name': c.name} for c in Category.objects.all()]
 
@@ -62,6 +86,7 @@ def dbview(request):
 
 @login_required
 @beta_blocker
+@full_account
 def add_civi(request):
     categories = [{'id': c.id, 'name': c.name} for c in Category.objects.all()]
     topics = [{'id': c.id, 'topic': c.topic} for c in Topic.objects.all()]
@@ -70,7 +95,10 @@ def add_civi(request):
 
 def login_view(request):
     if request.user.is_authenticated():
-        return HttpResponseRedirect('/')
+        if request.user.is_active:
+            return HttpResponseRedirect('/')
+        else:
+            return HttpResponseRedirect('/setup')
 
     return TemplateResponse(request, 'login.html', {})
 

@@ -29,12 +29,12 @@ cw.ProfileCiviCollection = BB.Collection.extend({
 
     model: cw.ProfileCiviModel,
 
-    url: function () {
-            if (! this.username ) {
-                throw new Error("This is a race condition! and why we can't have nice things :(");
-            }
-            return '/api/getUserCivis/' + this.user_id + '/';
-    },
+    // url: function () {
+    //         if (! this.username ) {
+    //             throw new Error("This is a race condition! and why we can't have nice things :(");
+    //         }
+    //         return '/api/getUserCivis/' + this.user_id + '/';
+    // },
 
     initialize: function (models, options) {
         options = options || {};

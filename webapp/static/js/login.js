@@ -2,6 +2,7 @@ cw = cw || {};
 
 cw.LoginView = BB.View.extend({
     el: '#login',
+    entryTemplate: _.template($('#entry-template').html()),
     loginTemplate: _.template($('#login-template').html()),
     registerTemplate: _.template($('#register-template').html()),
 
@@ -11,12 +12,15 @@ cw.LoginView = BB.View.extend({
     },
 
     render: function () {
+        this.$el.empty().append(this.entryTemplate());
+        this.renderForms();
+    },
+
+    renderForms: function()  {
         if (this.register) {
-            this.$el.empty().append(this.registerTemplate());
-            this.$el.find('.register-wrapper').css({'margin-top': $(window).height()/4});
+            this.$('#entry-content').empty().append(this.registerTemplate());
         } else {
-            this.$el.empty().append(this.loginTemplate());
-            this.$el.find('.login-wrapper').css({'margin-top': $(window).height()/4});
+            this.$('#entry-content').empty().append(this.loginTemplate());
         }
     },
 
@@ -24,7 +28,15 @@ cw.LoginView = BB.View.extend({
         'click .login-button': 'login',
         'click .register-link': 'swapToRegister',
         'click .login-link': 'swapToLogin',
-        'click .register-button': 'register'
+        'click .register-button': 'register',
+        'keypress .login-input ': 'checkForEnter',
+    },
+
+    checkForEnter: function(e) {
+        if (e.which == 13 && !e.shiftKey) {
+            e.preventDefault();
+            this.login();
+        }
     },
 
     login: function () {
@@ -59,34 +71,32 @@ cw.LoginView = BB.View.extend({
 
     swapToRegister: function () {
         this.register = true;
-        this.render();
+        this.renderForms();
     },
 
     swapToLogin: function () {
         this.register = false;
-        this.render();
+        this.renderForms();
     },
 
     register: function () {
-        var email = this.$el.find('#email').val(),
+        var email = this.$el.find('#email'),
             username = this.$el.find('#username').val(),
-            password = this.$el.find('#password').val(),
-            firstName = this.$el.find('#first-name').val(),
-            lastName = this.$el.find('#last-name').val(),
-            zipCode = this.$el.find('#zipcode').val();
+            password = this.$el.find('#password').val();
 
-        if (email && password && firstName && lastName && username && zipCode) {
+        if (!email.is(':valid')) {
+            Materialize.toast('<span class="subtitle-lato white-text">Please enter a valid email</span>', 3000);
 
+        } else if (password && username) {
+            email = email.val();
+            
             $.ajax({
                 type: 'POST',
                 url: 'auth/register',
                 data: {
                     email: email,
                     username: username,
-                    password: password,
-                    first_name: firstName,
-                    last_name: lastName,
-                    zip_code: zipCode
+                    password: password
                 },
                 success: function () {
                     window.location.replace('/');

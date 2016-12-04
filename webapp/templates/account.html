@@ -23,6 +23,17 @@
 <script id="bill-template" type="text/template">
     {% include "partials/account/utils/account_bill.html" %}
 </script>
+<script id="location-template" type="text/template">
+    {% include "partials/user-setup/map.html" %}
+</script>
+<script id="rep-chip-template" type="text/template">
+    {% verbatim %}
+    <div class="rep bold-text purple-text chip">
+        <img src="https://theunitedstates.io/images/congress/225x275/{{ rep.bioguide_id }}.jpg" alt="rep image">
+        <span>{{rep.title}} {{rep.first_name}} {{rep.last_name}} </span>
+    </div>
+    {% endverbatim %}
+</script>
 
 <!-- account tab templates -->
 <script id="my-civis-template" type="text/template">
@@ -64,7 +75,11 @@
 </body>
 
 <script type="text/javascript" src="{% static "js/account.js" %}"></script>
+<script type="text/javascript" src="{% static "js/utils/locate.js" %}"></script>
 <script type="text/javascript">
+    var googleApiKey = "{{ google_map_api_key }}";
+    var sunlightApiKey = "{{ sunlight_api_key }}";
+
     var username = '{{username}}';
     var request_user = '{{request.user}}'
     var current_user = '{{request.user.username}}'
@@ -74,6 +89,8 @@
     accountModel.fetch();
     var accountView = new cw.AccountView({
         model: accountModel,
-        current_user: current_user
+        current_user: current_user,
+        googleMapsApiKey: googleApiKey,
+        sunlightApiKey: sunlightApiKey
     });
 </script>

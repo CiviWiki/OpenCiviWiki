@@ -8,7 +8,7 @@ cw.AccountModel = BB.Model.extend({
             first_name: "",
             last_name: "",
             about_me: "",
-            zip_code: "",
+            location: "",
             history: [],
             followers: [],
             following: [],
@@ -17,10 +17,10 @@ cw.AccountModel = BB.Model.extend({
         };
     },
     url: function () {
-            if (! this.user ) {
-                throw new Error("This is a race condition! and why we can't have nice things :(");
-            }
-            return '/api/account_profile/' + this.user + '/';
+        if (! this.user ) {
+            throw new Error("This is a race condition! and why we can't have nice things :(");
+        }
+        return '/api/account_profile/' + this.user + '/';
     },
 
     initialize: function (model, options) {
@@ -46,13 +46,16 @@ cw.AccountView = BB.View.extend({
     myrepsTemplate: _.template($('#my-reps-template').html()),
     mybillsTemplate: _.template($('#my-bills-template').html()),
 
+
     initialize: function (options) {
+        this.options = options || {};
+        this.googleMapsApiKey = this.options.googleMapsApiKey;
+        this.sunlightApiKey = this.options.sunlightApiKey;
         this.isSave = false;
 
         this.listenTo(this.model, 'sync', function(){
             console.log(this.model);
             document.title = this.model.get("first_name") +" "+ this.model.get("last_name") +" (@"+this.model.get("username")+")";
-
 
             this.postRender();
 
@@ -87,34 +90,36 @@ cw.AccountView = BB.View.extend({
         this.$('#myreps').empty().append(this.myrepsTemplate());
         this.$('#mybills').empty().append(this.mybillsTemplate());
         this.$('#settings').empty().append(this.settingsTemplate());
+        var map = new cw.Map();
+        this.mapView = new cw.MapView({model: map, googleMapsApiKey: this.googleMapsApiKey, sunlightApiKey: this.sunlightApiKey});
+        this.listenTo(this.mapView.model, 'change', _.bind(this.saveLocation, this));
     },
 
     postRender: function () {
+        // Timestamp the image with a cachebreaker so that proper refersh occurs
+        this.model.set({"profile_image": this.model.get("profile_image") + "?" + new Date().getTime() });
         this.$el.find('.account-settings').empty().append(this.sidebarTemplate());
         this.tabsRender();
         cw.materializeShit();
-
-
-
-
         this.isSave = false;
+
     },
 
     events: {
-        // 'mouseenter .rating-box ': 'showRawRatings',
-        // 'mouseleave .rating-box ': 'showRawRatings',
-        'click .settings': 'showSettings',
         'click .follow-btn': 'followRequest',
+        'submit #profile_image_form': 'handleFiles',
+        'change .profile-image-pick': 'toggleImgButtons',
         'blur .save-account': 'saveAccount',
-        'keypress .save-account': cw.checkForEnter
+        'keypress .save-account': cw.checkForEnter,
     },
     showRawRatings: function(e) {
         $(e.target).closest('.rating').find('.rating-score').toggleClass('hide');
         $(e.target).closest('.rating').find('.rating-percent').toggleClass('hide');
     },
 
-    showSettings: function(event) {
-        console.log("settings");
+    toggleImgButtons: function(event) {
+        this.$('.profile-image-pick').toggleClass('hide');
+        this.$('.upload-image').toggleClass('hide');
     },
 
     followRequest: function(e){
@@ -130,12 +135,14 @@ cw.AccountView = BB.View.extend({
             success: function () {
                 Materialize.toast('You are now following '+_this.model.get("first_name")+" "+_this.model.get("last_name"), 3000);
 
-                $(e.target).addClass("disabled");
+
                 $(e.target).removeClass("follow-btn waves-effect waves-light");
                 $(e.target).html("FOLLOWING");
             }
         });
+        $(e.target).addClass("disabled");
     },
+
     saveAccount: function (e) {
         var $this = $(e.target),
             changeKey = $this.attr('id'),
@@ -156,10 +163,95 @@ cw.AccountView = BB.View.extend({
             success: function () {
                 Materialize.toast('Saved!', 3000);
 
-                // _this.isSave = true;
-                // _this.model.fetch();
+                _this.isSave = true;
+                _this.model.fetch();
+
             }
         });
     },
+    saveLocation: function () {
+        var _this = this;
 
+        var coordinates = this.mapView.model.get('coordinates'),
+            address = this.mapView.model.get('address');
+
+        if (!_.isEmpty(coordinates) && !_.isEmpty(address)) {
+            $.ajax({
+                type: 'POST',
+                url: '/api/edituser/',
+                data: {
+                    coordinates: coordinates,
+                    address: address.address,
+                    city: address.city,
+                    state: address.state,
+                    zip_code: address.zipcode,
+                    longitude: coordinates.lng,
+                    latitude: coordinates.lat,
+                },
+                success: function (data) {
+                    Materialize.toast('<span class="subtitle-lato white-text">Location Changed</span>', 3000);
+                    _this.isSave = true;
+                    _this.model.fetch();
+                },
+                error: function (data) {
+                    if (data.status_code === 400) {
+                        Materialize.toast(data.message, 3000);
+                    } else if (data.status_code === 500) {
+                        Materialize.toast('Internal Server Error', 3000);
+                    } else {
+                        Materialize.toast(data.statusText, 2000);
+                    }
+                }
+            });
+        }
+    },
+    handleFiles: function(e) {
+        e.preventDefault();
+
+        var _this = this,
+            formData = new FormData($('#profile_image_form')[0]);
+
+        $.ajax({
+            url: '/api/upload_profile/',
+            type: 'POST',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function () {
+                console.log("succ"+JSON.stringify(formData));
+                Materialize.toast('Saved!', 3000);
+
+                _this.isSave = true;
+                _this.model.fetch();
+            },
+            error: function(e){
+                Materialize.toast('ERROR: Image could not be uploaded', 3000);
+                Materialize.toast(JSON.stringify(e), 3000);
+            },
+
+        });
+        this.toggleImgButtons();
+
+        return false;
+    },
+    // // SunlightAPI related functions
+    // getLegislators: function(coordinates){
+    //     var _this = this;
+    //     $.ajax({
+    //         url: "https://congress.api.sunlightfoundation.com/legislators/locate?latitude=" + coordinates.lat + "&longitude="+ coordinates.lng + "&callback=?",
+    //         headers:{"X-APIKEY": this.sunlightApiKey},
+    //         dataType: "jsonp",
+    //         success: function(data, status){
+    //             _this.$('#rep-list').empty();
+    //             _.each(data.results, function(rep){
+    //                 _this.$('#rep-text').addClass('hide');
+    //                 _this.$('#rep-list').append(_this.repChipTemplate({ rep : rep }));
+    //             });
+    //         },
+    //         error: function(){
+    //             Materialize.toast("Sunlight Error: Could not get representatives", 2000);
+    //         }
+    //     });
+    // }
 });

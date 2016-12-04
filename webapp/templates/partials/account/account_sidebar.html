@@ -15,7 +15,7 @@
         <div class="location-info">
             <div class="section-title">MY INFO</div>
             <div class="divider"></div>
-            <div class="location"><i class="mini material-icons">place</i>{{this.model.get('zip_code')}}</div>
+            <div class="location"><i class="mini material-icons">place</i>{{this.model.get('location')}}</div>
         </div>
 
         <div class="section">
@@ -24,10 +24,10 @@
             <div class="about-me">{{this.model.get('about_me')}}</div>
         </div>
 {% endverbatim %}
-        {% if request.user.username != username|stringformat:"s" %}
+{% if request.user.username != username|stringformat:"s" %}
         <div class="profile-options">
             <a class="waves-effect waves-light btn follow-btn"><i class="material-icons mini left">person_add</i>follow</a>
         </div>
-        {% endif %}
+{% endif %}
     </div>
 </div>
