@@ -1,13 +1,42 @@
 @import 'base';
 
-// body {
-//     overflow: hidden;
-// }
-
 #thread {
     .new-civi-modal-holder {
+
+        .modal-content {
+            padding: 16px;
+
+            .new-civi-container {
+                margin-bottom: 30px;
+
+                .new-civi-title {
+                    margin-bottom: 6px;
+                }
+
+                .new-civi-header {
+                    margin-bottom: 4px;
+                }
+
+                .left-input-field input, .left-input-field label {
+                    left: 0;
+                }
+            }
+
+            .civi-type-button {
+                background-color: @dark-white !important;
+                color: @purple;
+                margin-right: 6px;
+
+                &.current {
+                    background-color: @purple !important;
+                    color: @white;
+                }
+            }
+        }
+
         .modal-footer {
             .btn {
+                background-color: @purple;
                 margin-right: 6px;
             }
         }

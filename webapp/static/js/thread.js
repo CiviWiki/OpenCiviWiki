@@ -32,9 +32,6 @@ cw.NewCiviView = BB.View.extend({
     template: _.template($('#new-civi-template').html()),
 
     initialize: function () {
-        this.listenTo(Backbone, 'openNewCivi', this.show);
-        this.listenTo(Backbone, 'closeNewCivi', this.hide);
-
         this.render();
     },
 
@@ -52,7 +49,8 @@ cw.NewCiviView = BB.View.extend({
 
     events: {
         'click .cancel-new-civi': 'cancelCivi',
-        'click .create-new-civi': 'createCivi'
+        'click .create-new-civi': 'createCivi',
+        'click .civi-type-button': 'clickType'
     },
 
     cancelCivi: function () {
@@ -61,7 +59,14 @@ cw.NewCiviView = BB.View.extend({
 
     createCivi: function () {
         this.hide();
-    }
+    },
+
+    clickType: function (e) {
+        var $this = $(e.target).closest('.civi-type-button');
+
+        $this.addClass('current');
+        $this.siblings().removeClass('current');
+    },
 });
 
 cw.ThreadView = BB.View.extend({

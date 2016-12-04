@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^account_data/(?P<user>\w+)/$', read.get_user, name='get user'),
     url(r'^thread_data/(?P<thread_id>\w+)/$', read.get_thread, name='get thread'),
     url(r'^response_data/(?P<thread_id>\w+)/(?P<civi_id>\w+)/$', read.get_responses, name='get responses'),
+    url(r'^new_thread/$', write.new_thread, name='new thread'),
     # url(r'^getblock$', read.getBlock, name='get block'),
     # url(r'^creategroup$', write.createGroup, name='add group'),
     # url(r'^createcivi$', write.createCivi, name='add civi'),

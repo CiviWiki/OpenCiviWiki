@@ -3,41 +3,48 @@ import json
 from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.contrib.auth.models import User
-from api.models import Category, Account, Topic
+from api.models import Category, Account
 
 from legislation import sunlightapi as sun
 from utils.custom_decorators import beta_blocker, login_required
 
 def base_view(request):
-	if not request.user.is_authenticated():
-		return TemplateResponse(request, 'static_templates/landing.html', {})
+    if not request.user.is_authenticated():
+        return TemplateResponse(request, 'static_templates/landing.html', {})
 
-	a = Account.objects.get(user=request.user)
-	if not a.beta_access:
-		return HttpResponseRedirect('/beta')
-	return TemplateResponse(request, 'feed.html', {})
+    a = Account.objects.get(user=request.user)
+    if not a.beta_access:
+        return HttpResponseRedirect('/beta')
+
+    categories = [{'id': c.id, 'name': c.name} for c in Category.objects.all()]
+
+    data = dict(
+        categories=categories
+    )
+
+    return TemplateResponse(request, 'feed.html', {'data': json.dumps(data)})
 
 
 @login_required
 @beta_blocker
 def user_profile(request, username=None):
-	if not username:
-		user = request.user
-	else:
-		try:
-			user = User.objects.get(username=username)
-		except User.DoesNotExist:
-			return HttpResponseRedirect('/404')
+    if not username:
+        user = request.user
+    else:
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return HttpResponseRedirect('/404')
 
-	a = Account.objects.get(user=user)
-	friend_data_dictionary = Account.objects.friends(a)
+    a = Account.objects.get(user=user)
+    friend_data_dictionary = Account.objects.friends(a)
 
-	result = dict(friends=friend_data_dictionary['friends'],
-				  requests=friend_data_dictionary['requests'],
-				  profile=Account.objects.summarize(a),
-				  bills=sun.get_bill_information(a))
+    result = dict(friends=friend_data_dictionary['friends'],
+                  requests=friend_data_dictionary['requests'],
+                  profile=Account.objects.summarize(a),
+                  bills=sun.get_bill_information(a))
 
-	return TemplateResponse(request, 'account.html', {'result': json.dumps(result)})
+    return TemplateResponse(request, 'account.html', {'result': json.dumps(result)})
 
 
 @login_required
@@ -46,10 +53,11 @@ def issue_thread(request, thread_id=None):
     if not thread_id:
         return HttpResponseRedirect('/404')
 
-    # t = Thread.objects.get(id=thread_id)
-
     return TemplateResponse(request, 'thread.html', {'thread_id': thread_id})
+<<<<<<< HEAD
 
+=======
+>>>>>>> final-push
 
 @login_required
 @beta_blocker

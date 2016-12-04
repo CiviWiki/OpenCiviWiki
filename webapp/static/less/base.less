@@ -40,6 +40,14 @@ html {
     color: @purple;
 }
 
+// Headers
+.header-lato {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    color: @gray;
+}
+
 // Titles
 .title-lato {
     font-family: 'Lato', sans-serif;
@@ -134,6 +142,10 @@ html {
     box-shadow: 0 1px 0 0 @purple !important;
 }
 .white-background-input-field input.invalid {
+    border-bottom: 1px solid @yellow !important;
+    box-shadow: 0 1px 0 0 @yellow !important;
+}
+.white-background-input-field textarea.invalid {
     border-bottom: 1px solid @yellow !important;
     box-shadow: 0 1px 0 0 @yellow !important;
 }

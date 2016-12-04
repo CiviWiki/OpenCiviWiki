@@ -7,6 +7,21 @@
 # from django.conf import settings
 # from django.db.models import Q
 
+from api.models import Thread
+
+from utils.custom_decorators import require_post_params
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+
+@login_required
+@require_post_params(params=['title', 'summary', 'category_id'])
+def new_thread(request):
+
+    t = Thread(title=request.POST['title'], summary=request.POST['summary'], category_id=request.POST['category_id'], author_id=request.user.id)
+    t.save()
+
+    return JsonResponse({'data': 'success'})
+
 # @login_required
 # @require_post_params(params=['title', 'description'])
 # def createGroup(request):
