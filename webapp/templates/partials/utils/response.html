@@ -1,9 +1,9 @@
 {% verbatim %}
-<div class="civi-card" data-civi-id="{{id}}">
-    <div class="row civi-header civi-click">
+<div class="civi-card" data-response-id="{{id}}">
+    <div class="row civi-header response-click">
         <div class="col s9 no-pads civi-title-outer">
-            <div class="civi-type gray-text">
-                {{c_type}}
+            <div class="civi-type gray-text response-text">
+                {{type}}
             </div>
             <div class="civi-title">
                 {{title}}
@@ -22,30 +22,29 @@
         </div>
         <div class="attachments">
             <div class="attachments-title gray-text">
+                ATTACHMENTS ({{attachments.length}})
             </div>
+            {{# _.each(attachments, function (a) { }}
+                <span>{{a}}</span>
+            {{# }); }}
         </div>
         <div class="rating">
             <button class="btn waves-effect rating-button">
                 <i class="tiny-for-button material-icons">thumb_down</i>
                 <i class="tiny-for-button material-icons">thumb_down</i>
-                {{votes_vneg}}
             </button>
             <button class="btn waves-effect rating-button">
                 <i class="tiny-for-button material-icons">thumb_down</i>
-                {{votes_neg}}
             </button>
             <button class="btn waves-effect rating-button">
                 <i class="tiny-for-button material-icons">remove</i>
-                {{votes_neutral}}
             </button>
             <button class="btn waves-effect rating-button">
                 <i class="tiny-for-button material-icons">thumb_up</i>
-                {{votes_pos}}
             </button>
             <button class="btn waves-effect rating-button">
                 <i class="tiny-for-button material-icons">thumb_up</i>
                 <i class="tiny-for-button material-icons">thumb_up</i>
-                {{votes_vpos}}
             </button>
         </div>
     </div>
@@ -57,7 +56,7 @@
         </div>
         <div class="author-info">
             <div class="author-name purple-text bold-text">
-                {{author_id}} {{author_id}}
+                {{author}}
             </div>
             <div class="created gray-text">
                 {{created}}
@@ -66,7 +65,6 @@
         <div class="right civi-footer-actions">
             <div>
                 <i class="mini material-icons favorite">star_border</i>
-                <i class="mini material-icons civi-grab-link">link</i>
                 <i class="mini material-icons">comment</i>
             </div>
         </div>

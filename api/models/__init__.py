@@ -10,5 +10,4 @@ from rebuttal import Rebuttal
 from representative import Representative
 from response import Response
 from thread import Thread
-from topic import Topic
 from vote import Vote

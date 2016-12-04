@@ -3,7 +3,7 @@
     <div class="row body-banner dark-white-text" style="margin: 0;">
         <div class="col s3">
             <div class="category-topic">
-                <span class="body-category">{{this.model.get('category')}}</span>
+                <span class="body-category">{{this.model.get('category').name}}</span>
                 <i class="mini material-icons">keyboard_arrow_right</i>
                 <span class="body-topic">{{this.model.get('topic')}}</span>
             </div>
@@ -14,19 +14,19 @@
         <div class="col s5">
             <div class="thread-header">
                 Main Thread
-                <button class="add-civi btn waves-effect right">
+                <button class="add-civi btn waves-effect right modal-trigger">
                     <i class="material-icons left">note_add</i>
-                    Add Civi
+                    New Civi
                 </button>
             </div>
         </div>
         <div class="col s4">
             <div class="response-header">
                 Responses
-                <button class="add-civi btn waves-effect right">
+                <!-- <button class="add-civi btn waves-effect right">
                     <i class="material-icons left">comment</i>
                     Add Response
-                </button>
+                </button> -->
             </div>
         </div>
     </div>

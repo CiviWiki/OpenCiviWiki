@@ -1,7 +1,9 @@
 from django.db import models
+from account import Account
+
 
 class Representative(models.Model):
-    account = models.ForeignKey('Account', default=None, null=True)
+    account = models.ForeignKey(Account, default=None, null=True)
 
     district = models.CharField(max_length=63) # junior or senior for senator
     state = models.CharField(max_length=63)

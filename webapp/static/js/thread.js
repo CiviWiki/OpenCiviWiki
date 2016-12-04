@@ -2,10 +2,10 @@ cw = cw || {};
 
 cw.ThreadModel = BB.Model.extend({
     url: function () {
-            if (! this.threadId ) {
-                throw new Error("This is a race condition! and why we can't have nice things :(");
-            }
-            return '/api/thread_data/' + this.threadId + '/';
+        if (! this.threadId ) {
+            throw new Error("This is a race condition! and why we can't have nice things :(");
+        }
+        return '/api/thread_data/' + this.threadId + '/';
     },
 
     initialize: function (model, options) {
@@ -13,24 +13,91 @@ cw.ThreadModel = BB.Model.extend({
     }
 });
 
+cw.ResponseCollection = BB.Collection.extend({
+    url: function () {
+        if (! this.threadId ) {
+            throw new Error("This is a race condition! and why we can't have nice things :(");
+        }
+        return '/api/response_data/' + this.threadId + '/' + this.civiId + '/';
+    },
+
+    initialize: function (model, options) {
+        this.threadId = options.threadId;
+        this.civiId = null;
+    }
+});
+
+cw.NewCiviView = BB.View.extend({
+    el: '.new-civi-modal-holder',
+    template: _.template($('#new-civi-template').html()),
+
+    initialize: function () {
+        this.render();
+    },
+
+    render: function () {
+        this.$el.empty().append(this.template());
+    },
+
+    show: function () {
+        this.$('.new-civi-modal').openModal();
+    },
+
+    hide: function () {
+        this.$('.new-civi-modal').closeModal();
+    },
+
+    events: {
+        'click .cancel-new-civi': 'cancelCivi',
+        'click .create-new-civi': 'createCivi',
+        'click .civi-type-button': 'clickType'
+    },
+
+    cancelCivi: function () {
+        this.hide();
+    },
+
+    createCivi: function () {
+        this.hide();
+    },
+
+    clickType: function (e) {
+        var $this = $(e.target).closest('.civi-type-button');
+
+        $this.addClass('current');
+        $this.siblings().removeClass('current');
+    },
+});
+
 cw.ThreadView = BB.View.extend({
     el: '#thread',
     template: _.template($('#thread-template').html()),
     wikiTemplate: _.template($('#thread-wiki-template').html()),
     bodyTemplate: _.template($('#thread-body-template').html()),
+    responseWrapper: _.template($('#thread-response-template').html()),
 
     initialize: function (options) {
         this.username = options.username;
 
+        this.responseCollection = new cw.ResponseCollection({}, {
+            threadId: this.model.threadId
+        });
+
         this.listenTo(this.model, 'sync', function () {
             this.threadWikiRender();
         });
+
+        this.listenTo(this.responseCollection, 'sync', this.renderResponses);
 
         this.render();
     },
 
     render: function () {
         this.$el.empty().append(this.template());
+
+        this.newCiviView = new cw.NewCiviView({
+            model: this.model
+        });
     },
 
     threadWikiRender: function () {
@@ -51,6 +118,10 @@ cw.ThreadView = BB.View.extend({
                 _this.changeNavScroll(e.target.scrollTop);
             });
         }
+    },
+
+    renderResponses: function () {
+        this.$('.responses').empty().append(this.responseWrapper());
     },
 
     changeNavScroll: function (scrollPosition, firstTime, navChange) {
@@ -103,8 +174,11 @@ cw.ThreadView = BB.View.extend({
         'click .enter-wiki': 'scrollToWiki',
         'click .expand-nav': 'expandNav',
         'click .civi-nav-link': 'goToCivi',
-        'click .civi-header': 'drilldownCivi',
-        'click .rating-button': 'clickRating'
+        'click .civi-click': 'drilldownCivi',
+        'click .rating-button': 'clickRating',
+        'click .favorite': 'clickFavorite',
+        'click .civi-grab-link': 'grabLink',
+        'click .add-civi': 'openNewCiviModal'
     },
 
     scrollToBody: function () {
@@ -182,12 +256,14 @@ cw.ThreadView = BB.View.extend({
                 $newCivi.addClass('current');
 
                 this.currentCivi = $newCivi.attr('data-civi-id');
-                //TODO ADD RESPONSES
+
+                this.responseCollection.civiId = this.currentCivi
+                this.responseCollection.fetch();
             } else {
                 $currentCivi.removeClass('current');
 
                 this.currentCivi = null;
-                //TODO REMOVE RESPONSES
+                this.$('.responses').empty();
             }
         }
     },
@@ -197,6 +273,24 @@ cw.ThreadView = BB.View.extend({
 
         $this.addClass('current');
         $this.siblings().removeClass('current');
+    },
+
+    clickFavorite: function (e) {
+        var $this = $(e.target);
+
+        if ($this.text() === 'star_border') {
+            $this.text('star');
+        } else {
+            $this.text('star_border');
+        }
+    },
+
+    grabLink: function () {
+        Materialize.toast('Civi link copied to clipboard.', 1500);
+    },
+
+    openNewCiviModal: function () {
+        this.newCiviView.show();
     }
 
 });

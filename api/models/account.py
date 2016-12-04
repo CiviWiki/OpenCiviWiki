@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.conf import settings
+from hashtag import Hashtag
 
 import json
 import os
@@ -47,7 +48,6 @@ def path_and_rename(path):
     return wrapper
 
 class Account(models.Model):
-
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=63, blank=False)
     last_name = models.CharField(max_length=63, blank=False)
@@ -62,18 +62,19 @@ class Account(models.Model):
 
     fed_district = models.CharField(max_length=63, default=None, null=True)
     state_district = models.CharField(max_length=63, default=None, null=True)
-    interests = models.ManyToManyField('Hashtag', related_name='interests')
-    ai_interests = models.ManyToManyField('Hashtag', related_name='ai_interests')
-    issues = models.ManyToManyField('Thread', related_name='issues')
+
+    interests = models.ManyToManyField(Hashtag, related_name='interests')
+    ai_interests = models.ManyToManyField(Hashtag, related_name='ai_interests')
+
     followers = models.ManyToManyField('self', related_name='follower')
-    following = models.ManyToManyField('self', related_name='followings')
+    following = models.ManyToManyField('self', related_name='following')
 
     beta_access = models.BooleanField(default=False)
     full_account = models.BooleanField(default=False)
 
     objects = AccountManager()
-    #custom "row-level" functionality (properties) for account models
 
+    #custom "row-level" functionality (properties) for account models
     def get_location(self):
         return '{city}, {state}'.format(city=self.city, state=dict(settings.US_STATES).get(self.state))
 

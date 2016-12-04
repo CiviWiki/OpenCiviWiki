@@ -7,9 +7,9 @@
                     {{this.model.get('title')}}
                 </div>
                 <div class="wiki-stats light-gray-text">
-                    <span class="wiki-stat">{{this.model.get('num_views')}} Views</span>
+                    <!-- <span class="wiki-stat">{{this.model.get('num_views')}} Views</span> -->
                     <span class="wiki-stat">{{this.model.get('num_civis')}} Civis</span>
-                    <span class="wiki-stat">{{this.model.get('num_responses')}} Responses</span>
+                    <!-- <span class="wiki-stat">{{this.model.get('num_responses')}} Responses</span> -->
                 </div>
             </div>
         </div>
@@ -18,8 +18,7 @@
         <div class="container">
             <div class="col s12">
                 <div class="wiki-body-header">
-                    <span class="wiki-header-category gray-text"><span class="black-text bold-text wiki-header-inner">Category:</span>{{this.model.get('category')}}</span>
-                    <span class="wiki-header-topic gray-text"><span class="black-text bold-text wiki-header-inner">Topic:</span>{{this.model.get('topic')}}</span>
+                    <span class="wiki-header-category gray-text"><span class="black-text bold-text wiki-header-inner">Category:</span>{{this.model.get('category').name}}</span>
                 </div>
             </div>
             <div class="col s8">

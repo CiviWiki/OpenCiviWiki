@@ -21,6 +21,7 @@ cw.checkForEnter = function (e) {
 cw.materializeShit = function () {
     Materialize.updateTextFields();
     $('ul.tabs').tabs();
+    $('select').material_select();
 };
 
 cw.initGlobalNav = function () {
@@ -46,6 +47,6 @@ cw.initGlobalNav = function () {
     });
 
     $account.on('click', function () {
-        window.location.href = '/profile/' + current_user; //TODO: username is not current loggedin user
+        window.location.href = '/profile/' + username;
     });
 };

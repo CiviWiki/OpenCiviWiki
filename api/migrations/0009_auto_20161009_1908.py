@@ -7,12 +7,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0009_auto_20160922_0137'),
+        ('api', '0008_auto_20161003_0228'),
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='account',
-            name='representatives',
+        migrations.AlterField(
+            model_name='thread',
+            name='title',
+            field=models.CharField(max_length=127),
         ),
     ]
