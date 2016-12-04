@@ -24,14 +24,19 @@ cw.AccountModel = BB.Model.extend({
     },
 
     initialize: function (model, options) {
+        options = options || {};
         this.user = options.user;
     }
 });
 
+
+// And hereon commences a pile of horrendous code. Be Ware!
+// TODO: review rewrite refactor. (please)
 cw.AccountView = BB.View.extend({
     el: '#account',
     template: _.template($('#account-template').html()),
     settingsTemplate: _.template($('#settings-template').html()),
+    sidebarTemplate: _.template($('#sidebar-template').html()),
 
     // Account Tabs Templates
     mycivisTemplate: _.template($('#my-civis-template').html()),
@@ -72,8 +77,8 @@ cw.AccountView = BB.View.extend({
             this.postRender();
         } else {
             this.$el.empty().append(this.template());
+            this.$el.find('.account-settings').pushpin({ top: $('.account-settings').offset().top });
             this.$el.find('.scroll-col').height($(window).height());
-            this.postRender();
         }
     },
 
@@ -160,6 +165,7 @@ cw.AccountView = BB.View.extend({
 
                 _this.isSave = true;
                 _this.model.fetch();
+
             }
         });
     },

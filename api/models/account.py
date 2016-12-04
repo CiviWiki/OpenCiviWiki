@@ -16,7 +16,7 @@ class AccountManager(models.Manager):
             "last_name": account.last_name,
             "about_me": account.about_me,
             "location": account.get_location(),
-            "history": [json.dumps(c) for c in Civi.objects.filter(author_id=account.id).order_by('-created')],
+            "history": [Civi.objects.summarize(c) for c in Civi.objects.filter(author_id=account.id).order_by('-created')],
             "profile_image": account.profile_image.url,
             "followers": self.followers(account),
             "following": self.following(account),
@@ -41,8 +41,6 @@ class AccountManager(models.Manager):
     def following(self, account):
         return [self.follow_summarize(a) for a in account.following.all()]
 
-
-
 @deconstructible
 class PathAndRename(object):
     def __init__(self, sub_path):
@@ -53,7 +51,7 @@ class PathAndRename(object):
         filename = '{}.{}'.format(instance.user.username, ext)
         return os.path.join(self.sub_path, filename)
 
-profile_upload_path = PathAndRename('profile/')
+profile_upload_path = PathAndRename('media/profile/')
 
 class Account(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -90,4 +88,4 @@ class Account(models.Model):
         "Returns the person's full name."
         return '{first_name} {last_name}'.format(first_name=self.first_name, last_name=self.last_name)
 
-    profile_image = models.ImageField(upload_to=profile_upload_path, blank=True, null=True, default ='profile/happy.png')
+    profile_image = models.ImageField(upload_to=profile_upload_path, blank=True, null=True, default ='media/profile/happy.png')

@@ -61,24 +61,24 @@ def get_profile(request, user):
         a = Account.objects.get(user=u)
         result = Account.objects.summarize(a)
 
-        reps = ['W000812', 'C001049', 'B000575', 'M001170']
-        rep_list = []
-        for rep in reps:
-            json_data = open('fixtures/data/{}.json'.format(rep))
-            data = json.load(json_data)
-            r = dict(
-                profile_image = "https://theunitedstates.io/images/congress/450x550/{}.jpg".format(rep),
-                username= rep,
-                title= data['title'],
-                first_name= data['first_name'],
-                last_name= data['last_name'],
-                party= "Republican" if data['party']=="R" else "Democrat",
-                alignment= 0
-            )
-            json_data.close()
-            rep_list.append(json.dumps(r))
+        # reps = ['W000812', 'C001049', 'B000575', 'M001170']
+        # rep_list = []
+        # for rep in reps:
+        #     json_data = open('fixtures/data/{}.json'.format(rep))
+        #     data = json.load(json_data)
+        #     r = dict(
+        #         profile_image = "https://theunitedstates.io/images/congress/450x550/{}.jpg".format(rep),
+        #         username= rep,
+        #         title= data['title'],
+        #         first_name= data['first_name'],
+        #         last_name= data['last_name'],
+        #         party= "Republican" if data['party']=="R" else "Democrat",
+        #         alignment= 0
+        #     )
+        #     json_data.close()
+        #     rep_list.append(json.dumps(r))
 
-        result['representatives'] = rep_list
+        result['representatives'] = []
         result['issues'] = ['''{"category": "category", "issue":"Example Issue that the User probably cares about" }''']*20
         return JsonResponse(result)
 

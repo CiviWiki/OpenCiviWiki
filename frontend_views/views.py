@@ -35,7 +35,8 @@ def base_view(request):
 @full_account
 def user_profile(request, username=None):
     if not username:
-        user = request.user
+        return HttpResponseRedirect('/profile/{0}'.format(request.user))
+
     else:
         try:
             user = User.objects.get(username=username)

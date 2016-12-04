@@ -6,6 +6,7 @@
     {% include "base/less_headers/account_less.html" %}
 </head>
 
+
 <!-- Util Partials -->
 <script id="civi-template" type="text/template">
     {% include "partials/account/utils/account_civi.html" %}
@@ -59,16 +60,18 @@
 <script id="account-template" type="text/template">
     {% include "partials/account/account_base.html" %}
 </script>
-
+<script id="sidebar-template" type="text/template">
+    {% include "partials/account/account_sidebar.html" %}
+</script>
 <script id="settings-template" type="text/template">
     {% include "partials/account/account_settings.html" %}
 </script>
 
+
 <body>
     {% include "partials/utils/global_nav.html" %}
-    <div id="account">
 
-    </div>
+    <div id="account"></div>
 </body>
 
 <script type="text/javascript" src="{% static "js/account.js" %}"></script>
@@ -76,16 +79,13 @@
 <script type="text/javascript">
     var googleApiKey = "{{ google_map_api_key }}";
     var sunlightApiKey = "{{ sunlight_api_key }}";
-
     var username = '{{username}}';
     var request_user = '{{request.user}}'
     var current_user = '{{request.user.username}}'
-
     var accountModel = new cw.AccountModel({}, {
         user: username
     });
     accountModel.fetch();
-
     var accountView = new cw.AccountView({
         model: accountModel,
         current_user: current_user,
@@ -93,5 +93,3 @@
         sunlightApiKey: sunlightApiKey
     });
 </script>
-
-</html>
