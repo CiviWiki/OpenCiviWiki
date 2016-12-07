@@ -48,9 +48,8 @@ cw.AccountView = BB.View.extend({
 
 
     initialize: function (options) {
-        this.options = options || {};
-        this.googleMapsApiKey = this.options.googleMapsApiKey;
-        this.sunlightApiKey = this.options.sunlightApiKey;
+        options = options || {};
+        this.mapView = options.mapView;
         this.isSave = false;
 
         this.listenTo(this.model, 'sync', function(){
@@ -69,7 +68,7 @@ cw.AccountView = BB.View.extend({
             }
         });
 
-        this.render();
+        return this;
     },
 
     render: function () {
@@ -90,9 +89,9 @@ cw.AccountView = BB.View.extend({
         this.$('#myreps').empty().append(this.myrepsTemplate());
         this.$('#mybills').empty().append(this.mybillsTemplate());
         this.$('#settings').empty().append(this.settingsTemplate());
-        var map = new cw.Map();
-        this.mapView = new cw.MapView({model: map, googleMapsApiKey: this.googleMapsApiKey, sunlightApiKey: this.sunlightApiKey});
-        this.listenTo(this.mapView.model, 'change', _.bind(this.saveLocation, this));
+
+        this.mapView.renderAndInitMap();
+        this.listenTo(this.mapView.model, 'change', _.bind(this.saveLocation, this)); //TODO: validateLocation and then save
     },
 
     postRender: function () {

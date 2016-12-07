@@ -40,8 +40,10 @@
 <script type="text/javascript" src="{% static "js/user-setup.js" %}"></script>
 <script type="text/javascript" src="{% static "js/utils/locate.js" %}"></script>
 <script type="text/javascript">
-    var googleApiKey = "{{ google_map_api_key }}";
+    var googleMapsApiKey = "{{ google_map_api_key }}";
     var sunlightApiKey = "{{ sunlight_api_key }}";
-    var setupView = new cw.UserSetupView({googleMapsApiKey: googleApiKey, sunlightApiKey: sunlightApiKey});
+    var mapView = new cw.MapView({model: new cw.Map(), googleMapsApiKey: googleMapsApiKey, sunlightApiKey: sunlightApiKey});
+    var setupView = new cw.UserSetupView({mapView: mapView});
+    setupView.render();
 </script>
 </html>

@@ -81,19 +81,16 @@ class UpdateProfileImage(forms.ModelForm):
             #validate dimensions
             max_width = max_height = 960
             if w > max_width or h > max_height:
-                raise forms.ValidationError(
-                    u'Please use an image that is '
-                    '%s x %s pixels or smaller.' % (max_width, max_height))
+                raise forms.ValidationError(u'Please use an image that is {w} x {h} pixels or smaller.'.format(w=max_width, h=max_height))
 
             #validate content type
             main, sub = profile_image.content_type.split('/')
-            if not (main == 'image' and sub in ['jpeg', 'pjpeg', 'gif', 'png']):
-                raise forms.ValidationError(u'Please use a JPEG, '
-                                            'GIF or PNG image.')
+            if not (main == 'image' and sub in ['jpg', 'jpeg', 'pjpeg', 'gif', 'png']):
+                raise forms.ValidationError(u'Please use a JPEG, GIF or PNG image.')
 
             #validate file size
-            if len(profile_image) > (100 * 1024):
-                raise forms.ValidationError('Profile image file size may not exceed 100k.')
+            if len(profile_image) > (2000 * 1024):
+                raise forms.ValidationError('Profile image file size may not exceed 2MB.')
 
         except AttributeError:
             pass
