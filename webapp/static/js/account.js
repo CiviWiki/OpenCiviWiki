@@ -52,6 +52,8 @@ cw.AccountView = BB.View.extend({
         this.mapView = options.mapView;
         this.isSave = false;
 
+
+
         this.listenTo(this.model, 'sync', function(){
             document.title = this.model.get("first_name") +" "+ this.model.get("last_name") +" (@"+this.model.get("username")+")";
 
@@ -77,14 +79,14 @@ cw.AccountView = BB.View.extend({
             this.$el.empty().append(this.template());
             this.$el.find('.account-settings').pushpin({ top: $('.account-settings').offset().top });
             this.$el.find('.scroll-col').height($(window).height());
-        }
 
-        // Only render the settings form if logged in user
-        var settingsEl = this.$('#settings');
-        if (settingsEl.length) {
-            settingsEl.empty().append(this.settingsTemplate());
-            this.mapView.renderAndInitMap();
-            this.listenTo(this.mapView.model, 'change', _.bind(this.saveLocation, this)); //TODO: validateLocation and then save
+            // Only render the settings form if logged in user
+            var settingsEl = this.$('#settings');
+            if (settingsEl.length) {
+                settingsEl.empty().append(this.settingsTemplate());
+                this.mapView.renderAndInitMap();
+                this.listenTo(this.mapView.model, 'change:address', _.bind(this.saveLocation, this)); //TODO: validateLocation and then save
+            }
         }
     },
 
@@ -95,7 +97,11 @@ cw.AccountView = BB.View.extend({
         this.$('#issues').empty().append(this.myissuesTemplate());
         this.$('#myreps').empty().append(this.myrepsTemplate());
         this.$('#mybills').empty().append(this.mybillsTemplate());
-
+        var settingsEl = this.$('#settings');
+        if (settingsEl.length) {
+            settingsEl.empty().append(this.settingsTemplate());
+            this.mapView.render();
+        }
     },
 
     postRender: function () {

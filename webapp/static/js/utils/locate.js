@@ -109,17 +109,24 @@ cw.MapView = BB.View.extend({
         var _this = this;
         var viewElement = el || $('#' + this.id);
         this.setElement(viewElement);
-        var url = "https://maps.googleapis.com/maps/api/js?key=" + this.googleMapsApiKey + "&libraries=places";
-        $.ajax({
-            url: url,
-            dataMoType: "script",
-            success: function(){
-                _this.render();
-            }
-        });
+
+        if (!this.loadedAPI) {
+            this.loadedAPI = true;
+            var url = "https://maps.googleapis.com/maps/api/js?key=" + _this.googleMapsApiKey + "&libraries=places";
+            $.ajax({
+                url: url,
+                dataType: "script",
+                success: function(){
+                    _this.render();
+
+                }
+            });
+        }
     },
 
     render: function(){
+        var viewElement = $('#' + this.id);
+        this.setElement(viewElement);
         this.$el.empty().append(this.locationTemplate());
         this.model.initMapWithMarker(document.getElementById('map'));
         this.initAutocomplete();
