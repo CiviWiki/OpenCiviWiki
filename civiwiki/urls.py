@@ -27,16 +27,12 @@ urlpatterns = [
     url(r'^auth/', include(auth)),
 ]
 
-if settings.DEBUG:
-    urlpatterns += [
-        url(r'^media/(?P<path>.*)$',serve, {
-            'document_root': settings.MEDIA_ROOT, 'show_indexes': True
-        }),
-        url(r'^static/(?P<path>.*)$', serve, {
-            'document_root': settings.STATIC_ROOT
-        })
-   ]
-
 urlpatterns += [
-    url(r'^', include(frontend_views))
+    url(r'^', include(frontend_views)),
+    url(r'^media/(?P<path>.*)$',serve, {
+        'document_root': settings.MEDIA_ROOT, 'show_indexes': True
+    }),
+    url(r'^static/(?P<path>.*)$', serve, {
+        'document_root': settings.STATIC_ROOT
+    })
 ]
