@@ -1,17 +1,314 @@
 @import 'base';
 
+@vote-green: #40C598;
+@vote-red: #cc5856;
 html {
     overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+body {
+    background-color: #fbfafc;
 }
 
+.floaty {
+    z-index: 100; // Temporary fix for now
+}
+.big-image-cropper{
+    border: 5px solid white;
+    width: 171px;
+    height: 171px;
+    overflow: hidden;
+    border-radius: 50%;
+}
+.image-cropper {
+    width: 120px;
+    height: 120px;
+    overflow: hidden;
+    border-radius: 50%;
+
+
+
+//     img {
+//     display: inline;
+//     height: 100%;
+//     width: auto;
+// }
+}
 #account {
-    .account-tabs {
-        .tabs .tab a {
-            color: @purple;
+    .no-state {
+        background-color: @white;
+        border: 2px @lightish-gray;
+        border-radius: 2px;
+        .text {
+            color: @light-gray;
+        }
+    }
+    .tab-title {
+        margin-bottom: 5px;
+        margin-top: 10px;
+    }
+    .people {
+        .chip {
+            margin: 5px;
+            .name {
+                font-weight: 400;
+                &:hover {
+                    font-weight: 600;
+                }
+            }
+
         }
 
-        .tabs .indicator {
-            background-color: @purple;
+    }
+    .top-bar {
+        height: 35px;
+        margin-bottom: 0px;
+        .logo-container {
+            height: inherit;
+            text-align: center;
+            line-height: 24px;
+            .logo {
+                // margin-left: 20px;
+
+                margin-top: 5px;
+                text-align: center;
+                font-size: 26px;
+                font-weight: 700;
+                color: @white;
+                letter-spacing: 0.01em;
+            }
+        }
+
+        .account-tabs {
+            height: inherit;
+            .tabs {
+                height: inherit;
+                .tab {
+                    height: inherit;
+                    line-height: 34px;
+                    a {
+                        color: @white;
+                        text-transform: capitalize;
+                        font-weight: 700;
+                        font-size: 12px;
+                        &:hover {
+                            color: @light-purple;
+                        }
+                    }
+                    .active {
+                        font-size: 14px;
+                        color: @light-purple;
+                    }
+                    i {
+                        vertical-align: middle;
+                        margin: 5px;
+                    }
+
+                }
+
+                 .indicator {
+                    background-color: @light-purple;
+                    height: 2px;
+                }
+            }
+        }
+    }
+    .content {
+
+        .account-settings {
+            margin-top: 20px;
+            .profile-options{
+                text-align: center;
+                margin: 5px;
+
+                a.btn{
+                    font-size: 13px;
+                    background-color: @dark-blue;
+                    &:hover {
+                        background-color: @blue;
+                    }
+                    i {
+                        margin-right: 5px;
+                    }
+                }
+            }
+            .card-image {
+                text-align: center;
+                min-height: 100px;
+
+                img {
+                    //border-top: 5px @purple solid;
+                }
+                .card-title {
+                    font-size: 24px;
+                    font-weight: 600;
+                    padding-bottom: 30px;
+                    color: @white;
+                    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+                }
+                .card-subtitle {
+                    color: @light-gray;
+                    font-weight: 300;
+                    font-size: 16px;
+                    padding-top: 10px;
+                    padding-bottom: 15px;
+                }
+
+            }
+            .user-info {
+                text-align: center;
+                margin-bottom: 10px;
+
+                .full-name {
+                    font-size: 20px;
+                    font-weight: 600;
+                }
+                .username {
+                    color: @light-gray;
+                    font-weight: 300;
+                }
+            }
+            .card-content {
+                text-align: left;
+                padding: 5px;
+                .section-title {
+                    font-size: 12px;
+                    font-weight: 400;
+                    color: @lightish-gray;
+                }
+
+                .divider {
+                    margin-bottom: 5px;
+                }
+
+
+                .location {
+                    font-size: 12px;
+                    i {
+                        color: @light-purple;
+                        vertical-align: bottom;
+                    }
+                }
+
+                .about-me {
+                    font-size: 12px;
+
+                }
+            }
+        }
+        .civi-cover {
+
+            .cover-content{
+                background-color:@light-purple;
+                padding-top: 10px;
+                padding-left: 5px;
+                padidng-bottom: -10px;
+            }
+        }
+
+        .civi-card{
+            display: inline-block;
+            // margin: 20px 0 0 5px;
+
+            .civi-header-account {
+                cursor: pointer;
+                border-bottom: 1px solid #ddd;
+                border-top-left-radius: 2px;
+                border-top-right-radius: 2px;
+                padding: 12px 20px 4px 20px;
+                margin-bottom: 10px;
+                background-color: @barely-not-white;
+
+                .civi-title-outer {
+                    display: inline-block;
+                    vertical-align: middle;
+
+                    .civi-type {
+                        font-size: 12px;
+                        font-weight: 300;
+                        text-transform: uppercase;
+                    }
+
+                    .civi-title {
+                        font-weight: 500;
+                    }
+                }
+            }
+            .rating{
+                width: 200px;
+                height: 43px;
+                display: inline-block;
+                text-align:center;
+                overflow: hidden;
+                border: solid 1px #dddddd;
+                border-radius: 2px;
+                vertical-align: top;
+                .rating-box{
+                    display: inline-block;
+                    text-align:center;
+                    width: 30px;
+                    vertical-align: top;
+                    .vote-icon{
+                        i {
+                            font-size:10px;
+                            line-height: 20px;
+                            vertical-align: top;
+                        }
+                    }
+                    .double-icon{
+                        i {
+                            font-size:10px;
+                            line-height: 16px;
+                            letter-spacing: -2px;
+                        }
+                        .double-icon-1{
+                            vertical-align: middle;
+                        }
+                        .double-icon-2{
+                            vertical-align: top;
+                        }
+                    }
+                    .rating-score{
+                        font-size: 14px;
+                        line-height: 18px;
+                        font-weight: 700;
+                        color: @light-purple;
+                    }
+                    .rating-percent{
+                        font-size: 16px;
+                        font-weight: 700;
+                        color: @light-purple;
+                        .percent {
+                            color: @lightish-gray;
+                            font-size: .75em;
+                        }
+                    }
+                    .r-0{
+                        color: @vote-red;
+                    }
+                    .r-1{
+                        color: @vote-red;
+                    }
+                    .r-2{
+                        color: @lightish-gray;
+                    }
+                    .r-3{
+                        color: @vote-green;
+                    }
+                    .r-4{
+                        color: @vote-green;
+                    }
+                    .rating-name{
+                        font-size: 8px;
+                        text-transform: uppercase;
+                        color: @gray;
+                        line-height: 1;
+                        vertical-align: middle;
+                        text-align:center;
+                    }
+                }
+
+            }
         }
     }
 }

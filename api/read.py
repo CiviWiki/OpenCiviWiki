@@ -4,6 +4,7 @@ from models import Account, Thread, Civi
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
 from utils import json_response
+import json
 # from utils.custom_decorators import require_post_params
 # from legislation import sunlightapi as sun
 
@@ -51,6 +52,36 @@ def get_user(request, user):
         a = Account.objects.get(user=u)
 
         return JsonResponse(model_to_dict(a))
+    except Account.DoesNotExist as e:
+        return HttpResponseBadRequest(reason=str(e))
+
+def get_profile(request, user):
+    try:
+        u = User.objects.get(username=user)
+        a = Account.objects.get(user=u)
+        result = Account.objects.summarize(a)
+
+        # reps = ['W000812', 'C001049', 'B000575', 'M001170']
+        # rep_list = []
+        # for rep in reps:
+        #     json_data = open('fixtures/data/{}.json'.format(rep))
+        #     data = json.load(json_data)
+        #     r = dict(
+        #         profile_image = "https://theunitedstates.io/images/congress/450x550/{}.jpg".format(rep),
+        #         username= rep,
+        #         title= data['title'],
+        #         first_name= data['first_name'],
+        #         last_name= data['last_name'],
+        #         party= "Republican" if data['party']=="R" else "Democrat",
+        #         alignment= 0
+        #     )
+        #     json_data.close()
+        #     rep_list.append(json.dumps(r))
+
+        result['representatives'] = []
+        result['issues'] = ['''{"category": "category", "issue":"Example Issue that the User probably cares about" }''']*20
+        return JsonResponse(result)
+
     except Account.DoesNotExist as e:
         return HttpResponseBadRequest(reason=str(e))
 

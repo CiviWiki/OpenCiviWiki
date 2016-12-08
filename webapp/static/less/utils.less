@@ -220,6 +220,11 @@
         position: fixed;
         bottom: 15px;
         right: 0;
+
+        // Prevent annoying behavior of highlighting instead of clicking
+        -webkit-user-select: none;  /* Chrome all / Safari all */
+        -moz-user-select: none;     /* Firefox all */
+        -ms-user-select: none;
     }
     .floaty-list {
         margin: 8px 0 0 0;

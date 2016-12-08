@@ -1,0 +1,16 @@
+{% verbatim %}
+<div class="col s6 m3">
+    <div class="card">
+        <div class="card-content center">
+            <div class="image-cropper">
+                <img class="responsive-img" src="{{profile_image}}" alt="">
+            </div>
+            <div class="section">
+                <a href="/profile/{{username}}"><div class="link-lato name">{{title}} {{first_name}} {{last_name}}</div></a>
+                <div class="text-lato">{{party}}</div>
+            </div>
+            <div class="subtitle-lato alignment">{{alignment}} % Match</div>
+        </div>
+    </div>
+</div>
+{% endverbatim %}

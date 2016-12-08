@@ -25,11 +25,18 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api/', include(api)),
     url(r'^auth/', include(auth)),
-    url(r'^', include(frontend_views))
 ]
 
+if settings.DEBUG:
+    urlpatterns += [
+        url(r'^media/(?P<path>.*)$',serve, {
+            'document_root': settings.MEDIA_ROOT, 'show_indexes': True
+        }),
+        url(r'^static/(?P<path>.*)$', serve, {
+            'document_root': settings.STATIC_ROOT
+        })
+   ]
+
 urlpatterns += [
-    url(r'^static/(?P<path>.*)$', serve, {
-        'document_root': settings.STATIC_ROOT
-    })
+    url(r'^', include(frontend_views))
 ]

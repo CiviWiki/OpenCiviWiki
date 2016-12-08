@@ -33,6 +33,15 @@ def beta_blocker(func):
         return func(request, *args, **kwargs)
     return inner
 
+def full_account(func):
+    @wraps(func)
+    def inner(request, *args, **kwargs):
+        a = Account.objects.get(user=request.user)
+        if not a.full_account:
+            return HttpResponseRedirect('/setup')
+        return func(request, *args, **kwargs)
+    return inner
+
 def login_required(func):
     @wraps(func)
     def inner(request, *args, **kwargs):
