@@ -77,11 +77,11 @@
 <script type="text/javascript" src="{% static "js/account.js" %}"></script>
 <script type="text/javascript" src="{% static "js/utils/locate.js" %}"></script>
 <script type="text/javascript">
-    var googleApiKey = "{{ google_map_api_key }}";
+    var googleMapsApiKey = "{{ google_map_api_key }}";
     var sunlightApiKey = "{{ sunlight_api_key }}";
+    var mapView = new cw.MapView({model: new cw.Map(), googleMapsApiKey: googleMapsApiKey, sunlightApiKey: sunlightApiKey});
 
     var username = '{{username}}';
-    var request_user = '{{request.user}}'
     var current_user = '{{request.user.username}}'
     var accountModel = new cw.AccountModel({}, {
         user: username
@@ -89,8 +89,10 @@
     accountModel.fetch();
     var accountView = new cw.AccountView({
         model: accountModel,
+        mapView: mapView,
         current_user: current_user,
-        googleMapsApiKey: googleApiKey,
+        googleMapsApiKey: googleMapsApiKey,
         sunlightApiKey: sunlightApiKey
     });
+    accountView.render();
 </script>

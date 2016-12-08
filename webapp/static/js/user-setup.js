@@ -12,10 +12,9 @@ cw.UserSetupView = BB.View.extend({
 
     initialize: function (options) {
         options = options || {};
-        this.googleMapsApiKey = options.googleMapsApiKey;
-        this.sunlightApiKey = options.sunlightApiKey;
 
-        this.render();
+        this.mapView = options.mapView;
+        return this;
     },
 
     render: function () {
@@ -26,8 +25,7 @@ cw.UserSetupView = BB.View.extend({
         this.$('#step3').empty().append(this.step3Template()).toggleClass('hide');
 
         // Init map view for locating the user
-        var map = new cw.Map();
-        this.mapView = new cw.MapView({model: map, googleMapsApiKey: this.googleMapsApiKey, sunlightApiKey: this.sunlightApiKey});
+        this.mapView.renderAndInitMap();
         this.listenTo(this.mapView.model, 'change', _.bind(this.validateStep2, this));
     },
 
@@ -215,7 +213,6 @@ cw.UserSetupView = BB.View.extend({
                 },
                 success: function (data) {
                     Materialize.toast('<span class="subtitle-lato white-text">Success</span>', 3000);
-                    Materialize.toast(data, 3000);
                     _this.nextStep();
                 },
                 error: function (data) {
@@ -265,10 +262,10 @@ cw.UserSetupView = BB.View.extend({
             },
             error: function(e){
                 Materialize.toast('ERROR: Image could not be uploaded', 3000);
-                Materialize.toast(JSON.stringify(e), 3000);
+                Materialize.toast(e.statusText, 3000);
                 _this.$el.find('.loading').addClass('hide');
                 _this.$el.find('.placeholder').removeClass('hide');
-                this.$el.find('#profile_image_form')[0].reset();
+                _this.$el.find('#profile_image_form')[0].reset();
             },
             data: formData,
             cache: false,

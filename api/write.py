@@ -222,7 +222,7 @@ def uploadProfileImage(request):
             except Exception as e:
                 return HttpResponseServerError(reason=str(e))
         else:
-            return HttpResponseBadRequest(reason='Invalid Form')
+            return HttpResponseBadRequest(reason=(form.errors['profile_image']))
     else:
         return HttpResponseForbidden('allowed only via POST')
 
@@ -236,7 +236,7 @@ def clearProfileImage(request):
             account.profile_image.delete()
 
             account.save()
-            return HttpResponse('image successfully removed')
+            return HttpResponse('Image Deleted')
         except Exception as e:
             return HttpResponseServerError(reason=str(e))
     else:

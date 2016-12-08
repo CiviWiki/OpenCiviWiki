@@ -26,9 +26,9 @@ cw.materializeShit = function () {
 
 cw.initGlobalNav = function () {
     var $floaty = $('.floaty'),
-        $logout = $('.svg-logout'),
-        $feed = $('.svg-feed'),
-        $account = $('.svg-account');
+        $logout = $('#item-logout'),
+        $feed = $('#item-feed'),
+        $account = $('#item-account');
 
     $floaty.on('mouseover', function() {
         $floaty.addClass('is-active');
@@ -47,6 +47,6 @@ cw.initGlobalNav = function () {
     });
 
     $account.on('click', function () {
-        window.location.href = '/profile/' + username;
+        window.location.href = '/profile/';
     });
 };

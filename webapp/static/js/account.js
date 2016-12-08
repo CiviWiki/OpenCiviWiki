@@ -48,13 +48,13 @@ cw.AccountView = BB.View.extend({
 
 
     initialize: function (options) {
-        this.options = options || {};
-        this.googleMapsApiKey = this.options.googleMapsApiKey;
-        this.sunlightApiKey = this.options.sunlightApiKey;
+        options = options || {};
+        this.mapView = options.mapView;
         this.isSave = false;
 
+
+
         this.listenTo(this.model, 'sync', function(){
-            console.log(this.model);
             document.title = this.model.get("first_name") +" "+ this.model.get("last_name") +" (@"+this.model.get("username")+")";
 
             this.postRender();
@@ -69,7 +69,7 @@ cw.AccountView = BB.View.extend({
             }
         });
 
-        this.render();
+        return this;
     },
 
     render: function () {
@@ -79,6 +79,14 @@ cw.AccountView = BB.View.extend({
             this.$el.empty().append(this.template());
             this.$el.find('.account-settings').pushpin({ top: $('.account-settings').offset().top });
             this.$el.find('.scroll-col').height($(window).height());
+
+            // Only render the settings form if logged in user
+            var settingsEl = this.$('#settings');
+            if (settingsEl.length) {
+                settingsEl.empty().append(this.settingsTemplate());
+                this.mapView.renderAndInitMap();
+                this.listenTo(this.mapView.model, 'change:address', _.bind(this.saveLocation, this)); //TODO: validateLocation and then save
+            }
         }
     },
 
@@ -89,10 +97,11 @@ cw.AccountView = BB.View.extend({
         this.$('#issues').empty().append(this.myissuesTemplate());
         this.$('#myreps').empty().append(this.myrepsTemplate());
         this.$('#mybills').empty().append(this.mybillsTemplate());
-        this.$('#settings').empty().append(this.settingsTemplate());
-        var map = new cw.Map();
-        this.mapView = new cw.MapView({model: map, googleMapsApiKey: this.googleMapsApiKey, sunlightApiKey: this.sunlightApiKey});
-        this.listenTo(this.mapView.model, 'change', _.bind(this.saveLocation, this));
+        var settingsEl = this.$('#settings');
+        if (settingsEl.length) {
+            settingsEl.empty().append(this.settingsTemplate());
+            this.mapView.render();
+        }
     },
 
     postRender: function () {

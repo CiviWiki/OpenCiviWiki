@@ -88,6 +88,7 @@ cw.Map = BB.Model.extend({
 });
 
 cw.MapView = BB.View.extend({
+    id: 'location',
     el: '#location',
     locationTemplate: _.template($('#location-template').html()),
     repChipTemplate: _.template($('#rep-chip-template').html()),
@@ -97,22 +98,35 @@ cw.MapView = BB.View.extend({
     },
 
     initialize: function(options) {
-        var _this = this;
         options = options || {};
 
-        var url = "https://maps.googleapis.com/maps/api/js?key=" + options.googleMapsApiKey + "&libraries=places";
-        $.ajax({
-            url: url,
-            dataType: "script",
-            success: function(){
-                _this.render();
-            }
-        });
-
+        this.googleMapsApiKey = options.googleMapsApiKey;
         this.sunlightApiKey = options.sunlightApiKey;
+        return this;
+    },
+
+    renderAndInitMap: function(el) {
+        var _this = this;
+        var viewElement = el || $('#' + this.id);
+        this.setElement(viewElement);
+
+        if (!this.loadedAPI) {
+            this.loadedAPI = true;
+            var url = "https://maps.googleapis.com/maps/api/js?key=" + _this.googleMapsApiKey + "&libraries=places";
+            $.ajax({
+                url: url,
+                dataType: "script",
+                success: function(){
+                    _this.render();
+
+                }
+            });
+        }
     },
 
     render: function(){
+        var viewElement = $('#' + this.id);
+        this.setElement(viewElement);
         this.$el.empty().append(this.locationTemplate());
         this.model.initMapWithMarker(document.getElementById('map'));
         this.initAutocomplete();
