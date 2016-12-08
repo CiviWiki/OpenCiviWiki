@@ -112,7 +112,7 @@ cw.MapView = BB.View.extend({
         var url = "https://maps.googleapis.com/maps/api/js?key=" + this.googleMapsApiKey + "&libraries=places";
         $.ajax({
             url: url,
-            dataType: "script",
+            dataMoType: "script",
             success: function(){
                 _this.render();
             }
