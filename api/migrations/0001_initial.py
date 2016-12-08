@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
                 ('state_district', models.CharField(default=None, max_length=63, null=True)),
                 ('beta_access', models.BooleanField(default=False)),
                 ('full_account', models.BooleanField(default=False)),
-                ('profile_image', models.ImageField(default=b'profile/happy.png', null=True, upload_to=api.models.account.PathAndRename(b'profile/'), blank=True)),
+                ('profile_image', models.ImageField(default=b'profile/default.png', null=True, upload_to=api.models.account.PathAndRename(b'profile/'), blank=True)),
             ],
         ),
         migrations.CreateModel(
@@ -219,7 +219,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='civi',
             name='links',
-            field=models.ManyToManyField(related_name='_links_+', to='api.Civi'),
+            field=models.ManyToManyField(related_name='_civi_links_+', to='api.Civi'),
         ),
         migrations.AddField(
             model_name='civi',
@@ -234,12 +234,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='account',
             name='followers',
-            field=models.ManyToManyField(related_name='_followers_+', to='api.Account'),
+            field=models.ManyToManyField(related_name='_account_followers_+', to='api.Account'),
         ),
         migrations.AddField(
             model_name='account',
             name='following',
-            field=models.ManyToManyField(related_name='_following_+', to='api.Account'),
+            field=models.ManyToManyField(related_name='_account_following_+', to='api.Account'),
         ),
         migrations.AddField(
             model_name='account',
