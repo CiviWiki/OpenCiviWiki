@@ -53,7 +53,6 @@ cw.AccountView = BB.View.extend({
         this.isSave = false;
 
         this.listenTo(this.model, 'sync', function(){
-            console.log(this.model);
             document.title = this.model.get("first_name") +" "+ this.model.get("last_name") +" (@"+this.model.get("username")+")";
 
             this.postRender();
@@ -79,6 +78,14 @@ cw.AccountView = BB.View.extend({
             this.$el.find('.account-settings').pushpin({ top: $('.account-settings').offset().top });
             this.$el.find('.scroll-col').height($(window).height());
         }
+
+        // Only render the settings form if logged in user
+        var settingsEl = this.$('#settings');
+        if (settingsEl.length) {
+            settingsEl.empty().append(this.settingsTemplate());
+            this.mapView.renderAndInitMap();
+            this.listenTo(this.mapView.model, 'change', _.bind(this.saveLocation, this)); //TODO: validateLocation and then save
+        }
     },
 
     tabsRender: function () {
@@ -88,10 +95,7 @@ cw.AccountView = BB.View.extend({
         this.$('#issues').empty().append(this.myissuesTemplate());
         this.$('#myreps').empty().append(this.myrepsTemplate());
         this.$('#mybills').empty().append(this.mybillsTemplate());
-        this.$('#settings').empty().append(this.settingsTemplate());
 
-        this.mapView.renderAndInitMap();
-        this.listenTo(this.mapView.model, 'change', _.bind(this.saveLocation, this)); //TODO: validateLocation and then save
     },
 
     postRender: function () {
