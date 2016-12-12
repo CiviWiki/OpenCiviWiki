@@ -28,11 +28,11 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    url(r'^', include(frontend_views)),
     url(r'^media/(?P<path>.*)$',serve, {
         'document_root': settings.MEDIA_ROOT, 'show_indexes': True
     }),
     url(r'^static/(?P<path>.*)$', serve, {
         'document_root': settings.STATIC_ROOT
-    })
+    }),
+    url(r'^', include(frontend_views))
 ]
