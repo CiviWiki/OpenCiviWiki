@@ -105,10 +105,10 @@ cw.MapView = BB.View.extend({
         return this;
     },
 
-    renderAndInitMap: function(el) {
+    renderAndInitMap: function(elId) {
         var _this = this;
-        var viewElement = el || $('#' + this.id);
-        this.setElement(viewElement);
+        this.id = elId || this.id;
+        this.setElement($('#' + this.id));
 
         if (!this.loadedAPI) {
             this.loadedAPI = true;
@@ -118,7 +118,6 @@ cw.MapView = BB.View.extend({
                 dataType: "script",
                 success: function(){
                     _this.render();
-
                 }
             });
         }
