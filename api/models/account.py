@@ -51,7 +51,9 @@ class PathAndRename(object):
         filename = '{}.{}'.format(instance.user.username, ext)
         return os.path.join(self.sub_path, filename)
 
+
 profile_upload_path = PathAndRename('profile/')
+
 
 class Account(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -79,6 +81,7 @@ class Account(models.Model):
     full_account = models.BooleanField(default=False)
 
     objects = AccountManager()
+    profile_image = models.ImageField(upload_to=profile_upload_path, blank=True, null=True, default='profile/default.png')
 
     #custom "row-level" functionality (properties) for account models
     def get_location(self):
@@ -87,5 +90,3 @@ class Account(models.Model):
     def get_full_name(self):
         "Returns the person's full name."
         return '{first_name} {last_name}'.format(first_name=self.first_name, last_name=self.last_name)
-
-    profile_image = models.ImageField(upload_to=profile_upload_path, blank=True, null=True, default ='profile/default.png')
