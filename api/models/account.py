@@ -23,7 +23,16 @@ class AccountManager(models.Manager):
         }
         return data
     #
-    def follow_summarize(self, account):
+    def chip_summarize(self, account):
+        data = {
+            "username": account.user.username,
+            "first_name": account.first_name,
+            "last_name": account.last_name,
+            "profile_image": account.profile_image.url,
+        }
+        return json.dumps(data)
+
+    def card_summarize(self, account):
         data = {
             "username": account.user.username,
             "first_name": account.first_name,
@@ -32,14 +41,14 @@ class AccountManager(models.Manager):
             "location": account.get_location(),
             "profile_image": account.profile_image.url,
         }
-        return json.dumps(data)
+        return data
 
 
     def followers(self, account):
-        return [self.follow_summarize(a) for a in account.followers.all()]
+        return [self.chip_summarize(a) for a in account.followers.all()]
 
     def following(self, account):
-        return [self.follow_summarize(a) for a in account.following.all()]
+        return [self.chip_summarize(a) for a in account.following.all()]
 
 @deconstructible
 class PathAndRename(object):
@@ -85,7 +94,12 @@ class Account(models.Model):
 
     #custom "row-level" functionality (properties) for account models
     def get_location(self):
-        return '{city}, {state}'.format(city=self.city, state=dict(settings.US_STATES).get(self.state))
+        if self.city and self.state:
+            return '{city}, {state}'.format(city=self.city, state=dict(settings.US_STATES).get(self.state))
+        elif self.state:
+            return '{state}'.format(state=dict(settings.US_STATES).get(self.state))
+        else:
+            return 'NO LOCATION'
 
     def get_full_name(self):
         "Returns the person's full name."

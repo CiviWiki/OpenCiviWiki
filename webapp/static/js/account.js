@@ -46,6 +46,9 @@ cw.AccountView = BB.View.extend({
     myrepsTemplate: _.template($('#my-reps-template').html()),
     mybillsTemplate: _.template($('#my-bills-template').html()),
 
+    // Partials
+    userCardTemplate: _.template($('#user-card-template').html()),
+
 
     initialize: function (options) {
         options = options || {};
@@ -126,38 +129,48 @@ cw.AccountView = BB.View.extend({
 
     showUserCard: function(e) {
         var _this = this;
-        // TODO: API call instead of bulk initial render
         var username = e.currentTarget.dataset.username;
-        if ($('#usercard-'+ username).hasClass('hide')) {
+        if (!$('#usercard-'+ username).hasClass('open')) {
             clearTimeout(this.showTimeout);
             this.showTimeout = setTimeout(function() {
-                // Hover Elements
-                var target = this.$(e.currentTarget),
-                    targetCard = $('#usercard-'+ username);
+                $.ajax({
+                    type: 'POST',
+                    url: '/api/account_card/'+username,
+                    success: function (data) {
+                        _this.$(e.currentTarget).after(_this.userCardTemplate(data));
+                        // Hover Elements
+                        var target = _this.$(e.currentTarget),
+                            targetCard = _this.$('#usercard-'+ username);
 
-                targetCard.removeClass('hide').stop().fadeIn("fast", function(){
-                    // Positions
-                    var pos = target.offset(),
-                    // Dimenions
-                        cardWidth = targetCard.width(),
-                        cardHeight = targetCard.height(),
-                        chipHeight = target.height(),
-                        documentHeight = $(window).height(),
-                        scroll = _this.$(".scroll-col").scrollTop(),
-                        top,left;
+                        targetCard.stop().fadeIn("fast", function(){
+                            // Positions
+                            var pos = target.offset(),
+                            // Dimenions
+                                cardWidth = targetCard.width(),
+                                cardHeight = targetCard.height(),
+                                chipHeight = target.height(),
+                                documentHeight = $(window).height(),
+                                scroll = _this.$(".scroll-col").scrollTop(),
+                                top,left;
 
-                    if (target[0].getBoundingClientRect().top + cardHeight + chipHeight >= documentHeight) {
-                        top = pos.top + scroll - cardHeight - chipHeight -2;
-                    } else {
-                        top = pos.top + scroll + 25;
+                            if (target[0].getBoundingClientRect().top + cardHeight + chipHeight >= documentHeight) {
+                                top = pos.top + scroll - cardHeight - chipHeight -2;
+                            } else {
+                                top = pos.top + scroll + 25;
+                            }
+                            left = target.position().left + 20;
+
+                            // Determine placement of the hovercard
+                            targetCard.css({
+                                'top': top ,
+                                'left': left
+                            });
+                        }).addClass('open');
+                    },
+                    error: function () {
+                        // No card for you!
+                        return;
                     }
-                    left = target.position().left + 20;
-
-                    // Determine placement of the hovercard
-                    targetCard.css({
-                        'top': top ,
-                        'left': left
-                    });
                 });
             }, 400);
         }
@@ -170,7 +183,7 @@ cw.AccountView = BB.View.extend({
             clearTimeout(this['timeout-'+username]);
         }
         this['timeout-'+username] = setTimeout(function() {
-            $('#usercard-'+ username).fadeOut("fast",function(){$(this).addClass('hide');});
+            $('#usercard-'+ username).fadeOut("fast",function(){$(this).remove();});
         }, 400);
         $('#usercard-'+ username).hover(function() {
             if (('timeout-'+username) in _this){
@@ -181,7 +194,7 @@ cw.AccountView = BB.View.extend({
                 clearTimeout(_this['timeout-'+username]);
             }
             _this['timeout-'+username] = setTimeout(function() {
-                $('#usercard-'+ username).fadeOut("fast",function(){$(this).addClass('hide');});
+                $('#usercard-'+ username).fadeOut("fast",function(){$(this).remove();});
             }, 300);
         });
     },

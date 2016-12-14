@@ -13,7 +13,6 @@
         {{# _.each(this.model.get('following'), function (u) { }}
             <div class="col s12 m6">
             {{= cw.underscorePartial('user-chip-template', JSON.parse(u))}}
-            {{= cw.underscorePartial('user-card-template', JSON.parse(u))}}
             </div>
         {{# }, this); }}
         {{# } else { }}

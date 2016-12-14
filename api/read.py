@@ -55,6 +55,15 @@ def get_user(request, user):
     except Account.DoesNotExist as e:
         return HttpResponseBadRequest(reason=str(e))
 
+def get_card(request, user):
+    try:
+        u = User.objects.get(username=user)
+        a = Account.objects.get(user=u)
+        result = Account.objects.card_summarize(a)
+        return JsonResponse(result)
+    except Account.DoesNotExist as e:
+        return HttpResponseBadRequest(reason=str(e))
+
 def get_profile(request, user):
     try:
         u = User.objects.get(username=user)
