@@ -172,19 +172,21 @@ cw.AccountView = BB.View.extend({
                         return;
                     }
                 });
-            }, 400);
+            }, 200);
         }
     },
 
     hideUserCard: function(e) {
-        var _this = this;
-        var username = e.currentTarget.dataset.username;
+        var _this = this,
+            username = e.currentTarget.dataset.username,
+            card = this.$('.user-card');
         if (('timeout-'+username) in this){
             clearTimeout(this['timeout-'+username]);
         }
+        clearTimeout(this.showTimeout);
         this['timeout-'+username] = setTimeout(function() {
-            $('#usercard-'+ username).fadeOut("fast",function(){$(this).remove();});
-        }, 400);
+            card.fadeOut("fast",function(){$(this).remove();});
+        }, 200);
         $('#usercard-'+ username).hover(function() {
             if (('timeout-'+username) in _this){
                 clearTimeout(_this['timeout-'+username]);
@@ -194,8 +196,8 @@ cw.AccountView = BB.View.extend({
                 clearTimeout(_this['timeout-'+username]);
             }
             _this['timeout-'+username] = setTimeout(function() {
-                $('#usercard-'+ username).fadeOut("fast",function(){$(this).remove();});
-            }, 300);
+                card.fadeOut("fast",function(){$(this).remove();});
+            }, 100);
         });
     },
 
