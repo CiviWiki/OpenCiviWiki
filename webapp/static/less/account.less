@@ -21,20 +21,91 @@ body {
     margin: 0 auto 0 auto;
     border-radius: 50%;
 }
+.medium-image-cropper{
+    border: 5px solid @barely-not-white;
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    margin: 0 auto 0 auto;
+    border-radius: 50%;
+}
+.small-image-cropper{
+    border: 2px solid white;
+    width: 64px;
+    height: 64px;
+    overflow: hidden;
+    margin: 0 auto 0 auto;
+    border-radius: 50%;
+}
 .image-cropper {
     width: 120px;
     height: 120px;
     overflow: hidden;
     border-radius: 50%;
+}
 
-
+.user-card {
+    position: absolute;
+    width: 300px;
+    padding: 10px;
+    display:block;
+    overflow:auto;
+    border-radius: 10px;
+    text-align: center;
+    .top {
+        margin-bottom: 10px;
+        .name {
+            color: @purple;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        .username {
+            a {
+                color: @lightish-gray;
+            }
+            line-height: 14px;
+            font-weight: 300;
+        }
+    }
+    .bottom {
+        margin-bottom: 10px;
+        .location {
+            font-size: 12px;
+            margin-bottom: 10px;
+            i {
+                color: @light-purple;
+                vertical-align: bottom;
+            }
+        }
+        .about-me {
+            margin-left: 25px;
+            margin-right: 25px;
+            font-size: 12px;
+            color: @gray;
+            word-wrap: break-word;
+        }
+    }
+    .buttons {
+        margin-bottom: 0px;
+    }
+}
+.btn{
+    font-size: 13px;
+    background-color: @dark-blue;
+    &:hover {
+        background-color: lighten(@dark-blue, 10%);
+    }
+    i {
+        margin-right: 5px;
+    }
+}
 
 //     img {
 //     display: inline;
 //     height: 100%;
 //     width: auto;
 // }
-}
+
 #account {
     .no-state {
         background-color: @white;
@@ -176,6 +247,7 @@ body {
                     font-size: 12px;
                     font-weight: 400;
                     color: @lightish-gray;
+
                 }
 
                 .divider {
@@ -193,7 +265,40 @@ body {
 
                 .about-me {
                     font-size: 12px;
+                    word-wrap: break-word;
+                }
+            }
+        }
 
+        .user-chip {
+            border: 1px solid @barely-not-white;
+            &.chip {
+                height: 64px;
+                display: block;
+                border-radius: 32px;
+
+
+                img {
+                    height: 64px;
+                    width: 64px;
+                    margin-top: -1px;
+                    margin-left: -12px;
+                    border: 2px solid @barely-not-white;
+                }
+                .name {
+                    font-size: 1.2em;
+                    font-weight: 600;
+                    color: @purple;
+                    text-overflow: ellipsis;
+                    line-height: 22px;
+                    margin-top: 10px;
+                    // width: auto;
+                    // box-sizing: border-box;
+                    overflow:hidden;
+                    white-space:nowrap;
+                }
+                .atname {
+                    line-height: 22px;
                 }
             }
         }

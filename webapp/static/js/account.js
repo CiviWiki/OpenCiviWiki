@@ -30,7 +30,7 @@ cw.AccountModel = BB.Model.extend({
 });
 
 
-// And hereon commences a pile of horrendous code. Be Ware!
+// And hereon commences a pile of horrendous code. Beware!
 // TODO: review rewrite refactor. (please)
 cw.AccountView = BB.View.extend({
     el: '#account',
@@ -119,8 +119,73 @@ cw.AccountView = BB.View.extend({
         'submit #profile_image_form': 'handleFiles',
         'change .profile-image-pick': 'toggleImgButtons',
         'blur .save-account': 'saveAccount',
+        'mouseenter .user-chip': 'showUserCard',
+        'mouseleave .user-chip': 'hideUserCard',
         'keypress .save-account': cw.checkForEnter,
     },
+
+    showUserCard: function(e) {
+        var _this = this;
+        // TODO: API call instead of bulk initial render
+        var username = e.currentTarget.dataset.username;
+        if ($('#usercard-'+ username).hasClass('hide')) {
+            clearTimeout(this.showTimeout);
+            this.showTimeout = setTimeout(function() {
+                // Hover Elements
+                var target = this.$(e.currentTarget),
+                    targetCard = $('#usercard-'+ username);
+
+                targetCard.removeClass('hide').stop().fadeIn("fast", function(){
+                    // Positions
+                    var pos = target.offset(),
+                    // Dimenions
+                        cardWidth = targetCard.width(),
+                        cardHeight = targetCard.height(),
+                        chipHeight = target.height(),
+                        documentHeight = $(window).height(),
+                        scroll = _this.$(".scroll-col").scrollTop(),
+                        top,left;
+
+                    if (target[0].getBoundingClientRect().top + cardHeight + chipHeight >= documentHeight) {
+                        top = pos.top + scroll - cardHeight - chipHeight -2;
+                    } else {
+                        top = pos.top + scroll + 25;
+                    }
+                    left = target.position().left + 20;
+
+                    // Determine placement of the hovercard
+                    targetCard.css({
+                        'top': top ,
+                        'left': left
+                    });
+                });
+            }, 400);
+        }
+    },
+
+    hideUserCard: function(e) {
+        var _this = this;
+        var username = e.currentTarget.dataset.username;
+        if (('timeout-'+username) in this){
+            clearTimeout(this['timeout-'+username]);
+        }
+        this['timeout-'+username] = setTimeout(function() {
+            $('#usercard-'+ username).fadeOut("fast",function(){$(this).addClass('hide');});
+        }, 400);
+        $('#usercard-'+ username).hover(function() {
+            if (('timeout-'+username) in _this){
+                clearTimeout(_this['timeout-'+username]);
+            }
+        }, function() {
+            if (('timeout-'+username) in _this){
+                clearTimeout(_this['timeout-'+username]);
+            }
+            _this['timeout-'+username] = setTimeout(function() {
+                $('#usercard-'+ username).fadeOut("fast",function(){$(this).addClass('hide');});
+            }, 300);
+        });
+    },
+
     showRawRatings: function(e) {
         $(e.target).closest('.rating').find('.rating-score').toggleClass('hide');
         $(e.target).closest('.rating').find('.rating-percent').toggleClass('hide');

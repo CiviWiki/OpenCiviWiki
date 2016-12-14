@@ -1,5 +1,5 @@
 {% verbatim %}
-<div class="people">
+<div class="people scroll">
     <div class="row tab-title">
         <div class="col s6 title-lato">{{this.model.get('followers').length}} Followers</div>
         <div class="input-field col s4 push-s2">
@@ -9,10 +9,12 @@
     </div>
     <!-- Populate Civi list -->
     <div class="row">
-
         {{# if (this.model.get('followers').length > 0) { }}
         {{# _.each(this.model.get('followers'), function (u) {}}
-            {{= cw.underscorePartial('people-template', JSON.parse(u))}}
+            <div class="col s12 m6">
+            {{= cw.underscorePartial('user-chip-template', JSON.parse(u))}}
+            {{= cw.underscorePartial('user-card-template', JSON.parse(u))}}
+            </div>
         {{# }, this); }}
         {{# } else { }}
         <div class="section no-state">

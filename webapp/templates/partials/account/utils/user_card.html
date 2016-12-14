@@ -1,10 +1,29 @@
 {% verbatim %}
-<div id="user-card-template">
-    <div class="user-card">
-        <div class="profile_image"><img src="http://placehold.it/100/501cb5" alt="Contact Person">{{username}}</div></div>
-        <div class="name">{{first_name}} {{last_name}}</div>
-        <div class="username">{{username}}</div>
-        <button class="center">{{followed}}</button>
+<div class="user-card card hide" id="usercard-{{username}}" data-username="{{username}}">
+    <div class="top">
+            <div class="profile_image">
+
+                <div class="medium-image-cropper">
+                    <a href="/profile/{{username}}">
+                        <img src="{{profile_image}}" alt="profile image" class="responsive-img">
+                    </a>
+                </div>
+            </div>
+            <a href="/profile/{{username}}" class="name">
+                {{first_name}} {{last_name}}
+            </a>
+            <div class="username">
+                <a href="/profile/{{username}}" >
+                    @{{username}}
+                </a>
+            </div>
+    </div>
+    <div class="bottom">
+        <div class="location"><i class="mini material-icons">place</i>{{location}}</div>
+        <div class="about-me center-block">{{about_me}}</div>
+    </div>
+    <div class="buttons row">
+        <a class="waves-effect waves-light btn follow-btn col s12" data-username="{{username}}">Follow</a>
     </div>
 </div>
 {% endverbatim %}
