@@ -38,7 +38,7 @@ class AccountManager(models.Manager):
             "username": account.user.username,
             "first_name": account.first_name,
             "last_name": account.last_name,
-            "about_me": account.about_me,
+            "about_me": account.about_me[:150] + ('' if len(account.about_me) <= 150 else '...'),
             "location": account.get_location(),
             "profile_image": account.profile_image.url,
             "follow_state": True if account in request_account.following.all() else False,

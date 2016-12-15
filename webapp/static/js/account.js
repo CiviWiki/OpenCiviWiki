@@ -64,10 +64,10 @@ cw.AccountView = BB.View.extend({
             if (_.find(this.model.get("followers"), function(follower){
                 return (JSON.parse(follower).username== current_user);
             })) {
-                var follow_btn = this.$el.find('.follow-btn');
-                follow_btn.addClass("disabled");
-                follow_btn.removeClass("follow-btn waves-effect waves-light");
-                follow_btn.html("FOLLOWING");
+                var follow_btn = this.$('#sidebar-follow-btn');
+                follow_btn.addClass("btn-secondary");
+                follow_btn.data("follow-state", true);
+                follow_btn.html("");
             }
         });
 
@@ -121,8 +121,8 @@ cw.AccountView = BB.View.extend({
         'submit #profile_image_form': 'handleFiles',
         'change .profile-image-pick': 'toggleImgButtons',
         'blur .save-account': 'saveAccount',
-        'mouseenter .user-chip': 'showUserCard',
-        'mouseleave .user-chip': 'hideUserCard',
+        'mouseenter .user-chip-contents': 'showUserCard',
+        'mouseleave .user-chip-contents': 'hideUserCard',
         'keypress .save-account': cw.checkForEnter,
     },
 
@@ -140,7 +140,7 @@ cw.AccountView = BB.View.extend({
                         if (current_user == data.username){
                             data.isCurrentUser = true;
                         }
-                        _this.$(e.currentTarget).after(_this.userCardTemplate(data));
+                        _this.$(e.currentTarget).parent().after(_this.userCardTemplate(data));
                         // Hover Elements
                         var target = _this.$(e.currentTarget),
                             targetCard = _this.$('#usercard-'+ username);
@@ -229,15 +229,15 @@ cw.AccountView = BB.View.extend({
                 data: apiData,
                 success: function () {
                     Materialize.toast('You are now following user '+ apiData.target, 3000);
-                    target.removeClass("waves-effect waves-light");
-                    target.html("FOLLOWING");
+                    target.addClass("btn-secondary");
                     target.data("follow-state", true);
+                    target.html("");
+
                 },
                 error: function () {
                     Materialize.toast('Could not follow user '+ apiData.target, 3000);
                 }
             });
-            target.addClass("disabled");
         } else {
             $.ajax({
                 url: '/api/unfollow/',
@@ -245,7 +245,7 @@ cw.AccountView = BB.View.extend({
                 data: apiData,
                 success: function () {
                     Materialize.toast('You have unfollowed user '+ apiData.target, 3000);
-                    target.addClass("waves-effect waves-light");
+                    target.removeClass("btn-secondary");
                     target.html("FOLLOW");
                     target.data("follow-state", false);
                 },
@@ -253,7 +253,6 @@ cw.AccountView = BB.View.extend({
                     Materialize.toast('Could not unfollow user '+ apiData.target, 3000);
                 }
             });
-            target.removeClass("disabled");
         }
 
     },

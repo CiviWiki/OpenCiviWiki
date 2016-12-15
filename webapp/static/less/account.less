@@ -87,6 +87,7 @@ body {
             font-size: 12px;
             color: @gray;
             word-wrap: break-word;
+            max-height: 100px;
         }
     }
     .buttons {
@@ -104,6 +105,30 @@ body {
     }
     i {
         margin-right: 5px;
+    }
+}
+.btn-secondary {
+    background-color: rgba(0,0,0,0);
+    border: 1px solid @blue;
+    color: @blue;
+    box-shadow: none;
+    line-height: 34px;
+
+    &:hover {
+        box-shadow: none;
+        background-color: rgba(0,0,0,0);
+        border: 1px solid @dark-blue;
+        color: @dark-blue;
+    }
+    &.follow-btn{
+        &::after {
+        content: "FOLLOWING";
+        }
+        &:hover{
+            &::after {
+            content: "UNFOLLOW";
+            }
+        }
     }
 }
 
@@ -200,16 +225,16 @@ body {
                 text-align: center;
                 margin: 5px;
 
-                a.btn{
-                    font-size: 13px;
-                    background-color: @dark-blue;
-                    &:hover {
-                        background-color: @blue;
-                    }
-                    i {
-                        margin-right: 5px;
-                    }
-                }
+                // a.btn{
+                //     font-size: 13px;
+                //     background-color: @dark-blue;
+                //     &:hover {
+                //         background-color: @blue;
+                //     }
+                //     i {
+                //         margin-right: 5px;
+                //     }
+                // }
             }
             .card-image {
                 text-align: center;
@@ -236,7 +261,7 @@ body {
             }
             .user-info {
                 text-align: center;
-                margin-bottom: 10px;
+                padding-top: 1rem;
 
                 .full-name {
                     font-size: 20px;
@@ -273,27 +298,26 @@ body {
                 .about-me {
                     font-size: 12px;
                     word-wrap: break-word;
-                    max-height: 250px;
-                    overflow: scroll;
+                    max-height: 200px;
+                    overflow-y: scroll;
                     &::-webkit-scrollbar {
                         -webkit-appearance: none;
                     }
                     &::-webkit-scrollbar:vertical {
-                        width: 11px;
+                        width: 5px;
                     }
 
                     &::-webkit-scrollbar:horizontal {
-                        height: 11px;
+                        height: 5px;
                     }
 
                     &::-webkit-scrollbar-thumb {
                         border-radius: 8px;
-                        border: 2px solid white; /* should match background, can't be transparent */
                         background-color: rgba(0, 0, 0, .1);
                     }
 
                     &::-webkit-scrollbar-track {
-                        background-color: #fff;
+                        background-color: #fbfafc;
                         border-radius: 8px;
                     }
                 }
@@ -307,7 +331,9 @@ body {
                 display: block;
                 border-radius: 32px;
 
-
+            .user-chip-contents{
+                display: inline-block;
+            }
                 img {
                     height: 64px;
                     width: 64px;
