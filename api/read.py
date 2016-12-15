@@ -59,9 +59,11 @@ def get_card(request, user):
     try:
         u = User.objects.get(username=user)
         a = Account.objects.get(user=u)
-        result = Account.objects.card_summarize(a)
+        result = Account.objects.card_summarize(a, Account.objects.get(user=request.user))
         return JsonResponse(result)
     except Account.DoesNotExist as e:
+        return HttpResponseBadRequest(reason=str(e))
+    except Exception as e:
         return HttpResponseBadRequest(reason=str(e))
 
 def get_profile(request, user):
@@ -89,6 +91,12 @@ def get_profile(request, user):
 
         result['representatives'] = []
         result['issues'] = ['''{"category": "category", "issue":"Example Issue that the User probably cares about" }''']*20
+        if request.user.username != user:
+            ra = Account.objects.get(user=request.user)
+            if user in ra.following.all():
+                result['follow_state'] = True
+            else:
+                result['follow_state'] = False
         return JsonResponse(result)
 
     except Account.DoesNotExist as e:
@@ -105,8 +113,8 @@ def get_thread(request, thread_id):
             'title': t.title,
             'summary': t.summary,
             'hashtags': t.hashtags.all().values(),
-            'author': model_to_dict(t.author),
-            'category': model_to_dict(t.category),
+            'author': 'a',#model_to_dict(t.author), // TODO: Fix This
+            'category': 'c',#model_to_dict(t.category),  // TODO: Fix This
             'created': t.created,
             'problems': problems,
             'causes': causes,

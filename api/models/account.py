@@ -32,14 +32,17 @@ class AccountManager(models.Manager):
         }
         return json.dumps(data)
 
-    def card_summarize(self, account):
+    def card_summarize(self, account, request_account):
         data = {
+            "id": account.user.id,
             "username": account.user.username,
             "first_name": account.first_name,
             "last_name": account.last_name,
             "about_me": account.about_me,
             "location": account.get_location(),
             "profile_image": account.profile_image.url,
+            "follow_state": True if account in request_account.following.all() else False,
+            "request_account": request_account.first_name
         }
         return data
 
@@ -83,8 +86,8 @@ class Account(models.Model):
     interests = models.ManyToManyField(Hashtag, related_name='interests')
     ai_interests = models.ManyToManyField(Hashtag, related_name='ai_interests')
 
-    followers = models.ManyToManyField('self', related_name='follower')
-    following = models.ManyToManyField('self', related_name='following')
+    followers = models.ManyToManyField('self', related_name='follower', symmetrical=False)
+    following = models.ManyToManyField('self', related_name='followings', symmetrical=False)
 
     beta_access = models.BooleanField(default=False)
     full_account = models.BooleanField(default=False)

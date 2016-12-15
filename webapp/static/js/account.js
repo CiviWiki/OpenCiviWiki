@@ -53,9 +53,8 @@ cw.AccountView = BB.View.extend({
     initialize: function (options) {
         options = options || {};
         this.mapView = options.mapView;
+        this.current_user = options.current_user;
         this.isSave = false;
-
-
 
         this.listenTo(this.model, 'sync', function(){
             document.title = this.model.get("first_name") +" "+ this.model.get("last_name") +" (@"+this.model.get("username")+")";
@@ -137,6 +136,10 @@ cw.AccountView = BB.View.extend({
                     type: 'POST',
                     url: '/api/account_card/'+username,
                     success: function (data) {
+                        data.isCurrentUser = false;
+                        if (current_user == data.username){
+                            data.isCurrentUser = true;
+                        }
                         _this.$(e.currentTarget).after(_this.userCardTemplate(data));
                         // Hover Elements
                         var target = _this.$(e.currentTarget),
@@ -213,23 +216,46 @@ cw.AccountView = BB.View.extend({
 
     followRequest: function(e){
         var apiData = {},
-            _this = this;
-        apiData.from_user = this.user;
-        apiData.to_user = this.user;
+            _this = this,
+            follow_state = this.$(e.currentTarget).data("follow-state");
+            target = this.$(e.target);
 
-        $.ajax({
-            url: '/api/followUser/',
-            type: 'POST',
-            data: apiData,
-            success: function () {
-                Materialize.toast('You are now following '+_this.model.get("first_name")+" "+_this.model.get("last_name"), 3000);
+        apiData.target = this.$(e.currentTarget).data("username");
 
+        if (!follow_state) {
+            $.ajax({
+                url: '/api/follow/',
+                type: 'POST',
+                data: apiData,
+                success: function () {
+                    Materialize.toast('You are now following user '+ apiData.target, 3000);
+                    target.removeClass("waves-effect waves-light");
+                    target.html("FOLLOWING");
+                    target.data("follow-state", true);
+                },
+                error: function () {
+                    Materialize.toast('Could not follow user '+ apiData.target, 3000);
+                }
+            });
+            target.addClass("disabled");
+        } else {
+            $.ajax({
+                url: '/api/unfollow/',
+                type: 'POST',
+                data: apiData,
+                success: function () {
+                    Materialize.toast('You have unfollowed user '+ apiData.target, 3000);
+                    target.addClass("waves-effect waves-light");
+                    target.html("FOLLOW");
+                    target.data("follow-state", false);
+                },
+                error: function () {
+                    Materialize.toast('Could not unfollow user '+ apiData.target, 3000);
+                }
+            });
+            target.removeClass("disabled");
+        }
 
-                $(e.target).removeClass("follow-btn waves-effect waves-light");
-                $(e.target).html("FOLLOWING");
-            }
-        });
-        $(e.target).addClass("disabled");
     },
 
     saveAccount: function (e) {

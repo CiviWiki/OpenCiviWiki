@@ -59,13 +59,16 @@ body {
             color: @purple;
             font-size: 20px;
             font-weight: 600;
+            &:hover {
+                color: lighten(@purple, 20%);
+            }
         }
         .username {
             a {
                 color: @lightish-gray;
             }
             line-height: 14px;
-            font-weight: 300;
+            font-weight: 400;
         }
     }
     .bottom {
@@ -270,15 +273,35 @@ body {
                 .about-me {
                     font-size: 12px;
                     word-wrap: break-word;
+                    max-height: 250px;
+                    overflow: scroll;
+                    &::-webkit-scrollbar {
+                        -webkit-appearance: none;
+                    }
+                    &::-webkit-scrollbar:vertical {
+                        width: 11px;
+                    }
+
+                    &::-webkit-scrollbar:horizontal {
+                        height: 11px;
+                    }
+
+                    &::-webkit-scrollbar-thumb {
+                        border-radius: 8px;
+                        border: 2px solid white; /* should match background, can't be transparent */
+                        background-color: rgba(0, 0, 0, .1);
+                    }
+
+                    &::-webkit-scrollbar-track {
+                        background-color: #fff;
+                        border-radius: 8px;
+                    }
                 }
             }
         }
 
         .user-chip {
             border: 1px solid @barely-not-white;
-            // Shadow
-            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-            transition: all 0.3s cubic-bezier(.25,.8,.25,1);
             &.chip {
                 height: 64px;
                 display: block;
@@ -293,6 +316,7 @@ body {
                     border: 2px solid @barely-not-white;
                 }
                 .name {
+                    display: inline-block;
                     font-size: 1.2em;
                     font-weight: 600;
                     color: @purple;
@@ -303,9 +327,13 @@ body {
                     // box-sizing: border-box;
                     overflow:hidden;
                     white-space:nowrap;
+                    &:hover {
+                        color: lighten(@purple, 20%);
+                    }
                 }
                 .atname {
-                    line-height: 22px;
+                    line-height: 0px;
+                    font-weight: 400;
                 }
             }
         }

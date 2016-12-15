@@ -1,6 +1,117 @@
 @import 'base';
 
+body {
+    background-color: @barely-not-white;
+}
 #feed {
+
+    .btn{
+        background-color:@dark-blue;
+        &:hover {
+            background-color: lighten(@dark-blue, 10%);
+        }
+    }
+    nav {
+        background-color: white;
+        height: 50px;
+        line-height: 50px;
+        .nav-wrapper {
+            margin-left: 240px;
+            margin-right: 200px;
+
+            .category-item {
+                height: 50px;
+                color: @lightish-gray;
+                &.active {
+                    color: @purple;
+                }
+            }
+            .category-button {
+                height: 30px;
+                button{
+                    i{
+                        line-height: 1.2em;
+                        margin-right:5px;
+                    }
+                }
+            }
+        }
+
+
+    }
+    .issue-item {
+
+        .picture {
+            background-color: @purple;
+            width: 200px;
+            height: 150px;
+            position: absolute;
+            float: left;
+        }
+        .content {
+            margin-left: 210px;
+            padding-top: 10px;
+            height: 150px;
+            text-align: left;
+            .text {
+                font-size: 12px;
+                color: @light-gray;
+            }
+            .issue-stats {
+                display: inline-block;
+                .stat {
+                    text-align: center;
+                    display: inline-block;
+                    margin-left: 10px;
+                    margin-right: 10px;
+                    width: 60px;
+                    .number {
+                        font-size: 16px;
+                        font-weight: 700;
+                        color: @purple;
+                    }
+                    .description {
+                        font-size: 12px;
+                        font-weight: 700;
+                        color: #dddddd;
+                    }
+                }
+                .vert-divider {
+                    display: inline-block;
+                    height: 30px;
+                    width: 1px;
+                    background-color: #dddddd;
+                }
+            }
+        }
+
+    }
+    .new-thread-wrapper{
+        height: 150px;
+        width: 150px;
+        background-color: #dddddd;
+        border-radius: 50%;
+        button {
+            width: 190px;
+            margin-left: -20px;
+            i {
+                margin-right:5px;
+            }
+        }
+    }
+    .issue-list {
+        .list{
+            .list-item {
+                margin-bottom: 10px;
+            }
+        }
+    }
+    .sort-options {
+        color: @light-gray;
+        .active {
+            color: @purple;
+        }
+    }
     .new-thread-modal-holder {
 
         .modal-content {

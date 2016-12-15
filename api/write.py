@@ -1,5 +1,6 @@
 import os, sys, json, pdb, random, hashlib,urllib2, pprint
 from models import Account, Category, Civi, Hashtag
+from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse, HttpResponseServerError, HttpResponseForbidden, HttpResponseBadRequest
 from utils.custom_decorators import require_post_params
 from django.contrib.auth.decorators import login_required
@@ -243,7 +244,7 @@ def clearProfileImage(request):
         return HttpResponseForbidden('allowed only via POST')
 # @login_required
 # @require_post_params(params=['friend'])
-# def requestFriend(request):
+# def requestFollow(request):
 #     '''
 #         USAGE:
 #             Takes in a user_id and sends your id to the users friend_requests list. No join
@@ -268,34 +269,68 @@ def clearProfileImage(request):
 #     except Exception as e:
 #         return HttpResponseServerError(reason=str(e))
 #
-# @login_required
-# @require_post_params(params=['friend'])
-# def acceptFriend(request):
-#     '''
-#         USAGE:
-#             Takes in user_id from current friend_requests list and joins accounts as friends.
-#             Does not join accounts as friends unless the POST friend is a valid member of the friend request array.
-#
-#         Text POST:
-#             friend
-#
-#         :return: (200, okay, list of friend information) (400, bad lookup) (500, error)
-#     '''
-#     try:
-#         account = Account.objects.get(user=request.user)
-#         stranger = Account.objects.get(id=request.POST.get('friend', -1))
-#
-#         if stranger_id not in account.friend_requests:
-#             raise Exception(reason="No request was sent from this person.")
-#
-#         account.friend_requests = [fr for fr in account.friend_requests if fr != stranger_id]
-#         account.friends.add(stranger)
-#         account.save()
-#         return JsonResponse({"result":Account.objects.serialize(account, "friends")})
-#     except Account.DoesNotExist as e:
-#         return HttpResponseBadRequest(reason=str(e))
-#     except Exception as e:
-#         return HttpResponseServerError(reason=str(e))
+@login_required
+@require_post_params(params=['target'])
+def requestFollow(request):
+    '''
+        USAGE:
+            Takes in user_id from current friend_requests list and joins accounts as friends.
+            Does not join accounts as friends unless the POST friend is a valid member of the friend request array.
+
+        Text POST:
+            friend
+
+        :return: (200, okay, list of friend information) (400, bad lookup) (500, error)
+    '''
+    if (request.user.username == request.POST.get('target', -1)):
+        return HttpResponseBadRequest(reason="You cannot follow yourself, silly!")
+
+    try:
+        account = Account.objects.get(user=request.user)
+        target = User.objects.get(username=request.POST.get('target', -1))
+        target_account = Account.objects.get(user=target)
+
+        account.following.add(target_account)
+        account.save()
+        target_account.followers.add(account)
+        target_account.save()
+        data = {
+            'username' : target.username,
+            'follow_status': True
+        }
+        return JsonResponse({"result": data})
+    except Account.DoesNotExist as e:
+        return HttpResponseBadRequest(reason=str(e))
+    except Exception as e:
+        return HttpResponseServerError(reason=str(e))
+
+@login_required
+@require_post_params(params=['target'])
+def requestUnfollow(request):
+    '''
+        USAGE:
+            Takes in user_id from current friend_requests list and joins accounts as friends.
+            Does not join accounts as friends unless the POST friend is a valid member of the friend request array.
+
+        Text POST:
+            friend
+
+        :return: (200, okay, list of friend information) (400, bad lookup) (500, error)
+    '''
+    try:
+        account = Account.objects.get(user=request.user)
+        target = User.objects.get(username=request.POST.get('target', -1))
+        target_account = Account.objects.get(user=target)
+
+        account.following.remove(target_account)
+        account.save()
+        target_account.followers.remove(account)
+        target_account.save()
+        return JsonResponse({"result": "Success"})
+    except Account.DoesNotExist as e:
+        return HttpResponseBadRequest(reason=str(e))
+    except Exception as e:
+        return HttpResponseServerError(reason=str(e))
 #
 # @login_required
 # @require_post_params(params=['friend'])
