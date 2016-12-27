@@ -1,5 +1,5 @@
 from django.http import JsonResponse, HttpResponseBadRequest
-from models import Account, Thread, Civi
+from models import Account, Thread, Civi, Representative
 #  Topic, Attachment, Category, Civi, Comment, Hashtag,
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
@@ -72,22 +72,25 @@ def get_profile(request, user):
         a = Account.objects.get(user=u)
         result = Account.objects.summarize(a)
 
-        # reps = ['W000812', 'C001049', 'B000575', 'M001170']
-        # rep_list = []
-        # for rep in reps:
-        #     json_data = open('fixtures/data/{}.json'.format(rep))
-        #     data = json.load(json_data)
-        #     r = dict(
-        #         profile_image = "https://theunitedstates.io/images/congress/450x550/{}.jpg".format(rep),
-        #         username= rep,
-        #         title= data['title'],
-        #         first_name= data['first_name'],
-        #         last_name= data['last_name'],
-        #         party= "Republican" if data['party']=="R" else "Democrat",
-        #         alignment= 0
-        #     )
-        #     json_data.close()
-        #     rep_list.append(json.dumps(r))
+        result['representatives'] = []
+        result['issues'] = ['''{"category": "category", "issue":"Example Issue that the User probably cares about" }''']*20
+        if request.user.username != user:
+            ra = Account.objects.get(user=request.user)
+            if user in ra.following.all():
+                result['follow_state'] = True
+            else:
+                result['follow_state'] = False
+        return JsonResponse(result)
+
+    except Account.DoesNotExist as e:
+        return HttpResponseBadRequest(reason=str(e))
+
+def get_rep(request, rep_id):
+    try:
+        # Federal Representatives only
+        u = Representative.objects.get(id=rep_id)
+        a = Account.objects.get(user=u)
+        result = Account.objects.summarize(a)
 
         result['representatives'] = []
         result['issues'] = ['''{"category": "category", "issue":"Example Issue that the User probably cares about" }''']*20

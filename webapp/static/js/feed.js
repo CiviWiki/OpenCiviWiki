@@ -1,4 +1,33 @@
 cw = cw || {};
+cw.ThreadModel = BB.Model.extend({
+    defaults: {
+
+    },
+
+    url: function () {
+        if (! this.threadId ) {
+            throw new Error("This is a race condition! and why we can't have nice things :(");
+        }
+        return '/api/thread_data/' + this.threadId + '/';
+    },
+
+    initialize: function (model, options) {
+        this.threadId = options.threadId;
+    }
+});
+
+cw.ResponseCollection = BB.Collection.extend({
+    url: function () {
+        if (! this.threadId ) {
+            throw new Error("This is a race condition! and why we can't have nice things :(");
+        }
+        return '/api/response_data/' + this.threadId + '/' + this.civiId + '/';
+    },
+    initialize: function (model, options) {
+        this.threadId = options.threadId;
+        this.civiId = null;
+    }
+});
 
 cw.FeedView = BB.View.extend({
     el: '#feed',
