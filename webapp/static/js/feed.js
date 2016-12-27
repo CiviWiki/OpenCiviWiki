@@ -79,7 +79,7 @@ cw.NewThreadView = BB.View.extend({
                 success: function () {
                     Materialize.toast('New thread created.', 2000);
                     _this.hide();
-                    _this.render()
+                    _this.render();
                 }
             });
         } else {

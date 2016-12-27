@@ -7,12 +7,14 @@ html {
     -webkit-font-smoothing: antialiased;
 }
 body {
-    background-color: #fbfafc;
+    background-color: #f7f6f8;
 }
 
 .floaty {
     z-index: 100; // FIXME: Temporary fix for now
 }
+
+// CIRCULAR IMAGE CROPPERS =====================================================
 .big-image-cropper{
     border: 5px solid white;
     width: 171px;
@@ -44,6 +46,7 @@ body {
     border-radius: 50%;
 }
 
+// COMMON COMPONENTS ===========================================================
 .user-card {
     position: absolute;
     width: 300px;
@@ -97,6 +100,7 @@ body {
 
     }
 }
+
 .btn{
     font-size: 13px;
     background-color: @dark-blue;
@@ -113,14 +117,16 @@ body {
     color: @blue;
     box-shadow: none;
     line-height: 34px;
-
+    font-weight: 400;
     &:hover {
         box-shadow: none;
         background-color: rgba(0,0,0,0);
-        border: 1px solid @dark-blue;
-        color: @dark-blue;
+        border: 1px solid darken(@blue, 10%);
+        color: darken(@blue, 10%);
     }
+
     &.follow-btn{
+
         &::after {
         content: "FOLLOWING";
         }
@@ -132,13 +138,27 @@ body {
     }
 }
 
-//     img {
-//     display: inline;
-//     height: 100%;
-//     width: auto;
-// }
+// ACCOUNT PAGE STYLING ========================================================
 
 #account {
+    z-index: 1;
+    .scroll-col {
+        overflow-y: auto;
+        &::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background-color: @dark-white;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: @light-gray;
+            margin-top: 4px;
+            margin-bottom: 4px;
+        }
+
+    }
     .no-state {
         background-color: @white;
         border: 2px @lightish-gray;
@@ -162,11 +182,11 @@ body {
             }
 
         }
-
     }
     .top-bar {
-        height: 35px;
+        height: 32px;
         margin-bottom: 0px;
+        z-index: 2;
         .logo-container {
             height: inherit;
             text-align: center;
@@ -182,14 +202,13 @@ body {
                 letter-spacing: 0.01em;
             }
         }
-
         .account-tabs {
             height: inherit;
             .tabs {
                 height: inherit;
                 .tab {
                     height: inherit;
-                    line-height: 34px;
+                    line-height: 32px;
                     a {
                         color: @white;
                         text-transform: capitalize;
@@ -206,6 +225,25 @@ body {
                     i {
                         vertical-align: middle;
                         margin: 5px;
+                    }
+                }
+                .settings-tab {
+                    padding: 4px;
+                    .btn{
+                        background-color: @light-purple;
+                        color: @white;
+                        font-size: 10px;
+                        line-height: 24px;
+                        padding: 0 .5rem;
+                        &:hover {
+                            background-color: lighten(@light-purple, 5%);
+                            color: @white;
+                        }
+                        i {
+                            margin: 0 .1em;
+                            vertical-align: middle;
+                            font-size: 16px;
+                        }
                     }
 
                 }
@@ -225,16 +263,9 @@ body {
                 text-align: center;
                 margin: 5px;
 
-                // a.btn{
-                //     font-size: 13px;
-                //     background-color: @dark-blue;
-                //     &:hover {
-                //         background-color: @blue;
-                //     }
-                //     i {
-                //         margin-right: 5px;
-                //     }
-                // }
+                a.btn{
+                    width: 100%;
+                }
             }
             .card-image {
                 text-align: center;

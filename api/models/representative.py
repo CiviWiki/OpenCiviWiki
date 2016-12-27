@@ -19,5 +19,7 @@ class Representative(models.Model):
 
     party = models.CharField(max_length=127)
 
+    bioguideID = models.CharField(max_length=7, blank=True, null=True)
+
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     last_modified = models.DateTimeField(auto_now=True, blank=True, null=True)

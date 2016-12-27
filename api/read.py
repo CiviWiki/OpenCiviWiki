@@ -102,6 +102,17 @@ def get_profile(request, user):
     except Account.DoesNotExist as e:
         return HttpResponseBadRequest(reason=str(e))
 
+def get_feed(request):
+    try:
+        t = Thread.objects.all().values()
+        data = {
+            'threads': t
+        }
+        return json_response(data)
+
+    except Exception as e:
+        return HttpResponseBadRequest(reason=str(e))
+
 def get_thread(request, thread_id):
     try:
         t = Thread.objects.get(id=thread_id)
@@ -114,7 +125,7 @@ def get_thread(request, thread_id):
             'summary': t.summary,
             'hashtags': t.hashtags.all().values(),
             'author': 'a',#model_to_dict(t.author), // TODO: Fix This
-            'category': 'c',#model_to_dict(t.category),  // TODO: Fix This
+            'category': model_to_dict(t.category),  # TODO: Fix This
             'created': t.created,
             'problems': problems,
             'causes': causes,
