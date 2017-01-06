@@ -23,7 +23,7 @@ def new_thread(request):
     t = Thread(title=request.POST['title'], summary=request.POST['summary'], category_id=request.POST['category_id'], author_id=request.user.id)
     t.save()
 
-    return JsonResponse({'data': 'success'})
+    return JsonResponse({'data': 'success', 'thread_id' : t.pk})
 
 # @login_required
 # @transaction.atomic
@@ -331,7 +331,31 @@ def requestUnfollow(request):
         return HttpResponseBadRequest(reason=str(e))
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
-#
+
+
+@login_required
+def editUserCategories(request):
+    '''
+        USAGE:
+            Edits list of categories for the user
+
+    '''
+    try:
+        account = Account.objects.get(user=request.user)
+        categories = [int(i) for i in request.POST.getlist('categories[]')]
+        account.categories.clear()
+        for category in categories:
+            account.categories.add(Category.objects.get(id=category))
+            account.save()
+
+        data = {
+            'user_categories' : list(account.categories.values_list('id', flat=True)) or all_categories
+        }
+        return JsonResponse({"result": data})
+    except Account.DoesNotExist as e:
+        return HttpResponseBadRequest(reason=str(e))
+    except Exception as e:
+        return HttpResponseServerError(reason=str(e))
 # @login_required
 # @require_post_params(params=['friend'])
 # def rejectFriend(request):

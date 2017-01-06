@@ -3,6 +3,7 @@ from django.utils.deconstruct import deconstructible
 from django.db import models
 from django.conf import settings
 from hashtag import Hashtag
+from category import Category
 
 import json
 import os
@@ -83,6 +84,7 @@ class Account(models.Model):
     fed_district = models.CharField(max_length=63, default=None, null=True)
     state_district = models.CharField(max_length=63, default=None, null=True)
 
+    categories = models.ManyToManyField(Category, related_name='user_categories', symmetrical=False)
     interests = models.ManyToManyField(Hashtag, related_name='interests')
     ai_interests = models.ManyToManyField(Hashtag, related_name='ai_interests')
 

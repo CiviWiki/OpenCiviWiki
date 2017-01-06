@@ -1,185 +1,69 @@
 {% verbatim %}
 <nav>
     <div class="nav-wrapper">
-      <ul class="center-block">
-        <li><a href="" class="category-item active">All</a></li>
-        <li><a href="" class="category-item">Public Safety</a></li>
-        <li><a href="" class="category-item">Environment</a></li>
-        <li><a href="" class="category-item">Health</a></li>
-      </ul>
-      <div class="category-button right">
-          <button class="btn waves-effect waves-light"><i class="tiny material-icons left">apps</i>MANAGE</button>
-      </div>
+        <div class="row">
+            <div class="logo-container col m2 push-m1 l2 push-l1 hide-on-small-only">
+                <div class="logo">CiviWiki</div>
+            </div>
+            <div class="col s10 m8 push-m1 l7 push-l1 nav-categories nav-item">
+                <ul class="center-block" id="user-categories-list">
+                    <li class="category-all"><a class="category-item active" data-id="all" >All</a></li>
+                    {{# _.each(user_categories, function (c) {}}
+                        <li class="user-categories"><a class="category-item" data-id="{{ c.id }}" >{{ c.name }}</a></li>
+                    {{# }, user_categories); }}
+
+                    <li class="dropdown-wrapper" ><a class="dropdown-button category-item" data-activates="categories-dropdown" data-beloworigin="true" data-constrainwidth="false" data-hover="true"  data-id="arrow"><i class="material-icons">arrow_drop_down</i></a></li>
+
+                </ul>
+                <ul id="categories-dropdown" class="dropdown-content"></ul>
+
+            </div>
+            <div class="col s2 m1 push-m1 l1 push-l1 nav-item">
+                <div class="category-button right">
+                    <button class="btn waves-effect waves-cw-blue btn-secondary">
+                        <i class="tiny material-icons left">label</i>
+                        <span class="hide-on-med-and-down">MANAGE</span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
     </div>
 </nav>
 <div class="content">
-    <div class="container">
-        <div class="row section">
-            <div class="col s4">
-                <div class="row center">
+    <div class="row">
+        <div class="col s12 m3 l2 push-l1">
+            <div class="row center">
+                <div class="col s6 m12">
                     <div class="new-thread-wrapper center-block">
-                            <div class="subtitle-lato">
-                                Can't find the Issue that you're interested in?
-                            </div>
-                            <button class="new-thread btn waves-effect modal-trigger ">
-                                <i class="material-icons left">note_add</i>
-                                New Thread
-                            </button>
+                        <div class="prompt">Can't find the issue that you're interested in?</div>
+                        <button class="new-thread btn waves-effect modal-trigger"><i class="material-icons left">note_add</i>New Thread</button>
                     </div>
-                    <div class="issue-list container">
+                </div>
+                <div class="col s6 m12">
+                    <div class="issue-list center-block">
                         <div class="section">
-                            <div class="list-title subtitle-lato">
-                                <i class="mini material-icons">trending_up</i> Trending Issues
+                            <div class="list-title">
+                                <i class="mini material-icons">trending_up</i>Trending Issues
                             </div>
                             <div class="divider"></div>
                             <div class="list">
-                                <div class="list-item link-lato left-align">A Trending Issue with Lots of Activity</div>
-                                <div class="list-item link-lato left-align">Another Trending Issue with Lots of Activity</div>
-                                <div class="list-item link-lato left-align">Controversial Issue with Deep Discussion</div>
-                                <div class="list-item link-lato left-align">An Issue That is Very Important</div>
-                            </div>
-                        </div>
-
-
-                    </div>
-                </div>
-            </div>
-            <div class="col s8">
-                <div class="sort-options row">
-                    <div class="options">
-                        <span class="active">Recommended</span>
-                        <span >Top</span>
-                        <span>New</span>
-                    </div>
-                </div>
-                <div class="list">
-                    <div class="issue-item card white z-index-1">
-                        <div class="picture" ></div>
-                        <div class="content">
-                            <div class="gray-text">
-                                Public Safety
-                            </div>
-                            <div class="subtitle-lato">
-                                Example Title
-                            </div>
-                            <div class="text">
-                                Example content goes in here that is basically the summary for the particular issue article. ABC 123 This is an example card for an article
-                            </div>
-                            <div class="issue-stats">
-                                <div class="stat">
-                                    <div class="number">999</div>
-                                    <div class="description">VIEWS</div>
-                                </div>
-                                <div class="vert-divider"></div>
-                                <div class="stat">
-                                    <div class="number">123</div>
-                                    <div class="description">CIVIS</div>
-                                </div>
-                                <div class="vert-divider"></div>
-                                <div class="stat">
-                                    <div class="number">42</div>
-                                    <div class="description">SOLUTIONS</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="issue-item card white z-index-1">
-                        <div class="picture" ></div>
-                        <div class="content">
-                            <div class="gray-text">
-                                Public Safety
-                            </div>
-                            <div class="subtitle-lato">
-                                Example Title
-                            </div>
-                            <div class="text">
-                                Example content goes in here that is basically the summary for the particular issue article. ABC 123 This is an example card for an article
-                            </div>
-                            <div class="issue-stats">
-                                <div class="stat">
-                                    <div class="number">999</div>
-                                    <div class="description">VIEWS</div>
-                                </div>
-                                <div class="vert-divider"></div>
-                                <div class="stat">
-                                    <div class="number">123</div>
-                                    <div class="description">CIVIS</div>
-                                </div>
-                                <div class="vert-divider"></div>
-                                <div class="stat">
-                                    <div class="number">42</div>
-                                    <div class="description">SOLUTIONS</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="issue-item card white z-index-1">
-                        <div class="picture" ></div>
-                        <div class="content">
-                            <div class="gray-text">
-                                Public Safety
-                            </div>
-                            <div class="subtitle-lato">
-                                Example Title
-                            </div>
-                            <div class="text">
-                                Example content goes in here that is basically the summary for the particular issue article. ABC 123 This is an example card for an article
-                            </div>
-                            <div class="issue-stats">
-                                <div class="stat">
-                                    <div class="number">999</div>
-                                    <div class="description">VIEWS</div>
-                                </div>
-                                <div class="vert-divider"></div>
-                                <div class="stat">
-                                    <div class="number">123</div>
-                                    <div class="description">CIVIS</div>
-                                </div>
-                                <div class="vert-divider"></div>
-                                <div class="stat">
-                                    <div class="number">42</div>
-                                    <div class="description">SOLUTIONS</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="issue-item card white z-index-1">
-                        <div class="picture" ></div>
-                        <div class="content">
-                            <div class="gray-text">
-                                Public Safety
-                            </div>
-                            <div class="subtitle-lato">
-                                Example Title
-                            </div>
-                            <div class="text">
-                                Example content goes in here that is basically the summary for the particular issue article. ABC 123 This is an example card for an article
-                            </div>
-                            <div class="issue-stats">
-                                <div class="stat">
-                                    <div class="number">999</div>
-                                    <div class="description">VIEWS</div>
-                                </div>
-                                <div class="vert-divider"></div>
-                                <div class="stat">
-                                    <div class="number">123</div>
-                                    <div class="description">CIVIS</div>
-                                </div>
-                                <div class="vert-divider"></div>
-                                <div class="stat">
-                                    <div class="number">42</div>
-                                    <div class="description">SOLUTIONS</div>
-                                </div>
+                                {{# _.each(trending, function (t) {}}
+                                    <div class="list-item left-align"><a class="list-text" href="thread/{{t.id}}">{{t.title}}</a></div>
+                                {{# }, this); }}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="col s12 m9 l8 push-l1 scroll-col">
+            <div class="list" id="feed-list"></div>
+        </div>
     </div>
 </div>
 
 
-<div class="new-thread-modal-holder">
-</div>
+<div class="new-thread-modal-holder"></div>
+<div class="categories-modal-holder"></div>
 {% endverbatim %}

@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^clear_profile/$',write.clearProfileImage, name='clear profile'),
     url(r'^follow/$', write.requestFollow, name='follow user'),
     url(r'^unfollow/$', write.requestUnfollow, name='unfollow user'),
+    url(r'^edit_user_categories/$', write.editUserCategories, name='edit user categories'),
     # url(r'^requestfriend$',write.requestFriend, name='request friend'),
     # url(r'^acceptfriend$',write.acceptFriend, name='accept friend'),
     # url(r'^removefriend$',write.removeFriend, name='remove friend'),
