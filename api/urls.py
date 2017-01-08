@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'^response_data/(?P<thread_id>\w+)/(?P<civi_id>\w+)/$', read.get_responses, name='get responses'),
     url(r'^feed/$', read.get_feed, name='get thread'),
     url(r'^new_thread/$', write.new_thread, name='new thread'),
+    url(r'^new_civi/$', write.createCivi, name='new civi'),
 
     # url(r'^getblock$', read.getBlock, name='get block'),
     # url(r'^creategroup$', write.createGroup, name='add group'),

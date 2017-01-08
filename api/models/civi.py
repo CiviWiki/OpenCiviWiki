@@ -23,7 +23,7 @@ class CiviManager(models.Manager):
             "title": civi.title,
             "body": civi.body,
             "attachments": [],
-            "author": dict(username=civi.author.user.username, profile_image=civi.author.profile_image.url),
+            "author": dict(username=civi.author.user.username, profile_image=civi.author.profile_image.url, first_name=civi.author.first_name, last_name=civi.author.last_name),
             "hashtags": [h.title for h in civi.hashtags.all()],
             "created": "{0} {1}, {2}".format(month_name[civi.created.month], civi.created.day, civi.created.year),
             "ratings": [r.randint(0,50) for x in range(5)], #TODO: real points
@@ -43,7 +43,7 @@ class Civi(models.Model):
 
     hashtags = models.ManyToManyField(Hashtag)
 
-    links = models.ManyToManyField('self')
+    links = models.ManyToManyField('self', symmetrical=False)
 
     title = models.CharField(max_length=127)
     body = models.CharField(max_length=4095)
@@ -52,6 +52,7 @@ class Civi(models.Model):
         ('problem', 'Problem'),
         ('cause', 'Cause'),
         ('solution', 'Solution'),
+        ('response', 'Response'),
     )
     c_type = models.CharField(max_length=31, default='problem', choices=c_CHOICES)
 

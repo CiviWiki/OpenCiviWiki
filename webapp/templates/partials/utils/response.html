@@ -20,43 +20,17 @@
         <div class="civi-body-inner">
             {{body}}
         </div>
-        <div class="attachments">
-            <div class="attachments-title gray-text">
-                ATTACHMENTS ({{attachments.length}})
-            </div>
-            {{# _.each(attachments, function (a) { }}
-                <span>{{a}}</span>
-            {{# }); }}
-        </div>
-        <div class="rating">
-            <button class="btn waves-effect rating-button">
-                <i class="tiny-for-button material-icons">thumb_down</i>
-                <i class="tiny-for-button material-icons">thumb_down</i>
-            </button>
-            <button class="btn waves-effect rating-button">
-                <i class="tiny-for-button material-icons">thumb_down</i>
-            </button>
-            <button class="btn waves-effect rating-button">
-                <i class="tiny-for-button material-icons">remove</i>
-            </button>
-            <button class="btn waves-effect rating-button">
-                <i class="tiny-for-button material-icons">thumb_up</i>
-            </button>
-            <button class="btn waves-effect rating-button">
-                <i class="tiny-for-button material-icons">thumb_up</i>
-                <i class="tiny-for-button material-icons">thumb_up</i>
-            </button>
-        </div>
+
     </div>
     <div class="civi-footer">
         <div class="author-photo-holder">
-            <div class="author-photo">
+            <div class="author-photo transparent" style="background-image: url('{{author.profile_image}}'); background-size: 34px;">
 
             </div>
         </div>
         <div class="author-info">
             <div class="author-name purple-text bold-text">
-                {{author}}
+                {{author.first_name}} {{author.last_name}}
             </div>
             <div class="created gray-text">
                 {{created}}

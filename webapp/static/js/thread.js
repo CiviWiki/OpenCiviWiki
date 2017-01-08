@@ -8,6 +8,17 @@ cw.ThreadModel = BB.Model.extend({
         return '/api/thread_data/' + this.threadId + '/';
     },
 
+    parse: function(data){
+        var parsed_problems = _.map(data.problems, function(c){return JSON.parse(c);});
+        var parsed_causes = _.map(data.causes, function(c){return JSON.parse(c);});
+        var parsed_solutions = _.map(data.solutions, function(c){return JSON.parse(c);});
+        data.problems = parsed_problems;
+        data.causes = parsed_causes;
+        data.solutions = parsed_solutions;
+
+        return data;
+    },
+
     initialize: function (model, options) {
         this.threadId = options.threadId;
     }
@@ -20,6 +31,12 @@ cw.ResponseCollection = BB.Collection.extend({
         }
         return '/api/response_data/' + this.threadId + '/' + this.civiId + '/';
     },
+    //
+    parse: function(data){
+        var parsed_data= _.map(data, function(c){return JSON.parse(c);});
+    
+        return parsed_data;
+    },
 
     initialize: function (model, options) {
         this.threadId = options.threadId;
@@ -31,7 +48,8 @@ cw.NewCiviView = BB.View.extend({
     el: '.new-civi-modal-holder',
     template: _.template($('#new-civi-template').html()),
 
-    initialize: function () {
+    initialize: function (options) {
+        this.options = options || {};
         this.render();
     },
 
@@ -59,6 +77,33 @@ cw.NewCiviView = BB.View.extend({
 
     createCivi: function () {
         this.hide();
+        var _this = this;
+
+        var title = this.$el.find('#civi-title').val(),
+            body = this.$el.find('#civi-body').val(),
+            c_type = this.$el.find('.civi-types > .current').val();
+
+        console.log(title, body, c_type);
+        if (title && body && c_type) {
+            $.ajax({
+                url: '/api/new_civi/',
+                type: 'POST',
+                data: {
+                    title: title,
+                    body: body,
+                    c_type: c_type,
+                    thread_id: this.model.threadId
+                },
+                success: function (response) {
+                    Materialize.toast('New civi created.', 2000);
+                    // var new_civi = response.data;
+                    _this.model.fetch();
+                    _this.options.parentView.scrollToWiki(); // HACK: this fixes big scroll, annoying? yes
+                }
+            });
+        } else {
+            Materialize.toast('Please input all fields.', 2000);
+        }
     },
 
     clickType: function (e) {
@@ -67,6 +112,57 @@ cw.NewCiviView = BB.View.extend({
         $this.addClass('current');
         $this.siblings().removeClass('current');
     },
+});
+
+cw.NewResponseView = BB.View.extend({
+    el: '.new-response-modal-holder',
+    template: _.template($('#new-response-template').html()),
+
+    initialize: function (options) {
+        this.options = options || {};
+        this.render();
+    },
+
+    render: function () {
+        this.$el.empty().append(this.template());
+    },
+
+    events: {
+        'click .create-new-response': 'createResponse',
+    },
+
+    show: function () {
+        this.$('.new-response-modal').openModal();
+    },
+
+    createResponse: function () {
+        var _this = this;
+
+        var title = this.$('#response-title').val(),
+            body = this.$('#response-body').val();
+
+        if (title && body) {
+            $.ajax({
+                url: '/api/new_civi/',
+                type: 'POST',
+                data: {
+                    title: title,
+                    body: body,
+                    c_type: 'response',
+                    thread_id: this.model.threadId,
+                    related_civi: this.options.parentView.currentCivi
+                },
+                success: function (response) {
+                    Materialize.toast('New response created.', 2000);
+                    // var new_civi = response.data;
+                    _this.model.fetch();
+                    _this.options.parentView.scrollToWiki(); // HACK: this fixes big scroll, annoying? yes
+                }
+            });
+        } else {
+            Materialize.toast('Please input all fields.', 2000);
+        }
+    }
 });
 
 cw.ThreadView = BB.View.extend({
@@ -96,7 +192,13 @@ cw.ThreadView = BB.View.extend({
         this.$el.empty().append(this.template());
 
         this.newCiviView = new cw.NewCiviView({
-            model: this.model
+            model: this.model,
+            parentView: this
+        });
+
+        this.newResponseView = new cw.NewResponseView({
+            model: this.model,
+            parentView: this
         });
     },
 
@@ -178,7 +280,8 @@ cw.ThreadView = BB.View.extend({
         'click .rating-button': 'clickRating',
         'click .favorite': 'clickFavorite',
         'click .civi-grab-link': 'grabLink',
-        'click .add-civi': 'openNewCiviModal'
+        'click .add-civi': 'openNewCiviModal',
+        'click .add-response': 'openNewResponseModal'
     },
 
     scrollToBody: function () {
@@ -189,7 +292,7 @@ cw.ThreadView = BB.View.extend({
 
         $('body').animate({
             scrollTop: $('.thread-body-holder').offset().top
-        }, 1000);
+        }, 200);
 
         var $civiNavScroll = this.$('.civi-outline');
         $civiNavScroll.css({height: $('body').height() - $civiNavScroll.offset().top});
@@ -216,7 +319,7 @@ cw.ThreadView = BB.View.extend({
 
         $('body').animate({
             scrollTop: 0
-        }, 1000, function () {
+        }, 200, function () {
             _this.$('.thread-body-holder').css({display: 'none'});
         });
         $('body').css({overflow: 'scroll'});
@@ -257,8 +360,9 @@ cw.ThreadView = BB.View.extend({
 
                 this.currentCivi = $newCivi.attr('data-civi-id');
 
-                this.responseCollection.civiId = this.currentCivi
+                this.responseCollection.civiId = this.currentCivi;
                 this.responseCollection.fetch();
+
             } else {
                 $currentCivi.removeClass('current');
 
@@ -291,6 +395,10 @@ cw.ThreadView = BB.View.extend({
 
     openNewCiviModal: function () {
         this.newCiviView.show();
+    },
+
+    openNewResponseModal: function () {
+        this.newResponseView.show();
     }
 
 });

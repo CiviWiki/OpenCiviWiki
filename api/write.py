@@ -82,65 +82,48 @@ def new_thread(request):
 #     except Exception as e:
 #         return HttpResponseServerError(reason=e)
 #
-# @login_required
-# @require_post_params(params=['group', 'creator', 'topic', 'category', 'title', 'body', 'type'])
-# def createCivi(request):
-#     '''
-#     USAGE:
-#         use this function to insert a new connected civi into the database.
-#
-#     Text POST:
-#         group
-#         creator
-#         topic
-#         category
-#         title
-#         body
-#         type
-#         reference (optional)
-#         at (optional)
-#         and_negative (optional)
-#         and_positive (optional)
-#
-#     :return: (200, ok) (400, missing required parameter) (500, internal error)
-#     '''
-#     civi = Civi()
-#     data = {
-#         'group_id': request.POST.get('group', ''),
-#         'creator_id': request.POST.get('creator', ''),
-#         'topic_id': request.POST.get('topic', ''),
-#         'title': request.POST.get('title', ''),
-#         'body': request.POST.get('body', ''),
-#         'type': request.POST.get('type', ''),
-#         'visits': 0,
-#         'votes_neutral': 0,
-#         'votes_positive1': 0,
-#         'votes_positive2': 0,
-#         'votes_negative1': 0,
-#         'votes_negative2': 0,
-#         'reference_id': request.POST.get('reference', ''),
-#         'at_id': request.POST.get('at', ''),
-#         'and_negative_id': request.POST.get('and_negative', ''),
-#         'and_positive_id': request.POST.get('and_positive', ''),
-#     }
-#     try:
-#         civi = Civi(**data)
-#
-#         hashtags = request.POST.get('hashtags', '')
-#         split = [x.strip() for x in hashtags.split(',')]
-#         for str in split:
-#             if not Hashtag.objects.filter(title=str).exists():
-#                 hash = Hashtag(title=str)
-#                 hash.save()
-#             else:
-#                 hash = Hashtag.objects.get(title=str)
-#
-#             civi.hashtags.add(hash.id)
-#         civi.save()
-#         return HttpResponse()
-#     except Exception as e:
-#         return HttpResponseServerError(reason=str(e))
-#
+@login_required
+@require_post_params(params=['title', 'body', 'c_type', 'thread_id'])
+def createCivi(request):
+    '''
+    USAGE:
+        use this function to insert a new connected civi into the database.
+
+    :return: (200, ok) (400, missing required parameter) (500, internal error)
+    '''
+
+
+    data = {
+        'author': Account.objects.get(user=request.user),
+        'title': request.POST.get('title', ''),
+        'body': request.POST.get('body', ''),
+        'c_type': request.POST.get('c_type', ''),
+        'thread': Thread.objects.get(id=request.POST.get('thread_id'))
+    }
+
+    try:
+        civi = Civi(**data)
+        civi.save()
+        # hashtags = request.POST.get('hashtags', '')
+        # split = [x.strip() for x in hashtags.split(',')]
+        # for str in split:
+        #     if not Hashtag.objects.filter(title=str).exists():
+        #         hash = Hashtag(title=str)
+        #         hash.save()
+        #     else:
+        #         hash = Hashtag.objects.get(title=str)
+        #
+        #     civi.hashtags.add(hash.id)
+
+        related_civi = request.POST.get('related_civi', '')
+        if related_civi:
+            parent_civi = Civi.objects.get(id=related_civi)
+            parent_civi.links.add(civi)
+
+        return JsonResponse({'data' : Civi.objects.serialize(civi)})
+    except Exception as e:
+        return HttpResponseServerError(reason=str(e))
+
 
 #TODO 1: profile image file upload
 #TODO 2: redo user editing

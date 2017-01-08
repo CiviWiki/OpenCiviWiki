@@ -26,7 +26,7 @@ def base_view(request):
     all_categories = list(Category.objects.values_list('id', flat=True))
     user_categories = list(a.categories.values_list('id', flat=True)) or all_categories
 
-    feed_threads = [Thread.objects.summarize(t) for t in Thread.objects.filter_by_category(user_categories).order_by('-created')]
+    feed_threads = [Thread.objects.summarize(t) for t in Thread.objects.order_by('-created')]
     top5_threads = list(Thread.objects.all().order_by('-num_views')[:5].values('id', 'title'))
 
     data = dict(
