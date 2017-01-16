@@ -18,7 +18,7 @@ class AccountManager(models.Manager):
             "about_me": account.about_me,
             "location": account.get_location(),
             "history": [Civi.objects.serialize(c) for c in Civi.objects.filter(author_id=account.id).order_by('-created')],
-            "profile_image": account.profile_image.url,
+            "profile_image": account.profile_image.url if account.profile_image else "/media/profile/default.png",
             "followers": self.followers(account),
             "following": self.following(account),
         }
@@ -29,7 +29,7 @@ class AccountManager(models.Manager):
             "username": account.user.username,
             "first_name": account.first_name,
             "last_name": account.last_name,
-            "profile_image": account.profile_image.url,
+            "profile_image": account.profile_image.url if account.profile_image else "/media/profile/default.png",
         }
         return json.dumps(data)
 
@@ -41,7 +41,7 @@ class AccountManager(models.Manager):
             "last_name": account.last_name,
             "about_me": account.about_me[:150] + ('' if len(account.about_me) <= 150 else '...'),
             "location": account.get_location(),
-            "profile_image": account.profile_image.url,
+            "profile_image": account.profile_image.url if account.profile_image else "/media/profile/default.png",
             "follow_state": True if account in request_account.following.all() else False,
             "request_account": request_account.first_name
         }
@@ -95,7 +95,7 @@ class Account(models.Model):
     full_account = models.BooleanField(default=False)
 
     objects = AccountManager()
-    profile_image = models.ImageField(upload_to=profile_upload_path, blank=True, null=True, default='profile/default.png')
+    profile_image = models.ImageField(upload_to=profile_upload_path, blank=True, null=True)
 
     #custom "row-level" functionality (properties) for account models
     def get_location(self):

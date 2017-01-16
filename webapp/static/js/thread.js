@@ -1,5 +1,109 @@
 cw = cw || {};
 
+cw.CiviModel = BB.Model.extend({
+    defaults: function(){
+        return {
+            id: '', //id from server. Client id is under cid
+            thread_id: '',
+            type: "Civi Type",
+            title: "Civi Title",
+            body: "Civi Body",
+            author: {
+                "username": "None",
+                "profile_image": "/media/profile/default.png",
+                "first_name": "None",
+                "last_name": "None",
+            },
+            votes: {
+                "votes_vneg": 0,
+                "votes_neg": 0,
+                "votes_neutral": 0,
+                "votes_pos": 0,
+                "votes_vpos": 0
+            },
+            attachments: [],
+            hashtags: [],
+            created: "No Date"
+        };
+    },
+
+    url: function () {
+        if ( !this.id ) {
+            throw new Error("This is a race condition! and why we can't have nice things :(");
+        }
+        return '/api/civi_data/' + this.id + '/';
+    },
+
+    initialize: function (model, options) {
+        options = options || {};
+    //     this.set({
+    //        ratings: r,
+    //        author: a,
+    //        attachments: a
+    //    });
+    },
+
+    save: function(attrs, options) { // TODO: Remove this after implementing django REST framework
+        options = options || {};
+
+        options.type = 'POST';
+        if (!options.url) {
+            options.url = '/api/editcivi/' + this.id + '/';
+        }
+        return Backbone.Model.prototype.save.call(this, attrs, options);
+    },
+
+    //TODO: validate: function()
+
+    vote: function (vote_type){
+
+    },
+});
+
+cw.CiviCollection = BB.Collection.extend({
+    model: cw.CiviModel,
+
+    url: function () {
+        if (! this.threadId ) {
+            throw new Error("This is a race condition! and why we can't have nice things :(");
+        }
+        return '/api/civi/' + this.threadId + '/';
+    },
+
+    initialize: function (model, options) {
+        options = options || {};
+        this.threadId = options.threadId;
+    },
+    //
+    // filterCategory: function (category_id) {
+    //     var filtered = this.models.filter(function (thread_data) {
+    //         return thread_data.get("thread").category_id === category_id;
+    //     });
+    //     return filtered;
+    // },
+});
+
+cw.ResponseCollection = BB.Collection.extend({
+    url: function () {
+        if (! this.threadId ) {
+            throw new Error("This is a race condition! and why we can't have nice things :(");
+        }
+        return '/api/response_data/' + this.threadId + '/' + this.civiId + '/';
+    },
+    //
+    parse: function(data){
+        var parsed_data= _.map(data, function(c){return JSON.parse(c);});
+
+        return parsed_data;
+    },
+
+    initialize: function (model, options) {
+        this.threadId = options.threadId;
+        this.civiId = null;
+    }
+});
+
+
 cw.ThreadModel = BB.Model.extend({
     url: function () {
         if (! this.threadId ) {
@@ -9,6 +113,7 @@ cw.ThreadModel = BB.Model.extend({
     },
 
     parse: function(data){
+        // TODO: remove this mess
         var parsed_problems = _.map(data.problems, function(c){return JSON.parse(c);});
         var parsed_causes = _.map(data.causes, function(c){return JSON.parse(c);});
         var parsed_solutions = _.map(data.solutions, function(c){return JSON.parse(c);});
@@ -24,25 +129,6 @@ cw.ThreadModel = BB.Model.extend({
     }
 });
 
-cw.ResponseCollection = BB.Collection.extend({
-    url: function () {
-        if (! this.threadId ) {
-            throw new Error("This is a race condition! and why we can't have nice things :(");
-        }
-        return '/api/response_data/' + this.threadId + '/' + this.civiId + '/';
-    },
-    //
-    parse: function(data){
-        var parsed_data= _.map(data, function(c){return JSON.parse(c);});
-    
-        return parsed_data;
-    },
-
-    initialize: function (model, options) {
-        this.threadId = options.threadId;
-        this.civiId = null;
-    }
-});
 
 cw.NewCiviView = BB.View.extend({
     el: '.new-civi-modal-holder',
@@ -55,6 +141,41 @@ cw.NewCiviView = BB.View.extend({
 
     render: function () {
         this.$el.empty().append(this.template());
+        this.renderMagicSuggest();
+    },
+
+    renderMagicSuggest: function() {
+        var _this = this;
+
+        this.ms = this.$('#magicsuggest').magicSuggest({
+            allowFreeEntries: false,
+            groupBy: 'type',
+            valueField: 'id',
+            displayField: 'title',
+            data: [],
+            renderer: function(data){
+                return '<div class="link-lato" data-civi-id="' + data.id +
+                '"><span class="gray-text">'+data.type+'</span> ' + data.title + '</div>';
+            },
+            selectionRenderer: function(data){
+                return '<span class="gray-text bold-text">'+data.type.toUpperCase() +'</span> '  + data.title;
+            },
+        });
+    },
+
+    selectData: function() {
+        var _this = this;
+        var c_type = this.$el.find('.civi-types > .current').val();
+        var linkableCivis = [];
+        if (c_type == 'problem') {
+            linkableCivis = _this.options.parentView.model.get('causes');
+        } else if (c_type == 'cause') {
+            linkableCivis = _.union(_this.options.parentView.model.get('problems'),
+            _this.options.parentView.model.get('solutions'));
+        } else if  (c_type == 'solution') {
+            linkableCivis = _this.options.parentView.model.get('causes');
+        }
+        this.ms.setData(linkableCivis);
     },
 
     show: function () {
@@ -82,8 +203,8 @@ cw.NewCiviView = BB.View.extend({
         var title = this.$el.find('#civi-title').val(),
             body = this.$el.find('#civi-body').val(),
             c_type = this.$el.find('.civi-types > .current').val();
+        var links = this.ms.getValue();
 
-        console.log(title, body, c_type);
         if (title && body && c_type) {
             $.ajax({
                 url: '/api/new_civi/',
@@ -92,13 +213,17 @@ cw.NewCiviView = BB.View.extend({
                     title: title,
                     body: body,
                     c_type: c_type,
-                    thread_id: this.model.threadId
+                    thread_id: this.model.threadId,
+                    links: links
                 },
                 success: function (response) {
                     Materialize.toast('New civi created.', 2000);
                     // var new_civi = response.data;
+                    _this.render();
                     _this.model.fetch();
-                    _this.options.parentView.scrollToWiki(); // HACK: this fixes big scroll, annoying? yes
+
+                    $('body').css({overflow: 'hidden'});
+
                 }
             });
         } else {
@@ -111,6 +236,8 @@ cw.NewCiviView = BB.View.extend({
 
         $this.addClass('current');
         $this.siblings().removeClass('current');
+
+        this.selectData();
     },
 });
 
@@ -155,8 +282,10 @@ cw.NewResponseView = BB.View.extend({
                 success: function (response) {
                     Materialize.toast('New response created.', 2000);
                     // var new_civi = response.data;
-                    _this.model.fetch();
-                    _this.options.parentView.scrollToWiki(); // HACK: this fixes big scroll, annoying? yes
+                    _this.options.parentView.responseCollection.fetch();
+                    _this.options.parentView.renderResponses();
+                    _this.render();
+
                 }
             });
         } else {
@@ -181,6 +310,10 @@ cw.ThreadView = BB.View.extend({
 
         this.listenTo(this.model, 'sync', function () {
             this.threadWikiRender();
+            this.threadBodyRender();
+            this.$('.scroll-col').height($(window).height() - this.$('.body-banner').height());
+            this.$('.civi-padding').height(this.$('.main-thread').height());
+            this.renderVotes();
         });
 
         this.listenTo(this.responseCollection, 'sync', this.renderResponses);
@@ -200,13 +333,15 @@ cw.ThreadView = BB.View.extend({
             model: this.model,
             parentView: this
         });
+        this.$('.thread-body-holder').addClass('hide');
+
     },
 
     threadWikiRender: function () {
         if (this.$('.thread-wiki-holder').length) {
             this.$('.thread-wiki-holder').empty().append(this.wikiTemplate());
 
-            this.threadBodyRender();
+
         }
     },
 
@@ -220,6 +355,15 @@ cw.ThreadView = BB.View.extend({
                 _this.changeNavScroll(e.target.scrollTop);
             });
         }
+    },
+
+    renderVotes: function() {
+        var _this = this;
+        var savedVotes = this.model.get('votes');
+        _.each(savedVotes, function(v){
+            console.log(v);
+            this.$('#civi-'+ v.civi_id).find("." +v.activity_type).addClass('current');
+        })
     },
 
     renderResponses: function () {
@@ -287,12 +431,18 @@ cw.ThreadView = BB.View.extend({
     scrollToBody: function () {
         var _this = this;
 
+        this.$('.thread-wiki-holder').addClass('hide');
+        this.$('.thread-body-holder').removeClass('hide');
         this.$('.thread-body-holder').css({display: 'block'});
+
         $('body').css({overflow: 'hidden'});
 
-        $('body').animate({
-            scrollTop: $('.thread-body-holder').offset().top
-        }, 200);
+        // this.$('.thread-body-holder').css({display: 'block'});
+        // $('body').css({overflow: 'hidden'});
+        //
+        // $('body').animate({
+        //     scrollTop: $('.thread-body-holder').offset().top
+        // }, 200);
 
         var $civiNavScroll = this.$('.civi-outline');
         $civiNavScroll.css({height: $('body').height() - $civiNavScroll.offset().top});
@@ -317,11 +467,14 @@ cw.ThreadView = BB.View.extend({
     scrollToWiki: function () {
         var _this = this;
 
-        $('body').animate({
-            scrollTop: 0
-        }, 200, function () {
-            _this.$('.thread-body-holder').css({display: 'none'});
-        });
+        // $('body').animate({
+        //     scrollTop: 0
+        // }, 200, function () {
+        //     _this.$('.thread-body-holder').css({display: 'none'});
+        // });
+        // $('body').css({overflow: 'scroll'});
+        this.$('.thread-body-holder').addClass('hide');
+        this.$('.thread-wiki-holder').removeClass('hide');
         $('body').css({overflow: 'scroll'});
     },
 
@@ -357,6 +510,15 @@ cw.ThreadView = BB.View.extend({
             if (this.currentCivi !== $newCivi.attr('data-civi-id')) {
                 $currentCivi.removeClass('current');
                 $newCivi.addClass('current');
+                var links = $newCivi.data('civi-links').split(",").map(Number);
+                _.each($newCivi.siblings(), function(civiCard){
+                    console.log(links, $(civiCard).data('civi-id'));
+                    if (links.indexOf($(civiCard).data('civi-id')) == -1 ){
+                        $(civiCard).addClass('hide');
+                    } else {
+                        $(civiCard).removeClass('hide');
+                    }
+                });
 
                 this.currentCivi = $newCivi.attr('data-civi-id');
 
@@ -365,6 +527,7 @@ cw.ThreadView = BB.View.extend({
 
             } else {
                 $currentCivi.removeClass('current');
+                $currentCivi.siblings().removeClass('hide');
 
                 this.currentCivi = null;
                 this.$('.responses').empty();
@@ -372,11 +535,42 @@ cw.ThreadView = BB.View.extend({
         }
     },
 
+
     clickRating: function (e) {
+        var _this = this;
         var $this = $(e.target).closest('.rating-button');
 
-        $this.addClass('current');
-        $this.siblings().removeClass('current');
+        var rating = $this.data('rating');
+        var civi_id = $(e.target).closest('.civi-card').data('civi-id');
+        // if ($this.hasClass('current') || $this.siblings().hasClass('current')) {
+        //     Materialize.toast('You can only vote once!', 2000);
+        // } else
+        if (rating && civi_id){
+
+            console.log(civi_id);
+            $.ajax({
+                url: '/api/rate_civi/',
+                type: 'POST',
+                data: {
+                    civi_id: civi_id,
+                    rating: rating
+                },
+                success: function (response) {
+                    Materialize.toast('Voted!', 2000);
+                    // var score = $this.find('.rate-value');
+                    // var new_vote = parseInt(score.text())+ 1;
+                    // score.text(new_vote);
+                    $this.addClass('current');
+                    $this.siblings().removeClass('current');
+                },
+                error: function(r){
+                    Materialize.toast('Could not vote :(', 2000);
+                }
+            });
+
+
+        }
+
     },
 
     clickFavorite: function (e) {
@@ -399,6 +593,18 @@ cw.ThreadView = BB.View.extend({
 
     openNewResponseModal: function () {
         this.newResponseView.show();
+    },
+    //TODO: ref; remove this
+    renderX: function() {
+        this.$el.html(this.template());
+        this.assign(this.subview, '.subview');
+        this.assign(this.anotherSubview, '.another-subview');
+        return this;
+    },
+    assign: function(view, selector) {
+        view.setElement(this.$(selector)).render();
     }
+
+
 
 });

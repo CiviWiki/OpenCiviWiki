@@ -1,5 +1,5 @@
-import os, sys, json, pdb, random, hashlib,urllib2, pprint
-from models import Account, Category, Civi, Hashtag
+import os, sys, json, pdb, random, hashlib, urllib2, pprint
+from models import Account, Category, Civi, Hashtag, Activity
 from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse, HttpResponseServerError, HttpResponseForbidden, HttpResponseBadRequest
 from utils.custom_decorators import require_post_params
@@ -114,16 +114,77 @@ def createCivi(request):
         #         hash = Hashtag.objects.get(title=str)
         #
         #     civi.hashtags.add(hash.id)
+        links = request.POST.getlist('links[]', '')
+        if links:
+            for civi_id in links:
+                linked_civi = Civi.objects.get(id=civi_id)
+                civi.linked_civis.add(linked_civi)
 
         related_civi = request.POST.get('related_civi', '')
         if related_civi:
+            # parent_civi = Civi.objects.get(id=related_civi)
+            # parent_civi.links.add(civi)
             parent_civi = Civi.objects.get(id=related_civi)
-            parent_civi.links.add(civi)
+            parent_civi.responses.add(civi)
 
         return JsonResponse({'data' : Civi.objects.serialize(civi)})
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
 
+
+@login_required
+@require_post_params(params=['civi_id', 'rating'])
+def rateCivi(request):
+    civi_id = request.POST.get('civi_id', '')
+    rating = request.POST.get('rating', '')
+    account = Account.objects.get(user=request.user)
+
+    c = Civi.objects.get(id=civi_id)
+
+    try:
+        prev_act = Activity.objects.get(civi=c, account=account)
+    except Activity.DoesNotExist:
+        prev_act = None
+
+    try:
+
+
+        activity_data = {
+            'account': account,
+            'thread': c.thread,
+            'civi': c,
+        }
+
+        if rating == "vneg":
+            c.votes_vneg = c.votes_vneg + 1
+            vote_val = 'vote_vneg'
+        elif rating == "neg":
+            c.votes_neg = c.votes_neg + 1
+            vote_val = 'vote_neg'
+        elif rating == "neutral":
+            c.votes_neutral = c.votes_neutral + 1
+            vote_val = 'vote_neutral'
+        elif rating == "pos":
+            c.votes_pos = c.votes_pos + 1
+            vote_val = 'vote_pos'
+        elif rating == "vpos":
+            # c.votes_vpos = c.votes_vpos + 1
+            vote_val = 'vote_vpos'
+        activity_data['activity_type'] = vote_val
+        
+        c.save()
+
+        if prev_act:
+            prev_act.activity_type = vote_val
+            prev_act.save()
+
+        else:
+            act = Activity(**activity_data)
+            act.save()
+
+        return HttpResponse('Success')
+    except Exception as e:
+        return HttpResponseServerError(reason=str(e))
 
 #TODO 1: profile image file upload
 #TODO 2: redo user editing
@@ -218,11 +279,11 @@ def clearProfileImage(request):
 
             # Clean up previous image
             account.profile_image.delete()
-
             account.save()
+
             return HttpResponse('Image Deleted')
         except Exception as e:
-            return HttpResponseServerError(reason=str(e))
+            return HttpResponseServerError(reason=str(default))
     else:
         return HttpResponseForbidden('allowed only via POST')
 # @login_required

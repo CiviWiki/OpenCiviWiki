@@ -14,40 +14,33 @@
             </div>
         </div>
         <div class="right rating">
-            <!-- {{# _.each(ratings, function (r, index) { }}
-                <div class="rating-box">
-                    <div class="rating-score r-{{index}} hide">{{r}}</div>
-                    <div class="rating-percent r-{{index}}">{{ (Math.floor( 100 * r/ (_.reduce(ratings, function(sum,num){ return sum + num }, 0 )) ))}}<span class="percent">%</span></div>
-                    <div class="rating-name">{{['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'][index]}}</div>
-                </div>
-            {{# }) }} -->
             <div class="rating-box r-0">
-                <div class="rating-score r-0">{{ratings[0]}}</div>
+                <div class="rating-score r-0">{{votes.votes_vneg}}</div>
                 <div class="vote-icon strongly-disagree-icon double-icon r-0">
                     <i class="material-icons double-icon-1">thumb_down</i>
                     <i class="material-icons double-icon-2">thumb_down</i>
                 </div>
             </div>
             <div class="rating-box r-1">
-                <div class="rating-score r-1">{{ratings[1]}}</div>
+                <div class="rating-score r-1">{{votes.votes_neg}}</div>
                 <div class="vote-icon disagree-icon r-1">
                     <i class="material-icons">thumb_down</i>
                 </div>
             </div>
             <div class="rating-box r-2">
-                    <div class="rating-score r-2">{{ratings[2]}}</div>
+                    <div class="rating-score r-2">{{votes.votes_neutral}}</div>
                 <div class="vote-icon neutral-icon r-2">
                     <i class="material-icons">remove</i>
                 </div>
             </div>
             <div class="rating-box r-3">
-                <div class="rating-score r-3">{{ratings[3]}}</div>
+                <div class="rating-score r-3">{{votes.votes_pos}}</div>
                 <div class="vote-icon agree-icon r-3">
                     <i class="material-icons">thumb_up</i>
                 </div>
             </div>
             <div class="rating-box r-4">
-                <div class="rating-score r-4">{{ratings[4]}}</div>
+                <div class="rating-score r-4">{{votes.vote_vpos}}</div>
                 <div class="vote-icon strongly-agree-icon double-icon r-4">
                     <i class="material-icons double-icon-1">thumb_up</i>
                     <i class="material-icons double-icon-2">thumb_up</i>
@@ -83,9 +76,9 @@
             </div>
         </div>
         <div class="right civi-footer-actions">
-            <div>
+            <a class="link-lato" href="/thread/{{thread_id}}">
                 Go to context<i class="mini material-icons">launch</i>
-            </div>
+            </a>
         </div>
     </div>
 </div>

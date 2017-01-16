@@ -91,7 +91,7 @@
             </div>
         </div>
     </div>
-    <div class="col s5 main-thread">
+    <div class="col s5 main-thread scroll-col">
         {{# _.each(this.model.get('problems'), function (p) { }}
             {{= cw.underscorePartial('civi-template', p)}}
         {{# }, this); }}
@@ -101,6 +101,7 @@
         {{# _.each(this.model.get('solutions'), function (p) { }}
             {{= cw.underscorePartial('civi-template', p)}}
         {{# }, this); }}
+        <div class="civi-padding"></div>
     </div>
     <div class="col s4 responses">
 

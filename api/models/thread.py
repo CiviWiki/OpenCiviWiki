@@ -44,8 +44,8 @@ class Thread(models.Model):
 
     hashtags = models.ManyToManyField(Hashtag)
 
-    title = models.CharField(max_length=127)
-    summary = models.CharField(max_length=4095)
+    title = models.CharField(max_length=127, blank=False, null=False)
+    summary = models.CharField(max_length=4095, blank=False, null=False)
 
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     last_modified = models.DateTimeField(auto_now=True, blank=True, null=True)

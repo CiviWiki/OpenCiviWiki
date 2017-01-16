@@ -1,5 +1,5 @@
 {% verbatim %}
-<div class="civi-card" data-civi-id="{{id}}">
+<div class="civi-card" id="civi-{{id}}" data-civi-id="{{id}}"  data-civi-links="{{links}}">
     <div class="row civi-header civi-click">
         <div class="col s9 no-pads civi-title-outer">
             <div class="civi-type gray-text">
@@ -12,7 +12,7 @@
         <div class="col s3 no-pads civi-header-actions">
             <div class="right">
                 <i class="mini material-icons">edit</i>
-                <i class="mini material-icons">flag</i>
+                <!-- <i class="mini material-icons">flag</i> -->
             </div>
         </div>
     </div>
@@ -20,7 +20,31 @@
         <div class="civi-body-inner">
             {{body}}
         </div>
-
+        <div class="rating">
+            <button class="btn waves-effect rating-button vote vote_vneg" data-rating="vneg">
+                <i class="tiny-for-button material-icons">thumb_down</i>
+                <i class="tiny-for-button material-icons">thumb_down</i>
+                <span class="rate-value">{{votes.votes_vneg}}</span>
+            </button>
+            <button class="btn waves-effect rating-button vote vote_neg" data-rating="neg">
+                <i class="tiny-for-button material-icons">thumb_down</i>
+                <span class="rate-value">{{votes.votes_neg}}</span>
+            </button>
+            <button class="btn waves-effect rating-button vote vote_neutral" data-rating="neutral">
+                <i class="tiny-for-button material-icons">remove</i>
+                <span class="rate-value">{{votes.votes_neutral}}</span>
+            </button>
+            <button class="btn waves-effect rating-button vote vote_pos" data-rating="pos">
+                <i class="tiny-for-button material-icons">thumb_up</i>
+                <span class="rate-value">{{votes.votes_pos}}</span>
+            </button>
+            <button class="btn waves-effect rating-button vote vote_vpos" data-rating="vpos">
+                <i class="tiny-for-button material-icons">thumb_up</i>
+                <i class="tiny-for-button material-icons">thumb_up</i>
+                <span class="rate-value">{{votes.votes_vpos}}</span>
+            </button>
+            <span class="link-lato">{{= score}}</span>
+        </div>
     </div>
     <div class="civi-footer">
         <div class="author-photo-holder">
@@ -39,7 +63,7 @@
         <div class="right civi-footer-actions">
             <div>
                 <i class="mini material-icons favorite">star_border</i>
-                <i class="mini material-icons civi-grab-link">link</i>
+                <!-- <i class="mini material-icons civi-grab-link">link</i> -->
                 <i class="mini material-icons">comment</i>
             </div>
         </div>

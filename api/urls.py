@@ -12,10 +12,12 @@ urlpatterns = [
     url(r'^account_profile/(?P<user>[-\w]+)/$', read.get_profile, name='get profile'),
     url(r'^account_card/(?P<user>[-\w]+)$', read.get_card, name='get card'),
     url(r'^thread_data/(?P<thread_id>\w+)/$', read.get_thread, name='get thread'),
+    url(r'^civi_data/(?P<thread_id>\w+)/(?P<civi_id>\w+)/$', read.get_civi, name='get civi'),
     url(r'^response_data/(?P<thread_id>\w+)/(?P<civi_id>\w+)/$', read.get_responses, name='get responses'),
     url(r'^feed/$', read.get_feed, name='get thread'),
     url(r'^new_thread/$', write.new_thread, name='new thread'),
     url(r'^new_civi/$', write.createCivi, name='new civi'),
+    url(r'^rate_civi/$', write.rateCivi, name='rate civi'),
 
     # url(r'^getblock$', read.getBlock, name='get block'),
     # url(r'^creategroup$', write.createGroup, name='add group'),
@@ -32,5 +34,5 @@ urlpatterns = [
     # url(r'^followgroup$',write.followGroup, name='follow group'),
     # url(r'^unfollowgroup$', write.unfollowGroup, name='unfollow group'),
     # url(r'^pincivi$', write.pinCivi, name='pin civi'),
-    # url(r'^unpincivi$', write.unpinCivi, name='unpin civi')
+    # url(r'^unpincivi$', write.unpinCivi, name='unpin civi'),
 ]
