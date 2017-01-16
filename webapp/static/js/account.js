@@ -30,7 +30,7 @@ cw.AccountModel = BB.Model.extend({
 });
 
 
-// And hereon commences a pile of horrendous code. Be Ware!
+// And hereon commences a pile of horrendous code. Beware!
 // TODO: review rewrite refactor. (please)
 cw.AccountView = BB.View.extend({
     el: '#account',
@@ -46,13 +46,15 @@ cw.AccountView = BB.View.extend({
     myrepsTemplate: _.template($('#my-reps-template').html()),
     mybillsTemplate: _.template($('#my-bills-template').html()),
 
+    // Partials
+    userCardTemplate: _.template($('#user-card-template').html()),
+
 
     initialize: function (options) {
         options = options || {};
         this.mapView = options.mapView;
+        this.current_user = options.current_user;
         this.isSave = false;
-
-
 
         this.listenTo(this.model, 'sync', function(){
             document.title = this.model.get("first_name") +" "+ this.model.get("last_name") +" (@"+this.model.get("username")+")";
@@ -62,10 +64,10 @@ cw.AccountView = BB.View.extend({
             if (_.find(this.model.get("followers"), function(follower){
                 return (JSON.parse(follower).username== current_user);
             })) {
-                var follow_btn = this.$el.find('.follow-btn');
-                follow_btn.addClass("disabled");
-                follow_btn.removeClass("follow-btn waves-effect waves-light");
-                follow_btn.html("FOLLOWING");
+                var follow_btn = this.$('#sidebar-follow-btn');
+                follow_btn.addClass("btn-secondary");
+                follow_btn.data("follow-state", true);
+                follow_btn.html("");
             }
         });
 
@@ -119,8 +121,89 @@ cw.AccountView = BB.View.extend({
         'submit #profile_image_form': 'handleFiles',
         'change .profile-image-pick': 'toggleImgButtons',
         'blur .save-account': 'saveAccount',
+        'mouseenter .user-chip-contents': 'showUserCard',
+        'mouseleave .user-chip-contents': 'hideUserCard',
         'keypress .save-account': cw.checkForEnter,
     },
+
+    showUserCard: function(e) {
+        var _this = this;
+        var username = e.currentTarget.dataset.username;
+        if (!$('#usercard-'+ username).hasClass('open')) {
+            clearTimeout(this.showTimeout);
+            this.showTimeout = setTimeout(function() {
+                $.ajax({
+                    type: 'POST',
+                    url: '/api/account_card/'+username,
+                    success: function (data) {
+                        data.isCurrentUser = false;
+                        if (current_user == data.username){
+                            data.isCurrentUser = true;
+                        }
+                        _this.$(e.currentTarget).parent().after(_this.userCardTemplate(data));
+                        // Hover Elements
+                        var target = _this.$(e.currentTarget),
+                            targetCard = _this.$('#usercard-'+ username);
+
+                        targetCard.stop().fadeIn("fast", function(){
+                            // Positions
+                            var pos = target.offset(),
+                            // Dimenions
+                                cardWidth = targetCard.width(),
+                                cardHeight = targetCard.height(),
+                                chipHeight = target.height(),
+                                documentHeight = $(window).height(),
+                                scroll = _this.$(".scroll-col").scrollTop(),
+                                top,left;
+
+                            if (target[0].getBoundingClientRect().top + cardHeight + chipHeight >= documentHeight) {
+                                top = pos.top + scroll - cardHeight - chipHeight -2;
+                            } else {
+                                top = pos.top + scroll + 25;
+                            }
+                            left = target.position().left + 20;
+
+                            // Determine placement of the hovercard
+                            targetCard.css({
+                                'top': top ,
+                                'left': left
+                            });
+                        }).addClass('open');
+                    },
+                    error: function () {
+                        // No card for you!
+                        return;
+                    }
+                });
+            }, 200);
+        }
+    },
+
+    hideUserCard: function(e) {
+        var _this = this,
+            username = e.currentTarget.dataset.username,
+            card = this.$('.user-card');
+        if (('timeout-'+username) in this){
+            clearTimeout(this['timeout-'+username]);
+        }
+        clearTimeout(this.showTimeout);
+        this['timeout-'+username] = setTimeout(function() {
+            card.fadeOut("fast",function(){$(this).remove();});
+        }, 200);
+        $('#usercard-'+ username).hover(function() {
+            if (('timeout-'+username) in _this){
+                clearTimeout(_this['timeout-'+username]);
+            }
+        }, function() {
+            if (('timeout-'+username) in _this){
+                clearTimeout(_this['timeout-'+username]);
+            }
+            _this['timeout-'+username] = setTimeout(function() {
+                card.fadeOut("fast",function(){$(this).remove();});
+            }, 100);
+        });
+    },
+
     showRawRatings: function(e) {
         $(e.target).closest('.rating').find('.rating-score').toggleClass('hide');
         $(e.target).closest('.rating').find('.rating-percent').toggleClass('hide');
@@ -133,23 +216,45 @@ cw.AccountView = BB.View.extend({
 
     followRequest: function(e){
         var apiData = {},
-            _this = this;
-        apiData.from_user = this.user;
-        apiData.to_user = this.user;
+            _this = this,
+            follow_state = this.$(e.currentTarget).data("follow-state");
+            target = this.$(e.target);
 
-        $.ajax({
-            url: '/api/followUser/',
-            type: 'POST',
-            data: apiData,
-            success: function () {
-                Materialize.toast('You are now following '+_this.model.get("first_name")+" "+_this.model.get("last_name"), 3000);
+        apiData.target = this.$(e.currentTarget).data("username");
 
+        if (!follow_state) {
+            $.ajax({
+                url: '/api/follow/',
+                type: 'POST',
+                data: apiData,
+                success: function () {
+                    Materialize.toast('You are now following user '+ apiData.target, 3000);
+                    target.addClass("btn-secondary");
+                    target.data("follow-state", true);
+                    target.html("");
 
-                $(e.target).removeClass("follow-btn waves-effect waves-light");
-                $(e.target).html("FOLLOWING");
-            }
-        });
-        $(e.target).addClass("disabled");
+                },
+                error: function () {
+                    Materialize.toast('Could not follow user '+ apiData.target, 3000);
+                }
+            });
+        } else {
+            $.ajax({
+                url: '/api/unfollow/',
+                type: 'POST',
+                data: apiData,
+                success: function () {
+                    Materialize.toast('You have unfollowed user '+ apiData.target, 3000);
+                    target.removeClass("btn-secondary");
+                    target.html("FOLLOW");
+                    target.data("follow-state", false);
+                },
+                error: function () {
+                    Materialize.toast('Could not unfollow user '+ apiData.target, 3000);
+                }
+            });
+        }
+
     },
 
     saveAccount: function (e) {

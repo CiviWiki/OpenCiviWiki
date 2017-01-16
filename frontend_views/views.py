@@ -3,7 +3,7 @@ import json
 from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.contrib.auth.models import User
-from api.models import Category, Account
+from api.models import Category, Account, Thread
 from api.forms import UpdateProfileImage
 from django.conf import settings
 
@@ -23,8 +23,17 @@ def base_view(request):
 
     categories = [{'id': c.id, 'name': c.name} for c in Category.objects.all()]
 
+    all_categories = list(Category.objects.values_list('id', flat=True))
+    user_categories = list(a.categories.values_list('id', flat=True)) or all_categories
+
+    feed_threads = [Thread.objects.summarize(t) for t in Thread.objects.order_by('-created')]
+    top5_threads = list(Thread.objects.all().order_by('-num_views')[:5].values('id', 'title'))
+
     data = dict(
-        categories=categories
+        categories=categories,
+        user_categories=user_categories,
+        threads=feed_threads,
+        trending=top5_threads
     )
 
     return TemplateResponse(request, 'feed.html', {'data': json.dumps(data)})
@@ -76,24 +85,24 @@ def issue_thread(request, thread_id=None):
 @beta_blocker
 @full_account
 def create_group(request):
-	return TemplateResponse(request, 'newgroup.html', {})
+    return TemplateResponse(request, 'newgroup.html', {})
 
 @login_required
 @beta_blocker
 @full_account
 def dbview(request):
-	result = [{'id': c.id, 'name': c.name} for c in Category.objects.all()]
+    result = [{'id': c.id, 'name': c.name} for c in Category.objects.all()]
 
-	return TemplateResponse(request, 'dbview.html', {'result': json.dumps(result)})
+    return TemplateResponse(request, 'dbview.html', {'result': json.dumps(result)})
 
 @login_required
 @beta_blocker
 @full_account
 def add_civi(request):
-	categories = [{'id': c.id, 'name': c.name} for c in Category.objects.all()]
-	topics = [{'id': c.id, 'topic': c.topic} for c in Topic.objects.all()]
+    categories = [{'id': c.id, 'name': c.name} for c in Category.objects.all()]
+    topics = [{'id': c.id, 'topic': c.topic} for c in Topic.objects.all()]
 
-	return TemplateResponse(request, 'add_civi.html', {'categories': json.dumps(categories), 'topics': json.dumps(topics)})
+    return TemplateResponse(request, 'add_civi.html', {'categories': json.dumps(categories), 'topics': json.dumps(topics)})
 
 def login_view(request):
     if request.user.is_authenticated():
@@ -103,22 +112,22 @@ def login_view(request):
     return TemplateResponse(request, 'login.html', {})
 
 def beta_view(request):
-	return TemplateResponse(request, 'beta_blocker.html', {})
+    return TemplateResponse(request, 'beta_blocker.html', {})
 
 def declaration(request):
-	return TemplateResponse(request, 'declaration.html', {})
+    return TemplateResponse(request, 'declaration.html', {})
 
 def landing_view(request):
-	return TemplateResponse(request, 'static_templates/landing.html', {})
+    return TemplateResponse(request, 'static_templates/landing.html', {})
 
 def how_it_works_view(request):
-	return TemplateResponse(request, 'static_templates/how_it_works.html', {})
+    return TemplateResponse(request, 'static_templates/how_it_works.html', {})
 
 def about_view(request):
-	return TemplateResponse(request, 'static_templates/about.html', {})
+    return TemplateResponse(request, 'static_templates/about.html', {})
 
 def support_us_view(request):
-	return TemplateResponse(request, 'static_templates/support_us.html', {})
+    return TemplateResponse(request, 'static_templates/support_us.html', {})
 
 def does_not_exist(request):
-	return TemplateResponse(request, 'base/404.html', {})
+    return TemplateResponse(request, 'base/404.html', {})

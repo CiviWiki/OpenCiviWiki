@@ -1,9 +1,9 @@
 {% verbatim %}
-<div class="civi-card" data-civi-id="{{id}}">
+<div class="civi-card" id="civi-{{id}}" data-civi-id="{{id}}"  data-civi-links="{{links}}">
     <div class="row civi-header civi-click">
         <div class="col s9 no-pads civi-title-outer">
             <div class="civi-type gray-text">
-                {{c_type}}
+                {{type}}
             </div>
             <div class="civi-title">
                 {{title}}
@@ -12,7 +12,7 @@
         <div class="col s3 no-pads civi-header-actions">
             <div class="right">
                 <i class="mini material-icons">edit</i>
-                <i class="mini material-icons">flag</i>
+                <!-- <i class="mini material-icons">flag</i> -->
             </div>
         </div>
     </div>
@@ -20,44 +20,41 @@
         <div class="civi-body-inner">
             {{body}}
         </div>
-        <div class="attachments">
-            <div class="attachments-title gray-text">
-            </div>
-        </div>
         <div class="rating">
-            <button class="btn waves-effect rating-button">
+            <button class="btn waves-effect rating-button vote vote_vneg" data-rating="vneg">
                 <i class="tiny-for-button material-icons">thumb_down</i>
                 <i class="tiny-for-button material-icons">thumb_down</i>
-                {{votes_vneg}}
+                <span class="rate-value">{{votes.votes_vneg}}</span>
             </button>
-            <button class="btn waves-effect rating-button">
+            <button class="btn waves-effect rating-button vote vote_neg" data-rating="neg">
                 <i class="tiny-for-button material-icons">thumb_down</i>
-                {{votes_neg}}
+                <span class="rate-value">{{votes.votes_neg}}</span>
             </button>
-            <button class="btn waves-effect rating-button">
+            <button class="btn waves-effect rating-button vote vote_neutral" data-rating="neutral">
                 <i class="tiny-for-button material-icons">remove</i>
-                {{votes_neutral}}
+                <span class="rate-value">{{votes.votes_neutral}}</span>
             </button>
-            <button class="btn waves-effect rating-button">
+            <button class="btn waves-effect rating-button vote vote_pos" data-rating="pos">
                 <i class="tiny-for-button material-icons">thumb_up</i>
-                {{votes_pos}}
+                <span class="rate-value">{{votes.votes_pos}}</span>
             </button>
-            <button class="btn waves-effect rating-button">
+            <button class="btn waves-effect rating-button vote vote_vpos" data-rating="vpos">
                 <i class="tiny-for-button material-icons">thumb_up</i>
                 <i class="tiny-for-button material-icons">thumb_up</i>
-                {{votes_vpos}}
+                <span class="rate-value">{{votes.votes_vpos}}</span>
             </button>
+            <span class="link-lato">{{= score}}</span>
         </div>
     </div>
     <div class="civi-footer">
         <div class="author-photo-holder">
-            <div class="author-photo">
+            <div class="author-photo transparent" style="background-image: url('{{author.profile_image}}'); background-size: 34px;">
 
             </div>
         </div>
         <div class="author-info">
             <div class="author-name purple-text bold-text">
-                {{author_id}} {{author_id}}
+                {{author.first_name}} {{author.last_name}}
             </div>
             <div class="created gray-text">
                 {{created}}
@@ -66,7 +63,7 @@
         <div class="right civi-footer-actions">
             <div>
                 <i class="mini material-icons favorite">star_border</i>
-                <i class="mini material-icons civi-grab-link">link</i>
+                <!-- <i class="mini material-icons civi-grab-link">link</i> -->
                 <i class="mini material-icons">comment</i>
             </div>
         </div>

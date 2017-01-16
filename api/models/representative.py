@@ -1,11 +1,26 @@
 from django.db import models
 from account import Account
 
+class RepresentativeManager(models.Manager):
+    def summarize(self, representative):
+        a = Account.objects.get(user=representative.account)
+        data = {
+            "first_name": a.first_name,
+            "last_name": a.last_name,
+            "about_me": a.about_me,
+            "location": a.get_location(),
+            "history": [Civi.objects.serialize(c) for c in Civi.objects.filter(author_id=account.id).order_by('-created')],
+            "profile_image": "https://theunitedstates.io/images/congress/225x275/{bioguide_id}.jpg".format(bioguide_id=representative.bioguideID),
+            "followers": self.followers(a),
+            "following": self.following(a),
+        }
+        return data
 
 class Representative(models.Model):
     account = models.ForeignKey(Account, default=None, null=True)
 
-    district = models.CharField(max_length=63) # junior or senior for senator
+    district = models.CharField(max_length=63, blank=True, null=True)
+    senate_class = models.CharField(max_length=63, blank=True, null=True) # junior or senior for senator
     state = models.CharField(max_length=63)
 
     level_CHOICES = (
@@ -19,5 +34,9 @@ class Representative(models.Model):
 
     party = models.CharField(max_length=127)
 
+    bioguideID = models.CharField(max_length=7, blank=True, null=True)
+
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     last_modified = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+    objects = RepresentativeManager()

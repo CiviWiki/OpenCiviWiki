@@ -37,12 +37,13 @@
 <script id="new-civi-template" type="text/template">
     {% include "partials/thread/new_civi.html" %}
 </script>
+<script id="new-response-template" type="text/template">
+    {% include "partials/thread/new_response.html" %}
+</script>
 
 <body>
     {% include "partials/utils/global_nav.html" %}
-    <div id="thread">
-
-    </div>
+    <div id="thread"></div>
 </body>
 
 <script type="text/javascript" src="{% static "js/thread.js" %}"></script>

@@ -105,10 +105,10 @@ cw.MapView = BB.View.extend({
         return this;
     },
 
-    renderAndInitMap: function(el) {
+    renderAndInitMap: function(elId) {
         var _this = this;
-        var viewElement = el || $('#' + this.id);
-        this.setElement(viewElement);
+        this.id = elId || this.id;
+        this.setElement($('#' + this.id));
 
         if (!this.loadedAPI) {
             this.loadedAPI = true;
@@ -118,7 +118,6 @@ cw.MapView = BB.View.extend({
                 dataType: "script",
                 success: function(){
                     _this.render();
-
                 }
             });
         }
@@ -128,9 +127,11 @@ cw.MapView = BB.View.extend({
         var viewElement = $('#' + this.id);
         this.setElement(viewElement);
         this.$el.empty().append(this.locationTemplate());
-        this.model.initMapWithMarker(document.getElementById('map'));
-        this.initAutocomplete();
-        this.adjustMapCenter(this.model.get('coordinates'));
+        if (typeof google != 'undefined'){
+            this.model.initMapWithMarker(document.getElementById('map'));
+            this.initAutocomplete();
+            this.adjustMapCenter(this.model.get('coordinates'));
+        }
     },
 
     // resizes the map to resolve grey-box sizing issues

@@ -1,5 +1,6 @@
-import os, sys, json, pdb, random, hashlib,urllib2, pprint
-from models import Account, Category, Civi, Hashtag
+import os, sys, json, pdb, random, hashlib, urllib2, pprint
+from models import Account, Category, Civi, Hashtag, Activity
+from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse, HttpResponseServerError, HttpResponseForbidden, HttpResponseBadRequest
 from utils.custom_decorators import require_post_params
 from django.contrib.auth.decorators import login_required
@@ -22,7 +23,7 @@ def new_thread(request):
     t = Thread(title=request.POST['title'], summary=request.POST['summary'], category_id=request.POST['category_id'], author_id=request.user.id)
     t.save()
 
-    return JsonResponse({'data': 'success'})
+    return JsonResponse({'data': 'success', 'thread_id' : t.pk})
 
 # @login_required
 # @transaction.atomic
@@ -81,65 +82,109 @@ def new_thread(request):
 #     except Exception as e:
 #         return HttpResponseServerError(reason=e)
 #
-# @login_required
-# @require_post_params(params=['group', 'creator', 'topic', 'category', 'title', 'body', 'type'])
-# def createCivi(request):
-#     '''
-#     USAGE:
-#         use this function to insert a new connected civi into the database.
-#
-#     Text POST:
-#         group
-#         creator
-#         topic
-#         category
-#         title
-#         body
-#         type
-#         reference (optional)
-#         at (optional)
-#         and_negative (optional)
-#         and_positive (optional)
-#
-#     :return: (200, ok) (400, missing required parameter) (500, internal error)
-#     '''
-#     civi = Civi()
-#     data = {
-#         'group_id': request.POST.get('group', ''),
-#         'creator_id': request.POST.get('creator', ''),
-#         'topic_id': request.POST.get('topic', ''),
-#         'title': request.POST.get('title', ''),
-#         'body': request.POST.get('body', ''),
-#         'type': request.POST.get('type', ''),
-#         'visits': 0,
-#         'votes_neutral': 0,
-#         'votes_positive1': 0,
-#         'votes_positive2': 0,
-#         'votes_negative1': 0,
-#         'votes_negative2': 0,
-#         'reference_id': request.POST.get('reference', ''),
-#         'at_id': request.POST.get('at', ''),
-#         'and_negative_id': request.POST.get('and_negative', ''),
-#         'and_positive_id': request.POST.get('and_positive', ''),
-#     }
-#     try:
-#         civi = Civi(**data)
-#
-#         hashtags = request.POST.get('hashtags', '')
-#         split = [x.strip() for x in hashtags.split(',')]
-#         for str in split:
-#             if not Hashtag.objects.filter(title=str).exists():
-#                 hash = Hashtag(title=str)
-#                 hash.save()
-#             else:
-#                 hash = Hashtag.objects.get(title=str)
-#
-#             civi.hashtags.add(hash.id)
-#         civi.save()
-#         return HttpResponse()
-#     except Exception as e:
-#         return HttpResponseServerError(reason=str(e))
-#
+@login_required
+@require_post_params(params=['title', 'body', 'c_type', 'thread_id'])
+def createCivi(request):
+    '''
+    USAGE:
+        use this function to insert a new connected civi into the database.
+
+    :return: (200, ok) (400, missing required parameter) (500, internal error)
+    '''
+
+
+    data = {
+        'author': Account.objects.get(user=request.user),
+        'title': request.POST.get('title', ''),
+        'body': request.POST.get('body', ''),
+        'c_type': request.POST.get('c_type', ''),
+        'thread': Thread.objects.get(id=request.POST.get('thread_id'))
+    }
+
+    try:
+        civi = Civi(**data)
+        civi.save()
+        # hashtags = request.POST.get('hashtags', '')
+        # split = [x.strip() for x in hashtags.split(',')]
+        # for str in split:
+        #     if not Hashtag.objects.filter(title=str).exists():
+        #         hash = Hashtag(title=str)
+        #         hash.save()
+        #     else:
+        #         hash = Hashtag.objects.get(title=str)
+        #
+        #     civi.hashtags.add(hash.id)
+        links = request.POST.getlist('links[]', '')
+        if links:
+            for civi_id in links:
+                linked_civi = Civi.objects.get(id=civi_id)
+                civi.linked_civis.add(linked_civi)
+
+        related_civi = request.POST.get('related_civi', '')
+        if related_civi:
+            # parent_civi = Civi.objects.get(id=related_civi)
+            # parent_civi.links.add(civi)
+            parent_civi = Civi.objects.get(id=related_civi)
+            parent_civi.responses.add(civi)
+
+        return JsonResponse({'data' : Civi.objects.serialize(civi)})
+    except Exception as e:
+        return HttpResponseServerError(reason=str(e))
+
+
+@login_required
+@require_post_params(params=['civi_id', 'rating'])
+def rateCivi(request):
+    civi_id = request.POST.get('civi_id', '')
+    rating = request.POST.get('rating', '')
+    account = Account.objects.get(user=request.user)
+
+    c = Civi.objects.get(id=civi_id)
+
+    try:
+        prev_act = Activity.objects.get(civi=c, account=account)
+    except Activity.DoesNotExist:
+        prev_act = None
+
+    try:
+
+
+        activity_data = {
+            'account': account,
+            'thread': c.thread,
+            'civi': c,
+        }
+
+        if rating == "vneg":
+            c.votes_vneg = c.votes_vneg + 1
+            vote_val = 'vote_vneg'
+        elif rating == "neg":
+            c.votes_neg = c.votes_neg + 1
+            vote_val = 'vote_neg'
+        elif rating == "neutral":
+            c.votes_neutral = c.votes_neutral + 1
+            vote_val = 'vote_neutral'
+        elif rating == "pos":
+            c.votes_pos = c.votes_pos + 1
+            vote_val = 'vote_pos'
+        elif rating == "vpos":
+            # c.votes_vpos = c.votes_vpos + 1
+            vote_val = 'vote_vpos'
+        activity_data['activity_type'] = vote_val
+        
+        c.save()
+
+        if prev_act:
+            prev_act.activity_type = vote_val
+            prev_act.save()
+
+        else:
+            act = Activity(**activity_data)
+            act.save()
+
+        return HttpResponse('Success')
+    except Exception as e:
+        return HttpResponseServerError(reason=str(e))
 
 #TODO 1: profile image file upload
 #TODO 2: redo user editing
@@ -234,16 +279,16 @@ def clearProfileImage(request):
 
             # Clean up previous image
             account.profile_image.delete()
-
             account.save()
+
             return HttpResponse('Image Deleted')
         except Exception as e:
-            return HttpResponseServerError(reason=str(e))
+            return HttpResponseServerError(reason=str(default))
     else:
         return HttpResponseForbidden('allowed only via POST')
 # @login_required
 # @require_post_params(params=['friend'])
-# def requestFriend(request):
+# def requestFollow(request):
 #     '''
 #         USAGE:
 #             Takes in a user_id and sends your id to the users friend_requests list. No join
@@ -268,35 +313,93 @@ def clearProfileImage(request):
 #     except Exception as e:
 #         return HttpResponseServerError(reason=str(e))
 #
-# @login_required
-# @require_post_params(params=['friend'])
-# def acceptFriend(request):
-#     '''
-#         USAGE:
-#             Takes in user_id from current friend_requests list and joins accounts as friends.
-#             Does not join accounts as friends unless the POST friend is a valid member of the friend request array.
-#
-#         Text POST:
-#             friend
-#
-#         :return: (200, okay, list of friend information) (400, bad lookup) (500, error)
-#     '''
-#     try:
-#         account = Account.objects.get(user=request.user)
-#         stranger = Account.objects.get(id=request.POST.get('friend', -1))
-#
-#         if stranger_id not in account.friend_requests:
-#             raise Exception(reason="No request was sent from this person.")
-#
-#         account.friend_requests = [fr for fr in account.friend_requests if fr != stranger_id]
-#         account.friends.add(stranger)
-#         account.save()
-#         return JsonResponse({"result":Account.objects.serialize(account, "friends")})
-#     except Account.DoesNotExist as e:
-#         return HttpResponseBadRequest(reason=str(e))
-#     except Exception as e:
-#         return HttpResponseServerError(reason=str(e))
-#
+@login_required
+@require_post_params(params=['target'])
+def requestFollow(request):
+    '''
+        USAGE:
+            Takes in user_id from current friend_requests list and joins accounts as friends.
+            Does not join accounts as friends unless the POST friend is a valid member of the friend request array.
+
+        Text POST:
+            friend
+
+        :return: (200, okay, list of friend information) (400, bad lookup) (500, error)
+    '''
+    if (request.user.username == request.POST.get('target', -1)):
+        return HttpResponseBadRequest(reason="You cannot follow yourself, silly!")
+
+    try:
+        account = Account.objects.get(user=request.user)
+        target = User.objects.get(username=request.POST.get('target', -1))
+        target_account = Account.objects.get(user=target)
+
+        account.following.add(target_account)
+        account.save()
+        target_account.followers.add(account)
+        target_account.save()
+        data = {
+            'username' : target.username,
+            'follow_status': True
+        }
+        return JsonResponse({"result": data})
+    except Account.DoesNotExist as e:
+        return HttpResponseBadRequest(reason=str(e))
+    except Exception as e:
+        return HttpResponseServerError(reason=str(e))
+
+@login_required
+@require_post_params(params=['target'])
+def requestUnfollow(request):
+    '''
+        USAGE:
+            Takes in user_id from current friend_requests list and joins accounts as friends.
+            Does not join accounts as friends unless the POST friend is a valid member of the friend request array.
+
+        Text POST:
+            friend
+
+        :return: (200, okay, list of friend information) (400, bad lookup) (500, error)
+    '''
+    try:
+        account = Account.objects.get(user=request.user)
+        target = User.objects.get(username=request.POST.get('target', -1))
+        target_account = Account.objects.get(user=target)
+
+        account.following.remove(target_account)
+        account.save()
+        target_account.followers.remove(account)
+        target_account.save()
+        return JsonResponse({"result": "Success"})
+    except Account.DoesNotExist as e:
+        return HttpResponseBadRequest(reason=str(e))
+    except Exception as e:
+        return HttpResponseServerError(reason=str(e))
+
+
+@login_required
+def editUserCategories(request):
+    '''
+        USAGE:
+            Edits list of categories for the user
+
+    '''
+    try:
+        account = Account.objects.get(user=request.user)
+        categories = [int(i) for i in request.POST.getlist('categories[]')]
+        account.categories.clear()
+        for category in categories:
+            account.categories.add(Category.objects.get(id=category))
+            account.save()
+
+        data = {
+            'user_categories' : list(account.categories.values_list('id', flat=True)) or all_categories
+        }
+        return JsonResponse({"result": data})
+    except Account.DoesNotExist as e:
+        return HttpResponseBadRequest(reason=str(e))
+    except Exception as e:
+        return HttpResponseServerError(reason=str(e))
 # @login_required
 # @require_post_params(params=['friend'])
 # def rejectFriend(request):
