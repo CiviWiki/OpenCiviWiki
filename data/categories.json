@@ -1,5 +1,11 @@
 [{
     "fields": {
+        "name": "Agriculture"
+    },
+    "model": "api.category",
+    "pk": 0
+},{
+    "fields": {
         "name": "Environment"
     },
     "model": "api.category",

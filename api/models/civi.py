@@ -47,7 +47,7 @@ class CiviManager(models.Manager):
             "body": civi.body,
             "author": dict(
                 username=civi.author.user.username,
-                profile_image=civi.author.profile_image.url,
+                profile_image= civi.author.profile_image.url if civi.author.profile_image else "/media/profile/default.png",
                 first_name=civi.author.first_name,
                 last_name=civi.author.last_name
             ),
