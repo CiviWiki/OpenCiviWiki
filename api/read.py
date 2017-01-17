@@ -173,7 +173,11 @@ def get_thread(request, thread_id):
             'title': t.title,
             'summary': t.summary,
             'hashtags': t.hashtags.all().values(),
-            'author': dict(username=t.author.user.username, profile_image=t.author.profile_image.url, first_name=t.author.first_name, last_name=t.author.last_name),
+            'author': dict(
+                username=t.author.user.username,
+                profile_image=t.author.profile_image.url  if t.author.profile_image  else "/media/profile/default.png",
+                first_name=t.author.first_name,
+                last_name=t.author.last_name),
             'category': model_to_dict(t.category),
             'created': t.created,
             'problems': problems,
