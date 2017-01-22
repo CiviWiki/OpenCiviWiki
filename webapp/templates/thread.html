@@ -51,15 +51,18 @@
 
     var username = '{{user.username}}',
         threadId = '{{thread_id}}';
-
+    var civis = JSON.parse('{{civis}}');
     var threadModel = new cw.ThreadModel({}, {
         threadId: threadId
     });
     threadModel.fetch();
 
+    var civiCollection = new cw.CiviCollection(civis);
+
     var threadView = new cw.ThreadView({
         username: username,
-        model: threadModel
+        model: threadModel,
+        civis: civiCollection
     });
 
 </script>

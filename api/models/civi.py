@@ -22,12 +22,12 @@ class CiviManager(models.Manager):
             "type": civi.c_type,
             "title": civi.title,
             "body": civi.body,
-            "author": dict(
-                username=civi.author.user.username,
-                profile_image=civi.author.profile_image.url if civi.author.profile_image else "/media/profile/default.png",
-                first_name=civi.author.first_name,
-                last_name=civi.author.last_name
-            ),
+            "author": {
+                'username': civi.author.user.username,
+                'profile_image': civi.author.profile_image_url,
+                'first_name': civi.author.first_name,
+                'last_name': civi.author.last_name
+            },
             "hashtags": [h.title for h in civi.hashtags.all()],
             "created": "{0} {1}, {2}".format(month_name[civi.created.month], civi.created.day, civi.created.year),
             "attachments": [],
@@ -107,14 +107,14 @@ class Civi(models.Model):
         #     votes_pos = self.votes_pos,
         #     votes_vpos = self.votes_vpos
         # )
-        votes = dict(
-            total = act_votes.count() - act_votes.filter(activity_type='vote_neutral').count(),
-            votes_vneg = act_votes.filter(activity_type='vote_vneg').count(),
-            votes_neg = act_votes.filter(activity_type='vote_neg').count(),
-            votes_neutral = act_votes.filter(activity_type='vote_neutral').count(),
-            votes_pos = act_votes.filter(activity_type='vote_pos').count(),
-            votes_vpos = act_votes.filter(activity_type='vote_vpos').count()
-        )
+        votes = {
+            'total': act_votes.count() - act_votes.filter(activity_type='vote_neutral').count(),
+            'votes_vneg': act_votes.filter(activity_type='vote_vneg').count(),
+            'votes_neg': act_votes.filter(activity_type='vote_neg').count(),
+            'votes_neutral':  act_votes.filter(activity_type='vote_neutral').count(),
+            'votes_pos': act_votes.filter(activity_type='vote_pos').count(),
+            'votes_vpos': act_votes.filter(activity_type='vote_vpos').count()
+        }
         return votes
 
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)

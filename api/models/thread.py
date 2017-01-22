@@ -19,7 +19,7 @@ class ThreadManager(models.Manager):
         author_data = {
             "username": thread.author.user.username,
             "full_name": thread.author.get_full_name(),
-            "profile_image": thread.author.profile_image.url if thread.author.profile_image else "/media/profile/default.png"
+            "profile_image": thread.author.profile_image_url
         }
         stats_data = {
             "num_views": thread.num_views,

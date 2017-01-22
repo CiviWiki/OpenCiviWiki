@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.utils.deconstruct import deconstructible
+from django.core.files.storage import default_storage
 from django.db import models
 from django.conf import settings
 from hashtag import Hashtag
@@ -18,18 +19,18 @@ class AccountManager(models.Manager):
             "about_me": account.about_me,
             "location": account.get_location(),
             "history": [Civi.objects.serialize(c) for c in Civi.objects.filter(author_id=account.id).order_by('-created')],
-            "profile_image": account.profile_image.url if account.profile_image else "/media/profile/default.png",
+            "profile_image": account.profile_image_url,
             "followers": self.followers(account),
             "following": self.following(account),
         }
         return data
-    #
+
     def chip_summarize(self, account):
         data = {
             "username": account.user.username,
             "first_name": account.first_name,
             "last_name": account.last_name,
-            "profile_image": account.profile_image.url if account.profile_image else "/media/profile/default.png",
+            "profile_image": account.profile_image_url,
         }
         return json.dumps(data)
 
@@ -41,7 +42,7 @@ class AccountManager(models.Manager):
             "last_name": account.last_name,
             "about_me": account.about_me[:150] + ('' if len(account.about_me) <= 150 else '...'),
             "location": account.get_location(),
-            "profile_image": account.profile_image.url if account.profile_image else "/media/profile/default.png",
+            "profile_image": account.profile_image_url,
             "follow_state": True if account in request_account.following.all() else False,
             "request_account": request_account.first_name
         }
@@ -63,7 +64,6 @@ class PathAndRename(object):
         ext = filename.split('.')[-1]
         filename = '{}.{}'.format(instance.user.username, ext)
         return os.path.join(self.sub_path, filename)
-
 
 profile_upload_path = PathAndRename('profile/')
 
@@ -109,3 +109,11 @@ class Account(models.Model):
     def get_full_name(self):
         "Returns the person's full name."
         return '{first_name} {last_name}'.format(first_name=self.first_name, last_name=self.last_name)
+
+    def _get_profile_image_url(self):
+        if self.profile_image and default_storage.exists(os.path.join(settings.MEDIA_ROOT, self.profile_image.name)):
+            return self.profile_image.url
+        else:
+            #NOTE: This default url will more than likely be changed later
+            return "/static/img/no_image_md.png",
+    profile_image_url = property(_get_profile_image_url)

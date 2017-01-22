@@ -3,7 +3,7 @@ import json
 from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.contrib.auth.models import User
-from api.models import Category, Account, Thread
+from api.models import Category, Account, Thread, Civi
 from api.forms import UpdateProfileImage
 from django.conf import settings
 
@@ -29,12 +29,12 @@ def base_view(request):
     feed_threads = [Thread.objects.summarize(t) for t in Thread.objects.order_by('-created')]
     top5_threads = list(Thread.objects.all().order_by('-num_views')[:5].values('id', 'title'))
 
-    data = dict(
-        categories=categories,
-        user_categories=user_categories,
-        threads=feed_threads,
-        trending=top5_threads
-    )
+    data = {
+        'categories': categories,
+        'user_categories': user_categories,
+        'threads': feed_threads,
+        'trending': top5_threads
+    }
 
     return TemplateResponse(request, 'feed.html', {'data': json.dumps(data)})
 
@@ -78,8 +78,21 @@ def user_setup(request):
 def issue_thread(request, thread_id=None):
     if not thread_id:
         return HttpResponseRedirect('/404')
+    req_a = Account.objects.get(user=request.user)
+    civis = Civi.objects.filter(thread_id=thread_id)
+    c = civis.order_by('-created')
+    c_scores = [ci.score(req_a.id) for ci in c]
+    c_data = [Civi.objects.serialize_s(ci) for ci in c]
+    for idx, item in enumerate(c_data):
+        c_data[idx]['score'] = c_scores[idx]
+    c_data = sorted(c_data, key=lambda x: x['score'], reverse=True)
 
-    return TemplateResponse(request, 'thread.html', {'thread_id': thread_id})
+    data = {
+        'thread_id': thread_id,
+        'civis': c_data
+    }
+
+    return TemplateResponse(request, 'thread.html', data)
 
 @login_required
 @beta_blocker

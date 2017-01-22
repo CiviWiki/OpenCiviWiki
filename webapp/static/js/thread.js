@@ -31,7 +31,7 @@ cw.CiviModel = BB.Model.extend({
         if ( !this.id ) {
             throw new Error("This is a race condition! and why we can't have nice things :(");
         }
-        return '/api/civi_data/' + this.id + '/';
+        return '/api/civi_data/' + this.id;
     },
 
     initialize: function (model, options) {
@@ -67,7 +67,7 @@ cw.CiviCollection = BB.Collection.extend({
         if (! this.threadId ) {
             throw new Error("This is a race condition! and why we can't have nice things :(");
         }
-        return '/api/civi/' + this.threadId + '/';
+        return '/api/threads/' + this.threadId + '/civis';
     },
 
     initialize: function (model, options) {
@@ -129,6 +129,27 @@ cw.ThreadModel = BB.Model.extend({
     }
 });
 
+cw.CiviView =  BB.View.extend({
+    el: '.new-civi-modal-holder',
+    template: _.template($('#new-civi-template').html()),
+
+    initialize: function (options) {
+        this.options = options || {};
+        this.render();
+    },
+
+    render: function () {
+        this.$el.empty().append(this.template());
+    },
+
+
+    events: {
+        'click .cancel-new-civi': 'cancelCivi',
+        'click .create-new-civi': 'createCivi',
+        'click .civi-type-button': 'clickType'
+    },
+
+});
 
 cw.NewCiviView = BB.View.extend({
     el: '.new-civi-modal-holder',
