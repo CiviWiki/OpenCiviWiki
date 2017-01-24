@@ -3,7 +3,8 @@ import json
 from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.contrib.auth.models import User
-from api.models import Category, Account, Thread, Civi
+from django.db.models import F
+from api.models import Category, Account, Thread, Civi, Activity
 from api.forms import UpdateProfileImage
 from django.conf import settings
 
@@ -51,11 +52,13 @@ def user_profile(request, username=None):
             user = User.objects.get(username=username)
         except User.DoesNotExist:
             return HttpResponseRedirect('/404')
-
-    return TemplateResponse(request, 'account.html', {'username': user,
-                                                    'profile_image_form': UpdateProfileImage,
-                                                    'google_map_api_key': settings.GOOGLE_API_KEY,
-                                                    'sunlight_api_key': settings.SUNLIGHT_API_KEY })
+    data = {
+        'username': user,
+        'profile_image_form': UpdateProfileImage,
+        'google_map_api_key': settings.GOOGLE_API_KEY,
+        'sunlight_api_key': settings.SUNLIGHT_API_KEY
+    }
+    return TemplateResponse(request, 'account.html', data)
 
 @login_required
 @beta_blocker
@@ -65,10 +68,13 @@ def user_setup(request):
         return HttpResponseRedirect('/')
         #start temp rep rendering TODO: REMOVE THIS
     else:
-        return TemplateResponse(request, 'user-setup.html', {'username': request.user.username,
-                                                            'email': request.user.email,
-                                                            'google_map_api_key': settings.GOOGLE_API_KEY,
-                                                            'sunlight_api_key': settings.SUNLIGHT_API_KEY })
+        data = {
+            'username': request.user.username,
+            'email': request.user.email,
+            'google_map_api_key': settings.GOOGLE_API_KEY,
+            'sunlight_api_key': settings.SUNLIGHT_API_KEY
+        }
+        return TemplateResponse(request, 'user-setup.html', data)
 
 
 
@@ -78,18 +84,56 @@ def user_setup(request):
 def issue_thread(request, thread_id=None):
     if not thread_id:
         return HttpResponseRedirect('/404')
-    req_a = Account.objects.get(user=request.user)
-    civis = Civi.objects.filter(thread_id=thread_id)
-    c = civis.order_by('-created')
-    c_scores = [ci.score(req_a.id) for ci in c]
-    c_data = [Civi.objects.serialize_s(ci) for ci in c]
-    for idx, item in enumerate(c_data):
-        c_data[idx]['score'] = c_scores[idx]
-    c_data = sorted(c_data, key=lambda x: x['score'], reverse=True)
+
+    req_acct = Account.objects.get(user=request.user)
+    t = Thread.objects.get(id=thread_id)
+    c_qs = Civi.objects.filter(thread_id=thread_id)
+    # c_scored = Civi.objects.thread_sorted_by_score(c_qs, req_acct.id)
+    c_scored = [c.dict_with_score(req_acct.id) for c in c_qs]
+    civis = sorted(c_scored, key=lambda c: c['score'], reverse=True)
+
+
+    # civis = Civi.objects.filter(thread_id=thread_id)
+    # c = civis.order_by('-created')
+    # c_scores = [ci.score(req_a.id) for ci in c]
+    # c_data = [Civi.objects.serialize_s(ci) for ci in c]
+    # for idx, item in enumerate(c_data):
+    #     c_data[idx]['score'] = c_scores[idx]
+    # c_data = sorted(c_data, key=lambda x: x['score'], reverse=True)
+
+    #modify thread view count
+    t.num_civis = len(civis)
+    t.num_views = F('num_views') + 1
+    t.save()
+    t.refresh_from_db()
+
+    thread_wiki_data = {
+        "title": t.title,
+        "summary": t.summary,
+        "author": {
+            "username": t.author.user.username,
+            "profile_image": t.author.profile_image_url,
+            "first_name": t.author.first_name,
+            "last_name": t.author.last_name
+        },
+        "contributors": [Account.objects.chip_summarize(a) for a in Account.objects.filter(pk__in=c_qs.distinct('author').values_list('author', flat=True))],
+        "category": {
+            "id": t.category.id,
+            "name": t.category.name
+        },
+        "created": t.created_date_str,
+        "num_civis": t.num_civis,
+        "num_views": t.num_views,
+        'user_votes': [{'civi_id':act.civi.id, 'activity_type': act.activity_type, 'acct': act.account.id} for act in Activity.objects.filter(thread=t.id, account=req_acct.id)]
+    }
+    thread_body_data = {
+        'civis': civis,
+    }
 
     data = {
         'thread_id': thread_id,
-        'civis': c_data
+        'thread_wiki_data': json.dumps(thread_wiki_data),
+        'thread_body_data': json.dumps(thread_body_data)
     }
 
     return TemplateResponse(request, 'thread.html', data)

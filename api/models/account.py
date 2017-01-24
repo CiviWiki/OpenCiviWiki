@@ -32,7 +32,7 @@ class AccountManager(models.Manager):
             "last_name": account.last_name,
             "profile_image": account.profile_image_url,
         }
-        return json.dumps(data)
+        return data
 
     def card_summarize(self, account, request_account):
         data = {
@@ -106,9 +106,10 @@ class Account(models.Model):
         else:
             return 'NO LOCATION'
 
-    def get_full_name(self):
+    def _get_full_name(self):
         "Returns the person's full name."
         return '{first_name} {last_name}'.format(first_name=self.first_name, last_name=self.last_name)
+    full_name = property(_get_full_name)
 
     def _get_profile_image_url(self):
         if self.profile_image and default_storage.exists(os.path.join(settings.MEDIA_ROOT, self.profile_image.name)):

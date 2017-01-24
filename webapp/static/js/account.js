@@ -62,7 +62,7 @@ cw.AccountView = BB.View.extend({
             this.postRender();
 
             if (_.find(this.model.get("followers"), function(follower){
-                return (JSON.parse(follower).username== current_user);
+                return (follower.username== current_user);
             })) {
                 var follow_btn = this.$('#sidebar-follow-btn');
                 follow_btn.addClass("btn-secondary");

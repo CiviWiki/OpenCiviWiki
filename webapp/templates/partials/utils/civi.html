@@ -1,63 +1,95 @@
 {% verbatim %}
-<div class="civi-card" id="civi-{{id}}" data-civi-id="{{id}}"  data-civi-links="{{links}}">
+<div class="civi-card" id="civi-{{this.model.get('id')}}" data-civi-id="{{this.model.get('id')}}"  data-civi-links="{{this.model.get('links')}}">
     <div class="row civi-header civi-click">
         <div class="col s9 no-pads civi-title-outer">
-            <div class="civi-type gray-text">
-                {{type}}
-            </div>
-            <div class="civi-title">
-                {{title}}
+            <div class="civi-type gray-text">{{this.model.get('type')}}</div>
+            <div class="civi-title ">
+                <span class="text-wrapper">{{this.model.get('title')}}</span>
+
+                {{# if (this.can_edit) { }}
+                <div class="dark-background-input-field hide edit-wrapper">
+                    <input class="edit-civi-title">
+                </div>
+                {{# } }}
             </div>
         </div>
         <div class="col s3 no-pads civi-header-actions">
             <div class="right">
-                <i class="mini material-icons">edit</i>
+
+                {{# if (this.can_edit) { }}
+                <i class="mini material-icons edit">edit</i>
+                <i class="mini material-icons delete">delete_forever</i>
+
+                <i class="mini material-icons edit-action edit-confirm hide">save</i>
+                <i class="mini material-icons edit-action edit-cancel hide">close</i>
+                {{# } }}
                 <!-- <i class="mini material-icons">flag</i> -->
             </div>
         </div>
     </div>
     <div class="civi-body">
         <div class="civi-body-inner">
-            {{body}}
+            <span class="text-wrapper">{{this.model.get('body')}}</span>
+            {{# if (this.can_edit) { }}
+            <div class="white-background-input-field hide edit-wrapper">
+                <textarea type="text" class="materialize-textarea edit-civi-body" length="1000"></textarea>
+            </div>
+            {{# } }}
         </div>
+        {{# if (this.model.get('links').length > 0) { }}
+        <div class="civi-links">
+            <div class="links-title gray-text">
+                LINKED CIVIS ({{this.model.get('links').length}})
+            </div>
+
+                {{# _.each(this.model.get('links'), function(link){  }}
+                    {{# var civi = this.civis.findWhere({id: link})}}
+                    <div class="link-item">
+                        <span class="bold-text link-lato">{{civi.get('type')}}</span>
+                        <span class="gray-text">{{civi.get('title')}}</span>
+                    </div>
+                {{# }, this); }}
+
+        </div>
+        {{# } }}
         <div class="rating">
             <button class="btn waves-effect rating-button vote vote_vneg" data-rating="vneg">
                 <i class="tiny-for-button material-icons">thumb_down</i>
                 <i class="tiny-for-button material-icons">thumb_down</i>
-                <span class="rate-value">{{votes.votes_vneg}}</span>
+                <span class="rate-value">{{this.model.get('votes.votes_vneg')}}</span>
             </button>
             <button class="btn waves-effect rating-button vote vote_neg" data-rating="neg">
                 <i class="tiny-for-button material-icons">thumb_down</i>
-                <span class="rate-value">{{votes.votes_neg}}</span>
+                <span class="rate-value">{{this.model.get('votes.votes_neg')}}</span>
             </button>
             <button class="btn waves-effect rating-button vote vote_neutral" data-rating="neutral">
                 <i class="tiny-for-button material-icons">remove</i>
-                <span class="rate-value">{{votes.votes_neutral}}</span>
+                <span class="rate-value">{{this.model.get('votes.votes_neutral')}}</span>
             </button>
             <button class="btn waves-effect rating-button vote vote_pos" data-rating="pos">
                 <i class="tiny-for-button material-icons">thumb_up</i>
-                <span class="rate-value">{{votes.votes_pos}}</span>
+                <span class="rate-value">{{this.model.get('votes.votes_pos')}}</span>
             </button>
             <button class="btn waves-effect rating-button vote vote_vpos" data-rating="vpos">
                 <i class="tiny-for-button material-icons">thumb_up</i>
                 <i class="tiny-for-button material-icons">thumb_up</i>
-                <span class="rate-value">{{votes.votes_vpos}}</span>
+                <span class="rate-value">{{this.model.get('votes.votes_vpos')}}</span>
             </button>
-            <span class="link-lato">{{= score}}</span>
+            <div class="grey-text text-lighten-1">{{ this.model.get('score')}}</div>
         </div>
     </div>
     <div class="civi-footer">
         <div class="author-photo-holder">
-            <div class="author-photo transparent" style="background-image: url('{{author.profile_image}}'); background-size: 34px;">
+            <div class="author-photo transparent" style="background-image: url('{{this.model.get('author').profile_image}}'); background-size: 34px;">
 
             </div>
         </div>
         <div class="author-info">
-            <a class="author-name purple-text bold-text" href="/profile/{{author.username}}">
-                {{author.first_name}} {{author.last_name}}
+            <a class="author-name purple-text bold-text" href="/profile/{{this.model.get('author').username}}">
+                {{this.model.get('author').first_name}} {{this.model.get('author').last_name}}
             </a>
             <div class="created gray-text">
-                {{created}}
+                {{this.model.get('created')}}
             </div>
         </div>
         <div class="right civi-footer-actions">

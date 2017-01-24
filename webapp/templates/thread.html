@@ -40,6 +40,9 @@
 <script id="new-response-template" type="text/template">
     {% include "partials/thread/new_response.html" %}
 </script>
+<script id="outline-template" type="text/template">
+    {% include "partials/thread/thread_outline.html" %}
+</script>
 
 <body>
     {% include "partials/utils/global_nav.html" %}
@@ -50,20 +53,19 @@
 <script type="text/javascript">
 
     var username = '{{user.username}}',
-        threadId = '{{thread_id}}';
-    var civis = JSON.parse('{{civis}}');
-    var threadModel = new cw.ThreadModel({}, {
-        threadId: threadId
-    });
-    threadModel.fetch();
+        threadId = '{{thread_id}}',
+        thread_body_data = JSON.parse('{{ thread_body_data|escapejs }}'),
+        thread_wiki_data = JSON.parse('{{ thread_wiki_data|escapejs }}');
 
-    var civiCollection = new cw.CiviCollection(civis);
+    var threadModel = new cw.ThreadModel(thread_wiki_data, {threadId: threadId});
+    var civiCollection = new cw.CiviCollection(thread_body_data.civis, {threadId: threadId});
 
     var threadView = new cw.ThreadView({
         username: username,
         model: threadModel,
         civis: civiCollection
     });
+    threadView.render();
 
 </script>
 

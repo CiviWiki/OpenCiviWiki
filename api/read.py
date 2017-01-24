@@ -215,9 +215,12 @@ def get_civis(request, thread_id):
 
 def get_responses(request, thread_id, civi_id):
     try:
-        Civi.objects.filter(thread_id=thread_id, )
-        res = [Civi.objects.serialize(c) for c in Civi.objects.get(id=civi_id).responses.all().order_by('-votes_vpos', '-votes_pos')]
-        return JsonResponse(res, safe=False)
+        req_acct = Account.objects.get(user=request.user)
+        c_qs = Civi.objects.get(id=civi_id).responses.all()
+        c_scored = [c.dict_with_score(req_acct.id) for c in c_qs]
+        civis = sorted(c_scored, key=lambda c: c['score'], reverse=True)
+
+        return JsonResponse(civis, safe=False)
     except Exception as e:
         return HttpResponseBadRequest(reason=str(e))
 

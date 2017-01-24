@@ -26,7 +26,8 @@ class Activity(models.Model):
         ('vote_neg', 'Vote Disagree'),
         ('vote_neutral', 'Vote Neutral'),
         ('vote_pos', 'Vote Agree'),
-        ('vote_vpos', 'Vote Strongly Agree')
+        ('vote_vpos', 'Vote Strongly Agree'),
+        ('favorite', 'Favor a Civi')
     )
     activity_type = models.CharField(max_length=255, choices=activity_CHOICES)
 

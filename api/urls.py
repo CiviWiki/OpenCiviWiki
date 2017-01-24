@@ -1,6 +1,7 @@
 from django.conf.urls import url
 import read, write
 
+#TODO: RESTful API - http://www.django-rest-framework.org/
 urlpatterns = [
     # url(r'^getcivi$', read.getCivi, name='civi'),
     # url(r'^topten$', read.topTen, name='example'),
@@ -19,6 +20,8 @@ urlpatterns = [
     url(r'^new_thread/$', write.new_thread, name='new thread'),
     url(r'^new_civi/$', write.createCivi, name='new civi'),
     url(r'^rate_civi/$', write.rateCivi, name='rate civi'),
+    url(r'^edit_civi/$', write.editCivi, name='edit civi'),
+    url(r'^delete_civi/$', write.deleteCivi, name='delete civi'),
 
     # url(r'^getblock$', read.getBlock, name='get block'),
     # url(r'^creategroup$', write.createGroup, name='add group'),

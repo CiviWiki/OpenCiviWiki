@@ -92,7 +92,7 @@ def createCivi(request):
     :return: (200, ok) (400, missing required parameter) (500, internal error)
     '''
 
-
+    a = Account.objects.get(user=request.user)
     data = {
         'author': Account.objects.get(user=request.user),
         'title': request.POST.get('title', ''),
@@ -127,7 +127,7 @@ def createCivi(request):
             parent_civi = Civi.objects.get(id=related_civi)
             parent_civi.responses.add(civi)
 
-        return JsonResponse({'data' : Civi.objects.serialize(civi)})
+        return JsonResponse({'data' : civi.dict_with_score(a.id)})
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
 
@@ -171,7 +171,7 @@ def rateCivi(request):
             # c.votes_vpos = c.votes_vpos + 1
             vote_val = 'vote_vpos'
         activity_data['activity_type'] = vote_val
-        
+
         c.save()
 
         if prev_act:
@@ -181,6 +181,40 @@ def rateCivi(request):
         else:
             act = Activity(**activity_data)
             act.save()
+
+        return HttpResponse('Success')
+    except Exception as e:
+        return HttpResponseServerError(reason=str(e))
+
+@login_required
+def editCivi(request):
+    civi_id = request.POST.get('civi_id', '')
+    title = request.POST.get('title', '')
+    body = request.POST.get('body', '')
+
+    c = Civi.objects.get(id=civi_id)
+    if (request.user.username != c.author.user.username):
+        return HttpResponseBadRequest(reason="No Edit Rights")
+
+    try:
+        c.title = title;
+        c.body = body;
+        c.save(update_fields=['title', 'body'])
+
+        return HttpResponse('Success')
+    except Exception as e:
+        return HttpResponseServerError(reason=str(e))
+
+@login_required
+def deleteCivi(request):
+    civi_id = request.POST.get('civi_id', '')
+
+    c = Civi.objects.get(id=civi_id)
+    if (request.user.username != c.author.user.username):
+        return HttpResponseBadRequest(reason="No Edit Rights")
+
+    try:
+        c.delete()
 
         return HttpResponse('Success')
     except Exception as e:
