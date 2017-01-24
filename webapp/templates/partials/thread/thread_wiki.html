@@ -1,11 +1,9 @@
 {% verbatim %}
 <div class="thread-wiki">
-    <div class="wiki-banner">
+    <div class="wiki-banner row">
         <div class="container">
-            <div class="col s5">
-                <div class="wiki-title title-lato dark-white-text">
-                    {{this.model.get('title')}}
-                </div>
+            <div class="col s7">
+                <div class="wiki-title title-lato dark-white-text">{{this.model.get('title')}}</div>
                 <div class="wiki-stats light-gray-text">
                     <span class="wiki-stat">{{this.model.get('num_views')}} Views</span>
                     <span class="wiki-stat">{{this.model.get('num_civis')}} Civis</span>
