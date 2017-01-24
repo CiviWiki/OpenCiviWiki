@@ -22,12 +22,12 @@ class CiviManager(models.Manager):
             "type": civi.c_type,
             "title": civi.title,
             "body": civi.body,
-            "author": dict(
-                username=civi.author.user.username,
-                profile_image=civi.author.profile_image.url if civi.author.profile_image else "/media/profile/default.png",
-                first_name=civi.author.first_name,
-                last_name=civi.author.last_name
-            ),
+            "author": {
+                'username': civi.author.user.username,
+                'profile_image': civi.author.profile_image_url,
+                'first_name': civi.author.first_name,
+                'last_name': civi.author.last_name
+            },
             "hashtags": [h.title for h in civi.hashtags.all()],
             "created": "{0} {1}, {2}".format(month_name[civi.created.month], civi.created.day, civi.created.year),
             "attachments": [],
@@ -64,7 +64,9 @@ class CiviManager(models.Manager):
             return json.dumps({filter: data[filter]})
         return data
 
-
+    def thread_sorted_by_score(self, civis_qs, req_acct_id):
+        qs = civis_qs.order_by('-created')
+        return sorted(qs.all(), key=lambda c: c.score(req_acct_id), reverse=True)
 
 class Civi(models.Model):
     objects = CiviManager()
@@ -84,7 +86,7 @@ class Civi(models.Model):
         ('problem', 'Problem'),
         ('cause', 'Cause'),
         ('solution', 'Solution'),
-        ('response', 'Response'), #TODO: move this to separate model O
+        ('response', 'Response'), #TODO: move this to separate model (subclass?)
     )
     c_type = models.CharField(max_length=31, default='problem', choices=c_CHOICES)
 
@@ -100,27 +102,25 @@ class Civi(models.Model):
     def votes(self):
         from activity import Activity
         act_votes = Activity.objects.filter(civi=self)
-        # votes = dict(
-        #     votes_vneg = self.votes_vneg,
-        #     votes_neg = self.votes_neg,
-        #     votes_neutral = self.votes_neutral,
-        #     votes_pos = self.votes_pos,
-        #     votes_vpos = self.votes_vpos
-        # )
-        votes = dict(
-            total = act_votes.count() - act_votes.filter(activity_type='vote_neutral').count(),
-            votes_vneg = act_votes.filter(activity_type='vote_vneg').count(),
-            votes_neg = act_votes.filter(activity_type='vote_neg').count(),
-            votes_neutral = act_votes.filter(activity_type='vote_neutral').count(),
-            votes_pos = act_votes.filter(activity_type='vote_pos').count(),
-            votes_vpos = act_votes.filter(activity_type='vote_vpos').count()
-        )
+
+        votes = {
+            'total': act_votes.count() - act_votes.filter(activity_type='vote_neutral').count(),
+            'votes_vneg': act_votes.filter(activity_type='vote_vneg').count(),
+            'votes_neg': act_votes.filter(activity_type='vote_neg').count(),
+            'votes_neutral':  act_votes.filter(activity_type='vote_neutral').count(),
+            'votes_pos': act_votes.filter(activity_type='vote_pos').count(),
+            'votes_vpos': act_votes.filter(activity_type='vote_vpos').count()
+        }
         return votes
 
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     last_modified = models.DateTimeField(auto_now=True, blank=True, null=True)
+    def _get_created_date_str(self):
+        d = self.created
+        return "{0} {1}, {2}".format(month_name[d.month], d.day, d.year)
+    created_date_str = property(_get_created_date_str)
 
-    def score(self, request_acct_id):
+    def score(self, request_acct_id=None):
         SD = -2
         D = -1
         A = 1
@@ -129,17 +129,19 @@ class Civi(models.Model):
         post_time = self.created
         current_time = datetime.datetime.now()
 
-
-        account = Account.objects.get(id=request_acct_id)
-
         #step 1
         votes = self.votes()
         v = votes['total']
         x = votes['votes_vneg'] * SD + votes['votes_neg'] * D + votes['votes_pos'] * A + votes['votes_vpos'] * SA
-        y = (1 if self.author in account.following.all().values_list('id', flat=True) else 0)
+        if request_acct_id:
+            account = Account.objects.get(id=request_acct_id)
+            y = (1 if self.author in account.following.all().values_list('id', flat=True) else 0)
+        else:
+            y = 0
+
         f = 0 #TODO: favorite val
-        t = (current_time - post_time.replace(tzinfo=None)).total_seconds()
-        g = 2
+        t = (current_time - post_time.replace(tzinfo=None)).total_seconds() / 60
+        g = 100
 
         #step2
         if x > 0:
@@ -157,3 +159,28 @@ class Civi(models.Model):
                 rank = x * math.log10(v) + y + f + g/t
 
         return rank
+
+    def dict_with_score(self, req_acct_id=None):
+        data = {
+            "id": self.id,
+            "thread_id": self.thread.id,
+            "type": self.c_type,
+            "title": self.title,
+            "body": self.body,
+            "author": {
+                'username': self.author.user.username,
+                'profile_image': self.author.profile_image_url,
+                'first_name': self.author.first_name,
+                'last_name': self.author.last_name
+            },
+            "votes": self.votes(),
+            "links": [c for c in self.linked_civis.all().values_list('id', flat=True)],
+            "created": self.created_date_str,
+            # Not Implemented Yet
+            "hashtags": [],
+            "attachments": [],
+	    }
+        if req_acct_id:
+            data['score'] = self.score(req_acct_id)
+
+        return data

@@ -18,8 +18,8 @@ class ThreadManager(models.Manager):
         }
         author_data = {
             "username": thread.author.user.username,
-            "full_name": thread.author.get_full_name(),
-            "profile_image": thread.author.profile_image.url if thread.author.profile_image else "/media/profile/default.png"
+            "full_name": thread.author.full_name,
+            "profile_image": thread.author.profile_image_url
         }
         stats_data = {
             "num_views": thread.num_views,
@@ -55,3 +55,8 @@ class Thread(models.Model):
     num_solutions = models.IntegerField(default=0)
 
     objects = ThreadManager()
+
+    def _get_created_date_str(self):
+        d = self.created
+        return "{0} {1}, {2}".format(month_name[d.month], d.day, d.year)
+    created_date_str = property(_get_created_date_str)

@@ -1,0 +1,47 @@
+{% verbatim %}
+<div class="problem-nav">
+    <div class="civi-nav-header">
+        <span class="civi-nav-title bold-text">Problem</span>
+        <span class="civi-nav-count right white-text">{{this.civis.where({type: 'problem'}).length}}</span>
+    </div>
+    <div class="problem-nav-wrapper civi-nav-wrapper" id="problem-nav">
+        {{# _.each(this.civis.where({type: 'problem'}), function (p) { }}
+            <div class="problem-nav-indiv civi-nav-indiv">
+                <div class="civi-nav-link" data-civi-nav-id="{{p.get('id')}}">
+                    <span>{{p.get('title')}}</span>
+                </div>
+            </div>
+        {{# }); }}
+    </div>
+</div>
+<div class="cause-nav">
+    <div class="civi-nav-header">
+        <span class="civi-nav-title bold-text">Cause</span>
+        <span class="civi-nav-count right white-text">{{this.civis.where({type: 'cause'}).length}}</span>
+    </div>
+    <div class="cause-nav-wrapper civi-nav-wrapper" id="cause-nav">
+        {{# _.each(this.civis.where({type: 'cause'}), function (c) { }}
+            <div class="cause-nav-indiv civi-nav-indiv">
+                <div class="civi-nav-link" data-civi-nav-id="{{c.get('id')}}">
+                    <span>{{c.get('title')}}</span>
+                </div>
+            </div>
+        {{# }); }}
+    </div>
+</div>
+<div class="solution-nav">
+    <div class="civi-nav-header">
+        <span class="civi-nav-title bold-text">Solution</span>
+        <span class="civi-nav-count right white-text">{{this.civis.where({type: 'solution'}).length}}</span>
+    </div>
+    <div class="solution-nav-wrapper civi-nav-wrapper" id="solution-nav">
+        {{# _.each(this.civis.where({type: 'solution'}), function (s) { }}
+            <div class="solution-nav-indiv civi-nav-indiv">
+                <div class="civi-nav-link" data-civi-nav-id="{{s.get('id')}}">
+                    <span>{{s.get('title')}}</span>
+                </div>
+            </div>
+        {{# }); }}
+    </div>
+</div>
+{% endverbatim %}

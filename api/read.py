@@ -137,32 +137,32 @@ def get_thread(request, thread_id):
         # solutions = civis.filter(c_type='solution')
 
         #TODO: move order by to frontend or accept optional arg
-        c = civis.filter(c_type='problem').order_by('-created')
+        c = civis.order_by('-created')
         c_scores = [ci.score(req_a.id) for ci in c]
-        problems = [Civi.objects.serialize_s(ci) for ci in c]
-        for idx, item in enumerate(problems):
+        c_data = [Civi.objects.serialize_s(ci) for ci in c]
+        for idx, item in enumerate(c_data):
             problems[idx]['score'] = c_scores[idx]
         problems = sorted(problems, key=lambda x: x['score'], reverse=True)
-        for idx, item in enumerate(problems):
-            problems[idx] = json.dumps(item, cls=DjangoJSONEncoder)
-
-        c = civis.filter(c_type='cause').order_by('-created')
-        c_scores = [ci.score(req_a.id) for ci in c]
-        causes = [Civi.objects.serialize_s(ci) for ci in c]
-        for idx, item in enumerate(causes):
-            causes[idx]['score'] = c_scores[idx]
-        causes = sorted(causes, key=lambda x: x['score'], reverse=True)
-        for idx, item in enumerate(causes):
-            causes[idx] = json.dumps(item, cls=DjangoJSONEncoder)
-
-        c = civis.filter(c_type='solution').order_by('-created')
-        c_scores = [ci.score(req_a.id) for ci in c]
-        solutions = [Civi.objects.serialize_s(ci) for ci in c]
-        for idx, item in enumerate(solutions):
-            solutions[idx]['score'] = c_scores[idx]
-        solutions = sorted(solutions, key=lambda x: x['score'], reverse=True)
-        for idx, item in enumerate(solutions):
-            solutions[idx] = json.dumps(item, cls=DjangoJSONEncoder)
+        # for idx, item in enumerate(problems):
+        #     problems[idx] = json.dumps(item, cls=DjangoJSONEncoder)
+        #
+        # c = civis.filter(c_type='cause').order_by('-created')
+        # c_scores = [ci.score(req_a.id) for ci in c]
+        # causes = [Civi.objects.serialize_s(ci) for ci in c]
+        # for idx, item in enumerate(causes):
+        #     causes[idx]['score'] = c_scores[idx]
+        # causes = sorted(causes, key=lambda x: x['score'], reverse=True)
+        # for idx, item in enumerate(causes):
+        #     causes[idx] = json.dumps(item, cls=DjangoJSONEncoder)
+        #
+        # c = civis.filter(c_type='solution').order_by('-created')
+        # c_scores = [ci.score(req_a.id) for ci in c]
+        # solutions = [Civi.objects.serialize_s(ci) for ci in c]
+        # for idx, item in enumerate(solutions):
+        #     solutions[idx]['score'] = c_scores[idx]
+        # solutions = sorted(solutions, key=lambda x: x['score'], reverse=True)
+        # for idx, item in enumerate(solutions):
+        #     solutions[idx] = json.dumps(item, cls=DjangoJSONEncoder)
 
         # problems = [Civi.objects.serialize(c) for c in civis.filter(c_type='problem').order_by('-votes_vpos', '-votes_pos')]
         # problems =
@@ -173,16 +173,17 @@ def get_thread(request, thread_id):
             'title': t.title,
             'summary': t.summary,
             'hashtags': t.hashtags.all().values(),
-            'author': dict(
-                username=t.author.user.username,
-                profile_image=t.author.profile_image.url  if t.author.profile_image  else "/media/profile/default.png",
-                first_name=t.author.first_name,
-                last_name=t.author.last_name),
+            'author': {
+                'username': t.author.user.username,
+                'profile_image': t.author.profile_image.url  if t.author.profile_image  else "/media/profile/default.png",
+                'first_name': t.author.first_name,
+                'last_name': t.author.last_name
+            },
             'category': model_to_dict(t.category),
             'created': t.created,
-            'problems': problems,
-            'causes': causes,
-            'solutions': solutions,
+            # 'problems': problems,
+            # 'causes': causes,
+            # 'solutions': solutions,
             'contributors': [Account.objects.chip_summarize(a) for a in Account.objects.filter(pk__in=civis.distinct('author').values_list('author', flat=True))],
             'num_civis': t.num_civis,
             'num_views': t.num_views,
@@ -197,19 +198,29 @@ def get_thread(request, thread_id):
     except Exception as e:
         return HttpResponseBadRequest(reason=str(e))
 
-def get_civi(request, thread_id, civi_id):
+def get_civi(request, civi_id):
     try:
-        Civi.objects.filter(thread_id=thread_id, )
-        res = [Civi.objects.serialize(c) for c in Civi.objects.get(id=civi_id).responses.all().order_by('-votes_vpos', '-votes_pos')]
-        return JsonResponse(res, safe=False)
+        c = Civi.objects.serialize(Civi.objects.get(id=civi_id))
+        return JsonResponse(c, safe=False)
     except Exception as e:
         return HttpResponseBadRequest(reason=str(e))
 
+def get_civis(request, thread_id):
+    try:
+        c = [Civi.objects.serialize(c) for c in Civi.objects.filter(thread=thread_id)]
+        return JsonResponse(c)
+    except Exception as e:
+        return HttpResponseBadRequest(reason=str(e))
+
+
 def get_responses(request, thread_id, civi_id):
     try:
-        Civi.objects.filter(thread_id=thread_id, )
-        res = [Civi.objects.serialize(c) for c in Civi.objects.get(id=civi_id).responses.all().order_by('-votes_vpos', '-votes_pos')]
-        return JsonResponse(res, safe=False)
+        req_acct = Account.objects.get(user=request.user)
+        c_qs = Civi.objects.get(id=civi_id).responses.all()
+        c_scored = [c.dict_with_score(req_acct.id) for c in c_qs]
+        civis = sorted(c_scored, key=lambda c: c['score'], reverse=True)
+
+        return JsonResponse(civis, safe=False)
     except Exception as e:
         return HttpResponseBadRequest(reason=str(e))
 

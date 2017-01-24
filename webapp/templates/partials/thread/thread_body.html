@@ -42,65 +42,14 @@
                 <span class="issue-outline-title">ISSUE OUTLINE</span>
                 <i class="expand-nav material-icons right">keyboard_arrow_down</i>
             </div>
-            <div class="civi-outline">
-                <div class="problem-nav">
-                    <div class="civi-nav-header">
-                        <span class="civi-nav-title bold-text">Problem</span>
-                        <span class="civi-nav-count right white-text">{{this.model.get('problems').length}}</span>
-                    </div>
-                    <div class="problem-nav-wrapper civi-nav-wrapper">
-                        {{# _.each(this.model.get('problems'), function (p) { }}
-                            <div class="problem-nav-indiv civi-nav-indiv">
-                                <div class="civi-nav-link" data-civi-nav-id="{{p.id}}">
-                                    <span>{{p.title}}</span>
-                                </div>
-                            </div>
-                        {{# }); }}
-                    </div>
-                </div>
-                <div class="cause-nav">
-                    <div class="civi-nav-header">
-                        <span class="civi-nav-title bold-text">Cause</span>
-                        <span class="civi-nav-count right white-text">{{this.model.get('causes').length}}</span>
-                    </div>
-                    <div class="cause-nav-wrapper civi-nav-wrapper">
-                        {{# _.each(this.model.get('causes'), function (c) { }}
-                            <div class="cause-nav-indiv civi-nav-indiv">
-                                <div class="civi-nav-link" data-civi-nav-id="{{c.id}}">
-                                    <span>{{c.title}}</span>
-                                </div>
-                            </div>
-                        {{# }); }}
-                    </div>
-                </div>
-                <div class="solution-nav">
-                    <div class="civi-nav-header">
-                        <span class="civi-nav-title bold-text">Solution</span>
-                        <span class="civi-nav-count right white-text">{{this.model.get('solutions').length}}</span>
-                    </div>
-                    <div class="solution-nav-wrapper civi-nav-wrapper">
-                        {{# _.each(this.model.get('solutions'), function (s) { }}
-                            <div class="solution-nav-indiv civi-nav-indiv">
-                                <div class="civi-nav-link" data-civi-nav-id="{{s.id}}">
-                                    <span>{{s.title}}</span>
-                                </div>
-                            </div>
-                        {{# }); }}
-                    </div>
-                </div>
+            <div class="civi-outline" id="civi-outline">
             </div>
         </div>
     </div>
-    <div class="col s5 main-thread scroll-col">
-        {{# _.each(this.model.get('problems'), function (p) { }}
-            {{= cw.underscorePartial('civi-template', p)}}
-        {{# }, this); }}
-        {{# _.each(this.model.get('causes'), function (p) { }}
-            {{= cw.underscorePartial('civi-template', p)}}
-        {{# }, this); }}
-        {{# _.each(this.model.get('solutions'), function (p) { }}
-            {{= cw.underscorePartial('civi-template', p)}}
-        {{# }, this); }}
+    <div class="col s5 main-thread scroll-col" id="main-thread">
+        <div id="thread-problems"></div>
+        <div id="thread-causes"></div>
+        <div id="thread-solutions"></div>
         <div class="civi-padding"></div>
     </div>
     <div class="col s4 responses">

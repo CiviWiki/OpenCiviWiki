@@ -41,7 +41,7 @@
                             {{# _.each(this.model.get('contributors'), function (c, idx) { }}
                                 {{# if (idx > 7) { return; } else { }}
                                     <div class="profile-button-wrapper col l3 m6 s12">
-                                        {{= cw.underscorePartial('profile-button-template', {c:JSON.parse(c)})}}
+                                        {{= cw.underscorePartial('profile-button-template', {c:c})}}
                                     </div>
                                 {{# } }}
                             {{# }, this); }}
