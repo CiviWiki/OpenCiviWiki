@@ -570,6 +570,7 @@ cw.ThreadView = BB.View.extend({
 
     renderOutline: function(){
         this.$('#civi-outline').empty().append(this.outlineTemplate());
+        this.calcCiviLocations();
     },
 
     renderCivis: function () {
@@ -644,6 +645,8 @@ cw.ThreadView = BB.View.extend({
             $currentNavCivi.removeClass('current');
             $newNavCivi.addClass('current');
 
+            _this.autoscrollCivi(_this.$('#civi-'+ newCivi));
+
             if (!_this.navExpanded) {
                 $($currentNavCivi.closest('.civi-nav-wrapper').siblings()[0]).removeClass('current');
                 $($newNavCivi.closest('.civi-nav-wrapper').siblings()[0]).addClass('current');
@@ -687,6 +690,15 @@ cw.ThreadView = BB.View.extend({
         var $civiResponseScroll = this.$('.responses');
         $civiResponseScroll.css({height: $('body').height() - $civiResponseScroll.offset().top});
 
+        this.calcCiviLocations();
+
+        this.currentScroll = 0;
+
+        _this.changeNavScroll(_this.currentScroll, true);
+    },
+
+    calcCiviLocations: function(){
+        var _this = this;
         var threadPos = this.$('.main-thread').position().top;
         this.civiLocations = [];
         this.$('.civi-card').each(function (idx, civi) {
@@ -694,12 +706,7 @@ cw.ThreadView = BB.View.extend({
                 $civiTop = $civi.position().top - threadPos;
             _this.civiLocations.push({top: $civiTop, bottom: $civiTop + $civi.height(), id: $civi.attr('data-civi-id')});
         });
-
-        this.currentScroll = 0;
-
-        _this.changeNavScroll(_this.currentScroll, true);
     },
-
     scrollToWiki: function () {
         var _this = this;
 
@@ -735,7 +742,59 @@ cw.ThreadView = BB.View.extend({
         var $link = $(e.target).closest('.civi-nav-link');
         this.$('.main-thread').animate({scrollTop: _.findWhere(this.civiLocations, {id: $link.attr('data-civi-nav-id')}).top - 15}, 250);
     },
+    autoscrollCivi: function (target) {
+        var $this = target;
 
+        if ($this.find('.civi-type').text() != "response") {
+            var $currentCivi = this.$('[data-civi-id="' + this.currentCivi + '"]'),
+                $newCivi = $this.closest('.civi-card');
+
+            if (this.currentCivi !== $newCivi.attr('data-civi-id')) {
+                // $currentCivi.removeClass('current');
+                this.$('.civi-card').removeClass('current');
+                $newCivi.addClass('current');
+                var civi_id = $newCivi.data('civi-id');
+
+                var links = this.civis.get(civi_id).get('links');
+                // var links_related = [];
+                // _.each(links, function(link){
+                //     links_related = this.$('#civi-'+link).data('civi-links');
+                //     console.log(links_related);
+                //     if (!links_related) return;
+                //     if (links_related.length > 1){
+                //         links_related= links_related.split(",").map(Number);
+                //     } else {
+                //         links_related = parseInt(links_related);
+                //     }
+                //
+                //     links = _.union(links, links_related);
+                // },this);
+                // console.log(links);
+
+                _.each(this.$('.civi-card'), function(civiCard){
+                    // console.log(links, $(civiCard).data('civi-id'));
+
+                    if (links.indexOf($(civiCard).data('civi-id')) == -1 ){
+                        $(civiCard).removeClass('linked');
+                    } else {
+                        $(civiCard).addClass('linked');
+                    }
+                });
+
+                this.currentCivi = $newCivi.attr('data-civi-id');
+
+                this.responseCollection.civiId = this.currentCivi;
+                this.responseCollection.fetch();
+
+            } else {
+                $currentCivi.removeClass('current');
+                this.$('.civi-card').removeClass('linked');
+
+                this.currentCivi = null;
+                this.$('.responses').empty();
+            }
+        }
+    },
     drilldownCivi: function (e) {
         var $this = $(e.currentTarget);
 
