@@ -36,12 +36,6 @@ cw.CiviModel = BB.Model.extend({
 
     initialize: function (model, options) {
         options = options || {};
-
-    //     this.set({
-    //        ratings: r,
-    //        author: a,
-    //        attachments: a
-    //    });
     },
 
     save: function(attrs, options) { // TODO: Remove this after implementing django REST framework
@@ -95,19 +89,12 @@ cw.ResponseCollection = BB.Collection.extend({
         }
         return '/api/response_data/' + this.threadId + '/' + this.civiId + '/';
     },
-    //
-    // parse: function(data){
-    //     var parsed_data= _.map(data, function(c){return JSON.parse(c);});
-    //
-    //     return parsed_data;
-    // },
 
     initialize: function (model, options) {
         this.threadId = options.threadId;
         this.civiId = null;
     }
 });
-
 
 cw.ThreadModel = BB.Model.extend({
     url: function () {
@@ -310,10 +297,10 @@ cw.CiviView =  BB.View.extend({
 
                 _this.civis.remove(_this.model);
 
+                _this.parentView.renderOutline();
 
                 _this.remove();
 
-                _this.parentView.renderOutline();
             },
             error: function(r){
                 Materialize.toast('Could not delete the civi', 2000);
@@ -848,9 +835,6 @@ cw.ThreadView = BB.View.extend({
             }
         }
     },
-
-
-
 
     openNewCiviModal: function () {
         this.newCiviView.show();
