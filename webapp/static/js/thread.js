@@ -72,11 +72,21 @@ cw.CiviCollection = BB.Collection.extend({
 
     filterByType: function (type) {
         var filtered = this.models.filter(function (civi) {
-            return civi.get("type").category_id === type;
+            return civi.get("type") === type;
         });
         return filtered;
     },
+});
 
+cw.CiviSubCollection = BB.Collection.extend({
+    model: cw.CiviModel,
+    comparator: function(model) {
+        return -model.get('score');
+    },
+
+    initialize: function (options) {
+        options = options || {};
+    },
 
 });
 
@@ -186,10 +196,10 @@ cw.CiviView =  BB.View.extend({
 
     clickRating: function (e) {
         var _this = this;
-        var $this = $(e.target).closest('.rating-button');
+        var $this = $(e.currentTarget);
 
         var rating = $this.data('rating');
-        var civi_id = $(e.target).closest('.civi-card').data('civi-id');
+        var civi_id = $(e.currentTarget).closest('.civi-card').data('civi-id');
 
         if (this.can_edit) {
             Materialize.toast('Trying to vote on your own civi? :}', 2000);
@@ -208,8 +218,9 @@ cw.CiviView =  BB.View.extend({
                     // var score = $this.find('.rate-value');
                     // var new_vote = parseInt(score.text())+ 1;
                     // score.text(new_vote);
+
+                    _this.$('.rating-button').removeClass('current');
                     $this.addClass('current');
-                    $this.siblings().removeClass('current');
                 },
                 error: function(r){
                     Materialize.toast('Could not vote :(', 2000);
@@ -296,10 +307,10 @@ cw.CiviView =  BB.View.extend({
                 });
 
                 _this.civis.remove(_this.model);
-
+                _this.remove();
                 _this.parentView.renderOutline();
 
-                _this.remove();
+
 
             },
             error: function(r){
@@ -493,6 +504,11 @@ cw.NewResponseView = BB.View.extend({
     }
 });
 
+cw.OutlineView = BB.View.extend({
+});
+cw.LinkSelectView = BB.View.extend({
+});
+
 cw.ThreadView = BB.View.extend({
     el: '#thread',
     template: _.template($('#thread-template').html()),
@@ -505,6 +521,10 @@ cw.ThreadView = BB.View.extend({
         options = options || {};
         this.username = options.username;
         this.civis = options.civis;
+
+        this.problems = new cw.CiviSubCollection(this.civis.filterByType('problem'));
+        this.causes = new cw.CiviSubCollection(this.civis.filterByType('cause'));
+        this.solutions = new cw.CiviSubCollection(this.civis.filterByType('solution'));
 
         this.responseCollection = new cw.ResponseCollection({}, {
             threadId: this.model.threadId
@@ -530,9 +550,9 @@ cw.ThreadView = BB.View.extend({
         this.threadWikiRender();
         this.threadBodyRender();
         this.$('.scroll-col').height($(window).height() - this.$('.body-banner').height());
-        this.$('.civi-padding').height(this.$('.main-thread').height());
+
         this.renderCivis();
-        this.renderVotes();
+        this.renderOutline();
 
     },
 
@@ -550,7 +570,7 @@ cw.ThreadView = BB.View.extend({
 
             this.renderOutline();
             this.$('.main-thread').on('scroll', function (e) {
-                _this.changeNavScroll(e.target.scrollTop);
+                _this.processCiviScroll();
             });
         }
     },
@@ -573,6 +593,9 @@ cw.ThreadView = BB.View.extend({
             var can_edit = civi.get('author').username == this.username ? true : false;
             this.$('#thread-solutions').append(new cw.CiviView({model: civi, can_edit: can_edit, parentView: this}).el);
         }, this);
+
+        this.$('.civi-padding').height(this.$('.main-thread').height());
+        this.renderVotes();
     },
 
     renderVotes: function() {
@@ -592,57 +615,7 @@ cw.ThreadView = BB.View.extend({
         }, this);
     },
 
-    changeNavScroll: function (scrollPosition, firstTime, navChange) {
-        var _this = this;
-        if (this.civis.length === 0){
-            return;
-        }
-        if (firstTime) {
-            var $newNavCivi = _this.$('[data-civi-nav-id="' + _this.civiLocations[0].id + '"]');
-            $newNavCivi.addClass('current');
 
-            if (!_this.navExpanded) {
-                $($newNavCivi.closest('.civi-nav-wrapper').siblings()[0]).addClass('current');
-            }
-
-            _this.currentNavCivi = _this.civiLocations[0].id;
-            return;
-        } else if (navChange) {
-            var $currentNavCivi = _this.$('[data-civi-nav-id="' + _this.currentNavCivi + '"]');
-
-            if (this.navExpanded) {
-                $($currentNavCivi.closest('.civi-nav-wrapper').siblings()[0]).removeClass('current');
-            } else {
-                $($currentNavCivi.closest('.civi-nav-wrapper').siblings()[0]).addClass('current');
-            }
-            return;
-        }
-
-        var element = _.find(_this.civiLocations, function (l) {
-            return scrollPosition > l.top - 16 && scrollPosition < l.bottom + 2;
-        });
-
-        if (!element) return;
-        var newCivi = element.id;
-
-        if (_this.currentNavCivi !== newCivi) {
-            var $currentNavCivi = _this.$('[data-civi-nav-id="' + _this.currentNavCivi + '"]'),
-                $newNavCivi = _this.$('[data-civi-nav-id="' + newCivi + '"]');
-
-            $currentNavCivi.removeClass('current');
-            $newNavCivi.addClass('current');
-
-            _this.autoscrollCivi(_this.$('#civi-'+ newCivi));
-
-            if (!_this.navExpanded) {
-                $($currentNavCivi.closest('.civi-nav-wrapper').siblings()[0]).removeClass('current');
-                $($newNavCivi.closest('.civi-nav-wrapper').siblings()[0]).addClass('current');
-            }
-
-            _this.currentNavCivi = newCivi;
-            _this.currentScroll = scrollPosition;
-        }
-    },
 
     events: {
         'click .enter-body': 'scrollToBody',
@@ -681,19 +654,10 @@ cw.ThreadView = BB.View.extend({
 
         this.currentScroll = 0;
 
-        _this.changeNavScroll(_this.currentScroll, true);
+        _this.processCiviScroll();
     },
 
-    calcCiviLocations: function(){
-        var _this = this;
-        var threadPos = this.$('.main-thread').position().top;
-        this.civiLocations = [];
-        this.$('.civi-card').each(function (idx, civi) {
-            var $civi = $(civi),
-                $civiTop = $civi.position().top - threadPos;
-            _this.civiLocations.push({top: $civiTop, bottom: $civiTop + $civi.height(), id: $civi.attr('data-civi-id')});
-        });
-    },
+
     scrollToWiki: function () {
         var _this = this;
 
@@ -715,73 +679,157 @@ cw.ThreadView = BB.View.extend({
         if ($this.hasClass('expanded')) {
             $('.civi-nav-wrapper').slideUp();
             $this.removeClass('expanded');
-            _this.navExpanded = false;
-            _this.changeNavScroll(_this.currentScroll, false, true);
+            this.navExpanded = false;
         } else {
             $('.civi-nav-wrapper').slideDown();
             $this.addClass('expanded');
-            _this.navExpanded = true;
-            _this.changeNavScroll(_this.currentScroll, false, true);
+            this.navExpanded = true;
         }
+        this.activateNav();
     },
 
     goToCivi: function (e) {
         var $link = $(e.target).closest('.civi-nav-link');
         this.$('.main-thread').animate({scrollTop: _.findWhere(this.civiLocations, {id: $link.attr('data-civi-nav-id')}).top - 15}, 250);
     },
-    autoscrollCivi: function (target) {
+
+    calcCiviLocations: function(){
+        var _this = this;
+        var threadPos = this.$('.main-thread').position().top;
+        this.civiLocations = [];
+        // this.civiTops = [];
+        this.civiTargets = [];
+        this.$('.civi-card').each(function (idx, civi) {
+            var $civi = $(civi),
+                $civiTop = $civi.position().top - threadPos;
+            _this.civiLocations.push({top: $civiTop, bottom: $civiTop + $civi.height(), target: $civi, id: $civi.attr('data-civi-id')});
+            // _this.civiTops.push($civiTop);
+            // _this.civiTargets.push({top: $civiTop, target: $civi, id: $civi.data('civi-id') });
+        });
+    },
+
+    processCiviScroll: function () {
+        var _this = this;
+
+        var scrollPosition = this.$('.main-thread').scrollTop();
+        // 1. Check if there are any civis. No tracking if none
+        if (this.civis.length === 0){
+            return;
+        }
+
+        // TODO: check if nav is folded, then just p-c-solution check
+        //
+        // if (firstTime) {
+        //     var $newNavCivi = _this.$('[data-civi-nav-id="' + _this.civiLocations[0].id + '"]');
+        //     $newNavCivi.addClass('current');
+        //
+        //     if (!_this.navExpanded) {
+        //         $($newNavCivi.closest('.civi-nav-wrapper').siblings()[0]).addClass('current');
+        //     }
+        //
+        //     _this.currentNavCivi = _this.civiLocations[0].id;
+        //     return;
+        // } else
+        // if (navChange) {
+        //     var $currentNavCivi = _this.$('[data-civi-nav-id="' + _this.currentNavCivi + '"]');
+        //
+        //     if (this.navExpanded) {
+        //         $($currentNavCivi.closest('.civi-nav-wrapper').siblings()[0]).removeClass('current');
+        //     } else {
+        //         $($currentNavCivi.closest('.civi-nav-wrapper').siblings()[0]).addClass('current');
+        //     }
+        //     return;
+        // }
+        // 2. Go through list of heights to get current active civi
+        var OFFSET = 100;
+        var element = _.find(this.civiLocations, function (l) {
+            return this.currentNavCivi !== l.id &&
+                scrollPosition >= l.top - OFFSET &&
+                scrollPosition < l.bottom - OFFSET;
+        }, this);
+        // 3. Activate Corresponding Civi Card and Nav
+        if (!element) return;
+        else {
+            this.activateNav(element.id);
+            _this.autoscrollCivi(_this.$('#civi-'+ element.id));
+        }
+
+    },
+
+    activateNav: function(id) {
+        var _this = this;
+        this.currentNavCivi = id || this.currentNavCivi;
+
+        var $currentNavCivi = _this.$('[data-civi-nav-id="' + _this.currentNavCivi + '"]');
+            // $newNavCivi = _this.$('[data-civi-nav-id="' + newCivi + '"]');
+
+
+        // $newNavCivi.addClass('current');
+        if (!_this.navExpanded) {
+            this.$('.civi-nav-header').removeClass('current');
+            $($currentNavCivi.closest('.civi-nav-wrapper').siblings()[0]).addClass('current');
+        } else {
+            this.$('.civi-nav-link').removeClass('current');
+            this.$('.civi-nav-header').removeClass('current');
+            $currentNavCivi.addClass('current');
+        }
+
+    },
+
+    autoscrollCivi: _.throttle(function (target) {
+        // TODO: Throttle this; needs time buffer
         var $this = target;
 
-        if ($this.find('.civi-type').text() != "response") {
-            var $currentCivi = this.$('[data-civi-id="' + this.currentCivi + '"]'),
-                $newCivi = $this.closest('.civi-card');
+        var $currentCivi = this.$('[data-civi-id="' + this.currentCivi + '"]'),
+            $newCivi = $this.closest('.civi-card');
 
-            if (this.currentCivi !== $newCivi.attr('data-civi-id')) {
-                // $currentCivi.removeClass('current');
-                this.$('.civi-card').removeClass('current');
-                $newCivi.addClass('current');
-                var civi_id = $newCivi.data('civi-id');
+        if (this.currentCivi !== $newCivi.attr('data-civi-id')) {
+            // $currentCivi.removeClass('current');
+            this.$('.civi-card').removeClass('current');
+            $newCivi.addClass('current');
+            var civi_id = $newCivi.data('civi-id');
 
-                var links = this.civis.get(civi_id).get('links');
-                // var links_related = [];
-                // _.each(links, function(link){
-                //     links_related = this.$('#civi-'+link).data('civi-links');
-                //     console.log(links_related);
-                //     if (!links_related) return;
-                //     if (links_related.length > 1){
-                //         links_related= links_related.split(",").map(Number);
-                //     } else {
-                //         links_related = parseInt(links_related);
-                //     }
-                //
-                //     links = _.union(links, links_related);
-                // },this);
-                // console.log(links);
+            // var links = this.civis.get(civi_id).get('links');
+            // // var links_related = [];
+            // // _.each(links, function(link){
+            // //     links_related = this.$('#civi-'+link).data('civi-links');
+            // //     console.log(links_related);
+            // //     if (!links_related) return;
+            // //     if (links_related.length > 1){
+            // //         links_related= links_related.split(",").map(Number);
+            // //     } else {
+            // //         links_related = parseInt(links_related);
+            // //     }
+            // //
+            // //     links = _.union(links, links_related);
+            // // },this);
+            // // console.log(links);
+            //
+            // _.each(this.$('.civi-card'), function(civiCard){
+            //     // console.log(links, $(civiCard).data('civi-id'));
+            //
+            //     if (links.indexOf($(civiCard).data('civi-id')) == -1 ){
+            //         $(civiCard).removeClass('linked');
+            //     } else {
+            //         $(civiCard).addClass('linked');
+            //     }
+            // });
 
-                _.each(this.$('.civi-card'), function(civiCard){
-                    // console.log(links, $(civiCard).data('civi-id'));
+            this.currentCivi = $newCivi.attr('data-civi-id');
 
-                    if (links.indexOf($(civiCard).data('civi-id')) == -1 ){
-                        $(civiCard).removeClass('linked');
-                    } else {
-                        $(civiCard).addClass('linked');
-                    }
-                });
+            this.responseCollection.civiId = this.currentCivi;
+            this.responseCollection.fetch();
 
-                this.currentCivi = $newCivi.attr('data-civi-id');
+        } else {
+            $currentCivi.removeClass('current');
+            this.$('.civi-card').removeClass('linked');
 
-                this.responseCollection.civiId = this.currentCivi;
-                this.responseCollection.fetch();
-
-            } else {
-                $currentCivi.removeClass('current');
-                this.$('.civi-card').removeClass('linked');
-
-                this.currentCivi = null;
-                this.$('.responses').empty();
-            }
+            this.currentCivi = null;
+            this.$('.responses').empty();
         }
-    },
+
+    }, 250),
+
     drilldownCivi: function (e) {
         var $this = $(e.currentTarget);
 
@@ -837,6 +885,7 @@ cw.ThreadView = BB.View.extend({
     },
 
     openNewCiviModal: function () {
+
         this.newCiviView.show();
     },
 
@@ -847,7 +896,4 @@ cw.ThreadView = BB.View.extend({
     assign: function(view, selector) {
         view.setElement(this.$(selector)).render();
     }
-
-
-
 });
