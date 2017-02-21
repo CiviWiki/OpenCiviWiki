@@ -1,13 +1,33 @@
 {% verbatim %}
+<div class="civi-switch center">
+    <div class="switch">
+        <!-- {{# if (count.total) { }}
+        <span class="count-badge other-count white-text left">999</span>
+        {{# } }} -->
+        <label>
+            <span class="label-other">Other</span>
+            <input type="checkbox" id="recommended-switch" checked>
+            <span class="lever"></span>
+            <span class="label-recommended bold">Recommended</span>
+        </label>
+        {{# if (count.total) { }}
+        <span class="count-badge white-text right">{{count.total}}</span>
+        {{# } }}
+    </div>
+
+</div>
 <div class="problem-nav">
     <div class="civi-nav-header">
         <span class="civi-nav-title bold-text">Problem</span>
-        <span class="civi-nav-count right white-text">{{this.problems.length}}</span>
+        {{# if (count.problem > 0) { }}
+            <span class="civi-nav-count right white-text">{{count.problem}}</span>
+        {{# } }}
     </div>
     <div class="problem-nav-wrapper civi-nav-wrapper" id="problem-nav">
-        {{# _.each(this.problems.models, function (p) { }}
+        {{# _.each(problems, function (p) { }}
             <div class="problem-nav-indiv civi-nav-indiv">
-                <div class="civi-nav-link" data-civi-nav-id="{{p.get('id')}}">
+                <i class="material-icons tiny civi-nav-state" id="civi-nav-state-{{p.get('id')}}"></i>
+                <div class="civi-nav-link" data-civi-nav-id="{{p.get('id')}}" id="civi-nav-{{p.get('id')}}">
                     <span>{{p.get('title')}}</span>
                 </div>
             </div>
@@ -17,12 +37,15 @@
 <div class="cause-nav">
     <div class="civi-nav-header">
         <span class="civi-nav-title bold-text">Cause</span>
-        <span class="civi-nav-count right white-text">{{this.causes.length}}</span>
+        {{# if (count.cause > 0) { }}
+            <span class="civi-nav-count right white-text">{{count.cause}}</span>
+        {{# } }}
     </div>
     <div class="cause-nav-wrapper civi-nav-wrapper" id="cause-nav">
-        {{# _.each(this.causes.models, function (c) { }}
+        {{# _.each(causes, function (c) { }}
             <div class="cause-nav-indiv civi-nav-indiv">
-                <div class="civi-nav-link" data-civi-nav-id="{{c.get('id')}}">
+                <i class="material-icons tiny civi-nav-state" id="civi-nav-state-{{c.get('id')}}"></i>
+                <div class="civi-nav-link" data-civi-nav-id="{{c.get('id')}}" id="civi-nav-{{c.get('id')}}">
                     <span>{{c.get('title')}}</span>
                 </div>
             </div>
@@ -32,12 +55,15 @@
 <div class="solution-nav">
     <div class="civi-nav-header">
         <span class="civi-nav-title bold-text">Solution</span>
-        <span class="civi-nav-count right white-text">{{this.solutions.length}}</span>
+        {{# if (count.solution > 0) { }}
+            <span class="civi-nav-count right white-text">{{count.solution}}</span>
+        {{# } }}
     </div>
     <div class="solution-nav-wrapper civi-nav-wrapper" id="solution-nav">
-        {{# _.each(this.solutions.models, function (s) { }}
+        {{# _.each(solutions, function (s) { }}
             <div class="solution-nav-indiv civi-nav-indiv">
-                <div class="civi-nav-link" data-civi-nav-id="{{s.get('id')}}">
+                <i class="material-icons tiny civi-nav-state" id="civi-nav-state-{{s.get('id')}}"></i>
+                <div class="civi-nav-link" data-civi-nav-id="{{s.get('id')}}" id="civi-nav-{{s.get('id')}}">
                     <span>{{s.get('title')}}</span>
                 </div>
             </div>

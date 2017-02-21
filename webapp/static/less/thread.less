@@ -8,13 +8,19 @@
     }
 }
 
-.count-pill {
+.count-badge {
     font-size: 12px;
     border-radius: 25px;
     background-color: @dark-blue;
     font-weight: bold;
     padding: 0 8px;
 }
+.nav-inactive {
+    color: #cccccc;
+    cursor: default;
+}
+
+
 body {
     -webkit-font-smoothing: antialiased;
     ::-webkit-scrollbar {
@@ -218,7 +224,7 @@ body {
 
         .body-banner {
             background-color: @dark-purple;
-            box-shadow: 0 2px 2px @box-shadow-gray;
+            box-shadow: 0 5px 6px -3px rgba(0, 0, 0, 0.4);
             position: relative;
             z-index: 2;
 
@@ -259,9 +265,16 @@ body {
 
         .nav-column {
             // box-shadow: 2px 0 2px @box-shadow-gray;
-            // position: relative;
-            // z-index: 2;
+            position: relative;
+            z-index: 2;
             background-color: @barely-not-white;
+            border-right: 1px solid @dark-white;
+
+            width: 25%;
+            margin-left: auto;
+            left: auto;
+            right: auto;
+
 
             .background-info-link {
                 background-color: @dark-purple;
@@ -282,6 +295,7 @@ body {
             }
 
             .issue-outline {
+
                 .issue-outline-header {
                     margin: 10px 15px 0 15px;
                     padding-bottom: 4px;
@@ -296,8 +310,22 @@ body {
                     }
                 }
                 .civi-switch {
-                    margin-top: 4px;
-                    margin-bottom: 4px;
+                    margin: 4px 16px;
+                    color: @dark-gray;
+                    .count-badge {
+                        line-height: 16px;
+                        margin-top: 4px;
+                    }
+                    .other-count {
+                        background-color: @light-gray;
+                    }
+                    .lever {
+                        margin: 0 8px;
+                    }
+                    .current {
+                        color: @dark-blue;
+                        font-weight: 700;
+                    }
                 }
 
                 .civi-outline {
@@ -305,8 +333,8 @@ body {
 
                     .civi-nav-header {
                         border-left: 3px solid rgba(0,0,0,0);
-                        padding-left: 6px;
-                        margin: 10px 15px 0 15px;
+                        padding-left: 4px;
+                        margin: 10px 16px 0 8px;
                         line-height: 16px;
 
                         .civi-nav-title {
@@ -333,19 +361,39 @@ body {
                         display: none;
 
                         .civi-nav-indiv {
-                            font-size: 12px;
+                            font-size: 14px;
                             margin: 8px 0 8px 0;
                             line-height: 16px;
+                            //
+                            // .voted {
+                            //
+                            //     color: #cccccc;
+                            //     margin-left: -1rem;
+                            // }
+                            .civi-nav-state {
+                                color: @dark-blue;
+                                margin-left: -1rem;
+                                width: 16px;
+                                // margin-right: 4px;
+                                line-height:16px;
+                                vertical-align: text-bottom;
+                                &.voted {
+                                    color: #cccccc;
+                                }
+                            }
+
 
                             .civi-nav-link {
                                 cursor: pointer;
                                 border-left: 3px solid rgba(0,0,0,0);
-                                padding-left: 6px;
+                                padding-left: 4px;
+                                display: inline-block;
+
 
                                 &.current {
-                                    color: @dark-blue;
-                                    border-color: @dark-blue;
-                                    font-weight: 500;
+                                    color: @dark-blue !important;
+                                    // border-color: @dark-blue;
+                                    font-weight: 700;
                                 }
                             }
                         }
@@ -359,9 +407,18 @@ body {
             overflow-y: scroll;
             overflow-x: hidden;
             padding: 15px 15px 0 15px;
+
+            width: 40%;
+            margin-left: auto;
+            left: auto;
+            right: auto;
         }
 
         .responses {
+            width: 35%;
+            margin-left: auto;
+            left: auto;
+            right: auto;
             // z-index: 1;
             overflow-y: scroll;
             padding: 15px 15px 0 15px;

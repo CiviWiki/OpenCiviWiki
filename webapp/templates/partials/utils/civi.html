@@ -52,6 +52,11 @@
 
         </div>
         {{# } }}
+        {{# if (this.can_edit) { }}
+            <div class="hide edit-wrapper">
+                <div class="edit-links" id="magicsuggest-{{this.model.get('id')}}"></div>
+            </div>
+        {{# } }}
         <div class="rating center ">
             <div class="rating-wrapper">
                 <div class="rating-name">DISAGREE</div>
@@ -65,6 +70,7 @@
                 </button>
             </div>
             <div class="rating-wrapper">
+                <div class="rating-name">NEUTRAL</div>
                 <button class="rating-button vote vote_neutral" data-rating="neutral">
                     <span class="rate-value">{{this.model.get('votes.votes_neutral')}}</span>
                 </button>
@@ -81,7 +87,7 @@
                 </button>
             </div>
             <div class="rating-center center-block"></div>
-            <div class="grey-text text-lighten-1">{{ this.model.get('score')}}</div>
+            <div class="temp-score">{{ this.model.get('score')}}</div>
         </div>
     </div>
     <div class="civi-footer">
@@ -100,7 +106,7 @@
         </div>
         <div class="right civi-footer-actions">
             <div>
-                <i class="mini material-icons favorite">star_border</i>
+                <!-- <i class="mini material-icons favorite">star_border</i> -->
                 <!-- <i class="mini material-icons civi-grab-link">link</i> -->
                 <i class="mini material-icons">comment</i>
             </div>

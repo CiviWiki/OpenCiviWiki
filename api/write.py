@@ -177,12 +177,20 @@ def rateCivi(request):
         if prev_act:
             prev_act.activity_type = vote_val
             prev_act.save()
-
+            data = {
+                'civi_id':prev_act.civi.id,
+                'activity_type': prev_act.activity_type,
+                'c_type': prev_act.civi.c_type
+            }
         else:
             act = Activity(**activity_data)
             act.save()
-
-        return HttpResponse('Success')
+            data = {
+                'civi_id':act.civi.id,
+                'activity_type': act.activity_type,
+                'c_type': act.civi.c_type
+            }
+        return JsonResponse({'data' : data})
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
 
@@ -197,9 +205,16 @@ def editCivi(request):
         return HttpResponseBadRequest(reason="No Edit Rights")
 
     try:
-        c.title = title;
-        c.body = body;
+        c.title = title
+        c.body = body
         c.save(update_fields=['title', 'body'])
+
+        links = request.POST.getlist('links[]', '')
+        c.linked_civis.clear()
+        if links:
+            for civi_id in links:
+                linked_civi = Civi.objects.get(id=civi_id)
+                c.linked_civis.add(linked_civi)
 
         return HttpResponse('Success')
     except Exception as e:
