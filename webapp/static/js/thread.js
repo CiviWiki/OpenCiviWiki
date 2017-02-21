@@ -935,11 +935,11 @@ cw.ThreadView = BB.View.extend({
         //     this.navExpanded = true;
         // }
         if (!this.navExpanded) {
-            $('.civi-nav-wrapper').slideUp();
+            $('.civi-nav-wrapper').hide();
             $this.removeClass('expanded');
             // this.navExpanded = false;
         } else {
-            $('.civi-nav-wrapper').slideDown();
+            $('.civi-nav-wrapper').show();
             $this.addClass('expanded');
             // this.navExpanded = true;
         }
