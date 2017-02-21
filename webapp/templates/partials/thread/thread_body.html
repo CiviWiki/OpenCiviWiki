@@ -20,7 +20,7 @@
                 </button>
             </div>
         </div>
-        <div class="col s4">
+        <div class="col">
             <div class="response-header">
                 Responses
                 <!-- <button class="add-civi btn waves-effect right">
@@ -30,7 +30,7 @@
             </div>
         </div>
     </div>
-    <div class="col s3 nav-column">
+    <div class="col nav-column">
         <div class="background-info-link dark-white-text">
             <span class="enter-wiki">
                 <i class="tiny material-icons">assignment</i>
@@ -40,30 +40,19 @@
         <div class="issue-outline">
             <div class="issue-outline-header gray-text bold-text">
                 <span class="issue-outline-title">ISSUE OUTLINE</span>
-                <i class="expand-nav material-icons right">keyboard_arrow_down</i>
+                <span class="civi-total">({{this.model.get('num_civis')}})</span>
+                <i class="expand-nav material-icons right expanded">keyboard_arrow_down</i>
             </div>
-            <div class="civi-switch center">
-                <div class="switch">
-                <label>
-                  Other
-                  <input type="checkbox" checked>
-                  <span class="lever"></span>
-                  Recommended
-                </label>
-              </div>
-            </div>
-
-            <div class="civi-outline" id="civi-outline">
-            </div>
+            <div class="civi-outline" id="civi-outline"></div>
         </div>
     </div>
-    <div class="col s5 main-thread scroll-col" id="main-thread">
+    <div class="col main-thread scroll-col" id="main-thread">
         <div id="thread-problems"></div>
         <div id="thread-causes"></div>
         <div id="thread-solutions"></div>
         <div class="civi-padding"></div>
     </div>
-    <div class="col s4 responses">
+    <div class="col responses">
 
     </div>
 </div>

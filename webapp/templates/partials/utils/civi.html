@@ -52,30 +52,42 @@
 
         </div>
         {{# } }}
-        <div class="rating">
-            <button class="btn waves-effect rating-button vote vote_vneg" data-rating="vneg">
-                <i class="tiny-for-button material-icons">thumb_down</i>
-                <i class="tiny-for-button material-icons">thumb_down</i>
-                <span class="rate-value">{{this.model.get('votes.votes_vneg')}}</span>
-            </button>
-            <button class="btn waves-effect rating-button vote vote_neg" data-rating="neg">
-                <i class="tiny-for-button material-icons">thumb_down</i>
-                <span class="rate-value">{{this.model.get('votes.votes_neg')}}</span>
-            </button>
-            <button class="btn waves-effect rating-button vote vote_neutral" data-rating="neutral">
-                <i class="tiny-for-button material-icons">remove</i>
-                <span class="rate-value">{{this.model.get('votes.votes_neutral')}}</span>
-            </button>
-            <button class="btn waves-effect rating-button vote vote_pos" data-rating="pos">
-                <i class="tiny-for-button material-icons">thumb_up</i>
-                <span class="rate-value">{{this.model.get('votes.votes_pos')}}</span>
-            </button>
-            <button class="btn waves-effect rating-button vote vote_vpos" data-rating="vpos">
-                <i class="tiny-for-button material-icons">thumb_up</i>
-                <i class="tiny-for-button material-icons">thumb_up</i>
-                <span class="rate-value">{{this.model.get('votes.votes_vpos')}}</span>
-            </button>
-            <div class="grey-text text-lighten-1">{{ this.model.get('score')}}</div>
+        {{# if (this.can_edit) { }}
+            <div class="hide edit-wrapper">
+                <div class="edit-links" id="magicsuggest-{{this.model.get('id')}}"></div>
+            </div>
+        {{# } }}
+        <div class="rating center ">
+            <div class="rating-wrapper">
+                <div class="rating-name">DISAGREE</div>
+                <button class="rating-button vote vote_vneg" data-rating="vneg">
+                    <span class="rate-value">{{this.model.get('votes.votes_vneg')}}</span>
+                </button>
+            </div>
+            <div class="rating-wrapper">
+                <button class="rating-button vote vote_neg" data-rating="neg">
+                    <span class="rate-value">{{this.model.get('votes.votes_neg')}}</span>
+                </button>
+            </div>
+            <div class="rating-wrapper">
+                <div class="rating-name">NEUTRAL</div>
+                <button class="rating-button vote vote_neutral" data-rating="neutral">
+                    <span class="rate-value">{{this.model.get('votes.votes_neutral')}}</span>
+                </button>
+            </div>
+            <div class="rating-wrapper">
+                <button class="rating-button vote vote_pos" data-rating="pos">
+                    <span class="rate-value">{{this.model.get('votes.votes_pos')}}</span>
+                </button>
+            </div>
+            <div class="rating-wrapper">
+                <div class="rating-name">AGREE</div>
+                <button class="rating-button vote vote_vpos" data-rating="vpos">
+                    <span class="rate-value">{{this.model.get('votes.votes_vpos')}}</span>
+                </button>
+            </div>
+            <div class="rating-center center-block"></div>
+            <div class="temp-score">{{ this.model.get('score')}}</div>
         </div>
     </div>
     <div class="civi-footer">
@@ -94,7 +106,7 @@
         </div>
         <div class="right civi-footer-actions">
             <div>
-                <i class="mini material-icons favorite">star_border</i>
+                <!-- <i class="mini material-icons favorite">star_border</i> -->
                 <!-- <i class="mini material-icons civi-grab-link">link</i> -->
                 <i class="mini material-icons">comment</i>
             </div>

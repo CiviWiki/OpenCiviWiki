@@ -19,6 +19,10 @@ class RepresentativeManager(models.Manager):
 class Representative(models.Model):
     account = models.ForeignKey(Account, default=None, null=True)
 
+    first_name = models.CharField(max_length=63, blank=False)
+    last_name = models.CharField(max_length=63, blank=False)
+    about_me = models.CharField(max_length=511, blank=True)
+
     district = models.CharField(max_length=63, blank=True, null=True)
     senate_class = models.CharField(max_length=63, blank=True, null=True) # junior or senior for senator
     state = models.CharField(max_length=63)

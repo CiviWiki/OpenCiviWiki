@@ -7,8 +7,33 @@
         color: @light-gray;
     }
 }
+
+.count-badge {
+    font-size: 12px;
+    border-radius: 25px;
+    background-color: @dark-blue;
+    font-weight: bold;
+    padding: 0 8px;
+}
+.nav-inactive {
+    color: #cccccc;
+    cursor: default;
+}
+
+
 body {
     -webkit-font-smoothing: antialiased;
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+        background-color: @dark-white;
+    }
+    ::-webkit-scrollbar-thumb {
+        background-color: @light-gray;
+        margin-top: 4px;
+        margin-bottom: 4px;
+    }
 }
 .linked {
     border: 1px solid #501cb5;
@@ -193,13 +218,15 @@ body {
     }
 
     .thread-body {
-        button {
+        .btn {
             background-color: @purple;
         }
 
         .body-banner {
             background-color: @dark-purple;
-            box-shadow: 0 2px 5px @box-shadow-gray;
+            box-shadow: 0 5px 6px -3px rgba(0, 0, 0, 0.4);
+            position: relative;
+            z-index: 2;
 
             .category-topic {
                 margin-top: 4px;
@@ -212,7 +239,7 @@ body {
             }
 
             .thread-title {
-                margin-top: 10px;
+                margin-top: 8px;
                 font-size: 16px;
                 line-height: 16px;
                 font-weight: 700;
@@ -220,7 +247,7 @@ body {
 
             .thread-header, .response-header {
                 font-size: 18px;
-                margin-top: 30px;
+                margin-top: 16px;
 
                 button {
                     margin-right: 20px;
@@ -237,7 +264,17 @@ body {
         }
 
         .nav-column {
-            box-shadow: 2px 0 5px @box-shadow-gray;
+            // box-shadow: 2px 0 2px @box-shadow-gray;
+            position: relative;
+            z-index: 2;
+            background-color: @barely-not-white;
+            border-right: 1px solid @dark-white;
+
+            width: 25%;
+            margin-left: auto;
+            left: auto;
+            right: auto;
+
 
             .background-info-link {
                 background-color: @dark-purple;
@@ -258,6 +295,7 @@ body {
             }
 
             .issue-outline {
+
                 .issue-outline-header {
                     margin: 10px 15px 0 15px;
                     padding-bottom: 4px;
@@ -271,23 +309,44 @@ body {
                         }
                     }
                 }
+                .civi-switch {
+                    margin: 4px 16px;
+                    color: @dark-gray;
+                    .count-badge {
+                        line-height: 16px;
+                        margin-top: 4px;
+                    }
+                    .other-count {
+                        background-color: @light-gray;
+                    }
+                    .lever {
+                        margin: 0 8px;
+                    }
+                    .current {
+                        color: @dark-blue;
+                        font-weight: 700;
+                    }
+                }
 
                 .civi-outline {
-                    overflow-y: scroll;
+                    overflow-y: auto;
 
                     .civi-nav-header {
-                        border-left: 3px solid #fff;
-                        padding-left: 6px;
-                        margin: 10px 15px 0 15px;
+                        border-left: 3px solid rgba(0,0,0,0);
+                        padding-left: 4px;
+                        margin: 10px 16px 0 8px;
+                        line-height: 16px;
 
                         .civi-nav-title {
-                            font-size: 18px;
+                            font-size: 16px;
                         }
 
                         .civi-nav-count {
+                            font-size: 12px;
                             border-radius: 25px;
                             background-color: @dark-blue;
-                            padding: 0 10px;
+                            font-weight: bold;
+                            padding: 0 8px;
                         }
 
                         &.current {
@@ -303,18 +362,38 @@ body {
 
                         .civi-nav-indiv {
                             font-size: 14px;
-                            margin: 4px 0 10px 0;
+                            margin: 8px 0 8px 0;
                             line-height: 16px;
+                            //
+                            // .voted {
+                            //
+                            //     color: #cccccc;
+                            //     margin-left: -1rem;
+                            // }
+                            .civi-nav-state {
+                                color: @dark-blue;
+                                margin-left: -1rem;
+                                width: 16px;
+                                // margin-right: 4px;
+                                line-height:16px;
+                                vertical-align: text-bottom;
+                                &.voted {
+                                    color: #cccccc;
+                                }
+                            }
+
 
                             .civi-nav-link {
                                 cursor: pointer;
-                                border-left: 3px solid #fff;
-                                padding-left: 6px;
+                                border-left: 3px solid rgba(0,0,0,0);
+                                padding-left: 4px;
+                                display: inline-block;
+
 
                                 &.current {
-                                    color: @dark-blue;
-                                    border-color: @dark-blue;
-                                    font-weight: 500;
+                                    color: @dark-blue !important;
+                                    // border-color: @dark-blue;
+                                    font-weight: 700;
                                 }
                             }
                         }
@@ -324,15 +403,27 @@ body {
         }
 
         .main-thread {
+            // z-index: 1;
             overflow-y: scroll;
+            overflow-x: hidden;
             padding: 15px 15px 0 15px;
+
+            width: 40%;
+            margin-left: auto;
+            left: auto;
+            right: auto;
         }
 
         .responses {
+            width: 35%;
+            margin-left: auto;
+            left: auto;
+            right: auto;
+            // z-index: 1;
             overflow-y: scroll;
             padding: 15px 15px 0 15px;
             // border-left: 1px solid #ddd;
-            box-shadow: 0 2px 5px @box-shadow-gray;
+            // box-shadow: 0 2px 5px @box-shadow-gray;
         }
     }
 }
