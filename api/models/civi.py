@@ -140,24 +140,26 @@ class Civi(models.Model):
             y = 0
 
         f = 0 #TODO: favorite val
-        t = (current_time - post_time.replace(tzinfo=None)).total_seconds() / 60
-        g = 100
-
+        t = (current_time - post_time.replace(tzinfo=None)).total_seconds() / 300
+        g = 1
+        amp = math.pow(10,0)
         #step2
         if x > 0:
+            v = votes['total'] if votes['total'] > 1 else 2
             #step3 - A X*Log10V+Y + F + (##/T) = Rank Value
-            rank = x * math.log10(v) + y + f + g/t
+            rank = x * math.log10(v) *amp  + y + f + g/t
 
         elif x == 0:
+
             #step3 - B  V^2+Y + F + (##/T) = Rank Value
             rank = v**2 + y + f + g/t
         elif x < 0:
+            v = votes['total'] if votes['total'] > 1 else 2
             #step3 - C
             if abs(x)/v <= 5:
-                rank = abs(x) * math.log10(v) + y + f + g/t
+                rank = abs(x) * math.log10(v) *amp + y + f + g/t
             else:
-                rank = x * math.log10(v) + y + f + g/t
-
+                rank = x * math.log10(v) * amp + y + f + g/t
         return rank
 
     def dict_with_score(self, req_acct_id=None):

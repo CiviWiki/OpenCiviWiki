@@ -1,18 +1,14 @@
 {% verbatim %}
 <div class="civi-switch center">
     <div class="switch">
-        <!-- {{# if (count.total) { }}
-        <span class="count-badge other-count white-text left">999</span>
-        {{# } }} -->
+        <span class="count-badge badge-other white-text left">{{count.totalOther}}</span>
         <label>
             <span class="label-other">Other</span>
             <input type="checkbox" id="recommended-switch" checked>
             <span class="lever"></span>
             <span class="label-recommended bold">Recommended</span>
         </label>
-        {{# if (count.total) { }}
-        <span class="count-badge white-text right">{{count.total}}</span>
-        {{# } }}
+        <span class="count-badge badge-recommended white-text right">{{count.totalRec}}</span>
     </div>
 
 </div>

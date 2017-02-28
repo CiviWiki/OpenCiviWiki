@@ -1,5 +1,12 @@
 cw = cw || {};
 
+cw.DEFAULTS = {
+    types: ['problem', 'cause', 'solution'],
+    types_plural: ['problems', 'causes', 'solutions'],
+    civiViewStates: ['recommended', 'other'],
+    viewLimit: 5,
+};
+
 cw.CiviModel = BB.Model.extend({
     defaults: function(){
         return {
@@ -70,6 +77,21 @@ cw.CiviCollection = BB.Collection.extend({
         this.threadId = options.threadId;
     },
 
+    filterByOptions: function (options) {
+        var type = options.type || 'problem';
+        var viewState = options.viewState || 'default';
+        var limit = options.limit || civi.length;
+
+        var filtered = this.models.filter(function (civi) {
+            return civi.get("type") === type && viewState === civi.viewState;
+        });
+
+        if (limit < civi.length && limit > 1){
+            filtered = filtered.split(limit);
+        }
+        return filtered;
+    },
+
     filterByType: function (type) {
         var filtered = this.models.filter(function (civi) {
             return civi.get("type") === type;
@@ -105,17 +127,16 @@ cw.CiviCollection = BB.Collection.extend({
     },
 });
 
-cw.CiviSubCollection = BB.Collection.extend({
-    model: cw.CiviModel,
-    comparator: function(model) {
-        return -model.get('score');
-    },
-
-    initialize: function (options) {
-        options = options || {};
-    },
-
-});
+// cw.CiviSubCollection = BB.Collection.extend({
+//     model: cw.CiviModel,
+//     comparator: function(model) {
+//         return -model.get('score');
+//     },
+//
+//     initialize: function (options) {
+//         options = options || {};
+//     },
+// });
 
 cw.ResponseCollection = BB.Collection.extend({
     model: cw.CiviModel,
@@ -259,7 +280,7 @@ cw.CiviView =  BB.View.extend({
                         _this.parentView.model.set('user_votes', prev_votes);
                     }
 
-                    _this.parentView.initRecommended();
+                    _this.parentView.initRecommended(); //THISTHIS
                     _this.parentView.renderBodyContents();
                     _this.parentView.processCiviScroll();
 
@@ -357,7 +378,8 @@ cw.CiviView =  BB.View.extend({
 
                 _this.civis.remove(_this.model);
                 _this.remove();
-                _this.parentView.renderOutline();
+                _this.parentView.initRecommended();
+                _this.parentView.renderBodyContents();
 
             },
             error: function(r){
@@ -381,50 +403,6 @@ cw.NewCiviView = BB.View.extend({
         this.magicSuggestView = new cw.LinkSelectView({$el: this.$('#magicsuggest'), civis: this.options.parentView.civis});
         // this.renderMagicSuggest();
     },
-
-    // renderMagicSuggest: function() {
-    //     var _this = this;
-    //
-    //     this.ms = this.$('#magicsuggest').magicSuggest({
-    //         allowFreeEntries: false,
-    //         groupBy: 'type',
-    //         valueField: 'id',
-    //         displayField: 'title',
-    //         data: [],
-    //         renderer: function(data){
-    //             return '<div class="link-lato" data-civi-id="' + data.id +
-    //             '"><span class="gray-text">'+data.type+'</span> ' + data.title + '</div>';
-    //         },
-    //         selectionRenderer: function(data){
-    //             return '<span class="gray-text bold-text">'+data.type.toUpperCase() +'</span> '  + data.title;
-    //         },
-    //     });
-    // },
-    //
-    // selectData: function() {
-    //     var _this = this;
-    //     var c_type = this.$el.find('.civi-types > .current').val();
-    //     var linkableCivis = [];
-    //     if (c_type == 'problem') {
-    //         linkableCivis = _this.options.parentView.civis.where({type:'cause'});
-    //     } else if (c_type == 'cause') {
-    //         linkableCivis = _.union(_this.options.parentView.civis.where({type:'problem'}),
-    //         _this.options.parentView.civis.where({type:'solution'}));
-    //     } else if  (c_type == 'solution') {
-    //         linkableCivis = _this.options.parentView.civis.where({type:'cause'});
-    //     }
-    //     var msdata = [];
-    //     _.each(linkableCivis, function(c_model){
-    //         var civi = {
-    //             'id': c_model.get('id'),
-    //             'type': c_model.get('type'),
-    //             'title': c_model.get('title')
-    //         };
-    //         msdata.push(civi);
-    //     });
-    //     // console.log(msdata);
-    //     this.ms.setData(msdata);
-    // },
 
     show: function () {
         this.$('.new-civi-modal').openModal();
@@ -472,7 +450,13 @@ cw.NewCiviView = BB.View.extend({
                     var can_edit = new_civi.get('author').username == _this.options.parentView.username ? true : false;
                     $('#thread-' + c_type + 's').append(new cw.CiviView({model: new_civi, can_edit: can_edit, parentView: _this.options.parentView}).el);
                     _this.options.parentView.civis.add(new_civi);
-                    _this.options.parentView.renderOutline(); //TODO: move renders into listeners
+
+                    // if(c_type ==='problem'){
+                    //     this.recommendedCivis.push(new_civi.id);
+                    //     this.otherCivis.push(new_civi.id);
+                    // }
+                    _this.options.parentView.initRecommended();
+                    _this.options.parentView.renderBodyContents(); //TODO: move renders into listeners
                     console.log(new_civi);
                     // _.each(new_civi.get('links'), function(link){
                     //     console.log(link);
@@ -632,7 +616,15 @@ cw.ThreadView = BB.View.extend({
         this.civis = options.civis;
         this.navExpanded = true;
 
+        this.civiRecViewLimits = {problem : 0,cause: 0,solution: 0};
+        this.civiOtherViewLimits = {problem : 0,cause: 0,solution: 0};
+        this.civiRecViewTotals = {problem : 0,cause: 0,solution: 0};
+        this.civiOtherViewTotals = {problem : 0,cause: 0,solution: 0};
+
         this.viewRecommended = true;
+        this.recommendedCivis = [];
+        this.otherCivis = [];
+        this.outlineCivis = {};
         this.initRecommended();
 
         this.responseCollection = new cw.ResponseCollection({}, {
@@ -640,11 +632,18 @@ cw.ThreadView = BB.View.extend({
         });
 
         this.listenTo(this.responseCollection, 'sync', this.renderResponses);
+        this.render();
     },
 
     initRecommended: function() {
+        var _this = this;
+        this.recommendedCivis = [];
+        this.otherCivis = [];
+        this.civiRecViewTotals = {problem : 0,cause: 0,solution: 0};
+        this.civiOtherViewTotals = {problem : 0,cause: 0,solution: 0};
 
-
+        var civiRecViewLimits= {problem : 0,cause: 0,solution: 0},
+        civiOtherViewLimits= {problem : 0,cause: 0,solution: 0};
         // 1. Get id list of voted civis\
         var votes = this.model.get('user_votes');
         //TODO: I dont like this
@@ -654,27 +653,90 @@ cw.ThreadView = BB.View.extend({
 
         // var recProblems = (_.indexOf(arrayIds, civi.id) > -1);
         // Mark each voted civi
+        // _.each(this.civis.models, function(civi){
+        //     civi.recommended = false;
+        //     civi.otherRecommended = false;
+        //     var voteData = _.findWhere(votes, {civi_id: civi.id});
+        //     if (!_.isUndefined(voteData)) {
+        //         if ((voteData.activity_type == 'vote_pos' || voteData.activity_type == 'vote_vpos')){
+        //             _.each(civi.get('links'), function(link){
+        //                 var linked_civi = this.civis.get(link);
+        //                 if (!_.isUndefined(linked_civi) ) {
+        //                     linked_civi.recommended = true;
+        //                 }
+        //             }, this);
+        //         } else {
+        //             _.each(civi.get('links'), function(link){
+        //                 var linked_civi = this.civis.get(link);
+        //                 if (!_.isUndefined(linked_civi) ) {
+        //                     linked_civi.otherRecommended = true;
+        //                 }
+        //             }, this);
+        //         }
+        //     }
+        // }, this);
+
         _.each(this.civis.models, function(civi){
-            civi.recommended = false;
-            civi.otherRecommended = false;
             var voteData = _.findWhere(votes, {civi_id: civi.id});
             if (!_.isUndefined(voteData)) {
+
+                civi.voted = true;
+                var type = civi.get('type');
+                if (type === 'problem') {
+                    civiRecViewLimits[type]++;
+                    civiOtherViewLimits[type]++;
+                } else if (voteData.activity_type == 'vote_pos' || voteData.activity_type == 'vote_vpos') {
+                    civiRecViewLimits[type]++;
+                } else {
+                    civiOtherViewLimits[type]++;
+                }
+
                 if ((voteData.activity_type == 'vote_pos' || voteData.activity_type == 'vote_vpos')){
                     _.each(civi.get('links'), function(link){
                         var linked_civi = this.civis.get(link);
                         if (!_.isUndefined(linked_civi) ) {
-                            linked_civi.recommended = true;
+                            this.recommendedCivis.push(link);
+                            // linked_civi.recommended = true;
                         }
                     }, this);
                 } else {
                     _.each(civi.get('links'), function(link){
                         var linked_civi = this.civis.get(link);
                         if (!_.isUndefined(linked_civi) ) {
-                            linked_civi.otherRecommended = true;
+                            this.otherCivis.push(link);
+
                         }
                     }, this);
                 }
+            } else {
+                civi.voted = false;
             }
+        }, this);
+
+        // Recommended civis pool takes precedence
+        this.otherCivis = _.difference(this.otherCivis, this.recommendedCivis);
+
+        _.each(this.civis.filterByType('problem'), function(civi){
+            this.recommendedCivis.push(civi.id);
+            this.otherCivis.push(civi.id);
+        },this);
+
+        _.each(cw.DEFAULTS.types, function(type){
+            if (this.civiRecViewLimits[type] === 0) {
+                if (civiRecViewLimits[type] < 5) {
+                    civiRecViewLimits[type] = 5;
+                }
+                this.civiRecViewLimits[type] = civiRecViewLimits[type];
+            }
+            if (this.civiOtherViewLimits[type] === 0) {
+                if (civiOtherViewLimits[type] < 5) {
+                    civiOtherViewLimits[type] = 5;
+                }
+                this.civiOtherViewLimits[type] = civiOtherViewLimits[type];
+            }
+
+
+
         }, this);
 
         // _.each(this.civis.models, function(civi){
@@ -689,10 +751,10 @@ cw.ThreadView = BB.View.extend({
         //     }
         // }, this);
 
-        _.each(this.civis.filterByType('problem'), function(civi){
-            civi.recommended = true;
-            civi.otherRecommended = true;
-        });
+        // _.each(this.civis.filterByType('problem'), function(civi){
+        //     civi.recommended = true;
+        //     civi.otherRecommended = true;
+        // });
         // 2. Get id list of linked civis
 
         // 3. Populate collections based on recommended
@@ -749,10 +811,11 @@ cw.ThreadView = BB.View.extend({
     },
 
     renderOutline: function(){
+        var _this = this;
         // Render Outline Template based on models
-        var problems = this.civis.filterByType('problem'),
-            causes = this.civis.filterRecByType('cause', this.viewRecommended),
-            solutions = this.civis.filterRecByType('solution', this.viewRecommended);
+        var problems = this.outlineCivis.problem;
+            causes = this.outlineCivis.cause;
+            solutions = this.outlineCivis.solution;
 
         var renderData = {
             problems: problems,
@@ -760,28 +823,48 @@ cw.ThreadView = BB.View.extend({
             solutions: solutions
         };
 
-        var voteCount = { problem:0, cause:0, solution:0};
+        var recCount = { problem:0, cause:0, solution:0};
+        var otherCount = { problem:0, cause:0, solution:0};
         var votes = this.model.get('user_votes'),
             voteIds = _.pluck(votes, 'civi_id');
 
-        _.each(this.civis.filterByRec(this.viewRecommended), function(c){
+        var counterCount = 0;
+        _.each(_this.civis.models, function(c){
+            var type = c.get('type');
             if (_.indexOf(voteIds, c.id) > -1) {
-                voteCount[c.get('type')]++;
-                // var votedCivi = this[v.c_type+'s'].get(v.civi_id);
-                // if (!_.isUndefined(votedCivi)){
-                //     this.voteCount
-                // }
+                // If part of current view setting
+                if (_.indexOf(_this.recommendedCivis, c.id) > -1) {
+                    recCount[type]++;
+                } else if (_.indexOf(_this.otherCivis, c.id) > -1){
+                    otherCount[type]++;
+                }
             }
-        }, {this:this, voteCount:voteCount});
+        });
+
+        var highlightCount = {problem: 0,cause: 0,solution: 0};
+        _.each(cw.DEFAULTS.types, function(type) {
+            if (_this.viewRecommended){
+                highlightCount[type] = _this.civiRecViewTotals[type];
+            } else {
+                highlightCount[type] = _this.civiOtherViewTotals[type];
+            }
+        });
+        var voteCount, totalRec, totalOther;
+        if (this.viewRecommended){
+            voteCount = recCount;
+        } else {
+            voteCount = otherCount;
+        }
 
         var count = {
-            problem: problems.length - voteCount.problem,
-            cause: causes.length - voteCount.cause,
-            solution: solutions.length - voteCount.solution,
-            total: problems.length + causes.length + solutions.length,
+            problem: highlightCount.problem - recCount.problem,
+            cause: highlightCount.cause - voteCount.cause,
+            solution: highlightCount.solution - voteCount.solution,
         };
 
-        count.total = count.problem + count.cause + count.solution;
+        count.totalRec = this.civiRecViewTotals.problem + this.civiRecViewTotals.cause + this.civiRecViewTotals.solution - recCount.problem - recCount.cause - recCount.solution;
+        count.totalOther = this.civiOtherViewTotals.problem + this.civiOtherViewTotals.cause + this.civiOtherViewTotals.solution - recCount.problem - otherCount.cause - otherCount.solution;
+
         renderData.count = count;
 
         this.$('#civi-outline').empty().append(this.outlineTemplate(renderData));
@@ -790,11 +873,24 @@ cw.ThreadView = BB.View.extend({
         if (this.viewRecommended){
             this.$(".label-recommended").addClass('current');
             this.$(".label-other").removeClass('current');
+            this.$(".badge-recommended").addClass('current');
+            this.$(".badge-other").removeClass('current');
+            this.$(".civi-nav-count").removeClass('other');
         } else {
             this.$(".label-recommended").removeClass('current');
             this.$(".label-other").addClass('current');
+            this.$(".badge-recommended").removeClass('current');
+            this.$(".badge-other").addClass('current');
+            this.$(".civi-nav-count").addClass('other');
         }
+        // view more
 
+        _.each(cw.DEFAULTS.types, function(type) {
+            var loadMore = this.$('#thread-'+type+'s>.' + type + '-loader');
+            if (loadMore) {
+                loadMore.clone().appendTo('#'+type+'-nav');
+            }
+        }, this);
 
         // Calculate tracking
         this.calcCiviLocations();
@@ -812,6 +908,8 @@ cw.ThreadView = BB.View.extend({
             navItemState.addClass('voted').text('beenhere');
         }, this);
 
+
+
         this.expandNav();
     },
 
@@ -819,22 +917,65 @@ cw.ThreadView = BB.View.extend({
         this.$('#thread-problems').empty();
         this.$('#thread-causes').empty();
         this.$('#thread-solutions').empty();
-        _.each(this.civis.filterByType('problem'), this.civiRenderHelper, this);
-        _.each(this.civis.filterByType('cause'), this.civiRenderHelper, this);
-        _.each(this.civis.filterByType('solution'), this.civiRenderHelper, this);
+
+        this.threadCivis = {};
+        _.each(['problem', 'cause', 'solution'], function(type){
+            var civis = this.civis.filterByType(type);
+            // Filter by Recommended state if not 'problem' type
+            var recCivis = _.filter(civis, function(c) {
+                return (_.indexOf(this.recommendedCivis, c.id) != -1);
+            }, this);
+            this.civiRecViewTotals[type] = recCivis.length;
+            var otherCivis = _.filter(civis, function(c) {
+                return (_.indexOf(this.otherCivis, c.id) != -1);
+            }, this);
+            this.civiOtherViewTotals[type] = otherCivis.length;
+            if (type != 'problem') {
+                if (this.viewRecommended) {
+                    civis =recCivis;
+                } else {
+                    civis =otherCivis;
+                }
+            }
+            // Sort civi list by score
+            civis = _.sortBy(civis, function(civi){
+                if (civi.voted) {
+                    return -civi.get('score') - 100;
+                }
+                return -civi.get('score');
+            });
+
+            // Cut by type view limit TODO: move to rendering
+
+            var limit;
+            if (this.viewRecommended) {
+                limit = this.civiRecViewLimits[type];
+            } else {
+                limit = this.civiOtherViewLimits[type];
+            }
+            var totalCount = civis.length;
+
+            if(totalCount > limit) {
+                civis = civis.slice(0,limit);
+                _.each(civis, this.civiRenderHelper, this);
+                this.$('#thread-'+type+'s').append('<div class="'+type+'-loader civi-load-more"><span class="civi-show-count">'+limit+'/'+totalCount+ ' '+ type+'s</span> <span class="btn-loadmore" data-civi-type="'+type+'">View More +</span></div>');
+            } else {
+                _.each(civis, this.civiRenderHelper, this);
+            }
+
+            this.outlineCivis[type] = civis;
+
+        }, this);
+
+
+
+        // _.each(this.civis.filterByType('cause'), this.civiRenderHelper, this);
+        // _.each(this.civis.filterByType('solution'), this.civiRenderHelper, this);
     },
 
     civiRenderHelper: function(civi){
         var can_edit = civi.get('author').username == this.username ? true : false;
-        if (this.viewRecommended) {
-            if (civi.recommended || civi.get('type') === 'problem') {
-                this.$('#thread-'+civi.get('type')+'s').append(new cw.CiviView({model: civi, can_edit: can_edit, parentView: this}).el);
-            }
-        } else {
-            if (civi.otherRecommended || civi.get('type') === 'problem') {
-                this.$('#thread-'+civi.get('type')+'s').append(new cw.CiviView({model: civi, can_edit: can_edit, parentView: this}).el);
-            }
-        }
+        this.$('#thread-'+civi.get('type')+'s').append(new cw.CiviView({model: civi, can_edit: can_edit, parentView: this}).el);
 
     },
 
@@ -869,7 +1010,8 @@ cw.ThreadView = BB.View.extend({
         'click .civi-card': 'drilldownCivi',
         'click .add-civi': 'openNewCiviModal',
         'click .add-response': 'openNewResponseModal',
-        'click #recommended-switch': 'toggleRecommended'
+        'click #recommended-switch': 'toggleRecommended',
+        'click .btn-loadmore': 'loadMoreCivis'
     },
 
     scrollToBody: function () {
@@ -1141,6 +1283,30 @@ cw.ThreadView = BB.View.extend({
                 this.$('.responses').empty();
             }
         }
+    },
+
+    loadMoreCivis: function(e) {
+        var $target = $(e.currentTarget);
+        var type = $target.data('civi-type');
+        var limit, remaining;
+        if (this.viewRecommended) {
+            limit = this.civiRecViewLimits[type];
+            remaining =  this.civiRecViewTotals[type] - limit;
+        } else {
+            limit = this.civiOtherViewLimits[type];
+            remaining =  this.civiOtherViewTotals[type] - limit;
+        }
+        if (remaining <= 0) {
+            return;
+        }
+        var addCount = (cw.DEFAULTS.viewLimit < remaining ? cw.DEFAULTS.viewLimit : remaining);
+
+        if (this.viewRecommended) {
+            this.civiRecViewLimits[type] += addCount;
+        } else {
+            this.civiOtherViewLimits[type] += addCount;
+        }
+        this.renderBodyContents();
     },
 
     toggleRecommended: function(e) {
