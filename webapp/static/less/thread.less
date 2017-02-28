@@ -1,4 +1,5 @@
 @import 'base';
+@red: #cc5856;
 .no-state {
     background-color: @white;
     border: 2px @lightish-gray;
@@ -265,12 +266,13 @@ body {
 
         .nav-column {
             // box-shadow: 2px 0 2px @box-shadow-gray;
+            // box-shadow: 0 5px 6px -3px rgba(0, 0, 0, 0.4);
             position: relative;
             z-index: 2;
             background-color: @barely-not-white;
-            border-right: 1px solid @dark-white;
+            // border-right: 1px solid @dark-white;
 
-            width: 25%;
+            width: 22%;
             margin-left: auto;
             left: auto;
             right: auto;
@@ -310,31 +312,33 @@ body {
                     }
                 }
                 .civi-switch {
-                    margin: 4px 16px;
+                    margin: 4px 8px;
                     color: @dark-gray;
                     .count-badge {
+                        background-color: #dddddd;
                         line-height: 16px;
                         margin-top: 4px;
+
                     }
-                    .other-count {
-                        background-color: @light-gray;
-                    }
+
                     .lever {
                         margin: 0 8px;
                     }
-                    .current {
-                        color: @dark-blue;
-                        font-weight: 700;
+                    .badge-other.current{
+                        background-color: @red !important;
+                    }
+                    .badge-recommended.current{
+                        background-color: @dark-blue !important;
                     }
                 }
 
                 .civi-outline {
-                    overflow-y: auto;
+                    overflow-y: scroll;
 
                     .civi-nav-header {
                         border-left: 3px solid rgba(0,0,0,0);
                         padding-left: 4px;
-                        margin: 10px 16px 0 8px;
+                        margin: 10px 8px 0 8px;
                         line-height: 16px;
 
                         .civi-nav-title {
@@ -347,6 +351,9 @@ body {
                             background-color: @dark-blue;
                             font-weight: bold;
                             padding: 0 8px;
+                            &.other {
+                                background-color: @red;
+                            }
                         }
 
                         &.current {
@@ -356,7 +363,7 @@ body {
                     }
 
                     .civi-nav-wrapper {
-                        margin: 0 15px 10px 15px;
+                        margin: 0 0px 8px 16px;
                         height: 100%;
                         display: none;
 
@@ -373,7 +380,7 @@ body {
                             .civi-nav-state {
                                 color: @dark-blue;
                                 margin-left: -1rem;
-                                width: 16px;
+                                width: 5%;
                                 // margin-right: 4px;
                                 line-height:16px;
                                 vertical-align: text-bottom;
@@ -384,7 +391,7 @@ body {
 
 
                             .civi-nav-link {
-                                width: 90%;
+                                width: 95%;
                                 cursor: pointer;
                                 border-left: 3px solid rgba(0,0,0,0);
                                 padding-left: 4px;
@@ -393,8 +400,7 @@ body {
 
                                 &.current {
                                     color: @dark-blue !important;
-                                    // border-color: @dark-blue;
-                                    font-weight: 700;
+                                    border-color: @dark-blue;
                                 }
                             }
                         }
@@ -407,9 +413,9 @@ body {
             // z-index: 1;
             overflow-y: scroll;
             overflow-x: hidden;
-            padding: 15px 15px 0 15px;
+            padding: 15px 32px 0 32px;
 
-            width: 40%;
+            width: 43%;
             margin-left: auto;
             left: auto;
             right: auto;
@@ -426,5 +432,28 @@ body {
             // border-left: 1px solid #ddd;
             // box-shadow: 0 2px 5px @box-shadow-gray;
         }
+    }
+
+    .civi-load-more {
+        text-transform: uppercase;
+        text-align: center;
+        color: @lightish-gray;
+        font-size: 12px;
+        .civi-show-count {
+            font-size: 10px;
+        }
+        .btn-loadmore {
+            color: @dark-blue;
+            font-weight: 700;
+            &:hover {
+                cursor: pointer;
+                color: @blue;
+            }
+        }
+    }
+    .main-thread .civi-load-more{
+        background-color: @dark-white;
+        border-radius: 5px;
+        margin-bottom: 24px;
     }
 }
