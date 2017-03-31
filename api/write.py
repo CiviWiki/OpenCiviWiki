@@ -1,5 +1,5 @@
 import os, sys, json, pdb, random, hashlib, urllib2, pprint
-from models import Account, Category, Civi, Hashtag, Activity
+from models import Account, Category, Civi, CiviImage, Hashtag, Activity
 from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse, HttpResponseServerError, HttpResponseForbidden, HttpResponseBadRequest
 from utils.custom_decorators import require_post_params
@@ -11,10 +11,12 @@ from api.forms import UpdateProfileImage
 from django.core.files import File  # need this for image file handling
 
 from api.models import Thread
+from channels import Group as channels_Group
 
 from utils.custom_decorators import require_post_params
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from notifications.signals import notify
 
 @login_required
 @require_post_params(params=['title', 'summary', 'category_id'])
@@ -93,12 +95,13 @@ def createCivi(request):
     '''
 
     a = Account.objects.get(user=request.user)
+    thread_id = request.POST.get('thread_id')
     data = {
         'author': Account.objects.get(user=request.user),
         'title': request.POST.get('title', ''),
         'body': request.POST.get('body', ''),
         'c_type': request.POST.get('c_type', ''),
-        'thread': Thread.objects.get(id=request.POST.get('thread_id'))
+        'thread': Thread.objects.get(id=thread_id)
     }
 
     try:
@@ -120,12 +123,49 @@ def createCivi(request):
                 linked_civi = Civi.objects.get(id=civi_id)
                 civi.linked_civis.add(linked_civi)
 
+        # If response
         related_civi = request.POST.get('related_civi', '')
         if related_civi:
             # parent_civi = Civi.objects.get(id=related_civi)
             # parent_civi.links.add(civi)
             parent_civi = Civi.objects.get(id=related_civi)
             parent_civi.responses.add(civi)
+
+            notify.send(
+                request.user, # Actor User
+                recipient=parent_civi.author.user, # Target User
+                verb=u'responded to your civi', # Verb
+                action_object=civi, # Action Object
+                target=civi.thread, # Target Object
+                popup_string="{user} responded to your civi in {thread}".format(user=a.full_name, thread=civi.thread.title),
+                link="/{}/{}".format("thread", thread_id)
+            )
+        else: #not a reply, a regular civi
+            c_qs = Civi.objects.filter(thread_id=thread_id)
+            accounts = Account.objects.filter(pk__in=c_qs.distinct('author').values_list('author', flat=True))
+            data = {
+                "command": "add",
+                "data": json.dumps(civi.dict_with_score(a.id)),
+            }
+            channels_Group("thread-%s" % thread_id).send({
+                "text": json.dumps(data),
+            })
+
+            for act in accounts:
+                if act.user.username != request.user.username:
+
+                    notify.send(
+                        request.user, # Actor User
+                        recipient=act.user, # Target User
+                        verb=u'created a new civi', # Verb
+                        action_object=civi, # Action Object
+                        target=civi.thread, # Target Object
+                        popup_string="{user} created a new civi in the thread {thread}".format(user=act.full_name, thread=civi.thread.title),
+                        link="/{}/{}".format("thread", thread_id)
+                    )
+
+
+
 
         return JsonResponse({'data' : civi.dict_with_score(a.id)})
     except Exception as e:
@@ -335,6 +375,55 @@ def clearProfileImage(request):
             return HttpResponseServerError(reason=str(default))
     else:
         return HttpResponseForbidden('allowed only via POST')
+
+@login_required
+def uploadCiviImage(request):
+    if request.method == 'POST':
+        r = request.POST
+        civi_id = r.get('civi_id')
+        if not civi_id:
+            return HttpResponseBadRequest(reason="Invalid Civi Reference")
+
+        try:
+            c = Civi.objects.get(id=civi_id)
+            for image in request.FILES.getlist('attachment_image'):
+                civi_image = CiviImage(title="", civi=c, image=image)
+                civi_image.save()
+
+            data = {
+                "attachments": [{'id': img.id, 'url': img.image_url} for img in c.images.all()],
+            }
+            return  JsonResponse(data)
+
+        except Exception as e:
+            return HttpResponseServerError(reason=(str(e)+ civi_id + str(request.FILES)))
+    else:
+        return HttpResponseForbidden('allowed only via POST')
+
+@login_required
+def uploadThreadImage(request):
+    if request.method == 'POST':
+        r = request.POST
+        thread_id = r.get('thread_id')
+        if not thread_id:
+            return HttpResponseBadRequest(reason="Invalid Thread Reference")
+
+        try:
+            thread = Thread.objects.get(id=thread_id)
+
+            # Clean up previous image
+            thread.image.delete()
+
+            # Upload new image and set as profile picture
+            thread.image = request.FILES['attachment_image']
+            thread.save()
+
+            return  HttpResponse("Success")
+
+        except Exception as e:
+            return HttpResponseServerError(reason=(str(e)+ civi_id + str(request.FILES)))
+    else:
+        return HttpResponseForbidden('allowed only via POST')
 # @login_required
 # @require_post_params(params=['friend'])
 # def requestFollow(request):
@@ -391,6 +480,16 @@ def requestFollow(request):
             'username' : target.username,
             'follow_status': True
         }
+
+        notify.send(
+            request.user, # Actor User
+            recipient=target, # Target User
+            verb=u'is following you', # Verb
+            target=target_account, # Target Object
+            popup_string="{user} is now following you".format(user=account.full_name),
+            link="/{}/{}".format(profile, request.user.username)
+        )
+
         return JsonResponse({"result": data})
     except Account.DoesNotExist as e:
         return HttpResponseBadRequest(reason=str(e))
@@ -449,153 +548,3 @@ def editUserCategories(request):
         return HttpResponseBadRequest(reason=str(e))
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
-# @login_required
-# @require_post_params(params=['friend'])
-# def rejectFriend(request):
-#     '''
-#         USAGE:
-#             Takes in user_id from current friend_requests list and removes it.
-#
-#         Text POST:
-#             friend
-#
-#         :return: (200, okay, list of friend information) (400, bad lookup) (500, error)
-#     '''
-#     try:
-#         account = Account.objects.get(user=request.user)
-#         stranger = Account.objects.get(id=request.POST.get('friend', -1))
-#
-#         if stranger.id not in account.friend_requests:
-#             raise Exception("No request was sent from this person.")
-#
-#         account.friend_requests = [fr for fr in account.friend_requests if fr != stranger_id]
-#         account.save()
-#
-#         return JsonResponse({"result":Account.objects.serialize(account, "friends")})
-#     except Account.DoesNotExist as e:
-#         return HttpResponseBadRequest(reason=str(e))
-#     except Exception as e:
-#         return HttpResponseServerError(reason=str(e))
-#
-# @login_required
-# @require_post_params(params=['friend'])
-# def removeFriend(request):
-#     '''
-#         USAGE:
-#             takes in user_id from current friends and removes the join on accounts.
-#
-#         Text POST:
-#             friend
-#
-#         :return: (200, okay, list of friend information) (500, error)
-#     '''
-#     account = Account.objects.get(user=request.user)
-#     try:
-#         friend = Account.objects.get(id=request.POST.get('friend', -1))
-#         account.friends.remove(friend)
-#         account.save()
-#         return JsonResponse(Account.objects.serialize(account, "friends"))
-#     except Account.DoesNotExist as e:
-#         return HttpResponseServerError(reason=str(e))
-#
-# @login_required
-# @require_post_params(params=['group'])
-# def followGroup(request):
-#     '''
-#         USAGE:
-#             given a group ID number, add user as follower of that group.
-#
-#         Text POST:
-#             group
-#
-#         :return: (200, ok, list of group information) (400, bad request) (500, error)
-#     '''
-#
-#     account = Account.objects.get(user=request.user)
-#     try:
-#         group = Group.objects.get(id=request.POST.get('group', -1))
-#         account.group.add(group)
-#         account.save()
-#         return JsonResponse({"result":Account.objects.serialize(account, "groups")}, safe=False)
-#     except Group.DoesNotExist as e:
-#         return HttpResponseBadRequest(reason=str(e))
-#     except Exception as e:
-#         return HttpResponseServerError(reason=str(e))
-#
-# @login_required
-# @require_post_params(params=['group'])
-# def unfollowGroup(request):
-#     '''
-#         USAGE:
-#             given a group ID numer, remove user as a follower of that group.
-#
-#         Text POST:
-#             group
-#
-#         :return: (200, ok, list of group information) (400, bad request) (500, error)
-#     '''
-#
-#     account = Account.objects.get(user=request.user)
-#     try:
-#         group = Group.objects.get(id=request.POST.get('group', -1))
-#         account.group.remove(group)
-#         return JsonResponse({"result":Account.objects.serialize(account, "group")}, safe=False)
-#     except Group.DoesNotExist as e:
-#         return HttpResponseBadRequest(reason=str(e))
-#     except Exception as e:
-#         return HttpResponseServerError(reason=str(e))
-#
-#
-# @login_required
-# @require_post_params(params=['civi'])
-# def pinCivi(request):
-#     '''
-#         USAGE:
-#             given a civi ID numer, pin the civi.
-#
-#         Text POST:
-#             civi
-#
-#         :return: (200, ok, list of pinned civis) (400, bad request) (500, error)
-#     '''
-#
-#     account = Account.objects.get(user=request.user)
-#     try:
-#         civi = Civi.objects.get(id=request.POST.get('civi', -1))
-#         if civi.id not in account.pinned:
-#             account.pinned += civi.id
-#             account.save()
-#         return JsonResponse({"result":Account.objects.serialize(account, "group")}, safe=False)
-#
-#     except Civi.DoesNotExist as e:
-#         return HttpResponseBadRequest(reason=str(e))
-#     except Exception as e:
-#         return HttpResponseServerError(reson=str(e))
-#
-#
-#
-# @login_required
-# @require_post_params(params=['id'])
-# def unpinCivi(request):
-#     '''
-#         USAGE:
-#             given a civi ID numer, unpin the civi.
-#
-#         Text POST:
-#             civi
-#
-#         :return: (200, ok, list of pinned civis) (400, bad request) (500, error)
-#     '''
-#     account = Account.objects.get(user=request.user)
-#     try:
-#         cid = Civi.objects.get(id=request.POST.get("id", -1))
-#         if cid in account.pinned:
-#             account.pinned = [e for e in account.pinned if e != cid]
-#             account.save()
-#
-#         return JsonResponse({"result":Account.objects.serialize(account, "group")}, safe=False)
-#     except Civi.DoesNotExist as e:
-#         return HttpResponseBadRequest(reason=str(e))
-#     except Exception as e:
-#         return HttpResponseServerError(reason=str(e))
-#

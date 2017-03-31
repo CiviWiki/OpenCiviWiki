@@ -195,10 +195,20 @@ cw.CiviView =  BB.View.extend({
         'click .delete': 'deleteEdit',
         'click .edit-confirm': 'saveEdit',
         'click .edit-cancel': 'closeEdit',
+        'click .civi-image-thumb': 'viewImageModal',
+
         // 'click .civi-grab-link': 'grabLink',
         // vote
         // changevote
 
+    },
+
+    viewImageModal: function(e){
+        var img_src = $(e.currentTarget).attr('src');
+        var $modal = $('#civi-image-modal');
+        $('#civi-image-big').attr('src', img_src);
+        $modal.openModal();
+        e.stopPropagation();
     },
     // clean() function
     clickFavorite: function (e) {
@@ -415,7 +425,23 @@ cw.NewCiviView = BB.View.extend({
     events: {
         'click .cancel-new-civi': 'cancelCivi',
         'click .create-new-civi': 'createCivi',
-        'click .civi-type-button': 'clickType'
+        'click .civi-type-button': 'clickType',
+        'change .attachment-image-pick': 'previewImageNames'
+    },
+
+
+    previewImageNames: function(e) {
+        var attachment_input = this.$el.find('#id_attachment_image');
+        var uploaded_images = attachment_input[0].files;
+        console.log(attachment_input);
+        this.$('.file-preview').empty().append("<div>"+uploaded_images.length+" Images</div>");
+        _.each(uploaded_images, function(img_file){
+            console.log(img_file);
+            this.$('.file-preview').append("<div class=\"link-lato gray-text\">"+img_file.name+"</div>");
+        }, this);
+
+        this.attachmentCount = uploaded_images.length;
+
     },
 
     cancelCivi: function () {
@@ -442,29 +468,73 @@ cw.NewCiviView = BB.View.extend({
                     links: links
                 },
                 success: function (response) {
-                    _this.hide();
-                    Materialize.toast('New civi created.', 2000);
-                    var new_civi_data = response.data;
-                    var new_civi = new cw.CiviModel(new_civi_data);
-                    // TODO: change outline as well
-                    var can_edit = new_civi.get('author').username == _this.options.parentView.username ? true : false;
-                    $('#thread-' + c_type + 's').append(new cw.CiviView({model: new_civi, can_edit: can_edit, parentView: _this.options.parentView}).el);
-                    _this.options.parentView.civis.add(new_civi);
+                    var attachment_input = _this.$('#id_attachment_image');
+                    var uploaded_images = attachment_input[0].files;
+                    if (uploaded_images.length > 0) {
+                        var formData = new FormData(_this.$('#attachment_image_form')[0]);
+                        formData.set('civi_id', response.data.id);
+                        $.ajax({
+                            url: '/api/upload_images/',
+                            type: 'POST',
+                            success: function (response2) {
+                                _this.hide();
+                                Materialize.toast('New civi created.', 2000);
+                                var new_civi_data = response.data;
+                                var new_civi = new cw.CiviModel(new_civi_data);
+                                new_civi.set('attachments', response2.attachments);
+                                // TODO: change outline as well
+                                var can_edit = new_civi.get('author').username == _this.options.parentView.username ? true : false;
+                                $('#thread-' + c_type + 's').append(new cw.CiviView({model: new_civi, can_edit: can_edit, parentView: _this.options.parentView}).el);
+                                _this.options.parentView.civis.add(new_civi);
 
-                    // if(c_type ==='problem'){
-                    //     this.recommendedCivis.push(new_civi.id);
-                    //     this.otherCivis.push(new_civi.id);
-                    // }
-                    _this.options.parentView.initRecommended();
-                    _this.options.parentView.renderBodyContents(); //TODO: move renders into listeners
-                    console.log(new_civi);
-                    // _.each(new_civi.get('links'), function(link){
-                    //     console.log(link);
-                    //     _this.options.parentView.civis.findWhere({id: link}).view.render();
-                    // });
-                    _this.render();
+                                // if(c_type ==='problem'){
+                                //     this.recommendedCivis.push(new_civi.id);
+                                //     this.otherCivis.push(new_civi.id);
+                                // }
+                                _this.options.parentView.initRecommended();
+                                _this.options.parentView.renderBodyContents(); //TODO: move renders into listeners
+                                // _.each(new_civi.get('links'), function(link){
+                                //     console.log(link);
+                                //     _this.options.parentView.civis.findWhere({id: link}).view.render();
+                                // });
+                                _this.render();
 
-                    $('body').css({overflow: 'hidden'});
+                                $('body').css({overflow: 'hidden'});
+                            },
+                            error: function(e){
+                                Materialize.toast('ERROR: Image could not be uploaded', 3000);
+                                Materialize.toast(e.statusText, 3000);
+                                alert(JSON.stringify(e, null, 4));
+                                _this.imgSuccess = false;
+                            },
+                            data: formData,
+                            cache: false,
+                            contentType: false,
+                            processData: false
+                        });
+                    } else {
+                        _this.hide();
+                        Materialize.toast('New civi created.', 2000);
+                        var new_civi_data = response.data;
+                        var new_civi = new cw.CiviModel(new_civi_data);
+                        var can_edit = new_civi.get('author').username == _this.options.parentView.username ? true : false;
+                        $('#thread-' + c_type + 's').append(new cw.CiviView({model: new_civi, can_edit: can_edit, parentView: _this.options.parentView}).el);
+                        _this.options.parentView.civis.add(new_civi);
+
+                        // if(c_type ==='problem'){
+                        //     this.recommendedCivis.push(new_civi.id);
+                        //     this.otherCivis.push(new_civi.id);
+                        // }
+                        _this.options.parentView.initRecommended();
+                        _this.options.parentView.renderBodyContents(); //TODO: move renders into listeners
+                        // _.each(new_civi.get('links'), function(link){
+                        //     console.log(link);
+                        //     _this.options.parentView.civis.findWhere({id: link}).view.render();
+                        // });
+                        _this.render();
+                    }
+
+
 
                 },
                 error: function (response) {
@@ -999,6 +1069,13 @@ cw.ThreadView = BB.View.extend({
         _.each(this.responseCollection.models, function(civi){
             var can_edit = civi.get('author').username == this.username ? true : false;
             this.$('#response-list').append(new cw.CiviView({model: civi, can_edit: can_edit, parentView: this}).el);
+
+            var vote = _.find(this.model.get('user_votes'), function(v){
+                return v.civi_id === civi.id;
+            });
+            if (vote) {
+                this.$('#civi-'+ vote.civi_id).find("." +vote.activity_type).addClass('current');
+            }
         }, this);
     },
 
@@ -1232,8 +1309,10 @@ cw.ThreadView = BB.View.extend({
     }, 250),
 
     drilldownCivi: function (e) {
+        if ($(e.target).hasClass('rating-button')) {
+            return;
+        }
         var $this = $(e.currentTarget);
-
         if ($this.find('.civi-type').text() != "response") {
             var $currentCivi = this.$('[data-civi-id="' + this.currentCivi + '"]'),
                 $newCivi = $this.closest('.civi-card');

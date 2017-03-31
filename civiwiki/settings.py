@@ -36,9 +36,12 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages',
+    'channels',
     'api',
     'authentication',
-    'frontend_views'
+    'frontend_views',
+    'notifications',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -73,16 +76,37 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'civiwiki.wsgi.application'
 
+# Channels Setup
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "asgi_redis.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("localhost", 6379)],
+        },
+        "ROUTING": "civiwiki.routing.channel_routing",
+    },
+}
+
+# AWS S3 Setup
+AWS_STORAGE_BUCKET_NAME = get_env_variable("AWS_STORAGE_BUCKET_NAME", '')
+if AWS_STORAGE_BUCKET_NAME:
+    AWS_S3_ACCESS_KEY_ID = get_env_variable("AWS_S3_ACCESS_KEY_ID")
+    AWS_S3_SECRET_ACCESS_KEY = get_env_variable("AWS_S3_SECRET_ACCESS_KEY")
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+    AWS_S3_SECURE_URLS = False
+    AWS_QUERYSTRING_AUTH = False
+else:
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'webapp/static'),
 )
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+
+# Database
 if 'CIVIWIKI_LOCAL_NAME' not in os.environ:
     STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
@@ -101,12 +125,20 @@ else:
         },
     }
 
+
+# Internationalization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 LOGIN_URL = '/login'
+
+
+# Notification API Settings
+NOTIFICATIONS_SOFT_DELETE=True
+NOTIFICATIONS_USE_JSONFIELD=True
+
 
 # Valid US State Choices
 US_STATES = (('AL', 'Alabama'), ('AK', 'Alaska'), ('AZ', 'Arizona'), ('AR', 'Arkansas'), ('CA', 'California'),

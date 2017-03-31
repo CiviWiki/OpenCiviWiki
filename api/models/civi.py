@@ -4,9 +4,13 @@ from thread import Thread
 from bill import Bill
 from hashtag import Hashtag
 import random as r
-import json, datetime, math
+import os, json, datetime, math, uuid
 from django.core.serializers.json import DjangoJSONEncoder
+from django.utils.deconstruct import deconstructible
+from django.core.files.storage import default_storage
+from django.conf import settings
 from calendar import month_name
+
 
 class CiviManager(models.Manager):
     def summarize(self, civi):
@@ -67,6 +71,7 @@ class CiviManager(models.Manager):
     def thread_sorted_by_score(self, civis_qs, req_acct_id):
         qs = civis_qs.order_by('-created')
         return sorted(qs.all(), key=lambda c: c.score(req_acct_id), reverse=True)
+
 
 class Civi(models.Model):
     objects = CiviManager()
@@ -180,9 +185,38 @@ class Civi(models.Model):
             "created": self.created_date_str,
             # Not Implemented Yet
             "hashtags": [],
-            "attachments": [],
+            "attachments": [{'id': img.id, 'url': img.image_url} for img in self.images.all()],
 	    }
         if req_acct_id:
             data['score'] = self.score(req_acct_id)
 
         return data
+
+
+@deconstructible
+class PathAndRename(object):
+    def __init__(self, sub_path):
+        self.sub_path = sub_path
+
+    def __call__(self, instance, filename):
+        ext = filename.split('.')[-1]
+        new_filename = str(uuid.uuid4())
+        filename = '{}.{}'.format(new_filename, ext)
+        return os.path.join(self.sub_path, filename)
+
+image_upload_path = PathAndRename('')
+
+
+class CiviImage(models.Model):
+    civi = models.ForeignKey(Civi, related_name='images')
+    title = models.CharField(max_length=255, null=True, blank=True)
+    image = models.ImageField(upload_to=image_upload_path, null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+
+    def _get_image_url(self):
+        if self.image and default_storage.exists(os.path.join(settings.MEDIA_ROOT, self.image.name)):
+            return self.image.url
+        else:
+            #NOTE: This default url will probably be changed later
+            return "/static/img/no_image_md.png",
+    image_url = property(_get_image_url)

@@ -13,3 +13,8 @@ sunlight==1.2.9
 whitenoise==3.2
 dj-database-url==0.4.1
 Pillow==3.4.2
+channels==1.0.3
+asgi-redis==1.0.0
+django-notifications-hq==1.2
+boto==2.46.1
+django-storages==1.5.2
