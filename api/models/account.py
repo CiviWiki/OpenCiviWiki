@@ -6,8 +6,7 @@ from django.conf import settings
 from hashtag import Hashtag
 from category import Category
 
-import json
-import os
+import os, json, uuid
 
 class AccountManager(models.Manager):
     def summarize(self, account):
@@ -62,10 +61,11 @@ class PathAndRename(object):
 
     def __call__(self, instance, filename):
         ext = filename.split('.')[-1]
-        filename = '{}.{}'.format(instance.user.username, ext)
+        new_filename = str(uuid.uuid4())
+        filename = '{}.{}'.format(new_filename, ext)
         return os.path.join(self.sub_path, filename)
 
-profile_upload_path = PathAndRename('profile/')
+profile_upload_path = PathAndRename('')
 
 
 class Account(models.Model):
@@ -115,6 +115,6 @@ class Account(models.Model):
         if self.profile_image and default_storage.exists(os.path.join(settings.MEDIA_ROOT, self.profile_image.name)):
             return self.profile_image.url
         else:
-            #NOTE: This default url will more than likely be changed later
+            #NOTE: This default url will probably be changed later
             return "/static/img/no_image_md.png",
     profile_image_url = property(_get_profile_image_url)

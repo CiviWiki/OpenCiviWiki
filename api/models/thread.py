@@ -4,6 +4,10 @@ from category import Category
 from fact import Fact
 from hashtag import Hashtag
 from calendar import month_name
+import os, json, uuid
+from django.utils.deconstruct import deconstructible
+from django.core.files.storage import default_storage
+from django.conf import settings
 
 class ThreadManager(models.Manager):
     #TODO: move this to read.py, try to be more query operation specific here
@@ -14,7 +18,8 @@ class ThreadManager(models.Manager):
             "title": thread.title,
             "summary": thread.summary, #thread.summary[:320] + ('' if len(thread.summary) <= 320 else '...'),
             "created": "{0} {1}, {2}".format(month_name[thread.created.month], thread.created.day, thread.created.year),
-            "category_id": thread.category.id
+            "category_id": thread.category.id,
+            "image": thread.image_url
         }
         author_data = {
             "username": thread.author.user.username,
@@ -37,6 +42,19 @@ class ThreadManager(models.Manager):
     def filter_by_category(self, categories):
         return self.all().filter(category__in=categories)
 
+@deconstructible
+class PathAndRename(object):
+    def __init__(self, sub_path):
+        self.sub_path = sub_path
+
+    def __call__(self, instance, filename):
+        ext = filename.split('.')[-1]
+        new_filename = str(uuid.uuid4())
+        filename = '{}.{}'.format(new_filename, ext)
+        return os.path.join(self.sub_path, filename)
+
+image_upload_path = PathAndRename('')
+
 class Thread(models.Model):
     author = models.ForeignKey(Account, default=None, null=True)
     category = models.ForeignKey(Category, default=None, null=True)
@@ -46,6 +64,15 @@ class Thread(models.Model):
 
     title = models.CharField(max_length=127, blank=False, null=False)
     summary = models.CharField(max_length=4095, blank=False, null=False)
+    image = models.ImageField(upload_to=image_upload_path, blank=True, null=True)
+
+    def _get_image_url(self): #TODO: move this to utils
+        if self.image and default_storage.exists(os.path.join(settings.MEDIA_ROOT, self.image.name)):
+            return self.image.url
+        else:
+            #NOTE: This default url will probably be changed later
+            return "/static/img/no_image_md.png",
+    image_url = property(_get_image_url)
 
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     last_modified = models.DateTimeField(auto_now=True, blank=True, null=True)

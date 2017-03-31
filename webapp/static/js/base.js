@@ -28,6 +28,7 @@ cw.initGlobalNav = function () {
     var $floaty = $('.floaty'),
         $logout = $('#item-logout'),
         $feed = $('#item-feed'),
+        $notifications = $('#item-notifications'),
         $account = $('#item-account');
 
     $floaty.on('mouseover', function() {
@@ -42,11 +43,17 @@ cw.initGlobalNav = function () {
         window.location.href = '/auth/logout';
     });
 
+    $notifications.on('click', function () {
+        $('.notifications-modal').openModal();
+    });
+
     $feed.on('click', function () {
         window.location.href = '/';
     });
 
+
     $account.on('click', function () {
         window.location.href = '/profile/';
     });
+
 };

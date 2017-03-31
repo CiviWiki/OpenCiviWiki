@@ -52,6 +52,20 @@
 
         </div>
         {{# } }}
+        {{# if (this.model.get('attachments').length > 0) { }}
+        <div class="civi-attachments">
+            <div class="attachments-title gray-text">
+                ATTACHMENTS ({{this.model.get('attachments').length}})
+            </div>
+
+                {{# _.each(this.model.get('attachments'), function(attachment){  }}
+                    <div class="attachments-item">
+                        <img class="civi-image-thumb" src="{{attachment.url}}" width="50px" height="40px"/>
+                    </div>
+                {{# }, this); }}
+
+        </div>
+        {{# } }}
         {{# if (this.can_edit) { }}
             <div class="hide edit-wrapper">
                 <div class="edit-links" id="magicsuggest-{{this.model.get('id')}}"></div>

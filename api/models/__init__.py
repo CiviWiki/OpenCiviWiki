@@ -1,7 +1,7 @@
 from account import Account
 from bill import Bill
 from category import Category
-from civi import Civi
+from civi import Civi, CiviImage
 from fact import Fact
 from hashtag import Hashtag
 from notification import Notification

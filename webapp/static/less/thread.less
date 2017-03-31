@@ -184,9 +184,12 @@ body {
             top: 5vh;
 
             .thread-image-wrapper {
-                width: 25vw;
-                height: 30vh;
+                max-width: 40vw;
+                max-height: 30vh;
                 box-shadow: 0 0 4px 2px @box-shadow-gray;
+            }
+            .thread-image-thumb {
+                width: 100%
             }
             .thread-image-wrapper {
                 overflow: hidden;
@@ -272,7 +275,7 @@ body {
             background-color: @barely-not-white;
             // border-right: 1px solid @dark-white;
 
-            width: 22%;
+            width: 25%;
             margin-left: auto;
             left: auto;
             right: auto;
@@ -415,7 +418,7 @@ body {
             overflow-x: hidden;
             padding: 15px 32px 0 32px;
 
-            width: 43%;
+            width: 40%;
             margin-left: auto;
             left: auto;
             right: auto;
@@ -455,5 +458,8 @@ body {
         background-color: @dark-white;
         border-radius: 5px;
         margin-bottom: 24px;
+        min-height: 160px;
+        height: 160px;
+        padding-top: 72px;
     }
 }

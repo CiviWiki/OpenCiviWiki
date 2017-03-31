@@ -110,6 +110,7 @@ def issue_thread(request, thread_id=None):
     thread_wiki_data = {
         "title": t.title,
         "summary": t.summary,
+        "image": t.image_url,
         "author": {
             "username": t.author.user.username,
             "profile_image": t.author.profile_image_url,

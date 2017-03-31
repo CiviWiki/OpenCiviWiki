@@ -8,6 +8,7 @@ cw.FeedThreadModel = BB.Model.extend({
             summary: "Thread Summary",
             created: "No Date",
             category_id: 20, // ID for "Other"
+            image: "static/img/no_image_md.png"
         },
         author: {
             username: "None",
@@ -212,8 +213,32 @@ cw.NewThreadView = BB.View.extend({
                     category_id: category_id
                 },
                 success: function (response) {
-                    Materialize.toast('New thread created.', 2000);
-                    window.location = "thread/" + response.thread_id;
+                    var file = $('#id_attachment_image').val();
+
+                    if (file) {
+                        var formData = new FormData(_this.$('#attachment_image_form')[0]);
+                        formData.set('thread_id', response.thread_id);
+                        $.ajax({
+                            url: '/api/upload_image/',
+                            type: 'POST',
+                            success: function () {
+                                Materialize.toast('New thread created.', 2000);
+                                window.location = "thread/" + response.thread_id;
+                            },
+                            error: function(e){
+                                Materialize.toast('ERROR: Image could not be uploaded', 3000);
+                                Materialize.toast(e.statusText, 3000);
+                            },
+                            data: formData,
+                            cache: false,
+                            contentType: false,
+                            processData: false
+                        });
+                    } else {
+                        Materialize.toast('New thread created.', 2000);
+                        window.location = "thread/" + response.thread_id;
+                    }
+
                 }
             });
         } else {
