@@ -37,30 +37,49 @@
 <script id="new-civi-template" type="text/template">
     {% include "partials/thread/new_civi.html" %}
 </script>
+<script id="new-response-template" type="text/template">
+    {% include "partials/thread/new_response.html" %}
+</script>
+<script id="outline-template" type="text/template">
+    {% include "partials/thread/thread_outline.html" %}
+</script>
 
 <body>
     {% include "partials/utils/global_nav.html" %}
-    <div id="thread">
-
-    </div>
+    <div id="thread"></div>
 </body>
 
 <script type="text/javascript" src="{% static "js/thread.js" %}"></script>
 <script type="text/javascript">
 
     var username = '{{user.username}}',
-        threadId = '{{thread_id}}';
+        threadId = '{{thread_id}}',
+        thread_body_data = JSON.parse('{{ thread_body_data|escapejs }}'),
+        thread_wiki_data = JSON.parse('{{ thread_wiki_data|escapejs }}');
 
-    var threadModel = new cw.ThreadModel({}, {
-        threadId: threadId
-    });
-    threadModel.fetch();
+    var threadModel = new cw.ThreadModel(thread_wiki_data, {threadId: threadId});
+    var civiCollection = new cw.CiviCollection(thread_body_data.civis, {threadId: threadId});
 
     var threadView = new cw.ThreadView({
         username: username,
-        model: threadModel
+        model: threadModel,
+        civis: civiCollection
     });
 
-</script>
+    // HACK: TEMP Websocket fun
+    var WS_SCHEME = window.location.protocol == "https:" ? "wss" : "ws";
+    var HOST = WS_SCHEME + '://' + window.location.host;
+    cw.ws = new WebSocket(HOST + "/thread/"+threadId+"/");
 
+    cw.ws.onopen = function() {
+        cw.ws.send("Boop!");
+    };
+    cw.ws.onmessage = function (event) {
+        data = JSON.parse(event.data);
+
+        console.log(data.command, data.data.title);
+    };
+
+    if (cw.ws.readyState == WebSocket.OPEN) cw.ws.onopen();
+</script>
 </html>

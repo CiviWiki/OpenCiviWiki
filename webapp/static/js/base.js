@@ -26,9 +26,10 @@ cw.materializeShit = function () {
 
 cw.initGlobalNav = function () {
     var $floaty = $('.floaty'),
-        $logout = $('.svg-logout'),
-        $feed = $('.svg-feed'),
-        $account = $('.svg-account');
+        $logout = $('#item-logout'),
+        $feed = $('#item-feed'),
+        $notifications = $('#item-notifications'),
+        $account = $('#item-account');
 
     $floaty.on('mouseover', function() {
         $floaty.addClass('is-active');
@@ -42,11 +43,17 @@ cw.initGlobalNav = function () {
         window.location.href = '/auth/logout';
     });
 
+    $notifications.on('click', function () {
+        $('.notifications-modal').openModal();
+    });
+
     $feed.on('click', function () {
         window.location.href = '/';
     });
 
+
     $account.on('click', function () {
-        window.location.href = '/profile/' + username;
+        window.location.href = '/profile/';
     });
+
 };

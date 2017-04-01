@@ -26,6 +26,7 @@ DEBUG = True
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = get_env_variable("DJANGO_SECRET_KEY")
 SUNLIGHT_API_KEY = get_env_variable("SUNLIGHT_API_KEY")
+GOOGLE_API_KEY = "AIzaSyAKMT4cagDtpKz61vy0ByPxGDo2nvvXn4M" #get_env_variable("GOOGLE_MAP_API_KEY")
 ALLOWED_HOSTS = [".herokuapp.com", ".civiwiki.org"]
 
 INSTALLED_APPS = (
@@ -35,9 +36,12 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages',
+    'channels',
     'api',
     'authentication',
-    'frontend_views'
+    'frontend_views',
+    'notifications',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -72,13 +76,50 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'civiwiki.wsgi.application'
 
+# Channels Setup
+if 'CIVIWIKI_REDIS_URL' not in os.environ:
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "asgi_redis.RedisChannelLayer",
+            "CONFIG": {
+                "hosts": [("localhost", 6379)],
+            },
+            "ROUTING": "civiwiki.routing.channel_routing",
+        },
+    }
+else:
+    REDIS_URL = get_env_variable("CIVIWIKI_REDIS_URL")
+    REDIS_PORT = get_env_variable("CIVIWIKI_REDIS_PORT")
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "asgi_redis.RedisChannelLayer",
+            "CONFIG": {
+                "hosts": [(REDIS_URL, REDIS_PORT)],
+            },
+            "ROUTING": "civiwiki.routing.channel_routing",
+        },
+    }
+
+# AWS S3 Setup
+AWS_STORAGE_BUCKET_NAME = get_env_variable("AWS_STORAGE_BUCKET_NAME", '')
+if AWS_STORAGE_BUCKET_NAME:
+    AWS_S3_ACCESS_KEY_ID = get_env_variable("AWS_S3_ACCESS_KEY_ID")
+    AWS_S3_SECRET_ACCESS_KEY = get_env_variable("AWS_S3_SECRET_ACCESS_KEY")
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+    AWS_S3_SECURE_URLS = False
+    AWS_QUERYSTRING_AUTH = False
+else:
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'webapp/static'),
 )
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
+# Database
 if 'CIVIWIKI_LOCAL_NAME' not in os.environ:
     STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
@@ -97,9 +138,30 @@ else:
         },
     }
 
+
+# Internationalization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 LOGIN_URL = '/login'
+
+
+# Notification API Settings
+NOTIFICATIONS_SOFT_DELETE=True
+NOTIFICATIONS_USE_JSONFIELD=True
+
+
+# Valid US State Choices
+US_STATES = (('AL', 'Alabama'), ('AK', 'Alaska'), ('AZ', 'Arizona'), ('AR', 'Arkansas'), ('CA', 'California'),
+            ('CO', 'Colorado'), ('CT', 'Connecticut'), ('DE', 'Delaware'), ('DC', 'District of Columbia'), ('FL', 'Florida'),
+            ('GA', 'Georgia'), ('HI', 'Hawaii'), ('ID', 'Idaho'), ('IL', 'Illinois'), ('IN', 'Indiana'),
+            ('IA', 'Iowa'), ('KS', 'Kansas'), ('KY', 'Kentucky'), ('LA', 'Louisiana'), ('ME', 'Maine'),
+            ('MD', 'Maryland'), ('MA', 'Massachusetts'), ('MI', 'Michigan'), ('MN', 'Minnesota'), ('MS', 'Mississippi'),
+            ('MO', 'Missouri'), ('MT', 'Montana'), ('NE', 'Nebraska'), ('NV', 'Nevada'), ('NH', 'New Hampshire'),
+            ('NJ', 'New Jersey'), ('NM', 'New Mexico'), ('NY', 'New York'), ('NC', 'North Carolina'), ('ND', 'North Dakota'),
+            ('OH', 'Ohio'), ('OK', 'Oklahoma'), ('OR', 'Oregon'), ('PA', 'Pennsylvania'), ('RI', 'Rhode Island'),
+            ('SC', 'South Carolina'), ('SD', 'South Dakota'), ('TN', 'Tennessee'), ('TX', 'Texas'), ('UT', 'Utah'),
+            ('VT', 'Vermont'), ('VA', 'Virginia'), ('WA', 'Washington'), ('WV', 'West Virginia'), ('WI', 'Wisconsin'),
+            ('WY', 'Wyoming'))

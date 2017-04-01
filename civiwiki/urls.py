@@ -20,16 +20,21 @@ from django.views.static import serve
 from api import urls as api
 from authentication import urls as auth
 from frontend_views import urls as frontend_views
+# import notifications
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api/', include(api)),
     url(r'^auth/', include(auth)),
-    url(r'^', include(frontend_views))
+    url('^inbox/notifications/', include('notifications.urls', namespace='notifications')),
 ]
 
 urlpatterns += [
+    url(r'^media/(?P<path>.*)$',serve, {
+        'document_root': settings.MEDIA_ROOT, 'show_indexes': True
+    }),
     url(r'^static/(?P<path>.*)$', serve, {
         'document_root': settings.STATIC_ROOT
-    })
+    }),
+    url(r'^', include(frontend_views))
 ]

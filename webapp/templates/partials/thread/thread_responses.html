@@ -1,5 +1,12 @@
 {% verbatim %}
-{{# _.each(this.responseCollection.toJSON(), function (r) { }}
-    {{= cw.underscorePartial('response-template', r)}}
-{{# }, this); }}
+<div class="center section">
+    <button class="btn add-response waves-effect">add response</button>
+</div>
+{{# if (this.responseCollection.length > 0) { }}
+    <div id="response-list"></div>
+{{# } else { }}
+    <div class="no-state center section">
+        <div class="text title-lato">NO RESPONSES</div>
+    </div>
+{{# } }}
 {% endverbatim %}

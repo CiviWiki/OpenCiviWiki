@@ -10,14 +10,14 @@
 @white: #fff;
 @black: #000;
 @dark-white: #eee;
-@barely-not-white: #f5f5f5;
+@barely-not-white: #f7f6f9; //#f5f5f5;
 @light-gray: #aaa;
 @lightish-gray: #999;
 @gray: #666;
 @dark-gray: #333;
 @deep-gray: #181818;
 @text: #333;
-@box-shadow-gray: rgba(0,0,0,0.26);
+@box-shadow-gray: rgba(0,0,0,0.15);
 
 html {
     font-family: 'Lato', sans-serif;
@@ -141,15 +141,17 @@ html {
     border-bottom: 1px solid @purple !important;
     box-shadow: 0 1px 0 0 @purple !important;
 }
-.white-background-input-field input.invalid {
+.white-background-input-field input.invalid, .white-background-input-field textarea.invalid {
     border-bottom: 1px solid @yellow !important;
     box-shadow: 0 1px 0 0 @yellow !important;
 }
+
 .white-background-input-field textarea.invalid {
     border-bottom: 1px solid @yellow !important;
     box-shadow: 0 1px 0 0 @yellow !important;
 }
-.white-background-input-field input.valid {
+
+.white-background-input-field input.valid, .white-background-input-field textarea.valid  {
     border-bottom: 1px solid @purple !important;
     box-shadow: 0 1px 0 0 @purple !important;
 }

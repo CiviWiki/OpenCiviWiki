@@ -13,6 +13,15 @@
 <script id="new-thread-template" type="text/template">
     {% include "partials/feed/new_thread.html" %}
 </script>
+<script id="thread-card-template" type="text/template">
+    {% include "partials/feed/thread_card.html" %}
+</script>
+<script id="feed-list-template" type="text/template">
+    {% include "partials/feed/feed_list.html" %}
+</script>
+<script id="categories-template" type="text/template">
+    {% include "partials/feed/categories.html" %}
+</script>
 
 <body>
     {% include "partials/utils/global_nav.html" %}
@@ -25,12 +34,16 @@
 <script type="text/javascript">
     var username = '{{user.username}}',
         user_id = '{{user.id}}',
-        data = JSON.parse('{{data|safe}}'),
-        categories = data.categories,
-        feedView = new cw.FeedView({
+        data = JSON.parse('{{data|escapejs}}');
+
+    var threadCollection = new cw.FeedThreadCollection(data.threads);
+    var feedView = new cw.FeedView({
             username: username,
             user_id: user_id,
-            categories: categories
+            categories: _.sortBy(data.categories,"id"),
+            user_categories: data.user_categories,
+            threads: threadCollection,
+            trending: data.trending
         });
 </script>
 

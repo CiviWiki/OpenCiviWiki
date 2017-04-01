@@ -1,15 +1,13 @@
 {% verbatim %}
 <div class="thread-wiki">
-    <div class="wiki-banner">
+    <div class="wiki-banner row">
         <div class="container">
-            <div class="col s5">
-                <div class="wiki-title title-lato dark-white-text">
-                    {{this.model.get('title')}}
-                </div>
+            <div class="col s7">
+                <div class="wiki-title title-lato dark-white-text">{{this.model.get('title')}}</div>
                 <div class="wiki-stats light-gray-text">
                     <span class="wiki-stat">{{this.model.get('num_views')}} Views</span>
                     <span class="wiki-stat">{{this.model.get('num_civis')}} Civis</span>
-                    <span class="wiki-stat">{{this.model.get('num_responses')}} Responses</span>
+                    <!-- <span class="wiki-stat">{{this.model.get('num_responses')}} Responses</span> -->
                 </div>
             </div>
         </div>
@@ -18,8 +16,7 @@
         <div class="container">
             <div class="col s12">
                 <div class="wiki-body-header">
-                    <span class="wiki-header-category gray-text"><span class="black-text bold-text wiki-header-inner">Category:</span>{{this.model.get('category')}}</span>
-                    <span class="wiki-header-topic gray-text"><span class="black-text bold-text wiki-header-inner">Topic:</span>{{this.model.get('topic')}}</span>
+                    <span class="wiki-header-category gray-text"><span class="black-text bold-text wiki-header-inner">Category:</span>{{this.model.get('category').name}}</span>
                 </div>
             </div>
             <div class="col s8">
@@ -42,7 +39,7 @@
                             {{# _.each(this.model.get('contributors'), function (c, idx) { }}
                                 {{# if (idx > 7) { return; } else { }}
                                     <div class="profile-button-wrapper col l3 m6 s12">
-                                        {{= cw.underscorePartial('profile-button-template', {name: c})}}
+                                        {{= cw.underscorePartial('profile-button-template', {c:c})}}
                                     </div>
                                 {{# } }}
                             {{# }, this); }}
@@ -77,7 +74,10 @@
         </div>
     </div>
     <div class="wiki-image">
-        <img src="http://media.salon.com/2014/06/riot_police-620x4121.jpg" alt="">
+        <div class="thread-image-wrapper">
+            <img class="thread-image-thumb" src="{{this.model.get('image')}}" alt="">
+            <!-- <div class="placeholder"><i class="material-icons">image</i></div> -->
+        </div>
     </div>
 </div>
 {% endverbatim %}

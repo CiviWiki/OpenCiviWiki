@@ -23,10 +23,26 @@
                 </select>
             </div>
         </div>
+        <div class="white-background-input-field">
+            <form method="post" enctype="multipart/form-data" id="attachment_image_form">
+                <div class="file-field input-field">
+                    <input class="upload-image btn waves-effect hide" type="submit" value="Upload"/>
+                    <div class="btn attachment-image-pick dark-blue-background">
+                        <span>Add an Image</span>
+                        <input id="id_attachment_image" name="attachment_image" type="file">
+                    </div>
+                  <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text">
+                  </div>
+                </div>
+                <div class="file-preview"></div>
+            </form>
+        </div>
     </div>
+
     <div class="modal-footer">
-        <button class="create-new-thread waves-effect btn">Add Thread</a>
-        <button class="cancel-new-thread waves-effect btn">Cancel</a>
+        <button class="create-new-thread waves-effect btn">Add Thread</button>
+        <button class="cancel-new-thread waves-effect btn">Cancel</button>
     </div>
 </div>
 {% endverbatim %}

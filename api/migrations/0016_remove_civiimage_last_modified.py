@@ -7,13 +7,12 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0001_initial'),
+        ('api', '0015_auto_20170331_0710'),
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='account',
-            name='beta_access',
-            field=models.BooleanField(default=False),
+        migrations.RemoveField(
+            model_name='civiimage',
+            name='last_modified',
         ),
     ]

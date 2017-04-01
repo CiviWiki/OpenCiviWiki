@@ -1,6 +1,46 @@
 @import 'base';
+@red: #cc5856;
+.no-state {
+    background-color: @white;
+    border: 2px @lightish-gray;
+    border-radius: 2px;
+    .text {
+        color: @light-gray;
+    }
+}
 
+.count-badge {
+    font-size: 12px;
+    border-radius: 25px;
+    background-color: @dark-blue;
+    font-weight: bold;
+    padding: 0 8px;
+}
+.nav-inactive {
+    color: #cccccc;
+    cursor: default;
+}
+
+
+body {
+    -webkit-font-smoothing: antialiased;
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+        background-color: @dark-white;
+    }
+    ::-webkit-scrollbar-thumb {
+        background-color: @light-gray;
+        margin-top: 4px;
+        margin-bottom: 4px;
+    }
+}
+.linked {
+    border: 1px solid #501cb5;
+}
 #thread {
+
     .new-civi-modal-holder {
 
         .modal-content {
@@ -54,8 +94,9 @@
             box-shadow: 0 2px 5px @box-shadow-gray;
 
             .wiki-title {
-                padding-top: 40%;
-                line-height: 35px;
+                padding-top: 80px;
+                line-height: 24px;
+                font-size: 24px;
             }
 
             .wiki-stats {
@@ -142,10 +183,27 @@
             right: 15%;
             top: 5vh;
 
-            img {
+            .thread-image-wrapper {
                 max-width: 40vw;
                 max-height: 30vh;
                 box-shadow: 0 0 4px 2px @box-shadow-gray;
+            }
+            .thread-image-thumb {
+                width: 100%
+            }
+            .thread-image-wrapper {
+                overflow: hidden;
+                .placeholder {
+                    background-color: @light-purple;
+                    text-align: center;
+                    width: 100%;
+                    height: 100%;
+                    i {
+                        color: white;
+                        font-size: 2em;
+                        transform: translateY(+300%);
+                    }
+                }
             }
         }
 
@@ -164,13 +222,15 @@
     }
 
     .thread-body {
-        button {
+        .btn {
             background-color: @purple;
         }
 
         .body-banner {
             background-color: @dark-purple;
-            box-shadow: 0 2px 5px @box-shadow-gray;
+            box-shadow: 0 5px 6px -3px rgba(0, 0, 0, 0.4);
+            position: relative;
+            z-index: 2;
 
             .category-topic {
                 margin-top: 4px;
@@ -183,13 +243,15 @@
             }
 
             .thread-title {
-                margin-top: 10px;
-                font-size: 20px;
+                margin-top: 8px;
+                font-size: 16px;
+                line-height: 16px;
+                font-weight: 700;
             }
 
             .thread-header, .response-header {
                 font-size: 18px;
-                margin-top: 30px;
+                margin-top: 16px;
 
                 button {
                     margin-right: 20px;
@@ -206,7 +268,18 @@
         }
 
         .nav-column {
-            box-shadow: 2px 0 5px @box-shadow-gray;
+            // box-shadow: 2px 0 2px @box-shadow-gray;
+            // box-shadow: 0 5px 6px -3px rgba(0, 0, 0, 0.4);
+            position: relative;
+            z-index: 2;
+            background-color: @barely-not-white;
+            // border-right: 1px solid @dark-white;
+
+            width: 25%;
+            margin-left: auto;
+            left: auto;
+            right: auto;
+
 
             .background-info-link {
                 background-color: @dark-purple;
@@ -227,6 +300,7 @@
             }
 
             .issue-outline {
+
                 .issue-outline-header {
                     margin: 10px 15px 0 15px;
                     padding-bottom: 4px;
@@ -240,23 +314,49 @@
                         }
                     }
                 }
+                .civi-switch {
+                    margin: 4px 8px;
+                    color: @dark-gray;
+                    .count-badge {
+                        background-color: #dddddd;
+                        line-height: 16px;
+                        margin-top: 4px;
+
+                    }
+
+                    .lever {
+                        margin: 0 8px;
+                    }
+                    .badge-other.current{
+                        background-color: @red !important;
+                    }
+                    .badge-recommended.current{
+                        background-color: @dark-blue !important;
+                    }
+                }
 
                 .civi-outline {
                     overflow-y: scroll;
 
                     .civi-nav-header {
-                        border-left: 3px solid #fff;
-                        padding-left: 6px;
-                        margin: 10px 15px 0 15px;
+                        border-left: 3px solid rgba(0,0,0,0);
+                        padding-left: 4px;
+                        margin: 10px 8px 0 8px;
+                        line-height: 16px;
 
                         .civi-nav-title {
-                            font-size: 18px;
+                            font-size: 16px;
                         }
 
                         .civi-nav-count {
+                            font-size: 12px;
                             border-radius: 25px;
                             background-color: @dark-blue;
-                            padding: 0 10px;
+                            font-weight: bold;
+                            padding: 0 8px;
+                            &.other {
+                                background-color: @red;
+                            }
                         }
 
                         &.current {
@@ -266,24 +366,44 @@
                     }
 
                     .civi-nav-wrapper {
-                        margin: 0 15px 10px 15px;
+                        margin: 0 0px 8px 16px;
                         height: 100%;
                         display: none;
 
                         .civi-nav-indiv {
                             font-size: 14px;
-                            margin: 4px 0 10px 0;
+                            margin: 8px 0 8px 0;
                             line-height: 16px;
+                            //
+                            // .voted {
+                            //
+                            //     color: #cccccc;
+                            //     margin-left: -1rem;
+                            // }
+                            .civi-nav-state {
+                                color: @dark-blue;
+                                margin-left: -1rem;
+                                width: 5%;
+                                // margin-right: 4px;
+                                line-height:16px;
+                                vertical-align: text-bottom;
+                                &.voted {
+                                    color: #cccccc;
+                                }
+                            }
+
 
                             .civi-nav-link {
+                                width: 95%;
                                 cursor: pointer;
-                                border-left: 3px solid #fff;
-                                padding-left: 6px;
+                                border-left: 3px solid rgba(0,0,0,0);
+                                padding-left: 4px;
+                                display: inline-block;
+
 
                                 &.current {
-                                    color: @dark-blue;
+                                    color: @dark-blue !important;
                                     border-color: @dark-blue;
-                                    font-weight: 500;
                                 }
                             }
                         }
@@ -293,15 +413,53 @@
         }
 
         .main-thread {
+            // z-index: 1;
             overflow-y: scroll;
-            padding: 15px 15px 0 15px;
+            overflow-x: hidden;
+            padding: 15px 32px 0 32px;
+
+            width: 40%;
+            margin-left: auto;
+            left: auto;
+            right: auto;
         }
 
         .responses {
+            width: 35%;
+            margin-left: auto;
+            left: auto;
+            right: auto;
+            // z-index: 1;
             overflow-y: scroll;
             padding: 15px 15px 0 15px;
             // border-left: 1px solid #ddd;
-            box-shadow: 0 2px 5px @box-shadow-gray;
+            // box-shadow: 0 2px 5px @box-shadow-gray;
         }
+    }
+
+    .civi-load-more {
+        text-transform: uppercase;
+        text-align: center;
+        color: @lightish-gray;
+        font-size: 12px;
+        .civi-show-count {
+            font-size: 10px;
+        }
+        .btn-loadmore {
+            color: @dark-blue;
+            font-weight: 700;
+            &:hover {
+                cursor: pointer;
+                color: @blue;
+            }
+        }
+    }
+    .main-thread .civi-load-more{
+        background-color: @dark-white;
+        border-radius: 5px;
+        margin-bottom: 24px;
+        min-height: 160px;
+        height: 160px;
+        padding-top: 72px;
     }
 }
