@@ -77,15 +77,28 @@ TEMPLATES = [
 WSGI_APPLICATION = 'civiwiki.wsgi.application'
 
 # Channels Setup
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "asgi_redis.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [("localhost", 6379)],
+if 'CIVIWIKI_REDIS_URL' not in os.environ:
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "asgi_redis.RedisChannelLayer",
+            "CONFIG": {
+                "hosts": [("localhost", 6379)],
+            },
+            "ROUTING": "civiwiki.routing.channel_routing",
         },
-        "ROUTING": "civiwiki.routing.channel_routing",
-    },
-}
+    }
+else:
+    REDIS_URL = get_env_variable("CIVIWIKI_REDIS_URL")
+    REDIS_PORT = get_env_variable("CIVIWIKI_REDIS_PORT")
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "asgi_redis.RedisChannelLayer",
+            "CONFIG": {
+                "hosts": [(REDIS_URL, REDIS_PORT)],
+            },
+            "ROUTING": "civiwiki.routing.channel_routing",
+        },
+    }
 
 # AWS S3 Setup
 AWS_STORAGE_BUCKET_NAME = get_env_variable("AWS_STORAGE_BUCKET_NAME", '')

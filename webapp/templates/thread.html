@@ -50,7 +50,6 @@
 </body>
 
 <script type="text/javascript" src="{% static "js/thread.js" %}"></script>
-
 <script type="text/javascript">
 
     var username = '{{user.username}}',
@@ -69,7 +68,7 @@
 
     // HACK: TEMP Websocket fun
     var WS_SCHEME = window.location.protocol == "https:" ? "wss" : "ws";
-    var HOST = window.location.origin.replace(/^http/, WS_SCHEME);
+    var HOST = WS_SCHEME + '://' + window.location.host;
     cw.ws = new WebSocket(HOST + "/thread/"+threadId+"/");
 
     cw.ws.onopen = function() {
@@ -83,5 +82,4 @@
 
     if (cw.ws.readyState == WebSocket.OPEN) cw.ws.onopen();
 </script>
-
 </html>
