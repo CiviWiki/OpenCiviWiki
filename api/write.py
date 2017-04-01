@@ -146,7 +146,7 @@ def createCivi(request):
             data = {
                 "command": "add",
                 "data": json.dumps(civi.dict_with_score(a.id)),
-            # }
+            }
             # channels_Group("thread-%s" % thread_id).send({
             #     "text": json.dumps(data),
             # })
