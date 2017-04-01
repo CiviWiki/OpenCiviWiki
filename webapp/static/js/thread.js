@@ -456,6 +456,8 @@ cw.NewCiviView = BB.View.extend({
             c_type = this.$el.find('.civi-types > .current').val();
         var links = this.magicSuggestView.ms.getValue();
 
+        this.$(e.currentTarget).addClass('disabled').attr('disabled', true);
+
         if (title && body && c_type) {
             $.ajax({
                 url: '/api/new_civi/',
@@ -504,8 +506,7 @@ cw.NewCiviView = BB.View.extend({
                             error: function(e){
                                 Materialize.toast('ERROR: Image could not be uploaded', 3000);
                                 Materialize.toast(e.statusText, 3000);
-                                alert(JSON.stringify(e, null, 4));
-                                _this.imgSuccess = false;
+                                _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
                             },
                             data: formData,
                             cache: false,
@@ -521,6 +522,16 @@ cw.NewCiviView = BB.View.extend({
                         $('#thread-' + c_type + 's').append(new cw.CiviView({model: new_civi, can_edit: can_edit, parentView: _this.options.parentView}).el);
                         _this.options.parentView.civis.add(new_civi);
 
+                        var parent_links = new_civi.get('links');
+                        _.each(parent_links, function(parent_id){
+                            var parent_civi = _this.options.parentView.civis.get(parent_id)
+                            if (parent_civi) {
+                                var prev_links = parent_civi.get('links');
+                                prev_links.push(new_civi.id);
+                                parent_civi.set('links', prev_links);
+                            }
+
+                        }, this);
                         // if(c_type ==='problem'){
                         //     this.recommendedCivis.push(new_civi.id);
                         //     this.otherCivis.push(new_civi.id);
@@ -539,10 +550,12 @@ cw.NewCiviView = BB.View.extend({
                 },
                 error: function (response) {
                     Materialize.toast('Could not create Civi', 2000);
+                    _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
                 }
             });
         } else {
             Materialize.toast('Please input all fields.', 2000);
+            this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
         }
     },
 
@@ -578,9 +591,9 @@ cw.NewResponseView = BB.View.extend({
         this.$('.new-response-modal').openModal();
     },
 
-    createResponse: function () {
+    createResponse: function (e) {
         var _this = this;
-
+        this.$(e.currentTarget).addClass('disabled').attr('disabled', true);
         var title = this.$('#response-title').val(),
             body = this.$('#response-body').val();
 
@@ -602,10 +615,15 @@ cw.NewResponseView = BB.View.extend({
                     _this.options.parentView.renderResponses();
                     _this.render();
 
+                },
+                error: function(){
+                    Materialize.toast('Could not create response', 2000);
+                    this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
                 }
             });
         } else {
             Materialize.toast('Please input all fields.', 2000);
+
         }
     }
 });

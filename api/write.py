@@ -160,7 +160,7 @@ def createCivi(request):
                         verb=u'created a new civi', # Verb
                         action_object=civi, # Action Object
                         target=civi.thread, # Target Object
-                        popup_string="{user} created a new civi in the thread {thread}".format(user=act.full_name, thread=civi.thread.title),
+                        popup_string="{user} created a new civi in the thread {thread}".format(user=request.user.full_name, thread=civi.thread.title),
                         link="/{}/{}".format("thread", thread_id)
                     )
 
