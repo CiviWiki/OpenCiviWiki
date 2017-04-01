@@ -146,10 +146,10 @@ def createCivi(request):
             data = {
                 "command": "add",
                 "data": json.dumps(civi.dict_with_score(a.id)),
-            }
-            channels_Group("thread-%s" % thread_id).send({
-                "text": json.dumps(data),
-            })
+            # }
+            # channels_Group("thread-%s" % thread_id).send({
+            #     "text": json.dumps(data),
+            # })
 
             for act in accounts:
                 if act.user.username != request.user.username:
