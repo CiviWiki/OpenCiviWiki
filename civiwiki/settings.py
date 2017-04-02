@@ -21,13 +21,16 @@ def get_env_variable(environment_variable, optional=False):
             error = "environment variable '{ev}' not found.".format(ev=environment_variable)
             raise ImproperlyConfigured(error)
 
-DEBUG = True
+if 'DEBUG' not in os.environ:
+    DEBUG = False
+else:
+    DEBUG = True
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = get_env_variable("DJANGO_SECRET_KEY")
 SUNLIGHT_API_KEY = get_env_variable("SUNLIGHT_API_KEY")
 GOOGLE_API_KEY = "AIzaSyAKMT4cagDtpKz61vy0ByPxGDo2nvvXn4M" #get_env_variable("GOOGLE_MAP_API_KEY")
-ALLOWED_HOSTS = [".herokuapp.com", ".civiwiki.org"]
+ALLOWED_HOSTS = [".herokuapp.com", ".civiwiki.org", "127.0.0.1", "localhost"]
 
 INSTALLED_APPS = (
     'django.contrib.admin',
