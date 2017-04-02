@@ -290,12 +290,16 @@ cw.CiviView =  BB.View.extend({
                         _this.parentView.model.set('user_votes', prev_votes);
                     }
 
-                    _this.parentView.initRecommended(); //THISTHIS
-                    _this.parentView.renderBodyContents();
-                    _this.parentView.processCiviScroll();
+                    if (_this.model.get('type') != "response") {
+                        _this.parentView.initRecommended(); //THISTHIS
+                        _this.parentView.renderBodyContents();
+                        _this.parentView.processCiviScroll();
+                    }
 
                     _this.$('.rating-button').removeClass('current');
                     $this.addClass('current');
+
+
                 },
                 error: function(r){
                     Materialize.toast('Could not vote :(', 2000);
