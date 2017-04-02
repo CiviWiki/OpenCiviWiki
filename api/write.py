@@ -131,15 +131,17 @@ def createCivi(request):
             parent_civi = Civi.objects.get(id=related_civi)
             parent_civi.responses.add(civi)
 
-            notify.send(
-                request.user, # Actor User
-                recipient=parent_civi.author.user, # Target User
-                verb=u'responded to your civi', # Verb
-                action_object=civi, # Action Object
-                target=civi.thread, # Target Object
-                popup_string="{user} responded to your civi in {thread}".format(user=a.full_name, thread=civi.thread.title),
-                link="/{}/{}".format("thread", thread_id)
-            )
+            if parent_civi.author.user.username != request.user.username:
+                notify.send(
+                    request.user, # Actor User
+                    recipient=parent_civi.author.user, # Target User
+                    verb=u'responded to your civi', # Verb
+                    action_object=civi, # Action Object
+                    target=civi.thread, # Target Object
+                    popup_string="{user} responded to your civi in {thread}".format(user=a.full_name, thread=civi.thread.title),
+                    link="/{}/{}".format("thread", thread_id)
+                )
+
         else: #not a reply, a regular civi
             c_qs = Civi.objects.filter(thread_id=thread_id)
             accounts = Account.objects.filter(pk__in=c_qs.distinct('author').values_list('author', flat=True))

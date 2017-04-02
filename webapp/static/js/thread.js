@@ -588,7 +588,6 @@ cw.NewResponseView = BB.View.extend({
 
     events: {
         'click .create-new-response': 'createResponse',
-        'click #response-title': 'test',
         'change .attachment-image-pick': 'previewImageNames'
     },
 
@@ -596,9 +595,6 @@ cw.NewResponseView = BB.View.extend({
         this.$('.new-response-modal').openModal();
     },
 
-    test: function() {
-        alert("test!");
-    },
     previewImageNames: function(e) {
         var attachment_input = this.$el.find('#response_attachment_image');
         var uploaded_images = attachment_input[0].files;
