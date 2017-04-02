@@ -1,5 +1,10 @@
 {% verbatim %}
 <div class="center section">
+    <div class="section">
+        {{# var parentCivi = this.civis.get(this.responseCollection.civiId); }}
+        <div class="link-lato">{{ parentCivi.get('type').toUpperCase() }}</div>
+        <div class="header-lato">{{ this.civis.get(this.responseCollection.civiId).get('title') }}</div>
+    </div>
     <button class="btn add-response waves-effect">add response</button>
 </div>
 {{# if (this.responseCollection.length > 0) { }}

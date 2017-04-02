@@ -21,13 +21,16 @@ def get_env_variable(environment_variable, optional=False):
             error = "environment variable '{ev}' not found.".format(ev=environment_variable)
             raise ImproperlyConfigured(error)
 
-DEBUG = True
+if 'DEBUG' not in os.environ:
+    DEBUG = False
+else:
+    DEBUG = True
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = get_env_variable("DJANGO_SECRET_KEY")
 SUNLIGHT_API_KEY = get_env_variable("SUNLIGHT_API_KEY")
 GOOGLE_API_KEY = "AIzaSyAKMT4cagDtpKz61vy0ByPxGDo2nvvXn4M" #get_env_variable("GOOGLE_MAP_API_KEY")
-ALLOWED_HOSTS = [".herokuapp.com", ".civiwiki.org"]
+ALLOWED_HOSTS = [".herokuapp.com", ".civiwiki.org", "127.0.0.1", "localhost"]
 
 INSTALLED_APPS = (
     'django.contrib.admin',
@@ -77,28 +80,16 @@ TEMPLATES = [
 WSGI_APPLICATION = 'civiwiki.wsgi.application'
 
 # Channels Setup
-if 'CIVIWIKI_REDIS_URL' not in os.environ:
-    CHANNEL_LAYERS = {
-        "default": {
-            "BACKEND": "asgi_redis.RedisChannelLayer",
-            "CONFIG": {
-                "hosts": [("localhost", 6379)],
-            },
-            "ROUTING": "civiwiki.routing.channel_routing",
+REDIS_URL = get_env_variable("REDIS_URL", 'redis://localhost:6379')
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "asgi_redis.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [REDIS_URL],
         },
-    }
-else:
-    REDIS_URL = get_env_variable("CIVIWIKI_REDIS_URL")
-    REDIS_PORT = get_env_variable("CIVIWIKI_REDIS_PORT")
-    CHANNEL_LAYERS = {
-        "default": {
-            "BACKEND": "asgi_redis.RedisChannelLayer",
-            "CONFIG": {
-                "hosts": [(REDIS_URL, REDIS_PORT)],
-            },
-            "ROUTING": "civiwiki.routing.channel_routing",
-        },
-    }
+        "ROUTING": "civiwiki.routing.channel_routing",
+    },
+}
 
 # AWS S3 Setup
 AWS_STORAGE_BUCKET_NAME = get_env_variable("AWS_STORAGE_BUCKET_NAME", '')
