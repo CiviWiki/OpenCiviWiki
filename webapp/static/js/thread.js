@@ -1311,7 +1311,7 @@ cw.ThreadView = BB.View.extend({
 
     },
 
-    autoscrollCivi: _.throttle(function (target) {
+    autoscrollCivi: function (target) {
         // TODO: Throttle may need to be somewhere else
         var $this = target;
 
@@ -1365,7 +1365,7 @@ cw.ThreadView = BB.View.extend({
             this.$('.responses').empty();
         }
 
-    }, 250),
+    },
 
     drilldownCivi: function (e) {
         if ($(e.target).hasClass('rating-button')) {
@@ -1382,32 +1382,6 @@ cw.ThreadView = BB.View.extend({
                 $newCivi.addClass('current');
                 var civi_id = $newCivi.data('civi-id');
 
-                var links = this.civis.get(civi_id).get('links');
-                // var links_related = [];
-                // _.each(links, function(link){
-                //     links_related = this.$('#civi-'+link).data('civi-links');
-                //     console.log(links_related);
-                //     if (!links_related) return;
-                //     if (links_related.length > 1){
-                //         links_related= links_related.split(",").map(Number);
-                //     } else {
-                //         links_related = parseInt(links_related);
-                //     }
-                //
-                //     links = _.union(links, links_related);
-                // },this);
-                // console.log(links);
-
-                // _.each(this.$('.civi-card'), function(civiCard){
-                //     // console.log(links, $(civiCard).data('civi-id'));
-                //
-                //     if (links.indexOf($(civiCard).data('civi-id')) == -1 ){
-                //         $(civiCard).removeClass('linked');
-                //     } else {
-                //         $(civiCard).addClass('linked');
-                //     }
-                // });
-
                 this.currentCivi = $newCivi.attr('data-civi-id');
 
                 this.responseCollection.civiId = this.currentCivi;
@@ -1421,6 +1395,17 @@ cw.ThreadView = BB.View.extend({
                 this.$('.responses').empty();
             }
         }
+    },
+
+    selectInitialCiviAfterToggle: function(){
+        var $newCivi = this.$('.civi-card').first();
+
+        $newCivi.addClass('current');
+        this.currentCivi = $newCivi.attr('data-civi-id');
+
+        this.responseCollection.civiId = this.currentCivi;
+        this.responseCollection.fetch();
+
     },
 
     loadMoreCivis: function(e) {
@@ -1456,6 +1441,7 @@ cw.ThreadView = BB.View.extend({
         this.$('.main-thread').scrollTop(0);
         this.renderBodyContents();
         this.processCiviScroll();
+        this.selectInitialCiviAfterToggle();
     },
 
     openNewCiviModal: function () {
