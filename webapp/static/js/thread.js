@@ -573,7 +573,6 @@ cw.NewCiviView = BB.View.extend({
 cw.NewResponseView = BB.View.extend({
     el: '.new-response-modal-holder',
     template: _.template($('#new-response-template').html()),
-
     initialize: function (options) {
         this.options = options || {};
         this.render();
@@ -585,10 +584,29 @@ cw.NewResponseView = BB.View.extend({
 
     events: {
         'click .create-new-response': 'createResponse',
+        'click #response-title': 'test',
+        'change .attachment-image-pick': 'previewImageNames'
     },
 
     show: function () {
         this.$('.new-response-modal').openModal();
+    },
+
+    test: function() {
+        alert("test!");
+    },
+    previewImageNames: function(e) {
+        var attachment_input = this.$el.find('#response_attachment_image');
+        var uploaded_images = attachment_input[0].files;
+        console.log(attachment_input);
+        this.$('.file-preview').empty().append("<div>"+uploaded_images.length+" Images</div>");
+        _.each(uploaded_images, function(img_file){
+            console.log(img_file);
+            this.$('.file-preview').append("<div class=\"link-lato gray-text\">"+img_file.name+"</div>");
+        }, this);
+
+        this.attachmentCount = uploaded_images.length;
+
     },
 
     createResponse: function (e) {
@@ -609,21 +627,44 @@ cw.NewResponseView = BB.View.extend({
                     related_civi: this.options.parentView.currentCivi
                 },
                 success: function (response) {
-                    Materialize.toast('New response created.', 2000);
-                    // var new_civi = response.data;
-                    _this.options.parentView.responseCollection.fetch();
-                    _this.options.parentView.renderResponses();
-                    _this.render();
-
+                    var attachment_input = _this.$('#response_attachment_image');
+                    var uploaded_images = attachment_input[0].files;
+                    if (uploaded_images.length > 0) {
+                        var formData = new FormData(_this.$('#response_attachment_image_form')[0]);
+                        formData.set('civi_id', response.data.id);
+                        $.ajax({
+                            url: '/api/upload_images/',
+                            type: 'POST',
+                            success: function (response2) {
+                                Materialize.toast('New response created.', 2000);
+                                _this.options.parentView.responseCollection.fetch();
+                                _this.options.parentView.renderResponses();
+                                _this.render();
+                            },
+                            error: function(e){
+                                Materialize.toast('Could not create response', 2000);
+                                _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
+                            },
+                            data: formData,
+                            cache: false,
+                            contentType: false,
+                            processData: false
+                        });
+                    } else {
+                        Materialize.toast('New response created.', 2000);
+                        _this.options.parentView.responseCollection.fetch();
+                        _this.options.parentView.renderResponses();
+                        _this.render();
+                    }
                 },
                 error: function(){
                     Materialize.toast('Could not create response', 2000);
-                    this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
+                    _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
                 }
             });
         } else {
             Materialize.toast('Please input all fields.', 2000);
-
+            _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
         }
     }
 });

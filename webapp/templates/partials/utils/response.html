@@ -20,6 +20,20 @@
         <div class="civi-body-inner">
             {{body}}
         </div>
+        {{# if (attachments.length > 0) { }}
+        <div class="civi-attachments">
+            <div class="attachments-title gray-text">
+                ATTACHMENTS ({{ attachments.length }})
+            </div>
+
+                {{# _.each(attachments, function(attachment){  }}
+                    <div class="attachments-item">
+                        <img class="civi-image-thumb" src="{{attachment.url}}" width="50px" height="40px"/>
+                    </div>
+                {{# }, this); }}
+
+        </div>
+        {{# } }}
         <div class="rating">
             <button class="btn waves-effect rating-button vote" data-rating="vneg">
                 <i class="tiny-for-button material-icons">thumb_down</i>
