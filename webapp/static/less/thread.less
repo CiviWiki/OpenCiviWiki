@@ -40,7 +40,15 @@ body {
     border: 1px solid #501cb5;
 }
 #thread {
-
+    .edit-thread-modal {
+        .action-button {
+            display: inline-block;
+            color: @dark-blue;
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
     .new-civi-modal-holder {
 
         .modal-content {
@@ -90,6 +98,8 @@ body {
     .thread-wiki {
         .wiki-banner {
             min-height: 30vh;
+            padding-bottom: 16px;
+            margin-bottom: 24px;
             background-color: @dark-purple;
             box-shadow: 0 2px 5px @box-shadow-gray;
 
@@ -106,11 +116,65 @@ body {
                     margin-right: 4px;
                 }
             }
+            .wiki-author {
+                .author-photo-holder {
+                    display: inline-block;
+                    width: 40px;
+                    vertical-align: middle;
+
+                    .author-photo {
+                        width: 100%;
+                        height: 40px;
+                        border-radius: 50px;
+                        background-color: @white;
+                    }
+                }
+
+                .author-info {
+                    display: inline-block;
+                    vertical-align: middle;
+                    margin-left: 6px;
+
+                    .author-name {
+                        font-size: 14px;
+                        line-height: 16px;
+                        color: @light-purple;
+                    }
+                }
+            }
+
+            .wiki-edit-actions {
+                line-height: 40px;
+                .edit-thread-button {
+                    display: inline;
+                    padding: 4px;
+                    &:hover {
+                        cursor: pointer;
+                        i {
+                            color: @blue;
+                        }
+                        .edit-text {
+                            color: @blue;
+                        }
+                    }
+                }
+                i {
+                    color: @dark-blue;
+                    vertical-align: text-top;
+                }
+                .edit-text {
+                    font-weight: 700;
+                    font-size: 12px;
+                    color: @dark-blue;
+                    vertical-align: top;
+
+                }
+            }
         }
 
         .wiki-body {
+
             .wiki-body-header {
-                padding-top: 24px;
                 font-size: 17px;
 
                 .wiki-header-inner {
@@ -179,17 +243,18 @@ body {
         }
 
         .wiki-image {
-            position: absolute;
-            right: 15%;
-            top: 5vh;
+            float: right;
+            max-height: 150px;
 
             .thread-image-wrapper {
-                max-width: 40vw;
-                max-height: 30vh;
-                box-shadow: 0 0 4px 2px @box-shadow-gray;
+                padding-top: 40px;
+                overflow: visible;
+
             }
             .thread-image-thumb {
-                width: 100%
+                width: 100%;
+                max-height: 300px;
+                box-shadow: 0 0 4px 2px @box-shadow-gray;
             }
             .thread-image-wrapper {
                 overflow: hidden;

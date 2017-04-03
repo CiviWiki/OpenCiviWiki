@@ -222,12 +222,12 @@ cw.NewThreadView = BB.View.extend({
                             url: '/api/upload_image/',
                             type: 'POST',
                             success: function () {
-                                Materialize.toast('New thread created.', 2000);
+                                Materialize.toast('New thread created.', 5000);
                                 window.location = "thread/" + response.thread_id;
                             },
                             error: function(e){
-                                Materialize.toast('ERROR: Image could not be uploaded', 3000);
-                                Materialize.toast(e.statusText, 3000);
+                                Materialize.toast('ERROR: Image could not be uploaded', 5000);
+                                Materialize.toast(e.statusText, 5000);
                             },
                             data: formData,
                             cache: false,
@@ -235,14 +235,14 @@ cw.NewThreadView = BB.View.extend({
                             processData: false
                         });
                     } else {
-                        Materialize.toast('New thread created.', 2000);
+                        Materialize.toast('New thread created.', 5000);
                         window.location = "thread/" + response.thread_id;
                     }
 
                 }
             });
         } else {
-            Materialize.toast('Please input all fields.', 2000);
+            Materialize.toast('Please input all fields.', 5000);
         }
     },
 });
@@ -293,7 +293,7 @@ cw.CategoriesView = BB.View.extend({
                     'categories[]': selectedCategories,
                 },
                 success: function (response) {
-                    Materialize.toast('Categories Changed', 2000);
+                    Materialize.toast('Categories Changed', 5000);
                     _this.hide();
                     _this.user_categories = response.result.user_categories;
                     _this.mainView.setUserCategories(_this.user_categories);
@@ -302,7 +302,7 @@ cw.CategoriesView = BB.View.extend({
                 }
             });
         } else {
-            Materialize.toast('Please select at least one category', 2000);
+            Materialize.toast('Please select at least one category', 5000);
         }
     },
 });
