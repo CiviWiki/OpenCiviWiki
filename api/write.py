@@ -300,6 +300,43 @@ def deleteCivi(request):
 #     reps = [for rep in resp_parsed.data]
 #     Account.user(request.user).representatives = reps
 #
+
+@login_required
+def editThread(request):
+    try:
+        thread_id = request.POST.get('thread_id')
+        title = request.POST.get('title')
+        summary = request.POST.get('summary')
+        category_id = request.POST.get('category_id')
+        if (thread_id):
+
+
+            t = Thread.objects.get(id=thread_id)
+            category_id = request.POST.get('category_id')
+            if (request.user.username != t.author.user.username):
+                return HttpResponseBadRequest(reason="No Edit Rights")
+
+            t.title = title
+            t.summary = summary
+            t.category_id = category_id
+            t.save()
+
+            return_data = {
+                'thread_id': thread_id,
+                'title': t.title,
+                'summary': t.summary,
+                "category": {
+                    "id": t.category.id,
+                    "name": t.category.name
+                },
+            }
+            return JsonResponse({'data': return_data})
+        else:
+            return HttpResponseBadRequest(reason="Invalid Thread Reference")
+
+    except Exception as e:
+        return HttpResponseServerError(reason=str(e))
+
 @login_required
 def uploadphoto(request):
     pass
@@ -420,10 +457,13 @@ def uploadThreadImage(request):
             thread.image = request.FILES['attachment_image']
             thread.save()
 
-            return  HttpResponse("Success")
+            data = {
+                'image': thread.image_url
+            }
+            return  JsonResponse(data)
 
         except Exception as e:
-            return HttpResponseServerError(reason=(str(e)+ civi_id + str(request.FILES)))
+            return HttpResponseServerError(reason=(str(e)))
     else:
         return HttpResponseForbidden('allowed only via POST')
 # @login_required

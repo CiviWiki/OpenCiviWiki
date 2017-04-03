@@ -16,7 +16,7 @@ class ThreadManager(models.Manager):
         thread_data = {
             "id": thread.id,
             "title": thread.title,
-            "summary": thread.summary, #thread.summary[:320] + ('' if len(thread.summary) <= 320 else '...'),
+            "summary": thread.summary[:320] + ('' if len(thread.summary) <= 320 else '...'),
             "created": "{0} {1}, {2}".format(month_name[thread.created.month], thread.created.day, thread.created.year),
             "category_id": thread.category.id,
             "image": thread.image_url

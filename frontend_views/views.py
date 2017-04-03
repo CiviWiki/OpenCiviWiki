@@ -122,6 +122,7 @@ def issue_thread(request, thread_id=None):
             "id": t.category.id,
             "name": t.category.name
         },
+        "categories": [{'id': c.id, 'name': c.name} for c in Category.objects.all()],
         "created": t.created_date_str,
         "num_civis": t.num_civis,
         "num_views": t.num_views,
