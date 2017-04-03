@@ -56,7 +56,7 @@ cw.UserSetupView = BB.View.extend({
                 this.mapView.resizeMap().adjustMapCenter();
                 this.currentStep = 2;
             } else {
-                Materialize.toast('<span class="subtitle-lato white-text">Please fill out all the fields</span>', 3000);
+                Materialize.toast('<span class="subtitle-lato white-text">Please fill out all the fields</span>', 5000);
             }
         } else if (this.currentStep === 2) {
             this.$('#step2').addClass('hide');
@@ -212,22 +212,22 @@ cw.UserSetupView = BB.View.extend({
                     latitude: coordinates.lat,
                 },
                 success: function (data) {
-                    Materialize.toast('<span class="subtitle-lato white-text">Success</span>', 3000);
+                    Materialize.toast('<span class="subtitle-lato white-text">Success</span>', 5000);
                     _this.nextStep();
                 },
                 error: function (data) {
                     if (data.status_code === 400) {
-                        Materialize.toast(data.message, 3000);
+                        Materialize.toast(data.message, 5000);
                     } else if (data.status_code === 500) {
-                        Materialize.toast('Internal Server Error', 3000);
+                        Materialize.toast('Internal Server Error', 5000);
                     } else {
-                        Materialize.toast(data.statusText, 2000);
+                        Materialize.toast(data.statusText, 5000);
                     }
                 }
             });
 
         } else {
-            Materialize.toast('<span class="subtitle-lato white-text">Please fill all the fields</span>', 3000);
+            Materialize.toast('<span class="subtitle-lato white-text">Please fill all the fields</span>', 5000);
         }
     },
 
@@ -258,11 +258,11 @@ cw.UserSetupView = BB.View.extend({
                     reader.readAsDataURL(uploaded_image);
 
                 }
-                Materialize.toast('Image Uploaded!', 3000);
+                Materialize.toast('Image Uploaded!', 5000);
             },
             error: function(e){
-                Materialize.toast('ERROR: Image could not be uploaded', 3000);
-                Materialize.toast(e.statusText, 3000);
+                Materialize.toast('ERROR: Image could not be uploaded', 5000);
+                Materialize.toast(e.statusText, 5000);
                 _this.$el.find('.loading').addClass('hide');
                 _this.$el.find('.placeholder').removeClass('hide');
                 _this.$el.find('#profile_image_form')[0].reset();
@@ -287,10 +287,10 @@ cw.UserSetupView = BB.View.extend({
                 _this.$el.find('.loading').addClass('hide');
                 _this.$el.find('.placeholder').removeClass('hide');
                 _this.$el.find('#profile_image_form')[0].reset();
-                Materialize.toast(JSON.stringify(e), 3000);
+                Materialize.toast(JSON.stringify(e), 5000);
             },
             error: function(e){
-                Materialize.toast(JSON.stringify(e), 3000);
+                Materialize.toast(JSON.stringify(e), 5000);
             }
         });
     },

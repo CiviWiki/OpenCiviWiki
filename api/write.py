@@ -456,7 +456,7 @@ def uploadThreadImage(request):
             # Upload new image and set as profile picture
             thread.image = request.FILES['attachment_image']
             thread.save()
-
+            thread.sync
             data = {
                 'image': thread.image_url
             }

@@ -228,14 +228,14 @@ cw.AccountView = BB.View.extend({
                 type: 'POST',
                 data: apiData,
                 success: function () {
-                    Materialize.toast('You are now following user '+ apiData.target, 3000);
+                    Materialize.toast('You are now following user '+ apiData.target, 5000);
                     target.addClass("btn-secondary");
                     target.data("follow-state", true);
                     target.html("");
 
                 },
                 error: function () {
-                    Materialize.toast('Could not follow user '+ apiData.target, 3000);
+                    Materialize.toast('Could not follow user '+ apiData.target, 5000);
                 }
             });
         } else {
@@ -244,13 +244,13 @@ cw.AccountView = BB.View.extend({
                 type: 'POST',
                 data: apiData,
                 success: function () {
-                    Materialize.toast('You have unfollowed user '+ apiData.target, 3000);
+                    Materialize.toast('You have unfollowed user '+ apiData.target, 5000);
                     target.removeClass("btn-secondary");
                     target.html("FOLLOW");
                     target.data("follow-state", false);
                 },
                 error: function () {
-                    Materialize.toast('Could not unfollow user '+ apiData.target, 3000);
+                    Materialize.toast('Could not unfollow user '+ apiData.target, 5000);
                 }
             });
         }
@@ -275,7 +275,7 @@ cw.AccountView = BB.View.extend({
             type: 'POST',
             data: apiData,
             success: function () {
-                Materialize.toast('Saved!', 3000);
+                Materialize.toast('Saved!', 5000);
 
                 _this.isSave = true;
                 _this.model.fetch();
@@ -303,17 +303,17 @@ cw.AccountView = BB.View.extend({
                     latitude: coordinates.lat,
                 },
                 success: function (data) {
-                    Materialize.toast('<span class="subtitle-lato white-text">Location Changed</span>', 3000);
+                    Materialize.toast('<span class="subtitle-lato white-text">Location Changed</span>', 5000);
                     _this.isSave = true;
                     _this.model.fetch();
                 },
                 error: function (data) {
                     if (data.status_code === 400) {
-                        Materialize.toast(data.message, 3000);
+                        Materialize.toast(data.message, 5000);
                     } else if (data.status_code === 500) {
-                        Materialize.toast('Internal Server Error', 3000);
+                        Materialize.toast('Internal Server Error', 5000);
                     } else {
-                        Materialize.toast(data.statusText, 2000);
+                        Materialize.toast(data.statusText, 5000);
                     }
                 }
             });
@@ -334,14 +334,14 @@ cw.AccountView = BB.View.extend({
             processData: false,
             success: function () {
                 console.log("succ"+JSON.stringify(formData));
-                Materialize.toast('Saved!', 3000);
+                Materialize.toast('Saved!', 5000);
 
                 _this.isSave = true;
                 _this.model.fetch();
             },
             error: function(e){
-                Materialize.toast('ERROR: Image could not be uploaded', 3000);
-                Materialize.toast(JSON.stringify(e), 3000);
+                Materialize.toast('ERROR: Image could not be uploaded', 5000);
+                Materialize.toast(JSON.stringify(e), 5000);
             },
 
         });
@@ -364,7 +364,7 @@ cw.AccountView = BB.View.extend({
     //             });
     //         },
     //         error: function(){
-    //             Materialize.toast("Sunlight Error: Could not get representatives", 2000);
+    //             Materialize.toast("Sunlight Error: Could not get representatives", 5000);
     //         }
     //     });
     // }

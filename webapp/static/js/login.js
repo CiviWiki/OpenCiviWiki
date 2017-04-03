@@ -56,16 +56,16 @@ cw.LoginView = BB.View.extend({
                 },
                 error: function (data) {
                     if (data.status === 400) {
-                        Materialize.toast(data.statusText, 2000);
+                        Materialize.toast(data.statusText, 5000);
                     } else if (data.status === 500 && data.statusText == "inactive account") {
                         window.location.replace('/beta');
                     } else {
-                        Materialize.toast(data.statusText, 2000);
+                        Materialize.toast(data.statusText, 5000);
                     }
                 }
             });
         } else {
-            Materialize.toast('<span class="subtitle-lato white-text">Please input your username and password</span>', 2000);
+            Materialize.toast('<span class="subtitle-lato white-text">Please input your username and password</span>', 5000);
         }
     },
 
@@ -85,11 +85,11 @@ cw.LoginView = BB.View.extend({
             password = this.$el.find('#password').val();
 
         if (!email.is(':valid')) {
-            Materialize.toast('<span class="subtitle-lato white-text">Please enter a valid email</span>', 3000);
+            Materialize.toast('<span class="subtitle-lato white-text">Please enter a valid email</span>', 5000);
 
         } else if (password && username) {
             email = email.val();
-            
+
             $.ajax({
                 type: 'POST',
                 url: 'auth/register',
@@ -103,17 +103,17 @@ cw.LoginView = BB.View.extend({
                 },
                 error: function (data) {
                     if (data.status_code === 400) {
-                        Materialize.toast(data.message, 3000);
+                        Materialize.toast(data.message, 5000);
                     } else if (data.status_code === 500) {
-                        Materialize.toast('Internal Server Error', 3000);
+                        Materialize.toast('Internal Server Error', 5000);
                     } else {
-                        Materialize.toast(data.statusText, 2000);
+                        Materialize.toast(data.statusText, 5000);
                     }
                 }
             });
 
         } else {
-            Materialize.toast('<span class="subtitle-lato white-text">Please fill all the fields</span>', 3000);
+            Materialize.toast('<span class="subtitle-lato white-text">Please fill all the fields</span>', 5000);
         }
     }
 });
