@@ -369,7 +369,7 @@ cw.CiviView =  BB.View.extend({
         // Populate with data TODO: move to a template
         this.$('.edit-civi-body').text(this.model.get('body'));
         this.$('.edit-civi-title').val(this.model.get('title'));
-        this.$('#'+ this.model.get('type')).prop("checked", true);
+        this.$('#'+ this.model.get('type') + "-" + this.model.id).prop("checked", true);
         if (this.model.get('type') != 'response') {
             this.magicSuggestView = new cw.LinkSelectView({$el: this.$('#magicsuggest-'+this.model.id), civis: this.civis});
             this.magicSuggestView.setLinkableData(this.model.get('type'));
@@ -392,8 +392,9 @@ cw.CiviView =  BB.View.extend({
         }
     },
 
-    clickNewType: function(){
-        var new_type = $("#civi-type-form input[type='radio']:checked").val();
+    clickNewType: function(e){
+        var new_type = $(e.target).closest("input[type='radio']:checked").val();
+        // var new_type = $("#civi-type-form input[type='radio']:checked").val();
         this.magicSuggestView.setLinkableData(new_type);
         this.magicSuggestView.ms.clear();
         Materialize.toast('Changing the civi type has cleared your links', 5000);
@@ -429,7 +430,7 @@ cw.CiviView =  BB.View.extend({
             links = [];
         }
 
-        var new_type = $("#civi-type-form input[type='radio']:checked").val();
+        var new_type = this.$("#civi-type-form input[type='radio']:checked").val();
         console.log(new_type);
         if (!new_body || !new_title){
             Materialize.toast('Please do not leave fields blank', 5000);

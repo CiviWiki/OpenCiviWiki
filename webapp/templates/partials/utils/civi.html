@@ -8,19 +8,19 @@
 
                 {{# if (this.can_edit) { }}
                 <div class="dark-background-input-field hide edit-wrapper edit-type">
-                    <form action="#" id="civi-type-form">
+                    <form action="#" id="civi-type-form" class="edit-civi-type">
                         <div class="civi-types">
                             <span class="civi-type-button">
-                                <input class="with-gap" name="civi-type" type="radio" id="problem" value="problem"/>
-                                <label for="problem" class="civi-type-label">PROBLEM</label>
+                                <input class="with-gap" name="civi-type" type="radio" id="problem-{{this.model.get('id')}}" value="problem"/>
+                                <label for="problem-{{this.model.get('id')}}" class="civi-type-label">PROBLEM</label>
                             </span>
                             <span class="civi-type-button">
-                                <input class="with-gap" name="civi-type" type="radio" id="cause" value="cause"/>
-                                <label for="cause" class="civi-type-label">CAUSE</label>
+                                <input class="with-gap" name="civi-type" type="radio" id="cause-{{this.model.get('id')}}" value="cause"/>
+                                <label for="cause-{{this.model.get('id')}}" class="civi-type-label">CAUSE</label>
                             </span>
                             <span class="civi-type-button">
-                                <input class="with-gap" name="civi-type" type="radio" id="solution" value="solution"/>
-                                <label for="solution" class="civi-type-label">SOLUTION</label>
+                                <input class="with-gap" name="civi-type" type="radio" id="solution-{{this.model.get('id')}}" value="solution"/>
+                                <label for="solution-{{this.model.get('id')}}" class="civi-type-label">SOLUTION</label>
                             </span>
                         </div>
                     </form>
