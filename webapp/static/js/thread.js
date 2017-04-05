@@ -311,7 +311,7 @@ cw.CiviView =  BB.View.extend({
 
     clickEdit: function (e) {
         e.stopPropagation();
-        console.log('clickEdit');
+        // Populate with data TODO: move to a template
         this.$('.edit-civi-body').text(this.model.get('body'));
         this.$('.edit-civi-title').val(this.model.get('title'));
         this.$('#'+ this.model.get('type')).prop("checked", true);
@@ -398,6 +398,7 @@ cw.CiviView =  BB.View.extend({
     deleteEdit: function(e) {
         var _this = this;
         e.stopPropagation();
+
         $.ajax({
             url: '/api/delete_civi/',
             type: 'POST',
@@ -406,8 +407,12 @@ cw.CiviView =  BB.View.extend({
             },
             success: function (response) {
                 Materialize.toast('Deleted Civi succssfully', 5000);
-                _.each(_this.model.links, function(link){
-                    _this.civis.findWhere({id: link}).view.render();
+                _.each(_this.model.get('links'), function(link){
+                    var linked_civi = _this.civis.findWhere({id: link});
+                    var prev_links =linked_civi.get('links');
+                    new_links = _.without(prev_links, _this.model.id);
+                    linked_civi.set('links', new_links);
+                    // console.log(linked_civi.id, _this.model.id, prev_links, new_links);
                 });
 
                 _this.civis.remove(_this.model);
