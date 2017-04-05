@@ -316,10 +316,12 @@ cw.CiviView =  BB.View.extend({
         this.$('.edit-civi-body').text(this.model.get('body'));
         this.$('.edit-civi-title').val(this.model.get('title'));
         this.$('#'+ this.model.get('type')).prop("checked", true);
-        this.$('.edit-civi-title').val();
-        this.magicSuggestView = new cw.LinkSelectView({$el: this.$('#magicsuggest-'+this.model.id), civis: this.civis});
-        this.magicSuggestView.setLinkableData(this.model.get('type'));
-        this.magicSuggestView.ms.setValue(this.model.get('links'));
+        if (this.model.get('type') != 'response') {
+            this.magicSuggestView = new cw.LinkSelectView({$el: this.$('#magicsuggest-'+this.model.id), civis: this.civis});
+            this.magicSuggestView.setLinkableData(this.model.get('type'));
+            this.magicSuggestView.ms.setValue(this.model.get('links'));
+        }
+
         this.imageRemoveList = [];
 
         this.$('.edit-wrapper').removeClass('hide');
@@ -327,6 +329,11 @@ cw.CiviView =  BB.View.extend({
         this.$('.text-wrapper').addClass('hide');
         this.$('.edit').addClass('hide');
         this.$('.delete').addClass('hide');
+
+        if (this.model.get('type') === 'response') {
+            this.$('.edit-links').addClass('hide');
+            this.$('#civi-type-form').addClass('hide');
+        }
     },
 
     clickNewType: function(){
@@ -356,10 +363,16 @@ cw.CiviView =  BB.View.extend({
     saveEdit: function(e) {
         e.stopPropagation();
         var _this = this;
-
+        var c_type = this.model.get('type');
         var new_body = this.$('.edit-civi-body').val().trim();
             new_title = this.$('.edit-civi-title').val().trim();
-        var links = this.magicSuggestView.ms.getValue();
+        var links;
+        if (c_type != 'response') {
+            links= this.magicSuggestView.ms.getValue();
+        } else {
+            links = [];
+        }
+
         var new_type = $("#civi-type-form input[type='radio']:checked").val();
         console.log(new_type);
         if (!new_body || !new_title){
@@ -369,14 +382,25 @@ cw.CiviView =  BB.View.extend({
             this.closeEdit(e);
             return;
         } else {
-            console.log(this.imageRemoveList);
-            var data = {
-                civi_id: this.model.id,
-                title: new_title,
-                body: new_body,
-                links: links,
-                type: new_type
-            };
+            var data;
+
+            if (c_type === 'response') {
+                new_type = c_type;
+                data = {
+                    civi_id: this.model.id,
+                    title: new_title,
+                    body: new_body
+                };
+            } else {
+                data = {
+                    civi_id: this.model.id,
+                    title: new_title,
+                    body: new_body,
+                    links: links,
+                    type: new_type
+                };
+            }
+
             if (this.imageRemoveList.length){
                 data.image_remove_list = this.imageRemoveList;
             }
@@ -395,7 +419,10 @@ cw.CiviView =  BB.View.extend({
                     _this.model.set('type', new_type);
                     _this.model.set('attachments', response.attachments);
                     _this.model.set('score', response.score);
-                    _this.magicSuggestView.remove();
+                    if (_this.magicSuggestView){
+                        _this.magicSuggestView.remove();
+                    }
+
                     _this.render();
 
                     if (_this.model.get('type') != "response") {
@@ -485,7 +512,7 @@ cw.NewCiviView = BB.View.extend({
     },
 
     addImageLinkInput: function(){
-        var link_images = $('.civi-link-images').length;
+        var link_images = this.$('.civi-link-images').length;
         if (link_images > 20 ) {
             Materialize.toast("Don't think you need any more...", 5000);
         } else {
@@ -495,7 +522,7 @@ cw.NewCiviView = BB.View.extend({
     },
 
     previewImageNames: function(e) {
-        var attachment_input = this.$el.find('#id_attachment_image');
+        var attachment_input = this.$('#id_attachment_image');
         var uploaded_images = attachment_input[0].files;
         var $previewlist = this.$('.file-preview');
         $previewlist.empty();
@@ -515,7 +542,6 @@ cw.NewCiviView = BB.View.extend({
             }
         }, this);
 
-
         // Total images count
         var image_total = uploaded_images.length + this.attachment_links.length;
         if (image_total === 0) {
@@ -525,8 +551,6 @@ cw.NewCiviView = BB.View.extend({
         } else {
             $previewlist.prepend("<div>" + image_total + " Images</div>");
         }
-
-
 
         this.attachmentCount = image_total;
 
@@ -676,12 +700,17 @@ cw.NewResponseView = BB.View.extend({
 
     render: function () {
         this.$el.empty().append(this.template());
+
+        this.attachment_links = [];
+        this.attachmentCount = 0;
     },
 
     events: {
         'click .create-new-response': 'createResponse',
         'change .attachment-image-pick': 'previewImageNames',
-        'click .cancel-new-response': 'hide'
+        'click .cancel-new-response': 'hide',
+        'input .civi-link-images': 'previewImageNames',
+        'click #add-image-link-input': 'addImageLinkInput',
     },
 
     show: function () {
@@ -692,17 +721,48 @@ cw.NewResponseView = BB.View.extend({
         this.$('.new-response-modal').closeModal();
     },
 
+    addImageLinkInput: function(){
+        var link_images = this.$('.civi-link-images').length;
+        if (link_images > 20 ) {
+            Materialize.toast("Don't think you need any more...", 5000);
+        } else {
+            this.$('.image-link-list').append('<input type="text" class="civi-link-images" placeholder="Paste your image link here..."/>');
+        }
+
+    },
+
     previewImageNames: function(e) {
-        var attachment_input = this.$el.find('#response_attachment_image');
+        var attachment_input = this.$('#response_attachment_image');
         var uploaded_images = attachment_input[0].files;
-        console.log(attachment_input);
-        this.$('.file-preview').empty().append("<div>"+uploaded_images.length+" Images</div>");
+        var $previewlist = this.$('.file-preview');
+        $previewlist.empty();
+        // File Upload Images
         _.each(uploaded_images, function(img_file){
-            console.log(img_file);
-            this.$('.file-preview').append("<div class=\"link-lato gray-text\">"+img_file.name+"</div>");
+            $previewlist.append("<div class=\"link-lato gray-text preview-item \">"+img_file.name+"</div>");
         }, this);
 
-        this.attachmentCount = uploaded_images.length;
+        // Link Images
+        this.attachment_links = [];
+        var link_images = $('.civi-link-images');
+        _.each(link_images, function(img_link){
+            var link_value = img_link.value.trim();
+            if (link_value){
+                $previewlist.append("<div class=\"link-lato gray-text preview-item \">"+link_value+"</div>");
+                this.attachment_links.push(link_value);
+            }
+        }, this);
+
+        // Total images count
+        var image_total = uploaded_images.length + this.attachment_links.length;
+        if (image_total === 0) {
+            $previewlist.prepend("<div>No Images</div>");
+        } else if (image_total === 1) {
+            $previewlist.prepend("<div>1 Image</div>");
+        } else {
+            $previewlist.prepend("<div>" + image_total + " Images</div>");
+        }
+
+        this.attachmentCount = image_total;
 
     },
 
@@ -726,9 +786,14 @@ cw.NewResponseView = BB.View.extend({
                 success: function (response) {
                     var attachment_input = _this.$('#response_attachment_image');
                     var uploaded_images = attachment_input[0].files;
-                    if (uploaded_images.length > 0) {
+                    if (_this.attachmentCount > 0) {
                         var formData = new FormData(_this.$('#response_attachment_image_form')[0]);
                         formData.set('civi_id', response.data.id);
+                        if (_this.attachment_links.length){
+                            _.each(_this.attachment_links, function(img_link){
+                                formData.append('attachment_links[]', img_link);
+                            });
+                        }
                         $.ajax({
                             url: '/api/upload_images/',
                             type: 'POST',
