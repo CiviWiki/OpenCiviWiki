@@ -24,7 +24,13 @@
             </div>
         </div>
         <div class="white-background-input-field">
-            <form method="post" enctype="multipart/form-data" id="attachment_image_form">
+
+            <div class="image-upload-method">
+                <div class="header-lato">Upload Image:</div>
+                <button class="waves-effect waves-light btn" id="image-from-computer"><i class="material-icons left">file_upload</i>COMPUTER</button>
+                <button class="waves-effect waves-light btn" id="image-from-link"><i class="material-icons left">insert_link</i>LINK</button>
+            </div>
+            <form method="post" enctype="multipart/form-data" id="attachment_image_form" class="hide">
                 <div class="file-field input-field">
                     <input class="upload-image btn waves-effect hide" type="submit" value="Upload"/>
                     <div class="btn attachment-image-pick dark-blue-background">
@@ -37,6 +43,7 @@
                 </div>
                 <div class="file-preview"></div>
             </form>
+            <input id="link-image-form" type="text" class="hide" placeholder="Paste your image link here..."/>
         </div>
     </div>
 

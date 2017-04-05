@@ -170,7 +170,7 @@ cw.NewThreadView = BB.View.extend({
 
     initialize: function (options) {
         this.options = options.info;
-
+        this.imageMode = "";
         this.render();
     },
 
@@ -189,13 +189,24 @@ cw.NewThreadView = BB.View.extend({
 
     events: {
         'click .cancel-new-thread': 'cancelThread',
-        'click .create-new-thread': 'createThread'
+        'click .create-new-thread': 'createThread',
+        'click #image-from-computer': 'showImageUploadForm',
+        'click #image-from-link': 'showImageLinkForm'
     },
 
     cancelThread: function () {
         this.hide();
     },
-
+    showImageUploadForm: function () {
+        this.imageMode="upload";
+        this.$('#attachment_image_form').removeClass('hide');
+        this.$('#link-image-form').addClass('hide');
+    },
+    showImageLinkForm: function () {
+        this.imageMode="link";
+        this.$('#attachment_image_form').addClass('hide');
+        this.$('#link-image-form').removeClass('hide');
+    },
     createThread: function () {
         var _this = this;
 
@@ -213,27 +224,50 @@ cw.NewThreadView = BB.View.extend({
                     category_id: category_id
                 },
                 success: function (response) {
-                    var file = $('#id_attachment_image').val();
+                    if (_this.imageMode==="upload") {
+                        var file = $('#id_attachment_image').val();
 
-                    if (file) {
-                        var formData = new FormData(_this.$('#attachment_image_form')[0]);
-                        formData.set('thread_id', response.thread_id);
-                        $.ajax({
-                            url: '/api/upload_image/',
-                            type: 'POST',
-                            success: function () {
-                                Materialize.toast('New thread created.', 5000);
-                                window.location = "thread/" + response.thread_id;
-                            },
-                            error: function(e){
-                                Materialize.toast('ERROR: Image could not be uploaded', 5000);
-                                Materialize.toast(e.statusText, 5000);
-                            },
-                            data: formData,
-                            cache: false,
-                            contentType: false,
-                            processData: false
-                        });
+                        if (file) {
+                            var formData = new FormData(_this.$('#attachment_image_form')[0]);
+                            formData.set('thread_id', response.thread_id);
+                            $.ajax({
+                                url: '/api/upload_image/',
+                                type: 'POST',
+                                success: function () {
+                                    Materialize.toast('New thread created.', 5000);
+                                    window.location = "thread/" + response.thread_id;
+                                },
+                                error: function(e){
+                                    Materialize.toast('ERROR: Image could not be uploaded', 5000);
+                                    Materialize.toast(e.statusText, 5000);
+                                },
+                                data: formData,
+                                cache: false,
+                                contentType: false,
+                                processData: false
+                            });
+                        }
+                    } else if (_this.imageMode==="link") {
+                        var img_url = _this.$('#link-image-form').val().trim();
+                        console.log(_this.imageMode, img_url);
+                        if (img_url) {
+                            $.ajax({
+                                url: '/api/upload_image/',
+                                type: 'POST',
+                                data: {
+                                    link: img_url,
+                                    thread_id: response.thread_id
+                                },
+                                success: function () {
+                                    Materialize.toast('New thread created.', 5000);
+                                    window.location = "thread/" + response.thread_id;
+                                },
+                                error: function(e){
+                                    Materialize.toast('ERROR: Image could not be uploaded', 5000);
+                                    Materialize.toast(e.statusText, 5000);
+                                }
+                            });
+                        }
                     } else {
                         Materialize.toast('New thread created.', 5000);
                         window.location = "thread/" + response.thread_id;

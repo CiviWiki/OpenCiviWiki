@@ -107,6 +107,7 @@ body {
                 padding-top: 80px;
                 line-height: 24px;
                 font-size: 24px;
+                word-wrap: break-word;
             }
 
             .wiki-stats {
@@ -166,7 +167,8 @@ body {
                     font-weight: 700;
                     font-size: 12px;
                     color: @dark-blue;
-                    vertical-align: top;
+                    line-height: 14px;
+                    display: inline-block;
 
                 }
             }
@@ -247,28 +249,17 @@ body {
             max-height: 150px;
 
             .thread-image-wrapper {
-                padding-top: 40px;
+                margin-top: 40px;
                 overflow: visible;
+                max-height: 250px;
 
             }
             .thread-image-thumb {
                 width: 100%;
-                max-height: 300px;
                 box-shadow: 0 0 4px 2px @box-shadow-gray;
             }
             .thread-image-wrapper {
                 overflow: hidden;
-                .placeholder {
-                    background-color: @light-purple;
-                    text-align: center;
-                    width: 100%;
-                    height: 100%;
-                    i {
-                        color: white;
-                        font-size: 2em;
-                        transform: translateY(+300%);
-                    }
-                }
             }
         }
 

@@ -1,4 +1,4 @@
-import os, sys, json, pdb, random, hashlib, urllib2, pprint
+import os, sys, json, pdb, random, hashlib, urllib2, pprint, urllib
 from models import Account, Category, Civi, CiviImage, Hashtag, Activity
 from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse, HttpResponseServerError, HttpResponseForbidden, HttpResponseBadRequest
@@ -8,8 +8,8 @@ from django.shortcuts import render
 from django.conf import settings
 # from django.db.models import Q
 from api.forms import UpdateProfileImage
-from django.core.files import File  # need this for image file handling
-
+from django.core.files import File   # need this for image file handling
+from django.core.files.base import ContentFile
 from api.models import Thread
 from channels import Group as channels_Group
 
@@ -241,6 +241,7 @@ def editCivi(request):
     civi_id = request.POST.get('civi_id', '')
     title = request.POST.get('title', '')
     body = request.POST.get('body', '')
+    civi_type = request.POST.get('type', '')
 
     c = Civi.objects.get(id=civi_id)
     if (request.user.username != c.author.user.username):
@@ -249,6 +250,7 @@ def editCivi(request):
     try:
         c.title = title
         c.body = body
+        c.c_type = civi_type
         c.save(update_fields=['title', 'body'])
 
         links = request.POST.getlist('links[]', '')
@@ -448,15 +450,21 @@ def uploadThreadImage(request):
             return HttpResponseBadRequest(reason="Invalid Thread Reference")
 
         try:
+            img_link = r.get('link', '')
             thread = Thread.objects.get(id=thread_id)
+            if img_link:
+                thread.image.delete()
+                result = urllib.urlretrieve(img_link)
+                thread.image = File(open(result[0]))
+                thread.save()
+            else:
+                # Clean up previous image
+                thread.image.delete()
 
-            # Clean up previous image
-            thread.image.delete()
+                # Upload new image and set as profile picture
+                thread.image = request.FILES['attachment_image']
+                thread.save()
 
-            # Upload new image and set as profile picture
-            thread.image = request.FILES['attachment_image']
-            thread.save()
-            thread.sync
             data = {
                 'image': thread.image_url
             }

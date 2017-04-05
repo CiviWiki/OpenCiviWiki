@@ -28,15 +28,18 @@
         </div>
         <div class="previous-image">
             <div class="header-lato">Current image:</div>
-            <img class="thread-image-thumb" src="{{this.model.get('image')}}" width="50px" height="40px"/>
             <div class="button-wrapper">
                 <div class="delete-previous-image action-button"><i class="mini material-icons edit">clear</i>REMOVE</div>
             </div>
-
+            <img class="thread-image-thumb" src="{{this.model.get('image')}}" width="50px" height="40px"/>
         </div>
-        <div class="white-background-input-field">
-            <form method="post" enctype="multipart/form-data" id="attachment_image_form">
-                <div class="header-lato">Choose a new image:</div>
+        <div class="white-background-input-field" id="thread-image-forms">
+            <div class="image-upload-method">
+                <div class="header-lato">Upload Image:</div>
+                <button class="waves-effect waves-light btn" id="image-from-computer"><i class="material-icons left">file_upload</i>COMPUTER</button>
+                <button class="waves-effect waves-light btn" id="image-from-link"><i class="material-icons left">insert_link</i>LINK</button>
+            </div>
+            <form method="post" enctype="multipart/form-data" class="hide" id="attachment_image_form">
                 <div class="file-field input-field">
                     <input class="upload-image btn waves-effect hide" type="submit" value="Upload"/>
                     <div class="btn attachment-image-pick dark-blue-background">
@@ -47,8 +50,9 @@
                     <input class="file-path validate" type="text">
                   </div>
                 </div>
-                <div class="use-previous-image action-button"><i class="mini material-icons edit">undo</i>USE PREVIOUS IMAGE</div>
             </form>
+            <input id="link-image-form" type="text" class="hide" placeholder="Paste your image link here..."/>
+            <div class="use-previous-image action-button"><i class="mini material-icons edit">undo</i>USE PREVIOUS IMAGE</div>
         </div>
     </div>
 

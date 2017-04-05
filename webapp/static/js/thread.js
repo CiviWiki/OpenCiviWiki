@@ -196,6 +196,7 @@ cw.CiviView =  BB.View.extend({
         'click .edit-confirm': 'saveEdit',
         'click .edit-cancel': 'closeEdit',
         'click .civi-image-thumb': 'viewImageModal',
+        'change #civi-type-form': 'clickNewType',
 
         // 'click .civi-grab-link': 'grabLink',
         // vote
@@ -310,8 +311,11 @@ cw.CiviView =  BB.View.extend({
 
     clickEdit: function (e) {
         e.stopPropagation();
+        console.log('clickEdit');
         this.$('.edit-civi-body').text(this.model.get('body'));
         this.$('.edit-civi-title').val(this.model.get('title'));
+        this.$('#'+ this.model.get('type')).prop("checked", true);
+        this.$('.edit-civi-title').val();
         this.magicSuggestView = new cw.LinkSelectView({$el: this.$('#magicsuggest-'+this.model.id), civis: this.civis});
         this.magicSuggestView.setLinkableData(this.model.get('type'));
         this.magicSuggestView.ms.setValue(this.model.get('links'));
@@ -321,6 +325,13 @@ cw.CiviView =  BB.View.extend({
         this.$('.text-wrapper').addClass('hide');
         this.$('.edit').addClass('hide');
         this.$('.delete').addClass('hide');
+    },
+
+    clickNewType: function(){
+        var new_type = $("#civi-type-form input[type='radio']:checked").val();
+        this.magicSuggestView.setLinkableData(new_type);
+        this.magicSuggestView.ms.clear();
+        Materialize.toast('Changing the civi type has cleared your links', 5000);
     },
 
     closeEdit: function (e) {
@@ -339,11 +350,12 @@ cw.CiviView =  BB.View.extend({
         var new_body = this.$('.edit-civi-body').val().trim();
             new_title = this.$('.edit-civi-title').val().trim();
         var links = this.magicSuggestView.ms.getValue();
-        console.log(_.isEqual(links, this.model.get('links')));
+        var new_type = $("#civi-type-form input[type='radio']:checked").val();
+        console.log(new_type);
         if (!new_body || !new_title){
             Materialize.toast('Please do not leave fields blank', 5000);
             return;
-        } else if ((new_body == this.model.get('body') && new_title == this.model.get('title') && _.isEqual(links, this.model.get('links')) )){
+        } else if ((new_body == this.model.get('body') && new_title == this.model.get('title') && _.isEqual(links, this.model.get('links')) && new_type == this.model.get('type') )){
             this.closeEdit(e);
             return;
         } else {
@@ -354,7 +366,8 @@ cw.CiviView =  BB.View.extend({
                     civi_id: this.model.id,
                     title: new_title,
                     body: new_body,
-                    links: links
+                    links: links,
+                    type: new_type
                 },
                 success: function (response) {
                     Materialize.toast('Saved!', 5000);
@@ -364,8 +377,15 @@ cw.CiviView =  BB.View.extend({
                     _this.model.set('title', new_title);
                     _this.model.set('body', new_body);
                     _this.model.set('links', links);
+                    _this.model.set('type', new_type);
+                    _this.magicSuggestView.remove();
                     _this.render();
-                    _this.parentView.renderOutline();
+
+                    if (_this.model.get('type') != "response") {
+                        _this.parentView.initRecommended(); //THISTHIS
+                        _this.parentView.renderBodyContents();
+                        _this.parentView.processCiviScroll();
+                    }
                 },
                 error: function(r){
                     Materialize.toast('Could not edit the civi', 5000);
@@ -394,6 +414,7 @@ cw.CiviView =  BB.View.extend({
                 _this.remove();
                 _this.parentView.initRecommended();
                 _this.parentView.renderBodyContents();
+                _this.parentView.processCiviScroll();
 
             },
             error: function(r){
@@ -528,7 +549,7 @@ cw.NewCiviView = BB.View.extend({
 
                         var parent_links = new_civi.get('links');
                         _.each(parent_links, function(parent_id){
-                            var parent_civi = _this.options.parentView.civis.get(parent_id)
+                            var parent_civi = _this.options.parentView.civis.get(parent_id);
                             if (parent_civi) {
                                 var prev_links = parent_civi.get('links');
                                 prev_links.push(new_civi.id);
@@ -588,11 +609,16 @@ cw.NewResponseView = BB.View.extend({
 
     events: {
         'click .create-new-response': 'createResponse',
-        'change .attachment-image-pick': 'previewImageNames'
+        'change .attachment-image-pick': 'previewImageNames',
+        'click .cancel-new-response': 'hide'
     },
 
     show: function () {
         this.$('.new-response-modal').openModal();
+    },
+
+    hide: function () {
+        this.$('.new-response-modal').closeModal();
     },
 
     previewImageNames: function(e) {
@@ -639,6 +665,7 @@ cw.NewResponseView = BB.View.extend({
                                 Materialize.toast('New response created.', 5000);
                                 _this.options.parentView.responseCollection.fetch();
                                 _this.options.parentView.renderResponses();
+                                _this.hide();
                                 _this.render();
                             },
                             error: function(e){
@@ -654,6 +681,7 @@ cw.NewResponseView = BB.View.extend({
                         Materialize.toast('New response created.', 5000);
                         _this.options.parentView.responseCollection.fetch();
                         _this.options.parentView.renderResponses();
+                        _this.hide();
                         _this.render();
                     }
                 },
@@ -677,12 +705,13 @@ cw.EditThreadView = BB.View.extend({
         this.threadId = options.threadId;
         this.parentView = options.parentView;
         this.removeImage = false;
+        this.imageMode = "";
         this.render();
     },
 
     render: function () {
         this.$el.empty().append(this.template());
-        this.$('#attachment_image_form').addClass('hide');
+        this.$('#thread-image-forms').addClass('hide');
         cw.materializeShit();
     },
 
@@ -691,7 +720,9 @@ cw.EditThreadView = BB.View.extend({
         'click .cancel-thread': 'cancelEdit',
         'click .delete-previous-image': 'showImageForm',
         'click .use-previous-image': 'hideImageForm',
-        'click .edit-thread': 'editThread'
+        'click .edit-thread': 'editThread',
+        'click #image-from-computer': 'showImageUploadForm',
+        'click #image-from-link': 'showImageLinkForm'
     },
 
     show: function () {
@@ -708,15 +739,25 @@ cw.EditThreadView = BB.View.extend({
     },
 
     showImageForm: function () {
-        this.$('#attachment_image_form').removeClass('hide');
+        this.$('#thread-image-forms').removeClass('hide');
         this.$('.previous-image').addClass('hide');
         this.removeImage = true;
     },
 
     hideImageForm: function () {
-        this.$('#attachment_image_form').addClass('hide');
+        this.$('#thread-image-forms').addClass('hide');
         this.$('.previous-image').removeClass('hide');
         this.removeImage = false;
+    },
+    showImageUploadForm: function () {
+        this.imageMode="upload";
+        this.$('#attachment_image_form').removeClass('hide');
+        this.$('#link-image-form').addClass('hide');
+    },
+    showImageLinkForm: function () {
+        this.imageMode="link";
+        this.$('#attachment_image_form').addClass('hide');
+        this.$('#link-image-form').removeClass('hide');
     },
 
     editThread: function (e) {
@@ -741,35 +782,68 @@ cw.EditThreadView = BB.View.extend({
                 },
                 success: function (response) {
                     var file = $('#thread_attachment_image').val();
+                    var img_url = _this.$('#link-image-form').val().trim();
+                    if (_this.removeImage) {
+                        // if file
+                        if (_this.imageMode==="upload" && file){
+                            var formData = new FormData(_this.$('#attachment_image_form')[0]);
+                            formData.set('thread_id', response.data.thread_id);
+                            $.ajax({
+                                url: '/api/upload_image/',
+                                type: 'POST',
+                                success: function (response2) {
+                                    Materialize.toast('Saved changes', 5000);
+                                    _this.hide();
 
-                    if (_this.removeImage && file) {
-                        var formData = new FormData(_this.$('#attachment_image_form')[0]);
-                        formData.set('thread_id', response.data.thread_id);
-                        $.ajax({
-                            url: '/api/upload_image/',
-                            type: 'POST',
-                            success: function (response2) {
-                                Materialize.toast('Saved changes', 5000);
-                                _this.hide();
+
+                                    new_data = response.data;
+                                    _this.parentView.model.set('title', new_data.title);
+                                    _this.parentView.model.set('summary', new_data.summary);
+                                    _this.parentView.model.set('category', new_data.category);
+                                    _this.parentView.model.set('image', response2.image);
+                                    _this.parentView.threadWikiRender();
+                                    _this.render();  // TODO: Please remove this
+                                },
+                                error: function(e){
+                                    Materialize.toast('ERROR: Image could not be uploaded', 5000);
+                                    Materialize.toast(e.statusText, 5000);
+                                    _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
+                                },
+                                data: formData,
+                                cache: false,
+                                contentType: false,
+                                processData: false
+                            });
+                        } else if (_this.imageMode==="link" && img_url){
+
+                            $.ajax({
+                                url: '/api/upload_image/',
+                                type: 'POST',
+                                data: {
+                                    link: img_url,
+                                    thread_id: response.data.thread_id
+                                },
+                                success: function (response2) {
+                                    Materialize.toast('Saved changes', 5000);
+                                    _this.hide();
 
 
-                                new_data = response.data;
-                                _this.parentView.model.set('title', new_data.title);
-                                _this.parentView.model.set('summary', new_data.summary);
-                                _this.parentView.model.set('category', new_data.category);
-                                _this.parentView.model.set('image', response2.image);
-                                _this.parentView.threadWikiRender();
-                                _this.render();  // TODO: Please remove this
-                            },
-                            error: function(e){
-                                Materialize.toast('ERROR: Image could not be uploaded', 5000);
-                                Materialize.toast(e.statusText, 5000);
-                            },
-                            data: formData,
-                            cache: false,
-                            contentType: false,
-                            processData: false
-                        });
+                                    new_data = response.data;
+                                    _this.parentView.model.set('title', new_data.title);
+                                    _this.parentView.model.set('summary', new_data.summary);
+                                    _this.parentView.model.set('category', new_data.category);
+                                    _this.parentView.model.set('image', response2.image);
+                                    _this.parentView.threadWikiRender();
+                                    _this.render();  // TODO: Please remove this
+                                },
+                                error: function(e){
+                                    Materialize.toast('ERROR: Image could not be uploaded', 5000);
+                                    Materialize.toast(e.statusText, 5000);
+                                    _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
+                                }
+                            });
+                        }
+
                     } else {
                         Materialize.toast('Saved changes', 5000);
                         _this.hide();
@@ -796,9 +870,7 @@ cw.EditThreadView = BB.View.extend({
     },
 });
 
-
-cw.OutlineView = BB.View.extend({
-});
+cw.OutlineView = BB.View.extend({});
 cw.LinkSelectView = BB.View.extend({
     el: '#magicsuggest',
 
@@ -1504,7 +1576,10 @@ cw.ThreadView = BB.View.extend({
     },
 
     drilldownCivi: function (e) {
-        if ($(e.target).hasClass('rating-button')) {
+        var target = $(e.target);
+        console.log(target);
+        var ms_check = target.hasClass('ms-ctn') || target.hasClass('ms-sel-ctn') || target.hasClass('ms-close-btn') || target.hasClass('ms-trigger') || target.hasClass('ms-trigger-ico') || target.hasClass('ms-res-ctn') || target.hasClass('ms-sel-item') || target.hasClass('ms-res-group');
+        if (target.hasClass('rating-button') || target.is('input') || target.is('textarea') || target.is('label') || ms_check) {
             return;
         }
         var $this = $(e.currentTarget);

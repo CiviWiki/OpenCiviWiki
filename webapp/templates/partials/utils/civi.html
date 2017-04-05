@@ -1,19 +1,35 @@
 {% verbatim %}
 <div class="civi-card" id="civi-{{this.model.get('id')}}" data-civi-id="{{this.model.get('id')}}"  data-civi-links="{{this.model.get('links')}}">
     <div class="row civi-header civi-click">
-        <div class="col s9 no-pads civi-title-outer">
+        <div class="col s10 no-pads civi-title-outer">
             <div class="civi-type gray-text">{{this.model.get('type')}}</div>
             <div class="civi-title ">
                 <span class="text-wrapper">{{this.model.get('title')}}</span>
 
                 {{# if (this.can_edit) { }}
                 <div class="dark-background-input-field hide edit-wrapper">
+                    <form action="#" id="civi-type-form">
+                        <div class="civi-types">
+                            <span class="civi-type-button">
+                                <input class="with-gap" name="civi-type" type="radio" id="problem" value="problem"/>
+                                <label for="problem" class="civi-type-label">PROBLEM</label>
+                            </span>
+                            <span class="civi-type-button">
+                                <input class="with-gap" name="civi-type" type="radio" id="cause" value="cause"/>
+                                <label for="cause" class="civi-type-label">CAUSE</label>
+                            </span>
+                            <span class="civi-type-button">
+                                <input class="with-gap" name="civi-type" type="radio" id="solution" value="solution"/>
+                                <label for="solution" class="civi-type-label">SOLUTION</label>
+                            </span>
+                        </div>
+                    </form>
                     <input class="edit-civi-title">
                 </div>
                 {{# } }}
             </div>
         </div>
-        <div class="col s3 no-pads civi-header-actions">
+        <div class="col s2 no-pads civi-header-actions">
             <div class="right">
 
                 {{# if (this.can_edit) { }}
@@ -37,7 +53,7 @@
             {{# } }}
         </div>
         {{# if (this.model.get('links').length > 0) { }}
-        <div class="civi-links">
+        <div class="civi-links text-wrapper">
             <div class="links-title gray-text">
                 LINKED CIVIS ({{this.model.get('links').length}})
             </div>
