@@ -136,6 +136,30 @@
     //         color: @white;
     //     }
     // }
+    .edit-wrapper {
+        .attachments-item {
+            display: inline-block;
+
+            .delete-image-overlay {
+                // z-index:
+                position: absolute;
+                width: 50px;
+                height: 40px;
+                i {
+                    display: none;
+                }
+                &:hover {
+                    background-color: fade(@blue,30%);
+                    cursor: pointer;
+                    i {
+                        line-height: 40px;
+                        text-align: center;
+                        display: block;
+                    }
+                }
+            }
+        }
+    }
 
     .civi-body {
         padding: 0 20px;
@@ -245,6 +269,7 @@
             font-weight: bold;
             color: @light-purple;
         }
+
     }
 
     .civi-footer {

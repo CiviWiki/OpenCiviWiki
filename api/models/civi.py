@@ -206,8 +206,12 @@ class PathAndRename(object):
 
 image_upload_path = PathAndRename('')
 
+class CiviImageManager(models.Manager):
+    def get_images(self):
+        return
 
 class CiviImage(models.Model):
+    objects = CiviImageManager()
     civi = models.ForeignKey(Civi, related_name='images')
     title = models.CharField(max_length=255, null=True, blank=True)
     image = models.ImageField(upload_to=image_upload_path, null=True, blank=True)

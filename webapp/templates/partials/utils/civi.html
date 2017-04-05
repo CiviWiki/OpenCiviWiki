@@ -69,7 +69,7 @@
         </div>
         {{# } }}
         {{# if (this.model.get('attachments').length > 0) { }}
-        <div class="civi-attachments">
+        <div class="civi-attachments text-wrapper">
             <div class="attachments-title gray-text">
                 ATTACHMENTS ({{this.model.get('attachments').length}})
             </div>
@@ -84,6 +84,15 @@
         {{# } }}
         {{# if (this.can_edit) { }}
             <div class="hide edit-wrapper">
+                <div class="previous-civi-images">
+                    {{# _.each(this.model.get('attachments'), function(attachment){  }}
+                        <div class="attachments-item delete-civi-image action-button" data-image-id="{{attachment.id}}">
+                            <div class="delete-image-overlay input"><i class="small material-icons">clear</i></div>
+
+                            <img class="civi-image-thumb" src="{{attachment.url}}" width="50px" height="40px"/>
+                        </div>
+                    {{# }, this); }}
+                </div>
                 <div class="edit-links" id="magicsuggest-{{this.model.get('id')}}"></div>
             </div>
         {{# } }}

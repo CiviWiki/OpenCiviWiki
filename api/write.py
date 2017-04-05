@@ -1,4 +1,4 @@
-import os, sys, json, pdb, random, hashlib, urllib2, pprint, urllib
+import os, sys, json, pdb, random, hashlib, urllib2, pprint, urllib, PIL
 from models import Account, Category, Civi, CiviImage, Hashtag, Activity
 from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse, HttpResponseServerError, HttpResponseForbidden, HttpResponseBadRequest
@@ -256,11 +256,18 @@ def editCivi(request):
         links = request.POST.getlist('links[]', '')
         c.linked_civis.clear()
         if links:
-            for civi_id in links:
-                linked_civi = Civi.objects.get(id=civi_id)
+            for civiimage_id in links:
+                linked_civi = Civi.objects.get(id=civiimage_id)
                 c.linked_civis.add(linked_civi)
 
-        return HttpResponse('Success')
+        image_remove_list = request.POST.getlist('image_remove_list[]', '')
+        if image_remove_list:
+            for image_id in image_remove_list:
+                civi_image = CiviImage.objects.get(id=image_id)
+                civi_image.delete()
+
+        a = Account.objects.get(user=request.user)
+        return JsonResponse( c.dict_with_score(a.id))
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
 
@@ -427,9 +434,21 @@ def uploadCiviImage(request):
 
         try:
             c = Civi.objects.get(id=civi_id)
-            for image in request.FILES.getlist('attachment_image'):
-                civi_image = CiviImage(title="", civi=c, image=image)
-                civi_image.save()
+
+            attachment_links = request.POST.getlist('attachment_links[]')
+
+            if attachment_links:
+                for img_link in attachment_links:
+                    result = urllib.urlretrieve(img_link)
+                    img_file = File(open(result[0]))
+                    if check_image_with_pil(img_file):
+                        civi_image = CiviImage(title="", civi=c, image=img_file)
+                        civi_image.save()
+
+            if len(request.FILES) != 0:
+                for image in request.FILES.getlist('attachment_image'):
+                    civi_image = CiviImage(title="", civi=c, image=image)
+                    civi_image.save()
 
             data = {
                 "attachments": [{'id': img.id, 'url': img.image_url} for img in c.images.all()],
@@ -440,6 +459,13 @@ def uploadCiviImage(request):
             return HttpResponseServerError(reason=(str(e)+ civi_id + str(request.FILES)))
     else:
         return HttpResponseForbidden('allowed only via POST')
+
+def check_image_with_pil(image_file):
+    try:
+        PIL.Image.open(image_file)
+    except IOError:
+        return False
+    return True
 
 @login_required
 def uploadThreadImage(request):
@@ -460,8 +486,12 @@ def uploadThreadImage(request):
             elif img_link:
                 thread.image.delete()
                 result = urllib.urlretrieve(img_link)
-                thread.image = File(open(result[0]))
-                thread.save()
+                img_file = File(open(result[0]))
+                if check_image_with_pil(img_file):
+                    thread.image = img_file
+                    thread.save()
+                # else:
+                #     return HttpResponseBadRequest("Invalid Image")
             else:
                 # Clean up previous image
                 thread.image.delete()
