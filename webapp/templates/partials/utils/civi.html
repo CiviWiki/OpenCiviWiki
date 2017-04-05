@@ -84,6 +84,9 @@
         {{# } }}
         {{# if (this.can_edit) { }}
             <div class="hide edit-wrapper">
+                <div class="header-lato edit-links">Links:</div>
+                <div class="edit-links" id="magicsuggest-{{this.model.get('id')}}"></div>
+                <div class="header-lato">Images:</div>
                 <div class="previous-civi-images">
                     {{# _.each(this.model.get('attachments'), function(attachment){  }}
                         <div class="attachments-item delete-civi-image action-button" data-image-id="{{attachment.id}}">
@@ -93,7 +96,31 @@
                         </div>
                     {{# }, this); }}
                 </div>
-                <div class="edit-links" id="magicsuggest-{{this.model.get('id')}}"></div>
+                <div class="section">
+                    <button class="waves-effect waves-light btn btn-small" id="add-more-images"><i class="material-icons left">add</i>Add Images</button>
+                    <div class="white-background-input-field hide edit-images">
+                        <div class="header-lato">Upload Images:</div>
+                        <form method="post" enctype="multipart/form-data" id="attachment_image_form">
+                            <div class="file-field input-field">
+                                <input class="upload-image btn waves-effect hide" type="submit" value="Upload"/>
+                                <div class="btn btn-small attachment-image-pick dark-blue-background">
+                                    <span>Add Images</span>
+                                    <input id="id_attachment_image" name="attachment_image" type="file" multiple accept="image/*">
+                                </div>
+                              <div class="file-path-wrapper">
+                                <input class="file-path validate" type="text">
+                              </div>
+                            </div>
+
+                        </form>
+                        <div class="image-link-list">
+                            <input type="text" class="civi-link-images" placeholder="Paste your image link here..."/>
+                        </div>
+                        <button class="waves-effect waves-teal btn-flat btn-small" id="add-image-link-input">+ Add Another Image Link</button>
+
+                        <div class="file-preview"></div>
+                    </div>
+                </div>
             </div>
         {{# } }}
         <div class="rating center ">

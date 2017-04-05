@@ -197,12 +197,66 @@ cw.CiviView =  BB.View.extend({
         'click .edit-cancel': 'closeEdit',
         'click .civi-image-thumb': 'viewImageModal',
         'change #civi-type-form': 'clickNewType',
-        'click .delete-civi-image': 'addImageToDeleteList'
-
+        'click .delete-civi-image': 'addImageToDeleteList',
+        'click #add-more-images': 'showImageForm',
+        'change .attachment-image-pick': 'previewImageNames',
+        'input .civi-link-images': 'previewImageNames',
+        'click #add-image-link-input': 'addImageLinkInput',
         // 'click .civi-grab-link': 'grabLink',
         // vote
         // changevote
 
+    },
+
+    addImageLinkInput: function(){
+        var link_images = this.$('.civi-link-images').length;
+        if (link_images > 20 ) {
+            Materialize.toast("Don't think you need any more...", 5000);
+        } else {
+            this.$('.image-link-list').append('<input type="text" class="civi-link-images" placeholder="Paste your image link here..."/>');
+        }
+
+    },
+
+    previewImageNames: function(e) {
+        var attachment_input = this.$('#id_attachment_image');
+        var uploaded_images = attachment_input[0].files;
+        var $previewlist = this.$('.file-preview');
+        $previewlist.empty();
+        // File Upload Images
+        _.each(uploaded_images, function(img_file){
+            $previewlist.append("<div class=\"link-lato gray-text preview-item \">"+img_file.name+"</div>");
+        }, this);
+
+        // Link Images
+        this.attachment_links = [];
+        var link_images = $('.civi-link-images');
+        _.each(link_images, function(img_link){
+            var link_value = img_link.value.trim();
+            if (link_value){
+                $previewlist.append("<div class=\"link-lato gray-text preview-item \">"+link_value+"</div>");
+                this.attachment_links.push(link_value);
+            }
+        }, this);
+
+        // Total images count
+        var image_total = uploaded_images.length + this.attachment_links.length;
+        if (image_total === 0) {
+            $previewlist.prepend("<div>No Images</div>");
+        } else if (image_total === 1) {
+            $previewlist.prepend("<div>1 Image</div>");
+        } else {
+            $previewlist.prepend("<div>" + image_total + " Images</div>");
+        }
+
+        this.attachmentCount = image_total;
+
+    },
+
+    showImageForm: function(e){
+        // HEREHERE
+        this.$('.edit-images').removeClass('hide');
+        this.$('#add-more-images').addClass('hide');
     },
 
     viewImageModal: function(e){
@@ -321,6 +375,8 @@ cw.CiviView =  BB.View.extend({
             this.magicSuggestView.setLinkableData(this.model.get('type'));
             this.magicSuggestView.ms.setValue(this.model.get('links'));
         }
+        this.attachment_links = [];
+        this.attachmentCount = 0;
 
         this.imageRemoveList = [];
 
@@ -378,7 +434,7 @@ cw.CiviView =  BB.View.extend({
         if (!new_body || !new_title){
             Materialize.toast('Please do not leave fields blank', 5000);
             return;
-        } else if (this.imageRemoveList.length===0 && (new_body == this.model.get('body') && new_title == this.model.get('title') && _.isEqual(links, this.model.get('links')) && new_type == this.model.get('type') )){
+        } else if (this.imageRemoveList.length===0 && this.attachmentCount===0 && (new_body == this.model.get('body') && new_title == this.model.get('title') && _.isEqual(links, this.model.get('links')) && new_type == this.model.get('type') )){
             this.closeEdit(e);
             return;
         } else {
@@ -409,32 +465,150 @@ cw.CiviView =  BB.View.extend({
                 type: 'POST',
                 data: data,
                 success: function (response) {
-                    Materialize.toast('Saved!', 5000);
+                    _this.closeEdit(e);
                     // var score = $this.find('.rate-value');
                     // var new_vote = parseInt(score.text())+ 1;
                     // score.text(new_vote);
-                    _this.model.set('title', new_title);
-                    _this.model.set('body', new_body);
-                    _this.model.set('links', links);
-                    _this.model.set('type', new_type);
-                    _this.model.set('attachments', response.attachments);
-                    _this.model.set('score', response.score);
-                    if (_this.magicSuggestView){
-                        _this.magicSuggestView.remove();
+                    //
+                    var attachment_input = _this.$('#id_attachment_image');
+                    var uploaded_images = attachment_input[0].files;
+                    if (_this.attachmentCount > 0) {
+                        var formData = new FormData(_this.$('#attachment_image_form')[0]);
+                        formData.set('civi_id', _this.model.id);
+                        if (_this.attachment_links.length){
+                            _.each(_this.attachment_links, function(img_link){
+                                formData.append('attachment_links[]', img_link);
+                            });
+                        }
+
+                        $.ajax({
+                            url: '/api/upload_images/',
+                            type: 'POST',
+                            success: function (response2) {
+
+                                Materialize.toast('Saved.', 5000);
+
+                                // Set the models with new data and rerender
+                                _this.model.set('title', new_title);
+                                _this.model.set('body', new_body);
+                                _this.model.set('links', links);
+                                _this.model.set('type', new_type);
+                                _this.model.set('attachments', response2.attachments);
+                                _this.model.set('score', response.score);
+                                if (_this.magicSuggestView){
+                                    _this.magicSuggestView.remove();
+                                }
+
+                                _this.render();
+
+                                if (_this.model.get('type') != "response") {
+                                    var parent_links = _this.model.get('links');
+                                    _.each(parent_links, function(parent_id){
+                                        var parent_civi = _this.options.parentView.civis.get(parent_id);
+                                        if (parent_civi) {
+                                            var prev_links = parent_civi.get('links');
+                                            prev_links.push(_this.model.id);
+                                            parent_civi.set('links', prev_links);
+                                        }
+
+                                    }, this);
+
+                                    _this.parentView.initRecommended(); //THISTHIS
+                                    _this.parentView.renderBodyContents();
+                                    _this.parentView.processCiviScroll();
+                                }
+                            },
+                            error: function(e){
+                                Materialize.toast('Civi was edited but one or more images could not be uploaded', 5000);
+
+                                // Set the models with new data and rerender
+                                _this.model.set('title', new_title);
+                                _this.model.set('body', new_body);
+                                _this.model.set('links', links);
+                                _this.model.set('type', new_type);
+                                _this.model.set('attachments', response2.attachments);
+                                _this.model.set('score', response.score);
+                                if (_this.magicSuggestView){
+                                    _this.magicSuggestView.remove();
+                                }
+
+                                _this.render();
+
+                                if (_this.model.get('type') != "response") {
+                                    var parent_links = _this.model.get('links');
+                                    _.each(parent_links, function(parent_id){
+                                        var parent_civi = _this.options.parentView.civis.get(parent_id);
+                                        if (parent_civi) {
+                                            var prev_links = parent_civi.get('links');
+                                            prev_links.push(_this.model.id);
+                                            parent_civi.set('links', prev_links);
+                                        }
+
+                                    }, this);
+
+                                    _this.parentView.initRecommended(); //THISTHIS
+                                    _this.parentView.renderBodyContents();
+                                    _this.parentView.processCiviScroll();
+                                }
+                            },
+                            data: formData,
+                            cache: false,
+                            contentType: false,
+                            processData: false
+                        });
+
+                    } else {
+                        Materialize.toast('Saved', 5000);
+
+                        // Clean up previous links
+                        if (_this.model.get('type') != "response") {
+                            var orig_links = _this.model.get('links');
+                            _.each(orig_links, function(parent_id){
+                                var parent_civi = _this.options.parentView.civis.get(parent_id);
+                                if (parent_civi) {
+                                    var prev_links = parent_civi.get('links');
+                                    var cleaned = _.without(prev_links, _this.model.id);
+                                    parent_civi.set('links', cleaned);
+                                }
+                            }, this);
+                        }
+                        // Set the models with new data and rerender
+                        _this.model.set('title', new_title);
+                        _this.model.set('body', new_body);
+                        _this.model.set('links', links);
+                        _this.model.set('type', new_type);
+                        _this.model.set('attachments', response.attachments);
+                        _this.model.set('score', response.score);
+                        if (_this.magicSuggestView){
+                            _this.magicSuggestView.remove();
+                        }
+
+                        _this.render();
+
+                        if (_this.model.get('type') != "response") {
+                            var parent_links = _this.model.get('links');
+                            _.each(parent_links, function(parent_id){
+                                var parent_civi = _this.options.parentView.civis.get(parent_id);
+                                if (parent_civi) {
+                                    var prev_links = parent_civi.get('links');
+                                    prev_links.push(_this.model.id);
+                                    parent_civi.set('links', prev_links);
+                                }
+                            }, this);
+
+                            _this.parentView.initRecommended(); //THISTHIS
+                            _this.parentView.renderBodyContents();
+                            _this.parentView.processCiviScroll();
+                        }
                     }
 
-                    _this.render();
 
-                    if (_this.model.get('type') != "response") {
-                        _this.parentView.initRecommended(); //THISTHIS
-                        _this.parentView.renderBodyContents();
-                        _this.parentView.processCiviScroll();
-                    }
                 },
                 error: function(r){
                     Materialize.toast('Could not edit the civi', 5000);
-                    _this.render();
                     _this.closeEdit(e);
+                    _this.render();
+
                 }
             });
         }
@@ -1743,7 +1917,7 @@ cw.ThreadView = BB.View.extend({
         console.log(target);
         var ms_check = target.hasClass('ms-ctn') || target.hasClass('ms-sel-ctn') || target.hasClass('ms-close-btn') || target.hasClass('ms-trigger') || target.hasClass('ms-trigger-ico') || target.hasClass('ms-res-ctn') || target.hasClass('ms-sel-item') || target.hasClass('ms-res-group');
 
-        if (target.hasClass('rating-button') || target.is('input') || target.is('textarea') || target.is('label') || target.hasClass('input') || ms_check) {
+        if (target.hasClass('btn') || target.hasClass('rating-button') || target.is('input') || target.is('textarea') || target.is('label') || target.hasClass('input') || ms_check) {
             return;
         }
         var $this = $(e.currentTarget);
