@@ -450,9 +450,14 @@ def uploadThreadImage(request):
             return HttpResponseBadRequest(reason="Invalid Thread Reference")
 
         try:
-            img_link = r.get('link', '')
             thread = Thread.objects.get(id=thread_id)
-            if img_link:
+            remove = r.get('remove', '')
+            img_link = r.get('link', '')
+            if remove:
+                thread.image.delete()
+                thread.save()
+
+            elif img_link:
                 thread.image.delete()
                 result = urllib.urlretrieve(img_link)
                 thread.image = File(open(result[0]))

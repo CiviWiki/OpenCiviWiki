@@ -843,6 +843,33 @@ cw.EditThreadView = BB.View.extend({
                                 }
                             });
                         }
+                        else { // Remove image
+                            $.ajax({
+                                url: '/api/upload_image/',
+                                type: 'POST',
+                                data: {
+                                    remove: true,
+                                    thread_id: response.data.thread_id
+                                },
+                                success: function (response2) {
+                                    Materialize.toast('Saved changes', 5000);
+                                    _this.hide();
+
+                                    new_data = response.data;
+                                    _this.parentView.model.set('title', new_data.title);
+                                    _this.parentView.model.set('summary', new_data.summary);
+                                    _this.parentView.model.set('category', new_data.category);
+                                    _this.parentView.model.set('image', response2.image);
+                                    _this.parentView.threadWikiRender();
+                                    _this.render();  // TODO: Please remove this
+                                },
+                                error: function(e){
+                                    Materialize.toast('ERROR: Image could not be uploaded', 5000);
+                                    Materialize.toast(e.statusText, 5000);
+                                    _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
+                                }
+                            });
+                        }
 
                     } else {
                         Materialize.toast('Saved changes', 5000);
