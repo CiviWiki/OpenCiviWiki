@@ -123,7 +123,16 @@ cw.AccountView = BB.View.extend({
         'blur .save-account': 'saveAccount',
         'mouseenter .user-chip-contents': 'showUserCard',
         'mouseleave .user-chip-contents': 'hideUserCard',
+        'click .toggle-solutions': 'toggleSolutions',
         'keypress .save-account': cw.checkForEnter,
+    },
+
+    toggleSolutions: function(e) {
+        var id = $(e.currentTarget).data('id');
+        var textElement = $(e.currentTarget).find('.button-text');
+        var new_text = textElement.text() === "Show Solutions" ? "Hide Solutions" : "Show Solutions";
+        textElement.text(new_text);
+        this.$('#solutions-'+id).toggleClass('hide');
     },
 
     showUserCard: function(e) {

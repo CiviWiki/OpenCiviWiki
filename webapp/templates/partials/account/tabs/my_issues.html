@@ -6,7 +6,7 @@
 
     {{# if (this.model.get('issues').length > 0) { }}
     {{# _.each(this.model.get('issues'), function (i) { }}
-        {{= cw.underscorePartial('issue-template', JSON.parse(i))}}
+        {{= cw.underscorePartial('issue-template', i )}}
     {{# }, this); }}
     {{# } else { }}
     <div class="section no-state">

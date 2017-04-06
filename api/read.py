@@ -1,6 +1,7 @@
 from django.http import JsonResponse, HttpResponseBadRequest
 from models import Account, Thread, Civi, Representative, Category, Activity
 #  Topic, Attachment, Category, Civi, Comment, Hashtag,
+from django.db.models import Q
 from django.contrib.auth.models import User
 from django.core.serializers.json import DjangoJSONEncoder
 from django.forms.models import model_to_dict
@@ -72,9 +73,42 @@ def get_profile(request, user):
         u = User.objects.get(username=user)
         a = Account.objects.get(user=u)
         result = Account.objects.summarize(a)
+        # result = {}
 
         result['representatives'] = []
         # result['issues'] = ['''{"category": "category", "issue":"Example Issue that the User probably cares about" }''']*20
+
+        result['issues'] = []
+        voted_solutions = Activity.objects.filter(account=a.id, civi__c_type="solution", activity_type__contains="pos")
+        solution_threads = voted_solutions.distinct('thread__id').values_list('thread__id', flat=True)
+
+        for thread_id in solution_threads:
+            t = Thread.objects.get(id=thread_id)
+            solutions = []
+            solution_civis = voted_solutions.filter(thread=thread_id).values_list('civi__id', flat=True)
+            for civi_id in solution_civis:
+                c = Civi.objects.get(id=civi_id)
+                vote = voted_solutions.get(civi__id=civi_id).activity_type
+                vote_types = {
+                    'vote_pos': 'Agree',
+                    'vote_vpos': 'Strongly Agree'
+                }
+                solution_item = {
+                    'id': c.id,
+                    'title': c.title,
+                    'body': c.body,
+                    'user_vote': vote_types.get(vote)
+                }
+                solutions.append(solution_item)
+
+            my_issue_item = {
+                'thread_id': t.id,
+                'thread_title': t.title,
+                'category': t.category.name,
+                'solutions': solutions
+            }
+            result['issues'].append(my_issue_item)
+
         if request.user.username != user:
             ra = Account.objects.get(user=request.user)
             if user in ra.following.all():
