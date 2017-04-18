@@ -66,6 +66,13 @@ class Thread(models.Model):
     summary = models.CharField(max_length=4095, blank=False, null=False)
     image = models.ImageField(upload_to=image_upload_path, blank=True, null=True)
 
+    level_CHOICES = (
+        ('federal', 'Federal'),
+        ('state', 'State'),
+    )
+    level = models.CharField(max_length=31, default='federal', choices=level_CHOICES)
+    state = models.CharField(max_length=2, choices=settings.US_STATES, blank=True)
+
     def _get_image_url(self): #TODO: move this to utils
         if self.image and default_storage.exists(os.path.join(settings.MEDIA_ROOT, self.image.name)):
             return self.image.url

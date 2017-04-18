@@ -8,7 +8,7 @@ from django.forms.models import model_to_dict
 from utils import json_response
 import json
 # from utils.custom_decorators import require_post_params
-# from legislation import sunlightapi as sun
+from legislation import sunlightapi as sun
 
 
 # # Create your views here.
@@ -108,6 +108,14 @@ def get_profile(request, user):
                 'solutions': solutions
             }
             result['issues'].append(my_issue_item)
+
+        result['representatives'] = []
+        rep_ids = sun.get_legislator_ids_by_lat_long(a.latitude, a.longitude)
+
+        for bio_id in rep_ids:
+            rep = Representative.objects.get(bioguideID=bio_id)
+            if rep:
+                result['representatives'].append(rep.summarize())
 
         if request.user.username != user:
             ra = Account.objects.get(user=request.user)
@@ -251,7 +259,14 @@ def get_responses(request, thread_id, civi_id):
     try:
         req_acct = Account.objects.get(user=request.user)
         c_qs = Civi.objects.get(id=civi_id).responses.all()
-        c_scored = [c.dict_with_score(req_acct.id) for c in c_qs]
+        c_scored = []
+        for res_civi in c_qs:
+            c_dict = res_civi.dict_with_score(req_acct.id)
+            c_rebuttal = res_civi.responses.all()
+            if c_rebuttal:
+                c_dict['rebuttal'] = c_rebuttal[0].dict_with_score(req_acct.id)
+            c_scored.append(c_dict)
+
         civis = sorted(c_scored, key=lambda c: c['score'], reverse=True)
 
         return JsonResponse(civis, safe=False)

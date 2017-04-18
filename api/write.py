@@ -21,11 +21,21 @@ from notifications.signals import notify
 @login_required
 @require_post_params(params=['title', 'summary', 'category_id'])
 def new_thread(request):
+    new_thread_data = dict(
+        title=request.POST['title'],
+        summary=request.POST['summary'],
+        category_id=request.POST['category_id'],
+        author_id=request.user.id,
+        level=request.POST['level']
+    )
+    state = request.POST['state']
+    if state:
+        new_thread_data['state'] = state
 
-    t = Thread(title=request.POST['title'], summary=request.POST['summary'], category_id=request.POST['category_id'], author_id=request.user.id)
-    t.save()
+    new_t = Thread(**new_thread_data)
+    new_t.save()
 
-    return JsonResponse({'data': 'success', 'thread_id' : t.pk})
+    return JsonResponse({'data': 'success', 'thread_id' : new_t.pk})
 
 # @login_required
 # @transaction.atomic
@@ -317,17 +327,21 @@ def editThread(request):
         title = request.POST.get('title')
         summary = request.POST.get('summary')
         category_id = request.POST.get('category_id')
-        if (thread_id):
+        level = request.POST.get('level')
+        state = request.POST.get('state')
+        if thread_id:
 
 
             t = Thread.objects.get(id=thread_id)
             category_id = request.POST.get('category_id')
-            if (request.user.username != t.author.user.username):
+            if request.user.username != t.author.user.username:
                 return HttpResponseBadRequest(reason="No Edit Rights")
 
             t.title = title
             t.summary = summary
             t.category_id = category_id
+            t.level = level
+            t.state = state
             t.save()
 
             return_data = {
@@ -338,6 +352,9 @@ def editThread(request):
                     "id": t.category.id,
                     "name": t.category.name
                 },
+                "level": t.level,
+                "state": t.state if t.level == "state" else "",
+                "location": t.level if not t.state else dict(settings.US_STATES).get(t.state),
             }
             return JsonResponse({'data': return_data})
         else:

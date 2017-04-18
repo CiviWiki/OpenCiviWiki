@@ -92,6 +92,7 @@ class Civi(models.Model):
         ('cause', 'Cause'),
         ('solution', 'Solution'),
         ('response', 'Response'), #TODO: move this to separate model (subclass?)
+        ('rebuttal', 'Rebuttal'),
     )
     c_type = models.CharField(max_length=31, default='problem', choices=c_CHOICES)
 

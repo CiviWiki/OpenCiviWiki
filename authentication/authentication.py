@@ -24,7 +24,7 @@ def cw_login(request):
         login(request, user)
 
         if user.is_active:
-            # Redirect to a success page.
+            # TODO: Do not redirct, send success
             return HttpResponse()
         else:
             return HttpResponseBadRequest(reason='Inactive user')

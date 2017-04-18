@@ -178,6 +178,7 @@ cw.CiviView =  BB.View.extend({
     initialize: function (options) {
         this.options = options || {};
         this.can_edit = options.can_edit;
+        this.can_respond = options.can_respond;
         this.parentView = options.parentView;
         this.civis = this.parentView.civis;
         this.model.set('view', this);
@@ -202,6 +203,7 @@ cw.CiviView =  BB.View.extend({
         'change .attachment-image-pick': 'previewImageNames',
         'input .civi-link-images': 'previewImageNames',
         'click #add-image-link-input': 'addImageLinkInput',
+        'click #respond-button': 'addRebuttal',
         // 'click .civi-grab-link': 'grabLink',
         // vote
         // changevote
@@ -346,7 +348,7 @@ cw.CiviView =  BB.View.extend({
                         _this.parentView.model.set('user_votes', prev_votes);
                     }
 
-                    if (_this.model.get('type') != "response") {
+                    if (_this.model.get('type') != "response" && _this.model.get('type') != "rebuttal") {
                         _this.parentView.initRecommended(); //THISTHIS
                         _this.parentView.renderBodyContents();
                         _this.parentView.processCiviScroll();
@@ -370,7 +372,7 @@ cw.CiviView =  BB.View.extend({
         this.$('.edit-civi-body').text(this.model.get('body'));
         this.$('.edit-civi-title').val(this.model.get('title'));
         this.$('#'+ this.model.get('type') + "-" + this.model.id).prop("checked", true);
-        if (this.model.get('type') != 'response') {
+        if (this.model.get('type') != 'response' && this.model.get('type') != 'rebuttal') {
             this.magicSuggestView = new cw.LinkSelectView({$el: this.$('#magicsuggest-'+this.model.id), civis: this.civis});
             this.magicSuggestView.setLinkableData(this.model.get('type'));
             this.magicSuggestView.ms.setValue(this.model.get('links'));
@@ -386,7 +388,7 @@ cw.CiviView =  BB.View.extend({
         this.$('.edit').addClass('hide');
         this.$('.delete').addClass('hide');
 
-        if (this.model.get('type') === 'response') {
+        if (this.model.get('type') === 'response' || this.model.get('type') === 'rebuttal') {
             this.$('.edit-links').addClass('hide');
             this.$('#civi-type-form').addClass('hide');
         }
@@ -399,6 +401,13 @@ cw.CiviView =  BB.View.extend({
         this.magicSuggestView.ms.clear();
         Materialize.toast('Changing the civi type has cleared your links', 5000);
     },
+
+    addRebuttal: function(){
+        this.parentView.newResponseView.rebuttal_ref = this.model.id;
+        this.parentView.newResponseView.render();
+        this.parentView.newResponseView.show();
+    },
+
 
     addImageToDeleteList: function(e) {
         var target = $(e.currentTarget);
@@ -424,7 +433,7 @@ cw.CiviView =  BB.View.extend({
         var new_body = this.$('.edit-civi-body').val().trim();
             new_title = this.$('.edit-civi-title').val().trim();
         var links;
-        if (c_type != 'response') {
+        if (c_type != 'response' && c_type != 'rebuttal') {
             links= this.magicSuggestView.ms.getValue();
         } else {
             links = [];
@@ -441,7 +450,7 @@ cw.CiviView =  BB.View.extend({
         } else {
             var data;
 
-            if (c_type === 'response') {
+            if (c_type === 'response' || c_type === 'rebuttal') {
                 new_type = c_type;
                 data = {
                     civi_id: this.model.id,
@@ -502,7 +511,7 @@ cw.CiviView =  BB.View.extend({
 
                                 _this.render();
 
-                                if (_this.model.get('type') != "response") {
+                                if (_this.model.get('type') != "response" && _this.model.get('type') != "rebuttal") {
                                     var parent_links = _this.model.get('links');
                                     _.each(parent_links, function(parent_id){
                                         var parent_civi = _this.options.parentView.civis.get(parent_id);
@@ -535,7 +544,7 @@ cw.CiviView =  BB.View.extend({
 
                                 _this.render();
 
-                                if (_this.model.get('type') != "response") {
+                                if (_this.model.get('type') != "response" && _this.model.get('type') != "rebuttal") {
                                     var parent_links = _this.model.get('links');
                                     _.each(parent_links, function(parent_id){
                                         var parent_civi = _this.options.parentView.civis.get(parent_id);
@@ -562,7 +571,7 @@ cw.CiviView =  BB.View.extend({
                         Materialize.toast('Saved', 5000);
 
                         // Clean up previous links
-                        if (_this.model.get('type') != "response") {
+                        if (_this.model.get('type') != "response" && _this.model.get('type') != "rebuttal") {
                             var orig_links = _this.model.get('links');
                             _.each(orig_links, function(parent_id){
                                 var parent_civi = _this.options.parentView.civis.get(parent_id);
@@ -586,7 +595,7 @@ cw.CiviView =  BB.View.extend({
 
                         _this.render();
 
-                        if (_this.model.get('type') != "response") {
+                        if (_this.model.get('type') != "response" && _this.model.get('type') != "rebuttal") {
                             var parent_links = _this.model.get('links');
                             _.each(parent_links, function(parent_id){
                                 var parent_civi = _this.options.parentView.civis.get(parent_id);
@@ -870,6 +879,7 @@ cw.NewResponseView = BB.View.extend({
     template: _.template($('#new-response-template').html()),
     initialize: function (options) {
         this.options = options || {};
+        this.rebuttal_ref = '';
         this.render();
     },
 
@@ -945,8 +955,15 @@ cw.NewResponseView = BB.View.extend({
         var _this = this;
         this.$(e.currentTarget).addClass('disabled').attr('disabled', true);
         var title = this.$('#response-title').val(),
-            body = this.$('#response-body').val();
-
+            body = this.$('#response-body').val(),
+            related_civi, c_type;
+        if (this.rebuttal_ref) {
+            c_type = 'rebuttal';
+            related_civi = this.rebuttal_ref;
+        } else {
+            c_type = 'response';
+            related_civi = this.options.parentView.currentCivi;
+        }
         if (title && body) {
             $.ajax({
                 url: '/api/new_civi/',
@@ -954,9 +971,9 @@ cw.NewResponseView = BB.View.extend({
                 data: {
                     title: title,
                     body: body,
-                    c_type: 'response',
+                    c_type: c_type,
                     thread_id: this.model.threadId,
-                    related_civi: this.options.parentView.currentCivi
+                    related_civi: related_civi
                 },
                 success: function (response) {
                     var attachment_input = _this.$('#response_attachment_image');
@@ -980,8 +997,12 @@ cw.NewResponseView = BB.View.extend({
                                 _this.render();
                             },
                             error: function(e){
-                                Materialize.toast('Could not create response', 5000);
-                                _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
+                                Materialize.toast('Response was created but images could not be uploaded', 5000);
+                                // _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
+                                _this.options.parentView.responseCollection.fetch();
+                                _this.options.parentView.renderResponses();
+                                _this.hide();
+                                _this.render();
                             },
                             data: formData,
                             cache: false,
@@ -1023,6 +1044,12 @@ cw.EditThreadView = BB.View.extend({
     render: function () {
         this.$el.empty().append(this.template());
         this.$('#thread-image-forms').addClass('hide');
+
+        this.$('#thread-location').val(this.model.get('level'));
+        if (this.model.get('state')) {
+            this.$('.edit-thread-state-selection').removeClass('hide');
+            this.$('#thread-state').val(this.model.get('state'));
+        }
         cw.materializeShit();
     },
 
@@ -1033,7 +1060,8 @@ cw.EditThreadView = BB.View.extend({
         'click .use-previous-image': 'hideImageForm',
         'click .edit-thread': 'editThread',
         'click #image-from-computer': 'showImageUploadForm',
-        'click #image-from-link': 'showImageLinkForm'
+        'click #image-from-link': 'showImageLinkForm',
+        'change #thread-location': 'showStates',
     },
 
     show: function () {
@@ -1042,6 +1070,16 @@ cw.EditThreadView = BB.View.extend({
 
     hide: function () {
         this.$('.edit-thread-modal').closeModal();
+    },
+
+    showStates: function () {
+        var level = this.$el.find('#thread-location').val();
+        if (level === "state") {
+            this.$('.edit-thread-state-selection').removeClass('hide');
+        } else {
+            this.$('.edit-thread-state-selection').addClass('hide');
+            this.$el.find('#thread-state').val('');
+        }
     },
 
     cancelEdit: function () {
@@ -1077,8 +1115,12 @@ cw.EditThreadView = BB.View.extend({
 
         var title = this.$el.find('#thread-title').val().trim(),
             summary = this.$el.find('#thread-body').val().trim(),
-            category_id = this.$el.find('#thread-category').val();
-
+            level = this.$el.find('#thread-location').val(),
+            category_id = this.$el.find('#thread-category').val(),
+            state="";
+        if (level === "state" ) {
+            state = this.$el.find('#thread-state').val();
+        }
         var thread_id = this.threadId;
         console.log(title, summary, category_id, thread_id);
         if (title && summary && category_id) {
@@ -1089,7 +1131,9 @@ cw.EditThreadView = BB.View.extend({
                     title: title,
                     summary: summary,
                     category_id: category_id,
-                    thread_id: thread_id
+                    thread_id: thread_id,
+                    level: level,
+                    state: state
                 },
                 success: function (response) {
                     var file = $('#thread_attachment_image').val();
@@ -1111,6 +1155,9 @@ cw.EditThreadView = BB.View.extend({
                                     _this.parentView.model.set('title', new_data.title);
                                     _this.parentView.model.set('summary', new_data.summary);
                                     _this.parentView.model.set('category', new_data.category);
+                                    _this.parentView.model.set('level', new_data.level);
+                                    _this.parentView.model.set('state', new_data.state);
+                                    _this.parentView.model.set('location', new_data.location);
                                     _this.parentView.model.set('image', response2.image);
                                     _this.parentView.threadWikiRender();
                                     _this.render();  // TODO: Please remove this
@@ -1143,6 +1190,9 @@ cw.EditThreadView = BB.View.extend({
                                     _this.parentView.model.set('title', new_data.title);
                                     _this.parentView.model.set('summary', new_data.summary);
                                     _this.parentView.model.set('category', new_data.category);
+                                    _this.parentView.model.set('level', new_data.level);
+                                    _this.parentView.model.set('state', new_data.state);
+                                    _this.parentView.model.set('location', new_data.location);
                                     _this.parentView.model.set('image', response2.image);
                                     _this.parentView.threadWikiRender();
                                     _this.render();  // TODO: Please remove this
@@ -1171,6 +1221,9 @@ cw.EditThreadView = BB.View.extend({
                                     _this.parentView.model.set('summary', new_data.summary);
                                     _this.parentView.model.set('category', new_data.category);
                                     _this.parentView.model.set('image', response2.image);
+                                    _this.parentView.model.set('level', new_data.level);
+                                    _this.parentView.model.set('state', new_data.state);
+                                    _this.parentView.model.set('location', new_data.location);
                                     _this.parentView.threadWikiRender();
                                     _this.render();  // TODO: Please remove this
                                 },
@@ -1191,6 +1244,9 @@ cw.EditThreadView = BB.View.extend({
                         _this.parentView.model.set('title', new_data.title);
                         _this.parentView.model.set('summary', new_data.summary);
                         _this.parentView.model.set('category',new_data.category);
+                        _this.parentView.model.set('level', new_data.level);
+                        _this.parentView.model.set('state', new_data.state);
+                        _this.parentView.model.set('location', new_data.location);
                         _this.parentView.threadWikiRender();
                         _this.render(); // TODO: Please remove this
                     }
@@ -1672,13 +1728,30 @@ cw.ThreadView = BB.View.extend({
         this.$('.responses').empty().append(this.responseWrapper());
         _.each(this.responseCollection.models, function(civi){
             var can_edit = civi.get('author').username == this.username ? true : false;
-            this.$('#response-list').append(new cw.CiviView({model: civi, can_edit: can_edit, parentView: this}).el);
+            var can_respond = this.civis.get(this.responseCollection.civiId).get('author').username == this.username ? true : false;
+
+            var new_civi_view = new cw.CiviView({model: civi, can_edit: can_edit, can_respond: can_respond, parentView: this, response: true});
+            this.$('#response-list').append(new_civi_view.el);
 
             var vote = _.find(this.model.get('user_votes'), function(v){
                 return v.civi_id === civi.id;
             });
             if (vote) {
                 this.$('#civi-'+ vote.civi_id).find("." +vote.activity_type).addClass('current');
+            }
+            if (civi.get('rebuttal')) {
+                var rebuttal_model = new cw.CiviModel(civi.get('rebuttal'));
+                var rebuttal_can_edit = rebuttal_model.get('author').username == this.username ? true : false;
+                var rebuttal_view = new cw.CiviView({model: rebuttal_model, can_edit: rebuttal_can_edit, can_respond: false, parentView: this, response: true});
+                rebuttal_view.$('.civi-card').addClass('push-right');
+                new_civi_view.el.after(rebuttal_view.el);
+
+                vote = _.find(this.model.get('user_votes'), function(v){
+                    return v.civi_id === rebuttal_model.id;
+                });
+                if (vote) {
+                    this.$('#civi-'+ vote.civi_id).find("." +vote.activity_type).addClass('current');
+                }
             }
         }, this);
     },
@@ -1922,7 +1995,7 @@ cw.ThreadView = BB.View.extend({
             return;
         }
         var $this = $(e.currentTarget);
-        if ($this.find('.civi-type').text() != "response") {
+        if ($this.find('.civi-type').text() != "response" && $this.find('.civi-type').text() != "rebuttal") {
             var $currentCivi = this.$('[data-civi-id="' + this.currentCivi + '"]'),
                 $newCivi = $this.closest('.civi-card');
 

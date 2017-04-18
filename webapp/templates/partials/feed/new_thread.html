@@ -13,6 +13,27 @@
                 <label for="thread-body">Summary</label>
             </div>
         </div>
+        <div class="row">
+            <div class="new-thread-level-selection white-background-input-field col s4">
+                <div class="input-field left-input-field">
+                    <select id="thread-location">
+                        <option value="" disabled selected>Choose a Location</option>
+                        <option value="federal">Federal</option>
+                        <option value="state">State</option>
+                    </select>
+                </div>
+            </div>
+            <div class="new-thread-state-selection white-background-input-field col s4 hide">
+                <div class="input-field left-input-field">
+                    <select id="thread-state">
+                        {{# _.each(this.options.states, function (s) { }}
+                            <option value="{{s[0]}}">{{s[1]}}</option>
+                        {{# }); }}
+                    </select>
+                </div>
+            </div>
+        </div>
+
         <div class="new-thread-category-selection white-background-input-field">
             <div class="input-field left-input-field">
                 <select id="thread-category">

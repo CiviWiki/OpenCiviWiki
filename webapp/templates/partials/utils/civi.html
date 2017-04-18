@@ -174,7 +174,10 @@
             <div>
                 <!-- <i class="mini material-icons favorite">star_border</i> -->
                 <!-- <i class="mini material-icons civi-grab-link">link</i> -->
-                <i class="mini material-icons">comment</i>
+                {{# if (this.can_respond && !this.model.get('rebuttal') ){ }}
+                <span class="link-lato input" id="respond-button"><i class="mini material-icons">comment</i> RESPOND</span>
+
+                {{# } }}
             </div>
         </div>
     </div>

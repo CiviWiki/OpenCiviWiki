@@ -30,8 +30,12 @@ def base_view(request):
     feed_threads = [Thread.objects.summarize(t) for t in Thread.objects.order_by('-created')]
     top5_threads = list(Thread.objects.all().order_by('-num_views')[:5].values('id', 'title'))
 
+
+    # states = dict(settings.US_STATES)
+    states = sorted(settings.US_STATES, key=lambda s: s[1])
     data = {
         'categories': categories,
+        'states': states,
         'user_categories': user_categories,
         'threads': feed_threads,
         'trending': top5_threads
@@ -123,7 +127,11 @@ def issue_thread(request, thread_id=None):
             "name": t.category.name
         },
         "categories": [{'id': c.id, 'name': c.name} for c in Category.objects.all()],
+        "states": sorted(settings.US_STATES, key=lambda s: s[1]),
         "created": t.created_date_str,
+        "level": t.level,
+        "state": t.state if t.level == "state" else "",
+        "location": t.level if not t.state else dict(settings.US_STATES).get(t.state),
         "num_civis": t.num_civis,
         "num_views": t.num_views,
         'user_votes': [{'civi_id':act.civi.id, 'activity_type': act.activity_type, 'c_type': act.civi.c_type} for act in Activity.objects.filter(thread=t.id, account=req_acct.id)]

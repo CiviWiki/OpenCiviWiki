@@ -17,9 +17,25 @@ def get_bill_information(account):
     bill_data = []
     preferences = {}
     preferences['state'] = account.state
-    preferences['per_page'] = 20 / max(len(account.interests), 1) # I want to return a max of 50 bills from this function
+    # I want to return a max of 50 bills from this function
+    preferences['per_page'] = 20 / max(len(account.interests), 1)
     for interest in account.interests:
         preferences['q'] = interest
         bill_data += sunlight.openstates.bills(**preferences)
 
     return bill_data
+
+def get_legislator_ids_by_lat_long(latitude, longitude):
+    """ Gets legislator bioguide_ids by coordinate location"""
+    # sunlight.config.API_KEY = settings.SUNLIGHT_API_KEY
+    bioguide_ids = []
+    # preferences = {}
+    # preferences['state'] = account.state
+
+    legislators = sunlight.congress.locate_legislators_by_lat_lon(latitude, longitude)
+
+    if legislators and len(legislators):
+        for legislator in legislators:
+            bioguide_ids.append(legislator.get('bioguide_id'))
+
+    return bioguide_ids
