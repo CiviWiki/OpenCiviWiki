@@ -2,13 +2,11 @@
 <div class="row tab-title">
     <div class="col s12 title-lato">My representatives</div>
 </div>
-<!-- Populate Civi list -->
+
 <div class="row">
-
-
     {{# if (this.model.get('representatives').length > 0) { }}
     {{# _.each(this.model.get('representatives'), function (r) { }}
-        {{= cw.underscorePartial('rep-template', JSON.parse(r))}}
+        {{= cw.underscorePartial('rep-template', r)}}
     {{# }, this); }}
     {{# } else { }}
     <div class="section no-state">

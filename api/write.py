@@ -1,4 +1,4 @@
-import os, sys, json, pdb, random, hashlib, urllib2, pprint
+import os, sys, json, pdb, random, hashlib, urllib2, pprint, urllib, PIL
 from models import Account, Category, Civi, CiviImage, Hashtag, Activity
 from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse, HttpResponseServerError, HttpResponseForbidden, HttpResponseBadRequest
@@ -8,8 +8,8 @@ from django.shortcuts import render
 from django.conf import settings
 # from django.db.models import Q
 from api.forms import UpdateProfileImage
-from django.core.files import File  # need this for image file handling
-
+from django.core.files import File   # need this for image file handling
+from django.core.files.base import ContentFile
 from api.models import Thread
 from channels import Group as channels_Group
 
@@ -21,11 +21,21 @@ from notifications.signals import notify
 @login_required
 @require_post_params(params=['title', 'summary', 'category_id'])
 def new_thread(request):
+    new_thread_data = dict(
+        title=request.POST['title'],
+        summary=request.POST['summary'],
+        category_id=request.POST['category_id'],
+        author_id=request.user.id,
+        level=request.POST['level']
+    )
+    state = request.POST['state']
+    if state:
+        new_thread_data['state'] = state
 
-    t = Thread(title=request.POST['title'], summary=request.POST['summary'], category_id=request.POST['category_id'], author_id=request.user.id)
-    t.save()
+    new_t = Thread(**new_thread_data)
+    new_t.save()
 
-    return JsonResponse({'data': 'success', 'thread_id' : t.pk})
+    return JsonResponse({'data': 'success', 'thread_id' : new_t.pk})
 
 # @login_required
 # @transaction.atomic
@@ -241,6 +251,7 @@ def editCivi(request):
     civi_id = request.POST.get('civi_id', '')
     title = request.POST.get('title', '')
     body = request.POST.get('body', '')
+    civi_type = request.POST.get('type', '')
 
     c = Civi.objects.get(id=civi_id)
     if (request.user.username != c.author.user.username):
@@ -249,16 +260,24 @@ def editCivi(request):
     try:
         c.title = title
         c.body = body
+        c.c_type = civi_type
         c.save(update_fields=['title', 'body'])
 
         links = request.POST.getlist('links[]', '')
         c.linked_civis.clear()
         if links:
-            for civi_id in links:
-                linked_civi = Civi.objects.get(id=civi_id)
+            for civiimage_id in links:
+                linked_civi = Civi.objects.get(id=civiimage_id)
                 c.linked_civis.add(linked_civi)
 
-        return HttpResponse('Success')
+        image_remove_list = request.POST.getlist('image_remove_list[]', '')
+        if image_remove_list:
+            for image_id in image_remove_list:
+                civi_image = CiviImage.objects.get(id=image_id)
+                civi_image.delete()
+
+        a = Account.objects.get(user=request.user)
+        return JsonResponse( c.dict_with_score(a.id))
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
 
@@ -300,6 +319,50 @@ def deleteCivi(request):
 #     reps = [for rep in resp_parsed.data]
 #     Account.user(request.user).representatives = reps
 #
+
+@login_required
+def editThread(request):
+    try:
+        thread_id = request.POST.get('thread_id')
+        title = request.POST.get('title')
+        summary = request.POST.get('summary')
+        category_id = request.POST.get('category_id')
+        level = request.POST.get('level')
+        state = request.POST.get('state')
+        if thread_id:
+
+
+            t = Thread.objects.get(id=thread_id)
+            category_id = request.POST.get('category_id')
+            if request.user.username != t.author.user.username:
+                return HttpResponseBadRequest(reason="No Edit Rights")
+
+            t.title = title
+            t.summary = summary
+            t.category_id = category_id
+            t.level = level
+            t.state = state
+            t.save()
+
+            return_data = {
+                'thread_id': thread_id,
+                'title': t.title,
+                'summary': t.summary,
+                "category": {
+                    "id": t.category.id,
+                    "name": t.category.name
+                },
+                "level": t.level,
+                "state": t.state if t.level == "state" else "",
+                "location": t.level if not t.state else dict(settings.US_STATES).get(t.state),
+            }
+            return JsonResponse({'data': return_data})
+        else:
+            return HttpResponseBadRequest(reason="Invalid Thread Reference")
+
+    except Exception as e:
+        return HttpResponseServerError(reason=str(e))
+
 @login_required
 def uploadphoto(request):
     pass
@@ -388,9 +451,21 @@ def uploadCiviImage(request):
 
         try:
             c = Civi.objects.get(id=civi_id)
-            for image in request.FILES.getlist('attachment_image'):
-                civi_image = CiviImage(title="", civi=c, image=image)
-                civi_image.save()
+
+            attachment_links = request.POST.getlist('attachment_links[]')
+
+            if attachment_links:
+                for img_link in attachment_links:
+                    result = urllib.urlretrieve(img_link)
+                    img_file = File(open(result[0]))
+                    if check_image_with_pil(img_file):
+                        civi_image = CiviImage(title="", civi=c, image=img_file)
+                        civi_image.save()
+
+            if len(request.FILES) != 0:
+                for image in request.FILES.getlist('attachment_image'):
+                    civi_image = CiviImage(title="", civi=c, image=image)
+                    civi_image.save()
 
             data = {
                 "attachments": [{'id': img.id, 'url': img.image_url} for img in c.images.all()],
@@ -402,6 +477,13 @@ def uploadCiviImage(request):
     else:
         return HttpResponseForbidden('allowed only via POST')
 
+def check_image_with_pil(image_file):
+    try:
+        PIL.Image.open(image_file)
+    except IOError:
+        return False
+    return True
+
 @login_required
 def uploadThreadImage(request):
     if request.method == 'POST':
@@ -412,18 +494,36 @@ def uploadThreadImage(request):
 
         try:
             thread = Thread.objects.get(id=thread_id)
+            remove = r.get('remove', '')
+            img_link = r.get('link', '')
+            if remove:
+                thread.image.delete()
+                thread.save()
 
-            # Clean up previous image
-            thread.image.delete()
+            elif img_link:
+                thread.image.delete()
+                result = urllib.urlretrieve(img_link)
+                img_file = File(open(result[0]))
+                if check_image_with_pil(img_file):
+                    thread.image = img_file
+                    thread.save()
+                # else:
+                #     return HttpResponseBadRequest("Invalid Image")
+            else:
+                # Clean up previous image
+                thread.image.delete()
 
-            # Upload new image and set as profile picture
-            thread.image = request.FILES['attachment_image']
-            thread.save()
+                # Upload new image and set as profile picture
+                thread.image = request.FILES['attachment_image']
+                thread.save()
 
-            return  HttpResponse("Success")
+            data = {
+                'image': thread.image_url
+            }
+            return  JsonResponse(data)
 
         except Exception as e:
-            return HttpResponseServerError(reason=(str(e)+ civi_id + str(request.FILES)))
+            return HttpResponseServerError(reason=(str(e)))
     else:
         return HttpResponseForbidden('allowed only via POST')
 # @login_required

@@ -1,13 +1,14 @@
 from django.http import JsonResponse, HttpResponseBadRequest
 from models import Account, Thread, Civi, Representative, Category, Activity
 #  Topic, Attachment, Category, Civi, Comment, Hashtag,
+from django.db.models import Q
 from django.contrib.auth.models import User
 from django.core.serializers.json import DjangoJSONEncoder
 from django.forms.models import model_to_dict
 from utils import json_response
 import json
 # from utils.custom_decorators import require_post_params
-# from legislation import sunlightapi as sun
+from legislation import sunlightapi as sun
 
 
 # # Create your views here.
@@ -72,9 +73,50 @@ def get_profile(request, user):
         u = User.objects.get(username=user)
         a = Account.objects.get(user=u)
         result = Account.objects.summarize(a)
+        # result = {}
 
         result['representatives'] = []
         # result['issues'] = ['''{"category": "category", "issue":"Example Issue that the User probably cares about" }''']*20
+
+        result['issues'] = []
+        voted_solutions = Activity.objects.filter(account=a.id, civi__c_type="solution", activity_type__contains="pos")
+        solution_threads = voted_solutions.distinct('thread__id').values_list('thread__id', flat=True)
+
+        for thread_id in solution_threads:
+            t = Thread.objects.get(id=thread_id)
+            solutions = []
+            solution_civis = voted_solutions.filter(thread=thread_id).values_list('civi__id', flat=True)
+            for civi_id in solution_civis:
+                c = Civi.objects.get(id=civi_id)
+                vote = voted_solutions.get(civi__id=civi_id).activity_type
+                vote_types = {
+                    'vote_pos': 'Agree',
+                    'vote_vpos': 'Strongly Agree'
+                }
+                solution_item = {
+                    'id': c.id,
+                    'title': c.title,
+                    'body': c.body,
+                    'user_vote': vote_types.get(vote)
+                }
+                solutions.append(solution_item)
+
+            my_issue_item = {
+                'thread_id': t.id,
+                'thread_title': t.title,
+                'category': t.category.name,
+                'solutions': solutions
+            }
+            result['issues'].append(my_issue_item)
+
+        result['representatives'] = []
+        rep_ids = sun.get_legislator_ids_by_lat_long(a.latitude, a.longitude)
+
+        for bio_id in rep_ids:
+            rep = Representative.objects.get(bioguideID=bio_id)
+            if rep:
+                result['representatives'].append(rep.summarize())
+
         if request.user.username != user:
             ra = Account.objects.get(user=request.user)
             if user in ra.following.all():
@@ -217,7 +259,14 @@ def get_responses(request, thread_id, civi_id):
     try:
         req_acct = Account.objects.get(user=request.user)
         c_qs = Civi.objects.get(id=civi_id).responses.all()
-        c_scored = [c.dict_with_score(req_acct.id) for c in c_qs]
+        c_scored = []
+        for res_civi in c_qs:
+            c_dict = res_civi.dict_with_score(req_acct.id)
+            c_rebuttal = res_civi.responses.all()
+            if c_rebuttal:
+                c_dict['rebuttal'] = c_rebuttal[0].dict_with_score(req_acct.id)
+            c_scored.append(c_dict)
+
         civis = sorted(c_scored, key=lambda c: c['score'], reverse=True)
 
         return JsonResponse(civis, safe=False)

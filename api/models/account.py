@@ -5,6 +5,7 @@ from django.db import models
 from django.conf import settings
 from hashtag import Hashtag
 from category import Category
+from representative import Representative
 
 import os, json, uuid
 
@@ -83,6 +84,7 @@ class Account(models.Model):
 
     fed_district = models.CharField(max_length=63, default=None, null=True)
     state_district = models.CharField(max_length=63, default=None, null=True)
+    representatives = models.ManyToManyField(Representative, related_name='account')
 
     categories = models.ManyToManyField(Category, related_name='user_categories', symmetrical=False)
     interests = models.ManyToManyField(Hashtag, related_name='interests')

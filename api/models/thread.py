@@ -16,7 +16,7 @@ class ThreadManager(models.Manager):
         thread_data = {
             "id": thread.id,
             "title": thread.title,
-            "summary": thread.summary, #thread.summary[:320] + ('' if len(thread.summary) <= 320 else '...'),
+            "summary": thread.summary[:320] + ('' if len(thread.summary) <= 320 else '...'),
             "created": "{0} {1}, {2}".format(month_name[thread.created.month], thread.created.day, thread.created.year),
             "category_id": thread.category.id,
             "image": thread.image_url
@@ -66,7 +66,12 @@ class Thread(models.Model):
     summary = models.CharField(max_length=4095, blank=False, null=False)
     image = models.ImageField(upload_to=image_upload_path, blank=True, null=True)
 
-    #TODO: State/Federal/(possibly Local) (airport fill-in?)
+    level_CHOICES = (
+        ('federal', 'Federal'),
+        ('state', 'State'),
+    )
+    level = models.CharField(max_length=31, default='federal', choices=level_CHOICES)
+    state = models.CharField(max_length=2, choices=settings.US_STATES, blank=True)
 
     def _get_image_url(self): #TODO: move this to utils
         if self.image and default_storage.exists(os.path.join(settings.MEDIA_ROOT, self.image.name)):

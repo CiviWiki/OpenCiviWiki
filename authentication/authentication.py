@@ -24,7 +24,7 @@ def cw_login(request):
         login(request, user)
 
         if user.is_active:
-            # Redirect to a success page.
+            # TODO: Do not redirct, send success
             return HttpResponse()
         else:
             return HttpResponseBadRequest(reason='Inactive user')
@@ -52,6 +52,7 @@ def cw_register(request):
         User.objects.create_user(username, email, password)
         user = authenticate(username=username, password=password)
         account = Account(user=user)
+        account.beta_access = True
         account.save()
     except Exception as e:
         print str(e)

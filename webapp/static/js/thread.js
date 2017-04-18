@@ -178,6 +178,7 @@ cw.CiviView =  BB.View.extend({
     initialize: function (options) {
         this.options = options || {};
         this.can_edit = options.can_edit;
+        this.can_respond = options.can_respond;
         this.parentView = options.parentView;
         this.civis = this.parentView.civis;
         this.model.set('view', this);
@@ -196,11 +197,68 @@ cw.CiviView =  BB.View.extend({
         'click .edit-confirm': 'saveEdit',
         'click .edit-cancel': 'closeEdit',
         'click .civi-image-thumb': 'viewImageModal',
-
+        'change #civi-type-form': 'clickNewType',
+        'click .delete-civi-image': 'addImageToDeleteList',
+        'click #add-more-images': 'showImageForm',
+        'change .attachment-image-pick': 'previewImageNames',
+        'input .civi-link-images': 'previewImageNames',
+        'click #add-image-link-input': 'addImageLinkInput',
+        'click #respond-button': 'addRebuttal',
         // 'click .civi-grab-link': 'grabLink',
         // vote
         // changevote
 
+    },
+
+    addImageLinkInput: function(){
+        var link_images = this.$('.civi-link-images').length;
+        if (link_images > 20 ) {
+            Materialize.toast("Don't think you need any more...", 5000);
+        } else {
+            this.$('.image-link-list').append('<input type="text" class="civi-link-images" placeholder="Paste your image link here..."/>');
+        }
+
+    },
+
+    previewImageNames: function(e) {
+        var attachment_input = this.$('#id_attachment_image');
+        var uploaded_images = attachment_input[0].files;
+        var $previewlist = this.$('.file-preview');
+        $previewlist.empty();
+        // File Upload Images
+        _.each(uploaded_images, function(img_file){
+            $previewlist.append("<div class=\"link-lato gray-text preview-item \">"+img_file.name+"</div>");
+        }, this);
+
+        // Link Images
+        this.attachment_links = [];
+        var link_images = $('.civi-link-images');
+        _.each(link_images, function(img_link){
+            var link_value = img_link.value.trim();
+            if (link_value){
+                $previewlist.append("<div class=\"link-lato gray-text preview-item \">"+link_value+"</div>");
+                this.attachment_links.push(link_value);
+            }
+        }, this);
+
+        // Total images count
+        var image_total = uploaded_images.length + this.attachment_links.length;
+        if (image_total === 0) {
+            $previewlist.prepend("<div>No Images</div>");
+        } else if (image_total === 1) {
+            $previewlist.prepend("<div>1 Image</div>");
+        } else {
+            $previewlist.prepend("<div>" + image_total + " Images</div>");
+        }
+
+        this.attachmentCount = image_total;
+
+    },
+
+    showImageForm: function(e){
+        // HEREHERE
+        this.$('.edit-images').removeClass('hide');
+        this.$('#add-more-images').addClass('hide');
     },
 
     viewImageModal: function(e){
@@ -222,11 +280,11 @@ cw.CiviView =  BB.View.extend({
                     civi_id: this.model.id,
                 },
                 success: function (response) {
-                    Materialize.toast('Favorited Civi', 2000);
+                    Materialize.toast('Favorited Civi', 5000);
                     $this.text('star');
                 },
                 error: function(r){
-                    Materialize.toast('Could not favor the civi', 2000);
+                    Materialize.toast('Could not favor the civi', 5000);
                 }
             });
 
@@ -238,10 +296,10 @@ cw.CiviView =  BB.View.extend({
                     civi_id: this.model.id,
                 },
                 success: function (response) {
-                    Materialize.toast('Favorited Civi', 2000);
+                    Materialize.toast('Favorited Civi', 5000);
                 },
                 error: function(r){
-                    Materialize.toast('Could not favor the civi', 2000);
+                    Materialize.toast('Could not favor the civi', 5000);
                 }
             });
             $this.text('star_border');
@@ -262,7 +320,7 @@ cw.CiviView =  BB.View.extend({
         var civi_id = $(e.currentTarget).closest('.civi-card').data('civi-id');
 
         // if (this.can_edit) {
-        //     Materialize.toast('Trying to vote on your own civi? :}', 2000);
+        //     Materialize.toast('Trying to vote on your own civi? :}', 5000);
         //     return;
         // }
         if (rating && civi_id){
@@ -274,7 +332,7 @@ cw.CiviView =  BB.View.extend({
                     rating: rating
                 },
                 success: function (response) {
-                    Materialize.toast('Voted!', 2000);
+                    Materialize.toast('Voted!', 5000);
                     // var score = $this.find('.rate-value');
                     // var new_vote = parseInt(score.text())+ 1;
                     // score.text(new_vote);
@@ -290,7 +348,7 @@ cw.CiviView =  BB.View.extend({
                         _this.parentView.model.set('user_votes', prev_votes);
                     }
 
-                    if (_this.model.get('type') != "response") {
+                    if (_this.model.get('type') != "response" && _this.model.get('type') != "rebuttal") {
                         _this.parentView.initRecommended(); //THISTHIS
                         _this.parentView.renderBodyContents();
                         _this.parentView.processCiviScroll();
@@ -302,7 +360,7 @@ cw.CiviView =  BB.View.extend({
 
                 },
                 error: function(r){
-                    Materialize.toast('Could not vote :(', 2000);
+                    Materialize.toast('Could not vote :(', 5000);
                 }
             });
         }
@@ -310,17 +368,53 @@ cw.CiviView =  BB.View.extend({
 
     clickEdit: function (e) {
         e.stopPropagation();
+        // Populate with data TODO: move to a template
         this.$('.edit-civi-body').text(this.model.get('body'));
         this.$('.edit-civi-title').val(this.model.get('title'));
-        this.magicSuggestView = new cw.LinkSelectView({$el: this.$('#magicsuggest-'+this.model.id), civis: this.civis});
-        this.magicSuggestView.setLinkableData(this.model.get('type'));
-        this.magicSuggestView.ms.setValue(this.model.get('links'));
+        this.$('#'+ this.model.get('type') + "-" + this.model.id).prop("checked", true);
+        if (this.model.get('type') != 'response' && this.model.get('type') != 'rebuttal') {
+            this.magicSuggestView = new cw.LinkSelectView({$el: this.$('#magicsuggest-'+this.model.id), civis: this.civis});
+            this.magicSuggestView.setLinkableData(this.model.get('type'));
+            this.magicSuggestView.ms.setValue(this.model.get('links'));
+        }
+        this.attachment_links = [];
+        this.attachmentCount = 0;
+
+        this.imageRemoveList = [];
 
         this.$('.edit-wrapper').removeClass('hide');
         this.$('.edit-action').removeClass('hide');
         this.$('.text-wrapper').addClass('hide');
         this.$('.edit').addClass('hide');
         this.$('.delete').addClass('hide');
+
+        if (this.model.get('type') === 'response' || this.model.get('type') === 'rebuttal') {
+            this.$('.edit-links').addClass('hide');
+            this.$('#civi-type-form').addClass('hide');
+        }
+    },
+
+    clickNewType: function(e){
+        var new_type = $(e.target).closest("input[type='radio']:checked").val();
+        // var new_type = $("#civi-type-form input[type='radio']:checked").val();
+        this.magicSuggestView.setLinkableData(new_type);
+        this.magicSuggestView.ms.clear();
+        Materialize.toast('Changing the civi type has cleared your links', 5000);
+    },
+
+    addRebuttal: function(){
+        this.parentView.newResponseView.rebuttal_ref = this.model.id;
+        this.parentView.newResponseView.render();
+        this.parentView.newResponseView.show();
+    },
+
+
+    addImageToDeleteList: function(e) {
+        var target = $(e.currentTarget);
+        var target_image = target.data('image-id');
+
+        this.imageRemoveList.push(target_image);
+        target.remove();
     },
 
     closeEdit: function (e) {
@@ -335,41 +429,196 @@ cw.CiviView =  BB.View.extend({
     saveEdit: function(e) {
         e.stopPropagation();
         var _this = this;
-
+        var c_type = this.model.get('type');
         var new_body = this.$('.edit-civi-body').val().trim();
             new_title = this.$('.edit-civi-title').val().trim();
-        var links = this.magicSuggestView.ms.getValue();
-        console.log(_.isEqual(links, this.model.get('links')));
+        var links;
+        if (c_type != 'response' && c_type != 'rebuttal') {
+            links= this.magicSuggestView.ms.getValue();
+        } else {
+            links = [];
+        }
+
+        var new_type = this.$("#civi-type-form input[type='radio']:checked").val();
+        console.log(new_type);
         if (!new_body || !new_title){
-            Materialize.toast('Please do not leave fields blank', 2000);
+            Materialize.toast('Please do not leave fields blank', 5000);
             return;
-        } else if ((new_body == this.model.get('body') && new_title == this.model.get('title') && _.isEqual(links, this.model.get('links')) )){
+        } else if (this.imageRemoveList.length===0 && this.attachmentCount===0 && (new_body == this.model.get('body') && new_title == this.model.get('title') && _.isEqual(links, this.model.get('links')) && new_type == this.model.get('type') )){
             this.closeEdit(e);
             return;
         } else {
-            $.ajax({
-                url: '/api/edit_civi/',
-                type: 'POST',
-                data: {
+            var data;
+
+            if (c_type === 'response' || c_type === 'rebuttal') {
+                new_type = c_type;
+                data = {
+                    civi_id: this.model.id,
+                    title: new_title,
+                    body: new_body
+                };
+            } else {
+                data = {
                     civi_id: this.model.id,
                     title: new_title,
                     body: new_body,
-                    links: links
-                },
+                    links: links,
+                    type: new_type
+                };
+            }
+
+            if (this.imageRemoveList.length){
+                data.image_remove_list = this.imageRemoveList;
+            }
+            $.ajax({
+                url: '/api/edit_civi/',
+                type: 'POST',
+                data: data,
                 success: function (response) {
-                    Materialize.toast('Saved!', 2000);
+                    _this.closeEdit(e);
                     // var score = $this.find('.rate-value');
                     // var new_vote = parseInt(score.text())+ 1;
                     // score.text(new_vote);
-                    _this.model.set('title', new_title);
-                    _this.model.set('body', new_body);
-                    _this.model.set('links', links);
-                    _this.render();
-                    _this.parentView.renderOutline();
+                    //
+                    var attachment_input = _this.$('#id_attachment_image');
+                    var uploaded_images = attachment_input[0].files;
+                    if (_this.attachmentCount > 0) {
+                        var formData = new FormData(_this.$('#attachment_image_form')[0]);
+                        formData.set('civi_id', _this.model.id);
+                        if (_this.attachment_links.length){
+                            _.each(_this.attachment_links, function(img_link){
+                                formData.append('attachment_links[]', img_link);
+                            });
+                        }
+
+                        $.ajax({
+                            url: '/api/upload_images/',
+                            type: 'POST',
+                            success: function (response2) {
+
+                                Materialize.toast('Saved.', 5000);
+
+                                // Set the models with new data and rerender
+                                _this.model.set('title', new_title);
+                                _this.model.set('body', new_body);
+                                _this.model.set('links', links);
+                                _this.model.set('type', new_type);
+                                _this.model.set('attachments', response2.attachments);
+                                _this.model.set('score', response.score);
+                                if (_this.magicSuggestView){
+                                    _this.magicSuggestView.remove();
+                                }
+
+                                _this.render();
+
+                                if (_this.model.get('type') != "response" && _this.model.get('type') != "rebuttal") {
+                                    var parent_links = _this.model.get('links');
+                                    _.each(parent_links, function(parent_id){
+                                        var parent_civi = _this.options.parentView.civis.get(parent_id);
+                                        if (parent_civi) {
+                                            var prev_links = parent_civi.get('links');
+                                            prev_links.push(_this.model.id);
+                                            parent_civi.set('links', prev_links);
+                                        }
+
+                                    }, this);
+
+                                    _this.parentView.initRecommended(); //THISTHIS
+                                    _this.parentView.renderBodyContents();
+                                    _this.parentView.processCiviScroll();
+                                }
+                            },
+                            error: function(e){
+                                Materialize.toast('Civi was edited but one or more images could not be uploaded', 5000);
+
+                                // Set the models with new data and rerender
+                                _this.model.set('title', new_title);
+                                _this.model.set('body', new_body);
+                                _this.model.set('links', links);
+                                _this.model.set('type', new_type);
+                                _this.model.set('attachments', response2.attachments);
+                                _this.model.set('score', response.score);
+                                if (_this.magicSuggestView){
+                                    _this.magicSuggestView.remove();
+                                }
+
+                                _this.render();
+
+                                if (_this.model.get('type') != "response" && _this.model.get('type') != "rebuttal") {
+                                    var parent_links = _this.model.get('links');
+                                    _.each(parent_links, function(parent_id){
+                                        var parent_civi = _this.options.parentView.civis.get(parent_id);
+                                        if (parent_civi) {
+                                            var prev_links = parent_civi.get('links');
+                                            prev_links.push(_this.model.id);
+                                            parent_civi.set('links', prev_links);
+                                        }
+
+                                    }, this);
+
+                                    _this.parentView.initRecommended(); //THISTHIS
+                                    _this.parentView.renderBodyContents();
+                                    _this.parentView.processCiviScroll();
+                                }
+                            },
+                            data: formData,
+                            cache: false,
+                            contentType: false,
+                            processData: false
+                        });
+
+                    } else {
+                        Materialize.toast('Saved', 5000);
+
+                        // Clean up previous links
+                        if (_this.model.get('type') != "response" && _this.model.get('type') != "rebuttal") {
+                            var orig_links = _this.model.get('links');
+                            _.each(orig_links, function(parent_id){
+                                var parent_civi = _this.options.parentView.civis.get(parent_id);
+                                if (parent_civi) {
+                                    var prev_links = parent_civi.get('links');
+                                    var cleaned = _.without(prev_links, _this.model.id);
+                                    parent_civi.set('links', cleaned);
+                                }
+                            }, this);
+                        }
+                        // Set the models with new data and rerender
+                        _this.model.set('title', new_title);
+                        _this.model.set('body', new_body);
+                        _this.model.set('links', links);
+                        _this.model.set('type', new_type);
+                        _this.model.set('attachments', response.attachments);
+                        _this.model.set('score', response.score);
+                        if (_this.magicSuggestView){
+                            _this.magicSuggestView.remove();
+                        }
+
+                        _this.render();
+
+                        if (_this.model.get('type') != "response" && _this.model.get('type') != "rebuttal") {
+                            var parent_links = _this.model.get('links');
+                            _.each(parent_links, function(parent_id){
+                                var parent_civi = _this.options.parentView.civis.get(parent_id);
+                                if (parent_civi) {
+                                    var prev_links = parent_civi.get('links');
+                                    prev_links.push(_this.model.id);
+                                    parent_civi.set('links', prev_links);
+                                }
+                            }, this);
+
+                            _this.parentView.initRecommended(); //THISTHIS
+                            _this.parentView.renderBodyContents();
+                            _this.parentView.processCiviScroll();
+                        }
+                    }
+
+
                 },
                 error: function(r){
-                    Materialize.toast('Could not edit the civi', 2000);
+                    Materialize.toast('Could not edit the civi', 5000);
                     _this.closeEdit(e);
+                    _this.render();
+
                 }
             });
         }
@@ -378,6 +627,7 @@ cw.CiviView =  BB.View.extend({
     deleteEdit: function(e) {
         var _this = this;
         e.stopPropagation();
+
         $.ajax({
             url: '/api/delete_civi/',
             type: 'POST',
@@ -385,19 +635,23 @@ cw.CiviView =  BB.View.extend({
                 civi_id: this.model.id,
             },
             success: function (response) {
-                Materialize.toast('Deleted Civi succssfully', 2000);
-                _.each(_this.model.links, function(link){
-                    _this.civis.findWhere({id: link}).view.render();
+                Materialize.toast('Deleted Civi succssfully', 5000);
+                _.each(_this.model.get('links'), function(link){
+                    var linked_civi = _this.civis.findWhere({id: link});
+                    var prev_links =linked_civi.get('links');
+                    new_links = _.without(prev_links, _this.model.id);
+                    linked_civi.set('links', new_links);
                 });
 
                 _this.civis.remove(_this.model);
                 _this.remove();
                 _this.parentView.initRecommended();
                 _this.parentView.renderBodyContents();
+                _this.parentView.processCiviScroll();
 
             },
             error: function(r){
-                Materialize.toast('Could not delete the civi', 2000);
+                Materialize.toast('Could not delete the civi', 5000);
             }
         });
     }
@@ -409,12 +663,16 @@ cw.NewCiviView = BB.View.extend({
 
     initialize: function (options) {
         this.options = options || {};
+
         this.render();
     },
 
     render: function () {
         this.$el.empty().append(this.template());
         this.magicSuggestView = new cw.LinkSelectView({$el: this.$('#magicsuggest'), civis: this.options.parentView.civis});
+
+        this.attachment_links = [];
+        this.attachmentCount = 0;
         // this.renderMagicSuggest();
     },
 
@@ -430,21 +688,55 @@ cw.NewCiviView = BB.View.extend({
         'click .cancel-new-civi': 'cancelCivi',
         'click .create-new-civi': 'createCivi',
         'click .civi-type-button': 'clickType',
-        'change .attachment-image-pick': 'previewImageNames'
+        'change .attachment-image-pick': 'previewImageNames',
+        'input .civi-link-images': 'previewImageNames',
+        'click #image-from-computer': 'showImageUploadForm',
+        'click #image-from-link': 'showImageLinkForm',
+        'click #add-image-link-input': 'addImageLinkInput',
     },
 
+    addImageLinkInput: function(){
+        var link_images = this.$('.civi-link-images').length;
+        if (link_images > 20 ) {
+            Materialize.toast("Don't think you need any more...", 5000);
+        } else {
+            this.$('.image-link-list').append('<input type="text" class="civi-link-images" placeholder="Paste your image link here..."/>');
+        }
+
+    },
 
     previewImageNames: function(e) {
-        var attachment_input = this.$el.find('#id_attachment_image');
+        var attachment_input = this.$('#id_attachment_image');
         var uploaded_images = attachment_input[0].files;
-        console.log(attachment_input);
-        this.$('.file-preview').empty().append("<div>"+uploaded_images.length+" Images</div>");
+        var $previewlist = this.$('.file-preview');
+        $previewlist.empty();
+        // File Upload Images
         _.each(uploaded_images, function(img_file){
-            console.log(img_file);
-            this.$('.file-preview').append("<div class=\"link-lato gray-text\">"+img_file.name+"</div>");
+            $previewlist.append("<div class=\"link-lato gray-text preview-item \">"+img_file.name+"</div>");
         }, this);
 
-        this.attachmentCount = uploaded_images.length;
+        // Link Images
+        this.attachment_links = [];
+        var link_images = $('.civi-link-images');
+        _.each(link_images, function(img_link){
+            var link_value = img_link.value.trim();
+            if (link_value){
+                $previewlist.append("<div class=\"link-lato gray-text preview-item \">"+link_value+"</div>");
+                this.attachment_links.push(link_value);
+            }
+        }, this);
+
+        // Total images count
+        var image_total = uploaded_images.length + this.attachment_links.length;
+        if (image_total === 0) {
+            $previewlist.prepend("<div>No Images</div>");
+        } else if (image_total === 1) {
+            $previewlist.prepend("<div>1 Image</div>");
+        } else {
+            $previewlist.prepend("<div>" + image_total + " Images</div>");
+        }
+
+        this.attachmentCount = image_total;
 
     },
 
@@ -470,65 +762,73 @@ cw.NewCiviView = BB.View.extend({
                     title: title,
                     body: body,
                     c_type: c_type,
-                    thread_id: this.model.threadId,
+                    thread_id: _this.model.threadId,
                     links: links
                 },
                 success: function (response) {
+                    var new_civi_data = response.data;
+                    var new_civi = new cw.CiviModel(new_civi_data);
+                    var can_edit = new_civi.get('author').username == _this.options.parentView.username ? true : false;
+
                     var attachment_input = _this.$('#id_attachment_image');
                     var uploaded_images = attachment_input[0].files;
-                    if (uploaded_images.length > 0) {
+                    if (_this.attachmentCount > 0) {
                         var formData = new FormData(_this.$('#attachment_image_form')[0]);
                         formData.set('civi_id', response.data.id);
+                        if (_this.attachment_links.length){
+                            _.each(_this.attachment_links, function(img_link){
+                                formData.append('attachment_links[]', img_link);
+                            });
+                        }
+
                         $.ajax({
                             url: '/api/upload_images/',
                             type: 'POST',
                             success: function (response2) {
-                                _this.hide();
-                                Materialize.toast('New civi created.', 2000);
-                                var new_civi_data = response.data;
-                                var new_civi = new cw.CiviModel(new_civi_data);
+
+                                Materialize.toast('New civi created.', 5000);
                                 new_civi.set('attachments', response2.attachments);
-                                // TODO: change outline as well
-                                var can_edit = new_civi.get('author').username == _this.options.parentView.username ? true : false;
+
+                                _this.hide();
                                 $('#thread-' + c_type + 's').append(new cw.CiviView({model: new_civi, can_edit: can_edit, parentView: _this.options.parentView}).el);
                                 _this.options.parentView.civis.add(new_civi);
 
-                                // if(c_type ==='problem'){
-                                //     this.recommendedCivis.push(new_civi.id);
-                                //     this.otherCivis.push(new_civi.id);
-                                // }
                                 _this.options.parentView.initRecommended();
                                 _this.options.parentView.renderBodyContents(); //TODO: move renders into listeners
-                                // _.each(new_civi.get('links'), function(link){
-                                //     console.log(link);
-                                //     _this.options.parentView.civis.findWhere({id: link}).view.render();
-                                // });
+
                                 _this.render();
 
                                 $('body').css({overflow: 'hidden'});
                             },
                             error: function(e){
-                                Materialize.toast('ERROR: Image could not be uploaded', 3000);
-                                Materialize.toast(e.statusText, 3000);
-                                _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
+                                Materialize.toast('Civi was created but one or more images could not be uploaded', 5000);
+
+                                _this.hide();
+                                $('#thread-' + c_type + 's').append(new cw.CiviView({model: new_civi, can_edit: can_edit, parentView: _this.options.parentView}).el);
+                                _this.options.parentView.civis.add(new_civi);
+
+                                _this.options.parentView.initRecommended();
+                                _this.options.parentView.renderBodyContents(); //TODO: move renders into listeners
+
+                                _this.render();
+
+                                $('body').css({overflow: 'hidden'});
                             },
                             data: formData,
                             cache: false,
                             contentType: false,
                             processData: false
                         });
+
                     } else {
                         _this.hide();
-                        Materialize.toast('New civi created.', 2000);
-                        var new_civi_data = response.data;
-                        var new_civi = new cw.CiviModel(new_civi_data);
-                        var can_edit = new_civi.get('author').username == _this.options.parentView.username ? true : false;
+                        Materialize.toast('New civi created.', 5000);
                         $('#thread-' + c_type + 's').append(new cw.CiviView({model: new_civi, can_edit: can_edit, parentView: _this.options.parentView}).el);
                         _this.options.parentView.civis.add(new_civi);
 
                         var parent_links = new_civi.get('links');
                         _.each(parent_links, function(parent_id){
-                            var parent_civi = _this.options.parentView.civis.get(parent_id)
+                            var parent_civi = _this.options.parentView.civis.get(parent_id);
                             if (parent_civi) {
                                 var prev_links = parent_civi.get('links');
                                 prev_links.push(new_civi.id);
@@ -553,12 +853,12 @@ cw.NewCiviView = BB.View.extend({
 
                 },
                 error: function (response) {
-                    Materialize.toast('Could not create Civi', 2000);
+                    Materialize.toast('Could not create Civi', 5000);
                     _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
                 }
             });
         } else {
-            Materialize.toast('Please input all fields.', 2000);
+            Materialize.toast('Please input all fields.', 5000);
             this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
         }
     },
@@ -579,33 +879,75 @@ cw.NewResponseView = BB.View.extend({
     template: _.template($('#new-response-template').html()),
     initialize: function (options) {
         this.options = options || {};
+        this.rebuttal_ref = '';
         this.render();
     },
 
     render: function () {
         this.$el.empty().append(this.template());
+
+        this.attachment_links = [];
+        this.attachmentCount = 0;
     },
 
     events: {
         'click .create-new-response': 'createResponse',
-        'change .attachment-image-pick': 'previewImageNames'
+        'change .attachment-image-pick': 'previewImageNames',
+        'click .cancel-new-response': 'hide',
+        'input .civi-link-images': 'previewImageNames',
+        'click #add-image-link-input': 'addImageLinkInput',
     },
 
     show: function () {
         this.$('.new-response-modal').openModal();
     },
 
+    hide: function () {
+        this.$('.new-response-modal').closeModal();
+    },
+
+    addImageLinkInput: function(){
+        var link_images = this.$('.civi-link-images').length;
+        if (link_images > 20 ) {
+            Materialize.toast("Don't think you need any more...", 5000);
+        } else {
+            this.$('.image-link-list').append('<input type="text" class="civi-link-images" placeholder="Paste your image link here..."/>');
+        }
+
+    },
+
     previewImageNames: function(e) {
-        var attachment_input = this.$el.find('#response_attachment_image');
+        var attachment_input = this.$('#response_attachment_image');
         var uploaded_images = attachment_input[0].files;
-        console.log(attachment_input);
-        this.$('.file-preview').empty().append("<div>"+uploaded_images.length+" Images</div>");
+        var $previewlist = this.$('.file-preview');
+        $previewlist.empty();
+        // File Upload Images
         _.each(uploaded_images, function(img_file){
-            console.log(img_file);
-            this.$('.file-preview').append("<div class=\"link-lato gray-text\">"+img_file.name+"</div>");
+            $previewlist.append("<div class=\"link-lato gray-text preview-item \">"+img_file.name+"</div>");
         }, this);
 
-        this.attachmentCount = uploaded_images.length;
+        // Link Images
+        this.attachment_links = [];
+        var link_images = $('.civi-link-images');
+        _.each(link_images, function(img_link){
+            var link_value = img_link.value.trim();
+            if (link_value){
+                $previewlist.append("<div class=\"link-lato gray-text preview-item \">"+link_value+"</div>");
+                this.attachment_links.push(link_value);
+            }
+        }, this);
+
+        // Total images count
+        var image_total = uploaded_images.length + this.attachment_links.length;
+        if (image_total === 0) {
+            $previewlist.prepend("<div>No Images</div>");
+        } else if (image_total === 1) {
+            $previewlist.prepend("<div>1 Image</div>");
+        } else {
+            $previewlist.prepend("<div>" + image_total + " Images</div>");
+        }
+
+        this.attachmentCount = image_total;
 
     },
 
@@ -613,8 +955,15 @@ cw.NewResponseView = BB.View.extend({
         var _this = this;
         this.$(e.currentTarget).addClass('disabled').attr('disabled', true);
         var title = this.$('#response-title').val(),
-            body = this.$('#response-body').val();
-
+            body = this.$('#response-body').val(),
+            related_civi, c_type;
+        if (this.rebuttal_ref) {
+            c_type = 'rebuttal';
+            related_civi = this.rebuttal_ref;
+        } else {
+            c_type = 'response';
+            related_civi = this.options.parentView.currentCivi;
+        }
         if (title && body) {
             $.ajax({
                 url: '/api/new_civi/',
@@ -622,28 +971,38 @@ cw.NewResponseView = BB.View.extend({
                 data: {
                     title: title,
                     body: body,
-                    c_type: 'response',
+                    c_type: c_type,
                     thread_id: this.model.threadId,
-                    related_civi: this.options.parentView.currentCivi
+                    related_civi: related_civi
                 },
                 success: function (response) {
                     var attachment_input = _this.$('#response_attachment_image');
                     var uploaded_images = attachment_input[0].files;
-                    if (uploaded_images.length > 0) {
+                    if (_this.attachmentCount > 0) {
                         var formData = new FormData(_this.$('#response_attachment_image_form')[0]);
                         formData.set('civi_id', response.data.id);
+                        if (_this.attachment_links.length){
+                            _.each(_this.attachment_links, function(img_link){
+                                formData.append('attachment_links[]', img_link);
+                            });
+                        }
                         $.ajax({
                             url: '/api/upload_images/',
                             type: 'POST',
                             success: function (response2) {
-                                Materialize.toast('New response created.', 2000);
+                                Materialize.toast('New response created.', 5000);
                                 _this.options.parentView.responseCollection.fetch();
                                 _this.options.parentView.renderResponses();
+                                _this.hide();
                                 _this.render();
                             },
                             error: function(e){
-                                Materialize.toast('Could not create response', 2000);
-                                _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
+                                Materialize.toast('Response was created but images could not be uploaded', 5000);
+                                // _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
+                                _this.options.parentView.responseCollection.fetch();
+                                _this.options.parentView.renderResponses();
+                                _this.hide();
+                                _this.render();
                             },
                             data: formData,
                             cache: false,
@@ -651,26 +1010,261 @@ cw.NewResponseView = BB.View.extend({
                             processData: false
                         });
                     } else {
-                        Materialize.toast('New response created.', 2000);
+                        Materialize.toast('New response created.', 5000);
                         _this.options.parentView.responseCollection.fetch();
                         _this.options.parentView.renderResponses();
+                        _this.hide();
                         _this.render();
                     }
                 },
                 error: function(){
-                    Materialize.toast('Could not create response', 2000);
+                    Materialize.toast('Could not create response', 5000);
                     _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
                 }
             });
         } else {
-            Materialize.toast('Please input all fields.', 2000);
+            Materialize.toast('Please input all fields.', 5000);
             _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
         }
     }
 });
 
-cw.OutlineView = BB.View.extend({
+cw.EditThreadView = BB.View.extend({
+    el: '.edit-thread-modal-holder',
+    template: _.template($('#edit-thread-template').html()),
+    initialize: function (options) {
+        this.options = options || {};
+        this.threadId = options.threadId;
+        this.parentView = options.parentView;
+        this.removeImage = false;
+        this.imageMode = "";
+        this.render();
+    },
+
+    render: function () {
+        this.$el.empty().append(this.template());
+        this.$('#thread-image-forms').addClass('hide');
+
+        this.$('#thread-location').val(this.model.get('level'));
+        if (this.model.get('state')) {
+            this.$('.edit-thread-state-selection').removeClass('hide');
+            this.$('#thread-state').val(this.model.get('state'));
+        }
+        cw.materializeShit();
+    },
+
+    events: {
+        'click .create-new-response': 'createResponse',
+        'click .cancel-thread': 'cancelEdit',
+        'click .delete-previous-image': 'showImageForm',
+        'click .use-previous-image': 'hideImageForm',
+        'click .edit-thread': 'editThread',
+        'click #image-from-computer': 'showImageUploadForm',
+        'click #image-from-link': 'showImageLinkForm',
+        'change #thread-location': 'showStates',
+    },
+
+    show: function () {
+        this.$('.edit-thread-modal').openModal();
+    },
+
+    hide: function () {
+        this.$('.edit-thread-modal').closeModal();
+    },
+
+    showStates: function () {
+        var level = this.$el.find('#thread-location').val();
+        if (level === "state") {
+            this.$('.edit-thread-state-selection').removeClass('hide');
+        } else {
+            this.$('.edit-thread-state-selection').addClass('hide');
+            this.$el.find('#thread-state').val('');
+        }
+    },
+
+    cancelEdit: function () {
+        this.hide();
+        this.render();
+    },
+
+    showImageForm: function () {
+        this.$('#thread-image-forms').removeClass('hide');
+        this.$('.previous-image').addClass('hide');
+        this.removeImage = true;
+    },
+
+    hideImageForm: function () {
+        this.$('#thread-image-forms').addClass('hide');
+        this.$('.previous-image').removeClass('hide');
+        this.removeImage = false;
+    },
+    showImageUploadForm: function () {
+        this.imageMode="upload";
+        this.$('#attachment_image_form').removeClass('hide');
+        this.$('#link-image-form').addClass('hide');
+    },
+    showImageLinkForm: function () {
+        this.imageMode="link";
+        this.$('#attachment_image_form').addClass('hide');
+        this.$('#link-image-form').removeClass('hide');
+    },
+
+    editThread: function (e) {
+        var _this = this;
+        _this.$(e.currentTarget).addClass('disabled').attr('disabled', true);
+
+        var title = this.$el.find('#thread-title').val().trim(),
+            summary = this.$el.find('#thread-body').val().trim(),
+            level = this.$el.find('#thread-location').val(),
+            category_id = this.$el.find('#thread-category').val(),
+            state="";
+        if (level === "state" ) {
+            state = this.$el.find('#thread-state').val();
+        }
+        var thread_id = this.threadId;
+        console.log(title, summary, category_id, thread_id);
+        if (title && summary && category_id) {
+            $.ajax({
+                url: '/api/edit_thread/',
+                type: 'POST',
+                data: {
+                    title: title,
+                    summary: summary,
+                    category_id: category_id,
+                    thread_id: thread_id,
+                    level: level,
+                    state: state
+                },
+                success: function (response) {
+                    var file = $('#thread_attachment_image').val();
+                    var img_url = _this.$('#link-image-form').val().trim();
+                    if (_this.removeImage) {
+                        // if file
+                        if (_this.imageMode==="upload" && file){
+                            var formData = new FormData(_this.$('#attachment_image_form')[0]);
+                            formData.set('thread_id', response.data.thread_id);
+                            $.ajax({
+                                url: '/api/upload_image/',
+                                type: 'POST',
+                                success: function (response2) {
+                                    Materialize.toast('Saved changes', 5000);
+                                    _this.hide();
+
+
+                                    new_data = response.data;
+                                    _this.parentView.model.set('title', new_data.title);
+                                    _this.parentView.model.set('summary', new_data.summary);
+                                    _this.parentView.model.set('category', new_data.category);
+                                    _this.parentView.model.set('level', new_data.level);
+                                    _this.parentView.model.set('state', new_data.state);
+                                    _this.parentView.model.set('location', new_data.location);
+                                    _this.parentView.model.set('image', response2.image);
+                                    _this.parentView.threadWikiRender();
+                                    _this.render();  // TODO: Please remove this
+                                },
+                                error: function(e){
+                                    Materialize.toast('ERROR: Image could not be uploaded', 5000);
+                                    Materialize.toast(e.statusText, 5000);
+                                    _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
+                                },
+                                data: formData,
+                                cache: false,
+                                contentType: false,
+                                processData: false
+                            });
+                        } else if (_this.imageMode==="link" && img_url){
+
+                            $.ajax({
+                                url: '/api/upload_image/',
+                                type: 'POST',
+                                data: {
+                                    link: img_url,
+                                    thread_id: response.data.thread_id
+                                },
+                                success: function (response2) {
+                                    Materialize.toast('Saved changes', 5000);
+                                    _this.hide();
+
+
+                                    new_data = response.data;
+                                    _this.parentView.model.set('title', new_data.title);
+                                    _this.parentView.model.set('summary', new_data.summary);
+                                    _this.parentView.model.set('category', new_data.category);
+                                    _this.parentView.model.set('level', new_data.level);
+                                    _this.parentView.model.set('state', new_data.state);
+                                    _this.parentView.model.set('location', new_data.location);
+                                    _this.parentView.model.set('image', response2.image);
+                                    _this.parentView.threadWikiRender();
+                                    _this.render();  // TODO: Please remove this
+                                },
+                                error: function(e){
+                                    Materialize.toast('ERROR: Image could not be uploaded', 5000);
+                                    Materialize.toast(e.statusText, 5000);
+                                    _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
+                                }
+                            });
+                        }
+                        else { // Remove image
+                            $.ajax({
+                                url: '/api/upload_image/',
+                                type: 'POST',
+                                data: {
+                                    remove: true,
+                                    thread_id: response.data.thread_id
+                                },
+                                success: function (response2) {
+                                    Materialize.toast('Saved changes', 5000);
+                                    _this.hide();
+
+                                    new_data = response.data;
+                                    _this.parentView.model.set('title', new_data.title);
+                                    _this.parentView.model.set('summary', new_data.summary);
+                                    _this.parentView.model.set('category', new_data.category);
+                                    _this.parentView.model.set('image', response2.image);
+                                    _this.parentView.model.set('level', new_data.level);
+                                    _this.parentView.model.set('state', new_data.state);
+                                    _this.parentView.model.set('location', new_data.location);
+                                    _this.parentView.threadWikiRender();
+                                    _this.render();  // TODO: Please remove this
+                                },
+                                error: function(e){
+                                    Materialize.toast('ERROR: Image could not be uploaded', 5000);
+                                    Materialize.toast(e.statusText, 5000);
+                                    _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
+                                }
+                            });
+                        }
+
+                    } else {
+                        Materialize.toast('Saved changes', 5000);
+                        _this.hide();
+
+                        // New Data
+                        new_data = response.data;
+                        _this.parentView.model.set('title', new_data.title);
+                        _this.parentView.model.set('summary', new_data.summary);
+                        _this.parentView.model.set('category',new_data.category);
+                        _this.parentView.model.set('level', new_data.level);
+                        _this.parentView.model.set('state', new_data.state);
+                        _this.parentView.model.set('location', new_data.location);
+                        _this.parentView.threadWikiRender();
+                        _this.render(); // TODO: Please remove this
+                    }
+
+                },
+                error: function() {
+                    Materialize.toast('Servor Error: Thread could not be edited', 5000);
+                    _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
+                }
+            });
+        } else {
+            Materialize.toast('Please input all fields.', 5000);
+            _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
+        }
+    },
 });
+
+cw.OutlineView = BB.View.extend({});
 cw.LinkSelectView = BB.View.extend({
     el: '#magicsuggest',
 
@@ -906,6 +1500,13 @@ cw.ThreadView = BB.View.extend({
             model: this.model,
             parentView: this
         });
+
+        this.editThreadView = new cw.EditThreadView({
+            model: this.model,
+            parentView: this,
+            threadId: this.model.threadId
+        });
+
         this.$('.thread-body-holder').addClass('hide');
 
         this.threadWikiRender();
@@ -1127,13 +1728,30 @@ cw.ThreadView = BB.View.extend({
         this.$('.responses').empty().append(this.responseWrapper());
         _.each(this.responseCollection.models, function(civi){
             var can_edit = civi.get('author').username == this.username ? true : false;
-            this.$('#response-list').append(new cw.CiviView({model: civi, can_edit: can_edit, parentView: this}).el);
+            var can_respond = this.civis.get(this.responseCollection.civiId).get('author').username == this.username ? true : false;
+
+            var new_civi_view = new cw.CiviView({model: civi, can_edit: can_edit, can_respond: can_respond, parentView: this, response: true});
+            this.$('#response-list').append(new_civi_view.el);
 
             var vote = _.find(this.model.get('user_votes'), function(v){
                 return v.civi_id === civi.id;
             });
             if (vote) {
                 this.$('#civi-'+ vote.civi_id).find("." +vote.activity_type).addClass('current');
+            }
+            if (civi.get('rebuttal')) {
+                var rebuttal_model = new cw.CiviModel(civi.get('rebuttal'));
+                var rebuttal_can_edit = rebuttal_model.get('author').username == this.username ? true : false;
+                var rebuttal_view = new cw.CiviView({model: rebuttal_model, can_edit: rebuttal_can_edit, can_respond: false, parentView: this, response: true});
+                rebuttal_view.$('.civi-card').addClass('push-right');
+                new_civi_view.el.after(rebuttal_view.el);
+
+                vote = _.find(this.model.get('user_votes'), function(v){
+                    return v.civi_id === rebuttal_model.id;
+                });
+                if (vote) {
+                    this.$('#civi-'+ vote.civi_id).find("." +vote.activity_type).addClass('current');
+                }
             }
         }, this);
     },
@@ -1147,7 +1765,8 @@ cw.ThreadView = BB.View.extend({
         'click .add-civi': 'openNewCiviModal',
         'click .add-response': 'openNewResponseModal',
         'click #recommended-switch': 'toggleRecommended',
-        'click .btn-loadmore': 'loadMoreCivis'
+        'click .btn-loadmore': 'loadMoreCivis',
+        'click .edit-thread-button': 'openEditThreadModal'
     },
 
     scrollToBody: function () {
@@ -1368,11 +1987,15 @@ cw.ThreadView = BB.View.extend({
     },
 
     drilldownCivi: function (e) {
-        if ($(e.target).hasClass('rating-button')) {
+        var target = $(e.target);
+        console.log(target);
+        var ms_check = target.hasClass('ms-ctn') || target.hasClass('ms-sel-ctn') || target.hasClass('ms-close-btn') || target.hasClass('ms-trigger') || target.hasClass('ms-trigger-ico') || target.hasClass('ms-res-ctn') || target.hasClass('ms-sel-item') || target.hasClass('ms-res-group');
+
+        if (target.hasClass('btn') || target.hasClass('rating-button') || target.is('input') || target.is('textarea') || target.is('label') || target.hasClass('input') || ms_check) {
             return;
         }
         var $this = $(e.currentTarget);
-        if ($this.find('.civi-type').text() != "response") {
+        if ($this.find('.civi-type').text() != "response" && $this.find('.civi-type').text() != "rebuttal") {
             var $currentCivi = this.$('[data-civi-id="' + this.currentCivi + '"]'),
                 $newCivi = $this.closest('.civi-card');
 
@@ -1451,6 +2074,10 @@ cw.ThreadView = BB.View.extend({
 
     openNewResponseModal: function () {
         this.newResponseView.show();
+    },
+
+    openEditThreadModal: function() {
+        this.editThreadView.show();
     },
 
     assign: function(view, selector) {

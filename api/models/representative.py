@@ -1,30 +1,21 @@
 from django.db import models
-from account import Account
+from django.conf import settings
 
 class RepresentativeManager(models.Manager):
-    def summarize(self, representative):
-        a = Account.objects.get(user=representative.account)
-        data = {
-            "first_name": a.first_name,
-            "last_name": a.last_name,
-            "about_me": a.about_me,
-            "location": a.get_location(),
-            "history": [Civi.objects.serialize(c) for c in Civi.objects.filter(author_id=account.id).order_by('-created')],
-            "profile_image": "https://theunitedstates.io/images/congress/225x275/{bioguide_id}.jpg".format(bioguide_id=representative.bioguideID),
-            "followers": self.followers(a),
-            "following": self.following(a),
-        }
-        return data
+    def get_reps():
+        return
 
 class Representative(models.Model):
-    account = models.ForeignKey(Account, default=None, null=True)
+    # account = models.ForeignKey(Account, default=None, null=True)
 
     first_name = models.CharField(max_length=63, blank=False)
     last_name = models.CharField(max_length=63, blank=False)
+    official_full_name = models.CharField(max_length=127, blank=True, null=True)
     about_me = models.CharField(max_length=511, blank=True)
 
     district = models.CharField(max_length=63, blank=True, null=True)
-    senate_class = models.CharField(max_length=63, blank=True, null=True) # junior or senior for senator
+    # junior or senior for senator
+    senate_class = models.CharField(max_length=63, blank=True, null=True)
     state = models.CharField(max_length=63)
 
     level_CHOICES = (
@@ -44,3 +35,16 @@ class Representative(models.Model):
     last_modified = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     objects = RepresentativeManager()
+
+    def summarize(self):
+        data = {
+            "bioguide_id": self.bioguideID,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "full_name": self.official_full_name,
+            "about_me": self.about_me,
+            "party": self.party,
+            "state": '{state}'.format(state=dict(settings.US_STATES).get(self.state)),
+            "profile_image": "https://theunitedstates.io/images/congress/225x275/{}.jpg".format(self.bioguideID)
+        }
+        return data

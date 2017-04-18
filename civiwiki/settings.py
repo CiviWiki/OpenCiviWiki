@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'authentication',
     'frontend_views',
     'notifications',
+    'legislation',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -92,16 +93,17 @@ CHANNEL_LAYERS = {
 }
 
 # AWS S3 Setup
-AWS_STORAGE_BUCKET_NAME = get_env_variable("AWS_STORAGE_BUCKET_NAME", '')
-if AWS_STORAGE_BUCKET_NAME:
+
+if 'AWS_STORAGE_BUCKET_NAME' not in os.environ:
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+else:
+    AWS_STORAGE_BUCKET_NAME = get_env_variable("AWS_STORAGE_BUCKET_NAME")
     AWS_S3_ACCESS_KEY_ID = get_env_variable("AWS_S3_ACCESS_KEY_ID")
     AWS_S3_SECRET_ACCESS_KEY = get_env_variable("AWS_S3_SECRET_ACCESS_KEY")
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
     AWS_S3_SECURE_URLS = False
     AWS_QUERYSTRING_AUTH = False
-else:
-    MEDIA_URL = '/media/'
-    MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
@@ -144,7 +146,7 @@ NOTIFICATIONS_SOFT_DELETE=True
 NOTIFICATIONS_USE_JSONFIELD=True
 
 
-# Valid US State Choices
+# Valid US State Choices TODO: MOVE this
 US_STATES = (('AL', 'Alabama'), ('AK', 'Alaska'), ('AZ', 'Arizona'), ('AR', 'Arkansas'), ('CA', 'California'),
             ('CO', 'Colorado'), ('CT', 'Connecticut'), ('DE', 'Delaware'), ('DC', 'District of Columbia'), ('FL', 'Florida'),
             ('GA', 'Georgia'), ('HI', 'Hawaii'), ('ID', 'Idaho'), ('IL', 'Illinois'), ('IN', 'Indiana'),

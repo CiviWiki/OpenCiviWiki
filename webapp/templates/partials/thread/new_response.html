@@ -17,25 +17,31 @@
             </div>
         </div>
         <div class="white-background-input-field ">
+            <div class="header-lato">Upload Images:</div>
             <form method="post" enctype="multipart/form-data" id="response_attachment_image_form">
                 <div class="file-field input-field">
                     <input class="upload-image btn waves-effect hide" type="submit" value="Upload"/>
                     <div class="btn attachment-image-pick dark-blue-background">
                         <span>Add Images</span>
-                        <input id="response_attachment_image" name="attachment_image" type="file" multiple>
+                        <input id="response_attachment_image" name="attachment_image" type="file" multiple accept="image/*">
                     </div>
                   <div class="file-path-wrapper">
                     <input class="file-path validate" type="text">
                   </div>
                 </div>
-                <div class="file-preview"></div>
             </form>
+            <div class="image-link-list">
+                <input type="text" class="civi-link-images" placeholder="Paste your image link here..."/>
+            </div>
+            <button class="waves-effect waves-teal btn-flat" id="add-image-link-input">+ Add Another Image Link</button>
+
+            <div class="file-preview"></div>
         </div>
     </div>
 
     <div class="modal-footer">
-        <button class="modal-action modal-close waves-effect waves-light btn create-new-response">add response</button>
-        <button class="modal-action modal-close waves-effect waves-cw-blue btn-flat">Cancel</button>
+        <button class="modal-action waves-effect waves-light btn create-new-response">add response</button>
+        <button class="modal-action waves-effect waves-cw-blue btn-flat cancel-new-response">Cancel</button>
     </div>
 </div>
 {% endverbatim %}

@@ -170,7 +170,7 @@ cw.NewThreadView = BB.View.extend({
 
     initialize: function (options) {
         this.options = options.info;
-
+        this.imageMode = "";
         this.render();
     },
 
@@ -189,11 +189,32 @@ cw.NewThreadView = BB.View.extend({
 
     events: {
         'click .cancel-new-thread': 'cancelThread',
-        'click .create-new-thread': 'createThread'
+        'click .create-new-thread': 'createThread',
+        'click #image-from-computer': 'showImageUploadForm',
+        'click #image-from-link': 'showImageLinkForm',
+        'change #thread-location': 'showStates',
     },
 
     cancelThread: function () {
         this.hide();
+    },
+    showImageUploadForm: function () {
+        this.imageMode="upload";
+        this.$('#attachment_image_form').removeClass('hide');
+        this.$('#link-image-form').addClass('hide');
+    },
+    showImageLinkForm: function () {
+        this.imageMode="link";
+        this.$('#attachment_image_form').addClass('hide');
+        this.$('#link-image-form').removeClass('hide');
+    },
+    showStates: function () {
+        var level = this.$el.find('#thread-location').val();
+        if (level === "state") {
+            this.$('.new-thread-state-selection').removeClass('hide');
+        } else {
+            this.$('.new-thread-state-selection').addClass('hide');
+        }
     },
 
     createThread: function () {
@@ -201,8 +222,12 @@ cw.NewThreadView = BB.View.extend({
 
         var title = this.$el.find('#thread-title').val(),
             summary = this.$el.find('#thread-body').val(),
-            category_id = this.$el.find('#thread-category').val();
-
+            level = this.$el.find('#thread-location').val(),
+            category_id = this.$el.find('#thread-category').val(),
+            state="";
+        if (level === "state" ) {
+            state = this.$el.find('#thread-state').val();
+        }
         if (title && summary && category_id) {
             $.ajax({
                 url: '/api/new_thread/',
@@ -210,39 +235,64 @@ cw.NewThreadView = BB.View.extend({
                 data: {
                     title: title,
                     summary: summary,
-                    category_id: category_id
+                    category_id: category_id,
+                    level: level,
+                    state: state
                 },
                 success: function (response) {
-                    var file = $('#id_attachment_image').val();
+                    if (_this.imageMode==="upload") {
+                        var file = $('#id_attachment_image').val();
 
-                    if (file) {
-                        var formData = new FormData(_this.$('#attachment_image_form')[0]);
-                        formData.set('thread_id', response.thread_id);
-                        $.ajax({
-                            url: '/api/upload_image/',
-                            type: 'POST',
-                            success: function () {
-                                Materialize.toast('New thread created.', 2000);
-                                window.location = "thread/" + response.thread_id;
-                            },
-                            error: function(e){
-                                Materialize.toast('ERROR: Image could not be uploaded', 3000);
-                                Materialize.toast(e.statusText, 3000);
-                            },
-                            data: formData,
-                            cache: false,
-                            contentType: false,
-                            processData: false
-                        });
+                        if (file) {
+                            var formData = new FormData(_this.$('#attachment_image_form')[0]);
+                            formData.set('thread_id', response.thread_id);
+                            $.ajax({
+                                url: '/api/upload_image/',
+                                type: 'POST',
+                                success: function () {
+                                    Materialize.toast('New thread created.', 5000);
+                                    window.location = "thread/" + response.thread_id;
+                                },
+                                error: function(e){
+                                    Materialize.toast('ERROR: Image could not be uploaded', 5000);
+                                    Materialize.toast(e.statusText, 5000);
+                                },
+                                data: formData,
+                                cache: false,
+                                contentType: false,
+                                processData: false
+                            });
+                        }
+                    } else if (_this.imageMode==="link") {
+                        var img_url = _this.$('#link-image-form').val().trim();
+                        console.log(_this.imageMode, img_url);
+                        if (img_url) {
+                            $.ajax({
+                                url: '/api/upload_image/',
+                                type: 'POST',
+                                data: {
+                                    link: img_url,
+                                    thread_id: response.thread_id
+                                },
+                                success: function () {
+                                    Materialize.toast('New thread created.', 5000);
+                                    window.location = "thread/" + response.thread_id;
+                                },
+                                error: function(e){
+                                    Materialize.toast('ERROR: Image could not be uploaded', 5000);
+                                    Materialize.toast(e.statusText, 5000);
+                                }
+                            });
+                        }
                     } else {
-                        Materialize.toast('New thread created.', 2000);
+                        Materialize.toast('New thread created.', 5000);
                         window.location = "thread/" + response.thread_id;
                     }
 
                 }
             });
         } else {
-            Materialize.toast('Please input all fields.', 2000);
+            Materialize.toast('Please input all fields.', 5000);
         }
     },
 });
@@ -293,7 +343,7 @@ cw.CategoriesView = BB.View.extend({
                     'categories[]': selectedCategories,
                 },
                 success: function (response) {
-                    Materialize.toast('Categories Changed', 2000);
+                    Materialize.toast('Categories Changed', 5000);
                     _this.hide();
                     _this.user_categories = response.result.user_categories;
                     _this.mainView.setUserCategories(_this.user_categories);
@@ -302,7 +352,7 @@ cw.CategoriesView = BB.View.extend({
                 }
             });
         } else {
-            Materialize.toast('Please select at least one category', 2000);
+            Materialize.toast('Please select at least one category', 5000);
         }
     },
 });
