@@ -52,6 +52,7 @@ def cw_register(request):
         User.objects.create_user(username, email, password)
         user = authenticate(username=username, password=password)
         account = Account(user=user)
+        account.beta_access = True
         account.save()
     except Exception as e:
         print str(e)
