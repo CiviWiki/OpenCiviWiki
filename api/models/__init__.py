@@ -12,3 +12,4 @@ from response import Response
 from thread import Thread
 from vote import Vote
 from activity import Activity
+from invitation import Invitation

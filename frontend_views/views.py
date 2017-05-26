@@ -1,16 +1,16 @@
 import json
 
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.contrib.auth.models import User
 from django.db.models import F
 from api.models import Category, Account, Thread, Civi, Activity
 from api.forms import UpdateProfileImage
-from django.conf import settings
+from api.tasks import send_mail, send_email_test
 
-
-from legislation import sunlightapi as sun
+# from legislation import sunlightapi as sun
 from utils.custom_decorators import beta_blocker, login_required, full_account
+from utils.constants import US_STATES
 
 def base_view(request):
     if not request.user.is_authenticated():
@@ -31,8 +31,7 @@ def base_view(request):
     top5_threads = list(Thread.objects.all().order_by('-num_views')[:5].values('id', 'title'))
 
 
-    # states = dict(settings.US_STATES)
-    states = sorted(settings.US_STATES, key=lambda s: s[1])
+    states = sorted(US_STATES, key=lambda s: s[1])
     data = {
         'categories': categories,
         'states': states,
@@ -127,11 +126,11 @@ def issue_thread(request, thread_id=None):
             "name": t.category.name
         },
         "categories": [{'id': c.id, 'name': c.name} for c in Category.objects.all()],
-        "states": sorted(settings.US_STATES, key=lambda s: s[1]),
+        "states": sorted(US_STATES, key=lambda s: s[1]),
         "created": t.created_date_str,
         "level": t.level,
         "state": t.state if t.level == "state" else "",
-        "location": t.level if not t.state else dict(settings.US_STATES).get(t.state),
+        "location": t.level if not t.state else dict(US_STATES).get(t.state),
         "num_civis": t.num_civis,
         "num_views": t.num_views,
         'user_votes': [{'civi_id':act.civi.id, 'activity_type': act.activity_type, 'c_type': act.civi.c_type} for act in Activity.objects.filter(thread=t.id, account=req_acct.id)]
@@ -161,6 +160,11 @@ def dbview(request):
     result = [{'id': c.id, 'name': c.name} for c in Category.objects.all()]
 
     return TemplateResponse(request, 'dbview.html', {'result': json.dumps(result)})
+
+def test(request):
+    target_email = 'joohee@civiwiki.org'
+    send_email_test.delay()
+    return HttpResponse("Send Mail Task to: {}".format(target_email), content_type="text/plain")
 
 @login_required
 @beta_blocker

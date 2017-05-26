@@ -1,10 +1,14 @@
 from django.contrib.auth.models import User
 from django.db import IntegrityError
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 from api.models import Account
 from django.http import JsonResponse, HttpResponse, HttpResponseServerError, HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import redirect
 from django.contrib.auth import authenticate, logout, login
 from utils.custom_decorators import require_post_params
+from reserved_usernames import RESERVED_USERNAMES
+
 
 @require_post_params(params=['username', 'password'])
 def cw_login(request):
@@ -42,12 +46,21 @@ def cw_register(request):
     password = request.POST.get('password', '')
     email = request.POST.get('email', '')
 
+    # Form Validation
+    try:
+        validate_email(email)
+    except ValidationError as error:
+        return HttpResponseServerError(reason=str(error))
+
+    # Check if a user exists with supplied data
     if User.objects.filter(email=email).exists():
         return HttpResponseBadRequest(reason='An account exists for this email address.')
 
-    if User.objects.filter(username=username).exists():
+    if User.objects.filter(username=username).exists() or username in RESERVED_USERNAMES:
         return HttpResponseBadRequest(reason='Sorry, this username is taken.')
 
+
+    # Create a New Account
     try:
         User.objects.create_user(username, email, password)
         user = authenticate(username=username, password=password)
@@ -58,6 +71,7 @@ def cw_register(request):
         print str(e)
         return HttpResponseServerError(reason=str(e))
 
+    # Create a New User
     try:
         user.is_active = True
         user.save()
@@ -65,5 +79,4 @@ def cw_register(request):
         return HttpResponse()
 
     except Exception as e:
-        print str(e)
         return HttpResponseServerError(reason=str(e))

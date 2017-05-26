@@ -4,8 +4,8 @@ Darius Calliet May 12, 2016
 
 Production settings file to select proper environment variables.
 """
-
 import os
+
 from django.core.exceptions import ImproperlyConfigured
 import dj_database_url
 
@@ -18,19 +18,20 @@ def get_env_variable(environment_variable, optional=False):
         if optional:
             return ''
         else:
-            error = "environment variable '{ev}' not found.".format(ev=environment_variable)
+            error = "Environment variable '{ev}' not found.".format(ev=environment_variable)
             raise ImproperlyConfigured(error)
+
 
 if 'DEBUG' not in os.environ:
     DEBUG = False
 else:
     DEBUG = True
 
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = get_env_variable("DJANGO_SECRET_KEY")
-SUNLIGHT_API_KEY = get_env_variable("SUNLIGHT_API_KEY")
-GOOGLE_API_KEY = "AIzaSyAKMT4cagDtpKz61vy0ByPxGDo2nvvXn4M" #get_env_variable("GOOGLE_MAP_API_KEY")
 ALLOWED_HOSTS = [".herokuapp.com", ".civiwiki.org", "127.0.0.1", "localhost"]
+
 
 INSTALLED_APPS = (
     'django.contrib.admin',
@@ -41,12 +42,14 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'storages',
     'channels',
+    'civiwiki',
     'api',
     'authentication',
     'frontend_views',
     'notifications',
     'legislation',
 )
+
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -59,8 +62,12 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
 )
 
+
 CORS_ORIGIN_ALLOW_ALL = True
+PREPEND_WWW = True
 ROOT_URLCONF = 'civiwiki.urls'
+LOGIN_URL = '/login'
+
 
 TEMPLATES = [
     {
@@ -78,10 +85,23 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'civiwiki.wsgi.application'
 
+
+# Apex Contact for Production Errors
+ADMINS = [('Development Team', 'dev@civiwiki.org')]
+
+
+# API keys
+SUNLIGHT_API_KEY = get_env_variable("SUNLIGHT_API_KEY")
+GOOGLE_API_KEY = get_env_variable("GOOGLE_MAP_API_KEY")
+
 # Channels Setup
-REDIS_URL = get_env_variable("REDIS_URL", 'redis://localhost:6379')
+if 'REDIS_URL' in os.environ:
+    REDIS_URL = get_env_variable("REDIS_URL")
+else:
+    REDIS_URL = 'redis://localhost:6379'
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "asgi_redis.RedisChannelLayer",
@@ -92,8 +112,17 @@ CHANNEL_LAYERS = {
     },
 }
 
-# AWS S3 Setup
 
+# Celery Task Runner Setup
+CELERY_BROKER_URL = REDIS_URL + '/0'
+CELERY_RESULT_BACKEND = CELERY_BROKER_URL
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIME_ZONE = 'America/Chicago' # TODO: Sync the timezone with django to (Chicago)US
+
+
+# AWS S3 Setup
 if 'AWS_STORAGE_BUCKET_NAME' not in os.environ:
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, "media")
@@ -132,29 +161,36 @@ else:
     }
 
 
-# Internationalization
+# Internationalization & Localization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
-LOGIN_URL = '/login'
+
+
+# SSL Setup
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+
+# Email Backend Setup
+if 'EMAIL_HOST' not in os.environ:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    EMAIL_HOST_USER = "test@civiwiki.org"
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = get_env_variable("EMAIL_HOST")
+    EMAIL_PORT = get_env_variable("EMAIL_PORT")
+    EMAIL_HOST_USER = get_env_variable("EMAIL_HOST_USER")
+    EMAIL_HOST_PASSWORD = get_env_variable("EMAIL_HOST_PASSWORD")
+    EMAIL_USE_SSL = True
+    DEFAULT_FROM_EMAIL = EMAIL_HOST
 
 
 # Notification API Settings
-NOTIFICATIONS_SOFT_DELETE=True
-NOTIFICATIONS_USE_JSONFIELD=True
-
-
-# Valid US State Choices TODO: MOVE this
-US_STATES = (('AL', 'Alabama'), ('AK', 'Alaska'), ('AZ', 'Arizona'), ('AR', 'Arkansas'), ('CA', 'California'),
-            ('CO', 'Colorado'), ('CT', 'Connecticut'), ('DE', 'Delaware'), ('DC', 'District of Columbia'), ('FL', 'Florida'),
-            ('GA', 'Georgia'), ('HI', 'Hawaii'), ('ID', 'Idaho'), ('IL', 'Illinois'), ('IN', 'Indiana'),
-            ('IA', 'Iowa'), ('KS', 'Kansas'), ('KY', 'Kentucky'), ('LA', 'Louisiana'), ('ME', 'Maine'),
-            ('MD', 'Maryland'), ('MA', 'Massachusetts'), ('MI', 'Michigan'), ('MN', 'Minnesota'), ('MS', 'Mississippi'),
-            ('MO', 'Missouri'), ('MT', 'Montana'), ('NE', 'Nebraska'), ('NV', 'Nevada'), ('NH', 'New Hampshire'),
-            ('NJ', 'New Jersey'), ('NM', 'New Mexico'), ('NY', 'New York'), ('NC', 'North Carolina'), ('ND', 'North Dakota'),
-            ('OH', 'Ohio'), ('OK', 'Oklahoma'), ('OR', 'Oregon'), ('PA', 'Pennsylvania'), ('RI', 'Rhode Island'),
-            ('SC', 'South Carolina'), ('SD', 'South Dakota'), ('TN', 'Tennessee'), ('TX', 'Texas'), ('UT', 'Utah'),
-            ('VT', 'Vermont'), ('VA', 'Virginia'), ('WA', 'Washington'), ('WV', 'West Virginia'), ('WI', 'Wisconsin'),
-            ('WY', 'Wyoming'))
+NOTIFICATIONS_SOFT_DELETE = True
+NOTIFICATIONS_USE_JSONFIELD = True

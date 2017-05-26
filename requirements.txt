@@ -26,3 +26,4 @@ priority==1.3.0
 pyOpenSSL==16.2.0
 service-identity==16.0.0
 idna==2.5
+celery==4.0.2

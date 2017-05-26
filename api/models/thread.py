@@ -8,6 +8,7 @@ import os, json, uuid
 from django.utils.deconstruct import deconstructible
 from django.core.files.storage import default_storage
 from django.conf import settings
+from utils.constants import US_STATES
 
 class ThreadManager(models.Manager):
     #TODO: move this to read.py, try to be more query operation specific here
@@ -71,7 +72,7 @@ class Thread(models.Model):
         ('state', 'State'),
     )
     level = models.CharField(max_length=31, default='federal', choices=level_CHOICES)
-    state = models.CharField(max_length=2, choices=settings.US_STATES, blank=True)
+    state = models.CharField(max_length=2, choices=US_STATES, blank=True)
 
     def _get_image_url(self): #TODO: move this to utils
         if self.image and default_storage.exists(os.path.join(settings.MEDIA_ROOT, self.image.name)):
