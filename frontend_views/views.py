@@ -1,12 +1,12 @@
 import json
 
+from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.contrib.auth.models import User
 from django.db.models import F
 from api.models import Category, Account, Thread, Civi, Activity
 from api.forms import UpdateProfileImage
-from api.tasks import send_mail, send_email_test
 
 # from legislation import sunlightapi as sun
 from utils.custom_decorators import beta_blocker, login_required, full_account
@@ -161,10 +161,6 @@ def dbview(request):
 
     return TemplateResponse(request, 'dbview.html', {'result': json.dumps(result)})
 
-def test(request):
-    target_email = 'joohee@civiwiki.org'
-    send_email_test.delay()
-    return HttpResponse("Send Mail Task to: {}".format(target_email), content_type="text/plain")
 
 @login_required
 @beta_blocker
@@ -174,6 +170,7 @@ def add_civi(request):
     topics = [{'id': c.id, 'topic': c.topic} for c in Topic.objects.all()]
 
     return TemplateResponse(request, 'add_civi.html', {'categories': json.dumps(categories), 'topics': json.dumps(topics)})
+
 
 def login_view(request):
     if request.user.is_authenticated():

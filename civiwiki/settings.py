@@ -64,9 +64,19 @@ MIDDLEWARE_CLASSES = (
 
 
 CORS_ORIGIN_ALLOW_ALL = True
-PREPEND_WWW = True
 ROOT_URLCONF = 'civiwiki.urls'
 LOGIN_URL = '/login'
+
+# Middleware Configuration
+PREPEND_WWW = True if not DEBUG else False
+
+
+# Internationalization & Localization
+LANGUAGE_CODE = 'en-us'
+TIME_ZONE = 'UTC'
+USE_I18N = True
+USE_L10N = True
+USE_TZ = True
 
 
 TEMPLATES = [
@@ -119,7 +129,7 @@ CELERY_RESULT_BACKEND = CELERY_BROKER_URL
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIME_ZONE = 'America/Chicago' # TODO: Sync the timezone with django to (Chicago)US
+CELERY_TIME_ZONE = TIME_ZONE
 
 
 # AWS S3 Setup
@@ -160,13 +170,6 @@ else:
         },
     }
 
-
-# Internationalization & Localization
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
-USE_I18N = True
-USE_L10N = True
-USE_TZ = True
 
 
 # SSL Setup
