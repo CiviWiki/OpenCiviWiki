@@ -42,6 +42,8 @@ class Invitation(models.Model):
     invitee_email = models.EmailField(default=None, null=False)
     verification_code = models.CharField(max_length=31, null=False)
     invitee_user = models.ForeignKey(User, default=None, null=True, related_name="invitees")
+    #TODO: Invitation type
+    #TODO: Invitation limit
 
     def _get_date_registered(self):
         if self.invitee_user:
@@ -52,3 +54,16 @@ class Invitation(models.Model):
     date_registered = property(_get_date_registered)
 
     date_created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+
+    def summarize(self):
+        data = {
+            'email': self.invitee_email,
+            'username': '',
+            'date_registered': ''
+        }
+
+        if self.invitee_user:
+            data['username'] = User.objects.get(self.invitee_user).username
+            data['date_registered'] =  self.date_registered
+
+        return data

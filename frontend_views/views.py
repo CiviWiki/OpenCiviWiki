@@ -9,6 +9,7 @@ from api.models import Category, Account, Thread, Civi, Activity
 from api.forms import UpdateProfileImage
 
 # from legislation import sunlightapi as sun
+from django.contrib.auth.decorators import user_passes_test
 from utils.custom_decorators import beta_blocker, login_required, full_account
 from utils.constants import US_STATES
 
@@ -170,6 +171,20 @@ def add_civi(request):
     topics = [{'id': c.id, 'topic': c.topic} for c in Topic.objects.all()]
 
     return TemplateResponse(request, 'add_civi.html', {'categories': json.dumps(categories), 'topics': json.dumps(topics)})
+
+
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+def invite(request):
+    user = User.objects.get(username=request.user.username)
+    invitees = [invitee_user.summarize() for invitee_user in user.invitees.all()]
+
+    response_data = {
+        'invitees': json.dumps(invitees)
+    }
+
+    return TemplateResponse(request, 'invite.html', response_data)
+
 
 
 def login_view(request):
