@@ -1,0 +1,63 @@
+<div class="modal new-civi-modal modal-fixed-footer">
+    <div class="modal-content container">
+        <div class="new-civi-type new-civi-container">
+            <div class="subtitle-lato new-civi-title">What type of civi would you like to add?</div>
+            <div class="header-lato new-civi-header">Choose One:</div>
+            <div class="civi-types">
+                <button class="btn waves-effect civi-type-button" value="problem">
+                    PROBLEM
+                </button>
+                <button class="btn waves-effect civi-type-button" value="cause">
+                    CAUSE
+                </button>
+                <button class="btn waves-effect civi-type-button" value="solution">
+                    SOLUTION
+                </button>
+            </div>
+        </div>
+        <div class="new-civi-contention new-civi-container">
+            <div class="input-field white-background-input-field left-input-field">
+                <input id="civi-title" type="text" length="120">
+                <label for="civi-title">What is the argument you want to make?</label>
+            </div>
+        </div>
+        <div class="new-civi-body white-background-input-field new-civi-container">
+            <div class="input-field left-input-field">
+                <textarea id="civi-body" type="text" class="materialize-textarea" length="1000"></textarea>
+                <label for="civi-body">Expand on your argument with facts and details</label>
+            </div>
+        </div>
+        <div class="section">
+            <div class="header-lato new-civi-header">Link to other civis</div>
+            <div id="magicsuggest"></div>
+        </div>
+        <div class="white-background-input-field ">
+            <div class="header-lato">Upload Images:</div>
+            <form method="post" enctype="multipart/form-data" id="attachment_image_form">
+                <div class="file-field input-field">
+                    <input class="upload-image btn waves-effect hide" type="submit" value="Upload"/>
+                    <div class="btn attachment-image-pick dark-blue-background">
+                        <span>Add Images</span>
+                        <input id="id_attachment_image" name="attachment_image" type="file" multiple accept="image/*">
+                    </div>
+                  <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text">
+                  </div>
+                </div>
+
+            </form>
+            <div class="image-link-list">
+                <input type="text" class="civi-link-images" placeholder="Paste your image link here..."/>
+            </div>
+            <button class="waves-effect waves-teal btn-flat" id="add-image-link-input">+ Add Another Image Link</button>
+
+            <div class="file-preview"></div>
+        </div>
+
+
+    </div>
+    <div class="modal-footer">
+        <button class="create-new-civi waves-effect btn">Add Civi</button>
+        <button class="cancel-new-civi waves-effect btn">Cancel</button>
+    </div>
+</div>

@@ -1,1 +1,1 @@
-web: gunicorn civiwiki.wsgi --log-file -
+web: honcho -f Procfile.prod start

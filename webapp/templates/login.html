@@ -6,22 +6,24 @@
     {% include "base/less_headers/login_less.html" %}
 </head>
 
+<script id="entry-template" type="text/template">
+    {% include "partials/login/entry_base.html" %}
+</script>
 <script id="login-template" type="text/template">
     {% include "partials/login/login_base.html" %}
 </script>
-
 <script id="register-template" type="text/template">
     {% include "partials/login/register_base.html" %}
 </script>
 
 <body>
-    <div id="login">
-
-    </div>
+    <div id="login"></div>
 </body>
 
 <script type="text/javascript" src="{% static "js/login.js" %}"></script>
 <script type="text/javascript">
+    // TODO: Var to initialize to register if routed,
+    // TODO: pre-fil variable if routed from verification page
     var loginView = new cw.LoginView();
 </script>
 

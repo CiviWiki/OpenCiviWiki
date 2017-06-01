@@ -1,91 +1,130 @@
-from __future__ import unicode_literals
-import json
-import datetime
-
+"""
+Account Model
+Extends the default django user model
+"""
 from django.contrib.auth.models import User
-from django.contrib.postgres.fields import ArrayField
+from django.utils.deconstruct import deconstructible
+from django.core.files.storage import default_storage
 from django.db import models
+from utils.constants import US_STATES
+from django.conf import settings
+from hashtag import Hashtag
+from category import Category
+from representative import Representative
 
-from civi import Civi
-
+import os
+import json
+import uuid
 
 class AccountManager(models.Manager):
-
     def summarize(self, account):
-
-        return {
-            "first_name": account.first_name,
-            "last_name": account.last_name,
-            "profile_image": account.profile_image,
-            "about_me": account.about_me,
-            "email": account.email,
-            "zip_code": account.zip_code,
-            "id": account.id
-        }
-
-    def serialize(self, account, filter=None):
-
+        from civi import Civi
         data = {
             "username": account.user.username,
             "first_name": account.first_name,
             "last_name": account.last_name,
-            "email": account.email,
-            "last_login": str(account.last_login),
             "about_me": account.about_me,
-            "valid": account.valid,
-            "profile_image": account.profile_image,
-            "cover_image": account.cover_image,
-            "statistics": account.statistics,
-            "interests": account.interests,
-            "pins": [Civi.objects.summarize(c) for c in Civi.objects.filter(pk__in=account.civi_pins)],
-            "history": [Civi.objects.summarize(c) for c in Civi.objects.filter(pk__in=account.civi_history)],
-            "friend_requests": [self.summarize(a) for a in self.filter(pk__in=account.friend_requests)],
-            "awards": [award for a in account.award_list],
-            "zip_code": account.zip_code,
-            "country": account.country,
-            "state": account.state,
-            "city": account.city,
-            "country": account.country,
-            "address1": account.address1,
-            "address2": account.address2,
-            "friends": [self.summarize(a) for a in account.friends.all()]
+            "location": account.get_location(),
+            "history": [Civi.objects.serialize(c) for c in Civi.objects.filter(author_id=account.id).order_by('-created')],
+            "profile_image": account.profile_image_url,
+            "followers": self.followers(account),
+            "following": self.following(account),
         }
-        if filter and filter in data:
-            return {filter: data[filter]}
         return data
 
-    def friends(self, account):
-        friends = [self.summarize(a) for a in account.friends.all()]
-        requests = [self.summarize(a) for a in self.filter(pk__in=account.friend_requests)]
-        return dict(friends=friends, requests=requests)
+    def chip_summarize(self, account):
+        data = {
+            "username": account.user.username,
+            "first_name": account.first_name,
+            "last_name": account.last_name,
+            "profile_image": account.profile_image_url,
+        }
+        return data
 
+    def card_summarize(self, account, request_account):
+        data = {
+            "id": account.user.id,
+            "username": account.user.username,
+            "first_name": account.first_name,
+            "last_name": account.last_name,
+            "about_me": account.about_me[:150] + ('' if len(account.about_me) <= 150 else '...'),
+            "location": account.get_location(),
+            "profile_image": account.profile_image_url,
+            "follow_state": True if account in request_account.following.all() else False,
+            "request_account": request_account.first_name
+        }
+        return data
+
+
+    def followers(self, account):
+        return [self.chip_summarize(a) for a in account.followers.all()]
+
+    def following(self, account):
+        return [self.chip_summarize(a) for a in account.following.all()]
+
+@deconstructible
+class PathAndRename(object):
+    def __init__(self, sub_path):
+        self.sub_path = sub_path
+
+    def __call__(self, instance, filename):
+        ext = filename.split('.')[-1]
+        new_filename = str(uuid.uuid4())
+        filename = '{}.{}'.format(new_filename, ext)
+        return os.path.join(self.sub_path, filename)
+
+profile_upload_path = PathAndRename('')
 
 
 class Account(models.Model):
-    '''
-    Holds meta information about an Account, not used to login.
-    '''
-    objects = AccountManager()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=63, blank=False)
     last_name = models.CharField(max_length=63, blank=False)
-    email = models.CharField(max_length=63, unique=True, blank=False)
-    last_login = models.DateTimeField(auto_now=True)
     about_me = models.CharField(max_length=511, blank=True)
-    valid = models.BooleanField(default=False)
-    beta_access = models.BooleanField(default=False)
-    profile_image = models.CharField(max_length=255)
-    cover_image = models.CharField(max_length=255)
-    statistics = models.TextField(blank=True)
-    interests = ArrayField(models.CharField(max_length=127, blank=True), default=[], blank=True)
-    civi_pins = ArrayField(models.CharField(max_length=127, blank=True), default=[], blank=True)
-    civi_history = ArrayField(models.CharField(max_length=127, blank=True), size=10, default=[], blank=True)
-    friend_requests = ArrayField(models.CharField(max_length=127, blank=True), default=[], blank=True)
-    award_list = ArrayField(models.CharField(max_length=127, blank=True), default=[], blank=True)
-    zip_code = models.CharField(max_length=6, blank=True)
-    country = models.CharField(max_length=46, blank=True)
-    state = models.CharField(max_length=63, blank=True)
+
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=False, default=0)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, null=False, default=0)
+    address = models.CharField(max_length=255, null=True)
     city = models.CharField(max_length=63, blank=True)
-    address1 = models.CharField(max_length=255, blank=True)
-    address2 = models.CharField(max_length=255, blank=True)
-    friends = models.ManyToManyField('Account', related_name='friended_account')
+    state = models.CharField(max_length=2, choices=US_STATES, blank=True)
+    zip_code = models.CharField(max_length=6, null=True)
+
+    fed_district = models.CharField(max_length=63, default=None, null=True)
+    state_district = models.CharField(max_length=63, default=None, null=True)
+    representatives = models.ManyToManyField(Representative, related_name='account')
+
+    categories = models.ManyToManyField(Category, related_name='user_categories', symmetrical=False)
+    interests = models.ManyToManyField(Hashtag, related_name='interests')
+    ai_interests = models.ManyToManyField(Hashtag, related_name='ai_interests')
+
+    followers = models.ManyToManyField('self', related_name='follower', symmetrical=False)
+    following = models.ManyToManyField('self', related_name='followings', symmetrical=False)
+
+    beta_access = models.BooleanField(default=False)
+    is_verified = models.BooleanField(default=False)
+    full_account = models.BooleanField(default=False)
+
+    objects = AccountManager()
+    profile_image = models.ImageField(upload_to=profile_upload_path, blank=True, null=True)
+
+    #custom "row-level" functionality (properties) for account models
+    def get_location(self):
+        if self.city and self.state:
+            return '{city}, {state}'.format(city=self.city, state=dict(US_STATES).get(self.state))
+        elif self.state:
+            return '{state}'.format(state=dict(US_STATES).get(self.state))
+        else:
+            return 'NO LOCATION'
+
+    def _get_full_name(self):
+        "Returns the person's full name."
+        return '{first_name} {last_name}'.format(first_name=self.first_name, last_name=self.last_name)
+    full_name = property(_get_full_name)
+
+    def _get_profile_image_url(self):
+        if self.profile_image and default_storage.exists(os.path.join(settings.MEDIA_ROOT, self.profile_image.name)):
+            return self.profile_image.url
+        else:
+            #NOTE: This default url will probably be changed later
+            return "/static/img/no_image_md.png",
+    profile_image_url = property(_get_profile_image_url)

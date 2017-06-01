@@ -1,6 +1,6 @@
 args==0.1.0
 clint==0.5.1
-Django==1.8.5
+Django==1.8.7
 django-cors-headers==1.1.0
 docutils==0.12
 gunicorn==19.6.0
@@ -12,3 +12,19 @@ six==1.10.0
 sunlight==1.2.9
 whitenoise==3.2
 dj-database-url==0.4.1
+Pillow==3.4.2
+daphne==1.1.0
+asgiref==1.0.1
+channels==1.0.3
+asgi-redis==1.0.0
+django-notifications-hq==1.2
+boto==2.46.1
+django-storages==1.5.2
+Twisted==17.1.0
+h2==2.6.1
+priority==1.3.0
+pyOpenSSL==16.2.0
+service-identity==16.0.0
+idna==2.5
+celery==4.0.2
+honcho==1.0.1

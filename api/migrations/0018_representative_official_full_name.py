@@ -7,13 +7,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0001_initial'),
+        ('api', '0017_auto_20170331_1233'),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='account',
-            name='beta_access',
-            field=models.BooleanField(default=False),
+            model_name='representative',
+            name='official_full_name',
+            field=models.CharField(max_length=127, null=True, blank=True),
         ),
     ]
