@@ -25,6 +25,18 @@ class Migration(migrations.Migration):
                 ('hashtags', models.ManyToManyField(to='api.Hashtag')),
             ],
         ),
+        migrations.CreateModel(
+            name='Notification',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('activity_type', models.CharField(default=b'new_follower', max_length=31, choices=[(b'new_follower', b'New follower'), (b'response_to_yout_civi', b'Response to your civi'), (b'rebuttal_to_your_response', b'Rebuttal to your response')])),
+                ('read', models.BooleanField(default=False)),
+                ('created', models.DateTimeField(auto_now_add=True, null=True)),
+                ('last_modified', models.DateTimeField(auto_now=True, null=True)),
+                ('account', models.ForeignKey(default=None, to='api.Account', null=True)),
+                ('civi', models.ForeignKey(default=None, to='api.Civi', null=True)),
+            ],
+        ),
         migrations.AddField(
             model_name='notification',
             name='thread',
