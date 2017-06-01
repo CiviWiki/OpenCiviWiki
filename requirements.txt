@@ -27,3 +27,4 @@ pyOpenSSL==16.2.0
 service-identity==16.0.0
 idna==2.5
 celery==4.0.2
+honcho==1.0.1
