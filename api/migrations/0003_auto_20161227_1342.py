@@ -41,4 +41,25 @@ class Migration(migrations.Migration):
             name='district',
             field=models.CharField(max_length=63, null=True, blank=True),
         ),
+        migrations.CreateModel(
+            name='Vote',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('vote', models.CharField(default=b'abstain', max_length=31, choices=[(b'yes', b'Yes'), (b'no', b'No'), (b'abstain', b'Abstain')])),
+                ('created', models.DateTimeField(auto_now_add=True, null=True)),
+                ('last_modified', models.DateTimeField(auto_now=True, null=True)),
+                ('bill', models.ForeignKey(default=None, to='api.Bill', null=True)),
+                ('representative', models.ForeignKey(default=None, to='api.Representative', null=True)),
+            ],
+        ),
+        migrations.AddField(
+            model_name='rationale',
+            name='vote',
+            field=models.ForeignKey(default=None, to='api.Vote', null=True),
+        ),
+        migrations.AddField(
+            model_name='rationale',
+            name='representative',
+            field=models.ForeignKey(default=None, to='api.Representative', null=True),
+        ),
     ]

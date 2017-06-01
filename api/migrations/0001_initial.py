@@ -134,21 +134,7 @@ class Migration(migrations.Migration):
                 ('author', models.ForeignKey(default=None, to='api.Account', null=True)),
             ],
         ),
-        migrations.CreateModel(
-            name='Representative',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('district', models.CharField(max_length=63)),
-                ('state', models.CharField(max_length=63)),
-                ('level', models.CharField(default=b'federal', max_length=31, choices=[(b'federal', b'Federal'), (b'state', b'State')])),
-                ('term_start', models.DateField()),
-                ('term_end', models.DateField()),
-                ('party', models.CharField(max_length=127)),
-                ('created', models.DateTimeField(auto_now_add=True, null=True)),
-                ('last_modified', models.DateTimeField(auto_now=True, null=True)),
-                ('account', models.ForeignKey(default=None, to='api.Account', null=True)),
-            ],
-        ),
+
         migrations.CreateModel(
             name='Response',
             fields=[
@@ -180,32 +166,14 @@ class Migration(migrations.Migration):
                 ('hashtags', models.ManyToManyField(to='api.Hashtag')),
             ],
         ),
-        migrations.CreateModel(
-            name='Vote',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('vote', models.CharField(default=b'abstain', max_length=31, choices=[(b'yes', b'Yes'), (b'no', b'No'), (b'abstain', b'Abstain')])),
-                ('created', models.DateTimeField(auto_now_add=True, null=True)),
-                ('last_modified', models.DateTimeField(auto_now=True, null=True)),
-                ('bill', models.ForeignKey(default=None, to='api.Bill', null=True)),
-                ('representative', models.ForeignKey(default=None, to='api.Representative', null=True)),
-            ],
-        ),
+
         migrations.AddField(
             model_name='rebuttal',
             name='response',
             field=models.ForeignKey(default=None, to='api.Response', null=True),
         ),
-        migrations.AddField(
-            model_name='rationale',
-            name='representative',
-            field=models.ForeignKey(default=None, to='api.Representative', null=True),
-        ),
-        migrations.AddField(
-            model_name='rationale',
-            name='vote',
-            field=models.ForeignKey(default=None, to='api.Vote', null=True),
-        ),
+
+
         migrations.AddField(
             model_name='notification',
             name='thread',
