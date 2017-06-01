@@ -11,6 +11,21 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.CreateModel(
+            name='Representative',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('district', models.CharField(max_length=63)),
+                ('state', models.CharField(max_length=63)),
+                ('level', models.CharField(default=b'federal', max_length=31, choices=[(b'federal', b'Federal'), (b'state', b'State')])),
+                ('term_start', models.DateField()),
+                ('term_end', models.DateField()),
+                ('party', models.CharField(max_length=127)),
+                ('created', models.DateTimeField(auto_now_add=True, null=True)),
+                ('last_modified', models.DateTimeField(auto_now=True, null=True)),
+                ('account', models.ForeignKey(default=None, to='api.Account', null=True)),
+            ],
+        ),
         migrations.AddField(
             model_name='representative',
             name='bioguideID',
