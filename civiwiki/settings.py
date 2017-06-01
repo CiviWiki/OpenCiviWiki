@@ -68,8 +68,7 @@ ROOT_URLCONF = 'civiwiki.urls'
 LOGIN_URL = '/login'
 
 # Middleware Configuration
-if 'PRODUCTION' in os.environ:
-    PREPEND_WWW = True
+PREPEND_WWW = 'PRODUCTION' in os.environ
 
 # SSL Setup
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
