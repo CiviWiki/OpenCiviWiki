@@ -1,16 +1,17 @@
 import json
 
-from django.http import HttpResponseRedirect
+from django.conf import settings
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.contrib.auth.models import User
 from django.db.models import F
 from api.models import Category, Account, Thread, Civi, Activity
 from api.forms import UpdateProfileImage
-from django.conf import settings
 
-
-from legislation import sunlightapi as sun
+# from legislation import sunlightapi as sun
+from django.contrib.auth.decorators import user_passes_test
 from utils.custom_decorators import beta_blocker, login_required, full_account
+from utils.constants import US_STATES
 
 def base_view(request):
     if not request.user.is_authenticated():
@@ -31,8 +32,7 @@ def base_view(request):
     top5_threads = list(Thread.objects.all().order_by('-num_views')[:5].values('id', 'title'))
 
 
-    # states = dict(settings.US_STATES)
-    states = sorted(settings.US_STATES, key=lambda s: s[1])
+    states = sorted(US_STATES, key=lambda s: s[1])
     data = {
         'categories': categories,
         'states': states,
@@ -127,11 +127,11 @@ def issue_thread(request, thread_id=None):
             "name": t.category.name
         },
         "categories": [{'id': c.id, 'name': c.name} for c in Category.objects.all()],
-        "states": sorted(settings.US_STATES, key=lambda s: s[1]),
+        "states": sorted(US_STATES, key=lambda s: s[1]),
         "created": t.created_date_str,
         "level": t.level,
         "state": t.state if t.level == "state" else "",
-        "location": t.level if not t.state else dict(settings.US_STATES).get(t.state),
+        "location": t.level if not t.state else dict(US_STATES).get(t.state),
         "num_civis": t.num_civis,
         "num_views": t.num_views,
         'user_votes': [{'civi_id':act.civi.id, 'activity_type': act.activity_type, 'c_type': act.civi.c_type} for act in Activity.objects.filter(thread=t.id, account=req_acct.id)]
@@ -162,6 +162,7 @@ def dbview(request):
 
     return TemplateResponse(request, 'dbview.html', {'result': json.dumps(result)})
 
+
 @login_required
 @beta_blocker
 @full_account
@@ -170,6 +171,21 @@ def add_civi(request):
     topics = [{'id': c.id, 'topic': c.topic} for c in Topic.objects.all()]
 
     return TemplateResponse(request, 'add_civi.html', {'categories': json.dumps(categories), 'topics': json.dumps(topics)})
+
+
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+def invite(request):
+    user = User.objects.get(username=request.user.username)
+    invitees = [invitee_user.summarize() for invitee_user in user.invitees.all()]
+
+    response_data = {
+        'invitees': json.dumps(invitees)
+    }
+
+    return TemplateResponse(request, 'invite.html', response_data)
+
+
 
 def login_view(request):
     if request.user.is_authenticated():

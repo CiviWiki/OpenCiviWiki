@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from utils.constants import US_STATES
 
 class RepresentativeManager(models.Manager):
     def get_reps():
@@ -44,7 +45,7 @@ class Representative(models.Model):
             "full_name": self.official_full_name,
             "about_me": self.about_me,
             "party": self.party,
-            "state": '{state}'.format(state=dict(settings.US_STATES).get(self.state)),
+            "state": '{state}'.format(state=dict(US_STATES).get(self.state)),
             "profile_image": "https://theunitedstates.io/images/congress/225x275/{}.jpg".format(self.bioguideID)
         }
         return data

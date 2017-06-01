@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'^setup$', v.user_setup, name='user setup'),
     url(r'^profile$', v.user_profile, name='default_profile'),
     url(r'^add_civi$', v.add_civi, name='add civi'),
+    url(r'^invite$', v.invite, name='invite'),
     url(r'^$', v.base_view, name='base'),
     url(r'', v.does_not_exist, name='404')
 ]

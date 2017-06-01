@@ -37,6 +37,8 @@ def full_account(func):
     @wraps(func)
     def inner(request, *args, **kwargs):
         a = Account.objects.get(user=request.user)
+        if not a.is_verified:
+            return HttpResponseRedirect('/beta')
         if not a.full_account:
             return HttpResponseRedirect('/setup')
         return func(request, *args, **kwargs)

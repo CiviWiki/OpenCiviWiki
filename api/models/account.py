@@ -1,13 +1,20 @@
+"""
+Account Model
+Extends the default django user model
+"""
 from django.contrib.auth.models import User
 from django.utils.deconstruct import deconstructible
 from django.core.files.storage import default_storage
 from django.db import models
+from utils.constants import US_STATES
 from django.conf import settings
 from hashtag import Hashtag
 from category import Category
 from representative import Representative
 
-import os, json, uuid
+import os
+import json
+import uuid
 
 class AccountManager(models.Manager):
     def summarize(self, account):
@@ -79,7 +86,7 @@ class Account(models.Model):
     latitude = models.DecimalField(max_digits=9, decimal_places=6, null=False, default=0)
     address = models.CharField(max_length=255, null=True)
     city = models.CharField(max_length=63, blank=True)
-    state = models.CharField(max_length=2, choices=settings.US_STATES, blank=True)
+    state = models.CharField(max_length=2, choices=US_STATES, blank=True)
     zip_code = models.CharField(max_length=6, null=True)
 
     fed_district = models.CharField(max_length=63, default=None, null=True)
@@ -94,6 +101,7 @@ class Account(models.Model):
     following = models.ManyToManyField('self', related_name='followings', symmetrical=False)
 
     beta_access = models.BooleanField(default=False)
+    is_verified = models.BooleanField(default=False)
     full_account = models.BooleanField(default=False)
 
     objects = AccountManager()
@@ -102,9 +110,9 @@ class Account(models.Model):
     #custom "row-level" functionality (properties) for account models
     def get_location(self):
         if self.city and self.state:
-            return '{city}, {state}'.format(city=self.city, state=dict(settings.US_STATES).get(self.state))
+            return '{city}, {state}'.format(city=self.city, state=dict(US_STATES).get(self.state))
         elif self.state:
-            return '{state}'.format(state=dict(settings.US_STATES).get(self.state))
+            return '{state}'.format(state=dict(US_STATES).get(self.state))
         else:
             return 'NO LOCATION'
 

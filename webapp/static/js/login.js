@@ -102,9 +102,11 @@ cw.LoginView = BB.View.extend({
                     window.location.replace('/');
                 },
                 error: function (data) {
-                    if (data.status_code === 400) {
-                        Materialize.toast(data.message, 5000);
-                    } else if (data.status_code === 500) {
+                    if (data.status === 400) {
+                        _.each(data.responseJSON.errors, function(error){
+                            Materialize.toast(error, 5000);
+                        });
+                    } else if (data.status === 500) {
                         Materialize.toast('Internal Server Error', 5000);
                     } else {
                         Materialize.toast(data.statusText, 5000);

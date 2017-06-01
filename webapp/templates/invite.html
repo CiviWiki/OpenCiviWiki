@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Invite Your Friends to CiviWiki</title>
+    {% load staticfiles %}
+    {% include "base/links.html" %}
+    {% include "base/less_headers/login_less.html" %}
+</head>
+<body>
+    <div class="container row">
+        <div class="card col s12">
+            <div class="container section">
+                <h1>Invite New Users</h1>
+                <input type="text">
+                <button class="btn btn-large">Send</button>
+            </div>
+            <div class="container row">
+                <div class="container col s12">
+                    <ul class="container collection with-header" id="invitee-list">
+                        <li class="collection-header"><h4><span id="invitee-count"></span>  Invitation(s)</h4></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+<script type="text/javascript">
+    var username = '{{user.username}}',
+        user_id = '{{user.id}}',
+        invitees = JSON.parse('{{invitees|escapejs}}');
+
+    $("#invitee-count").text(invitees.length);
+    _.each(invitees, function(invitee){
+        var item = $('<li class="collection-item"></li>')
+        var item_temp = '<div>' + invitee.email + '</div>';
+        if (invitee.username) {
+            item.append('<a href="/profile/' + invitee.username + '" class="secondary-content">Registered ' + invitee.date_registered  +'<i class="material-icons">verified_user</i></a>');
+        }
+        item.append(item_temp);
+        $("#invitee-list").append();
+    });
+</script>
+
+</html>
