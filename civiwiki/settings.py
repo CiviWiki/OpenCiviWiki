@@ -63,8 +63,6 @@ CORS_ORIGIN_ALLOW_ALL = True
 ROOT_URLCONF = 'civiwiki.urls'
 LOGIN_URL = '/login'
 
-# Middleware Configuration
-PREPEND_WWW = 'PRODUCTION' in os.environ
 
 # SSL Setup
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
