@@ -33,19 +33,7 @@ class Migration(migrations.Migration):
                 ('profile_image', models.ImageField(default=b'profile/default.png', null=True, upload_to=api.models.account.PathAndRename(b'profile/'), blank=True)),
             ],
         ),
-        migrations.CreateModel(
-            name='Bill',
-            fields=[
-                ('id', models.CharField(max_length=255, serialize=False, primary_key=True)),
-                ('title', models.CharField(max_length=1023)),
-                ('short_title', models.CharField(max_length=1023)),
-                ('short_summary', models.CharField(max_length=1023)),
-                ('number', models.IntegerField(default=0)),
-                ('b_type', models.CharField(max_length=63)),
-                ('created', models.DateTimeField(auto_now_add=True, null=True)),
-                ('last_modified', models.DateTimeField(auto_now=True, null=True)),
-            ],
-        ),
+
         migrations.CreateModel(
             name='Category',
             fields=[
@@ -70,7 +58,7 @@ class Migration(migrations.Migration):
                 ('created', models.DateTimeField(auto_now_add=True, null=True)),
                 ('last_modified', models.DateTimeField(auto_now=True, null=True)),
                 ('author', models.ForeignKey(default=None, to='api.Account', null=True)),
-                ('bill', models.ForeignKey(default=None, to='api.Bill', null=True)),
+
             ],
         ),
         migrations.CreateModel(
@@ -103,7 +91,7 @@ class Migration(migrations.Migration):
                 ('civi', models.ForeignKey(default=None, to='api.Civi', null=True)),
             ],
         ),
-        
+
         migrations.CreateModel(
             name='Rebuttal',
             fields=[
@@ -137,32 +125,10 @@ class Migration(migrations.Migration):
                 ('civi', models.ForeignKey(default=None, to='api.Civi', null=True)),
             ],
         ),
-        migrations.CreateModel(
-            name='Thread',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('title', models.CharField(max_length=127)),
-                ('summary', models.CharField(max_length=4095)),
-                ('created', models.DateTimeField(auto_now_add=True, null=True)),
-                ('last_modified', models.DateTimeField(auto_now=True, null=True)),
-                ('author', models.ForeignKey(default=None, to='api.Account', null=True)),
-                ('category', models.ForeignKey(default=None, to='api.Category', null=True)),
-                ('facts', models.ManyToManyField(to='api.Fact')),
-                ('hashtags', models.ManyToManyField(to='api.Hashtag')),
-            ],
-        ),
-
         migrations.AddField(
             model_name='rebuttal',
             name='response',
             field=models.ForeignKey(default=None, to='api.Response', null=True),
-        ),
-
-
-        migrations.AddField(
-            model_name='notification',
-            name='thread',
-            field=models.ForeignKey(default=None, to='api.Thread', null=True),
         ),
         migrations.AddField(
             model_name='civi',
@@ -174,11 +140,7 @@ class Migration(migrations.Migration):
             name='links',
             field=models.ManyToManyField(related_name='_civi_links_+', to='api.Civi'),
         ),
-        migrations.AddField(
-            model_name='civi',
-            name='thread',
-            field=models.ForeignKey(default=None, to='api.Thread', null=True),
-        ),
+
         migrations.AddField(
             model_name='account',
             name='ai_interests',
