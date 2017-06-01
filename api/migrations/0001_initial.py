@@ -61,15 +61,7 @@ class Migration(migrations.Migration):
 
             ],
         ),
-        migrations.CreateModel(
-            name='Fact',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('body', models.CharField(max_length=511)),
-                ('created', models.DateTimeField(auto_now_add=True, null=True)),
-                ('last_modified', models.DateTimeField(auto_now=True, null=True)),
-            ],
-        ),
+        
         migrations.CreateModel(
             name='Hashtag',
             fields=[
@@ -79,7 +71,7 @@ class Migration(migrations.Migration):
                 ('last_modified', models.DateTimeField(auto_now=True, null=True)),
             ],
         ),
-        
+
 
         migrations.CreateModel(
             name='Rebuttal',
