@@ -52,6 +52,22 @@ class Migration(migrations.Migration):
                 ('representative', models.ForeignKey(default=None, to='api.Representative', null=True)),
             ],
         ),
+        migrations.CreateModel(
+            name='Rationale',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('title', models.CharField(max_length=127)),
+                ('body', models.TextField(max_length=4095)),
+                ('votes_vneg', models.IntegerField(default=0)),
+                ('votes_neg', models.IntegerField(default=0)),
+                ('votes_neutral', models.IntegerField(default=0)),
+                ('votes_pos', models.IntegerField(default=0)),
+                ('votes_vpos', models.IntegerField(default=0)),
+                ('created', models.DateTimeField(auto_now_add=True, null=True)),
+                ('last_modified', models.DateTimeField(auto_now=True, null=True)),
+                ('bill', models.ForeignKey(default=None, to='api.Bill', null=True)),
+            ],
+        ),
         migrations.AddField(
             model_name='rationale',
             name='vote',
