@@ -68,7 +68,14 @@ ROOT_URLCONF = 'civiwiki.urls'
 LOGIN_URL = '/login'
 
 # Middleware Configuration
-PREPEND_WWW = True if not DEBUG else False
+if 'PRODUCTION' in os.environ:
+    PREPEND_WWW = True
+
+    # SSL Setup
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
 
 
 # Internationalization & Localization
@@ -169,15 +176,6 @@ else:
             'PASSWORD': get_env_variable("CIVIWIKI_LOCAL_PASSWORD"),
         },
     }
-
-
-
-# SSL Setup
-if not DEBUG:
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    SECURE_SSL_REDIRECT = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
 
 
 # Email Backend Setup
