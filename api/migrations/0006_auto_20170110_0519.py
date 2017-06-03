@@ -11,10 +11,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='civi',
-            name='links',
-        ),
+
         migrations.RemoveField(
             model_name='civi',
             name='related_civis',
@@ -23,6 +20,10 @@ class Migration(migrations.Migration):
             model_name='civi',
             name='links',
             field=models.ManyToManyField(related_name='_civi_links_+', to='api.Civi'),
+        ),
+        migrations.RemoveField(
+            model_name='civi',
+            name='links',
         ),
 
         migrations.AddField(
