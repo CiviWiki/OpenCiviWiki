@@ -11,6 +11,32 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.AddField(
+            model_name='civi',
+            name='votes_neg',
+            field=models.IntegerField(default=0),
+        ),
+        migrations.AddField(
+            model_name='civi',
+            name='votes_neutral',
+            field=models.IntegerField(default=0),
+        ),
+        migrations.AddField(
+            model_name='civi',
+            name='votes_pos',
+            field=models.IntegerField(default=0),
+        ),
+        migrations.AddField(
+            model_name='civi',
+            name='votes_vneg',
+            field=models.IntegerField(default=0),
+        ),
+        migrations.AddField(
+            model_name='civi',
+            name='votes_vpos',
+            field=models.IntegerField(default=0),
+        ),
+
         migrations.RenameField(
             model_name='civi',
             old_name='votes_neg',
