@@ -61,7 +61,11 @@ class Migration(migrations.Migration):
 
             ],
         ),
-
+        migrations.AddField(
+            model_name='civi',
+            name='votes_neutral',
+            field=models.IntegerField(default=0),
+        ),
         migrations.CreateModel(
             name='Hashtag',
             fields=[

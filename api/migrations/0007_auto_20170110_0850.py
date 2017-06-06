@@ -16,11 +16,7 @@ class Migration(migrations.Migration):
             name='votes_neg',
             field=models.IntegerField(default=0),
         ),
-        migrations.AddField(
-            model_name='civi',
-            name='votes_neutral',
-            field=models.IntegerField(default=0),
-        ),
+
         migrations.AddField(
             model_name='civi',
             name='votes_pos',
