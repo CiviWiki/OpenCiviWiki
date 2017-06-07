@@ -15,9 +15,5 @@ class Migration(migrations.Migration):
             model_name='representative',
             name='account',
         ),
-        migrations.AddField(
-            model_name='account',
-            name='representatives',
-            field=models.ManyToManyField(related_name='account', to='api.Representative'),
-        ),
+
     ]

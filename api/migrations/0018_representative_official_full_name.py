@@ -16,4 +16,9 @@ class Migration(migrations.Migration):
             name='official_full_name',
             field=models.CharField(max_length=127, null=True, blank=True),
         ),
+        migrations.AddField(
+            model_name='account',
+            name='representatives',
+            field=models.ManyToManyField(related_name='account', to='api.Representative'),
+        ),
     ]
