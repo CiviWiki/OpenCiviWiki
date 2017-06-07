@@ -1,1 +1,1 @@
-web: honcho -f Procfile.prod start
+web: honcho -f Procfile.prod start --port $PORT
