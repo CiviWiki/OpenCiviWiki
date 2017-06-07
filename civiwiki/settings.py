@@ -22,7 +22,14 @@ def get_env_variable(environment_variable, optional=False):
             raise ImproperlyConfigured(error)
 
 
+# Devlopment Environment Control
 DEBUG = 'DEBUG' in os.environ
+
+if 'DJANGO_HOST' in os.environ:
+    DJANGO_HOST = get_env_variable("DJANGO_HOST")
+else:
+    DJANGO_HOST = 'LOCALHOST'
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = get_env_variable("DJANGO_SECRET_KEY")
@@ -65,10 +72,11 @@ LOGIN_URL = '/login'
 
 
 # SSL Setup
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+if DJANGO_HOST is not 'LOCALHOST':
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
 
 
 # Internationalization & Localization
@@ -82,7 +90,7 @@ USE_TZ = True
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, "webapp/templates")],
+        'DIRS': [os.path.join(BASE_DIR, "webapp/templates")], #TODO: Add non-webapp template directory
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
