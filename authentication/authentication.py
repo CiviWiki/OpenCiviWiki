@@ -20,6 +20,8 @@ from django.utils.http import base36_to_int, int_to_base36
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.crypto import salted_hmac
 
+from django.template.response import TemplateResponse #TODO: move this out to views
+
 class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
     """ Token Generator for Email Confirmation """
     key_salt = "django.contrib.auth.tokens.PasswordResetTokenGenerator"
@@ -130,10 +132,40 @@ def activate_view(request, uidb64, token):
 
     if user is not None and account_activation_token.check_token(user, token):
         account = Account.objects.get(user=user)
-        account.is_verified = True
-        account.save()
+        if account.is_verified:
+            redirect_link = {
+                'href': "/",
+                'label': "Back to Main"
+            }
+            template_var = {
+                'title': "Email Already Verified",
+                'content': "You have already verified your email",
+                'link': redirect_link
+            }
+            return TemplateResponse(request, 'general-message.html', template_var)
+        else:
+            account.is_verified = True
+            account.save()
 
-        return HttpResponse('Thanks! Your email address has been verified')
+            redirect_link = {
+                'href': "/",
+                'label': "Back to Main"
+            }
+            template_var = {
+                'title': "Email Verification Successful",
+                'content': "Thank you for verifying your email with CiviWiki",
+                'link': redirect_link
+            }
+            return TemplateResponse(request, 'general-message.html', template_var)
     else:
         # invalid link
-        return HttpResponseBadRequest("INVALID VALUES")
+        redirect_link = {
+            'href': "/",
+            'label': "Back to Main"
+        }
+        template_var = {
+            'title': "Email Verification Error",
+            'content': "Email could not be verified",
+            'link': redirect_link
+        }
+        return TemplateResponse(request, 'general-message.html', template_var)
