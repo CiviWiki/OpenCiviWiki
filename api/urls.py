@@ -27,6 +27,7 @@ urlpatterns = [
     # url(r'^getblock$', read.getBlock, name='get block'),
     # url(r'^creategroup$', write.createGroup, name='add group'),
     # url(r'^createcivi$', write.createCivi, name='add civi'),
+    url(r'^invite/$',write.invite, name='invite users'),
     url(r'^edituser/$',write.editUser, name='edit user'),
     url(r'^upload_profile/$',write.uploadProfileImage, name='upload profile'),
     url(r'^upload_images/$',write.uploadCiviImage, name='upload images'),

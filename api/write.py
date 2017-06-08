@@ -1,5 +1,5 @@
 import os, sys, json, pdb, random, hashlib, urllib2, pprint, urllib, PIL
-from models import Account, Category, Civi, CiviImage, Hashtag, Activity
+from models import Account, Category, Civi, CiviImage, Hashtag, Activity, Invitation
 from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse, HttpResponseServerError, HttpResponseForbidden, HttpResponseBadRequest
 from utils.custom_decorators import require_post_params
@@ -17,6 +17,7 @@ from utils.custom_decorators import require_post_params
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from notifications.signals import notify
+from django.contrib.auth.decorators import user_passes_test
 
 @login_required
 @require_post_params(params=['title', 'summary', 'category_id'])
@@ -650,3 +651,50 @@ def editUserCategories(request):
         return HttpResponseBadRequest(reason=str(e))
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
+
+
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+def invite(request):
+    emails = request.POST.getlist('emailList[]', '')
+
+    if emails:
+        user = User.objects.get(username=request.user.username)
+        did_not_invite = []
+        for email in emails:
+            if Invitation.objects.filter(invitee_email=email).exists():
+                did_not_invite.append(email)
+            else:
+                data = {
+                    'host_user': user,
+                    'invitee_email': email,
+                    'verification_code': "",
+                }
+                new_invitation = Invitation(**data)
+                # new_invitation.host_user = user
+                # new_invitation.invitee_email = email
+                # new_invitation.verification_code = ""
+                new_invitation.save()
+
+        if len(did_not_invite) == len(emails):
+            response_data = {
+                "message": "Invitations exist for submitted email(s). No new invitations sent",
+                "error":"INVALID_EMAIL_DATA"
+            }
+            return JsonResponse(response_data, status=400)
+
+        invitees = [invitee_user.summarize() for invitee_user in user.invitees.all()]
+
+        response_data = {
+            'did_not_invite': did_not_invite,
+            'invitees': invitees
+        }
+        return JsonResponse(response_data)
+
+    else:
+        # Return an 'invalid login' error message.
+        response = {
+            "message": 'Invalid Email Data',
+            "error":"INVALID_EMAIL_DATA"
+        }
+        return JsonResponse(response, status=400)
