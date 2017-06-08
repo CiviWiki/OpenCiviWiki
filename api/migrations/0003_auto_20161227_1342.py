@@ -54,7 +54,7 @@ class Migration(migrations.Migration):
                 ('last_modified', models.DateTimeField(auto_now=True, null=True)),
             ],
         ),
-        migrations.AlterField(
+        migrations.AddField(
             model_name='civi',
             name='bill',
             field=models.ForeignKey(default=None, to='api.Bill', null=True),
