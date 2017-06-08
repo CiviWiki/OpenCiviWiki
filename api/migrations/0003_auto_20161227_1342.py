@@ -42,6 +42,24 @@ class Migration(migrations.Migration):
             field=models.CharField(max_length=63, null=True, blank=True),
         ),
         migrations.CreateModel(
+            name='Bill',
+            fields=[
+                ('id', models.CharField(max_length=255, serialize=False, primary_key=True)),
+                ('title', models.CharField(max_length=1023)),
+                ('short_title', models.CharField(max_length=1023)),
+                ('short_summary', models.CharField(max_length=1023)),
+                ('number', models.IntegerField(default=0)),
+                ('b_type', models.CharField(max_length=63)),
+                ('created', models.DateTimeField(auto_now_add=True, null=True)),
+                ('last_modified', models.DateTimeField(auto_now=True, null=True)),
+            ],
+        ),
+        migrations.AlterField(
+            model_name='civi',
+            name='bill',
+            field=models.ForeignKey(default=None, to='api.Bill', null=True),
+        ),
+        migrations.CreateModel(
             name='Vote',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
@@ -78,22 +96,5 @@ class Migration(migrations.Migration):
             name='representative',
             field=models.ForeignKey(default=None, to='api.Representative', null=True),
         ),
-        migrations.CreateModel(
-            name='Bill',
-            fields=[
-                ('id', models.CharField(max_length=255, serialize=False, primary_key=True)),
-                ('title', models.CharField(max_length=1023)),
-                ('short_title', models.CharField(max_length=1023)),
-                ('short_summary', models.CharField(max_length=1023)),
-                ('number', models.IntegerField(default=0)),
-                ('b_type', models.CharField(max_length=63)),
-                ('created', models.DateTimeField(auto_now_add=True, null=True)),
-                ('last_modified', models.DateTimeField(auto_now=True, null=True)),
-            ],
-        ),
-        migrations.AlterField(
-            model_name='civi',
-            name='bill',
-            field=models.ForeignKey(default=None, to='api.Bill', null=True),
-        ),
+
     ]
