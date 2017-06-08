@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
             name='c_type',
             field=models.CharField(default=b'problem', max_length=31, choices=[(b'problem', b'Problem'), (b'cause', b'Cause'), (b'solution', b'Solution'), (b'response', b'Response')]),
         ),
-        migrations.AlterField(
+        migrations.AddField(
             model_name='civi',
             name='links',
             field=models.ManyToManyField(related_name='link', to='api.Civi'),
