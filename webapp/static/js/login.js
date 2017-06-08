@@ -55,10 +55,8 @@ cw.LoginView = BB.View.extend({
                     window.location.replace('/');
                 },
                 error: function (data) {
-                    if (data.status === 400) {
-                        Materialize.toast(data.statusText, 5000);
-                    } else if (data.status === 500 && data.statusText == "inactive account") {
-                        window.location.replace('/beta');
+                    if (data.status === 400 && data.responseJSON) {
+                        Materialize.toast(data.responseJSON.message, 5000);
                     } else {
                         Materialize.toast(data.statusText, 5000);
                     }

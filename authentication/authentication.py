@@ -56,13 +56,20 @@ def cw_login(request):
         login(request, user)
 
         if user.is_active:
-            # TODO: Do not redirect, send success
             return HttpResponse()
         else:
-            return HttpResponseBadRequest(reason='Inactive user')
+            response = {
+                "message": 'Inactive user',
+                "error":"USER_INACTIVE"
+            }
+            return JsonResponse(response, status=400)
     else:
         # Return an 'invalid login' error message.
-        return HttpResponseBadRequest(reason='Invalid username or password')
+        response = {
+            "message": 'Invalid username or password',
+            "error":"INVALID_LOGIN"
+        }
+        return JsonResponse(response, status=400)
 
 def cw_logout(request):
     logout(request)
