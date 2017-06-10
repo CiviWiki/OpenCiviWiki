@@ -10,6 +10,30 @@
     <script src="{% static "dependencies/less.min.js" type="text/javascript" %}"></script>
 </head>
 
+<script id="single-invite-template" type="text/template">
+{% verbatim %}
+<tr>
+    <td>{{email}}</td>
+    <td>{{date_invited}}</td>
+    {{# if (status == "sent") { }}
+    <td>
+        <div class="grey-text">
+            <i class="material-icons tiny">send</i> Invite Sent
+        </div>
+    </td>
+    {{# } else if (status == "registered") { }}
+    <td>
+        <a href="/profile/{{username}}" class="waves-light blue-text">
+            <i class="material-icons tiny">verified_user</i> Active
+        </a>
+    </td>
+    {{# } else { }}
+    <td>No Data</td>
+    {{# } }}
+</tr>
+{% endverbatim %}
+</script>
+
 <script id="invite-template" type="text/template">
     <div class="container row">
         <div class="section row">
@@ -27,14 +51,26 @@
                         <textarea name="emails" id="emails" class="materialize-textarea "></textarea>
                         <label for="emails">Send Invites To...</label>
                     </div>
+                    <div class="input-field white-background-input-field ">
+                        <textarea name="custom_message" id="custom_message" class="materialize-textarea"></textarea>
+                        <label for="custom_message">Your Custom Invite Message (optional)</label>
+                    </div>
 
                     <button id="send-invites" class="btn dark-blue-background">Invite</button>
                 </div>
                 <div class="section row">
                     <div class="subtitle-lato"><i class="tiny material-icons">recent_actors</i> My Invites</div>
-                    <ul class="collection with-header" id="invitee-list">
-                        <li class="collection-header"><h6><span id="invitee-count"></span>  Invitation(s)</h6></li>
-                    </ul>
+                    <h6 class="grey-text"><span id="invitee-count"></span> Invitation(s)</h6>
+                    <table class="striped">
+                        <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>Date Invited</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="invitee-list"></tbody>
+                    </table>
                 </div>
             </div>
         </div>

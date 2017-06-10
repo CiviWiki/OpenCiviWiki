@@ -109,6 +109,7 @@ WSGI_APPLICATION = 'civiwiki.wsgi.application'
 
 # Apex Contact for Production Errors
 ADMINS = [('Development Team', 'dev@civiwiki.org')]
+SERVER_EMAIL = 'django@civiwiki.org'
 
 
 # API keys

@@ -7,6 +7,7 @@ cw.InviteView = BB.View.extend({
     initialize: function(options) {
         this.options = options || {};
         this.template = _.template($('#invite-template').text());
+        this.singleInviteTemplate = _.template($('#single-invite-template').text());
         this.render();
 
     },
@@ -18,16 +19,13 @@ cw.InviteView = BB.View.extend({
     },
 
     renderInvitees: function() {
-        $("#invitee-count").text(this.options.invitees.length);
+        this.$("#invitee-count").text(this.options.invitees.length);
+        this.$("#invitee-list").empty();
         _.each(this.options.invitees, function(invitee){
-            var item = $('<li class="collection-item"></li>')
-            var item_temp = '<div>' + this.options.invitee.email + '</div>';
-            if (this.options.invitee.username) {
-                item.append('<a href="/profile/' + this.options.invitee.username + '" class="secondary-content">Registered ' + this.options.invitee.date_registered  +'<i class="material-icons">verified_user</i></a>');
-            }
-            item.append(item_temp);
-            $("#invitee-list").append();
-        });
+            // invitee.date_invited = this.time_ago(new Date(Date.now() -  new Date(invitee.date_invited).getTime()));
+            invitee.date_invited = new Date(invitee.date_invited);
+            $("#invitee-list").append(this.singleInviteTemplate(invitee));
+        }, this);
     },
 
     events: {
@@ -35,7 +33,9 @@ cw.InviteView = BB.View.extend({
     },
 
     sendInvites: function () {
-        var emails = this.$el.find('#emails').val();
+        var _this = this;
+        var emails = this.$('#emails').val();
+        var custom_message = this.$('#custom_message').val().trim();
         var emailList = [];
 
         if (emails) {
@@ -51,6 +51,7 @@ cw.InviteView = BB.View.extend({
                     url: '/api/invite/',
                     data: {
                         emailList: validEmailList,
+                        custom_message: custom_message
                     },
                     success: function (data) {
                         var inviteCount = validEmailList.length;
@@ -60,9 +61,10 @@ cw.InviteView = BB.View.extend({
                         }
                         Materialize.toast(inviteCount + " Invite(s) Sent!", 5000, 'blue');
 
-
-                        this.$el.find('#emails').val("");
-                        this.options.invitees = data.invitees;
+                        _this.$('#emails').val("");
+                        _this.$('#custom_message').val("");
+                        _this.options.invitees = data.invitees;
+                        _this.renderInvitees();
                     },
                     error: function (data) {
                         if (data.status === 400 && data.responseJSON) {
@@ -71,7 +73,7 @@ cw.InviteView = BB.View.extend({
                             Materialize.toast(data.statusText, 5000, 'red');
                         }
                     }
-                }, this);
+                });
             }
 
 
@@ -90,4 +92,58 @@ cw.InviteView = BB.View.extend({
         return newList;
    },
 
-});
+   time_ago: function(time) {
+       switch (typeof time) {
+           case 'number':
+               break;
+           case 'string':
+               time = +new Date(time);
+               break;
+           case 'object':
+               if (time.constructor === Date) time = time.getTime();
+               break;
+           default:
+               time = +new Date();
+       }
+
+       var time_formats = [
+           [60, 'seconds', 1], // 60
+           [120, '1 minute ago', '1 minute from now'], // 60*2
+           [3600, 'minutes', 60], // 60*60, 60
+           [7200, '1 hour ago', '1 hour from now'], // 60*60*2
+           [86400, 'hours', 3600], // 60*60*24, 60*60
+           [172800, 'Yesterday', 'Tomorrow'], // 60*60*24*2
+           [604800, 'days', 86400], // 60*60*24*7, 60*60*24
+           [1209600, 'Last week', 'Next week'], // 60*60*24*7*4*2
+           [2419200, 'weeks', 604800], // 60*60*24*7*4, 60*60*24*7
+           [4838400, 'Last month', 'Next month'], // 60*60*24*7*4*2
+           [29030400, 'months', 2419200], // 60*60*24*7*4*12, 60*60*24*7*4
+           [58060800, 'Last year', 'Next year'], // 60*60*24*7*4*12*2
+           [2903040000, 'years', 29030400], // 60*60*24*7*4*12*100, 60*60*24*7*4*12
+       ];
+       var seconds = (+new Date() - time) / 1000,
+           token = 'ago',
+           list_choice = 1;
+
+       if (seconds === 0) {
+           return 'Just now'
+       }
+       if (seconds < 0) {
+           seconds = Math.abs(seconds);
+           token = 'from now';
+           list_choice = 2;
+       }
+       var i = 0,
+           format;
+       while (format = time_formats[i++])
+           if (seconds < format[0]) {
+               if (typeof format[2] == 'string')
+                   return format[list_choice];
+               else
+                   return Math.floor(seconds / format[2]) + ' ' + format[1] + ' ' + token;
+           }
+
+       return time;
+   }
+
+   });

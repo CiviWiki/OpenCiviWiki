@@ -5,7 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.contrib.auth.models import User
 from django.db.models import F
-from api.models import Category, Account, Thread, Civi, Activity
+from api.models import Category, Account, Thread, Civi, Activity, Invitation
 from api.forms import UpdateProfileImage
 
 # from legislation import sunlightapi as sun
@@ -177,8 +177,9 @@ def add_civi(request):
 @user_passes_test(lambda u: u.is_staff)
 def invite(request):
     user = User.objects.get(username=request.user.username)
-    invitees = [invitee_user.summarize() for invitee_user in user.invitees.all()]
 
+    invitations = Invitation.objects.filter_by_host(host_user=user).all()
+    invitees = [invitation.summarize() for invitation in invitations]
     response_data = {
         'invitees': json.dumps(invitees)
     }

@@ -110,7 +110,7 @@ def cw_register(request):
 
                 send_email.delay(
                     subject="CiviWiki Account Setup",
-                    recipient_email=email,
+                    recipient_list=[email],
                     context=email_context
                 )
 
