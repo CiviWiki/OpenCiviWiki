@@ -34,7 +34,7 @@ cw.InviteView = BB.View.extend({
 
     sendInvites: function () {
         var _this = this;
-        var emails = this.$('#emails').val();
+        var emails = this.$('#emails').val().trim();
         var custom_message = this.$('#custom_message').val().trim();
         var emailList = [];
 

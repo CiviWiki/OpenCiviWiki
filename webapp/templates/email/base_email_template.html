@@ -15,7 +15,10 @@
             <p style="font-size:16px;">{{ body }}</p>
             {% if link %}
             Here is your link:<br>
-            <a class="btn" href="{{ link }}" target="_blank" style="tcolor: #1acbab;">{{ link }}</a>
+            <div style="margin-bottom:24px;">
+                <a class="btn" href="{{ link }}" target="_blank" style="color: #1acbab;">{{ link }}</a>
+            </div>
+
             <!-- <table width="100%" style="margin-bottom:24px;">
                 <tr><td align="center" valign="middle" ><a class="btn" href="{{ link }}" target="_blank" style="text-decoration: none;color: #ffffff;background-color: #74edd6;text-align: center;height: 64px;line-height: 48px;width: 200px;border-radius: 2px;padding: 16px 24px;font-size:18px;letter-spacing: 0.5px;text-transform: uppercase;">Link</a>
                 </td></tr>
