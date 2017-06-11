@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
-from api.models import Account
+from api.models import Account, Invitation
 from django.http import JsonResponse, HttpResponse, HttpResponseServerError, HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import redirect
 from django.contrib.auth import authenticate, logout, login
@@ -89,11 +89,13 @@ def cw_register(request):
             try:
                 User.objects.create_user(username, email, password)
                 user = authenticate(username=username, password=password)
+
                 account = Account(user=user)
                 account.save()
 
                 user.is_active = True
                 user.save()
+
 
                 uid = urlsafe_base64_encode(force_bytes(user.pk))
                 token = account_activation_token.make_token(user)
@@ -113,6 +115,76 @@ def cw_register(request):
                     recipient_list=[email],
                     context=email_context
                 )
+
+                login(request, user)
+                return HttpResponse()
+
+            except Exception as e:
+                return HttpResponseServerError(reason=str(e))
+
+        else:
+            response = {
+                'success': False,
+                'errors' : [error[0] for error in form.errors.values()]
+            }
+            return JsonResponse(response, status=400)
+    else:
+        return HttpResponseBadRequest(reason="POST Method Required")
+
+@require_post_params(params=['username', 'password', 'email', 'beta_token'])
+def beta_register(request):
+    """ Special registration request for beta access """
+    # Beta Check
+    beta_token = request.POST.get('beta_token', '')
+    if beta_token:
+        email = request.POST.get('email' '')
+        try:
+            invitation = Invitation.objects.get(invitee_email=email)
+        except Invitation.DoesNotExist:
+            response_data = {
+                "message": "Beta invitation does not exist for this email",
+                "error":"NO_BETA_INVITE"
+            }
+            return JsonResponse(response_data, status=400)
+
+        if invitation.verification_code != beta_token:
+            response_data = {
+                "message": "The beta token is not valid",
+                "error":"INVALID_BETA_TOKEN"
+            }
+            return JsonResponse(response_data, status=400)
+
+    else:
+        response_data = {
+            "message": "Missing Beta Token",
+            "error":"MISSING_BETA_TOKEN"
+        }
+        return JsonResponse(response_data, status=400)
+
+
+    form = AccountRegistrationForm(request.POST or None)
+    if request.method == 'POST':
+        # Form Validation
+        if form.is_valid():
+            username = form.clean_username()
+            password = form.clean_password()
+            email = form.clean_email()
+
+            # Create a New Account
+            try:
+                User.objects.create_user(username, email, password)
+                user = authenticate(username=username, password=password)
+                account = Account(user=user)
+                account.beta_access = True
+                account.is_verfied = True
+                account.save()
+
+                invitation = Invitation.objects.get(invitee_email=email)
+                invitation.invitee_user = user
+                invitation.save()
+
+                user.is_active = True
+                user.save()
 
                 login(request, user)
                 return HttpResponse()

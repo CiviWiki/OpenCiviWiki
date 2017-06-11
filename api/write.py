@@ -694,7 +694,7 @@ def invite(request):
                 }
 
                 domain = get_current_site(request).domain
-                base_url = "http://{domain}/auth/beta_register/{email}/{token}/"
+                base_url = "http://{domain}/beta_register/{email}/{token}"
                 url_with_code = base_url.format(
                     domain=domain,
                     email=email,

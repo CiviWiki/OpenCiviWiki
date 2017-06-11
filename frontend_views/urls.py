@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'^profile$', v.user_profile, name='default_profile'),
     url(r'^add_civi$', v.add_civi, name='add civi'),
     url(r'^invite$', v.invite, name='invite'),
+    url(r'^beta_register/(?P<email>[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})/(?P<token>\w{31})$', v.beta_register, name='beta_register'),
     url(r'^$', v.base_view, name='base'),
     url(r'', v.does_not_exist, name='404')
 ]
