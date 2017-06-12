@@ -8,10 +8,11 @@ from django.shortcuts import redirect
 from django.contrib.auth import authenticate, logout, login
 from utils.custom_decorators import require_post_params
 from reserved_usernames import RESERVED_USERNAMES
-from forms import AccountRegistrationForm
+from forms import AccountRegistrationForm, PasswordResetForm, RecoverUserForm
 from api.tasks import send_email
 from django.contrib.sites.shortcuts import get_current_site
 from django.conf import settings
+from django.conf.urls import url
 
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -95,7 +96,6 @@ def cw_register(request):
 
                 user.is_active = True
                 user.save()
-
 
                 uid = urlsafe_base64_encode(force_bytes(user.pk))
                 token = account_activation_token.make_token(user)
@@ -248,3 +248,49 @@ def activate_view(request, uidb64, token):
             'link': redirect_link
         }
         return TemplateResponse(request, 'general-message.html', template_var)
+
+
+def recover_user():
+    view_variables = {
+        'template_name': 'user/reset_by_email.html',
+        'post_reset_redirect': 'recovery_email_sent',
+        'email_template_name': 'email/base_text_template.txt',
+        'subject_template_name': 'email/base_email_template.html',
+        'password_reset_form': RecoverUserForm
+    }
+
+    return view_variables
+
+def password_reset_confirm():
+    view_variables = {
+        'template_name': 'user/password_reset.html',
+        'set_password_form': PasswordResetForm
+    }
+
+    return view_variables
+
+def recover_user_sent(request):
+    redirect_link = {
+        'href': "/",
+        'label': "Back to Main"
+    }
+
+    template_var = {
+        'title': "Email Sent",
+        'content': "We've emailed you your username and instructions for setting your password. If an account exists with the email you entered, you should receive them shortly. If you don't receive an email, please make sure you've entered the address you registered with, and check your spam folder.", #TODO: move to string templates
+        'link': redirect_link
+    }
+    return TemplateResponse(request, 'general-message.html', template_var)
+
+def password_reset_complete(request):
+    redirect_link = {
+        'href': "/login",
+        'label': "Login"
+    }
+
+    template_var = {
+        'title': "Password reset complete",
+        'content': "Your password has been set. You may now go ahead and login.",
+        'link': redirect_link
+    }
+    return TemplateResponse(request, 'general-message.html', template_var)

@@ -30,12 +30,21 @@ cw.LoginView = BB.View.extend({
         'click .login-link': 'swapToLogin',
         'click .register-button': 'register',
         'keypress .login-input ': 'checkForEnter',
+        'blur .login-input': 'usernameToLowerCase'
     },
 
     checkForEnter: function(e) {
         if (e.which == 13 && !e.shiftKey) {
             e.preventDefault();
             this.login();
+        }
+    },
+
+    usernameToLowerCase: function(e){
+        var usernameInput = this.$('#username');
+        var lower = usernameInput.val().toLowerCase();
+        if (lower != usernameInput.val()) {
+            usernameInput.val(lower);
         }
     },
 
