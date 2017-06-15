@@ -421,12 +421,29 @@ def uploadProfileImage(request):
 
                 # Upload new image and set as profile picture
                 account.profile_image = form.clean_profile_image()
-                account.save()
+                try:
+                    account.save()
+                except Exception as e:
+                    response = {
+                        'message': str(e),
+                        'error': 'MODEL_SAVE_ERROR'
+                    }
+                    return JsonResponse(response, status=400)
+
                 return HttpResponse('image upload success')
             except Exception as e:
-                return HttpResponseServerError(reason=str(e))
+                response = {
+                    'message': str(e),
+                    'error': 'MODEL_ERROR'
+                }
+                return JsonResponse(response, status=400)
         else:
-            return HttpResponseBadRequest(reason=(form.errors['profile_image']))
+            response = {
+                'message': form.errors['profile_image'],
+                'error' : 'FORM_ERROR'
+            }
+            return JsonResponse(response, status=400)
+
     else:
         return HttpResponseForbidden('allowed only via POST')
 

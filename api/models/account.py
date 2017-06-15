@@ -2,19 +2,31 @@
 Account Model
 Extends the default django user model
 """
+import os
+import uuid
+import StringIO
+
 from django.contrib.auth.models import User
 from django.utils.deconstruct import deconstructible
 from django.core.files.storage import default_storage
-from django.db import models
-from utils.constants import US_STATES
+from django.core.exceptions import ValidationError
 from django.conf import settings
+from django.db import models
+from PIL import Image, ImageOps
+from django.core.files.uploadedfile import InMemoryUploadedFile
+
+
+from utils.constants import US_STATES
 from hashtag import Hashtag
 from category import Category
 from representative import Representative
 
-import os
-import json
-import uuid
+
+# Image manipulation constants
+PROFILE_IMAGE_SIZE = (171, 171)
+PROFILE_IMAGE_THUMB_SIZE = (40, 40)
+WHITE_BG = (255,255,255)
+
 
 class AccountManager(models.Manager):
     def summarize(self, account):
@@ -106,9 +118,11 @@ class Account(models.Model):
 
     objects = AccountManager()
     profile_image = models.ImageField(upload_to=profile_upload_path, blank=True, null=True)
+    profile_image_thumb = models.ImageField(upload_to=profile_upload_path, blank=True, null=True)
 
     #custom "row-level" functionality (properties) for account models
     def get_location(self):
+        """ Constructs a CITY, STATE string for locations in the US """
         if self.city and self.state:
             return '{city}, {state}'.format(city=self.city, state=dict(US_STATES).get(self.state))
         elif self.state:
@@ -118,13 +132,97 @@ class Account(models.Model):
 
     def _get_full_name(self):
         "Returns the person's full name."
-        return '{first_name} {last_name}'.format(first_name=self.first_name, last_name=self.last_name)
+
+        str_full_name = '{first_name} {last_name}'.format(
+            first_name=self.first_name,
+            last_name=self.last_name
+        )
+        return str_full_name
     full_name = property(_get_full_name)
 
     def _get_profile_image_url(self):
-        if self.profile_image and default_storage.exists(os.path.join(settings.MEDIA_ROOT, self.profile_image.name)):
+        """ Return placeholder profile image if user didn't upload one"""
+
+        file_exists = default_storage.exists(
+            os.path.join(settings.MEDIA_ROOT, self.profile_image.name)
+        )
+        if self.profile_image and file_exists:
             return self.profile_image.url
         else:
             #NOTE: This default url will probably be changed later
             return "/static/img/no_image_md.png",
     profile_image_url = property(_get_profile_image_url)
+
+    def __init__(self, *args, **kwargs):
+        super(Account, self).__init__(*args, **kwargs)
+        # if self.profile_image:
+        #     self.__original_profile_image_url = self.profile_image.url
+
+    def save(self, *args, **kwargs):
+        """ Image crop/resize and thumbnail creation """
+
+        # New Profile image --
+        if self.profile_image:
+            # if self.profile_image.url != self.__original_profile_image_url:
+            self.resize_profile_image()
+
+        super(Account, self).save(*args, **kwargs)
+    #
+    #
+    def resize_profile_image(self):
+        profile_image_field = self.profile_image
+        image_file = StringIO.StringIO(profile_image_field.read())
+        profile_image = Image.open(image_file)
+        profile_image.load()
+
+        # Resize image
+        profile_image = ImageOps.fit(profile_image, PROFILE_IMAGE_SIZE, Image.ANTIALIAS, centering=(0.5, 0.5))
+        # Convert to JPG image format with white background
+        if profile_image.mode not in ('L', 'RGB'):
+            white_bg_img = Image.new("RGB", PROFILE_IMAGE_SIZE, WHITE_BG)
+            white_bg_img.paste(profile_image, mask=profile_image.split()[3])
+            profile_image = white_bg_img
+
+        # Create thumb
+        tmp_image_file = StringIO.StringIO()
+        profile_image.save(tmp_image_file, 'JPEG', quality=90)
+        tmp_image_file.seek(0)
+        self.profile_image = InMemoryUploadedFile(tmp_image_file, 'ImageField', self.profile_image.name, 'image/jpeg', tmp_image_file.len, None)
+
+
+        # # Make a Thumbnail Image for the new resized image
+        thumb_image = profile_image.copy()
+        thumb_image.thumbnail(PROFILE_IMAGE_THUMB_SIZE, resample=Image.ANTIALIAS)
+        tmp_image_file = StringIO.StringIO()
+        thumb_image.save(tmp_image_file, 'JPEG', quality=90)
+        tmp_image_file.seek(0)
+        self.profile_image_thumb = InMemoryUploadedFile(tmp_image_file, 'ImageField', self.profile_image.name, 'image/jpeg', tmp_image_file.len, None)
+
+    #
+    # def resize_images(self):
+    #     """
+    #     Create and save the thumbnail for the profile_image (simple resize with PIL).
+    #     """
+    #     fh = storage.open(self.profile_image.name, 'r')
+    #     try:
+    #         image = Image.open(fh)
+    #     except:
+    #         raise Exception('Could not create thumbnail')
+    #
+    #     image.thumbnail(THUMB_SIZE, Image.ANTIALIAS)
+    #     fh.close()
+    #
+    #     # Path to save to, name, and extension
+    #     thumb_name, thumb_extension = os.path.splitext(self.profile_image.name)
+    #     thumb_extension = thumb_extension.lower()
+    #
+    #     thumb_filename = thumb_name + '_thumb' + thumb_extension
+    #
+    #     # Save thumbnail to in-memory file as StringIO
+    #     temp_thumb = StringIO()
+    #     image.save(temp_thumb, FTYPE)
+    #     temp_thumb.seek(0)
+    #
+    #     # Load a ContentFile into the thumbnail field so it gets saved
+    #     self.thumbnail.save(thumb_filename, ContentFile(temp_thumb.read()), save=True)
+    #     temp_thumb.close()

@@ -342,15 +342,19 @@ cw.AccountView = BB.View.extend({
             contentType: false,
             processData: false,
             success: function () {
-                console.log("succ"+JSON.stringify(formData));
                 Materialize.toast('Saved!', 5000);
 
                 _this.isSave = true;
                 _this.model.fetch();
             },
-            error: function(e){
-                Materialize.toast('ERROR: Image could not be uploaded', 5000);
-                Materialize.toast(JSON.stringify(e), 5000);
+            error: function(data){
+                if (data.status === 400) {
+                    Materialize.toast(data.responseJSON.message, 5000, 'red');
+                } else if (data.status === 500) {
+                    Materialize.toast('Internal Server Error', 5000, 'red');
+                } else {
+                    Materialize.toast(data.statusText, 5000, 'red');
+                }
             },
 
         });
