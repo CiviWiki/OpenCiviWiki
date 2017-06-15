@@ -667,6 +667,8 @@ cw.NewCiviView = BB.View.extend({
 
     render: function () {
         this.$el.empty().append(this.template());
+        $('.responses').height($('#new-civi-box').height() + $('.responses-box').height());
+
         this.magicSuggestView = new cw.LinkSelectView({$el: this.$('#magicsuggest'), civis: this.options.parentView.civis});
 
         this.attachment_links = [];
@@ -732,6 +734,8 @@ cw.NewCiviView = BB.View.extend({
 
     cancelCivi: function () {
         this.$el.empty();
+        $('.responses').height($('.responses-box').height());
+
     },
 
     createCivi: function (e) {
@@ -874,6 +878,7 @@ cw.NewResponseView = BB.View.extend({
 
     render: function () {
         this.$el.empty().append(this.template());
+        $('#add-new-response').hide();
 
         this.attachment_links = [];
         this.attachmentCount = 0;
@@ -893,6 +898,7 @@ cw.NewResponseView = BB.View.extend({
     //
     hide: function () {
         this.$el.empty();
+        $('#add-new-response').show();
     },
 
     addImageLinkInput: function(){

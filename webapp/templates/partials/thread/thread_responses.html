@@ -5,8 +5,11 @@
         <div class="link-lato">{{ parentCivi.get('type').toUpperCase() }}</div>
         <div class="header-lato">{{ this.civis.get(this.responseCollection.civiId).get('title') }}</div>
     </div>
-    <button class="btn add-response waves-effect">add response</button>
-    <div id="new-response-box"></div>
+    <button class="btn add-response waves-effect" id="add-new-response">add response</button>
+    <div class="section">
+        <div id="new-response-box"></div>
+    </div>
+
 </div>
 
 {{# if (this.responseCollection.length > 0) { }}
