@@ -89,7 +89,7 @@
     var accountModel = new cw.AccountModel({}, {
         user: username
     });
-    accountModel.fetch();
+
     var accountView = new cw.AccountView({
         model: accountModel,
         mapView: mapView,
@@ -97,5 +97,6 @@
         googleMapsApiKey: googleMapsApiKey,
         sunlightApiKey: sunlightApiKey
     });
+    accountModel.fetch();
     accountView.render();
 </script>

@@ -735,7 +735,6 @@ cw.NewCiviView = BB.View.extend({
     cancelCivi: function () {
         this.$el.empty();
         $('.responses').height($('.responses-box').height());
-
     },
 
     createCivi: function (e) {
@@ -897,7 +896,7 @@ cw.NewResponseView = BB.View.extend({
     // },
     //
     hide: function () {
-        this.$el.empty();
+        $('#new-response-box').empty();
         $('#add-new-response').show();
     },
 
@@ -1491,6 +1490,13 @@ cw.ThreadView = BB.View.extend({
         this.threadBodyRender();
         this.$('.scroll-col').height($(window).height() - this.$('.body-banner').height());
 
+
+        this.newCiviView = new cw.NewCiviView({
+            model: this.model,
+            parentView: this
+        });
+
+
         this.renderBodyContents();
     },
 
@@ -1704,11 +1710,11 @@ cw.ThreadView = BB.View.extend({
 
     renderResponses: function () {
         this.$('.responses-box').empty().append(this.responseWrapper());
-
         this.newResponseView = new cw.NewResponseView({
             model: this.model,
             parentView: this
         });
+
 
         _.each(this.responseCollection.models, function(civi){
             var can_edit = civi.get('author').username == this.username ? true : false;
@@ -2052,11 +2058,6 @@ cw.ThreadView = BB.View.extend({
     },
 
     openNewCiviModal: function () {
-        this.newCiviView = new cw.NewCiviView({
-            model: this.model,
-            parentView: this
-        });
-
         this.newCiviView.render();
     },
 
