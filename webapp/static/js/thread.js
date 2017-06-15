@@ -658,13 +658,11 @@ cw.CiviView =  BB.View.extend({
 });
 
 cw.NewCiviView = BB.View.extend({
-    el: '.new-civi-modal-holder',
+    el: '#new-civi-box',
     template: _.template($('#new-civi-template').html()),
 
     initialize: function (options) {
         this.options = options || {};
-
-        this.render();
     },
 
     render: function () {
@@ -674,14 +672,6 @@ cw.NewCiviView = BB.View.extend({
         this.attachment_links = [];
         this.attachmentCount = 0;
         // this.renderMagicSuggest();
-    },
-
-    show: function () {
-        this.$('.new-civi-modal').openModal();
-    },
-
-    hide: function () {
-        this.$('.new-civi-modal').closeModal();
     },
 
     events: {
@@ -741,7 +731,7 @@ cw.NewCiviView = BB.View.extend({
     },
 
     cancelCivi: function () {
-        this.hide();
+        this.$el.empty();
     },
 
     createCivi: function (e) {
@@ -789,28 +779,28 @@ cw.NewCiviView = BB.View.extend({
                                 Materialize.toast('New civi created.', 5000);
                                 new_civi.set('attachments', response2.attachments);
 
-                                _this.hide();
+                                // _this.hide();
                                 $('#thread-' + c_type + 's').append(new cw.CiviView({model: new_civi, can_edit: can_edit, parentView: _this.options.parentView}).el);
                                 _this.options.parentView.civis.add(new_civi);
 
                                 _this.options.parentView.initRecommended();
                                 _this.options.parentView.renderBodyContents(); //TODO: move renders into listeners
 
-                                _this.render();
+                                _this.$el.empty();
 
                                 $('body').css({overflow: 'hidden'});
                             },
                             error: function(e){
                                 Materialize.toast('Civi was created but one or more images could not be uploaded', 5000);
 
-                                _this.hide();
+                                // _this.hide();
                                 $('#thread-' + c_type + 's').append(new cw.CiviView({model: new_civi, can_edit: can_edit, parentView: _this.options.parentView}).el);
                                 _this.options.parentView.civis.add(new_civi);
 
                                 _this.options.parentView.initRecommended();
                                 _this.options.parentView.renderBodyContents(); //TODO: move renders into listeners
 
-                                _this.render();
+                                _this.$el.empty();
 
                                 $('body').css({overflow: 'hidden'});
                             },
@@ -821,7 +811,7 @@ cw.NewCiviView = BB.View.extend({
                         });
 
                     } else {
-                        _this.hide();
+                        // _this.hide();
                         Materialize.toast('New civi created.', 5000);
                         $('#thread-' + c_type + 's').append(new cw.CiviView({model: new_civi, can_edit: can_edit, parentView: _this.options.parentView}).el);
                         _this.options.parentView.civis.add(new_civi);
@@ -846,7 +836,7 @@ cw.NewCiviView = BB.View.extend({
                         //     console.log(link);
                         //     _this.options.parentView.civis.findWhere({id: link}).view.render();
                         // });
-                        _this.render();
+                        _this.$el.empty();
                     }
 
 
@@ -1487,11 +1477,6 @@ cw.ThreadView = BB.View.extend({
     render: function () {
         this.$el.empty().append(this.template());
 
-        this.newCiviView = new cw.NewCiviView({
-            model: this.model,
-            parentView: this
-        });
-
         this.newResponseView = new cw.NewResponseView({
             model: this.model,
             parentView: this
@@ -1721,7 +1706,7 @@ cw.ThreadView = BB.View.extend({
     },
 
     renderResponses: function () {
-        this.$('.responses').empty().append(this.responseWrapper());
+        this.$('.responses-box').empty().append(this.responseWrapper());
         _.each(this.responseCollection.models, function(civi){
             var can_edit = civi.get('author').username == this.username ? true : false;
             var can_respond = this.civis.get(this.responseCollection.civiId).get('author').username == this.username ? true : false;
@@ -1785,7 +1770,7 @@ cw.ThreadView = BB.View.extend({
         $civiNavScroll.css({height: $('body').height() - $civiNavScroll.offset().top});
         var $civiThreadScroll = this.$('.main-thread');
         $civiThreadScroll.css({height: $('body').height() - $civiThreadScroll.offset().top});
-        var $civiResponseScroll = this.$('.responses');
+        var $civiResponseScroll = this.$('.responses-box');
         $civiResponseScroll.css({height: $('body').height() - $civiResponseScroll.offset().top});
 
         this.renderOutline();
@@ -1977,7 +1962,7 @@ cw.ThreadView = BB.View.extend({
             this.$('.civi-card').removeClass('linked');
 
             this.currentCivi = null;
-            this.$('.responses').empty();
+            this.$('.responses-box').empty();
         }
 
     },
@@ -2011,7 +1996,7 @@ cw.ThreadView = BB.View.extend({
                 this.$('.civi-card').removeClass('linked');
 
                 this.currentCivi = null;
-                this.$('.responses').empty();
+                this.$('.responses-box').empty();
             }
         }
     },
@@ -2064,12 +2049,16 @@ cw.ThreadView = BB.View.extend({
     },
 
     openNewCiviModal: function () {
+        this.newCiviView = new cw.NewCiviView({
+            model: this.model,
+            parentView: this
+        });
 
-        this.newCiviView.show();
+        this.newCiviView.render();
     },
 
     openNewResponseModal: function () {
-        this.newResponseView.show();
+        this.newResponseView.render();
     },
 
     openEditThreadModal: function() {

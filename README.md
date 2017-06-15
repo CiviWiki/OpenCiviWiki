@@ -12,6 +12,8 @@ Why CiviWiki?
 For Developers.
 ---------------
 
+**NOTE: THIS README IS OUTDATED AND NEEDS TO BE UPDATED ACCORDINGLY**
+
 **Setup**: Setup requires certain environment variables on your machine to be set in order for the application to access secret values, these values are listed below.
 * Clone or Fork our repository.
 * Create a [virtual environment](http://docs.python-guide.org/en/latest/dev/virtualenvs/).

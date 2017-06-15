@@ -6,7 +6,9 @@
         <div class="header-lato">{{ this.civis.get(this.responseCollection.civiId).get('title') }}</div>
     </div>
     <button class="btn add-response waves-effect">add response</button>
+    <div id="new-response-box"></div>
 </div>
+
 {{# if (this.responseCollection.length > 0) { }}
     <div id="response-list"></div>
 {{# } else { }}
