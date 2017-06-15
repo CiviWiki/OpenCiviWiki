@@ -450,16 +450,6 @@ cw.CiviView =  BB.View.extend({
         } else {
             var data;
 
-            if (links.length === 0 ) {
-                if (c_type === 'cause') {
-                    Materialize.toast('A CAUSE Civi must be linked to a PROBLEM Civi', 5000);
-                    return;
-                } else if (c_type === 'solution') {
-                    Materialize.toast('A SOLUTION Civi must be linked to a CAUSE Civi', 5000);
-                    return;
-                }
-            }
-
 
             if (c_type === 'response' || c_type === 'rebuttal') {
                 new_type = c_type;
@@ -761,7 +751,7 @@ cw.NewCiviView = BB.View.extend({
         if (title && body && c_type) {
             if (links.length === 0) {
                 if (c_type === 'cause') {
-                    Materialize.toast('A CAUSE Civi must be linked to a PROBLEM Civi', 5000);
+                    Materialize.toast('A CAUSE Civi must be linked to a PROBLEM Civi. If it is only linked to a solution it will not appear', 5000);
                     this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
                     return;
                 } else if (c_type === 'solution') {
