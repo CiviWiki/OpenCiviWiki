@@ -1534,9 +1534,9 @@ cw.ThreadView = BB.View.extend({
         if (this.$('.thread-body-holder').length) {
             this.$('.thread-body-holder').empty().append(this.bodyTemplate());
 
-            // this.$('.main-thread').on('scroll', function (e) {
-            //     _this.processCiviScroll();
-            // });
+            this.$('.main-thread').on('scroll', function (e) {
+                _this.processCiviScroll();
+            });
         }
     },
 
