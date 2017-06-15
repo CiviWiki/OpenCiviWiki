@@ -1030,8 +1030,8 @@ cw.NewResponseView = BB.View.extend({
 });
 
 cw.EditThreadView = BB.View.extend({
-    el: '.edit-thread-modal-holder',
-    template: _.template($('#edit-thread-template').html()),
+    el: '.thread-wiki-holder',
+    template: _.template($('#edit-wiki-template').html()),
     initialize: function (options) {
         this.options = options || {};
         this.threadId = options.threadId;
@@ -1083,8 +1083,7 @@ cw.EditThreadView = BB.View.extend({
     },
 
     cancelEdit: function () {
-        this.hide();
-        this.render();
+        this.parentView.threadWikiRender();
     },
 
     showImageForm: function () {
@@ -1148,7 +1147,7 @@ cw.EditThreadView = BB.View.extend({
                                 type: 'POST',
                                 success: function (response2) {
                                     Materialize.toast('Saved changes', 5000);
-                                    _this.hide();
+                                    // _this.hide();
 
 
                                     new_data = response.data;
@@ -1160,7 +1159,7 @@ cw.EditThreadView = BB.View.extend({
                                     _this.parentView.model.set('location', new_data.location);
                                     _this.parentView.model.set('image', response2.image);
                                     _this.parentView.threadWikiRender();
-                                    _this.render();  // TODO: Please remove this
+
                                 },
                                 error: function(e){
                                     Materialize.toast('ERROR: Image could not be uploaded', 5000);
@@ -1195,7 +1194,6 @@ cw.EditThreadView = BB.View.extend({
                                     _this.parentView.model.set('location', new_data.location);
                                     _this.parentView.model.set('image', response2.image);
                                     _this.parentView.threadWikiRender();
-                                    _this.render();  // TODO: Please remove this
                                 },
                                 error: function(e){
                                     Materialize.toast('ERROR: Image could not be uploaded', 5000);
@@ -1214,7 +1212,7 @@ cw.EditThreadView = BB.View.extend({
                                 },
                                 success: function (response2) {
                                     Materialize.toast('Saved changes', 5000);
-                                    _this.hide();
+                                    // _this.hide();
 
                                     new_data = response.data;
                                     _this.parentView.model.set('title', new_data.title);
@@ -1225,7 +1223,6 @@ cw.EditThreadView = BB.View.extend({
                                     _this.parentView.model.set('state', new_data.state);
                                     _this.parentView.model.set('location', new_data.location);
                                     _this.parentView.threadWikiRender();
-                                    _this.render();  // TODO: Please remove this
                                 },
                                 error: function(e){
                                     Materialize.toast('ERROR: Image could not be uploaded', 5000);
@@ -1237,7 +1234,7 @@ cw.EditThreadView = BB.View.extend({
 
                     } else {
                         Materialize.toast('Saved changes', 5000);
-                        _this.hide();
+                        // _this.hide();
 
                         // New Data
                         new_data = response.data;
@@ -1248,7 +1245,6 @@ cw.EditThreadView = BB.View.extend({
                         _this.parentView.model.set('state', new_data.state);
                         _this.parentView.model.set('location', new_data.location);
                         _this.parentView.threadWikiRender();
-                        _this.render(); // TODO: Please remove this
                     }
 
                 },
@@ -2077,7 +2073,7 @@ cw.ThreadView = BB.View.extend({
     },
 
     openEditThreadModal: function() {
-        this.editThreadView.show();
+        this.editThreadView.render();
     },
 
     assign: function(view, selector) {

@@ -6,6 +6,7 @@ from utils.custom_decorators import require_post_params
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.conf import settings
+from utils.constants import US_STATES
 # from django.db.models import Q
 from api.forms import UpdateProfileImage
 from django.core.files import File   # need this for image file handling
@@ -359,7 +360,7 @@ def editThread(request):
                 },
                 "level": t.level,
                 "state": t.state if t.level == "state" else "",
-                "location": t.level if not t.state else dict(settings.US_STATES).get(t.state),
+                "location": t.level if not t.state else dict(US_STATES).get(t.state),
             }
             return JsonResponse({'data': return_data})
         else:
