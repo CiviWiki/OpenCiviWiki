@@ -430,7 +430,10 @@ def uploadProfileImage(request):
                     }
                     return JsonResponse(response, status=400)
 
-                return HttpResponse('image upload success')
+                response = {
+                    'profile_image': account.profile_image_url
+                }
+                return JsonResponse(response, status=200)
             except Exception as e:
                 response = {
                     'message': str(e),

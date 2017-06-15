@@ -238,31 +238,45 @@ cw.UserSetupView = BB.View.extend({
         $.ajax({
             url: '/api/upload_profile/',
             type: 'POST',
-            success: function () {
+            success: function (response) {
                 var img = _this.$el.find('#id_profile_image');
                 var uploaded_image = img[0].files[0];
                 if (uploaded_image) {
+                    var preview_image = _this.$el.find('.preview-image');
+                    preview_image.attr('src', response.profile_image);
 
-                    var reader = new FileReader();
-
-                    reader.onload = function(e) {
-                        var preview_image = _this.$el.find('.preview-image');
-                        preview_image.attr('src', e.target.result);
-                        _this.resizeImage();
-                        if (_this.$el.find('.preview-image').hasClass('hide')){
-                            _this.toggleImgButtons();
-                            _this.$el.find('.loading').addClass('hide');
-                            _this.$el.find('.placeholder').addClass('hide');
-                        }
-                    };
-                    reader.readAsDataURL(uploaded_image);
+                    if (_this.$el.find('.preview-image').hasClass('hide')){
+                        _this.toggleImgButtons();
+                        _this.$el.find('.loading').addClass('hide');
+                        _this.$el.find('.placeholder').addClass('hide');
+                    }
+                    // var reader = new FileReader();
+                    //
+                    // reader.onload = function(e) {
+                    //     var preview_image = _this.$el.find('.preview-image');
+                    //     preview_image.attr('src', e.target.result);
+                    //     // _this.resizeImage();
+                    //     if (_this.$el.find('.preview-image').hasClass('hide')){
+                    //         _this.toggleImgButtons();
+                    //         _this.$el.find('.loading').addClass('hide');
+                    //         _this.$el.find('.placeholder').addClass('hide');
+                    //     }
+                    // };
+                    // reader.readAsDataURL(uploaded_image);
 
                 }
+
                 Materialize.toast('Image Uploaded!', 5000);
             },
-            error: function(e){
-                Materialize.toast('ERROR: Image could not be uploaded', 5000);
-                Materialize.toast(e.statusText, 5000);
+            error: function(response){
+                if (response.status === 400) {
+                    Materialize.toast(response.responseJSON.message, 5000, 'red');
+                } else if (response.status === 500) {
+                    Materialize.toast('Internal Server Error', 5000, 'red');
+                } else {
+                    Materialize.toast(response.statusText, 5000, 'red');
+                }
+
                 _this.$el.find('.loading').addClass('hide');
                 _this.$el.find('.placeholder').removeClass('hide');
                 _this.$el.find('#profile_image_form')[0].reset();

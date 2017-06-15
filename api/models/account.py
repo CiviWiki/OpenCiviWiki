@@ -155,15 +155,12 @@ class Account(models.Model):
 
     def __init__(self, *args, **kwargs):
         super(Account, self).__init__(*args, **kwargs)
-        # if self.profile_image:
-        #     self.__original_profile_image_url = self.profile_image.url
 
     def save(self, *args, **kwargs):
         """ Image crop/resize and thumbnail creation """
 
         # New Profile image --
         if self.profile_image:
-            # if self.profile_image.url != self.__original_profile_image_url:
             self.resize_profile_image()
 
         super(Account, self).save(*args, **kwargs)
@@ -197,32 +194,3 @@ class Account(models.Model):
         thumb_image.save(tmp_image_file, 'JPEG', quality=90)
         tmp_image_file.seek(0)
         self.profile_image_thumb = InMemoryUploadedFile(tmp_image_file, 'ImageField', self.profile_image.name, 'image/jpeg', tmp_image_file.len, None)
-
-    #
-    # def resize_images(self):
-    #     """
-    #     Create and save the thumbnail for the profile_image (simple resize with PIL).
-    #     """
-    #     fh = storage.open(self.profile_image.name, 'r')
-    #     try:
-    #         image = Image.open(fh)
-    #     except:
-    #         raise Exception('Could not create thumbnail')
-    #
-    #     image.thumbnail(THUMB_SIZE, Image.ANTIALIAS)
-    #     fh.close()
-    #
-    #     # Path to save to, name, and extension
-    #     thumb_name, thumb_extension = os.path.splitext(self.profile_image.name)
-    #     thumb_extension = thumb_extension.lower()
-    #
-    #     thumb_filename = thumb_name + '_thumb' + thumb_extension
-    #
-    #     # Save thumbnail to in-memory file as StringIO
-    #     temp_thumb = StringIO()
-    #     image.save(temp_thumb, FTYPE)
-    #     temp_thumb.seek(0)
-    #
-    #     # Load a ContentFile into the thumbnail field so it gets saved
-    #     self.thumbnail.save(thumb_filename, ContentFile(temp_thumb.read()), save=True)
-    #     temp_thumb.close()
