@@ -450,6 +450,17 @@ cw.CiviView =  BB.View.extend({
         } else {
             var data;
 
+            if (links.length === 0 ) {
+                if (c_type === 'cause') {
+                    Materialize.toast('A CAUSE Civi must be linked to a PROBLEM Civi', 5000);
+                    return;
+                } else if (c_type === 'solution') {
+                    Materialize.toast('A SOLUTION Civi must be linked to a CAUSE Civi', 5000);
+                    return;
+                }
+            }
+
+
             if (c_type === 'response' || c_type === 'rebuttal') {
                 new_type = c_type;
                 data = {
@@ -748,6 +759,17 @@ cw.NewCiviView = BB.View.extend({
         this.$(e.currentTarget).addClass('disabled').attr('disabled', true);
 
         if (title && body && c_type) {
+            if (links.length === 0) {
+                if (c_type === 'cause') {
+                    Materialize.toast('A CAUSE Civi must be linked to a PROBLEM Civi', 5000);
+                    this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
+                    return;
+                } else if (c_type === 'solution') {
+                    Materialize.toast('A SOLUTION Civi must be linked to a CAUSE Civi', 5000);
+                    this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
+                    return;
+                }
+            }
             $.ajax({
                 url: '/api/new_civi/',
                 type: 'POST',
@@ -1512,9 +1534,9 @@ cw.ThreadView = BB.View.extend({
         if (this.$('.thread-body-holder').length) {
             this.$('.thread-body-holder').empty().append(this.bodyTemplate());
 
-            this.$('.main-thread').on('scroll', function (e) {
-                _this.processCiviScroll();
-            });
+            // this.$('.main-thread').on('scroll', function (e) {
+            //     _this.processCiviScroll();
+            // });
         }
     },
 
