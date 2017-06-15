@@ -1,15 +1,21 @@
 {% verbatim %}
-<div class="modal new-response-modal modal-fixed-footer">
-    <div class="modal-content container">
-        <div class="section">
-            <div class="subtitle-lato new-civi-title">Add your response</div>
-        </div>
-        <div class="new-civi-contention new-civi-container">
-            <div class="input-field white-background-input-field left-input-field">
-                <input id="response-title" type="text" length="120">
-                <label for="response-title">What is the argument you want to make?</label>
+<div class="new-civi-card">
+    <div class="row civi-header">
+        <div class="col s10 no-pads civi-title-outer">
+            <div class="civi-title">
+                <div class="section">
+                    <div class="subtitle-lato new-civi-title">Add your response</div>
+                </div>
+                <div class="new-civi-contention new-civi-container">
+                    <div class="input-field white-background-input-field left-input-field">
+                        <input id="response-title" type="text" length="120">
+                        <label for="response-title">What is the argument you want to make?</label>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
+    <div class="civi-body">
         <div class="new-civi-body white-background-input-field new-civi-container">
             <div class="input-field left-input-field">
                 <textarea id="response-body" type="text" class="materialize-textarea" length="4000"></textarea>
@@ -38,10 +44,9 @@
             <div class="file-preview"></div>
         </div>
     </div>
-
-    <div class="modal-footer">
-        <button class="modal-action waves-effect waves-light btn create-new-response">add response</button>
-        <button class="modal-action waves-effect waves-cw-blue btn-flat cancel-new-response">Cancel</button>
+    <div class="civi-footer">
+        <button class="waves-effect waves-light btn create-new-response">add response</button>
+        <button class="waves-effect waves-cw-blue btn-flat cancel-new-response">Cancel</button>
     </div>
 </div>
 {% endverbatim %}

@@ -865,12 +865,11 @@ cw.NewCiviView = BB.View.extend({
 });
 
 cw.NewResponseView = BB.View.extend({
-    el: '.new-response-modal-holder',
+    el: '#new-response-box',
     template: _.template($('#new-response-template').html()),
     initialize: function (options) {
         this.options = options || {};
         this.rebuttal_ref = '';
-        this.render();
     },
 
     render: function () {
@@ -887,13 +886,13 @@ cw.NewResponseView = BB.View.extend({
         'input .civi-link-images': 'previewImageNames',
         'click #add-image-link-input': 'addImageLinkInput',
     },
-
-    show: function () {
-        this.$('.new-response-modal').openModal();
-    },
-
+    //
+    // show: function () {
+    //     this.$('.new-response-modal').openModal();
+    // },
+    //
     hide: function () {
-        this.$('.new-response-modal').closeModal();
+        this.$el.empty();
     },
 
     addImageLinkInput: function(){
@@ -983,16 +982,14 @@ cw.NewResponseView = BB.View.extend({
                                 Materialize.toast('New response created.', 5000);
                                 _this.options.parentView.responseCollection.fetch();
                                 _this.options.parentView.renderResponses();
-                                _this.hide();
-                                _this.render();
+                                _this.$el.empty();
                             },
                             error: function(e){
                                 Materialize.toast('Response was created but images could not be uploaded', 5000);
                                 // _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
                                 _this.options.parentView.responseCollection.fetch();
                                 _this.options.parentView.renderResponses();
-                                _this.hide();
-                                _this.render();
+                                _this.$el.empty();
                             },
                             data: formData,
                             cache: false,
@@ -1003,8 +1000,7 @@ cw.NewResponseView = BB.View.extend({
                         Materialize.toast('New response created.', 5000);
                         _this.options.parentView.responseCollection.fetch();
                         _this.options.parentView.renderResponses();
-                        _this.hide();
-                        _this.render();
+                        _this.$el.empty();
                     }
                 },
                 error: function(){
@@ -1477,11 +1473,6 @@ cw.ThreadView = BB.View.extend({
     render: function () {
         this.$el.empty().append(this.template());
 
-        this.newResponseView = new cw.NewResponseView({
-            model: this.model,
-            parentView: this
-        });
-
         this.editThreadView = new cw.EditThreadView({
             model: this.model,
             parentView: this,
@@ -1707,6 +1698,12 @@ cw.ThreadView = BB.View.extend({
 
     renderResponses: function () {
         this.$('.responses-box').empty().append(this.responseWrapper());
+
+        this.newResponseView = new cw.NewResponseView({
+            model: this.model,
+            parentView: this
+        });
+
         _.each(this.responseCollection.models, function(civi){
             var can_edit = civi.get('author').username == this.username ? true : false;
             var can_respond = this.civis.get(this.responseCollection.civiId).get('author').username == this.username ? true : false;
