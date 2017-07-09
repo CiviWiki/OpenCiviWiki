@@ -7,3 +7,6 @@ The following packages are helpful/required to start developing CiviWiki:
 -PostgreSQL
 
 ## Set-up
+
+### Environment variables
+There are several environment variables that are needed for things to work properly:
