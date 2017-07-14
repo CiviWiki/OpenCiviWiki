@@ -6,6 +6,7 @@ The following packages are helpful/required to start developing CiviWiki:
 
 - PostgreSQL
 - Redis
+    - [Redis installation instructions](https://redis.io/topics/quickstart)
 
 ## Set-up
 
