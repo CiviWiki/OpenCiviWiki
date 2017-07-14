@@ -78,6 +78,13 @@ Certain resources, such as CSS and JavaScript files, need to be served from a st
 python manage.py collectstatic
 ```
 
+### Create super user
+You will need a super user in order to log in and manage CiviWiki:
+
+```py
+python manage.py createsuperuser
+```
+
 ## Run CiviWiki
 If the above steps are complete, we can start CiviWiki:
 
