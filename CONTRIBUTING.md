@@ -58,3 +58,10 @@ To activate all of the environment variables, e.g. on Ubuntu Linux, use the foll
 ```
 
 Note the pattern is 'dot space filename.sh'
+
+### Initial CiviWiki (Django project) set up
+Once you have a working virtual environment, installed all requirements, and have set up environment variables, you are ready to populate the initial database:
+
+```py
+python manage.py migrate
+```
