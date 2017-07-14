@@ -77,3 +77,10 @@ Certain resources, such as CSS and JavaScript files, need to be served from a st
 ```py
 python manage.py collectstatic
 ```
+
+### Run CiviWiki
+If the above steps are complete, we can start CiviWiki:
+
+```py
+python manage.py runserver
+```
