@@ -9,6 +9,18 @@ The following packages are helpful/required to start developing CiviWiki:
     - [Redis installation instructions](https://redis.io/topics/quickstart)
 
 ## Set-up
+The following instructions assume you have already cloned this repository.
+
+### Requirements
+You will need a virtual environment with Python 2.7 installed.
+
+Once your virtual environment is active, run the following command to install the requirements:
+
+```py
+pip install -r requirements.txt
+```
+
+The above command should be run in the same directory as the requirements.txt file.
 
 ### Environment variables
 There are several environment variables that are needed for things to work properly:
