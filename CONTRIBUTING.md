@@ -29,7 +29,6 @@ You can save some time and declare those environmental variables all at once wit
 ```sh
 #! /bin/bash
 
-#! /bin/bash
 
 export SUNLIGHT_API_KEY=**********
 export GOOGLE_MAP_API_KEY=**********
@@ -39,3 +38,11 @@ export CIVIWIKI_LOCAL_NAME=civiwiki
 export CIVIWIKI_LOCAL_USERNAME=civiwiki
 export CIVIWIKI_LOCAL_PASSWORD=password
 ```
+
+To activate all of the environment variables, e.g. on Ubuntu Linux, use the following command:
+
+```
+. setup_environment_variables.sh
+```
+
+Note the pattern is 'dot space filename.sh'
