@@ -71,6 +71,17 @@ python manage.py migrate
 
 If everything goes well, you should see a bunch of green 'OK's. Django will create the database structure for you.
 
+### Populate initial data
+There are two files, located in the `/data` directory, that contain initial categories and congressional data. Run the following commands to initialize the congressional and categoies data:
+
+```py
+python manage.py loaddata /data/congress.json
+```
+
+```py
+python manage.py loaddata /data/categories.json
+```
+
 ### Collect static files
 Certain resources, such as CSS and JavaScript files, need to be served from a static directory. Run the following command to collect static files for Django to serve:
 
