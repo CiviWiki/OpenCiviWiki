@@ -23,3 +23,19 @@ There are several environment variables that are needed for things to work prope
 - CIVIWIKI_LOCAL_NAME - database name in local PostgreSQL instance
 - CIVIWIKI_LOCAL_USERNAME - username in local PostgreSQL instance with rights to database
 - CIVIWIKI_LOCAL_PASSWORD - password for database user
+
+You can save some time and declare those environmental variables all at once with a shell script. E.g.
+
+```sh
+#! /bin/bash
+
+#! /bin/bash
+
+export SUNLIGHT_API_KEY=**********
+export GOOGLE_MAP_API_KEY=**********
+
+# PostgreSQL
+export CIVIWIKI_LOCAL_NAME=civiwiki
+export CIVIWIKI_LOCAL_USERNAME=civiwiki
+export CIVIWIKI_LOCAL_PASSWORD=password
+```
