@@ -68,3 +68,5 @@ Once you have a working virtual environment, installed all requirements, and hav
 ```py
 python manage.py migrate
 ```
+
+If everything goes well, you should see a bunch of green 'OK's. Django will create the database structure for you.
