@@ -41,7 +41,10 @@ You can save some time and declare those environmental variables all at once wit
 ```sh
 #! /bin/bash
 
+# CiviWiki (Django)
+export DJANGO_SECRET_KEY=**********
 
+# Third party
 export SUNLIGHT_API_KEY=**********
 export GOOGLE_MAP_API_KEY=**********
 
