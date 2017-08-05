@@ -20,7 +20,13 @@ from django.views.static import serve
 from api import urls as api
 from authentication import urls as auth
 from frontend_views import urls as frontend_views
+from django.conf.urls import url, handler404
+from frontend_views.views import does_not_exist
+
 # import notifications
+
+# handle 404 errors
+handler404 = does_not_exist
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
