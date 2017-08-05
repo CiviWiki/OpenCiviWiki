@@ -254,5 +254,6 @@ class CiviImage(models.Model):
             return self.image.url
         else:
             #NOTE: This default url will probably be changed later
-            return "/static/img/no_image_md.png",
+            return "/static/img/no_image_md.png"
+            
     image_url = property(_get_image_url)
