@@ -12,6 +12,7 @@ class Representative(models.Model):
     about_me = models.CharField(max_length=511, blank=True)
 
     district = models.CharField(max_length=63, blank=True, null=True)
+    
     # junior or senior for senator
     senate_class = models.CharField(max_length=63, blank=True, null=True)
     state = models.CharField(max_length=63)
