@@ -5,6 +5,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.contrib.auth.models import User
 from django.db.models import F
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 from api.models import Category, Account, Thread, Civi, Activity, Invitation
 from api.forms import UpdateProfileImage
 
@@ -277,4 +279,11 @@ def support_us_view(request):
     return TemplateResponse(request, 'static_templates/support_us.html', {})
 
 def does_not_exist(request):
-    return TemplateResponse(request, 'base/404.html', {})
+    response = render_to_response(
+        'base/404.html',
+        context_instance=RequestContext(request)
+    )
+
+    response.status_code = 404
+
+    return response
