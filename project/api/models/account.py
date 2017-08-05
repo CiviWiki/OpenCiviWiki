@@ -53,13 +53,19 @@ class AccountManager(models.Manager):
         return data
 
     def card_summarize(self, account, request_account):
+        # Length at which to truncate 'about me' text
+        about_me_truncate_length = 150
+
+        # If 'about me' text is longer than 150 characters... add elipsis (truncate)
+        ellipsis_if_too_long = '' if len(account.about_me) <= about_me_truncate_length else '...'
+
         data = {
             "id": account.user.id,
             "username": account.user.username,
             "first_name": account.first_name,
             "last_name": account.last_name,
-            "about_me": account.about_me[:150] + ('' if len(account.about_me) <= 150 else '...'),
-            "location": account.location,
+            "about_me": account.about_me[:about_me_truncate_length] + (ellipsis_if_too_long),
+            "location": account.get_location(),
             "profile_image": account.profile_image_url,
             "follow_state": True if account in request_account.following.all() else False,
             "request_account": request_account.first_name
@@ -181,8 +187,7 @@ class Account(models.Model):
         self.full_account = self.is_full_account()
 
         super(Account, self).save(*args, **kwargs)
-    #
-    #
+
     
     def resize_profile_image(self):
         """
