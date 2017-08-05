@@ -16,7 +16,6 @@ class Notification(models.Model):
         ('rebuttal_to_your_response', 'Rebuttal to your response'),
     )
     activity_type = models.CharField(max_length=31, default='new_follower', choices=activity_CHOICES)
-
     read = models.BooleanField(default=False)
 
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
