@@ -277,13 +277,3 @@ def about_view(request):
 
 def support_us_view(request):
     return TemplateResponse(request, 'static_templates/support_us.html', {})
-
-def does_not_exist(request):
-    response = render_to_response(
-        'base/404.html',
-        context_instance=RequestContext(request)
-    )
-
-    response.status_code = 404
-
-    return response
