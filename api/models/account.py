@@ -75,10 +75,10 @@ class AccountManager(models.Manager):
 
 
     def followers(self, account):
-        return [self.chip_summarize(a) for a in account.followers.all()]
+        return [self.chip_summarize(follower) for follower in account.followers.all()]
 
     def following(self, account):
-        return [self.chip_summarize(a) for a in account.following.all()]
+        return [self.chip_summarize(following) for following in account.following.all()]
 
 @deconstructible
 class PathAndRename(object):
@@ -86,9 +86,9 @@ class PathAndRename(object):
         self.sub_path = sub_path
 
     def __call__(self, instance, filename):
-        ext = filename.split('.')[-1]
+        extension = filename.split('.')[-1]
         new_filename = str(uuid.uuid4())
-        filename = '{}.{}'.format(new_filename, ext)
+        filename = '{}.{}'.format(new_filename, extension)
         return os.path.join(self.sub_path, filename)
 
 profile_upload_path = PathAndRename('')
@@ -130,20 +130,27 @@ class Account(models.Model):
     def get_location(self):
         """ Constructs a CITY, STATE string for locations in the US """
         if self.city and self.state:
-            return '{city}, {state}'.format(city=self.city, state=dict(US_STATES).get(self.state))
+            # Get US State from US States dictionary
+            us_state = dict(US_STATES).get(self.state)
+
+            return '{city}, {state}'.format(city=self.city, state=us_state)
         elif self.state:
-            return '{state}'.format(state=dict(US_STATES).get(self.state))
+            # Get US State from US States dictionary
+            us_state = dict(US_STATES).get(self.state)
+
+            return '{state}'.format(us_state)
         else:
             return 'NO LOCATION'
 
     def _get_full_name(self):
         "Returns the person's full name."
 
-        str_full_name = '{first_name} {last_name}'.format(
+        full_name = '{first_name} {last_name}'.format(
             first_name=self.first_name,
             last_name=self.last_name
         )
-        return str_full_name
+        return full_name
+
     full_name = property(_get_full_name)
 
     def _get_profile_image_url(self):
@@ -156,7 +163,8 @@ class Account(models.Model):
             return self.profile_image.url
         else:
             #NOTE: This default url will probably be changed later
-            return "/static/img/no_image_md.png",
+            return "/static/img/no_image_md.png"
+
     profile_image_url = property(_get_profile_image_url)
 
     def __init__(self, *args, **kwargs):
@@ -170,8 +178,7 @@ class Account(models.Model):
             self.resize_profile_image()
 
         super(Account, self).save(*args, **kwargs)
-    #
-    #
+
     def resize_profile_image(self):
         profile_image_field = self.profile_image
         image_file = StringIO.StringIO(profile_image_field.read())
@@ -180,6 +187,7 @@ class Account(models.Model):
 
         # Resize image
         profile_image = ImageOps.fit(profile_image, PROFILE_IMAGE_SIZE, Image.ANTIALIAS, centering=(0.5, 0.5))
+
         # Convert to JPG image format with white background
         if profile_image.mode not in ('L', 'RGB'):
             white_bg_img = Image.new("RGB", PROFILE_IMAGE_SIZE, WHITE_BG)
@@ -193,7 +201,7 @@ class Account(models.Model):
         self.profile_image = InMemoryUploadedFile(tmp_image_file, 'ImageField', self.profile_image.name, 'image/jpeg', tmp_image_file.len, None)
 
 
-        # # Make a Thumbnail Image for the new resized image
+        # Make a Thumbnail Image for the new resized image
         thumb_image = profile_image.copy()
         thumb_image.thumbnail(PROFILE_IMAGE_THUMB_SIZE, resample=Image.ANTIALIAS)
         tmp_image_file = StringIO.StringIO()
