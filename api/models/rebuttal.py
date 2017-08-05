@@ -1,16 +1,12 @@
 from django.db import models
 from account import Account
 from response import Response
-# from django.contrib.postgres.fields import ArrayField
-
 
 class Rebuttal(models.Model):
     author = models.ForeignKey(Account, default=None, null=True)
     response = models.ForeignKey(Response, default=None, null=True)
 
     body = models.TextField(max_length=1023)
-
-    # sources = ArrayField(models.CharField(max_length=127, blank=True), default=[], blank=True)
 
     votes_vneg = models.IntegerField(default=0)
     votes_neg = models.IntegerField(default=0)
