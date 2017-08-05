@@ -5,8 +5,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.contrib.auth.models import User
 from django.db.models import F
-from django.shortcuts import render_to_response
-from django.template import RequestContext
 from api.models import Category, Account, Thread, Civi, Activity, Invitation
 from api.forms import UpdateProfileImage
 
