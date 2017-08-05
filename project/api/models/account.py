@@ -74,10 +74,10 @@ class AccountManager(models.Manager):
 
 
     def followers(self, account):
-        return [self.chip_summarize(a) for a in account.followers.all()]
+        return [self.chip_summarize(follower) for follower in account.followers.all()]
 
     def following(self, account):
-        return [self.chip_summarize(a) for a in account.following.all()]
+        return [self.chip_summarize(following) for following in account.following.all()]
 
 @deconstructible
 class PathAndRename(object):
@@ -85,9 +85,9 @@ class PathAndRename(object):
         self.sub_path = sub_path
 
     def __call__(self, instance, filename):
-        ext = filename.split('.')[-1]
+        extension = filename.split('.')[-1]
         new_filename = str(uuid.uuid4())
-        filename = '{}.{}'.format(new_filename, ext)
+        filename = '{}.{}'.format(new_filename, extension)
         return os.path.join(self.sub_path, filename)
 
 
@@ -130,9 +130,15 @@ class Account(models.Model):
     def _get_location(self):
         """ Constructs a CITY, STATE string for locations in the US """
         if self.city and self.state:
-            return '{city}, {state}'.format(city=self.city, state=dict(US_STATES).get(self.state))
+            # Get US State from US States dictionary
+            us_state = dict(US_STATES).get(self.state)
+
+            return '{city}, {state}'.format(city=self.city, state=us_state)
         elif self.state:
-            return '{state}'.format(state=dict(US_STATES).get(self.state))
+            # Get US State from US States dictionary
+            us_state = dict(US_STATES).get(self.state)
+
+            return '{state}'.format(us_state)
         else:
             return 'NO LOCATION'
     location = property(_get_location)
@@ -140,11 +146,12 @@ class Account(models.Model):
     def _get_full_name(self):
         "Returns the person's full name."
 
-        str_full_name = '{first_name} {last_name}'.format(
+        full_name = '{first_name} {last_name}'.format(
             first_name=self.first_name,
             last_name=self.last_name
         )
-        return str_full_name
+        return full_name
+
     full_name = property(_get_full_name)
 
     def _get_profile_image_url(self):
@@ -199,9 +206,7 @@ class Account(models.Model):
         profile_image.load()
 
         # Resize image
-        profile_image = ImageOps.fit(profile_image, PROFILE_IMG_SIZE, Image.ANTIALIAS)
-
-        # TODO: Check if GIF to allow GIF uploads. Get 1st frame if so
+        profile_image = ImageOps.fit(profile_image, PROFILE_IMAGE_SIZE, Image.ANTIALIAS, centering=(0.5, 0.5))
 
         # Convert to JPG image format with white background
         if profile_image.mode not in ('L', 'RGB'):
