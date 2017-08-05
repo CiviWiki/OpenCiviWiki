@@ -14,22 +14,30 @@ class InvitationManager(models.Manager):
         """
         Gets the queryset of invited persons by the host user or all if not specified
         """
-        invitation_qs = super(InvitationManager, self).get_queryset()
+
+        # Get invitations queryset from parent class
+        invitations = super(InvitationManager, self).get_queryset()
+
         if host_user:
-            invitees = invitation_qs.filter(host_user=host_user)
+            invitees = invitations.filter(host_user=host_user)
         else:
-            invitees = invitation_qs
+            invitees = invitations
+
         return invitees
 
     def get_registered_invitees(self, host_user=None):
         """
         Gets the queryset of registered invited persons by the host user or all if not specified
         """
-        invitation_qs = super(InvitationManager, self).get_queryset()
+
+        # Get invitations queryset from parent class
+        invitations = super(InvitationManager, self).get_queryset()
+
         if host_user:
-            invitees = invitation_qs.filter(host_user=host_user, registered=True)
+            invitees = invitations.filter(host_user=host_user, registered=True)
         else:
-            invitees = invitation_qs.filter(registered=True)
+            invitees = invitations.filter(registered=True)
+
         return invitees
 
 
@@ -44,6 +52,8 @@ class Invitation(models.Model):
     invitee_email = models.EmailField(default=None, null=False)
     verification_code = models.CharField(max_length=31, null=False)
     invitee_user = models.ForeignKey(User, default=None, null=True, related_name="invitees")
+
+    date_created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     #TODO: Invitation type
     #TODO: Invitation limit
 
@@ -53,9 +63,8 @@ class Invitation(models.Model):
             return self.invitee_user.date_joined
         else:
             return None
-    date_registered = property(_get_date_registered)
 
-    date_created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    date_registered = property(_get_date_registered)
 
     def summarize(self):
         data = {
