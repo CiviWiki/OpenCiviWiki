@@ -13,11 +13,17 @@ from utils.constants import US_STATES
 class ThreadManager(models.Manager):
     #TODO: move this to read.py, try to be more query operation specific here
     def summarize(self, thread):
+        # Number of characters after which to truncate thread
+        thread_truncate_length = 320
+
+        # If thread length is longer than truncate length... add elipsis (truncate)
+        ellipsis_if_too_long = '' if len(thread.summary) <= thread_truncate_length else '...'
+
         from civi import Civi
         thread_data = {
             "id": thread.id,
             "title": thread.title,
-            "summary": thread.summary[:320] + ('' if len(thread.summary) <= 320 else '...'),
+            "summary": thread.summary[:thread_truncate_length] + (ellipsis_if_too_long),
             "created": "{0} {1}, {2}".format(month_name[thread.created.month], thread.created.day, thread.created.year),
             "category_id": thread.category.id,
             "image": thread.image_url
@@ -49,9 +55,9 @@ class PathAndRename(object):
         self.sub_path = sub_path
 
     def __call__(self, instance, filename):
-        ext = filename.split('.')[-1]
+        extension = filename.split('.')[-1]
         new_filename = str(uuid.uuid4())
-        filename = '{}.{}'.format(new_filename, ext)
+        filename = '{}.{}'.format(new_filename, extension)
         return os.path.join(self.sub_path, filename)
 
 image_upload_path = PathAndRename('')
@@ -79,7 +85,8 @@ class Thread(models.Model):
             return self.image.url
         else:
             #NOTE: This default url will probably be changed later
-            return "/static/img/no_image_md.png",
+            return "/static/img/no_image_md.png"
+
     image_url = property(_get_image_url)
 
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
@@ -94,4 +101,5 @@ class Thread(models.Model):
     def _get_created_date_str(self):
         d = self.created
         return "{0} {1}, {2}".format(month_name[d.month], d.day, d.year)
+        
     created_date_str = property(_get_created_date_str)
