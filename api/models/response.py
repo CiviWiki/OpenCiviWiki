@@ -1,8 +1,6 @@
 from django.db import models
 from account import Account
 from civi import Civi
-# from django.contrib.postgres.fields import ArrayField
-
 
 class Response(models.Model):
     author = models.ForeignKey(Account, default=None, null=True)
@@ -10,8 +8,6 @@ class Response(models.Model):
 
     title = models.CharField(max_length=127)
     body = models.TextField(max_length=2047)
-
-    # sources = ArrayField(models.CharField(max_length=127, blank=True), default=[], blank=True)
 
     votes_vneg = models.IntegerField(default=0)
     votes_neg = models.IntegerField(default=0)
