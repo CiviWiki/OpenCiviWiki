@@ -5,13 +5,13 @@ from thread import Thread
 
 class ActivityManager(models.Manager):
     def votes(self, civi_id):
-        c = Civi.objects.get(id=civi_id)
+        civi = Civi.objects.get(id=civi_id)
         votes = dict(
-            votes_vneg=c.votes_vneg,
-            votes_neg=c.votes_neg,
-            votes_neutral=c.votes_neutral,
-            votes_pos=c.votes_pos,
-            votes_vpos=c.votes_vpos
+            votes_vneg=civi.votes_vneg,
+            votes_neg=civi.votes_neg,
+            votes_neutral=civi.votes_neutral,
+            votes_pos=civi.votes_pos,
+            votes_vpos=civi.votes_vpos
         )
         return votes
 
