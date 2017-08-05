@@ -71,9 +71,9 @@ class CiviManager(models.Manager):
             return json.dumps({filter: data[filter]})
         return data
 
-    def thread_sorted_by_score(self, civis_questionss, req_acct_id):
-        questions = civis_questions.order_by('-created')
-        return sorted(questions.all(), key=lambda c: c.score(req_acct_id), reverse=True)
+    def thread_sorted_by_score(self, civis_queryset, req_acct_id):
+        queryset = civis_queryset.order_by('-created')
+        return sorted(queryset.all(), key=lambda c: c.score(req_acct_id), reverse=True)
 
 
 class Civi(models.Model):
@@ -253,5 +253,5 @@ class CiviImage(models.Model):
         else:
             #NOTE: This default url will probably be changed later
             return "/static/img/no_image_md.png"
-            
+
     image_url = property(_get_image_url)
