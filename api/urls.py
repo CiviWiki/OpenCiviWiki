@@ -1,6 +1,8 @@
 from django.conf.urls import url
 import read, write
 
+from api.v1.views import test_endpoint
+
 #TODO: RESTful API - http://www.django-rest-framework.org/
 urlpatterns = [
     # url(r'^getcivi$', read.getCivi, name='civi'),
@@ -45,4 +47,7 @@ urlpatterns = [
     # url(r'^unfollowgroup$', write.unfollowGroup, name='unfollow group'),
     # url(r'^pincivi$', write.pinCivi, name='pin civi'),
     # url(r'^unpincivi$', write.unpinCivi, name='unpin civi'),
+
+    # api
+    url(r'^v1/test/$', test_endpoint),
 ]
