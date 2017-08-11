@@ -49,5 +49,5 @@ urlpatterns = [
     # url(r'^unpincivi$', write.unpinCivi, name='unpin civi'),
 
     # api
-    url(r'^v1/sunlight/$', open_states_api_endpoint),
+    url(r'^v1/open_states/$', open_states_api_endpoint),
 ]
