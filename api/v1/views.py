@@ -6,7 +6,7 @@ import pyopenstates as open_states
 from django.conf import settings
 
 @api_view(['GET'])
-def open_states_api_endpoint(request):
+def open_states_bills(request):
     if request.method == 'GET':
         # Get OpenStates API key
         open_states_api_key = settings.OPEN_STATES_API_KEY
