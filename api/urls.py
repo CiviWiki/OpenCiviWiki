@@ -1,7 +1,7 @@
 from django.conf.urls import url
 import read, write
 
-from api.v1.views import open_states_api_endpoint
+from api.v1.views import open_states_bills
 
 #TODO: RESTful API - http://www.django-rest-framework.org/
 urlpatterns = [
