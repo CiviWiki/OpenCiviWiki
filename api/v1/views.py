@@ -14,7 +14,11 @@ def open_states_api_endpoint(request):
         # Initialize OpenStates with API key
         open_states.set_api_key(open_states_api_key)
 
-        # Get some data from OpenStates API
-        api_response = open_states.search_bills(q='methane')
+        # Get query parameter from request, False if not provided
+        query = request.GET.get('query', False)
 
-        return Response(api_response)
+        if (query):
+            # Get some data from OpenStates API
+            api_response = open_states.search_bills(q=query)
+
+            return Response(api_response)
