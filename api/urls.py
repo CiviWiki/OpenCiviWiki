@@ -1,7 +1,7 @@
 from django.conf.urls import url
 import read, write
 
-from api.v1.views import test_endpoint
+from api.v1.views import sunlight_api_endpoint
 
 #TODO: RESTful API - http://www.django-rest-framework.org/
 urlpatterns = [
@@ -49,5 +49,5 @@ urlpatterns = [
     # url(r'^unpincivi$', write.unpinCivi, name='unpin civi'),
 
     # api
-    url(r'^v1/test/$', test_endpoint),
+    url(r'^v1/sunlight/$', sunlight_api_endpoint),
 ]

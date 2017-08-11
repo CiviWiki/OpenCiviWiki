@@ -5,7 +5,7 @@ import requests
 from django.conf import settings
 
 @api_view(['GET'])
-def test_endpoint(request):
+def sunlight_api_endpoint(request):
     if request.method == 'GET':
         # Create a request to fake data API
         api_response = requests.get("https://reqres.in/api/users/2")
