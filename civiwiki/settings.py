@@ -115,6 +115,7 @@ ADMINS = [('Development Team', 'dev@civiwiki.org')]
 # API keys
 SUNLIGHT_API_KEY = get_env_variable("SUNLIGHT_API_KEY")
 GOOGLE_API_KEY = get_env_variable("GOOGLE_MAP_API_KEY")
+OPEN_STATES_API_KEY = get_env_variable("OPEN_STATES_API_KEY")
 
 # Channels Setup
 if 'REDIS_URL' in os.environ:
