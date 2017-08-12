@@ -66,6 +66,8 @@ MIDDLEWARE_CLASSES = (
 )
 
 
+CSRF_USE_SESSIONS = True # Store the CSRF token in the users session instead of in a cookie
+
 CORS_ORIGIN_ALLOW_ALL = True
 ROOT_URLCONF = 'civiwiki.urls'
 LOGIN_URL = '/login'
