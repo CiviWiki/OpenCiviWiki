@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/CiviWiki/OpenCiviWiki.png?label=ready&title=Ready)](https://waffle.io/CiviWiki/OpenCiviWiki?utm_source=badge)
 Welcome to Civiwiki!
 -------------------
 
