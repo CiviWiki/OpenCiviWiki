@@ -1,4 +1,10 @@
 {
+  "tags": [
+    {
+      "name": "Bill",
+      "description": "Operations related to searching for bills, both state and federal."
+    }
+  ],
   "info": {
     "title": "CiviWiki Bill API",
     "version": "0.1.0",
