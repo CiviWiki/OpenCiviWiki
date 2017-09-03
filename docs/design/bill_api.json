@@ -74,8 +74,17 @@
           "type": "string",
           "title": "Description",
           "description": "Bill description"
+        },
+        "source_id": {
+          "x-oad-type": "string",
+          "type": "string",
+          "title": "Source ID",
+          "description": "Unique ID from Bill source (Pro Publica or Open States)"
         }
-      }
+      },
+      "required": [
+        "source_id"
+      ]
     }
   },
   "info": {
