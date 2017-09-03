@@ -23,18 +23,8 @@
               "title": "Results",
               "description": "The array of bill results.",
               "items": {
-                "x-oad-type": "object",
-                "type": "object",
-                "title": "Bill",
-                "description": "A single bill object.",
-                "properties": {
-                  "name": {
-                    "x-oad-type": "string",
-                    "type": "string",
-                    "title": "Name",
-                    "description": "The name of the bill."
-                  }
-                }
+                "x-oad-type": "reference",
+                "$ref": "#/definitions/bill"
               }
             },
             "x-oad-type": "response"
@@ -64,6 +54,28 @@
         ]
       },
       "x-oad-type": "operation"
+    }
+  },
+  "definitions": {
+    "bill": {
+      "x-oad-type": "object",
+      "type": "object",
+      "title": "Bill",
+      "description": "A single bill object",
+      "properties": {
+        "name": {
+          "x-oad-type": "string",
+          "type": "string",
+          "title": "Name",
+          "description": "The name of the bill."
+        },
+        "description": {
+          "x-oad-type": "string",
+          "type": "string",
+          "title": "Description",
+          "description": "Bill description"
+        }
+      }
     }
   },
   "info": {
