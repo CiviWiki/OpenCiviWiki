@@ -1,27 +1,25 @@
-{
-  "info": {
-    "title": "CiviWiki API",
-    "version": "0.1.0",
-    "description": "Internal API for the CiviWiki frontend application.",
-    "contact": {
-      "name": "Mitchell West",
-      "email": "mitchell.west@civiwiki.org",
-      "url": "https://www.civiwiki.org"
-    },
-    "license": {
-      "name": "Creative Commons Zero",
-      "url": "https://creativecommons.org/publicdomain/zero/1.0/"
-    }
+"swagger": "2.0"
+"info": {
+  "title": "CiviWiki Bill API",
+  "version": "0.1.0",
+  "description": "Internal Bill API for the CiviWiki frontend application.",
+  "contact": {
+    "name": "Mitchell West",
+    "email": "mitchell.west@civiwiki.org",
+    "url": "https://www.civiwiki.org"
   },
-  "externalDocs": {
-    "description": "You can reach our development team on GitHub.",
-    "url": "https://github.com/CiviWiki/OpenCiviWiki"
-  },
-  "host": "civiwiki.org",
-  "basePath": "/api/v1/",
-  "schemes": [
-    "https",
-    "wss"
-  ],
-  "swagger": "2.0"
+  "license": {
+    "name": "Creative Commons Zero",
+    "url": "https://creativecommons.org/publicdomain/zero/1.0/"
+  }
+}
+"host": "civiwiki.org"
+"basePath": "/api/v1/"
+"schemes": [
+  "https",
+  "wss"
+]
+"externalDocs": {
+  "description": "You can reach our development team on GitHub.",
+  "url": "https://github.com/CiviWiki/OpenCiviWiki"
 }
