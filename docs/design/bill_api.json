@@ -5,6 +5,67 @@
       "description": "Operations related to searching for bills, both state and federal."
     }
   ],
+  "paths": {
+    "/bill": {
+      "get": {
+        "operationId": "bill_search",
+        "summary": "Get details for zero or more bills.",
+        "description": "This endpoint allows you to search for bills. It will return zero or more bills that match the search criteria.",
+        "tags": [
+          "Bill"
+        ],
+        "responses": {
+          "200": {
+            "description": "A JSON array containing one or more bills.",
+            "schema": {
+              "x-oad-type": "array",
+              "type": "array",
+              "title": "Results",
+              "description": "The array of bill results.",
+              "items": {
+                "x-oad-type": "object",
+                "type": "object",
+                "title": "Bill",
+                "description": "A single bill object.",
+                "properties": {
+                  "name": {
+                    "x-oad-type": "string",
+                    "type": "string",
+                    "title": "Name",
+                    "description": "The name of the bill."
+                  }
+                }
+              }
+            },
+            "x-oad-type": "response"
+          }
+        },
+        "parameters": [
+          {
+            "name": "query",
+            "in": "header",
+            "description": "The search query.",
+            "required": true,
+            "type": "string",
+            "x-oad-type": "parameter"
+          },
+          {
+            "name": "scope",
+            "in": "header",
+            "description": "The scope of this bill, either 'state' or 'federal'.",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "state",
+              "federal"
+            ],
+            "x-oad-type": "parameter"
+          }
+        ]
+      },
+      "x-oad-type": "operation"
+    }
+  },
   "info": {
     "title": "CiviWiki Bill API",
     "version": "0.1.0",
@@ -24,7 +85,7 @@
     "url": "https://github.com/CiviWiki/OpenCiviWiki"
   },
   "host": "civiwiki.org",
-  "basePath": "/api/v1/",
+  "basePath": "/api/v1",
   "schemes": [
     "https",
     "wss"
