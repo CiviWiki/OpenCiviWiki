@@ -50,6 +50,37 @@
         ]
       },
       "x-oad-type": "operation"
+    },
+    "/bills/{bill_id}": {
+      "get": {
+        "operationId": "get_bill",
+        "summary": "Git a single Bill object by ID.",
+        "tags": [
+          "Bill"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved bill.",
+            "schema": {
+              "x-oad-type": "reference",
+              "$ref": "#/definitions/bill"
+            },
+            "x-oad-type": "response"
+          }
+        },
+        "parameters": [
+          {
+            "name": "bill_id",
+            "in": "path",
+            "description": "The internal (CiviWiki) ID for the Bill.",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "x-oad-type": "parameter"
+          }
+        ]
+      },
+      "x-oad-type": "operation"
     }
   },
   "parameters": {
