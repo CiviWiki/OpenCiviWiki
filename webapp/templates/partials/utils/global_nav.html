@@ -3,11 +3,18 @@
 <div class="global-nav">
     <div class="floaty">
         <div class="floaty-btn">
-            <div id="notify-count-wrapper" class="hide">
-                {% live_notify_badge%}
+            <div class="nav-menu">
+                <div class="nav-menu-item button-icon" id="item-notifications">
+                    <div id="notify-count-wrapper" class="hide">
+                    {% live_notify_badge%}
+                    </div>
+                    <i class="material-icons" id="notify-icon">notifications_none</i>
+                </div>
+                <div class="nav-menu-item chip-menu-profile" id="js-toggle-menu">
+                    <span class="label-username">{{ request.session.login_user_firstname }}</span>
+                    <img class="chip-image-profile" src="{{ request.session.login_user_image }}" alt="{{ request.user.username }}">
+                </div>
             </div>
-            <img class="chip-image-profile" src="{{ request.session.login_user_image }}" alt="{{ request.user.username }}">
-            <span class="label-username">{{ request.session.login_user_firstname }}</span>
         </div>
         <div class="floaty-list">
             {% if request.user.is_staff %}
@@ -21,13 +28,6 @@
             </div>
             </a>
             {% endif %}
-            <div class="floaty-list-item floaty-list-item--blue" id="item-notifications" data-target="modal1">
-                <span class="floaty-list-item-label">Notifications</span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="absolute-center svg-notifications">
-                    <path xmlns="http://www.w3.org/2000/svg" d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
-                    <path d="M0 0h24v24h-24z" fill="none"/>
-                </svg>
-            </div>
             <div class="floaty-list-item floaty-list-item--blue" id="item-feed">
                 <span class="floaty-list-item-label">My Feed</span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="absolute-center svg-feed">

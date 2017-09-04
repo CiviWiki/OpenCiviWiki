@@ -45,6 +45,7 @@ $('#item-notifications').on('click', function () {
         url: '/inbox/notifications/mark-all-as-read/',
         success: function (response) {
             $('#notify-count-wrapper').addClass('hide');
+            $('#notify-icon').html('notifications_none').removeClass('active');
             console.log('success');
         },
         error: function(r){
@@ -57,8 +58,11 @@ var render_notifications = function(data) {
     var unreadCount = parseInt(data.unread_count);
     if (unreadCount === 0) {
         $('#notify-count-wrapper').addClass('hide');
+        $('#notify-icon').html('notifications_none').removeClass('active');
     } else {
         $('#notify-count-wrapper').removeClass('hide');
+        $('#notify-icon').html('notifications').addClass('active');
+
         this.new_notifications = [];
         var notified = false;
         if (data.unread_list.length > 5 && !notificationsView.initialNotificationShown) {
