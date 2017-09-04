@@ -171,7 +171,7 @@
   "info": {
     "title": "CiviWiki Bill API",
     "version": "0.1.0",
-    "description": "Internal Bill API for the CiviWiki frontend application.",
+    "description": "Read-only Bill API for the CiviWiki frontend application.",
     "contact": {
       "name": "Mitchell West",
       "email": "mitchell.west@civiwiki.org",
