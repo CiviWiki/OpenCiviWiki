@@ -9,7 +9,6 @@ import StringIO
 from django.contrib.auth.models import User
 from django.utils.deconstruct import deconstructible
 from django.core.files.storage import default_storage
-from django.core.exceptions import ValidationError
 from django.conf import settings
 from django.db import models
 from PIL import Image, ImageOps
@@ -23,8 +22,8 @@ from representative import Representative
 
 
 # Image manipulation constants
-PROFILE_IMAGE_SIZE = (171, 171)
-PROFILE_IMAGE_THUMB_SIZE = (40, 40)
+PROFILE_IMG_SIZE = (171, 171)
+PROFILE_IMG_THUMB_SIZE = (40, 40)
 WHITE_BG = (255,255,255)
 
 
@@ -36,7 +35,7 @@ class AccountManager(models.Manager):
             "first_name": account.first_name,
             "last_name": account.last_name,
             "about_me": account.about_me,
-            "location": account.get_location(),
+            "location": account.location,
             "history": [Civi.objects.serialize(c) for c in Civi.objects.filter(author_id=account.id).order_by('-created')],
             "profile_image": account.profile_image_url,
             "followers": self.followers(account),
@@ -60,7 +59,7 @@ class AccountManager(models.Manager):
             "first_name": account.first_name,
             "last_name": account.last_name,
             "about_me": account.about_me[:150] + ('' if len(account.about_me) <= 150 else '...'),
-            "location": account.get_location(),
+            "location": account.location,
             "profile_image": account.profile_image_url,
             "follow_state": True if account in request_account.following.all() else False,
             "request_account": request_account.first_name
@@ -84,6 +83,7 @@ class PathAndRename(object):
         new_filename = str(uuid.uuid4())
         filename = '{}.{}'.format(new_filename, ext)
         return os.path.join(self.sub_path, filename)
+
 
 profile_upload_path = PathAndRename('')
 
@@ -121,7 +121,7 @@ class Account(models.Model):
     profile_image_thumb = models.ImageField(upload_to=profile_upload_path, blank=True, null=True)
 
     #custom "row-level" functionality (properties) for account models
-    def get_location(self):
+    def _get_location(self):
         """ Constructs a CITY, STATE string for locations in the US """
         if self.city and self.state:
             return '{city}, {state}'.format(city=self.city, state=dict(US_STATES).get(self.state))
@@ -129,6 +129,7 @@ class Account(models.Model):
             return '{state}'.format(state=dict(US_STATES).get(self.state))
         else:
             return 'NO LOCATION'
+    location = property(_get_location)
 
     def _get_full_name(self):
         "Returns the person's full name."
@@ -148,10 +149,24 @@ class Account(models.Model):
         )
         if self.profile_image and file_exists:
             return self.profile_image.url
-        else:
-            #NOTE: This default url will probably be changed later
-            return "/static/img/no_image_md.png",
+
+        #NOTE: This default url will probably be changed later
+        return "/static/img/no_image_md.png"
     profile_image_url = property(_get_profile_image_url)
+
+    def _get_profile_image_thumb_url(self):
+        """ Return placeholder profile image if user didn't upload one"""
+
+        file_exists = default_storage.exists(
+            os.path.join(settings.MEDIA_ROOT, self.profile_image_thumb.name)
+        )
+        if self.profile_image_thumb and file_exists:
+            return self.profile_image_thumb.url
+
+        #NOTE: This default url will probably be changed later
+        return "/static/img/no_image_md.png"
+
+    profile_image_thumb_url = property(_get_profile_image_thumb_url)
 
     def __init__(self, *args, **kwargs):
         super(Account, self).__init__(*args, **kwargs)
@@ -163,34 +178,60 @@ class Account(models.Model):
         if self.profile_image:
             self.resize_profile_image()
 
+        self.full_account = self.is_full_account()
+
         super(Account, self).save(*args, **kwargs)
     #
     #
     def resize_profile_image(self):
+        """
+        Resizes and crops the user uploaded image and creates a thumbnail version of it
+        """
         profile_image_field = self.profile_image
         image_file = StringIO.StringIO(profile_image_field.read())
         profile_image = Image.open(image_file)
         profile_image.load()
 
         # Resize image
-        profile_image = ImageOps.fit(profile_image, PROFILE_IMAGE_SIZE, Image.ANTIALIAS, centering=(0.5, 0.5))
+        profile_image = ImageOps.fit(profile_image, PROFILE_IMG_SIZE, Image.ANTIALIAS)
+
+        # TODO: Check if GIF to allow GIF uploads. Get 1st frame if so
+
         # Convert to JPG image format with white background
         if profile_image.mode not in ('L', 'RGB'):
-            white_bg_img = Image.new("RGB", PROFILE_IMAGE_SIZE, WHITE_BG)
+            white_bg_img = Image.new("RGB", PROFILE_IMG_SIZE, WHITE_BG)
             white_bg_img.paste(profile_image, mask=profile_image.split()[3])
             profile_image = white_bg_img
 
-        # Create thumb
+        # Save new cropped image
         tmp_image_file = StringIO.StringIO()
         profile_image.save(tmp_image_file, 'JPEG', quality=90)
         tmp_image_file.seek(0)
-        self.profile_image = InMemoryUploadedFile(tmp_image_file, 'ImageField', self.profile_image.name, 'image/jpeg', tmp_image_file.len, None)
-
-
-        # # Make a Thumbnail Image for the new resized image
+        self.profile_image = InMemoryUploadedFile(
+            tmp_image_file,
+            'ImageField',
+            self.profile_image.name,
+            'image/jpeg',
+            tmp_image_file.len,
+            None
+        )
+        # Make a Thumbnail Image for the new resized image
         thumb_image = profile_image.copy()
-        thumb_image.thumbnail(PROFILE_IMAGE_THUMB_SIZE, resample=Image.ANTIALIAS)
+        thumb_image.thumbnail(PROFILE_IMG_THUMB_SIZE, resample=Image.ANTIALIAS)
         tmp_image_file = StringIO.StringIO()
         thumb_image.save(tmp_image_file, 'JPEG', quality=90)
         tmp_image_file.seek(0)
-        self.profile_image_thumb = InMemoryUploadedFile(tmp_image_file, 'ImageField', self.profile_image.name, 'image/jpeg', tmp_image_file.len, None)
+        self.profile_image_thumb = InMemoryUploadedFile(
+            tmp_image_file,
+            'ImageField',
+            self.profile_image.name,
+            'image/jpeg',
+            tmp_image_file.len,
+            None
+        )
+
+    def is_full_account(self):
+        if self.first_name and self.last_name and self.longitude and self.latitude:
+            return True
+        else:
+            return False

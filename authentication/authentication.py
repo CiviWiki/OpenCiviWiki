@@ -13,6 +13,7 @@ from api.tasks import send_email
 from django.contrib.sites.shortcuts import get_current_site
 from django.conf import settings
 from django.conf.urls import url
+from django.shortcuts import get_object_or_404
 
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -57,6 +58,11 @@ def cw_login(request):
         login(request, user)
 
         if user.is_active:
+
+            account = get_object_or_404(Account, user=user)
+            request.session["login_user_firstname"] = account.first_name
+            request.session["login_user_image"] = account.profile_image_thumb_url
+
             return HttpResponse()
         else:
             response = {

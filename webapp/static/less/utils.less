@@ -340,16 +340,19 @@
     }
     .floaty {
         position: fixed;
-        bottom: 15px;
+        top: 8px;
         right: 0;
         z-index: 100;
+        max-width: 40px;
         // Prevent annoying behavior of highlighting instead of clicking
         -webkit-user-select: none;  /* Chrome all / Safari all */
         -moz-user-select: none;     /* Firefox all */
         -ms-user-select: none;
     }
     .floaty-list {
-        margin: 8px 0 0 0;
+        float: right;
+        margin-top: 16px;
+        margin-right: 16px;
         padding: 0;
         list-style: none;
         display: inline-block;
@@ -363,7 +366,7 @@
         position: relative;
         width: 40px;
         height: 40px;
-        margin: 0 8px;
+        padding: 4px 8px;
         display: inline-block;
         cursor: pointer;
         background-color: #f0f0f0;
@@ -386,34 +389,32 @@
         fill: #fff;
     }
     .floaty-list-item-label {
-        position: absolute;
-        left: 50%;
-        bottom: 46px;
-        transform: translate(-50%, 0);
+        position: relative;
+        left: -40px;
+
+        float: right;
         padding: 4px 8px;
         font-size: 14px;
         color: #fff;
         background-color: #424242;
         border-radius: 2px;
-        opacity: 0;
+        opacity: 1;
         white-space: nowrap;
         pointer-events: none;
         transition: opacity .2s ease-out;
     }
-    .floaty-list-item:hover > .floaty-list-item-label {
-        opacity: 1;
-    }
+
     .floaty-btn {
         position: relative;
         display: inline-block;
-        width: 56px;
-        height: 56px;
+        width: 160px;
+        height: 40px;
         float: right;
-        margin: 0 15px 0 8px;
+        margin-right: 16px;
         cursor: pointer;
-        background-color: @purple;
-        border-radius: 50%;
-        box-shadow: 0 4px 8px rgba(0,0,0,.25);
+        // // background-color: @purple;
+        // border-radius: 50%;
+
     }
     .floaty-btn:hover .floaty-btn-label {
         opacity: 1;
@@ -453,5 +454,23 @@
         opacity: 1;
         -webkit-transform: rotate(0deg);
         transform: rotate(0deg);
+    }
+
+    .label-username {
+        float: right;
+        clear:left;
+        vertical-align: top;
+        line-height: 32px;
+        font-size: 16px;
+        padding-right: 4px;
+        color: @white
+    }
+    .chip-image-profile {
+        float: right;
+        max-width: 40px;
+        max-height: 40px;
+        line-height: 40px;
+        border-radius: 50%;
+        box-shadow: 0 4px 8px rgba(0,0,0,.25);
     }
 }

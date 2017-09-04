@@ -328,16 +328,16 @@ def deleteCivi(request):
 
 @login_required
 def editThread(request):
-    try:
-        thread_id = request.POST.get('thread_id')
-        title = request.POST.get('title')
-        summary = request.POST.get('summary')
-        category_id = request.POST.get('category_id')
-        level = request.POST.get('level')
-        state = request.POST.get('state')
-        if thread_id:
 
+    thread_id = request.POST.get('thread_id')
+    title = request.POST.get('title')
+    summary = request.POST.get('summary')
+    category_id = request.POST.get('category_id')
+    level = request.POST.get('level')
+    state = request.POST.get('state')
+    if thread_id:
 
+        try:
             t = Thread.objects.get(id=thread_id)
             category_id = request.POST.get('category_id')
             if request.user.username != t.author.user.username:
@@ -349,25 +349,26 @@ def editThread(request):
             t.level = level
             t.state = state
             t.save()
+        except Exception as e:
+            return HttpResponseServerError(reason=str(e))
 
-            return_data = {
-                'thread_id': thread_id,
-                'title': t.title,
-                'summary': t.summary,
-                "category": {
-                    "id": t.category.id,
-                    "name": t.category.name
-                },
-                "level": t.level,
-                "state": t.state if t.level == "state" else "",
-                "location": t.level if not t.state else dict(US_STATES).get(t.state),
-            }
-            return JsonResponse({'data': return_data})
-        else:
-            return HttpResponseBadRequest(reason="Invalid Thread Reference")
+        return_data = {
+            'thread_id': thread_id,
+            'title': t.title,
+            'summary': t.summary,
+            "category": {
+                "id": t.category.id,
+                "name": t.category.name
+            },
+            "level": t.level,
+            "state": t.state if t.level == "state" else "",
+            "location": t.level if not t.state else dict(US_STATES).get(t.state),
+        }
+        return JsonResponse({'data': return_data})
+    else:
+        return HttpResponseBadRequest(reason="Invalid Thread Reference")
 
-    except Exception as e:
-        return HttpResponseServerError(reason=str(e))
+
 
 @login_required
 def uploadphoto(request):
@@ -398,11 +399,11 @@ def editUser(request):
         "zip_code": r.get('zip_code', account.zip_code),
         "longitude": r.get('longitude', account.longitude),
         "latitude": r.get('latitude', account.latitude),
-        "full_account": r.get('full_account', account.full_account)
     }
 
     try:
         Account.objects.filter(id=account.id).update(**data)
+        account.save()
         account.refresh_from_db()
 
         return JsonResponse(Account.objects.summarize(account))
