@@ -1,7 +1,7 @@
 {
   "tags": [
     {
-      "name": "Bill",
+      "name": "Bills",
       "description": "Operations related to searching for bills, both state and federal."
     }
   ],
@@ -12,7 +12,7 @@
         "summary": "Get details for zero or more bills.",
         "description": "This endpoint allows you to search for bills. It will return zero or more bills that match the search criteria.",
         "tags": [
-          "Bill"
+          "Bills"
         ],
         "responses": {
           "200": {
@@ -56,7 +56,7 @@
         "operationId": "get_bill",
         "summary": "Git a single Bill object by ID.",
         "tags": [
-          "Bill"
+          "Bills"
         ],
         "responses": {
           "200": {
