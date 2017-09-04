@@ -6,9 +6,9 @@
     }
   ],
   "paths": {
-    "/bill": {
+    "/bills/search": {
       "get": {
-        "operationId": "bill_search",
+        "operationId": "bills_search",
         "summary": "Get details for zero or more bills.",
         "description": "This endpoint allows you to search for bills. It will return zero or more bills that match the search criteria.",
         "tags": [
