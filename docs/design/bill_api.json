@@ -93,9 +93,20 @@
           "type": "string",
           "title": "Source ID",
           "description": "Unique ID from Bill source (Pro Publica or Open States)"
+        },
+        "source": {
+          "x-oad-type": "string",
+          "type": "string",
+          "title": "Source",
+          "description": "Original source for information about this bill. Can be either of:\n\n- open_states\n- propublica",
+          "enum": [
+            "open_states",
+            "propublica"
+          ]
         }
       },
       "required": [
+        "source",
         "source_id"
       ]
     }
