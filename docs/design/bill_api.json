@@ -50,6 +50,19 @@
               "federal"
             ],
             "x-oad-type": "parameter"
+          },
+          {
+            "name": "source",
+            "in": "header",
+            "description": "Which source to search for bills",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "open_states",
+              "propublica",
+              "civiwiki"
+            ],
+            "x-oad-type": "parameter"
           }
         ]
       },
