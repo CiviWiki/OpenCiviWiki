@@ -43,7 +43,7 @@
             "name": "scope",
             "in": "header",
             "description": "The scope of this bill Can be either\n\n- state\n- federal",
-            "required": true,
+            "required": false,
             "type": "string",
             "enum": [
               "state",
@@ -55,7 +55,7 @@
             "name": "source",
             "in": "header",
             "description": "Which source to search for bills.\n\nCan be one of:\n\n- open_states\n- propublica\n- civiwiki",
-            "required": true,
+            "required": false,
             "type": "string",
             "enum": [
               "open_states",
@@ -63,10 +63,24 @@
               "civiwiki"
             ],
             "x-oad-type": "parameter"
+          },
+          {
+            "$ref": "#/parameters/name",
+            "x-oad-type": "reference"
           }
         ]
       },
       "x-oad-type": "operation"
+    }
+  },
+  "parameters": {
+    "name": {
+      "name": "Name",
+      "in": "header",
+      "description": "The name of a bill.",
+      "required": false,
+      "type": "string",
+      "x-oad-type": "parameter"
     }
   },
   "definitions": {
