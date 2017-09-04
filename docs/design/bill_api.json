@@ -32,37 +32,16 @@
         },
         "parameters": [
           {
-            "name": "query",
-            "in": "header",
-            "description": "The search query.",
-            "required": true,
-            "type": "string",
-            "x-oad-type": "parameter"
+            "$ref": "#/parameters/query",
+            "x-oad-type": "reference"
           },
           {
-            "name": "scope",
-            "in": "header",
-            "description": "The scope of this bill Can be either\n\n- state\n- federal",
-            "required": false,
-            "type": "string",
-            "enum": [
-              "state",
-              "federal"
-            ],
-            "x-oad-type": "parameter"
+            "$ref": "#/parameters/scope",
+            "x-oad-type": "reference"
           },
           {
-            "name": "source",
-            "in": "header",
-            "description": "Which source to search for bills.\n\nCan be one of:\n\n- open_states\n- propublica\n- civiwiki",
-            "required": false,
-            "type": "string",
-            "enum": [
-              "open_states",
-              "propublica",
-              "civiwiki"
-            ],
-            "x-oad-type": "parameter"
+            "$ref": "#/parameters/source",
+            "x-oad-type": "reference"
           },
           {
             "$ref": "#/parameters/name",
@@ -80,6 +59,39 @@
       "description": "The name of a bill.",
       "required": false,
       "type": "string",
+      "x-oad-type": "parameter"
+    },
+    "query": {
+      "name": "Query",
+      "in": "header",
+      "description": "The search query.",
+      "required": true,
+      "type": "string",
+      "x-oad-type": "parameter"
+    },
+    "scope": {
+      "name": "Scope",
+      "in": "header",
+      "description": "The scope of this bill Can be either\n\n- state\n- federal",
+      "required": false,
+      "type": "string",
+      "enum": [
+        "federal",
+        "state"
+      ],
+      "x-oad-type": "parameter"
+    },
+    "source": {
+      "name": "Source",
+      "in": "header",
+      "description": "Which source to search for bills.\n\nCan be one of:\n\n- open_states\n- propublica\n- civiwiki",
+      "required": false,
+      "type": "string",
+      "enum": [
+        "civiwiki",
+        "open_states",
+        "propublica"
+      ],
       "x-oad-type": "parameter"
     }
   },
