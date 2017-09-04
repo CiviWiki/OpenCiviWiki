@@ -43,6 +43,10 @@ Compatible Versioning ("ComVer") is SemVer where every PATCH number is 0 (zero).
 
 A ComVer release from 3.6 to 3.7 is just a SemVer release from 3.6.0 to 3.7.0. In other words, ComVer is safe to adopt since it is basically SemVer without ever issuing PATCH releases.
 
+## Coding Conventions 
+
+We strive to follow Django Coding Conventions. See https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/
+
 ## Development environment
 ### Environment Variables
 
