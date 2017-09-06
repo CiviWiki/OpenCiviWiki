@@ -50,6 +50,10 @@
           {
             "$ref": "#/parameters/bill_id",
             "x-oad-type": "reference"
+          },
+          {
+            "$ref": "#/parameters/state",
+            "x-oad-type": "reference"
           }
         ]
       },
