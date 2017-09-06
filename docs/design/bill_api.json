@@ -144,7 +144,7 @@
     "state": {
       "name": "State",
       "in": "header",
-      "description": "Two-letter abbreviation for U.S. state (or district). For use in e.g. state legislation search.\n\nhttps://en.wikipedia.org/wiki/List_of_U.S._state_abbreviations",
+      "description": "Two-letter USPS abbreviation for U.S. state (or district). For use in e.g. state legislation search.\n\nhttps://en.wikipedia.org/wiki/List_of_U.S._state_abbreviations",
       "required": false,
       "type": "string",
       "enum": [
