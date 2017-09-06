@@ -51,10 +51,10 @@
       },
       "x-oad-type": "operation"
     },
-    "/bills/{bill_id}": {
+    "/bills/{pk}": {
       "get": {
         "operationId": "get_bill",
-        "summary": "Git a single Bill object by ID.",
+        "summary": "Git a single Bill object by primary key.",
         "tags": [
           "Bills"
         ],
@@ -70,9 +70,9 @@
         },
         "parameters": [
           {
-            "name": "bill_id",
+            "name": "pk",
             "in": "path",
-            "description": "The internal (CiviWiki) ID for the Bill.",
+            "description": "The internal (CiviWiki) primary key for the Bill.",
             "required": true,
             "type": "integer",
             "format": "int32",
