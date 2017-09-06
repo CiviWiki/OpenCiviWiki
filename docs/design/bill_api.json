@@ -46,6 +46,10 @@
           {
             "$ref": "#/parameters/name",
             "x-oad-type": "reference"
+          },
+          {
+            "$ref": "#/parameters/bill_id",
+            "x-oad-type": "reference"
           }
         ]
       },
@@ -124,6 +128,14 @@
         "propublica"
       ],
       "x-oad-type": "parameter"
+    },
+    "bill_id": {
+      "name": "Bill ID",
+      "in": "header",
+      "description": "The official id of the bill (e.g. ‘SB 27’, ‘A 2111’)",
+      "required": false,
+      "type": "string",
+      "x-oad-type": "parameter"
     }
   },
   "definitions": {
@@ -160,6 +172,12 @@
             "open_states",
             "propublica"
           ]
+        },
+        "bill_id": {
+          "x-oad-type": "string",
+          "type": "string",
+          "title": "Bill ID",
+          "description": "The official id of the bill (e.g. ‘SB 27’, ‘A 2111’)"
         }
       },
       "required": [
