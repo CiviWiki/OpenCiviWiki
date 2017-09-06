@@ -108,7 +108,7 @@
       "name": "Scope",
       "in": "header",
       "description": "The scope of this bill Can be either\n\n- state\n- federal",
-      "required": false,
+      "required": true,
       "type": "string",
       "enum": [
         "federal",
