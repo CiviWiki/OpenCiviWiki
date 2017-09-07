@@ -85,6 +85,7 @@ class PathAndRename(object):
         filename = '{}.{}'.format(new_filename, ext)
         return os.path.join(self.sub_path, filename)
 
+
 profile_upload_path = PathAndRename('')
 
 
@@ -166,6 +167,7 @@ class Account(models.Model):
         super(Account, self).save(*args, **kwargs)
     #
     #
+    
     def resize_profile_image(self):
         profile_image_field = self.profile_image
         image_file = StringIO.StringIO(profile_image_field.read())
