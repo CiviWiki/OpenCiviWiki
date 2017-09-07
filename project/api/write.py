@@ -493,10 +493,10 @@ def uploadCiviImage(request):
             data = {
                 "attachments": [{'id': img.id, 'url': img.image_url} for img in c.images.all()],
             }
-            return  JsonResponse(data)
+            return JsonResponse(data)
 
         except Exception as e:
-            return HttpResponseServerError(reason=(str(e)+ civi_id + str(request.FILES)))
+            return HttpResponseServerError(reason=(str(e) + civi_id + str(request.FILES)))
     else:
         return HttpResponseForbidden('allowed only via POST')
 
@@ -543,7 +543,7 @@ def uploadThreadImage(request):
             data = {
                 'image': thread.image_url
             }
-            return  JsonResponse(data)
+            return JsonResponse(data)
 
         except Exception as e:
             return HttpResponseServerError(reason=(str(e)))
