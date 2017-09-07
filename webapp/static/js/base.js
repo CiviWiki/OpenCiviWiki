@@ -25,35 +25,27 @@ cw.materializeShit = function () {
 };
 
 cw.initGlobalNav = function () {
-    var $floaty = $('.floaty'),
-        $logout = $('#item-logout'),
-        $feed = $('#item-feed'),
-        $notifications = $('#item-notifications'),
-        $account = $('#item-account');
-
-    $floaty.on('mouseover', function() {
-        $floaty.addClass('is-active');
-    });
-
-    $floaty.on('mouseout', function() {
-        $floaty.removeClass('is-active');
-    });
-
-    $logout.on('click', function () {
-        window.location.href = '/auth/logout';
-    });
-
+    var $notifications = $('#item-notifications');
+    
     $notifications.on('click', function () {
         $('.notifications-modal').openModal();
     });
 
-    $feed.on('click', function () {
-        window.location.href = '/';
-    });
+    var $navMenuButton = $('#js-toggle-menu');
+    $navMenuButton.on('click', function () {
+        event.stopPropagation()
+        $('#js-dropdown-menu').toggleClass('hide');
+
+        $(document).on('click', function(event){
+            $target = $(event.target);
+
+            if ($target.parents('#js-dropdown-menu').length==0){
+                $('#js-dropdown-menu').addClass('hide');
+                $(this).unbind(event);
+            }
+        })
 
 
-    $account.on('click', function () {
-        window.location.href = '/profile/';
     });
 
 };
