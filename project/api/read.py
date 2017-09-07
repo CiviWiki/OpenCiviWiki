@@ -217,7 +217,7 @@ def get_thread(request, thread_id):
             'hashtags': t.hashtags.all().values(),
             'author': {
                 'username': t.author.user.username,
-                'profile_image': t.author.profile_image.url  if t.author.profile_image  else "/media/profile/default.png",
+                'profile_image': t.author.profile_image.url if t.author.profile_image else "/media/profile/default.png",
                 'first_name': t.author.first_name,
                 'last_name': t.author.last_name
             },
