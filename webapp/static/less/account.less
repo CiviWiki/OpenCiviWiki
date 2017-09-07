@@ -185,24 +185,8 @@ body {
         }
     }
     .top-bar {
-        height: 32px;
+        margin-top: 8px;
         margin-bottom: 0px;
-        z-index: 2;
-        .logo-container {
-            height: inherit;
-            text-align: center;
-            line-height: 24px;
-            .logo {
-                // margin-left: 20px;
-
-                margin-top: 5px;
-                text-align: center;
-                font-size: 26px;
-                font-weight: 700;
-                color: @white;
-                letter-spacing: 0.01em;
-            }
-        }
         .account-tabs {
             height: inherit;
             .tabs {
@@ -211,7 +195,11 @@ body {
                     height: inherit;
                     line-height: 32px;
                     a {
-                        color: @white;
+                        -webkit-user-select: none;  /* Chrome all / Safari all */
+                        -moz-user-select: none;     /* Firefox all */
+                        -ms-user-select: none;
+                        
+                        color: @light-gray;
                         text-transform: capitalize;
                         font-weight: 700;
                         font-size: 12px;
@@ -220,7 +208,7 @@ body {
                         }
                     }
                     .active {
-                        font-size: 14px;
+                        font-size: 12px;
                         color: @light-purple;
                     }
                     i {
@@ -251,6 +239,7 @@ body {
 
                  .indicator {
                     background-color: @light-purple;
+                    margin: 0 16px 0 16px;
                     height: 2px;
                 }
             }
