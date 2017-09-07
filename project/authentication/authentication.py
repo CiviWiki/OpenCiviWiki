@@ -19,6 +19,7 @@ from django.template.response import TemplateResponse #TODO: move this out to vi
 class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
     """ Token Generator for Email Confirmation """
     key_salt = "django.contrib.auth.tokens.PasswordResetTokenGenerator"
+
     def _make_token_with_timestamp(self, user, timestamp):
         """ Token function pulled from Django 1.11 """
         ts_b36 = int_to_base36(timestamp)
@@ -28,6 +29,7 @@ class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
             unicode(user.pk) + unicode(timestamp)
         ).hexdigest()[::2]
         return "%s-%s" % (ts_b36, hash)
+
 
 account_activation_token = AccountActivationTokenGenerator()
 

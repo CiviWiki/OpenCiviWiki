@@ -54,6 +54,7 @@ class PathAndRename(object):
         filename = '{}.{}'.format(new_filename, ext)
         return os.path.join(self.sub_path, filename)
 
+
 image_upload_path = PathAndRename('')
 
 class Thread(models.Model):
