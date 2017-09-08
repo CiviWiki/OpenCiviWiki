@@ -1,16 +1,12 @@
 from django.http import JsonResponse, HttpResponseBadRequest
 from models import Account, Thread, Civi, Representative, Category, Activity
 #  Topic, Attachment, Category, Civi, Comment, Hashtag,
-from django.db.models import Q
 from django.contrib.auth.models import User
-from django.core.serializers.json import DjangoJSONEncoder
 from django.forms.models import model_to_dict
 from utils import json_response
-import json
 # from utils.custom_decorators import require_post_params
 from legislation import sunlightapi as sun
 
-import tasks
 # # Create your views here.
 # @require_post_params(params=['id'])
 # def topTen(request):
