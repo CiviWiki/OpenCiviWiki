@@ -151,8 +151,8 @@ def get_rep(request, rep_id):
 
 def get_feed(request):
     try:
-        a = Account.objects.get(user=request.user)
-        all_categories = Category.objects.values_list('id', flat=True)
+        # a = Account.objects.get(user=request.user)
+        # all_categories = Category.objects.values_list('id', flat=True)
         # user_categories = list(a.categories.values_list('id', flat=True)) or all_categories
 
         # feed_threads = [Thread.objects.summarize(t) for t in Thread.objects.filter_by_category(user_categories).order_by('-created')]
