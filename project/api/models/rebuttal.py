@@ -8,8 +8,6 @@ class Rebuttal(models.Model):
 
     body = models.TextField(max_length=1023)
 
-    # sources = ArrayField(models.CharField(max_length=127, blank=True), default=[], blank=True)
-
     votes_vneg = models.IntegerField(default=0)
     votes_neg = models.IntegerField(default=0)
     votes_neutral = models.IntegerField(default=0)
