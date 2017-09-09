@@ -96,9 +96,6 @@ class Civi(models.Model):
     )
     c_type = models.CharField(max_length=31, default='problem', choices=c_CHOICES)
 
-    # sources = ArrayField(models.CharField(max_length=127, blank=True), default=[], blank=True)
-    # attachments
-
     votes_vneg = models.IntegerField(default=0)
     votes_neg = models.IntegerField(default=0)
     votes_neutral = models.IntegerField(default=0)
