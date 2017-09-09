@@ -14,9 +14,6 @@ from django.core.files.base import ContentFile
 from api.models import Thread
 from channels import Group as channels_Group
 
-from utils.custom_decorators import require_post_params
-from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required
 from notifications.signals import notify
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.sites.shortcuts import get_current_site
@@ -462,7 +459,7 @@ def clearProfileImage(request):
             account.save()
 
             return HttpResponse('Image Deleted')
-        except Exception as e:
+        except Exception:
             return HttpResponseServerError(reason=str(default))
     else:
         return HttpResponseForbidden('allowed only via POST')
