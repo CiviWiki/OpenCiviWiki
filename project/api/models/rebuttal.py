@@ -1,8 +1,6 @@
 from django.db import models
 from account import Account
 from response import Response
-# from django.contrib.postgres.fields import ArrayField
-
 
 class Rebuttal(models.Model):
     author = models.ForeignKey(Account, default=None, null=True)
