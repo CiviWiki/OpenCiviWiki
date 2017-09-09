@@ -4,7 +4,7 @@ from category import Category
 from fact import Fact
 from hashtag import Hashtag
 from calendar import month_name
-import os, json, uuid
+import os, uuid
 from django.utils.deconstruct import deconstructible
 from django.core.files.storage import default_storage
 from django.conf import settings
