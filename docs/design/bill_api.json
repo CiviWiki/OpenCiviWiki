@@ -46,15 +46,23 @@
           {
             "$ref": "#/parameters/name",
             "x-oad-type": "reference"
+          },
+          {
+            "$ref": "#/parameters/bill_id",
+            "x-oad-type": "reference"
+          },
+          {
+            "$ref": "#/parameters/state",
+            "x-oad-type": "reference"
           }
         ]
       },
       "x-oad-type": "operation"
     },
-    "/bills/{bill_id}": {
+    "/bills/{pk}": {
       "get": {
         "operationId": "get_bill",
-        "summary": "Git a single Bill object by ID.",
+        "summary": "Git a single Bill object by primary key.",
         "tags": [
           "Bills"
         ],
@@ -70,9 +78,9 @@
         },
         "parameters": [
           {
-            "name": "bill_id",
+            "name": "pk",
             "in": "path",
-            "description": "The internal (CiviWiki) ID for the Bill.",
+            "description": "The internal (CiviWiki) primary key for the Bill.",
             "required": true,
             "type": "integer",
             "format": "int32",
@@ -104,7 +112,7 @@
       "name": "Scope",
       "in": "header",
       "description": "The scope of this bill Can be either\n\n- state\n- federal",
-      "required": false,
+      "required": true,
       "type": "string",
       "enum": [
         "federal",
@@ -122,6 +130,75 @@
         "civiwiki",
         "open_states",
         "propublica"
+      ],
+      "x-oad-type": "parameter"
+    },
+    "bill_id": {
+      "name": "Bill ID",
+      "in": "header",
+      "description": "The official id of the bill (e.g. ‘SB 27’, ‘A 2111’)",
+      "required": false,
+      "type": "string",
+      "x-oad-type": "parameter"
+    },
+    "state": {
+      "name": "State",
+      "in": "header",
+      "description": "Two-letter USPS abbreviation for U.S. state (or district). For use in e.g. state legislation search.\n\nhttps://en.wikipedia.org/wiki/List_of_U.S._state_abbreviations",
+      "required": false,
+      "type": "string",
+      "enum": [
+        "AL",
+        "AK",
+        "AZ",
+        "AR",
+        "CA",
+        "CO",
+        "CT",
+        "DE",
+        "DC",
+        "FL",
+        "GA",
+        "HI",
+        "ID",
+        "IL",
+        "IN",
+        "IA",
+        "KS",
+        "KY",
+        "LA",
+        "ME",
+        "MD",
+        "MA",
+        "MI",
+        "MN",
+        "MS",
+        "MO",
+        "MT",
+        "NE",
+        "NV",
+        "NH",
+        "NJ",
+        "NM",
+        "NY",
+        "NC",
+        "ND",
+        "OH",
+        "OK",
+        "OR",
+        "PA",
+        "RI",
+        "SC",
+        "SD",
+        "TN",
+        "TX",
+        " \tUT",
+        "VT",
+        "VA",
+        "WA",
+        "WV",
+        "WI",
+        "WY"
       ],
       "x-oad-type": "parameter"
     }
@@ -160,6 +237,12 @@
             "open_states",
             "propublica"
           ]
+        },
+        "bill_id": {
+          "x-oad-type": "string",
+          "type": "string",
+          "title": "Bill ID",
+          "description": "The official id of the bill (e.g. ‘SB 27’, ‘A 2111’)"
         }
       },
       "required": [
