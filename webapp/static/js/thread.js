@@ -1500,7 +1500,8 @@ cw.ThreadView = BB.View.extend({
 
         this.threadWikiRender();
         this.threadBodyRender();
-        this.$('.scroll-col').height($(window).height() - this.$('.body-banner').height());
+
+        // this.$('.scroll-col').height($(window).sheight() - this.$('.body-banner').height());
 
 
         this.newCiviView = new cw.NewCiviView({
@@ -1510,6 +1511,9 @@ cw.ThreadView = BB.View.extend({
 
 
         this.renderBodyContents();
+        this.scrollToBody();
+
+
     },
 
     threadWikiRender: function () {
@@ -1778,38 +1782,29 @@ cw.ThreadView = BB.View.extend({
         this.$('.thread-body-holder').removeClass('hide');
         this.$('.thread-body-holder').css({display: 'block'});
 
-        $('body').css({overflow: 'hidden'});
-
-        // this.$('.thread-body-holder').css({display: 'block'});
-        // $('body').css({overflow: 'hidden'});
-        //
-        // $('body').animate({
-        //     scrollTop: $('.thread-body-holder').offset().top
-        // }, 200);
-
-        var $civiNavScroll = this.$('.civi-outline');
-        $civiNavScroll.css({height: $('body').height() - $civiNavScroll.offset().top});
-        var $civiThreadScroll = this.$('.main-thread');
-        $civiThreadScroll.css({height: $('body').height() - $civiThreadScroll.offset().top});
-        var $civiResponseScroll = this.$('.responses-box');
-        $civiResponseScroll.css({height: $('body').height() - $civiResponseScroll.offset().top});
+        this.resizeBodyToWindow();
 
         this.renderOutline();
-
-        // this.currentScroll = 0;
         this.processCiviScroll();
     },
 
+    resizeBodyToWindow: function() {
+        $('body').css({overflow: 'hidden'});
+
+        var $windowHeight = $('body').height();
+        var bodyHeight = $windowHeight - $("#js-global-nav").height();
+
+        var $civiNavScroll = this.$('.civi-outline');
+        $civiNavScroll.css({height: $windowHeight - $civiNavScroll.offset().top});
+        var $civiThreadScroll = this.$('.main-thread');
+        $civiThreadScroll.css({height: $windowHeight - $civiThreadScroll.offset().top});
+        var $civiResponseScroll = this.$('.responses-box');
+        $civiResponseScroll.css({height: $windowHeight - $civiResponseScroll.offset().top});
+    },
 
     scrollToWiki: function () {
         var _this = this;
 
-        // $('body').animate({
-        //     scrollTop: 0
-        // }, 200, function () {
-        //     _this.$('.thread-body-holder').css({display: 'none'});
-        // });
-        // $('body').css({overflow: 'scroll'});
         this.$('.thread-body-holder').addClass('hide');
         this.$('.thread-wiki-holder').removeClass('hide');
         $('body').css({overflow: 'scroll'});
@@ -1824,23 +1819,12 @@ cw.ThreadView = BB.View.extend({
         var _this = this,
             $this = _.isUndefined(e) ? this.$('.expand-nav') : $(e.target);
 
-        // if ($this.hasClass('expanded')) {
-        //     $('.civi-nav-wrapper').slideUp();
-        //     $this.removeClass('expanded');
-        //     this.navExpanded = false;
-        // } else {
-        //     $('.civi-nav-wrapper').slideDown();
-        //     $this.addClass('expanded');
-        //     this.navExpanded = true;
-        // }
         if (!this.navExpanded) {
             $('.civi-nav-wrapper').hide();
             $this.removeClass('expanded');
-            // this.navExpanded = false;
         } else {
             $('.civi-nav-wrapper').show();
             $this.addClass('expanded');
-            // this.navExpanded = true;
         }
         this.activateNav();
     },
