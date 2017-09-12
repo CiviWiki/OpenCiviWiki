@@ -1,23 +1,24 @@
-import json, urllib, PIL
-from models import Account, Category, Civi, CiviImage, Activity, Invitation
+import json, PIL, urllib, uuid
+
+from notifications.signals import notify
+# django packages
 from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse, HttpResponseServerError, HttpResponseForbidden, HttpResponseBadRequest
-from utils.custom_decorators import require_post_params
-from django.contrib.auth.decorators import login_required
-from utils.constants import US_STATES
-# from django.db.models import Q
-from api.forms import UpdateProfileImage
 from django.core.files import File   # need this for image file handling
-from api.models import Thread
-
-from utils.custom_decorators import require_post_params
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
-from notifications.signals import notify
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.sites.shortcuts import get_current_site
+
+# civi packages
+from api.forms import UpdateProfileImage
+from api.models import Thread
 from api.tasks import send_mass_email
-import uuid
+from models import Account, Activity, Category, Civi, CiviImage, Invitation
+from utils.custom_decorators import require_post_params
+from utils.constants import US_STATES
+from utils.custom_decorators import require_post_params
 
 
 @login_required
