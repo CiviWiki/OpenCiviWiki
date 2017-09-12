@@ -1496,7 +1496,7 @@ cw.ThreadView = BB.View.extend({
             threadId: this.model.threadId
         });
 
-        this.$('.thread-body-holder').addClass('hide');
+        this.$('.thread-wiki-holder').addClass('hide');
 
         this.threadWikiRender();
         this.threadBodyRender();
