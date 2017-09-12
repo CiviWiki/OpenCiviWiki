@@ -20,7 +20,8 @@
             <div class="nav-menu-item chip-menu-profile" id="js-toggle-menu">
                 <span class="label-username">{{ request.session.login_user_firstname }}</span>
                 <img class="chip-image-profile" src="{{ request.session.login_user_image }}" alt="{{ request.user.username }}">
-                <i class="material-icons">keyboard_arrow_down</i>
+                <i class="material-icons js-dropdown-icon">keyboard_arrow_down</i>
+                <i class="material-icons js-dropdown-icon hide">keyboard_arrow_up</i>
             </div>
             <div class="dropdown-menu-wrapper hide" id="js-dropdown-menu">
                 <div class="dropdown-menu">
@@ -30,6 +31,7 @@
                     {% endif %}
                     <a class="dropdown-item" href="/">My Feed</a>
                     <a class="dropdown-item" href="/profile">My Profile</a>
+                    <div class="divider"></div>
                     <a class="dropdown-item" href="/auth/logout">Sign Out</a>
                 </div>
             </div>

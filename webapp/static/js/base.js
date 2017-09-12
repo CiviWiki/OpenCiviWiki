@@ -26,7 +26,7 @@ cw.materializeShit = function () {
 
 cw.initGlobalNav = function () {
     var $notifications = $('#item-notifications');
-    
+
     $notifications.on('click', function () {
         $('.notifications-modal').openModal();
     });
@@ -35,12 +35,14 @@ cw.initGlobalNav = function () {
     $navMenuButton.on('click', function () {
         event.stopPropagation()
         $('#js-dropdown-menu').toggleClass('hide');
+        $('.js-dropdown-icon').toggleClass('hide');
 
         $(document).on('click', function(event){
             $target = $(event.target);
 
             if ($target.parents('#js-dropdown-menu').length==0){
                 $('#js-dropdown-menu').addClass('hide');
+                $('.js-dropdown-icon').toggleClass('hide');
                 $(this).unbind(event);
             }
         })
