@@ -1,8 +1,8 @@
 from django.db import models
-from account import Account
-from thread import Thread
-from bill import Bill
-from hashtag import Hashtag
+from .account import Account
+from .thread import Thread
+from .bill import Bill
+from .hashtag import Hashtag
 import random as r
 import os, json, datetime, math, uuid
 from django.core.serializers.json import DjangoJSONEncoder
