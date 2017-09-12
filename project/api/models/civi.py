@@ -130,7 +130,6 @@ class Civi(models.Model):
         D = -1
         A = 1
         SA = 2
-        owner_id = self.author
         post_time = self.created
         current_time = datetime.datetime.now()
 
