@@ -402,13 +402,15 @@ def editUser(request):
     }
 
     try:
-        Account.objects.filter(id=account.id).update(**data)
+        account.__dict__.update(**data)
         account.save()
-        account.refresh_from_db()
 
-        return JsonResponse(Account.objects.summarize(account))
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
+
+    request.session["login_user_firstname"] = account.first_name
+
+    return JsonResponse(Account.objects.summarize(account))
 
 @login_required
 def uploadProfileImage(request):
@@ -431,6 +433,8 @@ def uploadProfileImage(request):
                         'error': 'MODEL_SAVE_ERROR'
                     }
                     return JsonResponse(response, status=400)
+
+                request.session["login_user_image"] = account.profile_image_thumb_url
 
                 response = {
                     'profile_image': account.profile_image_url
@@ -464,7 +468,7 @@ def clearProfileImage(request):
 
             return HttpResponse('Image Deleted')
         except Exception as e:
-            return HttpResponseServerError(reason=str(default))
+            return HttpResponseServerError(reason=str(e))
     else:
         return HttpResponseForbidden('allowed only via POST')
 
