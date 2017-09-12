@@ -147,9 +147,9 @@ def get_rep(request, rep_id):
 
 def get_feed(request):
     try:
-        a = Account.objects.get(user=request.user)
-        all_categories = Category.objects.values_list('id', flat=True)
-        user_categories = list(a.categories.values_list('id', flat=True)) or all_categories
+        # a = Account.objects.get(user=request.user)
+        # all_categories = Category.objects.values_list('id', flat=True)
+        # user_categories = list(a.categories.values_list('id', flat=True)) or all_categories
 
         # feed_threads = [Thread.objects.summarize(t) for t in Thread.objects.filter_by_category(user_categories).order_by('-created')]
         # top5_threads = Thread.objects.all().order_by('-views')[:5].values('id', 'title')
@@ -180,7 +180,7 @@ def get_thread(request, thread_id):
         c_data = [Civi.objects.serialize_s(ci) for ci in c]
         for idx, item in enumerate(c_data):
             problems[idx]['score'] = c_scores[idx]
-        problems = sorted(problems, key=lambda x: x['score'], reverse=True)
+        # problems = sorted(problems, key=lambda x: x['score'], reverse=True)
         # for idx, item in enumerate(problems):
         #     problems[idx] = json.dumps(item, cls=DjangoJSONEncoder)
         #

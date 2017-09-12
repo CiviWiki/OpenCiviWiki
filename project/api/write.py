@@ -1,6 +1,7 @@
 import json, PIL, urllib, uuid
 
 from notifications.signals import notify
+
 # django packages
 from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse, HttpResponseServerError, HttpResponseForbidden, HttpResponseBadRequest
@@ -8,8 +9,9 @@ from django.core.files import File   # need this for image file handling
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.decorators import user_passes_test
-from django.contrib.sites.shortcuts import get_current_site
+from django.core.files.base import ContentFile
+from api.models import Thread
+from channels import Group as channels_Group
 
 # civi packages
 from api.forms import UpdateProfileImage
@@ -459,7 +461,7 @@ def clearProfileImage(request):
             account.save()
 
             return HttpResponse('Image Deleted')
-        except Exception as e:
+        except Exception:
             return HttpResponseServerError(reason=str(default))
     else:
         return HttpResponseForbidden('allowed only via POST')
