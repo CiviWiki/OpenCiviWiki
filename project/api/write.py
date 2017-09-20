@@ -11,7 +11,7 @@ from utils.constants import US_STATES
 from api.forms import UpdateProfileImage
 from django.core.files import File   # need this for image file handling
 from django.core.files.base import ContentFile
-from api.models.thread import Thread
+from .models.thread import Thread
 from channels import Group as channels_Group
 
 from utils.custom_decorators import require_post_params
