@@ -1,5 +1,4 @@
 from django.db import models
-from django.conf import settings
 from utils.constants import US_STATES
 
 class RepresentativeManager(models.Manager):

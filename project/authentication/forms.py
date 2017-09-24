@@ -3,13 +3,12 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import (
     UserCreationForm, SetPasswordForm, PasswordResetForm as AuthRecoverUserForm
 )
-from django.utils.translation import ugettext, ugettext_lazy as _
-from api.models import Account
+from django.utils.translation import ugettext_lazy as _
 from reserved_usernames import RESERVED_USERNAMES
 from api.tasks import send_email as task_send_email
 from django.contrib.sites.shortcuts import get_current_site
-from django.utils.encoding import force_bytes, force_text
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
 
 import re
