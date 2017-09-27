@@ -107,4 +107,4 @@ python manage.py runserver
 Once CiviWiki is running, visit the front page (probably something like http://localhost:8000). Once there, click 'log in/register', and then 'register new user'.
 
 ### Enable beta access for new user
-Once you have submitted the new user registration fom, you will be directed to the 'Development in progress' screen. In order to access the site functionality, you need to modify the new user record and set the `beta_access` field to `True` for the user record in the `api_account` table.
+Once you have submitted the new user registration form, you will be directed to the 'Development in progress' screen. In order to access the site functionality, you need to modify the new user record and set the `beta_access` field to `True` for the user record in the `api_account` table.

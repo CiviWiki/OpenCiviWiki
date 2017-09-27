@@ -9,7 +9,6 @@ import StringIO
 from django.contrib.auth.models import User
 from django.utils.deconstruct import deconstructible
 from django.core.files.storage import default_storage
-from django.core.exceptions import ValidationError
 from django.conf import settings
 from django.db import models
 from PIL import Image, ImageOps

@@ -10,9 +10,8 @@ TODO: move to auth
 from __future__ import absolute_import
 
 from django.conf import settings
-from django.core import mail
 from celery import shared_task
-from django.core.mail import send_mail, send_mass_mail
+from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.core.mail import get_connection, EmailMultiAlternatives
 
