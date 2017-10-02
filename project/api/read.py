@@ -7,7 +7,6 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.forms.models import model_to_dict
 from utils import json_response
 import json
-# from utils.custom_decorators import require_post_params
 from legislation import sunlightapi as sun
 
 import tasks
