@@ -1,6 +1,6 @@
 from django.db import models
-from account import Account
-from response import Response
+from .account import Account
+from .response import Response
 # from django.contrib.postgres.fields import ArrayField
 
 

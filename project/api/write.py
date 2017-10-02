@@ -5,7 +5,9 @@ from notifications.signals import notify
 from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse, HttpResponseServerError, HttpResponseForbidden, HttpResponseBadRequest
 from django.core.files import File   # need this for image file handling
+
 from django.contrib.auth.decorators import login_required
+
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
