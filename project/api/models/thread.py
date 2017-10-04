@@ -1,10 +1,10 @@
 from django.db import models
-from account import Account
-from category import Category
-from fact import Fact
-from hashtag import Hashtag
+from .account import Account
+from .category import Category
+from .fact import Fact
+from .hashtag import Hashtag
 from calendar import month_name
-import os, json, uuid
+import os, uuid
 from django.utils.deconstruct import deconstructible
 from django.core.files.storage import default_storage
 from django.conf import settings
@@ -53,6 +53,7 @@ class PathAndRename(object):
         new_filename = str(uuid.uuid4())
         filename = '{}.{}'.format(new_filename, ext)
         return os.path.join(self.sub_path, filename)
+
 
 image_upload_path = PathAndRename('')
 

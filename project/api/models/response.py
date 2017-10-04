@@ -1,6 +1,7 @@
 from django.db import models
-from account import Account
-from civi import Civi
+
+from .account import Account
+from .civi import Civi
 
 class Response(models.Model):
     author = models.ForeignKey(Account, default=None, null=True)

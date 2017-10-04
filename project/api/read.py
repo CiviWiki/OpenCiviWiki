@@ -1,15 +1,11 @@
 from django.http import JsonResponse, HttpResponseBadRequest
 from models import Account, Thread, Civi, Representative, Category, Activity
 #  Topic, Attachment, Category, Civi, Comment, Hashtag,
-from django.db.models import Q
 from django.contrib.auth.models import User
-from django.core.serializers.json import DjangoJSONEncoder
 from django.forms.models import model_to_dict
 from utils import json_response
-import json
-from legislation import sunlightapi as sun
 
-import tasks
+from legislation import sunlightapi as sun
 
 def get_user(request, user):
     try:
@@ -137,7 +133,7 @@ def get_thread(request, thread_id):
             'hashtags': t.hashtags.all().values(),
             'author': {
                 'username': t.author.user.username,
-                'profile_image': t.author.profile_image.url  if t.author.profile_image  else "/media/profile/default.png",
+                'profile_image': t.author.profile_image.url if t.author.profile_image else "/media/profile/default.png",
                 'first_name': t.author.first_name,
                 'last_name': t.author.last_name
             },

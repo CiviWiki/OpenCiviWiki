@@ -1,23 +1,23 @@
-import os, sys, json, pdb, random, hashlib, urllib2, pprint, urllib, PIL
-from models import Account, Category, Civi, CiviImage, Hashtag, Activity, Invitation
-from django.contrib.auth.models import User
-from django.http import JsonResponse, HttpResponse, HttpResponseServerError, HttpResponseForbidden, HttpResponseBadRequest
-from utils.custom_decorators import require_post_params
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
-from django.conf import settings
-from utils.constants import US_STATES
-from api.forms import UpdateProfileImage
-from django.core.files import File   # need this for image file handling
-from django.core.files.base import ContentFile
-from api.models import Thread
-from channels import Group as channels_Group
+import json, PIL, urllib, uuid
 
 from notifications.signals import notify
+# django packages
+from django.contrib.auth.models import User
+from django.http import JsonResponse, HttpResponse, HttpResponseServerError, HttpResponseForbidden, HttpResponseBadRequest
+
+from django.core.files import File   # need this for image file handling
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.sites.shortcuts import get_current_site
-from api.tasks import send_email, send_mass_email
-import uuid
+
+# civi packages
+from api.forms import UpdateProfileImage
+from api.models import Thread
+from api.tasks import send_mass_email
+from models import Account, Activity, Category, Civi, CiviImage, Invitation
+from utils.custom_decorators import require_post_params
+from utils.constants import US_STATES
+from utils.custom_decorators import require_post_params
 
 
 @login_required
@@ -420,10 +420,10 @@ def uploadCiviImage(request):
             data = {
                 "attachments": [{'id': img.id, 'url': img.image_url} for img in c.images.all()],
             }
-            return  JsonResponse(data)
+            return JsonResponse(data)
 
         except Exception as e:
-            return HttpResponseServerError(reason=(str(e)+ civi_id + str(request.FILES)))
+            return HttpResponseServerError(reason=(str(e) + civi_id + str(request.FILES)))
     else:
         return HttpResponseForbidden('allowed only via POST')
 
@@ -470,7 +470,7 @@ def uploadThreadImage(request):
             data = {
                 'image': thread.image_url
             }
-            return  JsonResponse(data)
+            return JsonResponse(data)
 
         except Exception as e:
             return HttpResponseServerError(reason=(str(e)))

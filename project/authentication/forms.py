@@ -3,13 +3,12 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import (
     UserCreationForm, SetPasswordForm, PasswordResetForm as AuthRecoverUserForm
 )
-from django.utils.translation import ugettext, ugettext_lazy as _
-from api.models import Account
+from django.utils.translation import ugettext_lazy as _
 from reserved_usernames import RESERVED_USERNAMES
 from api.tasks import send_email as task_send_email
 from django.contrib.sites.shortcuts import get_current_site
-from django.utils.encoding import force_bytes, force_text
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
 
 import re
@@ -118,7 +117,7 @@ class RecoverUserForm(AuthRecoverUserForm):
             domain = get_current_site(request).domain
             base_url = "http://{domain}/auth/password_reset/{uid}/{token}/"
             url_with_code = base_url.format(domain=domain, uid=uid, token=token)
-            email_body = "You're receiving this email because you requested an account recovery email for your user account at {domain}. Your username for this email is: {username}. If you also need to reset your password, please go to the following page and choose a new password.".format(domain = domain, username = user.username)
+            email_body = "You're receiving this email because you requested an account recovery email for your user account at {domain}. Your username for this email is: {username}. If you also need to reset your password, please go to the following page and choose a new password.".format(domain=domain, username=user.username)
 
             email_context = {
                 'title' : 'Account Recovery for CiviWiki',

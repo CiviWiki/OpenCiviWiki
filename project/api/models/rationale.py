@@ -1,7 +1,7 @@
 from django.db import models
-from bill import Bill
-from representative import Representative
-from vote import Vote
+from .bill import Bill
+from .representative import Representative
+from .vote import Vote
 
 
 class Rationale(models.Model):
@@ -17,6 +17,6 @@ class Rationale(models.Model):
     votes_neutral = models.IntegerField(default=0)
     votes_pos = models.IntegerField(default=0)
     votes_vpos = models.IntegerField(default=0)
-    
+
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     last_modified = models.DateTimeField(auto_now=True, blank=True, null=True)
