@@ -1,8 +1,9 @@
 from django.db import models
-from account import Account
-from thread import Thread
-from bill import Bill
-from hashtag import Hashtag
+from .account import Account
+from .thread import Thread
+from .bill import Bill
+from .hashtag import Hashtag
+import random as r
 import os, json, datetime, math, uuid
 from django.core.serializers.json import DjangoJSONEncoder
 from django.utils.deconstruct import deconstructible
@@ -37,7 +38,7 @@ class CiviManager(models.Manager):
             "votes": civi.votes(),
             "id": civi.id,
             "thread_id": civi.thread.id
-	    }
+        }
 
         if filter and filter in data:
             return json.dumps({filter: data[filter]})
@@ -50,7 +51,7 @@ class CiviManager(models.Manager):
             "body": civi.body,
             "author": dict(
                 username=civi.author.user.username,
-                profile_image= civi.author.profile_image.url if civi.author.profile_image else "/media/profile/default.png",
+                profile_image=civi.author.profile_image.url if civi.author.profile_image else "/media/profile/default.png",
                 first_name=civi.author.first_name,
                 last_name=civi.author.last_name
             ),
@@ -61,7 +62,7 @@ class CiviManager(models.Manager):
             "id": civi.id,
             "thread_id": civi.thread.id,
             "links": [c for c in civi.linked_civis.all().values_list('id', flat=True)]
-	    }
+        }
 
         if filter and filter in data:
             return json.dumps({filter: data[filter]})
@@ -95,9 +96,6 @@ class Civi(models.Model):
     )
     c_type = models.CharField(max_length=31, default='problem', choices=c_CHOICES)
 
-    # sources = ArrayField(models.CharField(max_length=127, blank=True), default=[], blank=True)
-    # attachments
-
     votes_vneg = models.IntegerField(default=0)
     votes_neg = models.IntegerField(default=0)
     votes_neutral = models.IntegerField(default=0)
@@ -112,7 +110,7 @@ class Civi(models.Model):
             'total': act_votes.count() - act_votes.filter(activity_type='vote_neutral').count(),
             'votes_vneg': act_votes.filter(activity_type='vote_vneg').count(),
             'votes_neg': act_votes.filter(activity_type='vote_neg').count(),
-            'votes_neutral':  act_votes.filter(activity_type='vote_neutral').count(),
+            'votes_neutral': act_votes.filter(activity_type='vote_neutral').count(),
             'votes_pos': act_votes.filter(activity_type='vote_pos').count(),
             'votes_vpos': act_votes.filter(activity_type='vote_vpos').count()
         }
@@ -120,6 +118,7 @@ class Civi(models.Model):
 
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     last_modified = models.DateTimeField(auto_now=True, blank=True, null=True)
+
     def _get_created_date_str(self):
         d = self.created
         return "{0} {1}, {2}".format(month_name[d.month], d.day, d.year)
@@ -130,6 +129,7 @@ class Civi(models.Model):
         D = -1
         A = 1
         SA = 2
+
         post_time = self.created
         current_time = datetime.datetime.now()
 
@@ -151,7 +151,7 @@ class Civi(models.Model):
         if x > 0:
             v = votes['total'] if votes['total'] > 1 else 2
             #step3 - A X*Log10V+Y + F + (##/T) = Rank Value
-            rank = x * math.log10(v) *amp  + y + f + g/t
+            rank = x * math.log10(v) * amp + y + f + g/t
 
         elif x == 0:
 
@@ -161,7 +161,7 @@ class Civi(models.Model):
             v = votes['total'] if votes['total'] > 1 else 2
             #step3 - C
             if abs(x)/v <= 5:
-                rank = abs(x) * math.log10(v) *amp + y + f + g/t
+                rank = abs(x) * math.log10(v) * amp + y + f + g/t
             else:
                 rank = x * math.log10(v) * amp + y + f + g/t
         return rank
@@ -185,7 +185,7 @@ class Civi(models.Model):
             # Not Implemented Yet
             "hashtags": [],
             "attachments": [{'id': img.id, 'url': img.image_url} for img in self.images.all()],
-	    }
+        }
         if req_acct_id:
             data['score'] = self.score(req_acct_id)
 
@@ -202,6 +202,7 @@ class PathAndRename(object):
         new_filename = str(uuid.uuid4())
         filename = '{}.{}'.format(new_filename, ext)
         return os.path.join(self.sub_path, filename)
+
 
 image_upload_path = PathAndRename('')
 

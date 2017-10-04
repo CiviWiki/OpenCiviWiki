@@ -1,6 +1,6 @@
 from django.db import models
-from bill import Bill
-from representative import Representative
+from .bill import Bill
+from .representative import Representative
 
 
 class Vote(models.Model):

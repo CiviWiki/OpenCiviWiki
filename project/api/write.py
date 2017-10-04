@@ -5,13 +5,12 @@ from notifications.signals import notify
 # django packages
 from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse, HttpResponseServerError, HttpResponseForbidden, HttpResponseBadRequest
+
 from django.core.files import File   # need this for image file handling
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required
-from django.core.files.base import ContentFile
-from api.models import Thread
-from channels import Group as channels_Group
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib.sites.shortcuts import get_current_site
+
 
 # civi packages
 from api.forms import UpdateProfileImage
@@ -42,63 +41,6 @@ def new_thread(request):
 
     return JsonResponse({'data': 'success', 'thread_id' : new_t.pk})
 
-# @login_required
-# @transaction.atomic
-# def update_profile(request):
-#     if request.method == 'POST':
-#         user_form = UserForm(request.POST, instance=request.user)
-#         profile_form = ProfileForm(request.POST, instance=request.user.profile)
-#         if user_form.is_valid() and profile_form.is_valid():
-#             user_form.save()
-#             profile_form.save()
-#             messages.success(request, _('Your profile was successfully updated!'))
-#             return redirect('settings:profile')
-#         else:
-#             messages.error(request, _('Please correct the error below.'))
-#     else:
-#         user_form = UserForm(instance=request.user)
-#         profile_form = ProfileForm(instance=request.user.profile)
-#     return render(request, 'profiles/profile.html', {
-#         'user_form': user_form,
-#         'profile_form': profile_form
-#     })
-# @login_required
-# @require_post_params(params=['title', 'description'])
-# def createGroup(request):
-#     '''
-#         USAGE:
-#             create a civi Group responsible for creating and managing civi content.
-#             Please validate file uploads as valid images on the frontend.
-#
-#         File Uploads:
-#             profile (optional)
-#             cover (optional)
-#
-#         Text POST:
-#             title
-#             description
-#
-#         :returns: (200, ok, group_id) (500, error)
-#     '''
-#     pi = request.FILES.get('profile', False)
-#     ci = request.FILES.get('cover', False)
-#     title = request.POST.get(title, '')
-#     data = {
-#         "owner": Account.objects.get(user=request.user),
-#         "title": title,
-#         "description": request.POST.get('description',''),
-#         "profile_image": writeImage('profile', pi, title),
-#         "cover_image": writeImage('cover', ci, title)
-#     }
-#
-#     try:
-#         group = Group(**data)
-#         group.save()
-#         account.groups.add(group)
-#         return JsonResponse({'result':group.id})
-#     except Exception as e:
-#         return HttpResponseServerError(reason=e)
-#
 @login_required
 @require_post_params(params=['title', 'body', 'c_type', 'thread_id'])
 def createCivi(request):
@@ -122,16 +64,6 @@ def createCivi(request):
     try:
         civi = Civi(**data)
         civi.save()
-        # hashtags = request.POST.get('hashtags', '')
-        # split = [x.strip() for x in hashtags.split(',')]
-        # for str in split:
-        #     if not Hashtag.objects.filter(title=str).exists():
-        #         hash = Hashtag(title=str)
-        #         hash.save()
-        #     else:
-        #         hash = Hashtag.objects.get(title=str)
-        #
-        #     civi.hashtags.add(hash.id)
         links = request.POST.getlist('links[]', '')
         if links:
             for civi_id in links:
@@ -141,8 +73,6 @@ def createCivi(request):
         # If response
         related_civi = request.POST.get('related_civi', '')
         if related_civi:
-            # parent_civi = Civi.objects.get(id=related_civi)
-            # parent_civi.links.add(civi)
             parent_civi = Civi.objects.get(id=related_civi)
             parent_civi.responses.add(civi)
 
@@ -164,9 +94,6 @@ def createCivi(request):
                 "command": "add",
                 "data": json.dumps(civi.dict_with_score(a.id)),
             }
-            # channels_Group("thread-%s" % thread_id).send({
-            #     "text": json.dumps(data),
-            # })
 
             for act in accounts:
                 if act.user.username != request.user.username:
@@ -495,10 +422,10 @@ def uploadCiviImage(request):
             data = {
                 "attachments": [{'id': img.id, 'url': img.image_url} for img in c.images.all()],
             }
-            return  JsonResponse(data)
+            return JsonResponse(data)
 
         except Exception as e:
-            return HttpResponseServerError(reason=(str(e)+ civi_id + str(request.FILES)))
+            return HttpResponseServerError(reason=(str(e) + civi_id + str(request.FILES)))
     else:
         return HttpResponseForbidden('allowed only via POST')
 
@@ -545,39 +472,13 @@ def uploadThreadImage(request):
             data = {
                 'image': thread.image_url
             }
-            return  JsonResponse(data)
+            return JsonResponse(data)
 
         except Exception as e:
             return HttpResponseServerError(reason=(str(e)))
     else:
         return HttpResponseForbidden('allowed only via POST')
-# @login_required
-# @require_post_params(params=['friend'])
-# def requestFollow(request):
-#     '''
-#         USAGE:
-#             Takes in a user_id and sends your id to the users friend_requests list. No join
-#             is made on accounts until user accepts friend request on other end.
-#
-#         Text POST:
-#             friend
-#
-#         :return: (200, okay) (400, error) (500, error)
-#     '''
-#     try:
-#         account = Account.objects.get(user=request.user)
-#         friend = Account.objects.get(id=request.POST.get('friend', -1))
-#         if account.id in friend.friend_requests:
-#             raise Exception("Request has already been sent to user")
-#
-#         friend.friend_requests += [int(account.id)]
-#         friend.save()
-#         return HttpResponse()
-#     except Account.DoesNotExist as e:
-#         return HttpResponseBadRequest(reason=str(e))
-#     except Exception as e:
-#         return HttpResponseServerError(reason=str(e))
-#
+
 @login_required
 @require_post_params(params=['target'])
 def requestFollow(request):
@@ -731,9 +632,6 @@ def invite(request):
                 email_messages.append(email_context)
 
                 new_invitation = Invitation(**data)
-                # new_invitation.host_user = user
-                # new_invitation.invitee_email = email
-                # new_invitation.verification_code = ""
                 new_invitation.save()
 
         if email_messages:
