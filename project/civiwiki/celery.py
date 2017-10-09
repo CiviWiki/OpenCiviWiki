@@ -26,4 +26,7 @@ def debug_task(self):
     """
     Debug printer for celery requests
     """
-    print 'Request: {0!r}'.format(self.request)
+
+    celery_debug_message = 'Request: {0!r}'.format(self.request)
+
+    print(celery_debug_message)

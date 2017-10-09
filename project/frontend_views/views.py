@@ -275,6 +275,3 @@ def about_view(request):
 
 def support_us_view(request):
     return TemplateResponse(request, 'static_templates/support_us.html', {})
-
-def does_not_exist(request):
-    return TemplateResponse(request, 'base/404.html', {})

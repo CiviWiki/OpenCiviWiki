@@ -20,7 +20,6 @@ from django.views.static import serve
 from api import urls as api
 from authentication import urls as auth
 from frontend_views import urls as frontend_views
-# import notifications
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
