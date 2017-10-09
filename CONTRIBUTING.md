@@ -2,7 +2,7 @@
 Use these instructions to set up a local development environment.
 
 ## Prerequisites
-The following packages are helpful/required to start developing CiviWiki:
+The following packages are required to start developing CiviWiki:
 
 - PostgreSQL
 - Redis
@@ -72,14 +72,14 @@ python manage.py migrate
 If everything goes well, you should see a bunch of green 'OK's. Django will create the database structure for you.
 
 ### Populate initial data
-There are two files, located in the `/data` directory, that contain initial categories and congressional data. Run the following commands to initialize the congressional and categoies data:
+There are two files, located in the `/data` directory, that contain initial categories and congressional data. Run the following commands to initialize the congressional and categories data:
 
 ```py
-python manage.py loaddata /data/congress.json
+python manage.py loaddata data/congress.json
 ```
 
 ```py
-python manage.py loaddata /data/categories.json
+python manage.py loaddata data/categories.json
 ```
 
 ### Collect static files
@@ -107,4 +107,4 @@ python manage.py runserver
 Once CiviWiki is running, visit the front page (probably something like http://localhost:8000). Once there, click 'log in/register', and then 'register new user'.
 
 ### Enable beta access for new user
-Once you have submitted the new user registration fom, you will be directed to the 'Development in progress' screen. In order to access the site functionality, you need to modify the new user record and set the `beta_access` field to `True` for the user record in the `api_account` table.
+Once you have submitted the new user registration form, you will be directed to the 'Development in progress' screen. In order to access the site functionality, you need to modify the new user record and set the `beta_access` field to `True` for the user record in the `api_account` table.

@@ -9,7 +9,6 @@ import StringIO
 from django.contrib.auth.models import User
 from django.utils.deconstruct import deconstructible
 from django.core.files.storage import default_storage
-from django.core.exceptions import ValidationError
 from django.conf import settings
 from django.db import models
 from PIL import Image, ImageOps
@@ -17,9 +16,9 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 
 
 from utils.constants import US_STATES
-from hashtag import Hashtag
-from category import Category
-from representative import Representative
+from .hashtag import Hashtag
+from .category import Category
+from .representative import Representative
 
 
 # Image manipulation constants
@@ -90,6 +89,7 @@ class PathAndRename(object):
         new_filename = str(uuid.uuid4())
         filename = '{}.{}'.format(new_filename, extension)
         return os.path.join(self.sub_path, filename)
+
 
 profile_upload_path = PathAndRename('')
 

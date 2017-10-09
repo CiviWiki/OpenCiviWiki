@@ -1,17 +1,17 @@
-from django.db import models
-from account import Account
-from thread import Thread
-from bill import Bill
-from hashtag import Hashtag
-# TODO: cleanup imports if not used
-#import random as r
+import random as r
 import os, json, datetime, math, uuid
+
+from calendar import month_name
+from django.db import models
 from django.core.serializers.json import DjangoJSONEncoder
 from django.utils.deconstruct import deconstructible
 from django.core.files.storage import default_storage
 from django.conf import settings
-from calendar import month_name
 
+from .account import Account
+from .thread import Thread
+from .bill import Bill
+from .hashtag import Hashtag
 
 class CiviManager(models.Manager):
     def summarize(self, civi):
@@ -39,7 +39,7 @@ class CiviManager(models.Manager):
             "votes": civi.votes(),
             "id": civi.id,
             "thread_id": civi.thread.id
-	    }
+        }
 
         if filter and filter in data:
             return json.dumps({filter: data[filter]})
@@ -100,8 +100,6 @@ class Civi(models.Model):
     )
     c_type = models.CharField(max_length=31, default='problem', choices=c_CHOICES)
 
-    # attachments
-
     votes_vneg = models.IntegerField(default=0)
     votes_neg = models.IntegerField(default=0)
     votes_neutral = models.IntegerField(default=0)
@@ -113,7 +111,7 @@ class Civi(models.Model):
         activity_votes = Activity.objects.filter(civi=self)
 
         votes = {
-            'total': act_votes.count() - act_votes.filter(activity_type='vote_neutral').count(),
+            'total': activity_votes.count() - activity_votes.filter(activity_type='vote_neutral').count(),
             'votes_vneg': activity_votes.filter(activity_type='vote_vneg').count(),
             'votes_neg': activity_votes.filter(activity_type='vote_neg').count(),
             'votes_neutral':  activity_votes.filter(activity_type='vote_neutral').count(),
@@ -218,7 +216,7 @@ class Civi(models.Model):
             # Not Implemented Yet
             "hashtags": [],
             "attachments": [{'id': img.id, 'url': img.image_url} for img in self.images.all()],
-	    }
+        }
         if req_acct_id:
             data['score'] = self.score(req_acct_id)
 
@@ -235,6 +233,7 @@ class PathAndRename(object):
         new_filename = str(uuid.uuid4())
         filename = '{}.{}'.format(new_filename, extension)
         return os.path.join(self.sub_path, filename)
+
 
 image_upload_path = PathAndRename('')
 

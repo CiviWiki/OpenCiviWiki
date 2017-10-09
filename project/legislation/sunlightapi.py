@@ -1,5 +1,3 @@
-import os
-import json
 import sunlight
 from django.conf import settings
 

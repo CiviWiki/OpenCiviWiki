@@ -1,6 +1,7 @@
 from django.db import models
-from account import Account
-from response import Response
+
+from .account import Account
+from .response import Response
 
 class Rebuttal(models.Model):
     author = models.ForeignKey(Account, default=None, null=True)

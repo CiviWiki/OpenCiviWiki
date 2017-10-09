@@ -1,7 +1,7 @@
 from django.db import models
-from account import Account
-from civi import Civi
-from thread import Thread
+from .account import Account
+from .civi import Civi
+from .thread import Thread
 
 class ActivityManager(models.Manager):
     def votes(self, civi_id):
