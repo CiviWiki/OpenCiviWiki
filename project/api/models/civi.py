@@ -119,6 +119,9 @@ class Civi(models.Model):
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     last_modified = models.DateTimeField(auto_now=True, blank=True, null=True)
 
+    # Allow draft state Civis (default to True)
+    is_draft = models.BooleanField(default=True)
+
     def _get_created_date_str(self):
         d = self.created
         return "{0} {1}, {2}".format(month_name[d.month], d.day, d.year)
