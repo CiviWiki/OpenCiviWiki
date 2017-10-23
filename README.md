@@ -13,24 +13,7 @@ We are an open source, non-profit community, working to develop a democratic eng
   
 
 # Development
-## Compatible Versioning
-We use Compatibile Versioning in this project.
 
-Given a version number MAJOR.MINOR, increment the:
-
-MAJOR version when you make backwards-incompatible updates of any kind
-MINOR version when you make 100% backwards-compatible updates
-Additional labels for pre-release and build metadata are available as extensions to the MAJOR.MINOR format.
-
-### How is this different to SemVer?
-
-Compatible Versioning ("ComVer") is SemVer where every PATCH number is 0 (zero). This way, ComVer is backwards compatible with SemVer.
-
-A ComVer release from 3.6 to 3.7 is just a SemVer release from 3.6.0 to 3.7.0. In other words, ComVer is safe to adopt since it is basically SemVer without ever issuing PATCH releases.
-
-## Coding Conventions 
-
-We strive to follow Django Coding Conventions. See https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/
 
 ## Development environment
 ### setup
