@@ -86,6 +86,9 @@ class Thread(models.Model):
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     last_modified = models.DateTimeField(auto_now=True, blank=True, null=True)
 
+    # Allow draft stage threads (default to True)
+    is_draft = models.BooleanField(default=True)
+
     num_views = models.IntegerField(default=0)
     num_civis = models.IntegerField(default=0)
     num_solutions = models.IntegerField(default=0)
