@@ -1,5 +1,4 @@
 from django.db import models
-from django.conf import settings
 from utils.constants import US_STATES
 
 class RepresentativeManager(models.Manager):
@@ -7,8 +6,6 @@ class RepresentativeManager(models.Manager):
         return
 
 class Representative(models.Model):
-    # account = models.ForeignKey(Account, default=None, null=True)
-
     first_name = models.CharField(max_length=63, blank=False)
     last_name = models.CharField(max_length=63, blank=False)
     official_full_name = models.CharField(max_length=127, blank=True, null=True)

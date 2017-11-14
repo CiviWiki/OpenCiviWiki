@@ -1,7 +1,6 @@
-from channels import Channel, Group
+from channels import Group
 from channels.sessions import channel_session
 from channels.auth import channel_session_user, channel_session_user_from_http
-from api.models import Account
 #
 #TODO
 # 1. A User follows you

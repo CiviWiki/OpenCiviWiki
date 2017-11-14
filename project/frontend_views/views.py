@@ -92,19 +92,9 @@ def issue_thread(request, thread_id=None):
     req_acct = Account.objects.get(user=request.user)
     t = Thread.objects.get(id=thread_id)
     c_qs = Civi.objects.filter(thread_id=thread_id).exclude(c_type='response')
-    # c_scored = Civi.objects.thread_sorted_by_score(c_qs, req_acct.id)
     c_scored = [c.dict_with_score(req_acct.id) for c in c_qs]
     civis = sorted(c_scored, key=lambda c: c['score'], reverse=True)
-
-
-    # civis = Civi.objects.filter(thread_id=thread_id)
-    # c = civis.order_by('-created')
-    # c_scores = [ci.score(req_a.id) for ci in c]
-    # c_data = [Civi.objects.serialize_s(ci) for ci in c]
-    # for idx, item in enumerate(c_data):
-    #     c_data[idx]['score'] = c_scores[idx]
-    # c_data = sorted(c_data, key=lambda x: x['score'], reverse=True)
-
+    
     #modify thread view count
     t.num_civis = len(civis)
     t.num_views = F('num_views') + 1

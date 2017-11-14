@@ -1,9 +1,6 @@
 from functools import wraps
 from django.utils.decorators import available_attrs
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
-from django.contrib.auth.views import redirect_to_login
-from django.shortcuts import resolve_url
-
 from api.models import Account
 
 '''

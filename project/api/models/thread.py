@@ -1,10 +1,10 @@
 from django.db import models
-from account import Account
-from category import Category
-from fact import Fact
-from hashtag import Hashtag
+from .account import Account
+from .category import Category
+from .fact import Fact
+from .hashtag import Hashtag
 from calendar import month_name
-import os, json, uuid
+import os, uuid
 from django.utils.deconstruct import deconstructible
 from django.core.files.storage import default_storage
 from django.conf import settings
@@ -54,6 +54,7 @@ class PathAndRename(object):
         filename = '{}.{}'.format(new_filename, ext)
         return os.path.join(self.sub_path, filename)
 
+
 image_upload_path = PathAndRename('')
 
 class Thread(models.Model):
@@ -84,6 +85,9 @@ class Thread(models.Model):
 
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     last_modified = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+    # Allow draft stage threads (default to True)
+    is_draft = models.BooleanField(default=True)
 
     num_views = models.IntegerField(default=0)
     num_civis = models.IntegerField(default=0)

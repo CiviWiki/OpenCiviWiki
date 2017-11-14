@@ -3,12 +3,6 @@ import read, write
 
 #TODO: RESTful API - http://www.django-rest-framework.org/
 urlpatterns = [
-    # url(r'^getcivi$', read.getCivi, name='civi'),
-    # url(r'^topten$', read.topTen, name='example'),
-    # url(r'^topics$', read.getTopics, name='get topics'),
-    # url(r'^categories$', read.getCategories, name='get categories'),
-    # url(r'^useridbyusername$', read.getIdByUsername, name='get id by username'),
-
     url(r'^account_data/(?P<user>[-\w]+)/$', read.get_user, name='get user'),
     url(r'^account_profile/(?P<user>[-\w]+)/$', read.get_profile, name='get profile'),
     url(r'^account_card/(?P<user>[-\w]+)$', read.get_card, name='get card'),
@@ -24,9 +18,6 @@ urlpatterns = [
     url(r'^edit_civi/$', write.editCivi, name='edit civi'),
     url(r'^delete_civi/$', write.deleteCivi, name='delete civi'),
 
-    # url(r'^getblock$', read.getBlock, name='get block'),
-    # url(r'^creategroup$', write.createGroup, name='add group'),
-    # url(r'^createcivi$', write.createCivi, name='add civi'),
     url(r'^invite/$',write.invite, name='invite users'),
     url(r'^edituser/$',write.editUser, name='edit user'),
     url(r'^upload_profile/$',write.uploadProfileImage, name='upload profile'),
@@ -36,13 +27,4 @@ urlpatterns = [
     url(r'^follow/$', write.requestFollow, name='follow user'),
     url(r'^unfollow/$', write.requestUnfollow, name='unfollow user'),
     url(r'^edit_user_categories/$', write.editUserCategories, name='edit user categories'),
-
-
-    # url(r'^requestfriend$',write.requestFriend, name='request friend'),
-    # url(r'^acceptfriend$',write.acceptFriend, name='accept friend'),
-    # url(r'^removefriend$',write.removeFriend, name='remove friend'),
-    # url(r'^followgroup$',write.followGroup, name='follow group'),
-    # url(r'^unfollowgroup$', write.unfollowGroup, name='unfollow group'),
-    # url(r'^pincivi$', write.pinCivi, name='pin civi'),
-    # url(r'^unpincivi$', write.unpinCivi, name='unpin civi'),
-]
+    ]

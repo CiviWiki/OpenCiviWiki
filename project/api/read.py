@@ -1,52 +1,11 @@
 from django.http import JsonResponse, HttpResponseBadRequest
 from models import Account, Thread, Civi, Representative, Category, Activity
 #  Topic, Attachment, Category, Civi, Comment, Hashtag,
-from django.db.models import Q
 from django.contrib.auth.models import User
-from django.core.serializers.json import DjangoJSONEncoder
 from django.forms.models import model_to_dict
 from utils import json_response
-import json
-# from utils.custom_decorators import require_post_params
+
 from legislation import sunlightapi as sun
-
-import tasks
-# # Create your views here.
-# @require_post_params(params=['id'])
-# def topTen(request):
-# 	'''
-# 		Given an topic ID, returns the top ten Civis of type Issue
-# 		(the chain heads)
-# 	'''
-# 	topic_id = request.POST.get('id', -1)
-# 	try:
-# 		topic = Topic.objects.get(id=int(topic_id))
-# 		return JsonResponse({'result':Civi.objects.block(topic)})
-# 	except Topic.DoesNotExist as e:
-# 		return HttpResponseBadRequest(reason=str(e))
-#
-# def getCategories(request):
-# 	'''
-# 		Returns to user list of all Categories
-# 	'''
-# 	result = [{'id': c.id, 'name': c.name} for c in Category.objects.all()]
-# 	return JsonResponse({"result":result})
-#
-# @require_post_params(params=['id'])
-# def getTopics(request):
-# 	'''
-# 		Takes in a category ID, returns a list of topics under the category.
-# 	'''
-# 	category_id = request.POST.get('id', -1)
-#
-# 	try:
-# 		Category.objects.get(id=category_id)
-# 	except Category.DoesNotExist as e:
-# 		return HttpResponseBadRequest(reason=str(e))
-#
-# 	result = [{'id':a.id, 'topic': a.topic, 'bill': a.bill} for a in Topic.objects.filter(category_id=category_id)]
-# 	return JsonResponse({"result":result})
-
 
 def get_user(request, user):
     try:
@@ -73,10 +32,8 @@ def get_profile(request, user):
         u = User.objects.get(username=user)
         a = Account.objects.get(user=u)
         result = Account.objects.summarize(a)
-        # result = {}
 
         result['representatives'] = []
-        # result['issues'] = ['''{"category": "category", "issue":"Example Issue that the User probably cares about" }''']*20
 
         result['issues'] = []
         voted_solutions = Activity.objects.filter(account=a.id, civi__c_type="solution", activity_type__contains="pos")
@@ -137,7 +94,6 @@ def get_rep(request, rep_id):
         result = Account.objects.summarize(a)
 
         result['representatives'] = []
-        # result['issues'] = ['''{"category": "category", "issue":"Example Issue that the User probably cares about" }''']*20
         if request.user.username != user:
             ra = Account.objects.get(user=request.user)
             if user in ra.following.all():
@@ -151,18 +107,7 @@ def get_rep(request, rep_id):
 
 def get_feed(request):
     try:
-        a = Account.objects.get(user=request.user)
-        all_categories = Category.objects.values_list('id', flat=True)
-        user_categories = list(a.categories.values_list('id', flat=True)) or all_categories
-
-        # feed_threads = [Thread.objects.summarize(t) for t in Thread.objects.filter_by_category(user_categories).order_by('-created')]
-        # top5_threads = Thread.objects.all().order_by('-views')[:5].values('id', 'title')
         feed_threads = [Thread.objects.summarize(t) for t in Thread.objects.order_by('-created')]
-
-        # data = {
-        #     'threads': feed_threads,
-        #     # 'trending_threads': top5_threads
-        # }
 
         return json_response(feed_threads)
 
@@ -174,9 +119,6 @@ def get_thread(request, thread_id):
         t = Thread.objects.get(id=thread_id)
         civis = Civi.objects.filter(thread_id=thread_id)
         req_a = Account.objects.get(user=request.user)
-        # problems = civis.filter(c_type='problem')
-        # causes = civis.filter(c_type='cause')
-        # solutions = civis.filter(c_type='solution')
 
         #TODO: move order by to frontend or accept optional arg
         c = civis.order_by('-created')
@@ -184,32 +126,6 @@ def get_thread(request, thread_id):
         c_data = [Civi.objects.serialize_s(ci) for ci in c]
         for idx, item in enumerate(c_data):
             problems[idx]['score'] = c_scores[idx]
-        problems = sorted(problems, key=lambda x: x['score'], reverse=True)
-        # for idx, item in enumerate(problems):
-        #     problems[idx] = json.dumps(item, cls=DjangoJSONEncoder)
-        #
-        # c = civis.filter(c_type='cause').order_by('-created')
-        # c_scores = [ci.score(req_a.id) for ci in c]
-        # causes = [Civi.objects.serialize_s(ci) for ci in c]
-        # for idx, item in enumerate(causes):
-        #     causes[idx]['score'] = c_scores[idx]
-        # causes = sorted(causes, key=lambda x: x['score'], reverse=True)
-        # for idx, item in enumerate(causes):
-        #     causes[idx] = json.dumps(item, cls=DjangoJSONEncoder)
-        #
-        # c = civis.filter(c_type='solution').order_by('-created')
-        # c_scores = [ci.score(req_a.id) for ci in c]
-        # solutions = [Civi.objects.serialize_s(ci) for ci in c]
-        # for idx, item in enumerate(solutions):
-        #     solutions[idx]['score'] = c_scores[idx]
-        # solutions = sorted(solutions, key=lambda x: x['score'], reverse=True)
-        # for idx, item in enumerate(solutions):
-        #     solutions[idx] = json.dumps(item, cls=DjangoJSONEncoder)
-
-        # problems = [Civi.objects.serialize(c) for c in civis.filter(c_type='problem').order_by('-votes_vpos', '-votes_pos')]
-        # problems =
-        # causes = [Civi.objects.serialize(c) for c in civis.filter(c_type='cause').order_by('-votes_vpos', '-votes_pos')]
-        # solutions = [Civi.objects.serialize(c) for c in civis.filter(c_type='solution').order_by('-votes_vpos', '-votes_pos')]
 
         data = {
             'title': t.title,
@@ -217,15 +133,12 @@ def get_thread(request, thread_id):
             'hashtags': t.hashtags.all().values(),
             'author': {
                 'username': t.author.user.username,
-                'profile_image': t.author.profile_image.url  if t.author.profile_image  else "/media/profile/default.png",
+                'profile_image': t.author.profile_image.url if t.author.profile_image else "/media/profile/default.png",
                 'first_name': t.author.first_name,
                 'last_name': t.author.last_name
             },
             'category': model_to_dict(t.category),
             'created': t.created,
-            # 'problems': problems,
-            # 'causes': causes,
-            # 'solutions': solutions,
             'contributors': [Account.objects.chip_summarize(a) for a in Account.objects.filter(pk__in=civis.distinct('author').values_list('author', flat=True))],
             'num_civis': t.num_civis,
             'num_views': t.num_views,
