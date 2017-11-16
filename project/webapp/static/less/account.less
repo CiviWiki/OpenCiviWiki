@@ -184,9 +184,21 @@ body {
 
         }
     }
+    .preview-image {
+        max-height: 171px;
+    }
+    #confirmation-prompt {
+        color: @light-gray;
+        font-size: 16px;
+    }
     .top-bar {
         margin-top: 8px;
         margin-bottom: 0px;
+
+        // Prevent annoying behavior of highlighting instead of clicking
+        -webkit-user-select: none;  /* Chrome all / Safari all */
+        -moz-user-select: none;     /* Firefox all */
+        -ms-user-select: none;
         .account-tabs {
             height: inherit;
             .tabs {
@@ -198,7 +210,7 @@ body {
                         -webkit-user-select: none;  /* Chrome all / Safari all */
                         -moz-user-select: none;     /* Firefox all */
                         -ms-user-select: none;
-                        
+
                         color: @light-gray;
                         text-transform: capitalize;
                         font-weight: 700;
@@ -223,6 +235,7 @@ body {
                         color: @white;
                         font-size: 10px;
                         line-height: 24px;
+                        height: 24px;
                         padding: 0 .5rem;
                         &:hover {
                             background-color: lighten(@light-purple, 5%);
@@ -234,7 +247,6 @@ body {
                             font-size: 16px;
                         }
                     }
-
                 }
 
                  .indicator {
@@ -244,6 +256,7 @@ body {
                 }
             }
         }
+
     }
     .content {
 

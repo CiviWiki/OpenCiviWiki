@@ -94,7 +94,7 @@ def issue_thread(request, thread_id=None):
     c_qs = Civi.objects.filter(thread_id=thread_id).exclude(c_type='response')
     c_scored = [c.dict_with_score(req_acct.id) for c in c_qs]
     civis = sorted(c_scored, key=lambda c: c['score'], reverse=True)
-    
+
     #modify thread view count
     t.num_civis = len(civis)
     t.num_views = F('num_views') + 1
@@ -176,6 +176,23 @@ def invite(request):
 
     return TemplateResponse(request, 'invite.html', response_data)
 
+
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+def settings_view(request):
+
+    request_account = Account.objects.get(user=request.user)
+
+    response_data = {
+        'username': request.user.username,
+        'email': request.user.email,
+        'google_map_api_key': settings.GOOGLE_API_KEY,
+        'sunlight_api_key': settings.SUNLIGHT_API_KEY,
+        'lng': request_account.longitude,
+        'lat': request_account.latitude
+    }
+
+    return TemplateResponse(request, 'user/settings.html', response_data)
 
 
 def login_view(request):

@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^thread/(?P<thread_id>\w+)$', v.issue_thread, name='issue thread'),
     url(r'^setup$', v.user_setup, name='user setup'),
     url(r'^profile$', v.user_profile, name='default_profile'),
+    url(r'^settings$', v.settings_view, name='settings'),
     url(r'^add_civi$', v.add_civi, name='add civi'),
     url(r'^invite$', v.invite, name='invite'),
     url(r'^beta_register/(?P<email>[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})/(?P<token>\w{31})$', v.beta_register, name='beta_register'),
