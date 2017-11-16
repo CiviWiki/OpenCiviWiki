@@ -23,23 +23,139 @@
 
 
 body {
-    -webkit-font-smoothing: antialiased;
-    ::-webkit-scrollbar {
-        width: 8px;
-    }
-    ::-webkit-scrollbar-track {
-        background-color: @dark-white;
-    }
-    ::-webkit-scrollbar-thumb {
-        background-color: @light-gray;
-        margin-top: 4px;
-        margin-bottom: 4px;
-    }
+    // -webkit-font-smoothing: antialiased;
+    // ::-webkit-scrollbar {
+    //     width: 8px;
+    // }
+    // ::-webkit-scrollbar-track {
+    //     background-color: @dark-white;
+    // }
+    // ::-webkit-scrollbar-thumb {
+    //     background-color: @light-gray;
+    //     margin-top: 4px;
+    //     margin-bottom: 4px;
+    // }
 }
 .linked {
     border: 1px solid #501cb5;
 }
+
+
 #thread {
+    .thread-nav {
+        background-color: transparent;
+        border-bottom: 1px solid @dark-white;
+        box-shadow: none;
+        color: @black;
+        height: 56px;
+        // line-height: 40px;
+        display: inline-block;
+
+        .nav-wrapper {
+                .nav-item {
+
+                    padding-left: 0;
+                    padding-right: 0;
+                    &.nav-categories {
+                        max-width: 1000px !important;
+                        margin-left: auto !important;
+                        margin-right: auto !important;
+
+                        padding-left: 16px;
+                        padding-right: 16px;
+                    }
+
+
+            }
+
+            #thread-meta {
+                display: flex;
+                padding-top: 8px;
+                .meta-item {
+                    height: 16px;
+                    line-height: 16px;
+                    color: @dark-gray;
+                    font-size: 14px;
+
+                    padding-right: 4px;
+                    i {
+                        vertical-align: text-bottom;
+                        line-height: 16px;
+                        height: 16px;
+                        display: inline-block;
+
+                        font-size: 1.5em;
+
+                        color: @light-gray;
+                        &:hover {
+                            cursor: pointer;
+                            color: @light-purple;
+                        }
+                    }
+
+                }
+
+                .title-item {
+                    width: 68%;
+                }
+                .dropdown-wrapper {
+                    .dropdown-content {
+                        li {
+                            min-height: 0;
+                            &:hover {
+                                background-color: white;
+                            }
+                        }
+
+                            .meta-item {
+                                color: @gray;
+                                height: inherit;
+                                line-height: 14px;
+                                padding-top: 8px;
+                                padding-bottom: 8px;
+                                margin: 0;
+                                &:hover {
+                                    color: @light-purple;
+                                    background-color: white;
+                                }
+                                &.active {
+                                    color: @light-purple;
+                                    font-weight: 600;
+                                }
+                            }
+                    }
+                }
+            }
+            .add-button {
+                height: 32px;
+                line-height: 32px;
+
+                float: right;
+
+
+                margin-left: auto;
+                .btn{
+                    font-size: 12px;
+                    padding: 0 8px;
+                    margin-top: 4px;
+                    height: 32px;
+
+                    .text {
+                        padding-bottom: 4px;
+                    }
+                    i{
+                        margin-left: 4px;
+                        margin-right: 4px;
+                        line-height: 32px;
+
+                        font-size: 1.7em;
+
+                    }
+                }
+            }
+        }
+    }
+
     .edit-thread-modal {
         .action-button {
             display: inline-block;
@@ -96,6 +212,11 @@ body {
     }
 
     .thread-wiki {
+        max-width: 1000px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+
+
         .wiki-banner {
             min-height: 30vh;
             padding-bottom: 16px;
@@ -106,7 +227,7 @@ body {
             .wiki-title {
                 padding-top: 80px;
                 line-height: 24px;
-                font-size: 24px;
+                font-size: 16px;
                 word-wrap: break-word;
             }
 
@@ -278,23 +399,32 @@ body {
     }
 
     .thread-body {
+        max-width: 1000px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+
         .btn {
             background-color: @purple;
         }
 
         .body-banner {
-            background-color: @dark-purple;
-            box-shadow: 0 5px 6px -3px rgba(0, 0, 0, 0.4);
-            position: relative;
-            z-index: 1;
+            display: inline-block;
+
+            // box-shadow: 0 5px 6px -3px rgba(0, 0, 0, 0.4);
+            // position: relative;
+            // z-index: 1;
 
             .category-topic {
-                margin-top: 4px;
-                font-size: 13px;
+                display: inline-block;
+                font-size: 16px;
+                line-height: 36px;
+                height:36px;
 
                 i {
+                    display: inline-block;
                     position: relative;
-                    top: 6px;
+                    line-height: 36px;
+                    height:36px;
                 }
             }
 
@@ -328,8 +458,10 @@ body {
             // box-shadow: 0 5px 6px -3px rgba(0, 0, 0, 0.4);
             position: relative;
             z-index: 2;
-            background-color: @barely-not-white;
-            // border-right: 1px solid @dark-white;
+            background-color: @white;
+
+
+            // border-bottom: 1px solid @dark-white;
 
             width: 25%;
             margin-left: auto;
@@ -343,7 +475,7 @@ body {
                 padding: 6px 0.75rem 16px 0.75rem;
 
                 .enter-wiki {
-                    font-size: 13px;
+                    font-size: 16px;
                     font-weight: 600;
                     cursor: pointer;
                     color: @blue;
@@ -379,9 +511,21 @@ body {
                         margin-top: 4px;
 
                     }
-
+                    .label-other {
+                        margin-right: 6px;
+                    }
+                    .label-recommended {
+                        margin-left: 10px;
+                    }
                     .lever {
-                        margin: 0 8px;
+                        margin: 0;
+                        width: 32px;
+                        &:after {
+                            width: 18px;
+                            height: 18px;
+                            border-radius: 18px;
+                            top: -2px;
+                        }
                     }
                     .badge-other.current{
                         background-color: @red !important;
@@ -472,7 +616,9 @@ body {
             // z-index: 1;
             overflow-y: scroll;
             overflow-x: hidden;
-            padding: 15px 32px 0 32px;
+            padding: 15px 16px 0 16px;
+            border-left: 1px solid @dark-white;
+            border-right: 1px solid @dark-white;
 
             width: 40%;
             margin-left: auto;

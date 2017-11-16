@@ -45,7 +45,8 @@ cw.SettingsView = BB.View.extend({
         this.renderPersonal();
 
         this.mapView.renderAndInitMap();
-        this.listenTo(this.mapView.model, 'change', _.bind(_.throttle(this.saveLocation, 1000), this));
+        // var saveLocationThrottled = _.throttle(this.saveLocation, 1000);
+        this.listenTo(this.mapView.model, 'change:is_new', _.bind(this.saveLocation, this));
     },
 
     renderAllLabels:function() {
@@ -95,38 +96,40 @@ cw.SettingsView = BB.View.extend({
 
     saveLocation: function () {
         var _this = this;
-        if(_.has(this.mapView.model.changed, 'coordinates') || _.has(this.mapView.model.changed, 'address')) {
-            var coordinates = this.mapView.model.get('coordinates'),
-                address = this.mapView.model.get('address');
+        var coordinates = this.mapView.model.get('coordinates'),
+            address = this.mapView.model.get('address');
 
-            if (!_.isEmpty(coordinates) && !_.isEmpty(address)) {
-                $.ajax({
-                    type: 'POST',
-                    url: '/api/edituser/',
-                    data: {
-                        coordinates: coordinates,
-                        address: address.address,
-                        city: address.city,
-                        state: address.state,
-                        zip_code: address.zipcode,
-                        longitude: coordinates.lng,
-                        latitude: coordinates.lat,
-                    },
-                    success: function (data) {
-                        Materialize.toast('<span class="subtitle-lato white-text">Location Changed</span>', 5000);
-                        _this.model.fetch();
-                    },
-                    error: function (data) {
-                        if (data.status_code === 400) {
-                            Materialize.toast(data.message, 5000);
-                        } else if (data.status_code === 500) {
-                            Materialize.toast('Internal Server Error', 5000);
-                        } else {
-                            Materialize.toast(data.statusText, 5000);
-                        }
+        if (!this.mapView.model.get('is_new')) return;
+
+        if (coordinates && address) {
+
+            $.ajax({
+                type: 'POST',
+                url: '/api/edituser/',
+                data: {
+                    coordinates: coordinates,
+                    address: address.address,
+                    city: address.city,
+                    state: address.state,
+                    zip_code: address.zipcode,
+                    longitude: coordinates.lng,
+                    latitude: coordinates.lat,
+                },
+                success: function (data) {
+                    Materialize.toast('<span class="subtitle-lato white-text">Location Changed</span>', 5000);
+                    _this.mapView.model.set('is_new', false);
+                    _this.model.fetch();
+                },
+                error: function (data) {
+                    if (data.status_code === 400) {
+                        Materialize.toast(data.message, 5000);
+                    } else if (data.status_code === 500) {
+                        Materialize.toast('Internal Server Error', 5000);
+                    } else {
+                        Materialize.toast(data.statusText, 5000);
                     }
-                });
-            }
+                }
+            });
         }
     },
 });

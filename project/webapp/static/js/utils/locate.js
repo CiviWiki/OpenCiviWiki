@@ -6,7 +6,7 @@ cw.Map = BB.Model.extend({
             id: '',
             uscapitol: { lat: 38.8899389, lng: -77.0090505 },
             zoom: 5,
-            coordinates: {}, address: {},
+            coordinates: {}, address: {}, is_new: false,
             // Visual Setup and Initalization Options
             mapOptions: {}, markerOptions: {},
             // Google Map Objects
@@ -179,6 +179,7 @@ cw.MapView = BB.View.extend({
             lng: place.geometry.location.lng()
         };
         this.model.set('coordinates', coordinates);
+        this.model.set('is_new', true);
         // this.getLegislators(coordinates);
 
         this.adjustMapCenter(coordinates);
@@ -212,6 +213,7 @@ cw.MapView = BB.View.extend({
                     if (status === 'OK') {
                         _this.$('#autocomplete').val(results[0].formatted_address);
                         _this.model.set('address', _this.getAddressFromComponents(results[0].address_components));
+                        _this.model.set('is_new', true);
                     } else {
                         Materialize.toast('Geocode Error: ' + status, 2000);
                     }

@@ -391,15 +391,23 @@ cw.CiviView =  BB.View.extend({
         if (this.model.get('type') === 'response' || this.model.get('type') === 'rebuttal') {
             this.$('.edit-links').addClass('hide');
             this.$('#civi-type-form').addClass('hide');
+        } else if (this.model.get('type') === 'problem') {
+            this.$('#magicsuggest-'+this.model.id).addClass('hide');
         }
     },
 
     clickNewType: function(e){
         var new_type = $(e.target).closest("input[type='radio']:checked").val();
         // var new_type = $("#civi-type-form input[type='radio']:checked").val();
+        if (new_type === "problem") {
+            this.$('.edit-links').addClass('hide');
+            this.$('#magicsuggest-'+this.model.id).addClass('hide');
+        } else {
+            this.$('.edit-links').removeClass('hide');
+            this.$('#magicsuggest-'+this.model.id).removeClass('hide');
+        }
         this.magicSuggestView.setLinkableData(new_type);
         this.magicSuggestView.ms.clear();
-        Materialize.toast('Changing the civi type has cleared your links', 5000);
     },
 
     addRebuttal: function(){
@@ -672,6 +680,9 @@ cw.NewCiviView = BB.View.extend({
 
         this.magicSuggestView = new cw.LinkSelectView({$el: this.$('#magicsuggest'), civis: this.options.parentView.civis});
 
+        this.$('.edit-links').addClass('hide');
+        this.$('#magicsuggest').addClass('hide');
+
         this.attachment_links = [];
         this.attachmentCount = 0;
         // this.renderMagicSuggest();
@@ -686,6 +697,7 @@ cw.NewCiviView = BB.View.extend({
         'click #image-from-computer': 'showImageUploadForm',
         'click #image-from-link': 'showImageLinkForm',
         'click #add-image-link-input': 'addImageLinkInput',
+        'click .ms-sel-ctn': ''
     },
 
     addImageLinkInput: function(){
@@ -875,7 +887,17 @@ cw.NewCiviView = BB.View.extend({
         $this.siblings().removeClass('current');
 
         var c_type = this.$el.find('.civi-types > .current').val();
-        this.magicSuggestView.setLinkableData(c_type);
+
+        if (c_type === "problem") {
+            this.$('.edit-links').addClass('hide');
+            this.$('#magicsuggest').addClass('hide');
+        } else {
+            this.$('.edit-links').removeClass('hide');
+            this.$('#magicsuggest').removeClass('hide');
+            this.magicSuggestView.setLinkableData(c_type);
+            this.magicSuggestView.ms.clear();
+        }
+
     },
 });
 
@@ -1286,6 +1308,7 @@ cw.LinkSelectView = BB.View.extend({
             groupBy: 'type',
             valueField: 'id',
             displayField: 'title',
+            expandOnFocus: true,
             data: [],
             renderer: function(data){
                 return '<div class="link-lato" data-civi-id="' + data.id +
@@ -1300,11 +1323,8 @@ cw.LinkSelectView = BB.View.extend({
     setLinkableData: function(c_type) {
         var _this = this;
         var linkableCivis = [];
-        if (c_type == 'problem') {
-            linkableCivis = _this.civis.where({type:'cause'});
-        } else if (c_type == 'cause') {
-            linkableCivis = _.union(_this.civis.where({type:'problem'}),
-            _this.civis.where({type:'solution'}));
+        if (c_type == 'cause') {
+            linkableCivis = _this.civis.where({type:'problem'});
         } else if  (c_type == 'solution') {
             linkableCivis = _this.civis.where({type:'cause'});
         }
