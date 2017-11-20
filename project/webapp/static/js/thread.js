@@ -676,7 +676,7 @@ cw.NewCiviView = BB.View.extend({
 
     render: function () {
         this.$el.empty().append(this.template());
-        $('.responses').height($('#new-civi-box').height() + $('.responses-box').height());
+        // $('.responses').height($('#new-civi-box').height() + $('.responses-box').height());
 
         this.magicSuggestView = new cw.LinkSelectView({$el: this.$('#magicsuggest'), civis: this.options.parentView.civis});
 
@@ -747,7 +747,7 @@ cw.NewCiviView = BB.View.extend({
 
     cancelCivi: function () {
         this.$el.empty();
-        $('.responses').height($('.responses-box').height());
+        // $('.responses').height($('.responses-box').height());
     },
 
     createCivi: function (e) {
@@ -1780,6 +1780,11 @@ cw.ThreadView = BB.View.extend({
                 }
             }
         }, this);
+
+        // add padding
+        var $lastResponseCivi = this.$('#response-list div:last-child');
+        var scrollPadding = this.$('.responses').height() - $lastResponseCivi.height();
+        this.$('.responses-padding').height(scrollPadding - 8);
     },
 
     events: {
@@ -1818,7 +1823,7 @@ cw.ThreadView = BB.View.extend({
         $civiNavScroll.css({height: $windowHeight - $civiNavScroll.offset().top});
         var $civiThreadScroll = this.$('.main-thread');
         $civiThreadScroll.css({height: $windowHeight - $civiThreadScroll.offset().top});
-        var $civiResponseScroll = this.$('.responses-box');
+        var $civiResponseScroll = this.$('.responses');
         $civiResponseScroll.css({height: $windowHeight - $civiResponseScroll.offset().top});
     },
 
