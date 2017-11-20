@@ -5,6 +5,7 @@ Use these instructions to set up a local development environment.
 The following packages are required to start developing CiviWiki:
 
 - PostgreSQL
+    - [PostgreSQL installation instructions](http://postgresguide.com/setup/install.html)
 - Redis
     - [Redis installation instructions](https://redis.io/topics/quickstart)
 
@@ -62,6 +63,9 @@ To activate all of the environment variables, e.g. on Ubuntu Linux, use the foll
 
 Note the pattern is 'dot space filename.sh'
 
+### Setting up the civiwiki postgresql database
+Follow the steps in [this](https://www.techrepublic.com/blog/diy-it-guy/diy-a-postgresql-database-server-setup-anyone-can-handle/) postgresql configuration instruction set to access your local postgresql server, set up necessary postgres users, and create an empty civiwiki database to be populated below.
+
 ### Initial CiviWiki (Django project) set up
 Once you have a working virtual environment, installed all requirements, and have set up environment variables, you are ready to populate the initial database:
 
@@ -109,7 +113,7 @@ Once CiviWiki is running, visit the front page (probably something like http://l
 ### Enable beta access for new user
 Once you have submitted the new user registration form, you will be directed to the 'Development in progress' screen. In order to access the site functionality, you need to modify the new user record and set the `beta_access` field to `True` for the user record in the `api_account` table.
 
-# Coding Conventions 
+# Coding Conventions
 
 We strive to follow Django Coding Conventions. See https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/
 
@@ -128,3 +132,9 @@ Compatible Versioning ("ComVer") is SemVer where every PATCH number is 0 (zero).
 
 A ComVer release from 3.6 to 3.7 is just a SemVer release from 3.6.0 to 3.7.0. In other words, ComVer is safe to adopt since it is basically SemVer without ever issuing PATCH releases.
 
+### Attributions
+  - Django
+  - JQuery
+  - Less
+  - Materialize
+  - Backbone
