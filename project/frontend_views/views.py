@@ -178,7 +178,7 @@ def invite(request):
 
 
 @login_required
-@user_passes_test(lambda u: u.is_staff)
+@beta_blocker
 def settings_view(request):
 
     request_account = Account.objects.get(user=request.user)
