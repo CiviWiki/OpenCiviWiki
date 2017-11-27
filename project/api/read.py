@@ -67,7 +67,7 @@ def get_profile(request, user):
             result['issues'].append(my_issue_item)
 
         result['representatives'] = []
-        rep_ids = sun.get_legislator_ids_by_lat_long(a.latitude, a.longitude)
+        rep_ids = []
 
         for bio_id in rep_ids:
             rep = Representative.objects.get(bioguideID=bio_id)
