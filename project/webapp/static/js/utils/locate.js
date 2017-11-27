@@ -173,7 +173,7 @@ cw.MapView = BB.View.extend({
             lng: place.geometry.location.lng()
         };
         this.model.set('coordinates', coordinates);
-        this.getLegislators(coordinates);
+        // this.getLegislators(coordinates);
 
         this.adjustMapCenter(coordinates);
         this.$('.progress').toggleClass('hide');
@@ -199,7 +199,7 @@ cw.MapView = BB.View.extend({
                 }
 
                 _this.model.set('coordinates', geolocation);
-                _this.getLegislators(geolocation);
+                // _this.getLegislators(geolocation); # Sunlight API is Deprecated
                 _this.adjustMapCenter(geolocation);
 
                 _this.model.get('geocoder').geocode({ 'location': geolocation }, function(results, status) {
