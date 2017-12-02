@@ -199,7 +199,7 @@ cw.UserSetupView = BB.View.extend({
                 type: 'POST',
                 url: '/api/edituser/',
                 data: {
-                    full_account: true,
+                    full_account: 'True',
                     about_me: about_me,
                     first_name: first_name,
                     last_name: last_name,

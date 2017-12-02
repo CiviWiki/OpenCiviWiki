@@ -329,11 +329,12 @@ def editUser(request):
 
     try:
         Account.objects.filter(id=account.id).update(**data)
-        account.refresh_from_db()
-
-        return JsonResponse(Account.objects.summarize(account))
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
+
+    account.refresh_from_db()
+
+    return JsonResponse(Account.objects.summarize(account))
 
 @login_required
 def uploadProfileImage(request):
