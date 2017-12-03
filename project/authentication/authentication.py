@@ -6,6 +6,7 @@ from utils.custom_decorators import require_post_params
 from forms import AccountRegistrationForm, PasswordResetForm, RecoverUserForm
 from api.tasks import send_email
 from django.contrib.sites.shortcuts import get_current_site
+from django.conf import settings
 
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -87,6 +88,8 @@ def cw_register(request):
                 user = authenticate(username=username, password=password)
 
                 account = Account(user=user)
+                if not settings.CLOSED_BETA:
+                    account.beta_access = True
                 account.save()
 
                 user.is_active = True
