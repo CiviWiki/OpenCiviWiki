@@ -328,13 +328,11 @@ def editUser(request):
     }
 
     try:
-        account.__dict__.update(**data)
-        account.save()
-
+        Account.objects.filter(id=account.id).update(**data)
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
 
-    request.session["login_user_firstname"] = account.first_name
+    account.refresh_from_db()
 
     return JsonResponse(Account.objects.summarize(account))
 
