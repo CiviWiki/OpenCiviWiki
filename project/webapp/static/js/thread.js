@@ -391,15 +391,23 @@ cw.CiviView =  BB.View.extend({
         if (this.model.get('type') === 'response' || this.model.get('type') === 'rebuttal') {
             this.$('.edit-links').addClass('hide');
             this.$('#civi-type-form').addClass('hide');
+        } else if (this.model.get('type') === 'problem') {
+            this.$('#magicsuggest-'+this.model.id).addClass('hide');
         }
     },
 
     clickNewType: function(e){
         var new_type = $(e.target).closest("input[type='radio']:checked").val();
         // var new_type = $("#civi-type-form input[type='radio']:checked").val();
+        if (new_type === "problem") {
+            this.$('.edit-links').addClass('hide');
+            this.$('#magicsuggest-'+this.model.id).addClass('hide');
+        } else {
+            this.$('.edit-links').removeClass('hide');
+            this.$('#magicsuggest-'+this.model.id).removeClass('hide');
+        }
         this.magicSuggestView.setLinkableData(new_type);
         this.magicSuggestView.ms.clear();
-        Materialize.toast('Changing the civi type has cleared your links', 5000);
     },
 
     addRebuttal: function(){
@@ -668,9 +676,12 @@ cw.NewCiviView = BB.View.extend({
 
     render: function () {
         this.$el.empty().append(this.template());
-        $('.responses').height($('#new-civi-box').height() + $('.responses-box').height());
+        // $('.responses').height($('#new-civi-box').height() + $('.responses-box').height());
 
         this.magicSuggestView = new cw.LinkSelectView({$el: this.$('#magicsuggest'), civis: this.options.parentView.civis});
+
+        this.$('.edit-links').addClass('hide');
+        this.$('#magicsuggest').addClass('hide');
 
         this.attachment_links = [];
         this.attachmentCount = 0;
@@ -686,6 +697,7 @@ cw.NewCiviView = BB.View.extend({
         'click #image-from-computer': 'showImageUploadForm',
         'click #image-from-link': 'showImageLinkForm',
         'click #add-image-link-input': 'addImageLinkInput',
+        'click .ms-sel-ctn': ''
     },
 
     addImageLinkInput: function(){
@@ -735,7 +747,7 @@ cw.NewCiviView = BB.View.extend({
 
     cancelCivi: function () {
         this.$el.empty();
-        $('.responses').height($('.responses-box').height());
+        // $('.responses').height($('.responses-box').height());
     },
 
     createCivi: function (e) {
@@ -875,7 +887,17 @@ cw.NewCiviView = BB.View.extend({
         $this.siblings().removeClass('current');
 
         var c_type = this.$el.find('.civi-types > .current').val();
-        this.magicSuggestView.setLinkableData(c_type);
+
+        if (c_type === "problem") {
+            this.$('.edit-links').addClass('hide');
+            this.$('#magicsuggest').addClass('hide');
+        } else {
+            this.$('.edit-links').removeClass('hide');
+            this.$('#magicsuggest').removeClass('hide');
+            this.magicSuggestView.setLinkableData(c_type);
+            this.magicSuggestView.ms.clear();
+        }
+
     },
 });
 
@@ -1286,6 +1308,7 @@ cw.LinkSelectView = BB.View.extend({
             groupBy: 'type',
             valueField: 'id',
             displayField: 'title',
+            expandOnFocus: true,
             data: [],
             renderer: function(data){
                 return '<div class="link-lato" data-civi-id="' + data.id +
@@ -1300,11 +1323,8 @@ cw.LinkSelectView = BB.View.extend({
     setLinkableData: function(c_type) {
         var _this = this;
         var linkableCivis = [];
-        if (c_type == 'problem') {
-            linkableCivis = _this.civis.where({type:'cause'});
-        } else if (c_type == 'cause') {
-            linkableCivis = _.union(_this.civis.where({type:'problem'}),
-            _this.civis.where({type:'solution'}));
+        if (c_type == 'cause') {
+            linkableCivis = _this.civis.where({type:'problem'});
         } else if  (c_type == 'solution') {
             linkableCivis = _this.civis.where({type:'cause'});
         }
@@ -1496,11 +1516,12 @@ cw.ThreadView = BB.View.extend({
             threadId: this.model.threadId
         });
 
-        this.$('.thread-body-holder').addClass('hide');
+        this.$('.thread-wiki-holder').addClass('hide');
 
         this.threadWikiRender();
         this.threadBodyRender();
-        this.$('.scroll-col').height($(window).height() - this.$('.body-banner').height());
+
+        // this.$('.scroll-col').height($(window).sheight() - this.$('.body-banner').height());
 
 
         this.newCiviView = new cw.NewCiviView({
@@ -1510,6 +1531,9 @@ cw.ThreadView = BB.View.extend({
 
 
         this.renderBodyContents();
+        this.scrollToBody();
+
+
     },
 
     threadWikiRender: function () {
@@ -1756,6 +1780,11 @@ cw.ThreadView = BB.View.extend({
                 }
             }
         }, this);
+
+        // add padding
+        var $lastResponseCivi = this.$('#response-list div:last-child');
+        var scrollPadding = this.$('.responses').height() - $lastResponseCivi.height();
+        this.$('.responses-padding').height(scrollPadding - 8);
     },
 
     events: {
@@ -1778,38 +1807,29 @@ cw.ThreadView = BB.View.extend({
         this.$('.thread-body-holder').removeClass('hide');
         this.$('.thread-body-holder').css({display: 'block'});
 
-        $('body').css({overflow: 'hidden'});
-
-        // this.$('.thread-body-holder').css({display: 'block'});
-        // $('body').css({overflow: 'hidden'});
-        //
-        // $('body').animate({
-        //     scrollTop: $('.thread-body-holder').offset().top
-        // }, 200);
-
-        var $civiNavScroll = this.$('.civi-outline');
-        $civiNavScroll.css({height: $('body').height() - $civiNavScroll.offset().top});
-        var $civiThreadScroll = this.$('.main-thread');
-        $civiThreadScroll.css({height: $('body').height() - $civiThreadScroll.offset().top});
-        var $civiResponseScroll = this.$('.responses-box');
-        $civiResponseScroll.css({height: $('body').height() - $civiResponseScroll.offset().top});
+        this.resizeBodyToWindow();
 
         this.renderOutline();
-
-        // this.currentScroll = 0;
         this.processCiviScroll();
     },
 
+    resizeBodyToWindow: function() {
+        $('body').css({overflow: 'hidden'});
+
+        var $windowHeight = $('body').height();
+        var bodyHeight = $windowHeight - $("#js-global-nav").height();
+
+        var $civiNavScroll = this.$('.civi-outline');
+        $civiNavScroll.css({height: $windowHeight - $civiNavScroll.offset().top});
+        var $civiThreadScroll = this.$('.main-thread');
+        $civiThreadScroll.css({height: $windowHeight - $civiThreadScroll.offset().top});
+        var $civiResponseScroll = this.$('.responses');
+        $civiResponseScroll.css({height: $windowHeight - $civiResponseScroll.offset().top});
+    },
 
     scrollToWiki: function () {
         var _this = this;
 
-        // $('body').animate({
-        //     scrollTop: 0
-        // }, 200, function () {
-        //     _this.$('.thread-body-holder').css({display: 'none'});
-        // });
-        // $('body').css({overflow: 'scroll'});
         this.$('.thread-body-holder').addClass('hide');
         this.$('.thread-wiki-holder').removeClass('hide');
         $('body').css({overflow: 'scroll'});
@@ -1824,23 +1844,12 @@ cw.ThreadView = BB.View.extend({
         var _this = this,
             $this = _.isUndefined(e) ? this.$('.expand-nav') : $(e.target);
 
-        // if ($this.hasClass('expanded')) {
-        //     $('.civi-nav-wrapper').slideUp();
-        //     $this.removeClass('expanded');
-        //     this.navExpanded = false;
-        // } else {
-        //     $('.civi-nav-wrapper').slideDown();
-        //     $this.addClass('expanded');
-        //     this.navExpanded = true;
-        // }
         if (!this.navExpanded) {
             $('.civi-nav-wrapper').hide();
             $this.removeClass('expanded');
-            // this.navExpanded = false;
         } else {
             $('.civi-nav-wrapper').show();
             $this.addClass('expanded');
-            // this.navExpanded = true;
         }
         this.activateNav();
     },

@@ -1,4 +1,5 @@
 import sunlight
+from sunlight.errors import BadRequestException
 from django.conf import settings
 from sunlight.errors import BadRequestException
 

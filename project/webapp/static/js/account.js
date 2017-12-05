@@ -52,7 +52,7 @@ cw.AccountView = BB.View.extend({
 
     initialize: function (options) {
         options = options || {};
-        this.mapView = options.mapView;
+        // this.mapView = options.mapView;
         this.current_user = options.current_user;
         this.isSave = false;
 
@@ -79,16 +79,10 @@ cw.AccountView = BB.View.extend({
             this.postRender();
         } else {
             this.$el.empty().append(this.template());
+
+            $('.account-tabs .tab').on('dragstart', function() {return false;});
             this.$el.find('.account-settings').pushpin({ top: $('.account-settings').offset().top });
             this.$el.find('.scroll-col').height($(window).height());
-
-            // Only render the settings form if logged in user
-            var settingsEl = this.$('#settings');
-            if (settingsEl.length) {
-                settingsEl.empty().append(this.settingsTemplate());
-                this.mapView.renderAndInitMap();
-                this.listenTo(this.mapView.model, 'change:address', _.bind(this.saveLocation, this)); //TODO: validateLocation and then save
-            }
         }
     },
 
@@ -102,7 +96,7 @@ cw.AccountView = BB.View.extend({
         var settingsEl = this.$('#settings');
         if (settingsEl.length) {
             settingsEl.empty().append(this.settingsTemplate());
-            this.mapView.render();
+            Materialize.updateTextFields();
         }
     },
 
@@ -119,11 +113,11 @@ cw.AccountView = BB.View.extend({
     events: {
         'click .follow-btn': 'followRequest',
         'submit #profile_image_form': 'handleFiles',
-        'change .profile-image-pick': 'toggleImgButtons',
         'blur .save-account': 'saveAccount',
         'mouseenter .user-chip-contents': 'showUserCard',
         'mouseleave .user-chip-contents': 'hideUserCard',
         'click .toggle-solutions': 'toggleSolutions',
+        'change .profile-image-pick': 'previewImage',
         'keypress .save-account': cw.checkForEnter,
     },
 
@@ -133,6 +127,27 @@ cw.AccountView = BB.View.extend({
         var new_text = textElement.text() === "Show Solutions" ? "Hide Solutions" : "Show Solutions";
         textElement.text(new_text);
         this.$('#solutions-'+id).toggleClass('hide');
+    },
+
+    previewImage: function(e){
+        var _this = this;
+        var img = this.$el.find('#id_profile_image');
+        if (img.val()) {
+            var uploaded_image = img[0].files[0];
+            if (uploaded_image) {
+                var formData = new FormData(this.$el.find('#profile_image_form')[0]);
+
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    var preview_image = _this.$el.find('.preview-image');
+                    preview_image.attr('src', e.target.result);
+
+                    _this.toggleImgButtons();
+                };
+                reader.readAsDataURL(uploaded_image);
+            }
+        }
     },
 
     showUserCard: function(e) {
@@ -221,6 +236,7 @@ cw.AccountView = BB.View.extend({
     toggleImgButtons: function(event) {
         this.$('.profile-image-pick').toggleClass('hide');
         this.$('.upload-image').toggleClass('hide');
+        this.$('#confirmation-prompt').toggleClass('hide');
     },
 
     followRequest: function(e){
@@ -269,7 +285,7 @@ cw.AccountView = BB.View.extend({
     saveAccount: function (e) {
         var $this = $(e.target),
             changeKey = $this.attr('id'),
-            changeVal = $this.val(),
+            changeVal = $this.val().trim(),
             apiData = {},
             _this = this;
 

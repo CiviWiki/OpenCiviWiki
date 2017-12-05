@@ -1,54 +1,49 @@
-<div class="row tab-title">
-    <div class="col s12 title-lato">Account Settings</div>
-</div>
-
 <!-- TODO: Content swipes up for edit functions -->
-<div class="account-edit">
+<div class="account-edit scroll-col">
     <div class="section">
     <div class="section">
     <div class="card">
     <div class="card-content">
-
         <div class="row">
-                <div class="subtitle-lato">Personal Information</div>
-                {% verbatim %}
-                <div class="white-background-input-field input-field col s12">
-                    <input class="save-account" id="first_name" type="text" value="{{this.model.get('first_name')}}">
-                    <label for="first-name">First Name</label>
-                </div>
-                <div class="white-background-input-field input-field col s12">
-                    <input class="save-account" id="last_name" type="text" value="{{this.model.get('last_name')}}">
-                    <label for="last-name">Last Name</label>
-                </div>
-                <div class="white-background-input-field input-field col s12">
-                    <input class="save-account" id="about_me" type="text" value="{{this.model.get('about_me')}}">
-                    <label for="zipcode">About Me</label>
-                </div>
-                <div class="white-background-input-field input-field col s12">
-                    <!-- <input class="save-account" id="zip_code" type="text" value="{{this.model.get('location')}}"> -->
+            <div class="title-lato center">Edit Profile</div>
+            {% verbatim %}
+            <!-- <div class="white-background-input-field input-field col s6">
+                <input class="save-account" id="first_name" type="text" value="{{this.model.get('first_name')}}">
+                <label for="first-name">First Name</label>
+            </div>
+            <div class="white-background-input-field input-field col s6">
+                <input class="save-account" id="last_name" type="text" value="{{this.model.get('last_name')}}">
+                <label for="last-name">Last Name</label>
+            </div> -->
+            <div class="white-background-input-field input-field col s12">
+                <input class="save-account" id="about_me" type="text" value="{{this.model.get('about_me')}}">
+                <label for="zipcode">About Me</label>
+            </div>
+
+            <div class="white-background-input-field input-field col s12">
+                <form method="post" enctype="multipart/form-data" id="profile_image_form">
                     <div class="section">
-                        <label for="location">Location</label>
-                        <div id="location"></div>
+                        <label for="profile_image_form">Profile Image</label>
                     </div>
-
-                </div>
-
-
-                {% endverbatim %}
-                <div class="white-background-input-field input-field col s12">
-                    <form method="post" enctype="multipart/form-data" id="profile_image_form">
-                        <div class="file-field input-field">
-                            <input class="upload-image btn waves-effect hide" type="submit" value="Upload"/>
-                            <div class="btn profile-image-pick">
-                                <span>Profile Image</span>
-                                <input id="id_profile_image" name="profile_image" type="file">
-                            </div>
-                          <div class="file-path-wrapper">
-                            <input class="file-path validate" type="text">
-                          </div>
+                    <div class="section">
+                        <div id="confirmation-prompt" class="center hide">This is only a preview image. Press confirm to finish your upload.</div>
+                    </div>
+                    <div class="z-index-1 center">
+                        <img class="preview-image responsive-img" id="profile-image" src="{{this.model.get('profile_image')}}">
+                    </div>
+                    <div class="file-field input-field col s12 m8 push-m2" >
+                        <input class="upload-image btn waves-effect hide" type="submit" value="Confirm Upload"/>
+                        <div class="btn profile-image-pick">
+                            <span>Choose Image</span>
+                            <input id="id_profile_image" name="profile_image" type="file">
                         </div>
-                    </form>
-                </div>
+                      <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text">
+                      </div>
+                    </div>
+                </form>
+            </div>
+            {% endverbatim %}
         </div>
         </div>
         </div>

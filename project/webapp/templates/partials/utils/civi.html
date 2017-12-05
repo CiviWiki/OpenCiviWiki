@@ -85,8 +85,8 @@
         {{# } }}
         {{# if (this.can_edit) { }}
             <div class="hide edit-wrapper">
-                <div class="header-lato edit-links">Links:</div>
-                <div class="edit-links" id="magicsuggest-{{this.model.get('id')}}"></div>
+                <div class="header-lato edit-links hide">Links:</div>
+                <div class="edit-links hide" id="magicsuggest-{{this.model.get('id')}}"></div>
                 <div class="header-lato">Images:</div>
                 <div class="previous-civi-images">
                     {{# _.each(this.model.get('attachments'), function(attachment){  }}
