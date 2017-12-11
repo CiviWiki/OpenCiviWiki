@@ -36,6 +36,10 @@ def new_thread(request):
     if state:
         new_thread_data['state'] = state
 
+    is_draft = request.POST['is_draft']
+    if is_draft:
+        new_thread_data['is_draft'] = is_draft
+
     new_t = Thread(**new_thread_data)
     new_t.save()
 
