@@ -2050,7 +2050,7 @@ cw.ThreadView = BB.View.extend({
                 location.reload();
             },
             error: function() {
-                Materialize.toast('Servor Error: Thread could not be published', 5000);
+                Materialize.toast('Server Error: Thread could not be published', 5000);
                 _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
             }
         });

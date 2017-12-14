@@ -28,9 +28,9 @@ def base_view(request):
     all_categories = list(Category.objects.values_list('id', flat=True))
     user_categories = list(a.categories.values_list('id', flat=True)) or all_categories
 
-    feed_threads = [Thread.objects.summarize(t) for t in Thread.objects.order_by('-created')]
+    feed_threads = [Thread.objects.summarize(t) for t in Thread.objects.exclude(is_draft=True).order_by('-created')]
     top5_threads = list(Thread.objects.all().order_by('-num_views')[:5].values('id', 'title'))
-
+    my_draft_threads = [Thread.objects.summarize(t) for t in Thread.objects.filter(author_id=a.id).exclude(is_draft=False).order_by('-created')]
 
     states = sorted(US_STATES, key=lambda s: s[1])
     data = {
@@ -38,7 +38,8 @@ def base_view(request):
         'states': states,
         'user_categories': user_categories,
         'threads': feed_threads,
-        'trending': top5_threads
+        'trending': top5_threads,
+        'draft_threads': my_draft_threads
     }
 
     return TemplateResponse(request, 'feed.html', {'data': json.dumps(data)})
