@@ -36,7 +36,7 @@ def new_thread(request):
     if state:
         new_thread_data['state'] = state
 
-    is_draft = request.POST['is_draft']
+    is_draft = request.POST.get('is_draft', False)
     if is_draft:
         new_thread_data['is_draft'] = is_draft
 

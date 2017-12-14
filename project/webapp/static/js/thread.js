@@ -1357,6 +1357,7 @@ cw.ThreadView = BB.View.extend({
         this.username = options.username;
         this.civis = options.civis;
         this.navExpanded = true;
+        this.is_draft = options.is_draft;
 
         this.civiRecViewLimits = {problem : 0,cause: 0,solution: 0};
         this.civiOtherViewLimits = {problem : 0,cause: 0,solution: 0};
@@ -1388,35 +1389,6 @@ cw.ThreadView = BB.View.extend({
         civiOtherViewLimits= {problem : 0,cause: 0,solution: 0};
         // 1. Get id list of voted civis\
         var votes = this.model.get('user_votes');
-        //TODO: I dont like this
-        // var problemIds = _.where(votes, {c_type: 'problem'}),
-        //     causeIds = _.where(votes, {c_type: 'cause'}),
-        //     solutionIds = _.where(votes, {c_type: 'solution'});
-
-        // var recProblems = (_.indexOf(arrayIds, civi.id) > -1);
-        // Mark each voted civi
-        // _.each(this.civis.models, function(civi){
-        //     civi.recommended = false;
-        //     civi.otherRecommended = false;
-        //     var voteData = _.findWhere(votes, {civi_id: civi.id});
-        //     if (!_.isUndefined(voteData)) {
-        //         if ((voteData.activity_type == 'vote_pos' || voteData.activity_type == 'vote_vpos')){
-        //             _.each(civi.get('links'), function(link){
-        //                 var linked_civi = this.civis.get(link);
-        //                 if (!_.isUndefined(linked_civi) ) {
-        //                     linked_civi.recommended = true;
-        //                 }
-        //             }, this);
-        //         } else {
-        //             _.each(civi.get('links'), function(link){
-        //                 var linked_civi = this.civis.get(link);
-        //                 if (!_.isUndefined(linked_civi) ) {
-        //                     linked_civi.otherRecommended = true;
-        //                 }
-        //             }, this);
-        //         }
-        //     }
-        // }, this);
 
         _.each(this.civis.models, function(civi){
             var voteData = _.findWhere(votes, {civi_id: civi.id});
@@ -1481,30 +1453,13 @@ cw.ThreadView = BB.View.extend({
 
         }, this);
 
-        // _.each(this.civis.models, function(civi){
-        //     if (civi.recommended) {
-        //         _.each(civi.get('links'), function(link){
-        //             var linked_civi = this.civis.get(link);
-        //             if (!_.isUndefined(linked_civi) ) {
-        //                 linked_civi.recommended = true;
-        //                 console.log(linked_civi.id);
-        //             }
-        //         }, this);
-        //     }
-        // }, this);
+        if (this.is_draft) {
+            combined_list = _.union(this.recommendedCivis, this.otherCivis);
+            this.recommendedCivis = combined_list;
+            this.otherCivis = combined_list;
+        }
 
-        // _.each(this.civis.filterByType('problem'), function(civi){
-        //     civi.recommended = true;
-        //     civi.otherRecommended = true;
-        // });
-        // 2. Get id list of linked civis
 
-        // 3. Populate collections based on recommended
-        // this.problems = new cw.CiviSubCollection(this.civis.filterByType('problem'));
-        // this.causes = new cw.CiviSubCollection(this.civis.filterByType('cause'));
-        // this.solutions = new cw.CiviSubCollection(this.civis.filterByType('solution'));
-
-        //
     },
 
     render: function () {
@@ -1532,7 +1487,6 @@ cw.ThreadView = BB.View.extend({
 
         this.renderBodyContents();
         this.scrollToBody();
-
 
     },
 
@@ -1797,7 +1751,8 @@ cw.ThreadView = BB.View.extend({
         'click .add-response': 'openNewResponseModal',
         'click #recommended-switch': 'toggleRecommended',
         'click .btn-loadmore': 'loadMoreCivis',
-        'click .edit-thread-button': 'openEditThreadModal'
+        'click .edit-thread-button': 'openEditThreadModal',
+        'click #js-publish-btn': 'publishThread'
     },
 
     scrollToBody: function () {
@@ -2076,6 +2031,29 @@ cw.ThreadView = BB.View.extend({
         this.renderBodyContents();
         this.processCiviScroll();
         this.selectInitialCiviAfterToggle();
+    },
+
+    publishThread: function(e){
+        var _this = this;
+        var thread_id = this.model.threadId;
+
+        _this.$(e.currentTarget).addClass('disabled').attr('disabled', true);
+
+        $.ajax({
+            url: '/api/edit_thread/',
+            type: 'POST',
+            data: {
+                thread_id: thread_id,
+                is_draft: "False",
+            },
+            success: function (response) {
+                location.reload();
+            },
+            error: function() {
+                Materialize.toast('Servor Error: Thread could not be published', 5000);
+                _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
+            }
+        });
     },
 
     openNewCiviModal: function () {
