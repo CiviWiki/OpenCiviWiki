@@ -258,6 +258,15 @@ def deleteCivi(request):
 
 @login_required
 def editThread(request):
+    # Change Publish State to True
+    is_draft = request.POST.get('is_draft', True)
+    if not is_draft:
+        # thread_id = request.POST.get('thread_id')
+        # draft_thread = Thread.objects.get(id=thread_id)
+        # draft_thread.is_draft = False
+        #
+        # draft_thread.save()
+        return JsonResponse({'data': "Success"})
 
     thread_id = request.POST.get('thread_id')
     title = request.POST.get('title')
@@ -265,6 +274,9 @@ def editThread(request):
     category_id = request.POST.get('category_id')
     level = request.POST.get('level')
     state = request.POST.get('state')
+
+
+
     if thread_id:
 
         try:

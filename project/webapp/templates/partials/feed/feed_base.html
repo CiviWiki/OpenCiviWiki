@@ -56,6 +56,18 @@
         </div>
         <div class="col s12 m9 l8 push-l1 scroll-col">
             <div class="list" id="feed-list"></div>
+            {{# if (draft_threads.length > 0){ }}
+            <div class="section center">
+                <div class="title-lato">Your Drafts ({{draft_threads.length}})</div>
+            </div>
+            <div class="row">
+            {{# _.each(draft_threads, function (t) {}}
+                <div class="col s12">
+                {{= cw.underscorePartial('thread-card-template', ({thread_data: t, categories: categories}))}}
+                </div>
+            {{# }, this); }}
+            {{# } }}
+            </div>
         </div>
     </div>
 </div>

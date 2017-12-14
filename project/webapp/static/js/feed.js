@@ -48,6 +48,7 @@ cw.FeedView = BB.View.extend({
         this.options = options || {};
         this.categories = this.options.categories;
         this.threads = this.options.threads.toJSON();
+        this.draft_threads = this.options.draft_threads.toJSON();
         this.render();
 
         this.options.threads.on('sync', function() {
@@ -62,6 +63,7 @@ cw.FeedView = BB.View.extend({
 
         var template_var = {
             'trending': this.options.trending,
+            'draft_threads': this.draft_threads,
             'categories': this.options.categories,
             'user_categories': filtered_categories,
         };
