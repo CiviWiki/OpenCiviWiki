@@ -1,17 +1,17 @@
 import json
 
 from django.conf import settings
-from django.http import HttpResponse, HttpResponseRedirect
-from django.template.response import TemplateResponse
+from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import User
 from django.db.models import F
+from django.http import HttpResponse, HttpResponseRedirect
+from django.template.response import TemplateResponse
+
 from api.models import Category, Account, Thread, Civi, Activity, Invitation
 from api.forms import UpdateProfileImage
-
-# from legislation import sunlightapi as sun
-from django.contrib.auth.decorators import user_passes_test
-from utils.custom_decorators import beta_blocker, login_required, full_account
 from utils.constants import US_STATES
+from utils.custom_decorators import beta_blocker, login_required, full_account
+
 
 def base_view(request):
     if not request.user.is_authenticated():
