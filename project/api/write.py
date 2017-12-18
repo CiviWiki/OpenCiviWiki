@@ -1,20 +1,26 @@
 import json, PIL, urllib, uuid
 
+from notifications.signals import notify
+
+# django packages
+from django.contrib.auth.models import User
+from django.http import JsonResponse, HttpResponse, HttpResponseServerError, HttpResponseForbidden, HttpResponseBadRequest
+
 from django.core.files import File   # need this for image file handling
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
-from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
-from django.http import JsonResponse, HttpResponse, HttpResponseServerError, HttpResponseForbidden, HttpResponseBadRequest
 
-from notifications.signals import notify
 
+# civi packages
 from api.forms import UpdateProfileImage
 from api.models import Thread
 from api.tasks import send_mass_email
 from models import Account, Activity, Category, Civi, CiviImage, Invitation
 from utils.custom_decorators import require_post_params
 from utils.constants import US_STATES
+from utils.custom_decorators import require_post_params
+
 
 @login_required
 @require_post_params(params=['title', 'summary', 'category_id'])
@@ -29,10 +35,6 @@ def new_thread(request):
     state = request.POST['state']
     if state:
         new_thread_data['state'] = state
-
-    is_draft = request.POST['is_draft']
-    if is_draft:
-        new_thread_data['is_draft'] = is_draft
 
     new_t = Thread(**new_thread_data)
     new_t.save()
@@ -252,46 +254,63 @@ def deleteCivi(request):
 
 @login_required
 def editThread(request):
-
     thread_id = request.POST.get('thread_id')
+
+    if not thread_id:
+        return HttpResponseBadRequest(reason="Invalid Thread Reference")
+
+    # Change Publish State to True
+    is_draft = request.POST.get('is_draft', True)
+
+    if not is_draft:
+        try:
+            draft_thread = Thread.objects.get(id=thread_id)
+        except Exception as e:
+            return HttpResponseServerError(reason=str(e))
+
+        draft_thread.is_draft = False
+
+        # try:
+        #     draft_thread.save()
+        # except Exception as e:
+        #     return HttpResponseServerError(reason=str(e))
+
+        return JsonResponse({'data': "Success"})
+
     title = request.POST.get('title')
     summary = request.POST.get('summary')
     category_id = request.POST.get('category_id')
     level = request.POST.get('level')
     state = request.POST.get('state')
-    if thread_id:
 
-        try:
-            t = Thread.objects.get(id=thread_id)
-            category_id = request.POST.get('category_id')
-            if request.user.username != t.author.user.username:
-                return HttpResponseBadRequest(reason="No Edit Rights")
+    try:
+        t = Thread.objects.get(id=thread_id)
+        category_id = request.POST.get('category_id')
+        if request.user.username != t.author.user.username:
+            return HttpResponseBadRequest(reason="No Edit Rights")
 
-            t.title = title
-            t.summary = summary
-            t.category_id = category_id
-            t.level = level
-            t.state = state
-            t.save()
-        except Exception as e:
-            return HttpResponseServerError(reason=str(e))
+        t.title = title
+        t.summary = summary
+        t.category_id = category_id
+        t.level = level
+        t.state = state
+        t.save()
+    except Exception as e:
+        return HttpResponseServerError(reason=str(e))
 
-        return_data = {
-            'thread_id': thread_id,
-            'title': t.title,
-            'summary': t.summary,
-            "category": {
-                "id": t.category.id,
-                "name": t.category.name
-            },
-            "level": t.level,
-            "state": t.state if t.level == "state" else "",
-            "location": t.level if not t.state else dict(US_STATES).get(t.state),
-        }
-        return JsonResponse({'data': return_data})
-    else:
-        return HttpResponseBadRequest(reason="Invalid Thread Reference")
-
+    return_data = {
+        'thread_id': thread_id,
+        'title': t.title,
+        'summary': t.summary,
+        "category": {
+            "id": t.category.id,
+            "name": t.category.name
+        },
+        "level": t.level,
+        "state": t.state if t.level == "state" else "",
+        "location": t.level if not t.state else dict(US_STATES).get(t.state),
+    }
+    return JsonResponse({'data': return_data})
 
 
 @login_required

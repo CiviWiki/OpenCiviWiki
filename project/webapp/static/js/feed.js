@@ -190,7 +190,6 @@ cw.NewThreadView = BB.View.extend({
     events: {
         'click .cancel-new-thread': 'cancelThread',
         'click .create-new-thread': 'createThread',
-        'click .draft-new-thread': 'draftThread',
         'click #image-from-computer': 'showImageUploadForm',
         'click #image-from-link': 'showImageLinkForm',
         'change #thread-location': 'showStates',
@@ -239,86 +238,6 @@ cw.NewThreadView = BB.View.extend({
                     category_id: category_id,
                     level: level,
                     state: state
-                },
-                success: function (response) {
-                    if (_this.imageMode==="upload") {
-                        var file = $('#id_attachment_image').val();
-
-                        if (file) {
-                            var formData = new FormData(_this.$('#attachment_image_form')[0]);
-                            formData.set('thread_id', response.thread_id);
-                            $.ajax({
-                                url: '/api/upload_image/',
-                                type: 'POST',
-                                success: function () {
-                                    Materialize.toast('New thread created.', 5000);
-                                    window.location = "thread/" + response.thread_id;
-                                },
-                                error: function(e){
-                                    Materialize.toast('ERROR: Image could not be uploaded', 5000);
-                                    Materialize.toast(e.statusText, 5000);
-                                },
-                                data: formData,
-                                cache: false,
-                                contentType: false,
-                                processData: false
-                            });
-                        }
-                    } else if (_this.imageMode==="link") {
-                        var img_url = _this.$('#link-image-form').val().trim();
-                        console.log(_this.imageMode, img_url);
-                        if (img_url) {
-                            $.ajax({
-                                url: '/api/upload_image/',
-                                type: 'POST',
-                                data: {
-                                    link: img_url,
-                                    thread_id: response.thread_id
-                                },
-                                success: function () {
-                                    Materialize.toast('New thread created.', 5000);
-                                    window.location = "thread/" + response.thread_id;
-                                },
-                                error: function(e){
-                                    Materialize.toast('ERROR: Image could not be uploaded', 5000);
-                                    Materialize.toast(e.statusText, 5000);
-                                }
-                            });
-                        }
-                    } else {
-                        Materialize.toast('New thread created.', 5000);
-                        window.location = "thread/" + response.thread_id;
-                    }
-
-                }
-            });
-        } else {
-            Materialize.toast('Please input all fields.', 5000);
-        }
-    },
-
-    draftThread: function () {
-        var _this = this;
-
-        var title = this.$el.find('#thread-title').val(),
-            summary = this.$el.find('#thread-body').val(),
-            level = this.$el.find('#thread-location').val(),
-            category_id = this.$el.find('#thread-category').val(),
-            state="";
-        if (level === "state" ) {
-            state = this.$el.find('#thread-state').val();
-        }
-        if (title && summary && category_id) {
-            $.ajax({
-                url: '/api/new_thread/',
-                type: 'POST',
-                data: {
-                    title: title,
-                    summary: summary,
-                    category_id: category_id,
-                    level: level,
-                    state: state,
-                    is_draft: "True"
                 },
                 success: function (response) {
                     if (_this.imageMode==="upload") {
