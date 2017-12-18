@@ -36,7 +36,7 @@ def new_thread(request):
     if state:
         new_thread_data['state'] = state
 
-    is_draft = request.POST.get('is_draft', False)
+    is_draft = request.POST.get('is_draft', True)
     if is_draft:
         new_thread_data['is_draft'] = is_draft
 
@@ -258,58 +258,58 @@ def deleteCivi(request):
 
 @login_required
 def editThread(request):
+    thread_id = request.POST.get('thread_id')
+
+    if not thread_id:
+        return HttpResponseBadRequest(reason="Invalid Thread Reference")
+
     # Change Publish State to True
     is_draft = request.POST.get('is_draft', True)
-    if not is_draft:
-        # thread_id = request.POST.get('thread_id')
-        # draft_thread = Thread.objects.get(id=thread_id)
-        # draft_thread.is_draft = False
-        #
-        # draft_thread.save()
-        return JsonResponse({'data': "Success"})
+    if is_draft in ["false", "False"] or not is_draft:
+        draft_thread = Thread.objects.get(id=thread_id)
+        draft_thread.is_draft = False
 
-    thread_id = request.POST.get('thread_id')
+        try:
+            draft_thread.save()
+        except Exception as e:
+            return HttpResponseServerError(reason=str(e))
+
+        return JsonResponse({'data': "remove from draft"})
+
     title = request.POST.get('title')
     summary = request.POST.get('summary')
     category_id = request.POST.get('category_id')
     level = request.POST.get('level')
     state = request.POST.get('state')
 
+    try:
+        t = Thread.objects.get(id=thread_id)
+        category_id = request.POST.get('category_id')
+        if request.user.username != t.author.user.username:
+            return HttpResponseBadRequest(reason="No Edit Rights")
 
+        t.title = title
+        t.summary = summary
+        t.category_id = category_id
+        t.level = level
+        t.state = state
+        t.save()
+    except Exception as e:
+        return HttpResponseServerError(reason=str(e))
 
-    if thread_id:
-
-        try:
-            t = Thread.objects.get(id=thread_id)
-            category_id = request.POST.get('category_id')
-            if request.user.username != t.author.user.username:
-                return HttpResponseBadRequest(reason="No Edit Rights")
-
-            t.title = title
-            t.summary = summary
-            t.category_id = category_id
-            t.level = level
-            t.state = state
-            t.save()
-        except Exception as e:
-            return HttpResponseServerError(reason=str(e))
-
-        return_data = {
-            'thread_id': thread_id,
-            'title': t.title,
-            'summary': t.summary,
-            "category": {
-                "id": t.category.id,
-                "name": t.category.name
-            },
-            "level": t.level,
-            "state": t.state if t.level == "state" else "",
-            "location": t.level if not t.state else dict(US_STATES).get(t.state),
-        }
-        return JsonResponse({'data': return_data})
-    else:
-        return HttpResponseBadRequest(reason="Invalid Thread Reference")
-
+    return_data = {
+        'thread_id': thread_id,
+        'title': t.title,
+        'summary': t.summary,
+        "category": {
+            "id": t.category.id,
+            "name": t.category.name
+        },
+        "level": t.level,
+        "state": t.state if t.level == "state" else "",
+        "location": t.level if not t.state else dict(US_STATES).get(t.state),
+    }
+    return JsonResponse({'data': return_data})
 
 
 @login_required

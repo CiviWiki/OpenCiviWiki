@@ -1509,6 +1509,10 @@ cw.ThreadView = BB.View.extend({
     },
 
     renderBodyContents: function () {
+        if (!this.is_draft) {
+            this.$("#js-publish-btn").hide()
+        }
+
         this.renderCivis();
         this.renderOutline();
         this.renderVotes();
@@ -1516,6 +1520,10 @@ cw.ThreadView = BB.View.extend({
 
     renderOutline: function(){
         var _this = this;
+        if (this.civis.length === 0){
+            this.$('#civi-outline').empty().append(this.outlineTemplate());
+        }
+
         // Render Outline Template based on models
         var problems = this.outlineCivis.problem;
             causes = this.outlineCivis.cause;
@@ -2035,22 +2043,22 @@ cw.ThreadView = BB.View.extend({
 
     publishThread: function(e){
         var _this = this;
-        var thread_id = this.model.threadId;
-
         _this.$(e.currentTarget).addClass('disabled').attr('disabled', true);
 
         $.ajax({
             url: '/api/edit_thread/',
             type: 'POST',
             data: {
-                thread_id: thread_id,
-                is_draft: "False",
+                thread_id: _this.model.threadId,
+                is_draft: false,
             },
             success: function (response) {
-                location.reload();
+                this.is_draft = false
+                Materialize.toast('Thread is now public', 5000);
+                this.$("#js-publish-btn").hide()
             },
             error: function() {
-                Materialize.toast('Server Error: Thread could not be published', 5000);
+                Materialize.toast('Servor Error: Thread could not be published', 5000);
                 _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
             }
         });
