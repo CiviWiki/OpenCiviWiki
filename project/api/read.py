@@ -1,11 +1,10 @@
-from django.http import JsonResponse, HttpResponseBadRequest
-from models import Account, Thread, Civi, Representative, Category, Activity
-#  Topic, Attachment, Category, Civi, Comment, Hashtag,
 from django.contrib.auth.models import User
+from django.http import JsonResponse, HttpResponseBadRequest
 from django.forms.models import model_to_dict
-from utils import json_response
 
+from models import Account, Thread, Civi, Representative, Category, Activity
 from legislation import sunlightapi as sun
+from utils import json_response
 
 def get_user(request, user):
     try:
