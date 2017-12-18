@@ -10,10 +10,11 @@ TODO: move to auth
 from __future__ import absolute_import
 
 from django.conf import settings
-from celery import shared_task
 from django.core.mail import send_mail
-from django.template.loader import render_to_string
 from django.core.mail import get_connection, EmailMultiAlternatives
+from django.template.loader import render_to_string
+
+from celery import shared_task
 
 @shared_task(name="send_email")
 def send_email(subject="", recipient_list="", context=None):
