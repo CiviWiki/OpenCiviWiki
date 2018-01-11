@@ -1,4 +1,5 @@
 from django.db import models
+
 from utils.constants import US_STATES
 
 class RepresentativeManager(models.Manager):
