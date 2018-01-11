@@ -11,7 +11,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.sites.shortcuts import get_current_site
 
-
 # civi packages
 from api.forms import UpdateProfileImage
 from api.models import Thread
@@ -19,8 +18,6 @@ from api.tasks import send_mass_email
 from models import Account, Activity, Category, Civi, CiviImage, Invitation
 from utils.custom_decorators import require_post_params
 from utils.constants import US_STATES
-from utils.custom_decorators import require_post_params
-
 
 @login_required
 @require_post_params(params=['title', 'summary', 'category_id'])
