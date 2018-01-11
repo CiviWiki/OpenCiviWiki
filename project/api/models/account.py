@@ -183,7 +183,7 @@ class Account(models.Model):
         super(Account, self).save(*args, **kwargs)
     #
     #
-    
+
     def resize_profile_image(self):
         """
         Resizes and crops the user uploaded image and creates a thumbnail version of it
