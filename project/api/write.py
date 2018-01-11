@@ -392,7 +392,7 @@ def clearProfileImage(request):
 
             return HttpResponse('Image Deleted')
         except Exception:
-            return HttpResponseServerError(reason=str(default))
+            return HttpResponseServerError(reason=str("default"))
     else:
         return HttpResponseForbidden('allowed only via POST')
 
@@ -518,7 +518,7 @@ def requestFollow(request):
             verb=u'is following you', # Verb
             target=target_account, # Target Object
             popup_string="{user} is now following you".format(user=account.full_name),
-            link="/{}/{}".format(profile, request.user.username)
+            link="/{}/{}".format("profile", request.user.username)
         )
 
         return JsonResponse({"result": data})
