@@ -1,5 +1,7 @@
-from django.conf.urls import url
 import read, write
+
+from django.conf.urls import url
+
 
 #TODO: RESTful API - http://www.django-rest-framework.org/
 urlpatterns = [
