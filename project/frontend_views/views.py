@@ -146,24 +146,6 @@ def issue_thread(request, thread_id=None):
 def create_group(request):
     return TemplateResponse(request, 'newgroup.html', {})
 
-@login_required
-@beta_blocker
-@full_account
-def dbview(request):
-    result = [{'id': c.id, 'name': c.name} for c in Category.objects.all()]
-
-    return TemplateResponse(request, 'dbview.html', {'result': json.dumps(result)})
-
-
-@login_required
-@beta_blocker
-@full_account
-def add_civi(request):
-    categories = [{'id': c.id, 'name': c.name} for c in Category.objects.all()]
-    topics = [{'id': c.id, 'topic': c.topic} for c in Topic.objects.all()]
-
-    return TemplateResponse(request, 'add_civi.html', {'categories': json.dumps(categories), 'topics': json.dumps(topics)})
-
 
 @login_required
 @user_passes_test(lambda u: u.is_staff)
