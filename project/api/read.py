@@ -87,14 +87,14 @@ def get_rep(request, rep_id):
     # TODO: FINISH THIS
     try:
         # Federal Representatives only
-        u = Representative.objects.get(id=rep_id)
-        a = Account.objects.get(user=u)
+        rep_user = Representative.objects.get(id=rep_id)
+        a = Account.objects.get(user=rep_user)
         result = Account.objects.summarize(a)
 
         result['representatives'] = []
-        if request.user.username != user:
+        if request.user.username != rep_user.username:
             ra = Account.objects.get(user=request.user)
-            if user in ra.following.all():
+            if rep_user.username in ra.following.all():
                 result['follow_state'] = True
             else:
                 result['follow_state'] = False
@@ -122,6 +122,8 @@ def get_thread(request, thread_id):
         c = civis.order_by('-created')
         c_scores = [ci.score(req_a.id) for ci in c]
         c_data = [Civi.objects.serialize_s(ci) for ci in c]
+
+        problems = []
         for idx, item in enumerate(c_data):
             problems[idx]['score'] = c_scores[idx]
 
