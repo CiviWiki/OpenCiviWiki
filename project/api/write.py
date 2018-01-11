@@ -572,7 +572,7 @@ def editUserCategories(request):
             account.save()
 
         data = {
-            'user_categories' : list(account.categories.values_list('id', flat=True)) or all_categories
+            'user_categories' : list(account.categories.values_list('id', flat=True)) or "all_categories"
         }
         return JsonResponse({"result": data})
     except Account.DoesNotExist as e:
