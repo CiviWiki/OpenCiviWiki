@@ -127,10 +127,13 @@ def rateCivi(request):
     rating = request.POST.get('rating', '')
     account = Account.objects.get(user=request.user)
 
-    c = Civi.objects.get(id=civi_id)
+    voted_civi = Civi.objects.get(id=civi_id)
+
+    if voted_civi.thread.is_draft:
+        return HttpResponseServerError(reason=str("Cannot vote on a civi that is in a thread still in draft mode"))
 
     try:
-        prev_act = Activity.objects.get(civi=c, account=account)
+        prev_act = Activity.objects.get(civi=voted_civi, account=account)
     except Activity.DoesNotExist:
         prev_act = None
 
@@ -139,28 +142,28 @@ def rateCivi(request):
 
         activity_data = {
             'account': account,
-            'thread': c.thread,
-            'civi': c,
+            'thread': voted_civi.thread,
+            'civi': voted_civi,
         }
 
         if rating == "vneg":
-            c.votes_vneg = c.votes_vneg + 1
+            voted_civi.votes_vneg = voted_civi.votes_vneg + 1
             vote_val = 'vote_vneg'
         elif rating == "neg":
-            c.votes_neg = c.votes_neg + 1
+            voted_civi.votes_neg = voted_civi.votes_neg + 1
             vote_val = 'vote_neg'
         elif rating == "neutral":
-            c.votes_neutral = c.votes_neutral + 1
+            voted_civi.votes_neutral = voted_civi.votes_neutral + 1
             vote_val = 'vote_neutral'
         elif rating == "pos":
-            c.votes_pos = c.votes_pos + 1
+            voted_civi.votes_pos = voted_civi.votes_pos + 1
             vote_val = 'vote_pos'
         elif rating == "vpos":
             # c.votes_vpos = c.votes_vpos + 1
             vote_val = 'vote_vpos'
         activity_data['activity_type'] = vote_val
 
-        c.save()
+        voted_civi.save()
 
         if prev_act:
             prev_act.activity_type = vote_val
@@ -267,6 +270,9 @@ def editThread(request):
     is_draft = request.POST.get('is_draft', True)
     if is_draft in ["false", "False"] or not is_draft:
         draft_thread = Thread.objects.get(id=thread_id)
+        if request.user.id is not draft_thread.author_id:
+            return HttpResponseForbidden("Only the original creator can publish the draft")
+
         draft_thread.is_draft = False
 
         try:
