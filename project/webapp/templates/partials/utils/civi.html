@@ -124,6 +124,7 @@
                 </div>
             </div>
         {{# } }}
+        {{# if (!this.is_draft) { }}
         <div class="rating center ">
             <div class="rating-wrapper">
                 <div class="rating-name">DISAGREE</div>
@@ -156,6 +157,7 @@
             <div class="rating-center center-block"></div>
             <div class="temp-score">{{ Math.round(this.model.get('score'), 2) }}</div>
         </div>
+        {{# } }}
     </div>
     <div class="civi-footer">
         <div class="author-photo-holder">
