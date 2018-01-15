@@ -2070,13 +2070,20 @@ cw.ThreadView = BB.View.extend({
                 is_draft: false,
             },
             success: function (response) {
-                this.is_draft = false
-                Materialize.toast('Thread is now public', 5000);
-                this.$("#js-publish-btn").hide()
+                _this.is_draft = false
+                Materialize.toast('Thread is now public. Refreshing the page...', 5000);
+                _this.$("#js-publish-btn").hide()
+                var reload_page = _.bind(location.reload, location);
+                _.delay(reload_page, 1000);
             },
-            error: function() {
-                Materialize.toast('Servor Error: Thread could not be published', 5000);
-                _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
+            error: function (response) {
+                if (response.status === 403) {
+                    Materialize.toast('You do not have permission to publish the thread', 5000);
+                }
+                else if (response.status === 500) {
+                    Materialize.toast('Server Error: Thread could not be published', 5000);
+                    _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
+                }
             }
         });
     },
