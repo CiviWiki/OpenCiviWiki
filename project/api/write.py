@@ -289,31 +289,32 @@ def editThread(request):
     state = request.POST.get('state')
 
     try:
-        t = Thread.objects.get(id=thread_id)
-        category_id = request.POST.get('category_id')
-        if request.user.username != t.author.user.username:
-            return HttpResponseBadRequest(reason="No Edit Rights")
+        req_edit_thread = Thread.objects.get(id=thread_id)
 
-        t.title = title
-        t.summary = summary
-        t.category_id = category_id
-        t.level = level
-        t.state = state
-        t.save()
+        category_id = request.POST.get('category_id')
+        if request.user.username != req_edit_thread.author.user.username:
+            return HttpResponseBadRequest("No Edit Rights")
+
+        req_edit_thread.title = title
+        req_edit_thread.summary = summary
+        req_edit_thread.category_id = category_id
+        req_edit_thread.level = level
+        req_edit_thread.state = state
+        req_edit_thread.save()
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
 
     return_data = {
         'thread_id': thread_id,
-        'title': t.title,
-        'summary': t.summary,
+        'title': req_edit_thread.title,
+        'summary': req_edit_thread.summary,
         "category": {
-            "id": t.category.id,
-            "name": t.category.name
+            "id": req_edit_thread.category.id,
+            "name": req_edit_thread.category.name
         },
-        "level": t.level,
-        "state": t.state if t.level == "state" else "",
-        "location": t.level if not t.state else dict(US_STATES).get(t.state),
+        "level": req_edit_thread.level,
+        "state": req_edit_thread.state if req_edit_thread.level == "state" else "",
+        "location": req_edit_thread.level if not req_edit_thread.state else dict(US_STATES).get(req_edit_thread.state),
     }
     return JsonResponse({'data': return_data})
 
