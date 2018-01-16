@@ -349,8 +349,10 @@ def editUser(request):
         "latitude": r.get('latitude', account.latitude),
     }
 
+
     try:
-        Account.objects.filter(id=account.id).update(**data)
+        account.__dict__.update(data)
+        account.save()
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
 
