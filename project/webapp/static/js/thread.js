@@ -1504,7 +1504,10 @@ cw.ThreadView = BB.View.extend({
         var _this = this;
 
         if (this.$('.thread-body-holder').length) {
-            this.$('.thread-body-holder').empty().append(this.bodyTemplate());
+            var bodyRenderData = {
+                is_draft: this.is_draft,
+            };
+            this.$('.thread-body-holder').empty().append(this.bodyTemplate(bodyRenderData));
 
             this.$('.main-thread').on('scroll', function (e) {
                 _this.processCiviScroll();
@@ -1513,12 +1516,9 @@ cw.ThreadView = BB.View.extend({
     },
 
     renderBodyContents: function () {
-        if (!this.is_draft) {
-            this.$("#js-publish-btn").hide()
-        }
-
         this.renderCivis();
         this.renderOutline();
+
         if (!this.is_draft) {
             this.renderVotes();
         }
