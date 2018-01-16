@@ -1414,17 +1414,15 @@ cw.ThreadView = BB.View.extend({
                     if ((voteData.activity_type == 'vote_pos' || voteData.activity_type == 'vote_vpos')){
                         _.each(civi.get('links'), function(link){
                             var linked_civi = this.civis.get(link);
-                            if (!_.isUndefined(linked_civi) ) {
+                            if (linked_civi) {
                                 this.recommendedCivis.push(link);
-                                // linked_civi.recommended = true;
                             }
                         }, this);
                     } else {
                         _.each(civi.get('links'), function(link){
                             var linked_civi = this.civis.get(link);
-                            if (!_.isUndefined(linked_civi) ) {
+                            if (linked_civi) {
                                 this.otherCivis.push(link);
-
                             }
                         }, this);
                     }
