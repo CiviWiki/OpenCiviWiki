@@ -90,8 +90,8 @@ def get_rep(request, rep_id):
     try:
         # Federal Representatives only
         rep_user = Representative.objects.get(id=rep_id)
-        a = Account.objects.get(user=rep_user)
-        result = Account.objects.summarize(a)
+        rep_account = Account.objects.get(user=rep_user)
+        result = Account.objects.summarize(rep_account)
 
         result['representatives'] = []
         if request.user.username != rep_user.username:
