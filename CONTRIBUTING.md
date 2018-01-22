@@ -2,7 +2,7 @@
 Use these instructions to set up a local development environment.
 
 ## Prerequisites
-The following packages are helpful/required to start developing CiviWiki:
+The following packages are required to start developing CiviWiki:
 
 - PostgreSQL
 - Redis
@@ -72,14 +72,14 @@ python manage.py migrate
 If everything goes well, you should see a bunch of green 'OK's. Django will create the database structure for you.
 
 ### Populate initial data
-There are two files, located in the `/data` directory, that contain initial categories and congressional data. Run the following commands to initialize the congressional and categoies data:
+There are two files, located in the `/data` directory, that contain initial categories and congressional data. Run the following commands to initialize the congressional and categories data:
 
 ```py
-python manage.py loaddata /data/congress.json
+python manage.py loaddata data/congress.json
 ```
 
 ```py
-python manage.py loaddata /data/categories.json
+python manage.py loaddata data/categories.json
 ```
 
 ### Collect static files
@@ -106,5 +106,21 @@ python manage.py runserver
 ## Register initial user
 Once CiviWiki is running, visit the front page (probably something like http://localhost:8000). Once there, click 'log in/register', and then 'register new user'.
 
-### Enable beta access for new user
-Once you have submitted the new user registration fom, you will be directed to the 'Development in progress' screen. In order to access the site functionality, you need to modify the new user record and set the `beta_access` field to `True` for the user record in the `api_account` table.
+# Coding Conventions
+
+We strive to follow Django Coding Conventions. See https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/
+
+# Compatible Versioning
+We use Compatibile Versioning in this project.
+
+Given a version number MAJOR.MINOR, increment the:
+
+MAJOR version when you make backwards-incompatible updates of any kind
+MINOR version when you make 100% backwards-compatible updates
+Additional labels for pre-release and build metadata are available as extensions to the MAJOR.MINOR format.
+
+## How is this different to SemVer?
+
+Compatible Versioning ("ComVer") is SemVer where every PATCH number is 0 (zero). This way, ComVer is backwards compatible with SemVer.
+
+A ComVer release from 3.6 to 3.7 is just a SemVer release from 3.6.0 to 3.7.0. In other words, ComVer is safe to adopt since it is basically SemVer without ever issuing PATCH releases.

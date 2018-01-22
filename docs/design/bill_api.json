@@ -1,0 +1,286 @@
+{
+  "tags": [
+    {
+      "name": "Bills",
+      "description": "Operations related to searching for bills, both state and federal."
+    }
+  ],
+  "paths": {
+    "/bills/search": {
+      "get": {
+        "operationId": "bills_search",
+        "summary": "Get details for zero or more bills.",
+        "description": "This endpoint allows you to search for bills. It will return zero or more bills that match the search criteria.",
+        "tags": [
+          "Bills"
+        ],
+        "responses": {
+          "200": {
+            "description": "A JSON array containing one or more bills.",
+            "schema": {
+              "x-oad-type": "array",
+              "type": "array",
+              "title": "Results",
+              "description": "The array of bill results.",
+              "items": {
+                "x-oad-type": "reference",
+                "$ref": "#/definitions/bill"
+              }
+            },
+            "x-oad-type": "response"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/parameters/query",
+            "x-oad-type": "reference"
+          },
+          {
+            "$ref": "#/parameters/scope",
+            "x-oad-type": "reference"
+          },
+          {
+            "$ref": "#/parameters/source",
+            "x-oad-type": "reference"
+          },
+          {
+            "$ref": "#/parameters/name",
+            "x-oad-type": "reference"
+          },
+          {
+            "$ref": "#/parameters/bill_id",
+            "x-oad-type": "reference"
+          },
+          {
+            "$ref": "#/parameters/state",
+            "x-oad-type": "reference"
+          }
+        ]
+      },
+      "x-oad-type": "operation"
+    },
+    "/bills/{pk}": {
+      "get": {
+        "operationId": "get_bill",
+        "summary": "Git a single Bill object by primary key.",
+        "tags": [
+          "Bills"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved bill.",
+            "schema": {
+              "x-oad-type": "reference",
+              "$ref": "#/definitions/bill"
+            },
+            "x-oad-type": "response"
+          }
+        },
+        "parameters": [
+          {
+            "name": "pk",
+            "in": "path",
+            "description": "The internal (CiviWiki) primary key for the Bill.",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "x-oad-type": "parameter"
+          }
+        ]
+      },
+      "x-oad-type": "operation"
+    }
+  },
+  "parameters": {
+    "name": {
+      "name": "Name",
+      "in": "header",
+      "description": "The name of a bill.",
+      "required": false,
+      "type": "string",
+      "x-oad-type": "parameter"
+    },
+    "query": {
+      "name": "Query",
+      "in": "header",
+      "description": "The search query.",
+      "required": true,
+      "type": "string",
+      "x-oad-type": "parameter"
+    },
+    "scope": {
+      "name": "Scope",
+      "in": "header",
+      "description": "The scope of this bill Can be either\n\n- state\n- federal",
+      "required": true,
+      "type": "string",
+      "enum": [
+        "federal",
+        "state"
+      ],
+      "x-oad-type": "parameter"
+    },
+    "source": {
+      "name": "Source",
+      "in": "header",
+      "description": "Which source to search for bills.\n\nCan be one of:\n\n- open_states\n- propublica\n- civiwiki",
+      "required": false,
+      "type": "string",
+      "enum": [
+        "civiwiki",
+        "open_states",
+        "propublica"
+      ],
+      "x-oad-type": "parameter"
+    },
+    "bill_id": {
+      "name": "Bill ID",
+      "in": "header",
+      "description": "The official id of the bill (e.g. ‘SB 27’, ‘A 2111’)",
+      "required": false,
+      "type": "string",
+      "x-oad-type": "parameter"
+    },
+    "state": {
+      "name": "State",
+      "in": "header",
+      "description": "Two-letter USPS abbreviation for U.S. state (or district). For use in e.g. state legislation search.\n\nhttps://en.wikipedia.org/wiki/List_of_U.S._state_abbreviations",
+      "required": false,
+      "type": "string",
+      "enum": [
+        "AL",
+        "AK",
+        "AZ",
+        "AR",
+        "CA",
+        "CO",
+        "CT",
+        "DE",
+        "DC",
+        "FL",
+        "GA",
+        "HI",
+        "ID",
+        "IL",
+        "IN",
+        "IA",
+        "KS",
+        "KY",
+        "LA",
+        "ME",
+        "MD",
+        "MA",
+        "MI",
+        "MN",
+        "MS",
+        "MO",
+        "MT",
+        "NE",
+        "NV",
+        "NH",
+        "NJ",
+        "NM",
+        "NY",
+        "NC",
+        "ND",
+        "OH",
+        "OK",
+        "OR",
+        "PA",
+        "RI",
+        "SC",
+        "SD",
+        "TN",
+        "TX",
+        " \tUT",
+        "VT",
+        "VA",
+        "WA",
+        "WV",
+        "WI",
+        "WY"
+      ],
+      "x-oad-type": "parameter"
+    }
+  },
+  "definitions": {
+    "bill": {
+      "x-oad-type": "object",
+      "type": "object",
+      "title": "Bill",
+      "description": "A single bill object",
+      "properties": {
+        "name": {
+          "x-oad-type": "string",
+          "type": "string",
+          "title": "Name",
+          "description": "The name of the bill."
+        },
+        "description": {
+          "x-oad-type": "string",
+          "type": "string",
+          "title": "Description",
+          "description": "Bill description"
+        },
+        "source_id": {
+          "x-oad-type": "string",
+          "type": "string",
+          "title": "Source ID",
+          "description": "Unique ID from Bill source (Pro Publica or Open States)"
+        },
+        "source": {
+          "x-oad-type": "string",
+          "type": "string",
+          "title": "Source",
+          "description": "Original source for information about this bill. Can be either of:\n\n- open_states\n- propublica",
+          "enum": [
+            "open_states",
+            "propublica"
+          ]
+        },
+        "bill_id": {
+          "x-oad-type": "string",
+          "type": "string",
+          "title": "Bill ID",
+          "description": "The official id of the bill (e.g. ‘SB 27’, ‘A 2111’)"
+        }
+      },
+      "required": [
+        "source",
+        "source_id"
+      ]
+    }
+  },
+  "info": {
+    "title": "CiviWiki Bill API",
+    "version": "0.1.0",
+    "description": "Read-only Bill API for the CiviWiki frontend application.",
+    "contact": {
+      "name": "Mitchell West",
+      "email": "mitchell.west@civiwiki.org",
+      "url": "https://www.civiwiki.org"
+    },
+    "license": {
+      "name": "Creative Commons Zero",
+      "url": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+  },
+  "externalDocs": {
+    "description": "You can reach our development team on GitHub.",
+    "url": "https://github.com/CiviWiki/OpenCiviWiki"
+  },
+  "host": "civiwiki.org",
+  "basePath": "/api/v1",
+  "schemes": [
+    "https",
+    "wss"
+  ],
+  "consumes": [
+    "application/json",
+    "application/x-www-form-urlencoded"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "swagger": "2.0"
+}
