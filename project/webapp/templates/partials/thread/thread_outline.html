@@ -1,4 +1,5 @@
 {% verbatim %}
+{{# if (!is_draft) { }}
 <div class="civi-switch center">
     <div class="switch">
         <span class="count-badge badge-other white-text left">{{count.totalOther}}</span>
@@ -10,7 +11,7 @@
         </label>
         <span class="count-badge badge-recommended white-text right">{{count.totalRec}}</span>
     </div>
-
+{{# } }}
 </div>
 <div class="problem-nav">
     <div class="civi-nav-header">

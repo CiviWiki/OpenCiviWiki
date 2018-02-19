@@ -1,11 +1,8 @@
 {% verbatim %}
-<nav>
+<nav class="feed-nav">
     <div class="nav-wrapper">
         <div class="row">
-            <div class="logo-container col m2 push-m1 l2 push-l1 hide-on-small-only">
-                <div class="logo">CiviWiki</div>
-            </div>
-            <div class="col s10 m8 push-m1 l7 push-l1 nav-categories nav-item">
+            <div class="col s10 m10 push-m1 l10 push-l1 nav-categories nav-item">
                 <ul class="center-block" id="user-categories-list">
                     <li class="category-all"><a class="category-item active" data-id="all" >All</a></li>
                     {{# _.each(user_categories, function (c) {}}
@@ -18,7 +15,7 @@
                 <ul id="categories-dropdown" class="dropdown-content"></ul>
 
             </div>
-            <div class="col s2 m1 push-m1 l1 push-l1 nav-item">
+            <div class="col s2 m1 push-m1 l1 nav-item">
                 <div class="category-button right">
                     <button class="btn waves-effect waves-cw-blue btn-secondary">
                         <i class="tiny material-icons left">label</i>
@@ -59,6 +56,18 @@
         </div>
         <div class="col s12 m9 l8 push-l1 scroll-col">
             <div class="list" id="feed-list"></div>
+            {{# if (draft_threads.length > 0){ }}
+            <div class="section center">
+                <div class="title-lato">Your Drafts ({{draft_threads.length}})</div>
+            </div>
+            <div class="row">
+            {{# _.each(draft_threads, function (t) {}}
+                <div class="col s12">
+                {{= cw.underscorePartial('thread-card-template', ({thread_data: t, categories: categories}))}}
+                </div>
+            {{# }, this); }}
+            {{# } }}
+            </div>
         </div>
     </div>
 </div>

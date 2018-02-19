@@ -1,5 +1,7 @@
 import sunlight
+from sunlight.errors import BadRequestException
 from django.conf import settings
+from sunlight.errors import BadRequestException
 
 def get_legislator_and_district(account):
     location = account.zip_code
@@ -25,12 +27,12 @@ def get_bill_information(account):
 
 def get_legislator_ids_by_lat_long(latitude, longitude):
     """ Gets legislator bioguide_ids by coordinate location"""
-    # sunlight.config.API_KEY = settings.SUNLIGHT_API_KEY
     bioguide_ids = []
-    # preferences = {}
-    # preferences['state'] = account.state
 
-    legislators = sunlight.congress.locate_legislators_by_lat_lon(latitude, longitude)
+    try:
+        legislators = sunlight.congress.locate_legislators_by_lat_lon(latitude, longitude)
+    except BadRequestException:
+        return bioguide_ids
 
     if legislators and len(legislators):
         for legislator in legislators:

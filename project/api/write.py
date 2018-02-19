@@ -11,7 +11,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.sites.shortcuts import get_current_site
 
-
 # civi packages
 from api.forms import UpdateProfileImage
 from api.models import Thread
@@ -19,8 +18,6 @@ from api.tasks import send_mass_email
 from models import Account, Activity, Category, Civi, CiviImage, Invitation
 from utils.custom_decorators import require_post_params
 from utils.constants import US_STATES
-from utils.custom_decorators import require_post_params
-
 
 @login_required
 @require_post_params(params=['title', 'summary', 'category_id'])
@@ -35,6 +32,10 @@ def new_thread(request):
     state = request.POST['state']
     if state:
         new_thread_data['state'] = state
+
+    is_draft = request.POST.get('is_draft', True)
+    if is_draft:
+        new_thread_data['is_draft'] = is_draft
 
     new_t = Thread(**new_thread_data)
     new_t.save()
@@ -123,10 +124,13 @@ def rateCivi(request):
     rating = request.POST.get('rating', '')
     account = Account.objects.get(user=request.user)
 
-    c = Civi.objects.get(id=civi_id)
+    voted_civi = Civi.objects.get(id=civi_id)
+
+    if voted_civi.thread.is_draft:
+        return HttpResponseServerError(reason=str("Cannot vote on a civi that is in a thread still in draft mode"))
 
     try:
-        prev_act = Activity.objects.get(civi=c, account=account)
+        prev_act = Activity.objects.get(civi=voted_civi, account=account)
     except Activity.DoesNotExist:
         prev_act = None
 
@@ -135,28 +139,28 @@ def rateCivi(request):
 
         activity_data = {
             'account': account,
-            'thread': c.thread,
-            'civi': c,
+            'thread': voted_civi.thread,
+            'civi': voted_civi,
         }
 
         if rating == "vneg":
-            c.votes_vneg = c.votes_vneg + 1
+            voted_civi.votes_vneg = voted_civi.votes_vneg + 1
             vote_val = 'vote_vneg'
         elif rating == "neg":
-            c.votes_neg = c.votes_neg + 1
+            voted_civi.votes_neg = voted_civi.votes_neg + 1
             vote_val = 'vote_neg'
         elif rating == "neutral":
-            c.votes_neutral = c.votes_neutral + 1
+            voted_civi.votes_neutral = voted_civi.votes_neutral + 1
             vote_val = 'vote_neutral'
         elif rating == "pos":
-            c.votes_pos = c.votes_pos + 1
+            voted_civi.votes_pos = voted_civi.votes_pos + 1
             vote_val = 'vote_pos'
         elif rating == "vpos":
             # c.votes_vpos = c.votes_vpos + 1
             vote_val = 'vote_vpos'
         activity_data['activity_type'] = vote_val
 
-        c.save()
+        voted_civi.save()
 
         if prev_act:
             prev_act.activity_type = vote_val
@@ -254,46 +258,62 @@ def deleteCivi(request):
 
 @login_required
 def editThread(request):
+    thread_id = request.POST.get('thread_id')
+
+    if not thread_id:
+        return HttpResponseBadRequest(reason="Invalid Thread Reference")
+
+    # Change Publish State to True
+    is_draft = request.POST.get('is_draft', True)
+    if is_draft in ["false", "False"] or not is_draft:
+        draft_thread = Thread.objects.get(id=thread_id)
+        if request.user.id is not draft_thread.author_id:
+            return HttpResponseForbidden("Only the original creator can publish the draft")
+
+        draft_thread.is_draft = False
+
+        try:
+            draft_thread.save()
+        except Exception as e:
+            return HttpResponseServerError(reason=str(e))
+
+        return JsonResponse({'data': "remove from draft"})
+
+    title = request.POST.get('title')
+    summary = request.POST.get('summary')
+    category_id = request.POST.get('category_id')
+    level = request.POST.get('level')
+    state = request.POST.get('state')
+
     try:
-        thread_id = request.POST.get('thread_id')
-        title = request.POST.get('title')
-        summary = request.POST.get('summary')
+        req_edit_thread = Thread.objects.get(id=thread_id)
+
         category_id = request.POST.get('category_id')
-        level = request.POST.get('level')
-        state = request.POST.get('state')
-        if thread_id:
+        if request.user.username != req_edit_thread.author.user.username:
+            return HttpResponseBadRequest("No Edit Rights")
 
-
-            t = Thread.objects.get(id=thread_id)
-            category_id = request.POST.get('category_id')
-            if request.user.username != t.author.user.username:
-                return HttpResponseBadRequest(reason="No Edit Rights")
-
-            t.title = title
-            t.summary = summary
-            t.category_id = category_id
-            t.level = level
-            t.state = state
-            t.save()
-
-            return_data = {
-                'thread_id': thread_id,
-                'title': t.title,
-                'summary': t.summary,
-                "category": {
-                    "id": t.category.id,
-                    "name": t.category.name
-                },
-                "level": t.level,
-                "state": t.state if t.level == "state" else "",
-                "location": t.level if not t.state else dict(US_STATES).get(t.state),
-            }
-            return JsonResponse({'data': return_data})
-        else:
-            return HttpResponseBadRequest(reason="Invalid Thread Reference")
-
+        req_edit_thread.title = title
+        req_edit_thread.summary = summary
+        req_edit_thread.category_id = category_id
+        req_edit_thread.level = level
+        req_edit_thread.state = state
+        req_edit_thread.save()
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
+
+    return_data = {
+        'thread_id': thread_id,
+        'title': req_edit_thread.title,
+        'summary': req_edit_thread.summary,
+        "category": {
+            "id": req_edit_thread.category.id,
+            "name": req_edit_thread.category.name
+        },
+        "level": req_edit_thread.level,
+        "state": req_edit_thread.state if req_edit_thread.level == "state" else "",
+        "location": req_edit_thread.level if not req_edit_thread.state else dict(US_STATES).get(req_edit_thread.state),
+    }
+    return JsonResponse({'data': return_data})
 
 @login_required
 def uploadphoto(request):
@@ -324,16 +344,18 @@ def editUser(request):
         "zip_code": r.get('zip_code', account.zip_code),
         "longitude": r.get('longitude', account.longitude),
         "latitude": r.get('latitude', account.latitude),
-        "full_account": r.get('full_account', account.full_account)
     }
 
-    try:
-        Account.objects.filter(id=account.id).update(**data)
-        account.refresh_from_db()
 
-        return JsonResponse(Account.objects.summarize(account))
+    try:
+        account.__dict__.update(data)
+        account.save()
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
+
+    account.refresh_from_db()
+
+    return JsonResponse(Account.objects.summarize(account))
 
 @login_required
 def uploadProfileImage(request):
@@ -356,6 +378,8 @@ def uploadProfileImage(request):
                         'error': 'MODEL_SAVE_ERROR'
                     }
                     return JsonResponse(response, status=400)
+
+                request.session["login_user_image"] = account.profile_image_thumb_url
 
                 response = {
                     'profile_image': account.profile_image_url
@@ -389,7 +413,7 @@ def clearProfileImage(request):
 
             return HttpResponse('Image Deleted')
         except Exception:
-            return HttpResponseServerError(reason=str(default))
+            return HttpResponseServerError(reason=str("default"))
     else:
         return HttpResponseForbidden('allowed only via POST')
 
@@ -515,7 +539,7 @@ def requestFollow(request):
             verb=u'is following you', # Verb
             target=target_account, # Target Object
             popup_string="{user} is now following you".format(user=account.full_name),
-            link="/{}/{}".format(profile, request.user.username)
+            link="/{}/{}".format("profile", request.user.username)
         )
 
         return JsonResponse({"result": data})
@@ -569,7 +593,7 @@ def editUserCategories(request):
             account.save()
 
         data = {
-            'user_categories' : list(account.categories.values_list('id', flat=True)) or all_categories
+            'user_categories' : list(account.categories.values_list('id', flat=True)) or "all_categories"
         }
         return JsonResponse({"result": data})
     except Account.DoesNotExist as e:

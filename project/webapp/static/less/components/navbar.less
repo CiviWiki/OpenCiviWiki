@@ -1,0 +1,89 @@
+.nav {
+    height: 40px;
+    line-height: 40px;
+    background-color: @dark-purple;
+
+    .nav-wrapper {
+        margin-left: 8px;
+        margin-right: 8px;
+
+        .nav-item {
+            line-height: inherit;
+            height: 40px;
+            display: inline-flex;
+        }
+        .logo {
+            height: inherit;
+            text-align: center;
+            line-height: inherit;
+            .wordmark {
+                text-align: center;
+                font-size: 24px;
+                font-weight: 700;
+                color: @white;
+                letter-spacing: 0.01em;
+                padding-bottom: 8px;
+
+            }
+        }
+        .nav-menu {
+            height: 40px;
+            line-height: 40px;
+            padding-top: 4px;
+
+            .nav-menu-item,.nav-menu-item * {
+                display: inline-block;
+                height: 32px;
+                line-height: 32px;
+            }
+            .button-icon i {
+                color: @white;
+                font-size: 24px;
+                vertical-align: super;
+            }
+            .button-icon i:hover {
+                color: @blue;
+                cursor: pointer;
+            }
+        }
+        .chip-menu-profile {
+            margin-bottom: 0;
+            vertical-align: top;
+            // Prevent annoying behavior of highlighting instead of clicking
+            -webkit-user-select: none;  /* Chrome all / Safari all */
+            -moz-user-select: none;     /* Firefox all */
+            -ms-user-select: none;
+            display: inline-block;
+            margin-left: 8px;
+            margin-right: 4px;
+
+            .label-username {
+                vertical-align: top;
+                line-height: 32px;
+                font-size: 16px;
+                padding-right: 4px;
+                color: @white
+            }
+            .chip-image-profile {
+                width: 32px;
+                height: 32px;
+                line-height: 32px;
+                border-radius: 50%;
+            }
+            .button-icon-toggle {
+                display: inline-block;
+                i {
+                    color: @white
+                }
+            }
+            &:hover {
+                .label-username, i{
+                    color: @blue;
+                }
+                cursor: pointer;
+            }
+
+        }
+
+    }
+}

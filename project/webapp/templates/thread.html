@@ -60,6 +60,7 @@
 
     var username = '{{user.username}}',
         threadId = '{{thread_id}}',
+        thread_is_draft = '{{is_draft}}',
         thread_body_data = JSON.parse('{{ thread_body_data|escapejs }}'),
         thread_wiki_data = JSON.parse('{{ thread_wiki_data|escapejs }}');
 
@@ -69,7 +70,8 @@
     var threadView = new cw.ThreadView({
         username: username,
         model: threadModel,
-        civis: civiCollection
+        civis: civiCollection,
+        is_draft: (thread_is_draft == 'True')
     });
 
     // HACK: TEMP Websocket fun

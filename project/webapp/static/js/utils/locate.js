@@ -6,7 +6,7 @@ cw.Map = BB.Model.extend({
             id: '',
             uscapitol: { lat: 38.8899389, lng: -77.0090505 },
             zoom: 5,
-            coordinates: {}, address: {},
+            coordinates: {}, address: {}, is_new: false,
             // Visual Setup and Initalization Options
             mapOptions: {}, markerOptions: {},
             // Google Map Objects
@@ -166,6 +166,12 @@ cw.MapView = BB.View.extend({
     fillInAddress: function () {
         this.$('.progress').toggleClass('hide');
         var place = this.model.get('autocomplete').getPlace();
+        // Check if user didn't select any Options
+        if (_.isUndefined(place.address_components)) {
+            this.$('.progress').toggleClass('hide');
+            return;
+        }
+
         this.model.set('address', this.getAddressFromComponents(place.address_components));
         // Set the model's coordinates
         var coordinates = {
@@ -173,7 +179,7 @@ cw.MapView = BB.View.extend({
             lng: place.geometry.location.lng()
         };
         this.model.set('coordinates', coordinates);
-        this.getLegislators(coordinates);
+        this.model.set('is_new', true);
 
         this.adjustMapCenter(coordinates);
         this.$('.progress').toggleClass('hide');
@@ -199,13 +205,13 @@ cw.MapView = BB.View.extend({
                 }
 
                 _this.model.set('coordinates', geolocation);
-                _this.getLegislators(geolocation);
                 _this.adjustMapCenter(geolocation);
 
                 _this.model.get('geocoder').geocode({ 'location': geolocation }, function(results, status) {
                     if (status === 'OK') {
                         _this.$('#autocomplete').val(results[0].formatted_address);
                         _this.model.set('address', _this.getAddressFromComponents(results[0].address_components));
+                        _this.model.set('is_new', true);
                     } else {
                         Materialize.toast('Geocode Error: ' + status, 2000);
                     }

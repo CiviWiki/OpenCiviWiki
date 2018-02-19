@@ -1,17 +1,16 @@
-import random as r
 import os, json, datetime, math, uuid
-
 from calendar import month_name
-from django.db import models
-from django.core.serializers.json import DjangoJSONEncoder
-from django.utils.deconstruct import deconstructible
+
 from django.core.files.storage import default_storage
+from django.core.serializers.json import DjangoJSONEncoder
+from django.db import models
 from django.conf import settings
+from django.utils.deconstruct import deconstructible
 
 from .account import Account
-from .thread import Thread
 from .bill import Bill
 from .hashtag import Hashtag
+from .thread import Thread
 
 class CiviManager(models.Manager):
     def summarize(self, civi):

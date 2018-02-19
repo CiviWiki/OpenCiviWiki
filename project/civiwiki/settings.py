@@ -109,6 +109,11 @@ TEMPLATES = [
 WSGI_APPLICATION = 'civiwiki.wsgi.application'
 
 
+# Global user privilege settings
+CLOSED_BETA = False
+if 'CLOSED_BETA' in os.environ:
+    CLOSED_BETA = get_env_variable("CLOSED_BETA")
+
 # Apex Contact for Production Errors
 ADMINS = [('Development Team', 'dev@civiwiki.org')]
 

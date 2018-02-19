@@ -1,20 +1,20 @@
-from django.contrib.auth.models import User
-from api.models import Account, Invitation
-from django.http import JsonResponse, HttpResponse, HttpResponseServerError, HttpResponseRedirect, HttpResponseBadRequest
+from django.conf import settings
 from django.contrib.auth import authenticate, logout, login
-from utils.custom_decorators import require_post_params
-from forms import AccountRegistrationForm, PasswordResetForm, RecoverUserForm
-from api.tasks import send_email
+from django.contrib.auth.models import User
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.contrib.sites.shortcuts import get_current_site
-
+from django.http import JsonResponse, HttpResponse, HttpResponseServerError, HttpResponseRedirect, HttpResponseBadRequest
+from django.shortcuts import get_object_or_404
+from django.template.response import TemplateResponse #TODO: move this out to views
+from django.utils.crypto import salted_hmac
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.http import int_to_base36
 
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
-from django.utils.crypto import salted_hmac
-
-from django.template.response import TemplateResponse #TODO: move this out to views
+from api.tasks import send_email
+from api.models import Account, Invitation
+from forms import AccountRegistrationForm, PasswordResetForm, RecoverUserForm
+from utils.custom_decorators import require_post_params
 
 class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
     """ Token Generator for Email Confirmation """
@@ -52,6 +52,11 @@ def cw_login(request):
         login(request, user)
 
         if user.is_active:
+
+            account = get_object_or_404(Account, user=user)
+            request.session["login_user_firstname"] = account.first_name
+            request.session["login_user_image"] = account.profile_image_thumb_url
+
             return HttpResponse()
         else:
             response = {
@@ -87,6 +92,8 @@ def cw_register(request):
                 user = authenticate(username=username, password=password)
 
                 account = Account(user=user)
+                if not settings.CLOSED_BETA:
+                    account.beta_access = True
                 account.save()
 
                 user.is_active = True

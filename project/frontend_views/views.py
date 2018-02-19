@@ -1,17 +1,17 @@
 import json
 
 from django.conf import settings
-from django.http import HttpResponse, HttpResponseRedirect
-from django.template.response import TemplateResponse
+from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import User
 from django.db.models import F
+from django.http import HttpResponse, HttpResponseRedirect
+from django.template.response import TemplateResponse
+
 from api.models import Category, Account, Thread, Civi, Activity, Invitation
 from api.forms import UpdateProfileImage
-
-# from legislation import sunlightapi as sun
-from django.contrib.auth.decorators import user_passes_test
-from utils.custom_decorators import beta_blocker, login_required, full_account
 from utils.constants import US_STATES
+from utils.custom_decorators import beta_blocker, login_required, full_account
+
 
 def base_view(request):
     if not request.user.is_authenticated():
@@ -28,9 +28,9 @@ def base_view(request):
     all_categories = list(Category.objects.values_list('id', flat=True))
     user_categories = list(a.categories.values_list('id', flat=True)) or all_categories
 
-    feed_threads = [Thread.objects.summarize(t) for t in Thread.objects.order_by('-created')]
-    top5_threads = list(Thread.objects.all().order_by('-num_views')[:5].values('id', 'title'))
-
+    feed_threads = [Thread.objects.summarize(t) for t in Thread.objects.exclude(is_draft=True).order_by('-created')]
+    top5_threads = list(Thread.objects.filter(is_draft=False).order_by('-num_views')[:5].values('id', 'title'))
+    my_draft_threads = [Thread.objects.summarize(t) for t in Thread.objects.filter(author_id=a.id).exclude(is_draft=False).order_by('-created')]
 
     states = sorted(US_STATES, key=lambda s: s[1])
     data = {
@@ -38,7 +38,8 @@ def base_view(request):
         'states': states,
         'user_categories': user_categories,
         'threads': feed_threads,
-        'trending': top5_threads
+        'trending': top5_threads,
+        'draft_threads': my_draft_threads
     }
 
     return TemplateResponse(request, 'feed.html', {'data': json.dumps(data)})
@@ -94,7 +95,7 @@ def issue_thread(request, thread_id=None):
     c_qs = Civi.objects.filter(thread_id=thread_id).exclude(c_type='response')
     c_scored = [c.dict_with_score(req_acct.id) for c in c_qs]
     civis = sorted(c_scored, key=lambda c: c['score'], reverse=True)
-    
+
     #modify thread view count
     t.num_civis = len(civis)
     t.num_views = F('num_views') + 1
@@ -132,6 +133,7 @@ def issue_thread(request, thread_id=None):
 
     data = {
         'thread_id': thread_id,
+        'is_draft': t.is_draft,
         'thread_wiki_data': json.dumps(thread_wiki_data),
         'thread_body_data': json.dumps(thread_body_data)
     }
@@ -143,24 +145,6 @@ def issue_thread(request, thread_id=None):
 @full_account
 def create_group(request):
     return TemplateResponse(request, 'newgroup.html', {})
-
-@login_required
-@beta_blocker
-@full_account
-def dbview(request):
-    result = [{'id': c.id, 'name': c.name} for c in Category.objects.all()]
-
-    return TemplateResponse(request, 'dbview.html', {'result': json.dumps(result)})
-
-
-@login_required
-@beta_blocker
-@full_account
-def add_civi(request):
-    categories = [{'id': c.id, 'name': c.name} for c in Category.objects.all()]
-    topics = [{'id': c.id, 'topic': c.topic} for c in Topic.objects.all()]
-
-    return TemplateResponse(request, 'add_civi.html', {'categories': json.dumps(categories), 'topics': json.dumps(topics)})
 
 
 @login_required
@@ -176,6 +160,23 @@ def invite(request):
 
     return TemplateResponse(request, 'invite.html', response_data)
 
+
+@login_required
+@beta_blocker
+def settings_view(request):
+
+    request_account = Account.objects.get(user=request.user)
+
+    response_data = {
+        'username': request.user.username,
+        'email': request.user.email,
+        'google_map_api_key': settings.GOOGLE_API_KEY,
+        'sunlight_api_key': settings.SUNLIGHT_API_KEY,
+        'lng': request_account.longitude,
+        'lat': request_account.latitude
+    }
+
+    return TemplateResponse(request, 'user/settings.html', response_data)
 
 
 def login_view(request):

@@ -1,30 +1,32 @@
 
 <div class="account-base">
-    <div class="row dark-purple-background top-bar z-depth-1">
-        <div class="logo-container col m2 push-m1 ">
-            <div class="logo">CiviWiki</div>
-        </div>
-        <div class="account-tabs col m6 push-m1">
-            <ul class="tabs transparent">
-                <li class="tab"><a class="active" href="#civis">MY CIVIS</a></li>
-                <li class="tab"><a href="#followers">FOLLOWERS</a></li>
-                <li class="tab"><a href="#following">FOLLOWING</a></li>
-                <li class="tab"><a href="#issues">MY ISSUES</a></li>
-                {% if representative %}
-                <li class="tab"><a href="#mybills">MY BILLS</a></li>
-                {% else%}
-                <li class="tab"><a href="#myreps">MY REPS</a></li>
-                {% endif %}
-                {% if request.user.username == username|stringformat:"s" %}
-                <li class="tab settings-tab"><a href="#settings" class="btn waves-effect waves-light"><i class="mini material-icons">settings</i>SETTINGS</a></li>
-                {% endif %}
-            </ul>
-        </div>
-    </div>
+
     <div class="row content">
-        <div class="col m2 push-m1 account-settings">
-        </div>
+        <div class="col m2 push-m1 account-settings"></div>
         <div class="col m8 push-m1 scroll-col">
+            <div class="row">
+                <div class="row top-bar sub-nav">
+                    <div class="account-tabs">
+                        <ul class="tabs transparent left">
+                            <li class="tab"><a class="active" href="#civis">MY CIVIS</a></li>
+                            <li class="tab"><a href="#followers">FOLLOWERS</a></li>
+                            <li class="tab"><a href="#following">FOLLOWING</a></li>
+                            <li class="tab"><a href="#issues">MY ISSUES</a></li>
+                            {% if representative %}
+                            <li class="tab"><a href="#mybills">MY BILLS</a></li>
+                            {% else%}
+                            <li class="tab"><a href="#myreps">MY REPS</a></li>
+                            {% endif %}
+                            {% if request.user.username == username|stringformat:"s" %}
+                            <li class="tab settings-tab">
+                                <a class="btn" href="#settings"><i class="mini material-icons">edit</i>EDIT PROFILE</a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
             <div class="row">
                 <div id="civis" class="col s12">
                     <div class="center " style="margin-top:25%;">

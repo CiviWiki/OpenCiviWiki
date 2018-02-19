@@ -37,6 +37,7 @@
         data = JSON.parse('{{data|escapejs}}');
 
     var threadCollection = new cw.FeedThreadCollection(data.threads);
+    var draftCollection = new cw.FeedThreadCollection(data.draft_threads);
     var feedView = new cw.FeedView({
             username: username,
             user_id: user_id,
@@ -44,7 +45,8 @@
             user_categories: data.user_categories,
             states: data.states,
             threads: threadCollection,
-            trending: data.trending
+            trending: data.trending,
+            draft_threads: draftCollection
         });
 </script>
 
