@@ -53,13 +53,19 @@ class AccountManager(models.Manager):
         return data
 
     def card_summarize(self, account, request_account):
+        # Length at which to truncate 'about me' text
+        about_me_truncate_length = 150
+
+        # If 'about me' text is longer than 150 characters... add elipsis (truncate)
+        ellipsis_if_too_long = '' if len(account.about_me) <= about_me_truncate_length else '...'
+
         data = {
             "id": account.user.id,
             "username": account.user.username,
             "first_name": account.first_name,
             "last_name": account.last_name,
-            "about_me": account.about_me[:150] + ('' if len(account.about_me) <= 150 else '...'),
-            "location": account.location,
+            "about_me": account.about_me[:about_me_truncate_length] + (ellipsis_if_too_long),
+            "location": account.get_location(),
             "profile_image": account.profile_image_url,
             "follow_state": True if account in request_account.following.all() else False,
             "request_account": request_account.first_name
@@ -68,10 +74,10 @@ class AccountManager(models.Manager):
 
 
     def followers(self, account):
-        return [self.chip_summarize(a) for a in account.followers.all()]
+        return [self.chip_summarize(follower) for follower in account.followers.all()]
 
     def following(self, account):
-        return [self.chip_summarize(a) for a in account.following.all()]
+        return [self.chip_summarize(following) for following in account.following.all()]
 
 @deconstructible
 class PathAndRename(object):
@@ -79,9 +85,9 @@ class PathAndRename(object):
         self.sub_path = sub_path
 
     def __call__(self, instance, filename):
-        ext = filename.split('.')[-1]
+        extension = filename.split('.')[-1]
         new_filename = str(uuid.uuid4())
-        filename = '{}.{}'.format(new_filename, ext)
+        filename = '{}.{}'.format(new_filename, extension)
         return os.path.join(self.sub_path, filename)
 
 
@@ -124,9 +130,15 @@ class Account(models.Model):
     def _get_location(self):
         """ Constructs a CITY, STATE string for locations in the US """
         if self.city and self.state:
-            return '{city}, {state}'.format(city=self.city, state=dict(US_STATES).get(self.state))
+            # Get US State from US States dictionary
+            us_state = dict(US_STATES).get(self.state)
+
+            return '{city}, {state}'.format(city=self.city, state=us_state)
         elif self.state:
-            return '{state}'.format(state=dict(US_STATES).get(self.state))
+            # Get US State from US States dictionary
+            us_state = dict(US_STATES).get(self.state)
+
+            return '{state}'.format(us_state)
         else:
             return 'NO LOCATION'
     location = property(_get_location)
@@ -134,11 +146,12 @@ class Account(models.Model):
     def _get_full_name(self):
         "Returns the person's full name."
 
-        str_full_name = '{first_name} {last_name}'.format(
+        full_name = '{first_name} {last_name}'.format(
             first_name=self.first_name,
             last_name=self.last_name
         )
-        return str_full_name
+        return full_name
+
     full_name = property(_get_full_name)
 
     def _get_profile_image_url(self):
@@ -149,9 +162,10 @@ class Account(models.Model):
         )
         if self.profile_image and file_exists:
             return self.profile_image.url
+        else:
+            #NOTE: This default url will probably be changed later
+            return "/static/img/no_image_md.png"
 
-        #NOTE: This default url will probably be changed later
-        return "/static/img/no_image_md.png"
     profile_image_url = property(_get_profile_image_url)
 
     def _get_profile_image_thumb_url(self):
@@ -181,8 +195,6 @@ class Account(models.Model):
         self.full_account = self.is_full_account()
 
         super(Account, self).save(*args, **kwargs)
-    #
-    #
 
     def resize_profile_image(self):
         """
@@ -194,9 +206,7 @@ class Account(models.Model):
         profile_image.load()
 
         # Resize image
-        profile_image = ImageOps.fit(profile_image, PROFILE_IMG_SIZE, Image.ANTIALIAS)
-
-        # TODO: Check if GIF to allow GIF uploads. Get 1st frame if so
+        profile_image = ImageOps.fit(profile_image, PROFILE_IMAGE_SIZE, Image.ANTIALIAS, centering=(0.5, 0.5))
 
         # Convert to JPG image format with white background
         if profile_image.mode not in ('L', 'RGB'):
@@ -208,6 +218,7 @@ class Account(models.Model):
         tmp_image_file = StringIO.StringIO()
         profile_image.save(tmp_image_file, 'JPEG', quality=90)
         tmp_image_file.seek(0)
+
         self.profile_image = InMemoryUploadedFile(
             tmp_image_file,
             'ImageField',
@@ -216,6 +227,7 @@ class Account(models.Model):
             tmp_image_file.len,
             None
         )
+
         # Make a Thumbnail Image for the new resized image
         thumb_image = profile_image.copy()
         thumb_image.thumbnail(PROFILE_IMG_THUMB_SIZE, resample=Image.ANTIALIAS)
