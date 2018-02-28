@@ -32,7 +32,7 @@ cw.initGlobalNav = function () {
     });
 
     var $navMenuButton = $('#js-toggle-menu');
-    $navMenuButton.on('click', function () {
+    $navMenuButton.on('click', function (event) {
         event.stopPropagation()
         $('#js-dropdown-menu').toggleClass('hide');
         $('.js-dropdown-icon').toggleClass('hide');
