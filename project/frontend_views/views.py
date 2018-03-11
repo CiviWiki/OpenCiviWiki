@@ -303,4 +303,4 @@ def civi2csv(request):
         for civi in civiList:
             writer.writerow(civi)
 
-        return JsonResponse({'url': filename})
+        return JsonResponse({'url': '/temp/' + filename})
