@@ -1,4 +1,32 @@
 {% verbatim %}
+
+<script>
+  // CSV export Ajax call script
+  $(document).ready(function() {
+
+    cardsHTML = [];
+    cards = document.getElementsByClassName('civi-card');
+    for (i = 0; i < cards.length; i++) {
+      cardsHTML.push(cards[i].innerHTML);
+    }
+
+    $('#csv-export').click(function() {
+      $.ajax({
+        type: 'POST',
+        url: 'http://127.0.0.1:8000/civi2csv',
+        dataType: 'json',
+        data: JSON.stringify({'civis': cardsHTML})
+      }).done(function(response) {
+        var anchor = document.createElement('a');
+        anchor.id = 'csv-link';
+        anchor.href = response.url;
+        document.body.appendChild(anchor);
+        document.getElementById('csv-link').click();
+      }).fail(function(errorThrown) {alert('Error:' + JSON.stringify(errorThrown))});
+    });
+  });
+</script>
+
 <div class="thread-body">
     <nav class="thread-nav body-banner">
         <div class="nav-wrapper">
@@ -30,11 +58,20 @@
                         </div>
                     </div>
                     {{# } }}
-                    <div class="add-button">
-                        <button class="add-civi btn waves-effect right">
-                            <i class="material-icons left">note_add</i>
-                            <span class="text">Add Civi</span>
-                        </button>
+                    <div style="width: 20%">
+                        <div style="display: flex; flex: 1; flex-direction: row;"</div>
+                            <div class="add-button">
+                                <button class="add-civi btn waves-effect right">
+                                    <i class="material-icons left">note_add</i>
+                                    <span class="text">Add Civi</span>
+                                </button>
+                            </div>
+                            <div class="add-button">
+                                <button id="csv-export" class="add-civi btn waves-effect">
+                                    <span class="text">Export to CSV</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
