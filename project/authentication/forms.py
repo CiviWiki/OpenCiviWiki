@@ -20,9 +20,9 @@ class AccountRegistrationForm(UserCreationForm):
     password = forms.CharField(required=True)
 
     error_message = {
-        'invalid_username': _("You may only use lowercase characters or numbers."),
+        'invalid_username': _("Usernames may only use lowercase characters or numbers."),
         'email_exists': _("An account exists for this email address."),
-        'username_exists': _("Sorry, this username is taken."),
+        'username_exists': _("Sorry, this username already exists."),
         'invalid_password': _("Password can't be entirely numeric."),
         'invalid_password_length': _("Password must be at least 4 characters.")
     }
