@@ -1,7 +1,6 @@
 import sunlight
 from sunlight.errors import BadRequestException
 from django.conf import settings
-from sunlight.errors import BadRequestException
 
 def get_legislator_and_district(account):
     location = account.zip_code
