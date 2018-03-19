@@ -47,6 +47,7 @@ INSTALLED_APPS = (
     'channels',
     'civiwiki',
     'api',
+    'rest_framework',
     'authentication',
     'frontend_views',
     'notifications',
