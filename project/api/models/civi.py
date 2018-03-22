@@ -78,8 +78,8 @@ class CiviManager(models.Manager):
 
 class Civi(models.Model):
     objects = CiviManager()
-    author = models.ForeignKey(Account, default=None, null=True)
-    thread = models.ForeignKey(Thread, default=None, null=True)
+    author = models.ForeignKey(Account, related_name='civis', default=None, null=True)
+    thread = models.ForeignKey(Thread, related_name='civis', default=None, null=True)
     bill = models.ForeignKey(Bill, default=None, null=True) # null if not solution
 
     hashtags = models.ManyToManyField(Hashtag)
