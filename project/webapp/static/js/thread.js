@@ -2102,3 +2102,4 @@ cw.ThreadView = BB.View.extend({
         view.setElement(this.$(selector)).render();
     }
 });
+

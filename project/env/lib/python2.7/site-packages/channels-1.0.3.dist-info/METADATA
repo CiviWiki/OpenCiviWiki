@@ -1,0 +1,35 @@
+Metadata-Version: 2.0
+Name: channels
+Version: 1.0.3
+Summary: Brings event-driven capabilities to Django with a channel system. Django 1.8 and up only.
+Home-page: http://github.com/django/channels
+Author: Django Software Foundation
+Author-email: foundation@djangoproject.com
+License: BSD
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Web Environment
+Classifier: Framework :: Django
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Topic :: Internet :: WWW/HTTP
+Requires-Dist: Django (>=1.8)
+Requires-Dist: asgiref (>=1.0.0)
+Requires-Dist: daphne (>=1.0.0)
+Provides-Extra: tests
+Requires-Dist: coverage; extra == 'tests'
+Requires-Dist: flake8 (>=2.0,<3.0); extra == 'tests'
+Requires-Dist: isort; extra == 'tests'
+Requires-Dist: mock; extra == 'tests'
+Requires-Dist: tox; extra == 'tests'
+
+UNKNOWN
+
+
