@@ -169,15 +169,22 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
 # Database
-DATABASES = {
-    'default': {
-        'HOST': 'localhost',
-        'PORT': '5432',
-        'NAME': 'postgres',
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'USER': 'postgres',
-        'PASSWORD': 'asdf',
-    },
+if 'CIVIWIKI_LOCAL_NAME' not in os.environ:
+    STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
+    DATABASES = {
+        'default': dj_database_url.parse(get_env_variable("DATABASE_URL"))
+    }
+else:
+    DATABASES = {
+        'default': {
+            'HOST': 'localhost',
+            'PORT': '5432',
+            'NAME': get_env_variable("CIVIWIKI_LOCAL_NAME"),
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'USER': get_env_variable("CIVIWIKI_LOCAL_USERNAME"),
+            'PASSWORD': get_env_variable("CIVIWIKI_LOCAL_PASSWORD"),
+        },
 }
 
 
