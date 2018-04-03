@@ -13,6 +13,7 @@ from api.forms import UpdateProfileImage
 from utils.constants import US_STATES
 from utils.custom_decorators import beta_blocker, login_required, full_account
 
+
 def base_view(request):
     if not request.user.is_authenticated():
         return TemplateResponse(request, 'static_templates/landing.html', {})
@@ -20,6 +21,8 @@ def base_view(request):
     a = Account.objects.get(user=request.user)
     if not a.beta_access:
         return HttpResponseRedirect('/beta')
+    if not a.full_account:
+        return HttpResponseRedirect('/setup')
 
     categories = [{'id': c.id, 'name': c.name} for c in Category.objects.all()]
 
@@ -45,6 +48,7 @@ def base_view(request):
 
 @login_required
 @beta_blocker
+@full_account
 def user_profile(request, username=None):
     if not username:
         return HttpResponseRedirect('/profile/{0}'.format(request.user))
@@ -82,6 +86,7 @@ def user_setup(request):
 
 @login_required
 @beta_blocker
+@full_account
 def issue_thread(request, thread_id=None):
     if not thread_id:
         return HttpResponseRedirect('/404')
@@ -138,6 +143,7 @@ def issue_thread(request, thread_id=None):
 
 @login_required
 @beta_blocker
+@full_account
 def create_group(request):
     return TemplateResponse(request, 'newgroup.html', {})
 
@@ -277,3 +283,4 @@ def civi2csv(request):
                     data.append(value)
             writer.writerow(data)
         return response
+    
