@@ -265,15 +265,14 @@ def support_us_view(request):
 @csrf_exempt
 def civi2csv(request):
     import csv
-    if request.method == 'POST':
-        thread = json.loads(request.body)['thread']
-        response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = 'attachment'
-        writer = csv.writer(response, delimiter=',')
-        for card in Civi.objects.filter(thread_id=thread):
-            data = []
-            for key, value in card.dict_with_score().items():
-                if value != []:
-                    data.append(value)
-            writer.writerow(data)
-        return response
+    thread = request.GET.get('thread')
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment, filename=' + thread + '.csv'
+    writer = csv.writer(response, delimiter=',')
+    for card in Civi.objects.filter(thread_id=thread):
+        data = []
+        for key, value in card.dict_with_score().items():
+            if value != []:
+                data.append(value)
+        writer.writerow(data)
+    return response
