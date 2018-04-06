@@ -185,7 +185,7 @@ else:
             'USER': get_env_variable("CIVIWIKI_LOCAL_USERNAME"),
             'PASSWORD': get_env_variable("CIVIWIKI_LOCAL_PASSWORD"),
         },
-}
+    }
 
 
 # Email Backend Setup
