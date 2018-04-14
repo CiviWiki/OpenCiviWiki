@@ -90,12 +90,4 @@
     //
     // if (cw.ws.readyState == WebSocket.OPEN) cw.ws.onopen();
 </script>
-
-<script>
-  $(document).ready(function() {
-    // Add current thread ID to export button href
-    document.getElementById('csv-export').href = '/civi2csv?thread=' + /[^/]*$/.exec(window.location.href)[0];
-  });
-</script>
-
 </html>
