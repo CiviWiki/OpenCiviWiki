@@ -104,6 +104,7 @@ def issue_thread(request, thread_id=None):
     t.refresh_from_db()
 
     thread_wiki_data = {
+        "thread_id": thread_id,
         "title": t.title,
         "summary": t.summary,
         "image": t.image_url,
@@ -269,9 +270,9 @@ def support_us_view(request):
     return TemplateResponse(request, 'static_templates/support_us.html', {})
 
 @csrf_exempt
-def civi2csv(request):
+def civi2csv(request, thread_id):
     import csv
-    thread = request.GET.get('thread')
+    thread = thread_id
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment, filename=' + thread + '.csv'
     writer = csv.writer(response, delimiter=',')
