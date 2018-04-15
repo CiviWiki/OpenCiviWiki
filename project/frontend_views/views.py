@@ -269,6 +269,7 @@ def about_view(request):
 def support_us_view(request):
     return TemplateResponse(request, 'static_templates/support_us.html', {})
 
+""" CSV export function. Thread ID goes in, CSV HTTP response attachment goes out. """
 @csrf_exempt
 def civi2csv(request, thread_id):
     import csv
