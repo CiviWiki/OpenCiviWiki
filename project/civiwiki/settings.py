@@ -52,10 +52,12 @@ INSTALLED_APPS = (
     'frontend_views',
     'notifications',
     'legislation',
+    'corsheaders',
 )
 
 
 MIDDLEWARE_CLASSES = (
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -223,3 +225,5 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_RENDERER_CLASSES': DEFAULT_RENDERER_CLASSES
 }
+# CORS Settings
+CORS_ORIGIN_ALLOW_ALL = True
