@@ -5,7 +5,6 @@ from rest_framework.documentation import include_docs_urls
 from api import views, read, write
 
 
-#TODO: RESTful API - http://www.django-rest-framework.org/
 router = DefaultRouter(trailing_slash=False)
 router.register(r'threads', views.ThreadViewSet)
 router.register(r'categories', views.CategoryViewSet)
