@@ -1,5 +1,22 @@
 cw = cw || {};
 
+cw.AccountModel = BB.Model.extend({
+    defaults: function() {
+        return {
+            username: "",
+            first_name: "",
+            last_name: "",
+            about_me: "",
+        };
+    },
+    urlRoot: "/api/v1/accounts/",
+
+    idAttribute: 'username',
+    initialize: function (model, options) {
+        options = options || {};
+    }
+});
+
 cw.UserSetupView = BB.View.extend({
     el: '#user-setup',
 
@@ -14,19 +31,22 @@ cw.UserSetupView = BB.View.extend({
         options = options || {};
 
         this.mapView = options.mapView;
+        this.listenTo(this.model, 'sync', this.render);
         return this;
     },
 
     render: function () {
-        this.$el.empty().append(this.baseTemplate());
-        this.$('#step0').empty().append(this.step0Template());
-        this.$('#step1').empty().append(this.step1Template()).toggleClass('hide');
-        this.$('#step2').empty().append(this.step2Template()).toggleClass('hide');
-        this.$('#step3').empty().append(this.step3Template()).toggleClass('hide');
+        if (this.currentStep === 0) {
+            this.$el.empty().append(this.baseTemplate());
+            this.$('#step0').empty().append(this.step0Template());
+            this.$('#step1').empty().append(this.step1Template()).toggleClass('hide');
+            this.$('#step2').empty().append(this.step2Template()).toggleClass('hide');
+            this.$('#step3').empty().append(this.step3Template()).toggleClass('hide');
 
-        // Init map view for locating the user
-        this.mapView.renderAndInitMap();
-        this.listenTo(this.mapView.model, 'change', _.bind(this.validateStep2, this));
+            // Init map view for locating the user
+            this.mapView.renderAndInitMap();
+            this.listenTo(this.mapView.model, 'change', _.bind(this.validateStep2, this));
+        }
     },
 
     events: {
@@ -95,6 +115,12 @@ cw.UserSetupView = BB.View.extend({
             about_me = this.$el.find('#about-me').val().trim();
 
         if (first_name && last_name && about_me) {
+            this.model.set({
+                'first_name': first_name,
+                'last_name': last_name,
+                'about_me': about_me,
+            });
+
             this.$el.find('.next').removeClass('disabled');
             this.$el.find('.help-text.invalid').addClass('hide');
             this.$el.find('.help-text.valid').removeClass('hide');
@@ -112,6 +138,15 @@ cw.UserSetupView = BB.View.extend({
         if (_.isEmpty(coordinates) || _.isEmpty(address)) {
             this.$el.find('.finish').addClass('disabled').attr('disabled', true);
         } else {
+            this.model.set({
+                'longitude': coordinates.lng,
+                'latitude': coordinates.lat,
+                'address': address.address,
+                'city': address.city,
+                'state': address.state,
+                'zip_code': address.zipcode,
+            });
+
             this.$el.find('.finish').removeClass('disabled').attr('disabled', false);
         }
     },
@@ -182,53 +217,22 @@ cw.UserSetupView = BB.View.extend({
 // SENDING REQUEST TO SERVER ===================================================
     setupUser: function () {
         var _this = this;
-        // Get data from step 1
-        var first_name = this.$el.find('#first-name').val(),
-            last_name = this.$el.find('#last-name').val(),
-            about_me = this.$el.find('#about-me').val();
 
-        var coordinates = this.mapView.model.get('coordinates'),
-            address = this.mapView.model.get('address');
-
-        console.log(first_name, last_name, about_me,coordinates, address);
-        // Get data from step 2
-        // TODO: step 2 data
-        if (first_name && last_name && about_me && coordinates && address) {
-
-            $.ajax({
-                type: 'POST',
-                url: '/api/edituser/',
-                data: {
-                    full_account: 'True',
-                    about_me: about_me,
-                    first_name: first_name,
-                    last_name: last_name,
-                    coordinates: coordinates,
-                    address: address.address,
-                    city: address.city,
-                    state: address.state,
-                    zip_code: address.zipcode,
-                    longitude: coordinates.lng,
-                    latitude: coordinates.lat,
-                },
-                success: function (data) {
-                    Materialize.toast('<span class="subtitle-lato white-text">Success</span>', 5000);
-                    _this.nextStep();
-                },
-                error: function (data) {
-                    if (data.status_code === 400) {
-                        Materialize.toast(data.message, 5000);
-                    } else if (data.status_code === 500) {
-                        Materialize.toast('Internal Server Error', 5000);
-                    } else {
-                        Materialize.toast(data.statusText, 5000);
-                    }
+        this.model.save({},{
+            success: function (data) {
+                Materialize.toast('<span class="subtitle-lato white-text">Success</span>', 5000);
+                _this.nextStep();
+            },
+            error: function (data) {
+                if (data.status_code === 400) {
+                    Materialize.toast(data.message, 5000);
+                } else if (data.status_code === 500) {
+                    Materialize.toast('Internal Server Error', 5000);
+                } else {
+                    Materialize.toast(data, 5000);
                 }
-            });
-
-        } else {
-            Materialize.toast('<span class="subtitle-lato white-text">Please fill all the fields</span>', 5000);
-        }
+            }
+        });
     },
 
     uploadProfileImg: function() {

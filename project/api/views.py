@@ -2,40 +2,40 @@
 RESTful API View Definitions
 
 """
-
+from django.conf import settings
 from django.http import Http404
 from django.shortcuts import get_object_or_404
-# from rest_framework import generics
-from rest_framework import permissions
+
+from rest_framework import authentication, permissions, viewsets
 from rest_framework.decorators import (
     api_view,
     detail_route,
-    list_route
 )
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
-from rest_framework import viewsets
 
-
-from api.models import Thread, Account, Category, Civi
+from api.models import Thread, Account, Category, Civi, CiviImage
 from api.serializers import (
     ThreadSerializer,
     CategorySerializer,
     CiviSerializer,
-    AccountSerializer
+    CiviImageSerializer,
+    AccountSerializer,
+    AccountListSerializer,
 )
 
 
-
-# API Root view
+# API Root view ==========================================/
 @api_view(['GET'])
 def api_root(request, format=None):
     return Response({
         'categories': reverse('category-list', request=request, format=format),
         'threads': reverse('thread-list', request=request, format=format),
-        'accounts': reverse('account-list', request=request, format=format)
+        'accounts': reverse('account-list', request=request, format=format),
+        'civis': reverse('civi-list', request=request, format=format),
     })
 
+# Instance Access Helper Functions =======================/
 def get_account(user=None, pk=None, username=None):
     """ gets author based on the user """
     if user:
@@ -49,6 +49,7 @@ def get_account(user=None, pk=None, username=None):
         raise Http404
 
 
+# Custom Authentication/Permission Classes ================/
 class IsOwnerOrReadOnly(permissions.BasePermission):
     """ Custom API permission to check if request user is the owner of the model """
 
@@ -58,7 +59,7 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
             (obj.author == get_account(user=request.user))
         )
 class IsAccountOwnerOrReadOnly(permissions.BasePermission):
-    """ Custom API permission to check if request user is the owner of the model """
+    """ Custom API permission to check if request user is the owner of the account """
 
     def has_object_permission(self, request, view, obj):
         return (
@@ -66,8 +67,21 @@ class IsAccountOwnerOrReadOnly(permissions.BasePermission):
             (obj.user == request.user)
         )
 
+
+# Bypass CSRF Session conflict in DRF
+class CsrfExemptSessionAuthentication(authentication.SessionAuthentication):
+    def enforce_csrf(self, request):
+        return
+
+
+AUTH_CLASSES = (authentication.BasicAuthentication)
+if settings.DEBUG:
+    AUTH_CLASSES = (CsrfExemptSessionAuthentication, authentication.BasicAuthentication)
+
+
+# Viewset Definitions =====================================/
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
-    """ RESTful API viewset for Categories """
+    """ REST API viewset for Categories """
 
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
@@ -80,72 +94,101 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class AccountViewSet(viewsets.ModelViewSet):
-    """ RESTful API viewset for a Account """
+    """
+    REST API viewset for an Account
+    retrieve:
+    Return the given user based a username.
+
+    list:
+    Return a list of all the existing users. Only with privileged access.
+    """
 
     queryset = Account.objects.all()
+    lookup_field = 'user__username'
     serializer_class = AccountSerializer
     http_method_names = ['get', 'head', 'put', 'patch']
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
-                          IsAccountOwnerOrReadOnly,)
+    permission_classes = (IsAccountOwnerOrReadOnly,)
 
-    @list_route(url_path='username/(?P<username>\w+)')
-    def get_by_username(self, request, username):
-        """
-        Gets a user account by username
-        /accounts/username/{username}
-        """
-        account = get_account(username=username)
-        serializer = AccountSerializer(account)
+    def list(self, request):
+        if self.request.user.is_staff:
+            accounts = Account.objects.all()
+        else:
+            accounts = Account.objects.filter(user=self.request.user)
+        serializer = AccountListSerializer(accounts, many=True)
         return Response(serializer.data)
 
     @detail_route()
-    def civis(self, request, pk=None):
+    def civis(self, request, user__username=None):
         """
         Gets the civis of the selected account
-        /accounts/{pk}/civis
+        /accounts/{username}/civis
         """
-        account = get_account(pk=pk)
+        account = get_account(username=user__username)
         account_civis = account.civis
         serializer = CiviSerializer(account_civis, many=True)
         return Response(serializer.data)
 
     @detail_route()
-    def followers(self, request, pk=None):
+    def followers(self, request, user__username=None):
         """
         Gets the followers of the selected account
-        /accounts/{pk}/followers
+        /accounts/{username}/followers
         """
-        account = get_account(pk=pk)
+        account = get_account(username=user__username)
         account_followers = account.followers.all()
-        serializer = AccountSerializer(account_followers, many=True)
+        serializer = AccountListSerializer(account_followers, many=True)
         return Response(serializer.data)
 
     @detail_route()
-    def following(self, request, pk=None):
+    def following(self, request, user__username=None):
         """
         Gets the followings of the selected account
-        /accounts/{pk}/following
+        /accounts/{username}/following
         """
-        account = get_account(pk=pk)
+        account = get_account(username=user__username)
         account_followings = account.following.all()
-        serializer = AccountSerializer(account_followings, many=True)
+        serializer = AccountListSerializer(account_followings, many=True)
         return Response(serializer.data)
 
 
 class ThreadViewSet(viewsets.ModelViewSet):
-    """ RESTful API viewset for Threads """
+    """ REST API viewset for Threads """
 
     queryset = Thread.objects.all()
     serializer_class = ThreadSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
-                          IsOwnerOrReadOnly,)
+    permission_classes = (IsOwnerOrReadOnly,)
+    authentication_classes = AUTH_CLASSES
 
     def perform_create(self, serializer):
-        """ allows us to modify how the instance save is managed """
         serializer.save(author=get_account(user=self.request.user))
 
     @detail_route()
     def civis(self, request, pk=None):
+        """
+        Gets the civis linked to the thread instance
+        /accounts/{username}/civis
+        """
         thread_civis = Civi.objects.filter_by_thread_id(pk)
         serializer = CiviSerializer(thread_civis, many=True)
+        return Response(serializer.data)
+
+class CiviViewSet(viewsets.ModelViewSet):
+    """ REST API viewset for Civis """
+
+    queryset = Civi.objects.all()
+    serializer_class = CiviSerializer
+    permission_classes = (IsOwnerOrReadOnly,)
+    authentication_classes = AUTH_CLASSES
+
+    def perform_create(self, serializer):
+        serializer.save(author=get_account(user=self.request.user))
+
+    @detail_route()
+    def images(self, request, pk=None):
+        """
+        Gets the related images
+        /accounts/{username}/images
+        """
+        civi_images = CiviImage.objects.filter(civi=pk)
+        serializer = CiviImageSerializer(civi_images, many=True, read_only=True)
         return Response(serializer.data)
