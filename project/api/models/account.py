@@ -127,6 +127,10 @@ class Account(models.Model):
     profile_image_thumb = models.ImageField(upload_to=profile_upload_path, blank=True, null=True)
 
     #custom "row-level" functionality (properties) for account models
+    def _get_username(self):
+        return self.user.username
+    username = property(_get_username)
+
     def _get_location(self):
         """ Constructs a CITY, STATE string for locations in the US """
         if self.city and self.state:
@@ -138,7 +142,7 @@ class Account(models.Model):
             # Get US State from US States dictionary
             us_state = dict(US_STATES).get(self.state)
 
-            return '{state}'.format(us_state)
+            return '{state}'.format(state=us_state)
         else:
             return 'NO LOCATION'
     location = property(_get_location)
@@ -206,7 +210,7 @@ class Account(models.Model):
         profile_image.load()
 
         # Resize image
-        profile_image = ImageOps.fit(profile_image, PROFILE_IMAGE_SIZE, Image.ANTIALIAS, centering=(0.5, 0.5))
+        profile_image = ImageOps.fit(profile_image, PROFILE_IMG_SIZE, Image.ANTIALIAS, centering=(0.5, 0.5))
 
         # Convert to JPG image format with white background
         if profile_image.mode not in ('L', 'RGB'):
