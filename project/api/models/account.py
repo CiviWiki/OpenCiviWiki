@@ -161,11 +161,14 @@ class Account(models.Model):
     def _get_profile_image_url(self):
         """ Return placeholder profile image if user didn't upload one"""
 
-        file_exists = default_storage.exists(
-            os.path.join(settings.MEDIA_ROOT, self.profile_image.name)
-        )
-        if self.profile_image and file_exists:
-            return self.profile_image.url
+        if self.profile_image:
+            file_exists = default_storage.exists(
+                os.path.join(settings.MEDIA_ROOT, self.profile_image.name)
+            )
+            if file_exists:
+                return self.profile_image.url
+
+        return "/static/img/no_image_md.png"
 
         #NOTE: This default url will probably be changed later
         return "/static/img/no_image_md.png"
@@ -174,13 +177,13 @@ class Account(models.Model):
     def _get_profile_image_thumb_url(self):
         """ Return placeholder profile image if user didn't upload one"""
 
-        file_exists = default_storage.exists(
-            os.path.join(settings.MEDIA_ROOT, self.profile_image_thumb.name)
-        )
-        if self.profile_image_thumb and file_exists:
-            return self.profile_image_thumb.url
+        if self.profile_image_thumb:
+            file_exists = default_storage.exists(
+                os.path.join(settings.MEDIA_ROOT, self.profile_image_thumb.name)
+            )
+            if file_exists:
+                return self.profile_image_thumb.url
 
-        #NOTE: This default url will probably be changed later
         return "/static/img/no_image_md.png"
 
     profile_image_thumb_url = property(_get_profile_image_thumb_url)
