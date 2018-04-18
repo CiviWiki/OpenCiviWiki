@@ -126,11 +126,10 @@ class Civi(models.Model):
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     last_modified = models.DateTimeField(auto_now=True, blank=True, null=True)
 
-    def _get_created_date_str(self):
+    @property
+    def created_date_str(self):
         d = self.created
         return "{0} {1}, {2}".format(month_name[d.month], d.day, d.year)
-
-    created_date_str = property(_get_created_date_str)
 
     def score(self, request_acct_id=None):
         # TODO: add docstring comment describing this score function in relatively plain English
@@ -251,11 +250,10 @@ class CiviImage(models.Model):
     image = models.ImageField(upload_to=image_upload_path, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
-    def _get_image_url(self):
+    @property
+    def image_url(self):
         if self.image and default_storage.exists(os.path.join(settings.MEDIA_ROOT, self.image.name)):
             return self.image.url
         else:
             #NOTE: This default url will probably be changed later
             return "/static/img/no_image_md.png"
-
-    image_url = property(_get_image_url)
