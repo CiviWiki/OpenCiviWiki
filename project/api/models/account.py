@@ -127,7 +127,8 @@ class Account(models.Model):
     profile_image_thumb = models.ImageField(upload_to=profile_upload_path, blank=True, null=True)
 
     #custom "row-level" functionality (properties) for account models
-    def _get_location(self):
+    @property
+    def location(self):
         """ Constructs a CITY, STATE string for locations in the US """
         if self.city and self.state:
             # Get US State from US States dictionary
@@ -141,9 +142,9 @@ class Account(models.Model):
             return '{state}'.format(us_state)
         else:
             return 'NO LOCATION'
-    location = property(_get_location)
 
-    def _get_full_name(self):
+    @property
+    def full_name(self):
         "Returns the person's full name."
 
         full_name = '{first_name} {last_name}'.format(
@@ -152,9 +153,8 @@ class Account(models.Model):
         )
         return full_name
 
-    full_name = property(_get_full_name)
-
-    def _get_profile_image_url(self):
+    @property
+    def profile_image_url(self):
         """ Return placeholder profile image if user didn't upload one"""
 
         if self.profile_image:
@@ -166,9 +166,8 @@ class Account(models.Model):
 
         return "/static/img/no_image_md.png"
 
-    profile_image_url = property(_get_profile_image_url)
-
-    def _get_profile_image_thumb_url(self):
+    @property
+    def profile_image_thumb_url(self):
         """ Return placeholder profile image if user didn't upload one"""
 
         if self.profile_image_thumb:
@@ -179,8 +178,6 @@ class Account(models.Model):
                 return self.profile_image_thumb.url
 
         return "/static/img/no_image_md.png"
-
-    profile_image_thumb_url = property(_get_profile_image_thumb_url)
 
     def __init__(self, *args, **kwargs):
         super(Account, self).__init__(*args, **kwargs)
