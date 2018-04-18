@@ -55,14 +55,13 @@ class Invitation(models.Model):
     #TODO: Invitation type
     #TODO: Invitation limit
 
-    def _get_date_registered(self):
+    @property
+    def date_registered(self):
         if self.invitee_user:
             # user_instance = User.objects.get(self.invitee_user)
             return self.invitee_user.date_joined
         else:
             return None
-
-    date_registered = property(_get_date_registered)
 
     def summarize(self):
         data = {
