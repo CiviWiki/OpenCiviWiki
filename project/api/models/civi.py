@@ -106,7 +106,7 @@ class Civi(models.Model):
     votes_vpos = models.IntegerField(default=0)
 
     def votes(self):
-        from activity import Activity
+        from .activity import Activity
         activity_votes = Activity.objects.filter(civi=self)
 
         votes = {

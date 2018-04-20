@@ -2,10 +2,13 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.forms.models import model_to_dict
 
-from models import Account, Thread, Civi, Representative, Activity
+from .models import Account, Thread, Civi, Representative, Activity
 from utils import json_response
 
 def get_user(request, user):
+    """
+    Checks that the user name you input exists.
+    """
     try:
         u = User.objects.get(username=user)
         a = Account.objects.get(user=u)
@@ -130,7 +133,7 @@ def get_thread(request, thread_id):
         data = {
             'title': t.title,
             'summary': t.summary,
-            'hashtags': t.hashtags.all().values(),
+            'hashtags': list(t.hashtags.all().values()),
             'author': {
                 'username': t.author.user.username,
                 'profile_image': t.author.profile_image.url if t.author.profile_image else "/media/profile/default.png",

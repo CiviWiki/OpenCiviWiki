@@ -42,9 +42,9 @@ class AccountSerializer(serializers.ModelSerializer):
         except ValueError:
             raise serializers.ValidationError("Longitude value cannot be converted")
 
-        if long > 180 or long < -180:
+        if int > 180 or int < -180:
             raise serializers.ValidationError("Invalid Longitude Value")
-        return long
+        return int
 
     def validate_latitude(self, value):
         """
