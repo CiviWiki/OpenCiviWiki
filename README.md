@@ -1,6 +1,6 @@
 [![ComVer](https://img.shields.io/badge/ComVer-compliant-brightgreen.svg)](https://github.com/staltz/comver)
 [![Stories in Ready](https://badge.waffle.io/CiviWiki/OpenCiviWiki.png?label=ready&title=next up)](https://waffle.io/CiviWiki/OpenCiviWiki?utm_source=badge)
-[![Code Climate](https://codeclimate.com/github/CiviWiki/OpenCiviWiki.png)](https://codeclimate.com/github/CiviWiki/OpenCiviWiki)
+[![Maintainability](https://api.codeclimate.com/v1/badges/5241b4275cc2dffe90f2/maintainability)](https://codeclimate.com/github/CiviWiki/OpenCiviWiki/maintainability)
 
 # Welcome to Civiwiki!
 
