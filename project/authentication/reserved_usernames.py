@@ -4,6 +4,7 @@ A list of possible usernames to reserve to avoid vanity URL collision with resou
 It is a merged list of the recommendations from this Quora discussion:
 http://www.quora.com/How-do-sites-prevent-vanity-URLs-from-colliding-with-future-features
 """
+from __future__ import unicode_literals
 
 RESERVED_USERNAMES = [
     # Generic reserved words

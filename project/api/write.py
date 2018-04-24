@@ -1,4 +1,9 @@
-import json, PIL, urllib, uuid
+from __future__ import absolute_import
+from __future__ import unicode_literals
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+import json, PIL, urllib.request, urllib.parse, urllib.error, uuid
 
 from notifications.signals import notify
 
@@ -15,7 +20,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from api.forms import UpdateProfileImage
 from api.models import Thread
 from api.tasks import send_mass_email
-from models import Account, Activity, Category, Civi, CiviImage, Invitation
+from .models import Account, Activity, Category, Civi, CiviImage, Invitation
 from utils.custom_decorators import require_post_params
 from utils.constants import US_STATES
 
@@ -432,7 +437,7 @@ def uploadCiviImage(request):
 
             if attachment_links:
                 for img_link in attachment_links:
-                    result = urllib.urlretrieve(img_link)
+                    result = urllib.request.urlretrieve(img_link)
                     img_file = File(open(result[0]))
                     if check_image_with_pil(img_file):
                         civi_image = CiviImage(title="", civi=c, image=img_file)
@@ -478,7 +483,7 @@ def uploadThreadImage(request):
 
             elif img_link:
                 thread.image.delete()
-                result = urllib.urlretrieve(img_link)
+                result = urllib.request.urlretrieve(img_link)
                 img_file = File(open(result[0]))
                 if check_image_with_pil(img_file):
                     thread.image = img_file

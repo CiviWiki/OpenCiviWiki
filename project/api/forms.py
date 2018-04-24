@@ -1,14 +1,17 @@
+from __future__ import absolute_import
+from __future__ import unicode_literals
 
+from builtins import object
 from django import forms
 from django.core.files.images import get_image_dimensions
 from django.contrib.auth.models import User
-from models import Account
+from .models import Account
 
 class UpdatePassword(forms.ModelForm):
     """
     Form for updating User Password
     """
-    class Meta:
+    class Meta(object):
         model = User
         fields = ['password', 'verify']
 
@@ -50,7 +53,7 @@ class UpdateAccount(forms.ModelForm):
     """
     Form for updating Account data
     """
-    class Meta:
+    class Meta(object):
         model = Account
         fields = ['first_name', 'last_name', 'about_me', 'profile_image']
 
@@ -66,7 +69,7 @@ class UpdateProfileImage(forms.ModelForm):
     Form for updating profile image
     """
 
-    class Meta:
+    class Meta(object):
         model = Account
         fields = ['profile_image']
 

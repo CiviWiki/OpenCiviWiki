@@ -1,5 +1,7 @@
+from __future__ import absolute_import
+from __future__ import unicode_literals
 from django.conf.urls import url
-import views as v
+from . import views as v
 
 urlpatterns = [
     url(r'^login$', v.login_view, name='login'),

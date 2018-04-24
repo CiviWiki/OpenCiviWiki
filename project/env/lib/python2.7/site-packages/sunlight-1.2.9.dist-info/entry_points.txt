@@ -1,0 +1,3 @@
+[console_scripts]
+sunlight = sunlight.cli:main
+

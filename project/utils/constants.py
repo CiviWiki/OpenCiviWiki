@@ -1,6 +1,7 @@
 """
 Constant Variables
 """
+from __future__ import unicode_literals
 
 # Valid US State Choices
 US_STATES = (

@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import os
 from channels.asgi import get_channel_layer
 

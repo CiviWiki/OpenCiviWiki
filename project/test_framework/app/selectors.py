@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 civi_wiki_url = "http://civiwiki-test.herokuapp.com/"
 username = "unit1test"
 password = "unit1test"

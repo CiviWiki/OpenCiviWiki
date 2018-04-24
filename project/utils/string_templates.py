@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 VALIDATION_EMAIL = '<b>Hello {name}, Welcome to CiviWiki!</b>\
 <br>\
 <br>\

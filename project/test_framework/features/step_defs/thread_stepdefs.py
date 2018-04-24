@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from aloe import step
 
 from app.tasks.thread_tasks import *

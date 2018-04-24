@@ -1,3 +1,9 @@
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import unicode_literals
+from builtins import str
+from builtins import object
+from past.utils import old_div
 import os, json, datetime, math, uuid
 from calendar import month_name
 
@@ -106,7 +112,7 @@ class Civi(models.Model):
     votes_vpos = models.IntegerField(default=0)
 
     def votes(self):
-        from activity import Activity
+        from .activity import Activity
         activity_votes = Activity.objects.filter(civi=self)
 
         votes = {
@@ -163,7 +169,7 @@ class Civi(models.Model):
         f = 0 #TODO: favorite val, is 'favorite' a meaningful name for this variable?
 
         # Calculate how long ago the post was created
-        time_ago = (current_time - post_time.replace(tzinfo=None)).total_seconds() / 300
+        time_ago = old_div((current_time - post_time.replace(tzinfo=None)).total_seconds(), 300)
 
         g = 1 # TODO: determine what the variable 'g' does
         amp = math.pow(10,0)
@@ -175,24 +181,24 @@ class Civi(models.Model):
             votes_total = votes['total'] if votes['total'] > 1 else 2
 
             #step3 - A X*Log10V+Y + F + (##/T) = Rank Value
-            rank = scores_sum * math.log10(votes_total) * amp + y + f + g / time_ago
+            rank = scores_sum * math.log10(votes_total) * amp + y + f + old_div(g, time_ago)
 
         elif scores_sum == 0:
             # Get count of total votes
             votes_total = votes['total']
 
             #step3 - B  V^2+Y + F + (##/T) = Rank Value
-            rank = votes_total**2 + y + f + g / time_ago
+            rank = votes_total**2 + y + f + old_div(g, time_ago)
         elif scores_sum < 0:
             # TODO: determine why we set votes total to two when votes['tota'] is <= 1
             # set votes total to 2 when votes['total'] is <= 1
             votes_total = votes['total'] if votes['total'] > 1 else 2
 
             #step3 - C
-            if abs(x)/v <= 5:
-                rank = abs(scores_sum) * math.log10(votes_total) * amp + y + f + g / time_ago
+            if old_div(abs(x),v) <= 5:
+                rank = abs(scores_sum) * math.log10(votes_total) * amp + y + f + old_div(g, time_ago)
             else:
-                rank = scores_sum * math.log10(votes_total) * amp + y + f + g / time_ago
+                rank = scores_sum * math.log10(votes_total) * amp + y + f + old_div(g, time_ago)
 
         return rank
 

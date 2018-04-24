@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from channels.routing import route
 from channels import include
 

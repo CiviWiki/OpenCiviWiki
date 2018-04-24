@@ -1,3 +1,6 @@
+from __future__ import absolute_import
+from __future__ import unicode_literals
+from builtins import object
 import re
 
 from django import forms
@@ -12,7 +15,7 @@ from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import ugettext_lazy as _
 
 from api.tasks import send_email as task_send_email
-from reserved_usernames import RESERVED_USERNAMES
+from .reserved_usernames import RESERVED_USERNAMES
 
 class AccountRegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -32,7 +35,7 @@ class AccountRegistrationForm(UserCreationForm):
         self.fields['password1'].required = False
         self.fields['password2'].required = False
 
-    class Meta:
+    class Meta(object):
         model = User
         fields = ('username', 'email', 'password')
 
