@@ -326,9 +326,9 @@ def editUser(request):
         "latitude": r.get('latitude', account.latitude),
     }
 
+    account.__dict__.update(data)
 
     try:
-        account.__dict__.update(data)
         account.save()
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
