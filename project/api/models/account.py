@@ -203,7 +203,7 @@ class Account(models.Model):
         profile_image.load()
 
         # Resize image
-        profile_image = ImageOps.fit(profile_image, PROFILE_IMAGE_SIZE, Image.ANTIALIAS, centering=(0.5, 0.5))
+        profile_image = ImageOps.fit(profile_image, PROFILE_IMG_SIZE, Image.ANTIALIAS, centering=(0.5, 0.5))
 
         # Convert to JPG image format with white background
         if profile_image.mode not in ('L', 'RGB'):
