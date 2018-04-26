@@ -11,7 +11,7 @@ class UpdatePassword(forms.ModelForm):
     """
     Form for updating User Password
     """
-    class Meta(object):
+    class Meta:
         model = User
         fields = ['password', 'verify']
 
