@@ -3,7 +3,6 @@ from __future__ import division
 from __future__ import unicode_literals
 from builtins import str
 from builtins import object
-from past.utils import old_div
 import os, json, datetime, math, uuid
 from calendar import month_name
 
@@ -181,24 +180,24 @@ class Civi(models.Model):
             votes_total = votes['total'] if votes['total'] > 1 else 2
 
             #step3 - A X*Log10V+Y + F + (##/T) = Rank Value
-            rank = scores_sum * math.log10(votes_total) * amp + y + f + old_div(g, time_ago)
+            rank = scores_sum * math.log10(votes_total) * amp + y + f + g / time_ago
 
         elif scores_sum == 0:
             # Get count of total votes
             votes_total = votes['total']
 
             #step3 - B  V^2+Y + F + (##/T) = Rank Value
-            rank = votes_total**2 + y + f + old_div(g, time_ago)
+            rank = votes_total**2 + y + f + g / time_ago
         elif scores_sum < 0:
             # TODO: determine why we set votes total to two when votes['tota'] is <= 1
             # set votes total to 2 when votes['total'] is <= 1
             votes_total = votes['total'] if votes['total'] > 1 else 2
 
             #step3 - C
-            if old_div(abs(x),v) <= 5:
-                rank = abs(scores_sum) * math.log10(votes_total) * amp + y + f + old_div(g, time_ago)
+            if abs(x) / v <= 5:
+                rank = abs(scores_sum) * math.log10(votes_total) * amp + y + f + g / time_ago
             else:
-                rank = scores_sum * math.log10(votes_total) * amp + y + f + old_div(g, time_ago)
+                rank = scores_sum * math.log10(votes_total) * amp + y + f + g / time_ago
 
         return rank
 
