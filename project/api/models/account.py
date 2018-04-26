@@ -207,7 +207,7 @@ class Account(models.Model):
         Resizes and crops the user uploaded image and creates a thumbnail version of it
         """
         profile_image_field = self.profile_image
-        image_file = io.StringIO(profile_image_field.read())
+        image_file = io.BytesIO(profile_image_field.read())
         profile_image = Image.open(image_file)
         profile_image.load()
 
