@@ -221,7 +221,7 @@ class Account(models.Model):
             profile_image = white_bg_img
 
         # Save new cropped image
-        tmp_image_file = io.StringIO()
+        tmp_image_file = io.BytesIO()
         profile_image.save(tmp_image_file, 'JPEG', quality=90)
         tmp_image_file.seek(0)
 
@@ -237,7 +237,7 @@ class Account(models.Model):
         # Make a Thumbnail Image for the new resized image
         thumb_image = profile_image.copy()
         thumb_image.thumbnail(PROFILE_IMG_THUMB_SIZE, resample=Image.ANTIALIAS)
-        tmp_image_file = io.StringIO()
+        tmp_image_file = io.BytesIO()
         thumb_image.save(tmp_image_file, 'JPEG', quality=90)
         tmp_image_file.seek(0)
         self.profile_image_thumb = InMemoryUploadedFile(
