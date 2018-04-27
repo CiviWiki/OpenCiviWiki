@@ -53,7 +53,7 @@ class UpdateAccount(forms.ModelForm):
     """
     Form for updating Account data
     """
-    class Meta(object):
+    class Meta:
         model = Account
         fields = ['first_name', 'last_name', 'about_me', 'profile_image']
 
@@ -69,7 +69,7 @@ class UpdateProfileImage(forms.ModelForm):
     Form for updating profile image
     """
 
-    class Meta(object):
+    class Meta:
         model = Account
         fields = ['profile_image']
 
