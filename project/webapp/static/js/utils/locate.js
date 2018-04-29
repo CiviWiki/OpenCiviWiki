@@ -211,10 +211,11 @@ cw.MapView = BB.View.extend({
                         _this.$('#autocomplete').val(results[0].formatted_address);
                         var fullAddress = _this.getAddressFromComponents(results[0].address_components);
                         if (fullAddress.country !== "United States") {
-                            Materialize.toast("<span>Please note that CiviWiki is currently setup for use in the United States</span>", 2000);
-                        } else {
-                            _this.adjustMapCenter(geolocation);
+                            fullAddress.state = "";
+                            fullAddress.zipcode = "";
+                            Materialize.toast("<span>Please note that CiviWiki is optimized for the use in the U.S.</span>", 5000);
                         }
+                        _this.adjustMapCenter(geolocation);
                         _this.model.set('address', fullAddress);
                         _this.model.set('is_new', true);
 

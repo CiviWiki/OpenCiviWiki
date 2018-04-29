@@ -140,7 +140,7 @@ class Account(models.Model):
                     # Get US State from US States dictionary
                     us_state = dict(US_STATES).get(self.state)
 
-                    return '{city}, {state}'.format(city=self.city, state=us_state)
+                    return u'{city}, {state}'.format(city=self.city, state=us_state)
                 elif self.state:
                     # Get US State from US States dictionary
                     us_state = dict(US_STATES).get(self.state)
@@ -150,7 +150,7 @@ class Account(models.Model):
                     return 'NO LOCATION'
             else:
                 if self.city:
-                    return '{city}, {country}'.format(city=self.city, country=self.country)
+                    return u'{city}, {country}'.format(city=self.city, country=self.country)
                 else:
                     return self.country
 
