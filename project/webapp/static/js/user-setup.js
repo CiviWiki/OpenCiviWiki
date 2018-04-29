@@ -218,18 +218,43 @@ cw.UserSetupView = BB.View.extend({
     setupUser: function () {
         var _this = this;
 
-        this.model.save({},{
-            success: function (data) {
-                Materialize.toast('<span class="subtitle-lato white-text">Success</span>', 5000);
-                _this.nextStep();
-            },
-            error: function (data) {
-                if (data.status_code === 400) {
-                    Materialize.toast(data.message, 5000);
-                } else if (data.status_code === 500) {
-                    Materialize.toast('Internal Server Error', 5000);
-                } else {
-                    Materialize.toast(data, 5000);
+        var coordinates = this.mapView.model.get('coordinates'),
+            address = this.mapView.model.get('address');
+
+        console.log(first_name, last_name, about_me,coordinates, address);
+        // Get data from step 2
+        // TODO: step 2 data
+        if (first_name && last_name && about_me && coordinates && address) {
+
+            $.ajax({
+                type: 'POST',
+                url: '/api/edituser/',
+                data: {
+                    full_account: 'True',
+                    about_me: about_me,
+                    first_name: first_name,
+                    last_name: last_name,
+                    coordinates: coordinates,
+                    address: address.address,
+                    city: address.city,
+                    state: address.state,
+                    zip_code: address.zipcode,
+                    country: address.country,
+                    longitude: coordinates.lng,
+                    latitude: coordinates.lat,
+                },
+                success: function (data) {
+                    Materialize.toast('<span class="subtitle-lato white-text">Success</span>', 5000);
+                    _this.nextStep();
+                },
+                error: function (data) {
+                    if (data.status_code === 400) {
+                        Materialize.toast(data.message, 5000);
+                    } else if (data.status_code === 500) {
+                        Materialize.toast('Internal Server Error', 5000);
+                    } else {
+                        Materialize.toast(data.statusText, 5000);
+                    }
                 }
             }
         });

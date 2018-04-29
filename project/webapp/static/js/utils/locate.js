@@ -205,19 +205,26 @@ cw.MapView = BB.View.extend({
                 }
 
                 _this.model.set('coordinates', geolocation);
-                _this.adjustMapCenter(geolocation);
 
                 _this.model.get('geocoder').geocode({ 'location': geolocation }, function(results, status) {
                     if (status === 'OK') {
                         _this.$('#autocomplete').val(results[0].formatted_address);
-                        _this.model.set('address', _this.getAddressFromComponents(results[0].address_components));
+                        var fullAddress = _this.getAddressFromComponents(results[0].address_components);
+                        if (fullAddress.country !== "United States") {
+                            Materialize.toast("<span>Please note that CiviWiki is currently setup for use in the United States</span>", 2000);
+                        } else {
+                            _this.adjustMapCenter(geolocation);
+                        }
+                        _this.model.set('address', fullAddress);
                         _this.model.set('is_new', true);
+
                     } else {
                         Materialize.toast('Geocode Error: ' + status, 2000);
                     }
                     this.$('.progress').addClass('hide');
                     this.$('#browser-locate-btn').removeClass('disabled').attr('disabled', false);
                     this.$('#autocomplete').removeClass('disabled').attr('disabled', false);
+
                 });
             }, function(error) {
                 Materialize.toast("<span>We could not use your browser's location. Please try entering your location</span>", 2000);
@@ -239,14 +246,16 @@ cw.MapView = BB.View.extend({
             locality: '',                       // City
             administrative_area_level_1: '',    // State
             postal_code: ''                     // Zipcode
+            country: ''                         // Country
         };
 
         var options = {
             street_number: 'long_name',                  // Number
             route: 'long_name',                          // Street
             locality: 'long_name',                       // City
-            administrative_area_level_1: 'short_name',    // State
-            postal_code: 'long_name'                     // Zipcode
+            administrative_area_level_1: 'short_name',   // State
+            postal_code: 'long_name',                    // Zipcode
+            country: 'long_name'                         // Country
         };
         $.each(address_components, function(index, component) {
             if (_.has(components, component.types[0])) {
@@ -258,7 +267,8 @@ cw.MapView = BB.View.extend({
             address : (components.street_number + " " + components.route).trim(),
             city: components.locality,
             state: components.administrative_area_level_1,
-            zipcode: components.postal_code
+            zipcode: components.postal_code,
+            country: components.country
         };
         return fullAddress;
     },
