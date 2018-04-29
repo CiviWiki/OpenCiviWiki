@@ -324,10 +324,10 @@ def editUser(request):
     '''
     Edit Account Model
     '''
-    r = request.POST
+    request_data = request.POST
     user = request.user
     account = Account.objects.get(user=user)
-    interests = r.get('interests', False)
+    interests = request_data.get('interests', False)
 
     if interests:
         interests = list(interests)
@@ -335,15 +335,16 @@ def editUser(request):
         interests = account.interests
 
     data = {
-        "first_name":r.get('first_name', account.first_name),
-        "last_name":r.get('last_name', account.last_name),
-        "about_me":r.get('about_me', account.about_me),
-        "address": r.get('address', account.address),
-        "city": r.get('city', account.city),
-        "state": r.get('state', account.state),
-        "zip_code": r.get('zip_code', account.zip_code),
-        "longitude": r.get('longitude', account.longitude),
-        "latitude": r.get('latitude', account.latitude),
+        "first_name":request_data.get('first_name', account.first_name),
+        "last_name":request_data.get('last_name', account.last_name),
+        "about_me":request_data.get('about_me', account.about_me),
+        "address": request_data.get('address', account.address),
+        "city": request_data.get('city', account.city),
+        "state": request_data.get('state', account.state),
+        "zip_code": request_data.get('zip_code', account.zip_code),
+        "longitude": request_data.get('longitude', account.longitude),
+        "latitude": request_data.get('latitude', account.latitude),
+        "country": request_data.get('country', account.country),
     }
 
 

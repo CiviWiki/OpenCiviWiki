@@ -245,7 +245,7 @@ cw.MapView = BB.View.extend({
             route: '',                          // Street
             locality: '',                       // City
             administrative_area_level_1: '',    // State
-            postal_code: ''                     // Zipcode
+            postal_code: '',                    // Zipcode
             country: ''                         // Country
         };
 
