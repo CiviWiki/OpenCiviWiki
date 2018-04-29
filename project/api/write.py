@@ -347,9 +347,9 @@ def editUser(request):
         "country": request_data.get('country', account.country),
     }
 
+    account.__dict__.update(data)
 
     try:
-        account.__dict__.update(data)
         account.save()
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
