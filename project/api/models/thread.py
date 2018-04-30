@@ -83,14 +83,13 @@ class Thread(models.Model):
     level = models.CharField(max_length=31, default='federal', choices=level_CHOICES)
     state = models.CharField(max_length=2, choices=US_STATES, blank=True)
 
-    def _get_image_url(self): #TODO: move this to utils
+    @property
+    def image_url(self): #TODO: move this to utils
         if self.image and default_storage.exists(os.path.join(settings.MEDIA_ROOT, self.image.name)):
             return self.image.url
         else:
             #NOTE: This default url will probably be changed later
             return "/static/img/no_image_md.png"
-
-    image_url = property(_get_image_url)
 
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     last_modified = models.DateTimeField(auto_now=True, blank=True, null=True)
@@ -104,8 +103,8 @@ class Thread(models.Model):
 
     objects = ThreadManager()
 
-    def _get_created_date_str(self):
+    @property
+    def created_date_str(self):
         d = self.created
         return "{0} {1}, {2}".format(month_name[d.month], d.day, d.year)
-        
-    created_date_str = property(_get_created_date_str)
+

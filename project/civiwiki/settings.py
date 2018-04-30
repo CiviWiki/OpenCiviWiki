@@ -52,10 +52,12 @@ INSTALLED_APPS = (
     'frontend_views',
     'notifications',
     'legislation',
+    'corsheaders',
 )
 
 
 MIDDLEWARE_CLASSES = (
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -204,3 +206,6 @@ else:
 # Notification API Settings
 NOTIFICATIONS_SOFT_DELETE = True
 NOTIFICATIONS_USE_JSONFIELD = True
+
+# CORS Settings
+CORS_ORIGIN_ALLOW_ALL = True
