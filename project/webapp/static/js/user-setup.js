@@ -208,6 +208,7 @@ cw.UserSetupView = BB.View.extend({
                     city: address.city,
                     state: address.state,
                     zip_code: address.zipcode,
+                    country: address.country,
                     longitude: coordinates.lng,
                     latitude: coordinates.lat,
                 },

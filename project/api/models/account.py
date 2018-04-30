@@ -106,6 +106,7 @@ class Account(models.Model):
     city = models.CharField(max_length=63, blank=True)
     state = models.CharField(max_length=2, choices=US_STATES, blank=True)
     zip_code = models.CharField(max_length=6, null=True)
+    country = models.CharField(max_length=63, blank=True, default="United States")
 
     fed_district = models.CharField(max_length=63, default=None, null=True)
     state_district = models.CharField(max_length=63, default=None, null=True)
@@ -129,19 +130,29 @@ class Account(models.Model):
     #custom "row-level" functionality (properties) for account models
     @property
     def location(self):
-        """ Constructs a CITY, STATE string for locations in the US """
-        if self.city and self.state:
-            # Get US State from US States dictionary
-            us_state = dict(US_STATES).get(self.state)
+        """
+        Constructs a CITY, STATE string for locations in the US,
+        a CITY, COUNTRY string for locations outside of the US
+        """
+        if self.country:
+            if self.country is "United States":
+                if self.city and self.state:
+                    # Get US State from US States dictionary
+                    us_state = dict(US_STATES).get(self.state)
 
-            return '{city}, {state}'.format(city=self.city, state=us_state)
-        elif self.state:
-            # Get US State from US States dictionary
-            us_state = dict(US_STATES).get(self.state)
+                    return u'{city}, {state}'.format(city=self.city, state=us_state)
+                elif self.state:
+                    # Get US State from US States dictionary
+                    us_state = dict(US_STATES).get(self.state)
 
-            return '{state}'.format(us_state)
-        else:
-            return 'NO LOCATION'
+                    return '{state}'.format(us_state)
+                else:
+                    return 'NO LOCATION'
+            else:
+                if self.city:
+                    return u'{city}, {country}'.format(city=self.city, country=self.country)
+                else:
+                    return self.country
 
     @property
     def full_name(self):
@@ -203,7 +214,7 @@ class Account(models.Model):
         profile_image.load()
 
         # Resize image
-        profile_image = ImageOps.fit(profile_image, PROFILE_IMAGE_SIZE, Image.ANTIALIAS, centering=(0.5, 0.5))
+        profile_image = ImageOps.fit(profile_image, PROFILE_IMG_SIZE, Image.ANTIALIAS, centering=(0.5, 0.5))
 
         # Convert to JPG image format with white background
         if profile_image.mode not in ('L', 'RGB'):
