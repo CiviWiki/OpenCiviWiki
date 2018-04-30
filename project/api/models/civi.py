@@ -168,7 +168,7 @@ class Civi(models.Model):
         f = 0 #TODO: favorite val, is 'favorite' a meaningful name for this variable?
 
         # Calculate how long ago the post was created
-        time_ago = old_div((current_time - post_time.replace(tzinfo=None)).total_seconds(), 300)
+        time_ago = (current_time - post_time.replace(tzinfo=None)).total_seconds() / 300
 
         g = 1 # TODO: determine what the variable 'g' does
         amp = math.pow(10,0)
