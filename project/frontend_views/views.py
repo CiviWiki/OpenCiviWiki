@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from django.db.models import F
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template.response import TemplateResponse
 
 from api.models import Category, Account, Thread, Civi, Activity, Invitation
@@ -13,6 +13,12 @@ from api.forms import UpdateProfileImage
 from utils.constants import US_STATES
 from utils.custom_decorators import beta_blocker, login_required, full_account
 
+# Imports for CSV export function
+import random
+import string
+import json
+import bs4
+import csv
 
 def base_view(request):
     if not request.user.is_authenticated():
@@ -269,6 +275,7 @@ def about_view(request):
 def support_us_view(request):
     return TemplateResponse(request, 'static_templates/support_us.html', {})
 
+<<<<<<< HEAD
 """ CSV export function. Thread ID goes in, CSV HTTP response attachment goes out. """
 @csrf_exempt
 def civi2csv(request, thread_id):
@@ -284,3 +291,35 @@ def civi2csv(request, thread_id):
                 data.append(value)
         writer.writerow(data)
     return response
+=======
+@csrf_exempt
+def civi2csv(request):
+    if request.method == 'POST':
+
+        randomChars = string.ascii_letters + string.digits
+        nonce = ''.join(random.choice(randomChars) for i in range(5))
+        filename = 'cividata-' + nonce + '.csv'
+        file = open('/temp/' + filename, 'w+')
+        writer = csv.writer(file, delimiter=',')
+        civiList = []
+        civis = json.loads(request.body)['civis']
+
+        for civi in civis:
+            civiData = []
+            soup = bs4.BeautifulSoup(civi, 'lxml')
+            civiData.append(soup.find('div', {'class': 'civi-type'}).text.strip())
+            civiData.append(soup.find('span', {'class': 'text-wrapper'}).text.strip())
+            civiData.append(soup.find('div', {'class': 'civi-body-inner'}).text.strip())
+            linkedCivis = soup.findAll('div', {'class': 'link-item'})
+            for link in linkedCivis:
+                civiData.append(link.select('.bold-text')[0].text.strip())
+                civiData.append(link.select('.gray-text')[0].text.strip())
+            civiData.append(soup.find('a', {'class': 'author-name'}).text.strip())
+            civiData.append(soup.find('div', {'class': 'created'}).text.strip())
+            civiList.append(civiData)
+
+        for civi in civiList:
+            writer.writerow(civi)
+
+        return JsonResponse({'url': '/temp/' + filename})
+>>>>>>> refs/remotes/CiviWiki/csv-export-pull-request
