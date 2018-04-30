@@ -2,6 +2,7 @@ import json
 
 from django.conf import settings
 from django.contrib.auth.decorators import user_passes_test
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from django.db.models import F
 from django.http import HttpResponse, HttpResponseRedirect
@@ -103,6 +104,7 @@ def issue_thread(request, thread_id=None):
     t.refresh_from_db()
 
     thread_wiki_data = {
+        "thread_id": thread_id,
         "title": t.title,
         "summary": t.summary,
         "image": t.image_url,
@@ -266,3 +268,19 @@ def about_view(request):
 
 def support_us_view(request):
     return TemplateResponse(request, 'static_templates/support_us.html', {})
+
+""" CSV export function. Thread ID goes in, CSV HTTP response attachment goes out. """
+@csrf_exempt
+def civi2csv(request, thread_id):
+    import csv
+    thread = thread_id
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment, filename=' + thread + '.csv'
+    writer = csv.writer(response, delimiter=',')
+    for card in Civi.objects.filter(thread_id=thread):
+        data = []
+        for key, value in card.dict_with_score().items():
+            if value != []:
+                data.append(value)
+        writer.writerow(data)
+    return response
