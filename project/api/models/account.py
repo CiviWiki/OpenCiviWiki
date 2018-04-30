@@ -230,7 +230,7 @@ class Account(models.Model):
             'ImageField',
             self.profile_image.name,
             'image/jpeg',
-            tmp_image_file.len,
+            tmp_image_file.getbuffer().nbytes,
             None
         )
 
@@ -245,7 +245,7 @@ class Account(models.Model):
             'ImageField',
             self.profile_image.name,
             'image/jpeg',
-            tmp_image_file.len,
+            tmp_image_file.getbuffer().nbytes,
             None
         )
 

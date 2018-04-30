@@ -102,7 +102,7 @@ def cw_register(request):
                 user.is_active = True
                 user.save()
 
-                uid = urlsafe_base64_encode(force_bytes(user.pk))
+                uid = urlsafe_base64_encode(force_bytes(user.pk)).decode()
                 token = account_activation_token.make_token(user)
                 domain = get_current_site(request).domain
                 base_url = "http://{domain}/auth/activate_account/{uid}/{token}/"
