@@ -28,13 +28,14 @@ class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
         fields = ('username', 'first_name', 'last_name', 'about_me', 'location','email',
-        'address', 'city', 'state', 'zip_code', 'longitude', 'latitude',
+        'address', 'city', 'state', 'zip_code', 'country', 'longitude', 'latitude',
         'profile_image', 'profile_image_url', 'profile_image_thumb_url')
 
         extra_kwargs = {
             'email': WRITE_ONLY,
             'city': WRITE_ONLY,
             'state': WRITE_ONLY,
+            'country': WRITE_ONLY,
         }
 
     def validate_profile_image(self, value):
@@ -132,4 +133,3 @@ class ThreadSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'summary', 'author', 'image_url', 'civis', 'image',
         'created', 'level', 'state', 'is_draft', 'category',
         'num_views', 'num_civis', 'num_solutions')
-
