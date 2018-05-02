@@ -5,3 +5,4 @@
 media/
 staticfiles
 .idea
+node_modules
