@@ -1,0 +1,54 @@
+{
+    "name": "openciviwiki",
+    "version": "0.2.0",
+    "description": "A democratic engagement web system.",
+    "main": "index.js",
+    "directories": {
+        "doc": "docs"
+    },
+    "scripts": {
+        "start": "webpack-dev-server",
+        "prebuild": "rm -rf ./public/",
+        "build": "npm run lint && webpack -p",
+        "lint": "eslint app",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "dependencies": {
+        "backbone": "~1.3.3",
+        "backbone.marionette": "~3.5.1",
+        "jquery": "~3.3.1",
+        "underscore": "~1.8.3"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.0.0-beta.46",
+        "@babel/preset-env": "^7.0.0-beta.46",
+        "babel-loader": "^8.0.0-beta.0",
+        "copy-webpack-plugin": "^4.5.1",
+        "css-loader": "^0.28.11",
+        "eslint": "^4.19.1",
+        "eslint-config-airbnb-base": "^12.1.0",
+        "eslint-loader": "^2.0.0",
+        "eslint-plugin-import": "^2.11.0",
+        "extract-text-webpack-plugin": "^4.0.0-beta.0",
+        "less": "^3.0.2",
+        "less-loader": "^4.1.0",
+        "materialize-css": "^0.100.2",
+        "style-loader": "^0.21.0",
+        "stylus": "^0.54.5",
+        "underscore-template-loader": "^1.0.0",
+        "webpack": "^4.6.0",
+        "webpack-dev-server": "^3.1.3",
+        "webpack-merge": "^4.1.2"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/CiviWiki/OpenCiviWiki.git"
+    },
+    "keywords": [],
+    "author": "JooHee Lee <joohee@civiwiki.org>",
+    "license": "AGPL-3.0",
+    "bugs": {
+        "url": "https://github.com/CiviWiki/OpenCiviWiki/issues"
+    },
+    "homepage": "https://www.civiwiki.org"
+}
