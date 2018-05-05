@@ -4,5 +4,6 @@
 .DS_Store
 media/
 staticfiles
+project/webapp/dist
 .idea
 node_modules

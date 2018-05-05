@@ -8,8 +8,8 @@
     },
     "scripts": {
         "start": "webpack-dev-server",
-        "prebuild": "rm -rf ./public/",
-        "build": "npm run lint && webpack -p",
+        "build": "webpack --config webpack.config.js --progress --colors",
+        "watch": "webpack --config webpack.config.js --watch",
         "lint": "eslint app",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
@@ -44,8 +44,6 @@
         "type": "git",
         "url": "git+https://github.com/CiviWiki/OpenCiviWiki.git"
     },
-    "keywords": [],
-    "author": "JooHee Lee <joohee@civiwiki.org>",
     "license": "AGPL-3.0",
     "bugs": {
         "url": "https://github.com/CiviWiki/OpenCiviWiki/issues"
