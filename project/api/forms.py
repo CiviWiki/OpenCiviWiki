@@ -41,7 +41,7 @@ class UpdatePassword(forms.ModelForm):
         clean_data = super(UpdatePassword, self).clean()
         if 'password' in clean_data and 'verify' in clean_data:
             if clean_data['password'] != clean_data['verify']:
-                raise forms.ValidationError("Passwords don't match.")
+                raise forms.ValidationError("Passwords do not match.")
         else:
             raise forms.ValidationError("Both password fields need to be filled out.")
         return clean_data

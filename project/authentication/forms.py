@@ -23,7 +23,7 @@ class AccountRegistrationForm(UserCreationForm):
         'invalid_username': _("Usernames may only use lowercase characters or numbers."),
         'email_exists': _("An account exists for this email address."),
         'username_exists': _("Sorry, this username already exists."),
-        'invalid_password': _("Password can't be entirely numeric."),
+        'invalid_password': _("Password can not be entirely numeric."),
         'invalid_password_length': _("Password must be at least 4 characters.")
     }
 
@@ -81,7 +81,7 @@ class PasswordResetForm(SetPasswordForm):
     A form that lets a user reset their password
     """
     error_messages = dict(SetPasswordForm.error_messages, **{
-        'invalid_password': _("Password can't be entirely numeric."),
+        'invalid_password': _("Password can not be entirely numeric."),
         'invalid_password_length': _("Password must be at least 4 characters.")
     })
 
