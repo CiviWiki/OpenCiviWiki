@@ -29,6 +29,7 @@ WHITE_BG = (255,255,255)
 
 class AccountManager(models.Manager):
     def summarize(self, account):
+        """Summarize contains all the personal info of a user"""
         from .civi import Civi
         data = {
             "username": account.user.username,
@@ -44,6 +45,7 @@ class AccountManager(models.Manager):
         return data
 
     def chip_summarize(self, account):
+        """Contains uname, fname, lname, and profile image"""
         data = {
             "username": account.user.username,
             "first_name": account.first_name,
@@ -74,9 +76,11 @@ class AccountManager(models.Manager):
 
 
     def followers(self, account):
+        """Shows whom is following this person"""
         return [self.chip_summarize(follower) for follower in account.followers.all()]
 
     def following(self, account):
+        """Shows whom this person is following"""
         return [self.chip_summarize(following) for following in account.following.all()]
 
 @deconstructible
@@ -252,6 +256,7 @@ class Account(models.Model):
         )
 
     def is_full_account(self):
+        """Returns true if the user has filled out their account completely."""
         if self.first_name and self.last_name and self.longitude and self.latitude:
             return True
         else:

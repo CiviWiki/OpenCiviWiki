@@ -13,7 +13,11 @@ from .hashtag import Hashtag
 from .thread import Thread
 
 class CiviManager(models.Manager):
+    """Class CiviManager contains all the basic data for a given civi.
+        It summarizes the civi, as well as provides the data for it.
+        """
     def summarize(self, civi):
+        """Returns id, type, title, and body of the civi"""
         return {
             "id": civi.id,
             "type": civi.c_type,
@@ -22,6 +26,9 @@ class CiviManager(models.Manager):
         }
 
     def serialize(self, civi, filter=None):
+        """Returns the civis data.  Type, title, body, author, hashtags, created
+            attachments, votes, id, and thread_id
+            """
         data = {
             "type": civi.c_type,
             "title": civi.title,
@@ -45,6 +52,9 @@ class CiviManager(models.Manager):
         return json.dumps(data, cls=DjangoJSONEncoder)
 
     def serialize_s(self, civi, filter=None):
+        """Returns the civis data.  Type, title, body, author, hashtags, created
+            attachments, votes, id, thread_id, and any links
+            """
         # Get account profile image, or set to default image
         profile_image_or_default = civi.author.profile_image.url if civi.author.profile_image else "/media/profile/default.png"
 
@@ -72,11 +82,15 @@ class CiviManager(models.Manager):
         return data
 
     def thread_sorted_by_score(self, civis_queryset, req_acct_id):
+        """Sorts threads by score"""
         queryset = civis_queryset.order_by('-created')
         return sorted(queryset.all(), key=lambda c: c.score(req_acct_id), reverse=True)
 
 
 class Civi(models.Model):
+    """Class Civi holds all the civi data. Threads, bills, body, author, hashtags,
+        created, attachments, votes, scores, id, and thread_id
+        """
     objects = CiviManager()
     author = models.ForeignKey(Account, related_name='civis', default=None, null=True)
     thread = models.ForeignKey(Thread, related_name='civis', default=None, null=True)
@@ -124,6 +138,7 @@ class Civi(models.Model):
 
     @property
     def created_date_str(self):
+        """Returns when civi was created"""
         d = self.created
         return "{0} {1}, {2}".format(month_name[d.month], d.day, d.year)
 
