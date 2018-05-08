@@ -2,7 +2,7 @@
 from django import forms
 from django.core.files.images import get_image_dimensions
 from django.contrib.auth.models import User
-from models import Account
+from .models import Account
 
 class UpdatePassword(forms.ModelForm):
     """
@@ -41,7 +41,7 @@ class UpdatePassword(forms.ModelForm):
         clean_data = super(UpdatePassword, self).clean()
         if 'password' in clean_data and 'verify' in clean_data:
             if clean_data['password'] != clean_data['verify']:
-                raise forms.ValidationError("Passwords don't match.")
+                raise forms.ValidationError("Passwords do not match.")
         else:
             raise forms.ValidationError("Both password fields need to be filled out.")
         return clean_data
@@ -82,12 +82,12 @@ class UpdateProfileImage(forms.ModelForm):
             max_height = 960
             max_width = 1280
             if w > max_width or h > max_height:
-                raise forms.ValidationError(u'Please use an image that is {w} x {h} pixels or smaller.'.format(w=max_width, h=max_height))
+                raise forms.ValidationError('Please use an image that is {w} x {h} pixels or smaller.'.format(w=max_width, h=max_height))
 
             #validate content type
             main, sub = profile_image.content_type.split('/')
             if not (main == 'image' and sub in ['jpg', 'jpeg', 'pjpeg', 'png']):
-                raise forms.ValidationError(u'Please use a JPEG or PNG image.')
+                raise forms.ValidationError('Please use a JPEG or PNG image.')
 
             #validate file size
             if len(profile_image) > (2000 * 1024):

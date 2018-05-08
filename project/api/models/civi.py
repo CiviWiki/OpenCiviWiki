@@ -13,7 +13,11 @@ from .hashtag import Hashtag
 from .thread import Thread
 
 class CiviManager(models.Manager):
+    """Class CiviManager contains all the basic data for a given civi.
+        It summarizes the civi, as well as provides the data for it.
+        """
     def summarize(self, civi):
+        """Returns id, type, title, and body of the civi"""
         return {
             "id": civi.id,
             "type": civi.c_type,
@@ -22,6 +26,9 @@ class CiviManager(models.Manager):
         }
 
     def serialize(self, civi, filter=None):
+        """Returns the civis data.  Type, title, body, author, hashtags, created
+            attachments, votes, id, and thread_id
+            """
         data = {
             "type": civi.c_type,
             "title": civi.title,
@@ -45,6 +52,9 @@ class CiviManager(models.Manager):
         return json.dumps(data, cls=DjangoJSONEncoder)
 
     def serialize_s(self, civi, filter=None):
+        """Returns the civis data.  Type, title, body, author, hashtags, created
+            attachments, votes, id, thread_id, and any links
+            """
         # Get account profile image, or set to default image
         profile_image_or_default = civi.author.profile_image.url if civi.author.profile_image else "/media/profile/default.png"
 
@@ -72,14 +82,18 @@ class CiviManager(models.Manager):
         return data
 
     def thread_sorted_by_score(self, civis_queryset, req_acct_id):
+        """Sorts threads by score"""
         queryset = civis_queryset.order_by('-created')
         return sorted(queryset.all(), key=lambda c: c.score(req_acct_id), reverse=True)
 
 
 class Civi(models.Model):
+    """Class Civi holds all the civi data. Threads, bills, body, author, hashtags,
+        created, attachments, votes, scores, id, and thread_id
+        """
     objects = CiviManager()
-    author = models.ForeignKey(Account, default=None, null=True)
-    thread = models.ForeignKey(Thread, default=None, null=True)
+    author = models.ForeignKey(Account, related_name='civis', default=None, null=True)
+    thread = models.ForeignKey(Thread, related_name='civis', default=None, null=True)
     bill = models.ForeignKey(Bill, default=None, null=True) # null if not solution
 
     hashtags = models.ManyToManyField(Hashtag)
@@ -106,7 +120,7 @@ class Civi(models.Model):
     votes_vpos = models.IntegerField(default=0)
 
     def votes(self):
-        from activity import Activity
+        from .activity import Activity
         activity_votes = Activity.objects.filter(civi=self)
 
         votes = {
@@ -124,13 +138,30 @@ class Civi(models.Model):
 
     @property
     def created_date_str(self):
+        """Returns when civi was created"""
         d = self.created
         return "{0} {1}, {2}".format(month_name[d.month], d.day, d.year)
 
     def score(self, request_acct_id=None):
-        # TODO: add docstring comment describing this score function in relatively plain English
-        # include descriptions of all variables
+        """
+        Each vote is weighted as an integer, ranging from (-2,2)
+        We then get the number of votes, and set them to a minimum of two.
+        This is because math.log10(0) is undefined,
+        and math.log10(1) is zero, so that would turn our rank to zero.
 
+        Rank is determined by the following formulae:
+        if the score is != 0, use:
+            rank = abs(scores_sum) * math.log10(votes_total) * amp + y + f + g / time_ago
+        else:
+            rank = votes_total**2 + y + f + g / time_ago
+
+        amp = math.pow(10,0) = 1  We can change the score weighting by changing either the base or exponent.
+        y = (1 if self.author in account.following.all().values_list('id', flat=True) else 0)
+        f = number of times this item has been favorited
+        g = 1.  It allows us to invert time since posting.  Thus, we have 300/(now-posted time)
+            Newer posts are thus weighted higher, and more likely to be seen.
+        """
+        
         # Weights for different vote types
         vneg_weight = -2
         neg_weight = -1
@@ -164,12 +195,11 @@ class Civi(models.Model):
         # Calculate how long ago the post was created
         time_ago = (current_time - post_time.replace(tzinfo=None)).total_seconds() / 300
 
-        g = 1 # TODO: determine what the variable 'g' does
+        g = 1
         amp = math.pow(10,0)
 
         # Calculate rank based on positive, zero, or negative scores sum
         if scores_sum > 0:
-            # TODO: determine why we set votes total to two when votes['total'] is <= 1
             # set votes total to 2 when votes['total'] is <= 1
             votes_total = votes['total'] if votes['total'] > 1 else 2
 
@@ -183,12 +213,11 @@ class Civi(models.Model):
             #step3 - B  V^2+Y + F + (##/T) = Rank Value
             rank = votes_total**2 + y + f + g / time_ago
         elif scores_sum < 0:
-            # TODO: determine why we set votes total to two when votes['tota'] is <= 1
             # set votes total to 2 when votes['total'] is <= 1
             votes_total = votes['total'] if votes['total'] > 1 else 2
 
             #step3 - C
-            if abs(x)/v <= 5:
+            if abs(x)/v <= 5:  #eh?
                 rank = abs(scores_sum) * math.log10(votes_total) * amp + y + f + g / time_ago
             else:
                 rank = scores_sum * math.log10(votes_total) * amp + y + f + g / time_ago
