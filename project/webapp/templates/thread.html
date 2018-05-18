@@ -53,6 +53,16 @@
 <body>
     {% include "partials/utils/global_nav.html" %}
     <div id="thread"></div>
+
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0';
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+
 </body>
 
 <script type="text/javascript" src="{% static "js/thread.js" %}"></script>
@@ -90,4 +100,53 @@
     //
     // if (cw.ws.readyState == WebSocket.OPEN) cw.ws.onopen();
 </script>
+
+<script>
+    // Script for Share button dropdown menu.
+
+    // Allows dropdown menu to be closed by clicking away
+
+    $('html').click(function() {
+        document.getElementById('share-options').className = 'share-hidden';
+    });
+
+    $('#share-options').click(function(event){
+        event.stopPropagation();
+    });
+
+    $('#share-menu').click(function(event){
+        event.stopPropagation();
+    });
+
+    // Adds current thread URL and title to sharing link
+
+    links = document.getElementsByClassName('resp-sharing-button__link');
+    titleVars = ['text=', 'title=', 'caption=', 'subject='];
+    for (i = 0; i < links.length; i++) {
+        links[i].href += encodeURIComponent(window.location);
+        for (j = 0; j < titleVars.length; j++) {
+            index = links[i].href.indexOf(titleVars[j]);
+            if (index > -1) {
+                links[i].href = links[i].href.substring(0, index + titleVars[j].length) +
+                                document.getElementsByClassName('thread-title')[0].innerHTML +
+                                links[i].href.substring(index + titleVars[j].length, links[i].href.length);
+            }
+        }
+    }
+
+    // Tumblr needs an extra parameter
+
+    links[3].href += '&canonicalUrl=' + encodeURIComponent(window.location);
+
+    // Displays dropdown menu
+
+    function share() {
+        if (document.getElementById('share-options').className != 'share') {
+            document.getElementById('share-options').className = 'share';
+        } else {
+            document.getElementById('share-options').className = 'share-hidden';
+        }
+    }
+</script>
+
 </html>
