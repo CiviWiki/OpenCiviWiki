@@ -1352,6 +1352,7 @@ cw.ThreadView = BB.View.extend({
     bodyTemplate: _.template($('#thread-body-template').html()),
     responseWrapper: _.template($('#thread-response-template').html()),
     outlineTemplate: _.template($('#outline-template').html()),
+    shareButtonTemplate: _.template($('#share-button-template').html()),
 
     initialize: function (options) {
         options = options || {};
@@ -1506,6 +1507,8 @@ cw.ThreadView = BB.View.extend({
                 is_draft: this.is_draft,
             };
             this.$('.thread-body-holder').empty().append(this.bodyTemplate(bodyRenderData));
+
+            this.$('.thread-sharing-buttons').empty().append(this.shareButtonTemplate());
 
             this.$('.main-thread').on('scroll', function (e) {
                 _this.processCiviScroll();

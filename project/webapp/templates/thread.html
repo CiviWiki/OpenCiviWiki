@@ -50,6 +50,10 @@
     {% include "partials/thread/thread_outline.html" %}
 </script>
 
+<script id="share-button-template" type="text/template">
+    {% include "partials/thread/share_button.html" %}
+</script>
+
 <body>
     {% include "partials/utils/global_nav.html" %}
     <div id="thread"></div>
@@ -90,4 +94,36 @@
     //
     // if (cw.ws.readyState == WebSocket.OPEN) cw.ws.onopen();
 </script>
+<<<<<<< HEAD
+=======
+
+<script>
+    // Script for Share button dropdown menu.
+
+    // Allows dropdown menu to be closed by clicking away
+
+    $('html').click(function() {
+        document.getElementById('share-options').className = 'share-hidden';
+    });
+
+    $('#share-options').click(function(event){
+        event.stopPropagation();
+    });
+
+    $('#share-menu').click(function(event){
+        event.stopPropagation();
+    });
+
+    // Displays dropdown menu
+
+    function share() {
+        if (document.getElementById('share-options').className != 'share') {
+            document.getElementById('share-options').className = 'share';
+        } else {
+            document.getElementById('share-options').className = 'share-hidden';
+        }
+    }
+</script>
+
+>>>>>>> 9c32f602... Updated share button to use template format
 </html>

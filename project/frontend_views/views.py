@@ -135,6 +135,7 @@ def issue_thread(request, thread_id=None):
 
     data = {
         'thread_id': thread_id,
+        'title': t.title,
         'is_draft': t.is_draft,
         'thread_wiki_data': json.dumps(thread_wiki_data),
         'thread_body_data': json.dumps(thread_body_data)
