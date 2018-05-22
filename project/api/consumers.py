@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+from builtins import str
 from channels import Group
 from channels.sessions import channel_session
 from channels.auth import channel_session_user, channel_session_user_from_http

@@ -1,6 +1,8 @@
 """
 Handles beta/website access invitations
 """
+from __future__ import unicode_literals
+from builtins import str
 from django.contrib.auth.models import User
 from django.db import models
 

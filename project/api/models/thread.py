@@ -1,3 +1,9 @@
+from __future__ import absolute_import
+from __future__ import unicode_literals
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import object
 import os, uuid
 from calendar import month_name
 
@@ -21,7 +27,7 @@ class ThreadManager(models.Manager):
         # If thread length is longer than truncate length... add elipsis (truncate)
         ellipsis_if_too_long = '' if len(thread.summary) <= thread_truncate_length else '...'
 
-        from civi import Civi
+        from .civi import Civi
         thread_data = {
             "id": thread.id,
             "title": thread.title,

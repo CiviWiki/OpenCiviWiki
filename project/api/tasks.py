@@ -8,6 +8,7 @@ Defined task functions output the returned value to the celery worker console
 TODO: move to auth
 """
 from __future__ import absolute_import
+from __future__ import unicode_literals
 
 from django.conf import settings
 from django.core.mail import send_mail

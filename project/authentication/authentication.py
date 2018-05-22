@@ -1,3 +1,6 @@
+from __future__ import absolute_import
+from __future__ import unicode_literals
+from builtins import str
 from django.conf import settings
 from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.models import User
@@ -14,7 +17,7 @@ from django.views.decorators.debug import sensitive_post_parameters
 
 from api.tasks import send_email
 from api.models import Account, Invitation
-from forms import AccountRegistrationForm, PasswordResetForm, RecoverUserForm
+from .forms import AccountRegistrationForm, PasswordResetForm, RecoverUserForm
 from utils.custom_decorators import require_post_params
 
 class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
@@ -27,7 +30,7 @@ class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
 
         hash = salted_hmac(
             self.key_salt,
-            unicode(user.pk) + unicode(timestamp)
+            str(user.pk) + str(timestamp)
         ).hexdigest()[::2]
         return "%s-%s" % (ts_b36, hash)
 
@@ -104,7 +107,7 @@ def cw_register(request):
                 user.is_active = True
                 user.save()
 
-                uid = urlsafe_base64_encode(force_bytes(user.pk))
+                uid = urlsafe_base64_encode(force_bytes(user.pk)).decode()
                 token = account_activation_token.make_token(user)
                 domain = get_current_site(request).domain
                 base_url = "http://{domain}/auth/activate_account/{uid}/{token}/"
@@ -132,7 +135,7 @@ def cw_register(request):
         else:
             response = {
                 'success': False,
-                'errors' : [error[0] for error in form.errors.values()]
+                'errors' : [error[0] for error in list(form.errors.values())]
             }
             return JsonResponse(response, status=400)
     else:
@@ -203,7 +206,7 @@ def beta_register(request):
         else:
             response = {
                 'success': False,
-                'errors' : [error[0] for error in form.errors.values()]
+                'errors' : [error[0] for error in list(form.errors.values())]
             }
             return JsonResponse(response, status=400)
     else:

@@ -1,3 +1,8 @@
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import unicode_literals
+from builtins import str
+from builtins import object
 import os, json, datetime, math, uuid
 from calendar import month_name
 
@@ -106,7 +111,7 @@ class Civi(models.Model):
     votes_vpos = models.IntegerField(default=0)
 
     def votes(self):
-        from activity import Activity
+        from .activity import Activity
         activity_votes = Activity.objects.filter(civi=self)
 
         votes = {
@@ -188,7 +193,7 @@ class Civi(models.Model):
             votes_total = votes['total'] if votes['total'] > 1 else 2
 
             #step3 - C
-            if abs(x)/v <= 5:
+            if abs(x) / v <= 5:
                 rank = abs(scores_sum) * math.log10(votes_total) * amp + y + f + g / time_ago
             else:
                 rank = scores_sum * math.log10(votes_total) * amp + y + f + g / time_ago

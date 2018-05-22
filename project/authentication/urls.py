@@ -1,8 +1,10 @@
+from __future__ import absolute_import
+from __future__ import unicode_literals
 from django.conf.urls import url
 from django.contrib.auth.views import (
     password_reset, password_reset_confirm
 )
-import authentication
+from . import authentication
 
 urlpatterns = [
     url(r'^login', authentication.cw_login, name='login'),

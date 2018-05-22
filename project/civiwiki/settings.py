@@ -4,6 +4,7 @@ Darius Calliet May 12, 2016
 
 Production settings file to select proper environment variables.
 """
+from __future__ import unicode_literals
 import os
 
 from django.core.exceptions import ImproperlyConfigured

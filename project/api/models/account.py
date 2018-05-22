@@ -2,9 +2,15 @@
 Account Model
 Extends the default django user model
 """
+from __future__ import absolute_import
+from __future__ import unicode_literals
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import object
 import os
 import uuid
-import StringIO
+import io
 
 from django.contrib.auth.models import User
 from django.utils.deconstruct import deconstructible
@@ -29,7 +35,7 @@ WHITE_BG = (255,255,255)
 
 class AccountManager(models.Manager):
     def summarize(self, account):
-        from civi import Civi
+        from .civi import Civi
         data = {
             "username": account.user.username,
             "first_name": account.first_name,
@@ -209,7 +215,7 @@ class Account(models.Model):
         Resizes and crops the user uploaded image and creates a thumbnail version of it
         """
         profile_image_field = self.profile_image
-        image_file = StringIO.StringIO(profile_image_field.read())
+        image_file = io.BytesIO(profile_image_field.read())
         profile_image = Image.open(image_file)
         profile_image.load()
 
@@ -223,7 +229,7 @@ class Account(models.Model):
             profile_image = white_bg_img
 
         # Save new cropped image
-        tmp_image_file = StringIO.StringIO()
+        tmp_image_file = io.BytesIO()
         profile_image.save(tmp_image_file, 'JPEG', quality=90)
         tmp_image_file.seek(0)
 
@@ -232,14 +238,14 @@ class Account(models.Model):
             'ImageField',
             self.profile_image.name,
             'image/jpeg',
-            tmp_image_file.len,
+            tmp_image_file.getbuffer().nbytes,
             None
         )
 
         # Make a Thumbnail Image for the new resized image
         thumb_image = profile_image.copy()
         thumb_image.thumbnail(PROFILE_IMG_THUMB_SIZE, resample=Image.ANTIALIAS)
-        tmp_image_file = StringIO.StringIO()
+        tmp_image_file = io.BytesIO()
         thumb_image.save(tmp_image_file, 'JPEG', quality=90)
         tmp_image_file.seek(0)
         self.profile_image_thumb = InMemoryUploadedFile(
@@ -247,7 +253,7 @@ class Account(models.Model):
             'ImageField',
             self.profile_image.name,
             'image/jpeg',
-            tmp_image_file.len,
+            tmp_image_file.getbuffer().nbytes,
             None
         )
 

@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import json
 
 from django.conf import settings
@@ -7,12 +8,12 @@ from django.contrib.auth.models import User
 from django.db.models import F
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template.response import TemplateResponse
+from django import template
 
 from api.models import Category, Account, Thread, Civi, Activity, Invitation
 from api.forms import UpdateProfileImage
 from utils.constants import US_STATES
 from utils.custom_decorators import beta_blocker, login_required, full_account
-
 
 def base_view(request):
     if not request.user.is_authenticated():
@@ -21,8 +22,8 @@ def base_view(request):
     a = Account.objects.get(user=request.user)
     if not a.beta_access:
         return HttpResponseRedirect('/beta')
-    if not a.full_account:
-        return HttpResponseRedirect('/setup')
+#    if not a.full_account:
+#        return HttpResponseRedirect('/setup')
 
     categories = [{'id': c.id, 'name': c.name} for c in Category.objects.all()]
 
@@ -48,7 +49,7 @@ def base_view(request):
 
 @login_required
 @beta_blocker
-@full_account
+#@full_account
 def user_profile(request, username=None):
     if not username:
         return HttpResponseRedirect('/profile/{0}'.format(request.user))
@@ -86,7 +87,7 @@ def user_setup(request):
 
 @login_required
 @beta_blocker
-@full_account
+#@full_account
 def issue_thread(request, thread_id=None):
     if not thread_id:
         return HttpResponseRedirect('/404')
@@ -135,6 +136,7 @@ def issue_thread(request, thread_id=None):
 
     data = {
         'thread_id': thread_id,
+        'title': t.title,
         'is_draft': t.is_draft,
         'thread_wiki_data': json.dumps(thread_wiki_data),
         'thread_body_data': json.dumps(thread_body_data)
@@ -144,7 +146,7 @@ def issue_thread(request, thread_id=None):
 
 @login_required
 @beta_blocker
-@full_account
+#@full_account
 def create_group(request):
     return TemplateResponse(request, 'newgroup.html', {})
 
@@ -279,7 +281,7 @@ def civi2csv(request, thread_id):
     writer = csv.writer(response, delimiter=',')
     for card in Civi.objects.filter(thread_id=thread):
         data = []
-        for key, value in card.dict_with_score().items():
+        for key, value in list(card.dict_with_score().items()):
             if value != []:
                 data.append(value)
         writer.writerow(data)

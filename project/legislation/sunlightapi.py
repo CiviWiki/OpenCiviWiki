@@ -1,3 +1,6 @@
+from __future__ import division
+from __future__ import unicode_literals
+from past.utils import old_div
 import sunlight
 from sunlight.errors import BadRequestException
 from django.conf import settings
@@ -18,7 +21,7 @@ def get_bill_information(account):
     preferences = {}
     preferences['state'] = account.state
     # I want to return a max of 50 bills from this function
-    preferences['per_page'] = 20 / max(len(account.interests), 1)
+    preferences['per_page'] = old_div(20, max(len(account.interests), 1))
     for interest in account.interests:
         preferences['q'] = interest
         bill_data += sunlight.openstates.bills(**preferences)

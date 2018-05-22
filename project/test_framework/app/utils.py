@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from aloe import world
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
