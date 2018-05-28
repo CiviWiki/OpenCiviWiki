@@ -4,6 +4,8 @@
 .DS_Store
 media/
 staticfiles
-project/webapp/dist
 .idea
+
+# Frontend
 node_modules
+project/webapp/dist
