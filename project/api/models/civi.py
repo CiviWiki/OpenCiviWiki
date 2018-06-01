@@ -188,7 +188,7 @@ class Civi(models.Model):
             votes_total = votes['total'] if votes['total'] > 1 else 2
 
             #step3 - C
-            if abs(x)/v <= 5:
+            if abs(scores_sum)/votes_total  <= 5:
                 rank = abs(scores_sum) * math.log10(votes_total) * amp + y + f + g / time_ago
             else:
                 rank = scores_sum * math.log10(votes_total) * amp + y + f + g / time_ago

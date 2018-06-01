@@ -26,11 +26,20 @@ export const Router = Mn.AppRouter.extend({
   },
 
   appRoutes: {
-    'app/': 'index',
-    'app/threads': 'showThreadList',
-    'app/thread/:threadId': 'showThread',
-    'threads/:threadId/edit': 'editThread'
-    'app/profile/:username': 'showProfile',
+    // Static Pages
+    '/': 'index',
+    '/about': 'about',
+    '/support_us': 'support_us',
+    '/howitwors': 'howItWorks',
 
+    '/login': 'login', 
+    '/invite': 'invite',
+    '/setup': 'setup',
+    '/settings' : 'settings',
+
+    '/threads': 'showThreadList',
+    '/thread/:threadId': 'showThread',
+    '/thread/:threadId/edit': 'editThread',
+    '/profile/:username': 'showProfile',
   }
 });
