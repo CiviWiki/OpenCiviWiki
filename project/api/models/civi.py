@@ -155,16 +155,16 @@ class Civi(models.Model):
 
         if request_acct_id:
             account = Account.objects.get(id=request_acct_id)
-            y = (1 if self.author in account.following.all().values_list('id', flat=True) else 0)
+            scores_sum = (1 if self.author in account.following.all().values_list('id', flat=True) else 0)
         else:
-            y = 0
+            scores_sum = 0
 
-        f = 0 #TODO: favorite val, is 'favorite' a meaningful name for this variable?
+        favorite = 0
 
         # Calculate how long ago the post was created
         time_ago = (current_time - post_time.replace(tzinfo=None)).total_seconds() / 300
 
-        g = 1 # TODO: determine what the variable 'g' does
+        gravity = 1 # TODO: determine what the variable 'g' does
         amp = math.pow(10,0)
 
         # Calculate rank based on positive, zero, or negative scores sum
@@ -174,14 +174,14 @@ class Civi(models.Model):
             votes_total = votes['total'] if votes['total'] > 1 else 2
 
             #step3 - A X*Log10V+Y + F + (##/T) = Rank Value
-            rank = scores_sum * math.log10(votes_total) * amp + y + f + g / time_ago
+            rank = scores_sum * math.log10(votes_total) * amp + scores_sum + favorite + gravity / time_ago
 
         elif scores_sum == 0:
             # Get count of total votes
             votes_total = votes['total']
 
             #step3 - B  V^2+Y + F + (##/T) = Rank Value
-            rank = votes_total**2 + y + f + g / time_ago
+            rank = votes_total**2 + scores_sum + favorite + gravity / time_ago
         elif scores_sum < 0:
             # TODO: determine why we set votes total to two when votes['tota'] is <= 1
             # set votes total to 2 when votes['total'] is <= 1
@@ -189,9 +189,9 @@ class Civi(models.Model):
 
             #step3 - C
             if abs(scores_sum) / votes_total <= 5:
-                rank = abs(scores_sum) * math.log10(votes_total) * amp + y + f + g / time_ago
+                rank = abs(scores_sum) * math.log10(votes_total) * amp + scores_sum + favorite + gravity / time_ago
             else:
-                rank = scores_sum * math.log10(votes_total) * amp + y + f + g / time_ago
+                rank = scores_sum * math.log10(votes_total) * amp + scores_sum + favorite + gravity / time_ago
 
         return rank
 
