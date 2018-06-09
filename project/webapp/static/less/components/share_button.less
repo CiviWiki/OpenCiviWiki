@@ -1,0 +1,132 @@
+/* Share thread dropdown menu styles */
+
+.share {
+  // pointer-events: auto;
+  background-color: #eee;
+  padding: 2px;
+  border-radius: 2px;
+  box-sizing: border-box;
+  box-shadow: 0px 1px 1px #aaa, -1px 1px 1px #aaa, 1px 1px 1px #aaa;
+  margin-top: 4px;
+  width: 100px;
+  right: -40%;
+  z-index: 3;
+}
+.share-options {
+  position: absolute;
+}
+
+// .share-hidden {
+//     opacity: 0;
+//     pointer-events: none;
+// }
+
+.share-container {
+  padding: 2px;
+}
+
+/* Button styles by sharingbutton.io */
+.resp-sharing-button {
+  border-radius: 5px;
+  transition: 25ms ease-out;
+  padding: 0.32em 0.25em;
+}
+
+.resp-sharing-button__link {
+  text-decoration: none;
+  color: #fff;
+  font-size: 12px;
+  vertical-align: center;
+  margin: 0px;
+
+  &svg {
+    width: 1em;
+    height: 1em;
+    margin-right: 0.4em;
+    vertical-align: middle;
+  }
+}
+
+resp-sharing-button__link,
+.resp-sharing-button__icon {
+  display: inline-block;
+}
+
+.resp-sharing-button--small svg {
+  margin: 0;
+  vertical-align: middle;
+  height: 5em;
+}
+
+/* Non solid icons get a stroke */
+.resp-sharing-button__icon {
+  stroke: #fff;
+  fill: none;
+}
+
+/* Solid icons get a fill */
+.resp-sharing-button__icon--solid {
+  fill: #fff;
+  stroke: none;
+}
+
+.resp-sharing-button--twitter {
+  background-color: #55acee;
+  border-color: #55acee;
+  &:hover,
+  &:active {
+    background-color: #2795e9;
+    border-color: #2795e9;
+  }
+}
+
+.resp-sharing-button--facebook {
+  background-color: #3b5998;
+  border-color: #3b5998;
+
+  &:hover,
+  &:active {
+    background-color: #2d4373;
+    border-color: #2d4373;
+  }
+}
+
+.resp-sharing-button--reddit {
+  background-color: #5f99cf;
+  border-color: #5f99cf;
+  &:hover,
+  &:active {
+    background-color: #3a80c1;
+    border-color: #3a80c1;
+  }
+}
+
+.resp-sharing-button--email {
+  background-color: #777777;
+  border-color: #777777;
+  &:hover,
+  &:active {
+    background-color: #5e5e5e;
+    border-color: #5e5e5e;
+  }
+}
+
+.resp-sharing-button--google {
+  background-color: #dd4b39;
+  border-color: #dd4b39;
+  &:hover,
+  &:active {
+    background-color: #c23321;
+    border-color: #c23321;
+  }
+}
+
+resp-sharing-button--tumblr {
+  background-color: #35465c;
+  border-color: #35465c;
+  &:hover,
+  &:active {
+    background-color: #222d3c;
+    border-color: #222d3c;
+  }
+}
