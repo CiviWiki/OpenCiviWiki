@@ -1780,7 +1780,7 @@ cw.ThreadView = BB.View.extend({
         'click .btn-loadmore': 'loadMoreCivis',
         'click .edit-thread-button': 'openEditThreadModal',
         'click #js-publish-btn': 'publishThread',
-        'click .share-menu': 'showShareOptions',
+        'click #share-menu': 'showShareOptions',
     },
 
     scrollToBody: function () {
@@ -2093,6 +2093,15 @@ cw.ThreadView = BB.View.extend({
     showShareOptions: function (event) {
         event.stopPropagation();
         this.$('#share-options').toggle('hide');
+
+        $(window).on('click', function(event){
+            $target = $(event.target);
+
+            if ($target.parents('#share-menu').length==0){
+                this.$('#share-options').toggle('hide');
+                $(window).unbind(event);
+            }
+        })
     },
 
     openNewCiviModal: function () {

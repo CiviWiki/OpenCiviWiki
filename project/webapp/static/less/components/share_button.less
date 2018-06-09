@@ -1,73 +1,56 @@
 /* Share thread dropdown menu styles */
-
 .share {
-  // pointer-events: auto;
-  background-color: #eee;
-  padding: 2px;
-  border-radius: 2px;
-  box-sizing: border-box;
-  box-shadow: 0px 1px 1px #aaa, -1px 1px 1px #aaa, 1px 1px 1px #aaa;
   margin-top: 4px;
-  width: 100px;
-  right: -40%;
+  min-width: 6em;
   z-index: 3;
 }
-.share-options {
+#share-options {
   position: absolute;
+  display: none;
+  left: -50%;
 }
-
-// .share-hidden {
-//     opacity: 0;
-//     pointer-events: none;
-// }
 
 .share-container {
   padding: 2px;
+  
 }
 
-/* Button styles by sharingbutton.io */
+/* Modified button styles, originally from sharingbutton.io*/
 .resp-sharing-button {
-  border-radius: 5px;
+  border-radius: 4px;
   transition: 25ms ease-out;
   padding: 0.32em 0.25em;
 }
 
 .resp-sharing-button__link {
   text-decoration: none;
-  color: #fff;
+  color: #ffffff;
   font-size: 12px;
   vertical-align: center;
   margin: 0px;
 
-  &svg {
+  svg {
     width: 1em;
-    height: 1em;
-    margin-right: 0.4em;
-    vertical-align: middle;
+    line-height: 2.5em;
+    height: 2.5em;
+    vertical-align: top;
   }
 }
 
-resp-sharing-button__link,
+
 .resp-sharing-button__icon {
   display: inline-block;
 }
 
-.resp-sharing-button--small svg {
+.resp-sharing-button--medium svg {
   margin: 0;
   vertical-align: middle;
-  height: 5em;
+  
 }
 
-/* Non solid icons get a stroke */
 .resp-sharing-button__icon {
-  stroke: #fff;
-  fill: none;
-}
-
-/* Solid icons get a fill */
-.resp-sharing-button__icon--solid {
-  fill: #fff;
-  stroke: none;
+  fill: #ffffff;
+  margin: 0px 4px;
 }
 
 .resp-sharing-button--twitter {
@@ -121,7 +104,7 @@ resp-sharing-button__link,
   }
 }
 
-resp-sharing-button--tumblr {
+.resp-sharing-button--tumblr {
   background-color: #35465c;
   border-color: #35465c;
   &:hover,
