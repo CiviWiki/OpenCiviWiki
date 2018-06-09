@@ -94,33 +94,4 @@
     //
     // if (cw.ws.readyState == WebSocket.OPEN) cw.ws.onopen();
 </script>
-
-<script>
-    // Script for Share button dropdown menu.
-
-    // Allows dropdown menu to be closed by clicking away
-
-    $('html').click(function() {
-        document.getElementById('share-options').className = 'share-hidden';
-    });
-
-    $('#share-options').click(function(event){
-        event.stopPropagation();
-    });
-
-    $('#share-menu').click(function(event){
-        event.stopPropagation();
-    });
-
-    // Displays dropdown menu
-
-    function share() {
-        if (document.getElementById('share-options').className != 'share') {
-            document.getElementById('share-options').className = 'share';
-        } else {
-            document.getElementById('share-options').className = 'share-hidden';
-        }
-    }
-</script>
-
 </html>
