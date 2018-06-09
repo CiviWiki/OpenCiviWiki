@@ -2092,13 +2092,12 @@ cw.ThreadView = BB.View.extend({
 
     showShareOptions: function (event) {
         event.stopPropagation();
-        this.$('#share-options').toggle('hide');
+        this.$('#share-options').toggleClass('hide');
 
         $(window).on('click', function(event){
             $target = $(event.target);
-
             if ($target.parents('#share-menu').length==0){
-                this.$('#share-options').toggle('hide');
+                this.$('#share-options').addClass('hide');
                 $(window).unbind(event);
             }
         })
