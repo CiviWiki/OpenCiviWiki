@@ -20,9 +20,10 @@ const Controller = Mn.Object.extend({
   },
 });
 
-export const Router = Mn.AppRouter.extend({
+const Router = Mn.AppRouter.extend({
   initialize() {
     this.controller = new Controller(this.options);
+
   },
 
   appRoutes: {
@@ -43,3 +44,5 @@ export const Router = Mn.AppRouter.extend({
     '/profile/:username': 'showProfile',
   }
 });
+
+export default Router;

@@ -10,7 +10,7 @@ cw.DEFAULTS = {
 cw.CiviModel = BB.Model.extend({
     defaults: function(){
         return {
-            id: '', //id from server. Client id is under cid
+            id: '', // id from server. Client id is under cid
             thread_id: '',
             type: "Civi Type",
             title: "Civi Title",
