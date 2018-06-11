@@ -105,7 +105,7 @@ class RecoverUserForm(AuthRecoverUserForm):
              subject_template_name='email/base_text_template.txt',
              email_template_name='email/base_email_template.html',
              use_https=False, token_generator=default_token_generator,
-             from_email=None, request=None, html_email_template_name=None):
+             from_email=None, request=None, html_email_template_name=None, extra_email_context=None):
         """
         Generates a one-use only link for resetting password and sends to the
         user.
