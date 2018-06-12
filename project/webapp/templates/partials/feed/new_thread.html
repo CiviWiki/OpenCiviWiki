@@ -39,7 +39,7 @@
                 <select id="thread-category">
                     <option value="" disabled selected>Choose your category</option>
                     {{# _.each(this.options.categories, function (c) { }}
-                        <option value="{{c.id}}">{{c.name}}</option>
+                        <option value="{{c.id}}" id = "thread-category-dropdown">{{c.name}}</option>
                     {{# }); }}
                 </select>
             </div>
@@ -69,7 +69,7 @@
     </div>
 
     <div class="modal-footer">
-        <button class="draft-new-thread waves-effect btn">Draft</button>
+        <button class="draft-new-thread waves-effect btn" id = "thread-create-draft">Draft</button>
         <!-- <button class="create-new-thread waves-effect btn">Publish</button> -->
         <button class="cancel-new-thread waves-effect btn-flat">Cancel</button>
     </div>
