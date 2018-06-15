@@ -21,7 +21,7 @@ class ThreadManager(models.Manager):
         # If thread length is longer than truncate length... add elipsis (truncate)
         ellipsis_if_too_long = '' if len(thread.summary) <= thread_truncate_length else '...'
 
-        from civi import Civi
+        from .civi import Civi
         thread_data = {
             "id": thread.id,
             "title": thread.title,
