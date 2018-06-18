@@ -1,4 +1,4 @@
-AccountModel = BB.Model.extend({
+const AccountModel = Bb.Model.extend({
     defaults: function() {
         return {
             profile_image: "",
@@ -26,3 +26,5 @@ AccountModel = BB.Model.extend({
         this.user = options.user;
     }
 });
+
+export default AccountModel;

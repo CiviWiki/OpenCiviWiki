@@ -1,13 +1,11 @@
-cw = cw || {};
-
-cw.DEFAULTS = {
+const DEFAULTS = {
     types: ['problem', 'cause', 'solution'],
     types_plural: ['problems', 'causes', 'solutions'],
     civiViewStates: ['recommended', 'other'],
     viewLimit: 5,
 };
 
-cw.CiviModel = BB.Model.extend({
+const CiviModel = Bb.Model.extend({
     defaults: function(){
         return {
             id: '', // id from server. Client id is under cid
@@ -61,3 +59,5 @@ cw.CiviModel = BB.Model.extend({
 
     },
 });
+
+export default Civi;

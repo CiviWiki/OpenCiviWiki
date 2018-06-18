@@ -1,6 +1,4 @@
-import { Model } from 'backbone';
-
-const Map = Model.extend({
+const Map = Bb.Model.extend({
     defaults: function() {
         return {
             id: '',
