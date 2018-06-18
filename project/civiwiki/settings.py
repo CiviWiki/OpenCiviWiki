@@ -52,6 +52,7 @@ INSTALLED_APPS = (
     'notifications',
     'legislation',
     'corsheaders',
+    'webpack_loader',
 )
 
 
@@ -167,6 +168,13 @@ STATICFILES_DIRS = (
 )
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+# Webpack
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'BUNDLE_DIR_NAME': 'bundles/',
+        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
+    }
+}
 
 # Database
 if 'CIVIWIKI_LOCAL_NAME' not in os.environ:

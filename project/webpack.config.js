@@ -16,8 +16,15 @@ module.exports = {
     filename: "[name].[hash].js",
     path: path.resolve(__dirname, "webapp/src/dist")
   },
+  build: {
+    assetsRoot: path.resolve(__dirname, "webapp", "statoc"),
+    assetsSubDirectory: "",
+    assetsPublicPath: "/static/"
+  },
+  dev: {
+    assetsPublicPath: "http://localhost:8080/"
+  },
   mode: "development",
-  devtool: "inline-source-map",
   module: {
     rules: [
       {
@@ -87,6 +94,13 @@ module.exports = {
       Mn: "backbone.marionette"
     })
   ],
+  resolve: {
+    modulesDirectories: ['node_modules'],
+    extensions: ['', '.js', '.jsx'],
+    alias: {
+      __STATIC__: resolve("static")
+    }
+  },
   resolveLoader: {
     moduleExtensions: ["-loader"]
   }
