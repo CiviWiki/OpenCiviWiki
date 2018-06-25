@@ -18,7 +18,7 @@ coverage==4.4.1
 cryptography==1.9
 daphne==1.1.0
 dj-database-url==0.4.1
-Django==1.8.7
+Django==1.11.7
 django-cors-headers==1.1.0
 django-model-utils==3.0.0
 django-notifications-hq==1.2

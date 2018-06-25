@@ -10,14 +10,16 @@ const BundleTracker = require("webpack-bundle-tracker");
 module.exports = {
   entry: {
     context: path.join(__dirname, "webapp", "src"),
-    app: ["./index.js"]
+    app: ["./index.js"],
+    static: ["./static.js"]
   },
   output: {
     filename: "[name].[hash].js",
-    path: path.resolve(__dirname, "webapp/src/dist")
+    path: path.resolve(__dirname, "webapp/static/bundles"),
+    publicPath: ''
   },
   build: {
-    assetsRoot: path.resolve(__dirname, "webapp", "statoc"),
+    assetsRoot: path.resolve(__dirname, "webapp", "static"),
     assetsSubDirectory: "",
     assetsPublicPath: "/static/"
   },
@@ -38,7 +40,7 @@ module.exports = {
       },
       {
         test: /\.less$/,
-        use: ["style-loader", "css-loader", "less-loader"]
+        use: ["less-loader"]
       },
       {
         test: /\.js?$/,
@@ -88,18 +90,18 @@ module.exports = {
       _: "underscore",
       $: "jquery",
       jQuery: "jquery",
-      Backbone: "backbone",
-      Bb: "backbone",
-      Marionette: "backbone.marionette",
-      Mn: "backbone.marionette"
+      // Backbone: "backbone",
+      // Bb: "backbone",
+      // Marionette: "backbone.marionette",
+      // Mn: "backbone.marionette"
     })
   ],
   resolve: {
     modulesDirectories: ['node_modules'],
     extensions: ['', '.js', '.jsx'],
-    alias: {
-      __STATIC__: resolve("static")
-    }
+    // alias: {
+    //   __STATIC__: resolve("static")
+    // }
   },
   resolveLoader: {
     moduleExtensions: ["-loader"]

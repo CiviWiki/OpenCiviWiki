@@ -1,0 +1,15 @@
+{% load render_bundle from webpack_loader %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    {% include "header.html" %}
+    <meta charset="UTF-8">
+    <title>CiviWiki</title>
+</head>
+
+<body>
+    {% render_bundle 'app' %}
+</body>
+
+</html>
