@@ -8,6 +8,5 @@ const App = Application.extend({
   onStart() {
     this.router = new Router({ app: this });
     CSRFToken();
-
   }
 });

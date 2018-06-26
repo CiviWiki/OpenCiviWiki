@@ -1,5 +1,6 @@
-import Router from "./router";
+import Router from "./approuter";
 import CSRFToken from "./utils/csrftoken";
+
 
 const App = Mn.Application.extend({
   onStart() {
