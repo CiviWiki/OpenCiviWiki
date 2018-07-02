@@ -51,7 +51,7 @@ The above command should be run in the same directory as the requirements.txt fi
 ### Environment variables
 There are several environment variables that are needed for things to work properly:
 
-- SUNLIGHT_API_KEY
+- PROPUBLICA_API_KEY
 - GOOGLE_MAP_API_KEY
 - REDIS_URL (optional)
 - AWS_STORAGE_BUCKET_NAME (optional)
@@ -71,7 +71,7 @@ You can save some time and declare those environmental variables all at once wit
 export DJANGO_SECRET_KEY=**********
 
 # Third party
-export SUNLIGHT_API_KEY=**********
+export PROPUBLICA_API_KEY=**********
 export GOOGLE_MAP_API_KEY=**********
 
 # PostgreSQL
