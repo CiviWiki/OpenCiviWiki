@@ -56,7 +56,6 @@ redis==2.10.5
 requests==2.8.1
 service-identity==16.0.0
 six==1.10.0
-sunlight==1.2.9
 Twisted==17.1.0
 txaio==2.8.0
 vine==1.1.3
