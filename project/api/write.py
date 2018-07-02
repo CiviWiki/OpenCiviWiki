@@ -238,11 +238,15 @@ def deleteCivi(request):
 # @login_required
 # def get_dist(request):
 #     '''
-#     Upon First registering or changing location information gets representative codes and addes them to the user array
+#     Upon First registering or changing location information gets representative codes and adds them to the user array.
 #     '''
-#     request = urllib2.Request("https://congress.api.sunlightfoundation.com/")
+#     Need chamber, state, and district.  Make sure all three are valid.  For members at large, district is set to 1.
+#     SENATE:
+#     request = urllib2.Request("https://api.propublica.org/congress/v1/members/senate/{state}/current.json")
+#     HOUSE:
+#     request = urllib2.Request("https://api.propublica.org/congress/v1/members/house/{state}/{district}/current.json")
 #
-#     #S3tting the key as the value of an X-APIKEY HTTP request header.
+#     #Setting the key as the value of an X-APIKEY HTTP request header.
 #     data = {
 #     "apikey": APIKEY,
 #     "fields": [],
