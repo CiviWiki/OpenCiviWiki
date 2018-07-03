@@ -1,10 +1,22 @@
-import read, write
+from django.conf.urls import url, include
+from rest_framework.routers import DefaultRouter
+from rest_framework.documentation import include_docs_urls
 
-from django.conf.urls import url
+from api import views, read, write
 
 
-#TODO: RESTful API - http://www.django-rest-framework.org/
+router = DefaultRouter(trailing_slash=False)
+router.register(r'threads', views.ThreadViewSet)
+router.register(r'categories', views.CategoryViewSet)
+router.register(r'accounts', views.AccountViewSet)
+router.register(r'civis', views.CiviViewSet)
+
 urlpatterns = [
+    url(r'^docs/', include_docs_urls(title='CiviWiki API', public=True)),
+    url(r'^v1/', include(router.urls)),
+]
+
+urlpatterns += [
     url(r'^account_data/(?P<user>[-\w]+)/$', read.get_user, name='get user'),
     url(r'^account_profile/(?P<user>[-\w]+)/$', read.get_profile, name='get profile'),
     url(r'^account_card/(?P<user>[-\w]+)$', read.get_card, name='get card'),
@@ -29,4 +41,4 @@ urlpatterns = [
     url(r'^follow/$', write.requestFollow, name='follow user'),
     url(r'^unfollow/$', write.requestUnfollow, name='unfollow user'),
     url(r'^edit_user_categories/$', write.editUserCategories, name='edit user categories'),
-    ]
+]

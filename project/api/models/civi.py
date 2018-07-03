@@ -11,6 +11,8 @@ from .account import Account
 from .bill import Bill
 from .hashtag import Hashtag
 from .thread import Thread
+from utils.constants import CIVI_TYPES
+
 
 class CiviManager(models.Manager):
     def summarize(self, civi):
@@ -35,7 +37,7 @@ class CiviManager(models.Manager):
             "hashtags": [hashtag.title for hashtag in civi.hashtags.all()],
             "created": "{0} {1}, {2}".format(month_name[civi.created.month], civi.created.day, civi.created.year),
             "attachments": [],
-            "votes": civi.votes(),
+            "votes": civi.votes,
             "id": civi.id,
             "thread_id": civi.thread.id
         }
@@ -61,11 +63,11 @@ class CiviManager(models.Manager):
             "hashtags": [h.title for h in civi.hashtags.all()],
             "created": "{0} {1}, {2}".format(month_name[civi.created.month], civi.created.day, civi.created.year),
             "attachments": [],
-            "votes": civi.votes(),
+            "votes": civi.votes,
             "id": civi.id,
             "thread_id": civi.thread.id,
             "links": [civi for civi in civi.linked_civis.all().values_list('id', flat=True)]
-	    }
+        }
 
         if filter and filter in data:
             return json.dumps({filter: data[filter]})
@@ -78,8 +80,8 @@ class CiviManager(models.Manager):
 
 class Civi(models.Model):
     objects = CiviManager()
-    author = models.ForeignKey(Account, default=None, null=True)
-    thread = models.ForeignKey(Thread, default=None, null=True)
+    author = models.ForeignKey(Account, related_name='civis', default=None, null=True)
+    thread = models.ForeignKey(Thread, related_name='civis', default=None, null=True)
     bill = models.ForeignKey(Bill, default=None, null=True) # null if not solution
 
     hashtags = models.ManyToManyField(Hashtag)
@@ -90,14 +92,7 @@ class Civi(models.Model):
     title = models.CharField(max_length=255, blank=False, null=False)
     body = models.CharField(max_length=1023, blank=False, null=False)
 
-    c_CHOICES = (
-        ('problem', 'Problem'),
-        ('cause', 'Cause'),
-        ('solution', 'Solution'),
-        ('response', 'Response'), #TODO: move this to separate model (subclass?)
-        ('rebuttal', 'Rebuttal'),
-    )
-    c_type = models.CharField(max_length=31, default='problem', choices=c_CHOICES)
+    c_type = models.CharField(max_length=31, default='problem', choices=CIVI_TYPES)
 
     votes_vneg = models.IntegerField(default=0)
     votes_neg = models.IntegerField(default=0)
@@ -105,7 +100,13 @@ class Civi(models.Model):
     votes_pos = models.IntegerField(default=0)
     votes_vpos = models.IntegerField(default=0)
 
-    def votes(self):
+    def __str__(self):
+        return self.title
+
+    def __unicode__(self):
+        return self.title
+
+    def _get_votes(self):
         from activity import Activity
         activity_votes = Activity.objects.filter(civi=self)
 
@@ -113,11 +114,13 @@ class Civi(models.Model):
             'total': activity_votes.count() - activity_votes.filter(activity_type='vote_neutral').count(),
             'votes_vneg': activity_votes.filter(activity_type='vote_vneg').count(),
             'votes_neg': activity_votes.filter(activity_type='vote_neg').count(),
-            'votes_neutral':  activity_votes.filter(activity_type='vote_neutral').count(),
+            'votes_neutral': activity_votes.filter(activity_type='vote_neutral').count(),
             'votes_pos': activity_votes.filter(activity_type='vote_pos').count(),
             'votes_vpos': activity_votes.filter(activity_type='vote_vpos').count()
         }
         return votes
+
+    votes = property(_get_votes)
 
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     last_modified = models.DateTimeField(auto_now=True, blank=True, null=True)
@@ -142,7 +145,7 @@ class Civi(models.Model):
         current_time = datetime.datetime.now()
 
         # Get all votes
-        votes = self.votes()
+        votes = self.votes
 
         # Score each each type of vote, based on count for that type
         vneg_score = votes['votes_vneg'] * vneg_weight
@@ -151,20 +154,20 @@ class Civi(models.Model):
         vpos_score = votes['votes_vpos'] * vpos_weight
 
         # Sum up all of the scores
-        scores_sum = vneg_score + neg_score + pos_score +vpos_score
+        scores_sum = vneg_score + neg_score + pos_score + vpos_score
 
         if request_acct_id:
             account = Account.objects.get(id=request_acct_id)
-            y = (1 if self.author in account.following.all().values_list('id', flat=True) else 0)
+            scores_sum = (1 if self.author in account.following.all().values_list('id', flat=True) else 0)
         else:
-            y = 0
+            scores_sum = 0
 
-        f = 0 #TODO: favorite val, is 'favorite' a meaningful name for this variable?
+        favorite = 0
 
         # Calculate how long ago the post was created
         time_ago = (current_time - post_time.replace(tzinfo=None)).total_seconds() / 300
 
-        g = 1 # TODO: determine what the variable 'g' does
+        gravity = 1 # TODO: determine what the variable 'g' does
         amp = math.pow(10,0)
 
         # Calculate rank based on positive, zero, or negative scores sum
@@ -174,24 +177,24 @@ class Civi(models.Model):
             votes_total = votes['total'] if votes['total'] > 1 else 2
 
             #step3 - A X*Log10V+Y + F + (##/T) = Rank Value
-            rank = scores_sum * math.log10(votes_total) * amp + y + f + g / time_ago
+            rank = scores_sum * math.log10(votes_total) * amp + scores_sum + favorite + gravity / time_ago
 
         elif scores_sum == 0:
             # Get count of total votes
             votes_total = votes['total']
 
             #step3 - B  V^2+Y + F + (##/T) = Rank Value
-            rank = votes_total**2 + y + f + g / time_ago
+            rank = votes_total**2 + scores_sum + favorite + gravity / time_ago
         elif scores_sum < 0:
             # TODO: determine why we set votes total to two when votes['tota'] is <= 1
             # set votes total to 2 when votes['total'] is <= 1
             votes_total = votes['total'] if votes['total'] > 1 else 2
 
             #step3 - C
-            if abs(scores_sum)/votes_total  <= 5:
-                rank = abs(scores_sum) * math.log10(votes_total) * amp + y + f + g / time_ago
+            if abs(scores_sum) / votes_total <= 5:
+                rank = abs(scores_sum) * math.log10(votes_total) * amp + scores_sum + favorite + gravity / time_ago
             else:
-                rank = scores_sum * math.log10(votes_total) * amp + y + f + g / time_ago
+                rank = scores_sum * math.log10(votes_total) * amp + scores_sum + favorite + gravity / time_ago
 
         return rank
 
@@ -208,7 +211,7 @@ class Civi(models.Model):
                 'first_name': self.author.first_name,
                 'last_name': self.author.last_name
             },
-            "votes": self.votes(),
+            "votes": self.votes,
             "links": [civi for civi in self.linked_civis.all().values_list('id', flat=True)],
             "created": self.created_date_str,
             # Not Implemented Yet

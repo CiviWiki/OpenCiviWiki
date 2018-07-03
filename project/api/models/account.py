@@ -129,6 +129,10 @@ class Account(models.Model):
 
     #custom "row-level" functionality (properties) for account models
     @property
+    def username(self):
+        return self.user.username
+
+    @property
     def location(self):
         """
         Constructs a CITY, STATE string for locations in the US,
