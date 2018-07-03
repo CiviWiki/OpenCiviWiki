@@ -3,7 +3,7 @@ import { Category } from '../models/Category'
 
 const Categories = Collection.extend({
     model: Category,
-    url: 'http://local5/api/books',
+    comparator: 'id'
 })
 
 export default Categories

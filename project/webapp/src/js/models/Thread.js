@@ -1,19 +1,24 @@
 import { Model } from "backbone";
 
-const Category = Model.extend({
+const Thread = Model.extend({
   defaults: function() {
     return {
       id: "",
-      name: ""
+      title: "",
+      summary: "",
+      author: "",
+      image: "",
+      created: "",
+      is_draft: ""
     };
   },
-  urlRoot: "/api/v1/categories/",
+  urlRoot: "/api/v1/threads/",
 
   idAttribute: "id",
-
+  
   initialize: (model, options) => {
     options = options || {};
   }
 });
 
-export default Category;
+export default Thread;
