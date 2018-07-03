@@ -98,7 +98,7 @@ module.exports = {
   ],
   resolve: {
     modulesDirectories: ['node_modules'],
-    extensions: ['', '.js', '.jsx'],
+    extensions: ['', '.js'],
     // alias: {
     //   __STATIC__: resolve("static")
     // }
