@@ -4,27 +4,19 @@ const path = require("path");
 const webpack = require("webpack");
 
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
 const BundleTracker = require("webpack-bundle-tracker");
+const env = process.env.NODE_ENV || "development";
 
 module.exports = {
+  context: path.resolve(__dirname, "webapp"),
   entry: {
-    context: path.join(__dirname, "webapp", "src"),
-    app: ["./index.js"],
-    static: ["./static.js"]
+    app: "./src/js/app.js"
+    // static: ["./static.js"]
   },
   output: {
     filename: "[name].[hash].js",
     path: path.resolve(__dirname, "webapp/static/bundles"),
-    publicPath: ''
-  },
-  build: {
-    assetsRoot: path.resolve(__dirname, "webapp", "static"),
-    assetsSubDirectory: "",
-    assetsPublicPath: "/static/"
-  },
-  dev: {
-    assetsPublicPath: "http://localhost:8080/"
+    publicPath: ""
   },
   mode: "development",
   module: {
@@ -32,11 +24,6 @@ module.exports = {
       {
         test: /\.html$/,
         loader: "underscore-template-loader",
-        query: {
-          interpolate: "\\{\\{#(.+?)\\}\\}",
-          evaluate: "\\{\\{=(.+?)\\}\\}",
-          escape: "\\{\\{(?!#|=)(.+?)\\}\\}"
-        }
       },
       {
         test: /\.less$/,
@@ -45,9 +32,8 @@ module.exports = {
       {
         test: /\.js?$/,
         exclude: /node_modules/,
-        loader: "babel",
-        query: {
-          presets: ["es2015"]
+        use: {
+          loader: "babel-loader"
         }
       },
       {
@@ -77,31 +63,28 @@ module.exports = {
     new ExtractTextPlugin({
       filename: "[name].[hash].css"
     }),
-    new CopyWebpackPlugin([
-      {
-        from: "./webapp/static/index.html",
-        to: "./index.html"
-      }
-    ]),
+    // new CopyWebpackPlugin([
+    //   {
+    //     from: "./static/index.html",
+    //     to: "./index.html"
+    //   }
+    // ]),
     new BundleTracker({
-      filename: "./static/webpack-stats.json"
+      filename: "./webapp/static/webpack-stats.json"
     }),
     new webpack.ProvidePlugin({
       _: "underscore",
       $: "jquery",
-      jQuery: "jquery",
-      // Backbone: "backbone",
-      // Bb: "backbone",
-      // Marionette: "backbone.marionette",
-      // Mn: "backbone.marionette"
+      jQuery: "jquery"
     })
   ],
   resolve: {
-    modulesDirectories: ['node_modules'],
-    extensions: ['', '.js'],
-    // alias: {
-    //   __STATIC__: resolve("static")
-    // }
+    extensions: ["*", ".js"],
+    alias: {
+      "@": path.resolve(__dirname, "src"),
+      "utils": path.resolve(__dirname, "./src/utils/"),
+      "templates": path.resolve(__dirname, "./src/templates/")
+    }
   },
   resolveLoader: {
     moduleExtensions: ["-loader"]

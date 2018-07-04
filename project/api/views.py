@@ -21,7 +21,7 @@ from api.serializers import (
     CiviSerializer,
     CiviImageSerializer,
     AccountSerializer,
-    AccountListSerializer,
+    AccountListSerializer
 )
 
 
@@ -150,6 +150,16 @@ class AccountViewSet(viewsets.ModelViewSet):
         serializer = AccountListSerializer(account_followings, many=True)
         return Response(serializer.data)
 
+    @detail_route()
+    def categories(self, request, user__username=None):
+        """
+        Gets the preferred categories of the selected account
+        /accounts/{username}/categories
+        """
+        account = get_account(username=user__username)
+        account_categories = account.categories
+        serializer = CategorySerializer(account_categories, many=True)
+        return Response(serializer.data)
 
 class ThreadViewSet(viewsets.ModelViewSet):
     """ REST API viewset for Threads """

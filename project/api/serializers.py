@@ -115,7 +115,6 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ('id', 'name')
 
-
 class ThreadSerializer(serializers.ModelSerializer):
     author = AccountListSerializer(required=False)
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())

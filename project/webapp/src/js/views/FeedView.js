@@ -1,10 +1,18 @@
 import { View } from "backbone.marionette";
-import feedTemplate from 'templates/views/feed.html'
+import { Account, Category, Thread } from "../models";
+import feedTemplate from "../../templates/views/test.html";
 
-const FeedView = View.extend ({
-    tagName: "feed",
-    template: _.template(feedTemplate),
+const FeedView = View.extend({
+  el: "#app-hook",
+  template: _.template(feedTemplate()),
 
-})
+//   templateContext: {
+//     categories: this.collection
+//   },
+  regions: {
+    feedList: "#main-threads",
+    trendingList: "#trending-threads"
+  }
+});
 
 export default FeedView;
