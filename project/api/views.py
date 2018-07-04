@@ -10,6 +10,7 @@ from rest_framework import authentication, permissions, viewsets
 from rest_framework.decorators import (
     api_view,
     detail_route,
+    list_route
 )
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
@@ -176,10 +177,16 @@ class ThreadViewSet(viewsets.ModelViewSet):
     def civis(self, request, pk=None):
         """
         Gets the civis linked to the thread instance
-        /accounts/{username}/civis
+        /thread/{id}/civis
         """
         thread_civis = Civi.objects.filter_by_thread_id(pk)
         serializer = CiviSerializer(thread_civis, many=True)
+        return Response(serializer.data)
+    
+    @list_route()
+    def top10(self, request):
+        top_10_threads = Thread.objects.filter() #is_draft=False).order_by('-num_views')[:10]
+        serializer = ThreadSerializer(top_10_threads, many=True)
         return Response(serializer.data)
 
 class CiviViewSet(viewsets.ModelViewSet):
@@ -197,7 +204,7 @@ class CiviViewSet(viewsets.ModelViewSet):
     def images(self, request, pk=None):
         """
         Gets the related images
-        /accounts/{username}/images
+        /civis/{id}/images
         """
         civi_images = CiviImage.objects.filter(civi=pk)
         serializer = CiviImageSerializer(civi_images, many=True, read_only=True)
