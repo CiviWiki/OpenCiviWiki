@@ -27,7 +27,13 @@ module.exports = {
       },
       {
         test: /\.less$/,
-        use: ["less-loader"]
+        use: [{
+          loader: 'style-loader' // creates style nodes from JS strings
+        }, {
+          loader: 'css-loader' // translates CSS into CommonJS
+        }, {
+          loader: 'less-loader' // compiles Less to CSS
+        }]
       },
       {
         test: /\.js?$/,
@@ -63,12 +69,6 @@ module.exports = {
     new ExtractTextPlugin({
       filename: "[name].[hash].css"
     }),
-    // new CopyWebpackPlugin([
-    //   {
-    //     from: "./static/index.html",
-    //     to: "./index.html"
-    //   }
-    // ]),
     new BundleTracker({
       filename: "./webapp/static/webpack-stats.json"
     }),
@@ -81,12 +81,10 @@ module.exports = {
   resolve: {
     extensions: ["*", ".js"],
     alias: {
-      "@": path.resolve(__dirname, "src"),
-      "utils": path.resolve(__dirname, "./src/utils/"),
-      "templates": path.resolve(__dirname, "./src/templates/")
+      src: path.resolve(__dirname, "./src"),
     }
   },
   resolveLoader: {
-    moduleExtensions: ["-loader"]
+    moduleExtensions: ["-loader"],
   }
 };

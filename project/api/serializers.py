@@ -92,8 +92,13 @@ class CiviSerializer(serializers.ModelSerializer):
     def get_score(self, obj):
         user = None
         request = self.context.get("request")
+
+        # Check for authenticated user
         if request and hasattr(request, "user"):
             user = request.user
+        else: 
+            return 0
+        
         if user.is_anonymous():
             return 0
         else:
