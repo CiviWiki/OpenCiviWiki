@@ -6,9 +6,9 @@ const Categories = Collection.extend({
   url: "/api/v1/categories",
   comparator: "id",
 
-  filterById /* prev:filterCategory */: function(category_id) {
-    var filtered = this.models.filter(function(thread_data) {
-      return thread_data.get("category") === category_id;
+  filterById /* prev:filterCategory */: category_id => {
+    var filtered = this.models.filter(model => {
+      return model.get("category") === category_id;
     });
     return filtered;
   }

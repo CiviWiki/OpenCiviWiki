@@ -24,16 +24,25 @@ module.exports = {
       {
         test: /\.html$/,
         loader: "underscore-template-loader",
+        query: {
+          interpolate: /\{\{=(.+?)\}\}/g,
+          evaluate: /\{\{#(.+?)\}\}/g,
+          escape: /\{\{(?!#|=)(.+?)\}\}/g
+        }
       },
       {
         test: /\.less$/,
-        use: [{
-          loader: 'style-loader' // creates style nodes from JS strings
-        }, {
-          loader: 'css-loader' // translates CSS into CommonJS
-        }, {
-          loader: 'less-loader' // compiles Less to CSS
-        }]
+        use: [
+          {
+            loader: "style-loader" // creates style nodes from JS strings
+          },
+          {
+            loader: "css-loader" // translates CSS into CommonJS
+          },
+          {
+            loader: "less-loader" // compiles Less to CSS
+          }
+        ]
       },
       {
         test: /\.js?$/,
@@ -81,10 +90,10 @@ module.exports = {
   resolve: {
     extensions: ["*", ".js"],
     alias: {
-      src: path.resolve(__dirname, "./src"),
+      src: path.resolve(__dirname, "./src")
     }
   },
   resolveLoader: {
-    moduleExtensions: ["-loader"],
+    moduleExtensions: ["-loader"]
   }
 };
