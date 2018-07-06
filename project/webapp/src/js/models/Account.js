@@ -20,6 +20,12 @@ const Account = Model.extend({
 
   idAttribute: "username",
 
+  fetchCurrent: () => {
+    url = `${this.urlRoot}`;
+    this.fetch(url);
+    return this;
+  },
+
   initialize: (model, options) => {
     options = options || {};
     this.user = options.user;
