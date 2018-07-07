@@ -1,6 +1,5 @@
 import { View } from "backbone.marionette";
-import { Account } from "../models";
-// import rootTemplate from 'templates/'
+
 import Navbar from "../components/Navbar/Navbar";
 import NotificationModal from "../components/Navbar/NotificationModal";
 import rootTemplate from "templates/layouts/root.html";
