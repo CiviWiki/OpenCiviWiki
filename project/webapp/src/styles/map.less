@@ -1,0 +1,52 @@
+@import "base";
+
+#location {
+    .input-field, #autocomplete {
+        @media only screen and (max-width: 600px) {
+            width: 200px;
+        }
+        width: 350px;
+    }
+
+    .map-wrapper {
+        .map-overlay {
+            position: relative;
+            .progress {
+                position: absolute;
+                left: 0;
+                right: 0;
+                margin: 0 auto 0 auto;
+                width: 350px;
+                @media only screen and (max-width: 600px) {
+                    width: 200px;
+                }
+                z-index: 2;
+
+            }
+        }
+        #map {
+            width: 350px;
+            height: 250px;
+            @media only screen and (max-width: 600px) {
+                width: 200px;
+                height: 200px;
+            }
+            margin-left: auto;
+            margin-right: auto;
+            border: solid 1px @dark-white;
+            z-index: 1;
+        }
+    }
+    .rep-title{
+        margin-top: 20px;
+    }
+    #rep-text {
+        margin: 20px 0 20px 0;
+    }
+    #rep-list {
+        margin-top: 15px;
+        .rep {
+            margin: 5px;
+        }
+    }
+}
