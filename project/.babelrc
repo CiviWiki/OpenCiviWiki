@@ -1,0 +1,14 @@
+{
+  "plugins": [
+    [
+      "module-resolver",
+      {
+        "root": ["./webapp/src"],
+        "alias": {
+          "styles": "./webapp/src/styles",
+          "templates": "./webapp/src/templates"
+        }
+      }
+    ]
+  ]
+}

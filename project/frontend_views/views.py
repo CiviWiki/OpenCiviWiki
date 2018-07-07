@@ -32,17 +32,13 @@ def base_view(request):
     # my_draft_threads = [Thread.objects.summarize(t) for t in Thread.objects.filter(author_id=a.id).exclude(is_draft=False).order_by('-created')]
 
     # states = sorted(US_STATES, key=lambda s: s[1])
-    # data = {
-    #     'categories': categories,
-    #     'states': states,
-    #     'user_categories': user_categories,
-    #     'threads': feed_threads,
-    #     'trending': top5_threads,
-    #     'draft_threads': my_draft_threads
-    # }
+    context = {
+        'username': request.user.username,
+        'google_map_api_key': settings.GOOGLE_API_KEY
+    }
 
     # return TemplateResponse(request, 'feed.html', {'data': json.dumps(data)})
-    return TemplateResponse(request, 'app.html')
+    return TemplateResponse(request, 'app.html', context)
 
 
 @login_required

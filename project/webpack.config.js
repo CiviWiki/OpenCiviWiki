@@ -3,7 +3,7 @@ const path = require("path");
 
 const webpack = require("webpack");
 
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const BundleTracker = require("webpack-bundle-tracker");
 const env = process.env.NODE_ENV || "development";
 
@@ -32,17 +32,11 @@ module.exports = {
       },
       {
         test: /\.less$/,
-        use: [
-          {
-            loader: "style-loader" // creates style nodes from JS strings
-          },
-          {
-            loader: "css-loader" // translates CSS into CommonJS
-          },
-          {
-            loader: "less-loader" // compiles Less to CSS
-          }
-        ]
+        use: [ 'style-loader', 'css-loader', 'less-loader']
+      },
+      {
+        test: /\.css$/,
+        use: [ 'style-loader', 'css-loader' ]
       },
       {
         test: /\.js?$/,
@@ -52,17 +46,12 @@ module.exports = {
         }
       },
       {
-        test: /\.css$/,
-        exclude: /node_modules/,
-        loader: ExtractTextPlugin.extract("style-loader", "css-loader")
-      },
-      {
         test: /\.(png|jp(e*)g|svg)$/,
         use: [
           {
             loader: "url-loader",
             options: {
-              limit: 8000,
+              limit: 5000,
               name: "img/[name].[hash].[ext]"
             }
           }
@@ -75,9 +64,6 @@ module.exports = {
     ]
   },
   plugins: [
-    new ExtractTextPlugin({
-      filename: "[name].[hash].css"
-    }),
     new BundleTracker({
       filename: "./webapp/static/webpack-stats.json"
     }),
@@ -89,6 +75,10 @@ module.exports = {
   ],
   resolve: {
     extensions: ["*", ".js"],
+    modules: [
+      'node_modules',
+      'webapp/src',
+    ],
     alias: {
       src: path.resolve(__dirname, "./src")
     }

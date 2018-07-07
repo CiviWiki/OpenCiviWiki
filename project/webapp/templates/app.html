@@ -1,0 +1,29 @@
+{% load render_bundle from webpack_loader %}
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    {% include "header.html" %}
+    <title>CiviWiki</title>
+</head>
+
+<body>
+    
+    <main id="app-hook"></main>
+    
+    {% csrf_token %}
+    {% render_bundle 'app' %}
+    
+    <script type="text/javascript">
+        var context = {
+            username: '{{ username }}',
+            GoogleAPIKey:'{{ google_map_api_key }}'
+        }
+        startApp(context);
+
+    </script>
+</body>
+
+</html>

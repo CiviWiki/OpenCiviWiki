@@ -25,11 +25,13 @@ class AccountSerializer(serializers.ModelSerializer):
     latitude = serializers.FloatField(max_value=90, min_value=-90, write_only=True, required=False)
     location = serializers.ReadOnlyField()
 
+    is_staff = serializers.ReadOnlyField(source='user.is_staff')
+
     class Meta:
         model = Account
         fields = ('username', 'first_name', 'last_name', 'about_me', 'location','email',
         'address', 'city', 'state', 'zip_code', 'country', 'longitude', 'latitude',
-        'profile_image', 'profile_image_url', 'profile_image_thumb_url')
+        'profile_image', 'profile_image_url', 'profile_image_thumb_url', 'is_staff')
 
         extra_kwargs = {
             'email': WRITE_ONLY,

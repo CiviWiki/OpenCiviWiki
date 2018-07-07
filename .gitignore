@@ -8,4 +8,5 @@ staticfiles
 
 # Frontend
 node_modules
-project/webapp/dist
+bundles
+webpack-stats.json
