@@ -139,3 +139,20 @@ class ThreadSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'summary', 'author', 'image_url', 'civis', 'image',
         'created', 'level', 'state', 'is_draft', 'category',
         'num_views', 'num_civis', 'num_solutions')
+
+
+class ThreadListSerializer(serializers.ModelSerializer):
+    author = AccountListSerializer(required=False)
+    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
+
+    created = serializers.ReadOnlyField(source='created_date_str')
+
+    num_views = serializers.ReadOnlyField()
+    num_civis = serializers.ReadOnlyField()
+    num_solutions = serializers.ReadOnlyField()
+
+    class Meta:
+        model = Thread
+        fields = ('id', 'title', 'summary', 'author', 'image_url', 'created', 
+        'level', 'state', 'is_draft', 'category', 'num_views', 'num_civis', 
+        'num_solutions')

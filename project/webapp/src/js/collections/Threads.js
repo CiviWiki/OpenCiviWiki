@@ -9,6 +9,11 @@ const Threads = Collection.extend({
     return -model.get("date").getTime();
   },
 
+  fetchAll: () => {
+    url = `${this.url}/all`;
+    this.fetch(url);
+    return this;
+  },
   fetchTop: () => {
     url = `${this.url}/top`;
     this.fetch(url);

@@ -17,6 +17,7 @@ from rest_framework.reverse import reverse
 from api.models import Thread, Account, Category, Civi, CiviImage
 from api.serializers import (
     ThreadSerializer,
+    ThreadListSerializer,
     CategorySerializer,
     CiviSerializer,
     CiviImageSerializer,
@@ -205,6 +206,16 @@ class ThreadViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
     
     @action(methods=['get', 'post'], detail=False)
+    def all(self, request):
+        """
+        Gets the all threads for listing
+        /threads/all
+        """
+        all_threads = self.queryset
+        serializer = ThreadListSerializer(all_threads, many=True, context={'request': request})
+        return Response(serializer.data)
+
+    @action(methods=['get', 'post'], detail=False)
     def top(self, request):
         """
         Gets the top threads based on the number of page views
@@ -212,7 +223,7 @@ class ThreadViewSet(viewsets.ModelViewSet):
         """
         limit = request.query_params.get('limit', 5)
         top_threads = Thread.objects.filter(is_draft=False).order_by('-num_views')[:limit]
-        serializer = ThreadSerializer(top_threads, many=True, context={'request': request})
+        serializer = ThreadListSerializer(top_threads, many=True, context={'request': request})
         return Response(serializer.data)
     
     @action(detail=False)
@@ -223,7 +234,7 @@ class ThreadViewSet(viewsets.ModelViewSet):
         """
         account = get_account(username=self.request.user)
         draft_threads = Thread.objects.filter(author=account, is_draft=True)
-        serializer = ThreadSerializer(draft_threads, many=True, context={'request': request})
+        serializer = ThreadListSerializer(draft_threads, many=True, context={'request': request})
         return Response(serializer.data)
 
 class CiviViewSet(viewsets.ModelViewSet):
