@@ -7,54 +7,50 @@ const Notifications = Collection.extend({
 
   initialize() {
     this.consecutive_misfires = 0;
-    this.notify_badge_class = "#live_notify_badge";
+    this.initialNotificationShown = false;
+    this.newIds = [];
   },
 
-  fetchNotifications() {
-    _.delay(this.fetchApiData, 1000, this);
+  startFetchPoll() {
+    _.delay(this.fetchUnread, 1000, this);
   },
 
-  fetchApiData(collection) {
-    let query = {
-      max: 99
-    };
-
+  fetchUnread(collection) {
+    const query = { max: 99 };
     $.ajax({
       url: `${collection.url}/unread_list/`,
       type: "GET",
       data: query,
-      success: function(data) {
+      success: data => {
         collection.consecutive_misfires = 0;
-
         if (data.unread_count > 0) {
-          collection.reset(data.unread_list);
+          collection.newIds = this.findNewIds(collection.models, data.unread_list);
+          if (collection.newIds.length > 0) collection.reset(data.unread_list);
         }
-
-        _.each(data.unread_list, function(notifications) {
-          var old_notification = _.findWhere(collection.models, {id: notifications.id});
-          // var json_Data = JSON.parse(notifications.data);
-          if (!old_notification) {
-            if (json_Data !== null) {
-              Materialize.toast(notifications.data.popup_string, 5000);
-            } else {
-              Materialize.toast("You have a new notification", 5000);
-            }
-          }
-        });
       },
-      error: function() {
-        collection.consecutive_misfires++;
+      error: () => { collection.consecutive_misfires++; },
+      complete: () => {
+        // Checking if polling should be continued
+        if (collection.consecutive_misfires < 10) {
+          _.delay(collection.fetchUnread, 3000, collection);
+        } else {
+          this.trigger("error");
+        }
       }
     });
+  },
 
-    if (collection.consecutive_misfires < 10) {
-      _.delay(collection.fetchApiData, 30000, collection);
-    } else {
-      collection.collection.trigger("selected", collection.model);
-      let badge = $(collection.notify_badge_class);
-      badge.html("!");
-      badge.attr("title", "Connection lost!");
-    }
+  findNewIds(oldUnreadList, newUnreadList) {
+    // Compare the current collection to the new and return the ids of the difference
+    const newIds = [];
+    _.each(newUnreadList, unreadItem => {
+      unreadItem.data = JSON.parse(unreadItem.data);
+      const itemIsOld = _.findWhere(oldUnreadList, { id: unreadItem.id });
+      if (!itemIsOld) {
+        newIds.push(unreadItem.id);
+      }
+    });
+    return newIds;
   }
 });
 

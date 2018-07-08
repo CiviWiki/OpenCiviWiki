@@ -1,9 +1,6 @@
+import "materialize-css";
 import { Application } from "backbone.marionette";
 import { history } from "backbone";
-
-import "materialize-css";
-import "materialize-css/dist/css/materialize.css";
-import "styles/utils.less";
 
 import Router from "./router";
 import CSRFToken from "./utils/csrftoken";

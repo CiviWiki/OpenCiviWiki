@@ -3,7 +3,7 @@ import { Model } from "backbone";
 const Notification = Model.extend({
   defaults: {
     actor: "username",
-    verb: "action",
+    verb: "performed an action",
     target: "object",
     timestamp: Date.now(),
     data: {},
@@ -11,6 +11,8 @@ const Notification = Model.extend({
 
   parse(response) {
     response.data =  JSON.parse(response.data);
+    console.log(response);
+    
     return response;
   }
 });

@@ -4,7 +4,10 @@ import Navbar from "../components/Navbar/Navbar";
 import NotificationModal from "../components/Navbar/NotificationModal";
 import rootTemplate from "templates/layouts/root.html";
 
-const RootLayout = View.extend({
+import "materialize-css/dist/css/materialize.css";
+import "styles/base.less";
+
+const RootView = View.extend({
   template: rootTemplate,
 
   regions: {
@@ -23,12 +26,13 @@ const RootLayout = View.extend({
   },
 
   initialize() {
-    this.currentUser = this.getOption("account");    
+    this.currentUser = this.getOption("account"); 
+    this.notifications = this.getOption("notifications"); 
   },
 
   onRender() {
-    this.showChildView("navbar", new Navbar({ model: this.currentUser }));
-    this.showChildView("notificationModal", new NotificationModal());
+    this.showChildView("navbar", new Navbar({ model: this.currentUser, notifications: this.notifications  }));
+    this.showChildView("notificationModal", new NotificationModal({ notifications: this.notifications }));
 
     M.Modal.init(this.getUI("modal"));
   },
@@ -42,4 +46,4 @@ const RootLayout = View.extend({
   }
 });
 
-export default RootLayout;
+export default RootView;

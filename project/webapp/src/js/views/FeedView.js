@@ -1,5 +1,10 @@
-export const AppLayout = View.extend({
-  template,
+import { View } from "backbone.marionette";
+import feedTemplate from "templates/layouts/feed.html";
+
+import "styles/feed.less";
+
+const FeedView = View.extend({
+  template: feedTemplate,
 
   regions: {
     categoryModal: "categories-modal-holder",
@@ -42,3 +47,5 @@ export const AppLayout = View.extend({
   //   Bb.history.navigate(`notes/${noteId}/edit`);  // Update the location bar
   // }
 });
+
+export default FeedView

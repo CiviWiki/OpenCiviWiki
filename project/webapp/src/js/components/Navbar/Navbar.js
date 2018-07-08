@@ -1,6 +1,9 @@
 import { View } from "backbone.marionette";
 import navbarTemplate from "templates/components/common/navbar.html";
 
+import "styles/navbar.less";
+import "styles/utils.less";
+
 const Navbar = View.extend({
   template: navbarTemplate,
 
@@ -9,8 +12,9 @@ const Navbar = View.extend({
     dropdown: "#js-dropdown-menu",
     dropdownIcon: ".js-dropdown-icon",
     notificationButton: "#item-notifications",
-    notificationCount: "#notify-count-wrapper",
-    notificationIcon: "#notify-icon"
+    notificationBadge: "#notify-count-wrapper",
+    notificationIcon: "#notify-icon",
+    notificationCount: "#live_notify_badge"
   },
 
   events: {
@@ -19,10 +23,27 @@ const Navbar = View.extend({
   },
 
   modelEvents: {
-    'change': 'render'
+    change: "render"
   },
 
-  toggleDropdown(event){
+  initialize() {
+    this.notifications = this.getOption("notifications");
+    this.listenTo(this.notifications, "reset", this.onNotification);
+    this.listenTo(this.notifications, "error", this.onNotificationError);
+  },
+
+  onNotification() {
+    this.renderNotificationToast();
+    this.renderNotificationBadge();
+  },
+
+  onNotificationError() {
+    this.getUI("notificationCount")
+      .html("!")
+      .attr("title", "Connection lost!");
+  },
+
+  toggleDropdown(event) {
     // Open the dropdown menu
     event.stopPropagation();
     this.getUI("dropdown").toggleClass("hide");
@@ -40,22 +61,64 @@ const Navbar = View.extend({
       }
     });
   },
-  
-  markNotifications(){
-    console.log(this.model);
-    this.triggerMethod('click:notifyIcon', this);
 
-    let _this = this;
+  markNotifications() {
+    // Send a request to the server marking that the notifications have been read
+    this.triggerMethod("click:notifyIcon", this);
+
+    const _this = this;
     $.ajax({
       type: "GET",
       url: "/inbox/notifications/mark-all-as-read/",
-      success: function() {
-        _this.getUI("notificationCount").addClass("hide");
-        _this.getUI("notificationIcon")
+      success: () => {
+        // Remove the notification count badge
+        _this.getUI("notificationBadge").addClass("hide");
+        _this
+          .getUI("notificationIcon")
           .html("notifications_none")
           .removeClass("active");
+      },
+      error: () => {
+        _this.onNotificationError();
       }
     });
+  },
+
+  renderNotificationToast() {
+    // Shows the Toast message based on the number of notifications
+    if (this.notifications.length <= 0) return;
+    else if (this.notifications.length === 1) {
+      M.toast({ html: this.notifications.at(0).get("data").popup_string });
+    } else {
+      if (!this.notifications.initialNotificationShown) {
+        this.notifications.initialNotificationShown = true;
+        M.toast({
+          html: `You have ${this.notifications.length} new notifications`
+        });
+      } else {
+        _.each(this.notifications.newIds, id => {
+          M.toast({
+            html: this.notifications.get(id).get("data").popup_string
+          });
+        });
+      }
+    }
+  },
+
+  renderNotificationBadge() {
+    // Show and hide the number by the notification icon
+    if (this.notifications.length === 0) {
+      this.getUI("notificationBadge").addClass("hide");
+      this.getUI("notificationIcon")
+        .html("notifications_none")
+        .removeClass("active");
+    } else {
+      this.getUI("notificationCount").html(this.notifications.length);
+      this.getUI("notificationBadge").removeClass("hide");
+      this.getUI("notificationIcon")
+        .html("notifications")
+        .addClass("active");
+    }
   }
 });
 
