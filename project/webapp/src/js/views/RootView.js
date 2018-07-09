@@ -1,5 +1,8 @@
 import { View } from "backbone.marionette";
 
+import { Account } from "../models";
+import { Notifications } from "../collections";
+
 import Navbar from "../components/Navbar/Navbar";
 import NotificationModal from "../components/Navbar/NotificationModal";
 import rootTemplate from "templates/layouts/root.html";
@@ -8,6 +11,8 @@ import "materialize-css/dist/css/materialize.css";
 import "styles/base.less";
 
 const RootView = View.extend({
+  tagName: "div",
+  className: "RootView",
   template: rootTemplate,
 
   regions: {
@@ -26,8 +31,13 @@ const RootView = View.extend({
   },
 
   initialize() {
-    this.currentUser = this.getOption("account"); 
-    this.notifications = this.getOption("notifications"); 
+    this.currentUser = new Account({
+      username: this.getOption("context").username
+    });
+    this.notifications = new Notifications();
+
+    this.currentUser.fetch();
+    this.notifications.startFetchPoll();
   },
 
   onRender() {

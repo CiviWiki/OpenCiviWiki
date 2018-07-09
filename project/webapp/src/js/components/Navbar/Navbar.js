@@ -5,6 +5,8 @@ import "styles/navbar.less";
 import "styles/utils.less";
 
 const Navbar = View.extend({
+  tagName: "div",
+  className: "nav-wrapper",
   template: navbarTemplate,
 
   ui: {

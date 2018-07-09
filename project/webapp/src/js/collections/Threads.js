@@ -6,28 +6,28 @@ const Threads = Collection.extend({
   url: "/api/v1/threads",
 
   comparator: model => {
-    return -model.get("date").getTime();
+    return -model.get("created").getTime();
   },
 
-  fetchAll: () => {
-    url = `${this.url}/all`;
-    this.fetch(url);
-    return this;
+  fetchAll() {
+    this.url = `${this.url}/all`;
+    this.fetch();
   },
-  fetchTop: () => {
-    url = `${this.url}/top`;
-    this.fetch(url);
-    return this;
+  fetchTop() {
+    this.url = `${this.url}/top`;
+    this.fetch();
   },
-  fetchDrafts: () => {
-    url = `${this.url}/drafts`;
-    this.fetch(url);
-    return this;
+  fetchDrafts() {
+    this.url = `${this.url}/drafts`;
+    this.fetch();
   },
 
-  filterCategory: function(category_id) {
-    var filtered = this.models.filter(function(thread_data) {
-      return thread_data.get("category") === category_id;
+  filterByCategory(categoryId) {
+    if (categoryId === -1) {
+      return this.models;
+    }
+    const filtered = this.models.filter(function(model) {
+      return model.get("category").id === categoryId;
     });
     return filtered;
   }

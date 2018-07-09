@@ -4,7 +4,8 @@ const Category = Model.extend({
   defaults: function() {
     return {
       id: "",
-      name: ""
+      name: "",
+      preferred: true,
     };
   },
   urlRoot: "/api/v1/categories/",

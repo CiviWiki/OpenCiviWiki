@@ -3,7 +3,7 @@
     <div class="modal-content">
         <div class="title center">MY CATEGORIES</div>
         <form id="user-category-form" action="#" class="container">
-            <div class="row">
+            <div class="row" id="user-categories-form">
                 {{# _.each(categories, function (c) { }}
                     <p class="col s12 m6 category-checkbox">
                         {{# if (_.contains(user_categories, c.id)) { }}

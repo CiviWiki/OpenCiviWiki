@@ -24,7 +24,7 @@ const Notifications = Collection.extend({
       success: data => {
         collection.consecutive_misfires = 0;
         if (data.unread_count > 0) {
-          collection.newIds = this.findNewIds(collection.models, data.unread_list);
+          collection.newIds = collection.findNewIds(collection.models, data.unread_list);
           if (collection.newIds.length > 0) collection.reset(data.unread_list);
         }
       },

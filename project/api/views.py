@@ -192,6 +192,15 @@ class ThreadViewSet(viewsets.ModelViewSet):
     permission_classes = (IsOwnerOrReadOnly,)
     authentication_classes = AUTH_CLASSES
 
+    def get_queryset(self):
+        """ allow rest api to filter by submissions """
+        queryset = Thread.objects.filter(is_draft=False)
+        category_id = self.request.query_params.get('category_id', None)
+        if category_id is not None:
+            queryset = queryset.filter(category__id=category_id)
+        
+        return queryset
+
     def perform_create(self, serializer):
         serializer.save(author=get_account(user=self.request.user))
 

@@ -11,18 +11,18 @@
 
 <body>
     
-    <main id="app-hook"></main>
-    
-    {% csrf_token %}
-    {% render_bundle 'app' %}
-    
-    <script type="text/javascript">
-        var context = {
-            username: '{{ username }}',
-            GoogleAPIKey:'{{ google_map_api_key }}'
-        }
-        startApp(context);
-    </script>
+<main id="app-hook"></main>
+
+{% csrf_token %}
+{% render_bundle 'app' %}
+
+<script type="text/javascript">
+var context = {
+    username: '{{ username }}',
+    GoogleAPIKey:'{{ google_map_api_key }}'
+}
+startApp(context);
+</script>
 </body>
 
 </html>

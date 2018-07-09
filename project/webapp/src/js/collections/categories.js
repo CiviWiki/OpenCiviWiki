@@ -6,8 +6,14 @@ const Categories = Collection.extend({
   url: "/api/v1/categories",
   comparator: "id",
 
+  fetchByUsername(username) {
+    this.url = `/api/v1/account/${username}/categories`;
+    this.fetch();
+    return this;
+  },
+
   filterById /* prev:filterCategory */: category_id => {
-    var filtered = this.models.filter(model => {
+    const filtered = this.models.filter(model => {
       return model.get("category") === category_id;
     });
     return filtered;
