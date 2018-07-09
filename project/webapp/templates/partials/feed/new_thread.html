@@ -37,9 +37,9 @@
         <div class="new-thread-category-selection white-background-input-field" id="new-thread-category-selection">
             <div class="input-field left-input-field">
                 <select id="thread-category">
-                    <option value="" disabled selected>Choose your category</option>
+                    <option value="" id="thread-category-dropdown" disabled selected>Choose your category</option>
                     {{# _.each(this.options.categories, function (c) { }}
-                        <option value="{{c.id}}" id = "thread-category-dropdown">{{c.name}}</option>
+                        <option value="{{c.id}}">{{c.name}}</option>
                     {{# }); }}
                 </select>
             </div>
