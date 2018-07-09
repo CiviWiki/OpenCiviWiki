@@ -1,89 +1,81 @@
-"use strict";
-const path = require("path");
-
-const webpack = require("webpack");
-
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const BundleTracker = require("webpack-bundle-tracker");
-const env = process.env.NODE_ENV || "development";
+const path = require('path');
+const webpack = require('webpack');
+const BundleTracker = require('webpack-bundle-tracker');
 
 module.exports = {
-  context: path.resolve(__dirname, "webapp"),
+  context: path.resolve(__dirname, 'webapp'),
   entry: {
-    app: "./src/js/app.js"
+    app: './src/js/app.js',
     // static: ["./static.js"]
   },
   output: {
-    filename: "[name].[hash].js",
-    path: path.resolve(__dirname, "webapp/static/bundles"),
-    publicPath: ""
+    filename: '[name].[hash].js',
+    path: path.resolve(__dirname, 'webapp/static/bundles'),
+    publicPath: '',
   },
-  mode: "development",
+  mode: 'development',
   module: {
     rules: [
       {
         test: /\.html$/,
-        loader: "underscore-template-loader",
+        loader: 'underscore-template-loader',
         query: {
           interpolate: /\{\{=(.+?)\}\}/g,
           evaluate: /\{\{#(.+?)\}\}/g,
-          escape: /\{\{(?!#|=)(.+?)\}\}/g
-        }
+          escape: /\{\{(?!#|=)(.+?)\}\}/g,
+        },
       },
       {
         test: /\.less$/,
-        use: [ 'style-loader', 'css-loader', 'less-loader']
+        use: ['style-loader', 'css-loader', 'less-loader'],
       },
       {
         test: /\.css$/,
-        use: [ 'style-loader', 'css-loader' ]
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.js?$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader"
-        }
+          loader: 'babel-loader',
+        },
       },
       {
         test: /\.(png|jp(e*)g|svg)$/,
         use: [
           {
-            loader: "url-loader",
+            loader: 'url-loader',
             options: {
               limit: 5000,
-              name: "img/[name].[hash].[ext]"
-            }
-          }
-        ]
+              name: 'img/[name].[hash].[ext]',
+            },
+          },
+        ],
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/,
-        use: ["file-loader"]
-      }
-    ]
+        use: ['file-loader'],
+      },
+    ],
   },
   plugins: [
     new BundleTracker({
-      filename: "./webapp/static/webpack-stats.json"
+      filename: './webapp/static/webpack-stats.json',
     }),
     new webpack.ProvidePlugin({
-      _: "underscore",
-      $: "jquery",
-      jQuery: "jquery"
-    })
+      _: 'underscore',
+      $: 'jquery',
+      jQuery: 'jquery',
+    }),
   ],
   resolve: {
-    extensions: ["*", ".js"],
-    modules: [
-      'node_modules',
-      'webapp/src',
-    ],
+    extensions: ['*', '.js'],
+    modules: ['node_modules', 'webapp/src'],
     alias: {
-      src: path.resolve(__dirname, "./src")
-    }
+      src: path.resolve(__dirname, './src'),
+    },
   },
   resolveLoader: {
-    moduleExtensions: ["-loader"]
-  }
+    moduleExtensions: ['-loader'],
+  },
 };
