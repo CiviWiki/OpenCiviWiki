@@ -1,8 +1,7 @@
 import { View } from 'backbone.marionette';
 
-import feedTemplate from 'templates/layouts/feed.html';
-import emptyTemplate from 'templates/components/Thread/empty.html';
-import 'styles/feed.less';
+import feedTemplate from 'Templates/layouts/feed.html';
+import emptyTemplate from 'Templates/components/Thread/empty.html';
 
 import { Threads, Categories } from '../collections';
 import EditCategoryModal from '../components/Feed/EditCategoryModal';
@@ -10,6 +9,8 @@ import CategoryNavbar from '../components/Feed/CategoryNavbar';
 import ThreadCollectionView from '../components/Feed/ThreadCollectionView';
 import ThreadList from '../components/Feed/ThreadList';
 import ThreadLink from '../components/Thread/Link';
+
+import 'Styles/feed.less';
 
 const EmptyView = View.extend({
   template: emptyTemplate,

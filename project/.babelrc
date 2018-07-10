@@ -5,8 +5,8 @@
       {
         "root": ["./webapp/src"],
         "alias": {
-          "styles": "./webapp/src/styles",
-          "templates": "./webapp/src/templates"
+          "Styles": "./webapp/src/styles",
+          "Templates": "./webapp/src/templates"
         }
       }
     ]

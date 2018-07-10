@@ -1,12 +1,17 @@
 {
-    "parser": "babel-eslint",
-    "extends": "airbnb-base",
-    "plugins": [
-        "backbone"
-    ],
-    "globals": {
-        "$": false,
-        "window": false,
-        "M": false
+  "parser": "babel-eslint",
+  "extends": "airbnb-base",
+  "plugins": ["backbone"],
+  "settings": {
+    "import/resolver": {
+      "babel-module": {
+        "extensions": [".js", ".jsx"]
+      }
     }
+  },
+  "globals": {
+    "$": false,
+    "window": false,
+    "M": false
+  }
 }
