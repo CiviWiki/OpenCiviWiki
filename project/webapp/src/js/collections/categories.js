@@ -1,10 +1,10 @@
-import { Collection } from "backbone";
-import { Category } from "../models";
+import { Collection } from 'backbone';
+import { Category } from '../models';
 
 const Categories = Collection.extend({
   model: Category,
-  url: "/api/v1/categories",
-  comparator: "id",
+  url: '/api/v1/categories',
+  comparator: 'id',
 
   fetchByUsername(username) {
     this.url = `/api/v1/account/${username}/categories`;
@@ -12,12 +12,10 @@ const Categories = Collection.extend({
     return this;
   },
 
-  filterById /* prev:filterCategory */: category_id => {
-    const filtered = this.models.filter(model => {
-      return model.get("category") === category_id;
-    });
+  filterById: (categoryId) => {
+    const filtered = this.models.filter(model => model.get('category') === categoryId);
     return filtered;
-  }
+  },
 });
 
 export default Categories;

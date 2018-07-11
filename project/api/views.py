@@ -197,7 +197,8 @@ class ThreadViewSet(viewsets.ModelViewSet):
         queryset = Thread.objects.filter(is_draft=False)
         category_id = self.request.query_params.get('category_id', None)
         if category_id is not None:
-            queryset = queryset.filter(category__id=category_id)
+            if category_id != 'all':
+                queryset = queryset.filter(category=category_id)
         
         return queryset
 

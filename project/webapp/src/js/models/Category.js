@@ -1,20 +1,16 @@
-import { Model } from "backbone";
+import { Model } from 'backbone';
 
 const Category = Model.extend({
-  defaults: function() {
+  defaults() {
     return {
-      id: "",
-      name: "",
+      id: '',
+      name: '',
       preferred: true,
     };
   },
-  urlRoot: "/api/v1/categories/",
+  urlRoot: '/api/v1/categories/',
 
-  idAttribute: "id",
-
-  initialize: (model, options) => {
-    options = options || {};
-  }
+  idAttribute: 'id',
 });
 
 export default Category;

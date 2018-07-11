@@ -1,7 +1,7 @@
-import { View } from "backbone.marionette"
-import emptyTemplate from "templates/components/common/empty.html";
+import { View } from 'backbone.marionette';
+import emptyTemplate from 'Templates/components/common/empty.html';
 
-var EmptyView = View.extend({
+const EmptyView = View.extend({
   template: emptyTemplate,
 });
 

@@ -169,7 +169,7 @@ class ThreadSerializer(serializers.ModelSerializer):
 
 class ThreadListSerializer(serializers.ModelSerializer):
     author = AccountListSerializer(required=False)
-    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
+    category = CategoryListSerializer()
 
     created = serializers.ReadOnlyField()
 

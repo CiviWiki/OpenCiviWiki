@@ -57,6 +57,10 @@ const RootView = View.extend({
     M.Modal.getInstance(this.getUI('modal')).open();
   },
 
+  /**
+   * Renders a given Marionette.View to the main content container
+   * @param {Marionette.View} contentView
+   */
   renderContent(contentView) {
     this.showChildView('content', contentView);
   },

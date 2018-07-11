@@ -1,12 +1,11 @@
-import { View, CollectionView } from "backbone.marionette";
+import { View, CollectionView } from 'backbone.marionette';
 
-import EmptyView from "../EmptyView";
-
-import baseTemplate from "templates/components/Notification/modal.html";
-import itemTemplate from "templates/components/Notification/item.html";
+import baseTemplate from 'Templates/components/Notification/modal.html';
+import itemTemplate from 'Templates/components/Notification/item.html';
+import EmptyView from '../EmptyView';
 
 const NotificationItemView = View.extend({
-  template: itemTemplate
+  template: itemTemplate,
 });
 
 const NotificationCollectionView = CollectionView.extend({
@@ -14,28 +13,28 @@ const NotificationCollectionView = CollectionView.extend({
 
   emptyView: EmptyView,
 
-  isEmpty: function(options) {
-    return this.collection.length == 0;
-  }
+  isEmpty() {
+    return this.collection.length === 0;
+  },
 });
 
 const NotificationModal = View.extend({
   template: baseTemplate,
 
   regions: {
-    notificationsList: "#notification-items"
+    notificationsList: '#notification-items',
   },
 
   initialize() {
-    this.notifications = this.getOption("notifications");
+    this.notifications = this.getOption('notifications');
   },
 
   onRender() {
     this.showChildView(
-      "notificationsList",
-      new NotificationCollectionView({ collection: this.notifications })
+      'notificationsList',
+      new NotificationCollectionView({ collection: this.notifications }),
     );
-  }
+  },
 });
 
 export default NotificationModal;

@@ -10,8 +10,11 @@
     }
   },
   "globals": {
+    "_": false,
     "$": false,
+    "document": false,
     "window": false,
-    "M": false
+    "M": false,
+    "FormData": true
   }
 }

@@ -1,13 +1,11 @@
-import { Collection } from "backbone";
-import { Thread } from "../models";
+import { Collection } from 'backbone';
+import { Thread } from '../models';
 
 const Threads = Collection.extend({
   model: Thread,
-  url: "/api/v1/threads",
+  url: '/api/v1/threads',
 
-  comparator: model => {
-    return -model.get("created").getTime();
-  },
+  comparator: model => -model.get('created').getTime(),
 
   fetchAll() {
     this.url = `${this.url}/all`;
@@ -26,11 +24,9 @@ const Threads = Collection.extend({
     if (categoryId === -1) {
       return this.models;
     }
-    const filtered = this.models.filter(function(model) {
-      return model.get("category").id === categoryId;
-    });
+    const filtered = this.models.filter(model => model.get('category').id === categoryId);
     return filtered;
-  }
+  },
 });
 
 export default Threads;

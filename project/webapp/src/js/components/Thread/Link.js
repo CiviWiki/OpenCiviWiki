@@ -1,10 +1,10 @@
-import { View } from "backbone.marionette";
-import linkTemplate from "templates/components/Thread/link.html";
+import { View } from 'backbone.marionette';
+import linkTemplate from 'Templates/components/Thread/link.html';
 
 const ThreadLink = View.extend({
-  tagName: "div",
-  className: "list-item left-align",
-  template: linkTemplate
+  tagName: 'div',
+  className: 'list-item left-align',
+  template: linkTemplate,
 });
 
-export default ThreadLink
+export default ThreadLink;

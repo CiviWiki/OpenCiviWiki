@@ -1,5 +1,5 @@
 import { AppRouter } from 'backbone.marionette';
-import AppController from './controller'
+import AppController from './controller';
 
 const Router = AppRouter.extend({
   initialize(options) {
@@ -7,17 +7,17 @@ const Router = AppRouter.extend({
   },
 
   appRoutes: {
-    // '/login': 'login', 
+    // '/login': 'login',
     // '/invite': 'invite',
     // '/setup': 'setup',
     // '/settings' : 'settings',
 
-    '' : 'viewMainFeed',
-    '/thread/:threadId': 'showThread',
+    '': 'viewMainFeed',
+    '/thread/:threadId': 'viewThread',
     // '/thread/:threadId/edit': 'editThread',
 
     // '/profile/:username': 'showProfile',
-  }
+  },
 });
 
 export default Router;

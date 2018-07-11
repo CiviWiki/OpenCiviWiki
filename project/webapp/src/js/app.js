@@ -1,29 +1,28 @@
-import "materialize-css";
-import { Application } from "backbone.marionette";
-import { history } from "backbone";
+import 'materialize-css';
+import { Application } from 'backbone.marionette';
+import { history } from 'backbone';
 
-import Router from "./router";
-import CSRFToken from "./utils/csrftoken";
-
+import Router from './router';
+import CSRFToken from './utils/csrftoken';
 
 const App = Application.extend({
-  region: "main",
+  region: 'main',
   initialize() {
-    this.context = this.getOption("context");
+    this.context = this.getOption('context');
   },
 
   onStart() {
     this.router = new Router({
       app: this,
-      context: this.context
+      context: this.context,
     });
 
     CSRFToken();
-    history.start({ root: "/", pushState: true });
-  }
+    history.start({ root: '/', pushState: true });
+  },
 });
 
-window.startApp = context => {
-  const app = new App({ context: context });
+window.startApp = (context) => {
+  const app = new App({ context });
   app.start();
 };
