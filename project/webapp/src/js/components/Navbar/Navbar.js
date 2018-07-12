@@ -1,8 +1,7 @@
 import { View } from 'backbone.marionette';
-import navbarTemplate from 'templates/components/common/navbar.html';
-
-import 'styles/navbar.less';
-import 'styles/utils.less';
+import navbarTemplate from 'Templates/common/navbar.html';
+import 'Styles/navbar.less';
+import 'Styles/utils.less';
 
 const Navbar = View.extend({
   tagName: 'div',

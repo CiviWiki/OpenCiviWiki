@@ -13,10 +13,12 @@ const Router = AppRouter.extend({
     // '/settings' : 'settings',
 
     '': 'viewMainFeed',
-    '/thread/:threadId': 'viewThread',
+    'thread/:threadId': 'viewThread',
     // '/thread/:threadId/edit': 'editThread',
 
-    // '/profile/:username': 'showProfile',
+    'profile(/)': 'viewMyProfile',
+    'profile/(:username)': 'viewProfile',
+    '*invalidRoute': 'showErrorPage',
   },
 });
 

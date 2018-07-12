@@ -54,6 +54,7 @@ const FeedView = View.extend({
     this.navCategories = new Categories();
 
     this.listenTo(this.categories, 'change reset', this.fillNavCategories);
+    this.listenTo(this.threads, 'reset', this.scrollToTop);
   },
 
   onRender() {
@@ -140,6 +141,13 @@ const FeedView = View.extend({
    */
   showNewThreadModal() {
     this.getChildView('newThreadModal').openModal();
+  },
+
+  /**
+   * Auto scroll to the top of the list
+   */
+  scrollToTop() {
+    $(this.getUI('scrollElement')).scrollTop(0);
   },
 });
 

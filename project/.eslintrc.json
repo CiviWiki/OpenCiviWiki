@@ -9,12 +9,12 @@
       }
     }
   },
+  "env": {
+    "browser": true,
+    "jquery": true
+  },
   "globals": {
     "_": false,
-    "$": false,
-    "document": false,
-    "window": false,
-    "M": false,
-    "FormData": true
+    "M": false
   }
 }

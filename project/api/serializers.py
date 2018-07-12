@@ -62,13 +62,26 @@ class AccountListSerializer(serializers.ModelSerializer):
     username = serializers.ReadOnlyField(source='user.username')
     first_name = serializers.ReadOnlyField()
     last_name = serializers.ReadOnlyField()
-
+    
+    profile_image_url = serializers.ReadOnlyField()
     profile_image_thumb_url = serializers.ReadOnlyField()
+
+    is_following = serializers.SerializerMethodField()
 
     class Meta:
         model = Account
-        fields = ('username', 'first_name', 'last_name', 'profile_image_thumb_url',)
+        fields = ('username', 'first_name', 'last_name', 'profile_image_url', 'profile_image_thumb_url', 'is_following')
 
+    def get_is_following(self, obj):
+        request = self.context.get("request")
+    
+        # Check for authenticated user
+        if request and hasattr(request, "user"):
+            account = Account.objects.get(user=request.user)
+            if obj in account.following.all():
+                return True 
+        return False
+            
 
 class CiviImageSerializer(serializers.ModelSerializer):
     image_url = serializers.ReadOnlyField()

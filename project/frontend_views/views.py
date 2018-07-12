@@ -14,7 +14,7 @@ from utils.constants import US_STATES
 from utils.custom_decorators import login_required, full_account
 
 
-def base_view(request):
+def base_view(request, path=''):
     if not request.user.is_authenticated():
         return TemplateResponse(request, 'static_templates/landing.html', {})
 
