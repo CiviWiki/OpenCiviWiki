@@ -2,7 +2,6 @@ import { View, CollectionView } from 'backbone.marionette';
 
 import baseTemplate from 'Templates/components/Feed/category_navbar.html';
 import itemTemplate from 'Templates/components/Feed/category_item.html';
-// import dropdownButton from 'Templates/components/Feed/category_dropdown_button.html';
 
 import EmptyView from '../EmptyView';
 

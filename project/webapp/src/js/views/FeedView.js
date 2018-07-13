@@ -9,7 +9,7 @@ import CategoryNavbar from '../components/Feed/CategoryNavbar';
 import ThreadCollectionView from '../components/Feed/ThreadCollectionView';
 import ThreadList from '../components/Feed/ThreadList';
 import NewThreadModal from '../components/Feed/NewThreadModal';
-import ThreadLink from '../components/Thread/Link';
+import ThreadLink from '../components/Feed/ThreadLink';
 
 import 'Styles/feed.less';
 

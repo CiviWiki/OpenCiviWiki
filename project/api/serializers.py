@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from api.forms import UpdateProfileImage
-from api.models import Civi, Thread, Account, Category, CiviImage
+from api.models import Civi, Thread, Account, Category, CiviImage, Activity
 from utils.constants import CIVI_TYPES
 
 WRITE_ONLY = {'write_only': True}
@@ -55,15 +55,15 @@ class AccountSerializer(serializers.ModelSerializer):
             return validation_form.clean_profile_image()
         else:
             raise serializers.ValidationError(validation_form.errors['profile_image'])
-    
+
     def get_is_following(self, obj):
         request = self.context.get("request")
-    
+
         # Check for authenticated user
         if request and hasattr(request, "user"):
             account = Account.objects.get(user=request.user)
             if obj in account.following.all():
-                return True 
+                return True
         return False
 
 
@@ -74,7 +74,7 @@ class AccountListSerializer(serializers.ModelSerializer):
     username = serializers.ReadOnlyField(source='user.username')
     first_name = serializers.ReadOnlyField()
     last_name = serializers.ReadOnlyField()
-    
+
     profile_image_url = serializers.ReadOnlyField()
     profile_image_thumb_url = serializers.ReadOnlyField()
 
@@ -86,14 +86,14 @@ class AccountListSerializer(serializers.ModelSerializer):
 
     def get_is_following(self, obj):
         request = self.context.get("request")
-    
+
         # Check for authenticated user
         if request and hasattr(request, "user"):
             account = Account.objects.get(user=request.user)
             if obj in account.following.all():
-                return True 
+                return True
         return False
-            
+
 
 class CiviImageSerializer(serializers.ModelSerializer):
     image_url = serializers.ReadOnlyField()
@@ -123,9 +123,9 @@ class CiviSerializer(serializers.ModelSerializer):
         # Check for authenticated user
         if request and hasattr(request, "user"):
             user = request.user
-        else: 
+        else:
             return 0
-        
+
         if user.is_anonymous():
             return 0
         else:
@@ -155,7 +155,7 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ('id', 'name', 'preferred')
-    
+
     def get_preferred(self, obj):
         user = None
         request = self.context.get("request")
@@ -168,7 +168,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
         if user.is_anonymous():
             return True
-            
+
         account = Account.objects.get(user=user)
         return obj.id in account.categories.values_list('id', flat=True)
 
@@ -204,6 +204,42 @@ class ThreadListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Thread
-        fields = ('id', 'title', 'summary', 'author', 'image_url', 'created', 
-        'level', 'state', 'is_draft', 'category', 'num_views', 'num_civis', 
+        fields = ('id', 'title', 'summary', 'author', 'image_url', 'created',
+        'level', 'state', 'is_draft', 'category', 'num_views', 'num_civis',
         'num_solutions')
+
+
+class ThreadDetailSerializer(serializers.ModelSerializer):
+    author = AccountListSerializer(required=False)
+    category = CategoryListSerializer()
+
+    civis = CiviSerializer(many=True)
+    created = serializers.ReadOnlyField(source='created_date_str')
+    image = serializers.ImageField(write_only=True, allow_empty_file=False, required=False)
+
+    num_views = serializers.ReadOnlyField()
+    num_civis = serializers.ReadOnlyField()
+    num_solutions = serializers.ReadOnlyField()
+
+    contributors = serializers.SerializerMethodField()
+    user_votes = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Thread
+        fields = ('id', 'title', 'summary', 'author', 'image_url', 'civis', 'image',
+        'created', 'level', 'state', 'is_draft', 'category',
+        'num_views', 'num_civis', 'num_solutions', 'contributors', 'user_votes')
+
+    def get_contributors(self, obj):
+        issue_civis = Civi.objects.filter(thread__id=obj.id)
+        contributor_accounts = Account.objects.filter(pk__in=issue_civis.distinct('author').values_list('author', flat=True))
+        return AccountListSerializer(contributor_accounts, many=True).data
+
+    def get_user_votes(self, obj):
+        request = self.context.get("request")
+
+        if request and hasattr(request, "user"):
+            user_activities = Activity.objects.filter(thread=obj.id, account=request.user.id)
+            return [{'civi_id':activity.civi.id, 'activity_type': activity.activity_type, 'c_type': activity.civi.c_type} for activity in user_activities]
+        else:
+            return []

@@ -1,5 +1,5 @@
 import { CollectionView } from 'backbone.marionette';
-import ThreadCard from '../Thread/Card';
+import ThreadCard from './ThreadCard';
 
 const ThreadCollectionView = CollectionView.extend({
   tagName: 'div',

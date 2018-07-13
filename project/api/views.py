@@ -18,6 +18,7 @@ from api.models import Thread, Account, Category, Civi, CiviImage
 from api.serializers import (
     ThreadSerializer,
     ThreadListSerializer,
+    ThreadDetailSerializer,
     CategorySerializer,
     CiviSerializer,
     CiviImageSerializer,
@@ -161,7 +162,7 @@ class AccountViewSet(viewsets.ModelViewSet):
         account_categories = account.categories
         serializer = CategorySerializer(account_categories, many=True)
         return Response(serializer.data)
-    
+
     @action(detail=True)
     def threads(self, request, user__username=None):
         """
@@ -188,9 +189,14 @@ class ThreadViewSet(viewsets.ModelViewSet):
     """ REST API viewset for Threads """
 
     queryset = Thread.objects.filter(is_draft=False).order_by('-created')
-    serializer_class = ThreadSerializer
+    serializer_class = ThreadDetailSerializer
     permission_classes = (IsOwnerOrReadOnly,)
     authentication_classes = AUTH_CLASSES
+
+    def list(self, request):
+        threads = Thread.objects.filter(is_draft=False).order_by('-created')
+        serializer = ThreadSerializer(threads, many=True, context={'request': request})
+        return Response(serializer.data)
 
     def get_queryset(self):
         """ allow rest api to filter by submissions """
@@ -199,7 +205,7 @@ class ThreadViewSet(viewsets.ModelViewSet):
         if category_id is not None:
             if category_id != 'all':
                 queryset = queryset.filter(category=category_id)
-        
+
         return queryset
 
     def perform_create(self, serializer):
@@ -214,7 +220,7 @@ class ThreadViewSet(viewsets.ModelViewSet):
         thread_civis = Civi.objects.filter(thread=pk)
         serializer = CiviSerializer(thread_civis, many=True)
         return Response(serializer.data)
-    
+
     @action(methods=['get', 'post'], detail=False)
     def all(self, request):
         """
@@ -235,7 +241,7 @@ class ThreadViewSet(viewsets.ModelViewSet):
         top_threads = Thread.objects.filter(is_draft=False).order_by('-num_views')[:limit]
         serializer = ThreadListSerializer(top_threads, many=True, context={'request': request})
         return Response(serializer.data)
-    
+
     @action(detail=False)
     def drafts(self, request):
         """

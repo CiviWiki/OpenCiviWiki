@@ -115,7 +115,7 @@ const ProfileView = View.extend({
       }),
     );
     this.showChildView(
-      'issues',
+      'myreps',
       new TabView({
         collection: new Accounts(this.model.get('myreps')),
         collectionChildView: Representative,
