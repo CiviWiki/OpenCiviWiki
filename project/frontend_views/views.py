@@ -49,15 +49,14 @@ def user_profile(request, username=None):
 @login_required
 def user_setup(request):
     a = Account.objects.get(user=request.user)
-    # if a.full_account:
-    #     return HttpResponseRedirect('/')
-        #start temp rep rendering TODO: REMOVE THIS
-    # else:
-    context = {
-        'username': request.user.username,
-        'google_map_api_key': settings.GOOGLE_API_KEY
-    }
-    return TemplateResponse(request, 'app.html', context)
+    if a.full_account:
+        return HttpResponseRedirect('/')
+    else:
+        context = {
+            'username': request.user.username,
+            'google_map_api_key': settings.GOOGLE_API_KEY
+        }
+        return TemplateResponse(request, 'app.html', context)
 
 
 
