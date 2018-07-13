@@ -1,16 +1,17 @@
 import { View } from 'backbone.marionette';
 
 import { Civi } from '../models';
-
-import EditThreadView;
-import CiviView;
-import NewResponseView;
+import { Responses } from '../collections';
+import EditThreadView from '../components/Thread/EditThread';
+import CiviView from '../components/Thread/Civi';
+import NewResponseView from '../components/Thread/NewResponse';
+import NewCiviView from '../components/Thread/NewCivi';
 
 const DEFAULTS = {
-    types: ['problem', 'cause', 'solution'],
-    types_plural: ['problems', 'causes', 'solutions'],
-    civiViewStates: ['recommended', 'other'],
-    viewLimit: 5,
+  types: ['problem', 'cause', 'solution'],
+  types_plural: ['problems', 'causes', 'solutions'],
+  civiViewStates: ['recommended', 'other'],
+  viewLimit: 5,
 };
 
 const ThreadView = View.extend({
@@ -22,7 +23,6 @@ const ThreadView = View.extend({
   outlineTemplate: _.template($('#outline-template').html()),
 
   initialize(options) {
-    options = options || {};
     this.username = options.username;
     this.civis = options.civis;
     this.navExpanded = true;
@@ -39,12 +39,7 @@ const ThreadView = View.extend({
     this.outlineCivis = {};
     this.initRecommended();
 
-    this.responseCollection = new cpw.ResponseCollection(
-      {},
-      {
-        threadId: this.model.threadId,
-      },
-    );
+    this.responseCollection = new Responses({ threadId: this.model.threadId });
 
     this.listenTo(this.responseCollection, 'sync', this.renderResponses);
     this.render();
@@ -59,68 +54,51 @@ const ThreadView = View.extend({
 
     const civiRecViewLimits = { problem: 0, cause: 0, solution: 0 };
 
-
     const civiOtherViewLimits = { problem: 0, cause: 0, solution: 0 };
-    // 1. Get id list of voted civis\
+    // 1. Get id list of voted civis
     const votes = this.model.get('user_votes');
 
-    if (this.is_draft) {
-      _.each(
-        this.civis.models,
-        (civi) => {
-          this.recommendedCivis.push(civi.id);
-        },
-        this,
-      );
+    if (view.is_draft) {
+      _.each(view.civis.models, (civi) => {
+        view.recommendedCivis.push(civi.id);
+      });
     } else {
-      _.each(
-        this.civis.models,
-        (civi) => {
-          const voteData = _.findWhere(votes, { civi_id: civi.id });
-          if (!_.isUndefined(voteData)) {
-            civi.voted = true;
-            const type = civi.get('type');
-            if (type === 'problem') {
-              civiRecViewLimits[type] += civiRecViewLimits[type];
-              civiOtherViewLimits[type] += civiOtherViewLimits[type];
-            } else if (
-              voteData.activity_type === 'vote_pos'
-              || voteData.activity_type === 'vote_vpos'
-            ) {
-              civiRecViewLimits[type] += civiRecViewLimits[type];
-            } else {
-              civiOtherViewLimits[type] += civiOtherViewLimits[type];
-            }
-
-            if (voteData.activity_type === 'vote_pos' || voteData.activity_type === 'vote_vpos') {
-              _.each(
-                civi.get('links'),
-                (link) => {
-                  const linkedCivi = this.civis.get(link);
-                  if (linkedCivi) {
-                    this.recommendedCivis.push(link);
-                  }
-                },
-                this,
-              );
-            } else {
-              _.each(
-                civi.get('links'),
-                (link) => {
-                  const linkedCivi = this.civis.get(link);
-                  if (linkedCivi) {
-                    this.otherCivis.push(link);
-                  }
-                },
-                this,
-              );
-            }
+      _.each(view.civis.models, (civi) => {
+        const voteData = _.findWhere(votes, { civi_id: civi.id });
+        if (!_.isUndefined(voteData)) {
+          civi.set('voted', true);
+          const type = civi.get('type');
+          if (type === 'problem') {
+            civiRecViewLimits[type] += civiRecViewLimits[type];
+            civiOtherViewLimits[type] += civiOtherViewLimits[type];
+          } else if (
+            voteData.activity_type === 'vote_pos'
+            || voteData.activity_type === 'vote_vpos'
+          ) {
+            civiRecViewLimits[type] += civiRecViewLimits[type];
           } else {
-            civi.voted = false;
+            civiOtherViewLimits[type] += civiOtherViewLimits[type];
           }
-        },
-        this,
-      );
+
+          if (voteData.activity_type === 'vote_pos' || voteData.activity_type === 'vote_vpos') {
+            _.each(civi.get('links'), (link) => {
+              const linkedCivi = view.civis.get(link);
+              if (linkedCivi) {
+                view.recommendedCivis.push(link);
+              }
+            });
+          } else {
+            _.each(civi.get('links'), (link) => {
+              const linkedCivi = view.civis.get(link);
+              if (linkedCivi) {
+                view.otherCivis.push(link);
+              }
+            });
+          }
+        } else {
+          civi.set('voted', false);
+        }
+      });
     }
 
     // Recommended civis pool takes precedence
@@ -137,7 +115,7 @@ const ThreadView = View.extend({
 
     _.each(
       DEFAULTS.types,
-        (type) => {
+      (type) => {
         if (this.civiRecViewLimits[type] === 0) {
           if (civiRecViewLimits[type] < 5) {
             civiRecViewLimits[type] = 5;
@@ -197,7 +175,7 @@ const ThreadView = View.extend({
         .empty()
         .append(this.bodyTemplate(bodyRenderData));
 
-      this.$('.main-thread').on('scroll', (e) => {
+      this.$('.main-thread').on('scroll', () => {
         view.processCiviScroll();
       });
     }
@@ -221,32 +199,26 @@ const ThreadView = View.extend({
     }
 
     // Render Outline Template based on models
-    const problems = this.outlineCivis.problem;
-    causes = this.outlineCivis.cause;
-    solutions = this.outlineCivis.solution;
-
     const renderData = {
-      problems,
-      causes,
-      solutions,
+      problems: this.outlineCivis.problem,
+      causes: this.outlineCivis.cause,
+      solutions: this.outlineCivis.solution,
     };
 
     const recCount = { problem: 0, cause: 0, solution: 0 };
     const otherCount = { problem: 0, cause: 0, solution: 0 };
     const votes = this.model.get('user_votes');
 
-
     const voteIds = _.pluck(votes, 'civi_id');
 
-    const counterCount = 0;
     _.each(view.civis.models, (c) => {
       const type = c.get('type');
       if (_.indexOf(voteIds, c.id) > -1) {
         // If part of current view setting
         if (_.indexOf(view.recommendedCivis, c.id) > -1) {
-          recCount[type]++;
+          recCount[type] += 1;
         } else if (_.indexOf(view.otherCivis, c.id) > -1) {
-          otherCount[type]++;
+          otherCount[type] += 1;
         }
       }
     });
@@ -259,8 +231,7 @@ const ThreadView = View.extend({
         highlightCount[type] = view.civiOtherViewTotals[type];
       }
     });
-    let voteCount; let totalRec; let
-      totalOther;
+    let voteCount;
     if (this.viewRecommended) {
       voteCount = recCount;
     } else {
@@ -320,7 +291,7 @@ const ThreadView = View.extend({
 
     _.each(
       DEFAULTS.types,
-      function (type) {
+      (type) => {
         const loadMore = this.$(`#thread-${type}s>.${type}-loader`);
         if (loadMore) {
           loadMore.clone().appendTo(`#${type}-nav`);
@@ -339,11 +310,9 @@ const ThreadView = View.extend({
     const outline = this.$('#civi-outline');
     _.each(
       this.model.get('user_votes'),
-      (v) => {
-        // var navItem = outline.find('#civi-nav-'+ v.civi_id);
-        // navItem.before('<i class="material-icons tiny voted">beenhere</i>').addClass('nav-inactive');
-        outline.find(`#civi-nav-${v.civi_id}`).addClass('nav-inactive');
-        const navItemState = outline.find(`#civi-nav-state-${v.civi_id}`);
+      (vote) => {
+        outline.find(`#civi-nav-${vote.civi_id}`).addClass('nav-inactive');
+        const navItemState = outline.find(`#civi-nav-state-${vote.civi_id}`);
         navItemState.addClass('voted').text('beenhere');
       },
       this,
@@ -360,26 +329,22 @@ const ThreadView = View.extend({
     this.threadCivis = {};
     _.each(
       ['problem', 'cause', 'solution'],
-      function (type) {
+      (type) => {
         let civis = this.civis.filterByType(type);
         // Filter by Recommended state if not 'problem' type
         const recCivis = _.filter(
           civis,
-          function (c) {
-            return _.indexOf(this.recommendedCivis, c.id) != -1;
-          },
+          civi => _.indexOf(this.recommendedCivis, civi.id) !== -1,
           this,
         );
         this.civiRecViewTotals[type] = recCivis.length;
         const otherCivis = _.filter(
           civis,
-          function (c) {
-            return _.indexOf(this.otherCivis, c.id) != -1;
-          },
+          civi => _.indexOf(this.otherCivis, civi.id) !== -1,
           this,
         );
         this.civiOtherViewTotals[type] = otherCivis.length;
-        if (type != 'problem') {
+        if (type !== 'problem') {
           if (this.viewRecommended) {
             civis = recCivis;
           } else {
@@ -388,13 +353,13 @@ const ThreadView = View.extend({
         }
         // Sort civi list by score
         civis = _.sortBy(civis, (civi) => {
-          if (civi.voted) {
+          if (civi.get('voted')) {
             return -civi.get('score') - 100;
           }
           return -civi.get('score');
         });
 
-        // Cut by type view limit TODO: move to rendering
+        // Cut by type view limit
 
         let limit;
         if (this.viewRecommended) {
@@ -408,17 +373,7 @@ const ThreadView = View.extend({
           civis = civis.slice(0, limit);
           _.each(civis, this.civiRenderHelper, this);
           this.$(`#thread-${type}s`).append(
-            `<div class="${
-              type
-            }-loader civi-load-more"><span class="civi-show-count">${
-              limit
-            }/${
-              totalCount
-            } ${
-              type
-            }s</span> <span class="btn-loadmore" data-civi-type="${
-              type
-            }">View More +</span></div>`,
+            `<div class="${type}-loader civi-load-more"><span class="civi-show-count">${limit}/${totalCount} ${type}s</span> <span class="btn-loadmore" data-civi-type="${type}">View More +</span></div>`,
           );
         } else {
           _.each(civis, this.civiRenderHelper, this);
@@ -431,21 +386,21 @@ const ThreadView = View.extend({
   },
 
   civiRenderHelper(civi) {
-    const is_draft = this.is_draft;
-    const can_edit = civi.get('author').username == this.username;
     this.$(`#thread-${civi.get('type')}s`).append(
       new CiviView({
-        model: civi, can_edit, is_draft, parentView: this,
+        model: civi,
+        can_edit: civi.get('author').username === this.username,
+        is_draft: this.is_draft,
+        parentView: this,
       }).el,
     );
   },
 
   renderVotes() {
-    const view = this;
     const savedVotes = this.model.get('user_votes');
-    _.each(savedVotes, function (v) {
-      this.$(`#civi-${v.civi_id}`)
-        .find(`.${v.activity_type}`)
+    _.each(savedVotes, (vote) => {
+      this.$(`#civi-${vote.civi_id}`)
+        .find(`.${vote.activity_type}`)
         .addClass('current');
     });
   },
@@ -461,18 +416,18 @@ const ThreadView = View.extend({
 
     _.each(
       this.responseCollection.models,
-      function (civi) {
-        const can_edit = civi.get('author').username == this.username;
-        const can_respond = this.civis.get(this.responseCollection.civiId).get('author').username == this.username;
+      (civi) => {
+        const canEdit = civi.get('author').username === this.username;
+        const canRespond = this.civis.get(this.responseCollection.civiId).get('author').username === this.username;
 
-        const new_civi_view = new CiviView({
+        const newCiviView = new CiviView({
           model: civi,
-          can_edit,
-          can_respond,
+          can_edit: canEdit,
+          can_respond: canRespond,
           parentView: this,
           response: true,
         });
-        this.$('#response-list').append(new_civi_view.el);
+        this.$('#response-list').append(newCiviView.el);
 
         let vote = _.find(this.model.get('user_votes'), v => v.civi_id === civi.id);
         if (vote) {
@@ -481,19 +436,19 @@ const ThreadView = View.extend({
             .addClass('current');
         }
         if (civi.get('rebuttal')) {
-          const rebuttal_model = new cw.CiviModel(civi.get('rebuttal'));
-          const rebuttal_can_edit = rebuttal_model.get('author').username == this.username;
-          const rebuttal_view = new cw.CiviView({
-            model: rebuttal_model,
-            can_edit: rebuttal_can_edit,
+          const rebuttalModel = new Civi(civi.get('rebuttal'));
+          const rebuttalCanEdit = rebuttalModel.get('author').username === this.username;
+          const rebuttalView = new CiviView({
+            model: rebuttalModel,
+            can_edit: rebuttalCanEdit,
             can_respond: false,
             parentView: this,
             response: true,
           });
-          rebuttal_view.$('.civi-card').addClass('push-right');
-          new_civi_view.el.after(rebuttal_view.el);
+          rebuttalView.$('.civi-card').addClass('push-right');
+          newCiviView.el.after(rebuttalView.el);
 
-          vote = _.find(this.model.get('user_votes'), v => v.civi_id === rebuttal_model.id);
+          vote = _.find(this.model.get('user_votes'), v => v.civi_id === rebuttalModel.id);
           if (vote) {
             this.$(`#civi-${vote.civi_id}`)
               .find(`.${vote.activity_type}`)
@@ -525,8 +480,6 @@ const ThreadView = View.extend({
   },
 
   scrollToBody() {
-    const view = this;
-
     this.$('.thread-wiki-holder').addClass('hide');
     this.$('.thread-body-holder').removeClass('hide');
     this.$('.thread-body-holder').css({ display: 'block' });
@@ -541,7 +494,6 @@ const ThreadView = View.extend({
     $('body').css({ overflow: 'hidden' });
 
     const $windowHeight = $('body').height();
-    const bodyHeight = $windowHeight - $('#js-global-nav').height();
 
     const $civiNavScroll = this.$('.civi-outline');
     $civiNavScroll.css({ height: $windowHeight - $civiNavScroll.offset().top });
@@ -552,23 +504,18 @@ const ThreadView = View.extend({
   },
 
   scrollToWiki() {
-    const view = this;
-
     this.$('.thread-body-holder').addClass('hide');
     this.$('.thread-wiki-holder').removeClass('hide');
     $('body').css({ overflow: 'scroll' });
   },
 
-  toggleExpandNav(e) {
+  toggleExpandNav(event) {
     this.navExpanded = !this.navExpanded;
-    this.expandNav(e);
+    this.expandNav(event);
   },
 
-  expandNav(e) {
-    const view = this;
-
-
-    const $this = _.isUndefined(e) ? this.$('.expand-nav') : $(e.target);
+  expandNav(event) {
+    const $this = _.isUndefined(event) ? this.$('.expand-nav') : $(event.target);
 
     if (!this.navExpanded) {
       $('.civi-nav-wrapper').hide();
@@ -580,8 +527,8 @@ const ThreadView = View.extend({
     this.activateNav();
   },
 
-  goToCivi(e) {
-    const $link = $(e.target).closest('.civi-nav-link');
+  goToCivi(event) {
+    const $link = $(event.target).closest('.civi-nav-link');
     this.$('.main-thread').animate(
       {
         scrollTop: _.findWhere(this.civiLocations, { id: $link.attr('data-civi-nav-id') }).top - 15,
@@ -600,7 +547,6 @@ const ThreadView = View.extend({
     this.$('.civi-card').each((idx, civi) => {
       const $civi = $(civi);
 
-
       const $civiTop = $civi.position().top + scrollPos - threadPos;
       view.civiLocations.push({
         top: $civiTop,
@@ -613,7 +559,6 @@ const ThreadView = View.extend({
   },
 
   processCiviScroll() {
-    const view = this;
     const scrollPosition = this.$('.main-thread').scrollTop();
     // 1. Check if there are any civis. No tracking if none
     if (this.civis.length === 0) {
@@ -624,13 +569,9 @@ const ThreadView = View.extend({
     const OFFSET = 100;
     const element = _.find(
       this.civiLocations,
-      function (l) {
-        return (
-          this.currentNavCivi !== l.id
-          && scrollPosition >= l.top - OFFSET
-          && scrollPosition < l.bottom - OFFSET
-        );
-      },
+      location => this.currentNavCivi !== location.id
+        && scrollPosition >= location.top - OFFSET
+        && scrollPosition < location.bottom - OFFSET,
       this,
     );
     // 3. Activate Corresponding Civi Card and Nav
@@ -660,14 +601,12 @@ const ThreadView = View.extend({
 
     const $currentCivi = this.$(`[data-civi-id="${this.currentCivi}"]`);
 
-
     const $newCivi = $this.closest('.civi-card');
 
     if (this.currentCivi !== $newCivi.attr('data-civi-id')) {
       // $currentCivi.removeClass('current');
       this.$('.civi-card').removeClass('current');
       $newCivi.addClass('current');
-      const civi_id = $newCivi.data('civi-id');
 
       this.currentCivi = $newCivi.attr('data-civi-id');
       if (!_.isUndefined(this.currentCivi)) {
@@ -685,7 +624,7 @@ const ThreadView = View.extend({
 
   drilldownCivi(e) {
     const target = $(e.target);
-    const ms_check = target.hasClass('ms-ctn')
+    const msCheck = target.hasClass('ms-ctn')
       || target.hasClass('ms-sel-ctn')
       || target.hasClass('ms-close-btn')
       || target.hasClass('ms-trigger')
@@ -701,17 +640,16 @@ const ThreadView = View.extend({
       || target.is('textarea')
       || target.is('label')
       || target.hasClass('input')
-      || ms_check
+      || msCheck
     ) {
       return;
     }
     const $this = $(e.currentTarget);
     if (
-      $this.find('.civi-type').text() != 'response'
-      && $this.find('.civi-type').text() != 'rebuttal'
+      $this.find('.civi-type').text() !== 'response'
+      && $this.find('.civi-type').text() !== 'rebuttal'
     ) {
       const $currentCivi = this.$(`[data-civi-id="${this.currentCivi}"]`);
-
 
       const $newCivi = $this.closest('.civi-card');
 
@@ -719,7 +657,6 @@ const ThreadView = View.extend({
         // $currentCivi.removeClass('current');
         this.$('.civi-card').removeClass('current');
         $newCivi.addClass('current');
-        const civi_id = $newCivi.data('civi-id');
 
         this.currentCivi = $newCivi.attr('data-civi-id');
 
@@ -748,8 +685,8 @@ const ThreadView = View.extend({
   loadMoreCivis(e) {
     const $target = $(e.currentTarget);
     const type = $target.data('civi-type');
-    let limit; let
-      remaining;
+    let limit;
+    let remaining;
     if (this.viewRecommended) {
       limit = this.civiRecViewLimits[type];
       remaining = this.civiRecViewTotals[type] - limit;
@@ -760,7 +697,7 @@ const ThreadView = View.extend({
     if (remaining <= 0) {
       return;
     }
-    const addCount = cw.DEFAULTS.viewLimit < remaining ? cw.DEFAULTS.viewLimit : remaining;
+    const addCount = DEFAULTS.viewLimit < remaining ? DEFAULTS.viewLimit : remaining;
 
     if (this.viewRecommended) {
       this.civiRecViewLimits[type] += addCount;
@@ -770,8 +707,8 @@ const ThreadView = View.extend({
     this.renderBodyContents();
   },
 
-  toggleRecommended(e) {
-    const target = $(e.currentTarget);
+  toggleRecommended(event) {
+    const target = $(event.currentTarget);
     const recommendState = target.is(':checked');
 
     this.viewRecommended = recommendState;
@@ -782,10 +719,10 @@ const ThreadView = View.extend({
     this.selectInitialCiviAfterToggle();
   },
 
-  publishThread(e) {
+  publishThread(event) {
     const view = this;
     view
-      .$(e.currentTarget)
+      .$(event.currentTarget)
       .addClass('disabled')
       .attr('disabled', true);
 
@@ -808,7 +745,7 @@ const ThreadView = View.extend({
         } else if (response.status === 500) {
           M.toast('Server Error: Thread could not be published');
           view
-            .$(e.currentTarget)
+            .$(event.currentTarget)
             .removeClass('disabled')
             .attr('disabled', false);
         }

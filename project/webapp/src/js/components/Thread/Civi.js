@@ -278,8 +278,6 @@ const CiviView = View.extend({
       data,
       success(response) {
         view.closeEdit(event);
-        // const attachmentInput = view.$('#id_attachment_image');
-        // const uploaded_images = attachmentInput[0].files;
         if (view.attachmentCount > 0) {
           const formData = new FormData(view.$('#attachment_image_form')[0]);
           formData.set('civi_id', view.model.id);

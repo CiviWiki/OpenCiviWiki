@@ -6,10 +6,9 @@ const Civis = Collection.extend({
   url() {
     return `/api/response_data/${this.threadId}/${this.civiId}/`;
   },
-  comparator: 'id',
+  comparator: 'threadId',
 
-  initialize(model, options) {
-    this.threadId = options.threadId;
+  initialize() {
     this.civiId = null;
   },
   filterByType(type) {
