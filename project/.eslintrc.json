@@ -15,6 +15,7 @@
   },
   "globals": {
     "_": false,
-    "M": false
+    "M": false,
+    "google": false
   }
 }

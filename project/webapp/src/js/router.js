@@ -7,12 +7,13 @@ const Router = AppRouter.extend({
   },
 
   appRoutes: {
+    '': 'viewMainFeed',
     // '/login': 'login',
     // '/invite': 'invite',
-    // '/setup': 'setup',
+    'setup': 'viewSetup',
     // '/settings' : 'settings',
 
-    '': 'viewMainFeed',
+    
     'thread/:threadId': 'viewThread',
     'profile/(:username)': 'viewProfile',
     '*invalidRoute': 'showErrorPage',

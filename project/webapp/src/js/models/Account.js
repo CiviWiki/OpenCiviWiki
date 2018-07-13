@@ -17,13 +17,15 @@ const Account = Model.extend({
     is_staff: false,
   },
   urlRoot: '/api/v1/accounts/',
-
+  url() {
+    return `${this.urlRoot}${this.id}/`;
+  },
   idAttribute: 'username',
 
   fetchCurrent() {
     this.url = `${this.urlRoot}`;
     this.fetch();
-    return this;
+    this.url = `${this.urlRoot}${this.id}/`;
   },
 
   fetchProfile() {
@@ -34,7 +36,7 @@ const Account = Model.extend({
   fetchCard() {
     this.url = `/api/account_profile/${this.id}/`;
     this.fetch();
-    this.url = `${this.urlRoot}/${this.id}/`;
+    this.url = `${this.urlRoot}${this.id}/`;
   },
 });
 

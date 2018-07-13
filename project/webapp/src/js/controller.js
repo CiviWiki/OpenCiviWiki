@@ -1,10 +1,10 @@
 import { Object } from 'backbone.marionette';
-import { history } from 'backbone';
 import { Account } from './models';
 import RootView from './views/RootView';
 import FeedView from './views/FeedView';
 import ErrorView from './views/ErrorView';
 import ProfileView from './views/ProfileView';
+import UserSetupView from './views/UserSetupView';
 
 const AppController = Object.extend({
   initialize() {
@@ -31,6 +31,16 @@ const AppController = Object.extend({
     this.account.fetchProfile();
 
     this.rootView.renderContent(profileView);
+  },
+
+  viewSetup() {
+    this.account = new Account({ username: this.context.username });
+    const setupView = new UserSetupView({
+      model: this.account,
+      context: this.context,
+    });
+    this.account.fetch();
+    this.rootView.renderContent(setupView);
   },
 
   showErrorPage() {
