@@ -14,9 +14,6 @@ const Router = AppRouter.extend({
 
     '': 'viewMainFeed',
     'thread/:threadId': 'viewThread',
-    // '/thread/:threadId/edit': 'editThread',
-
-    'profile(/)': 'viewMyProfile',
     'profile/(:username)': 'viewProfile',
     '*invalidRoute': 'showErrorPage',
   },

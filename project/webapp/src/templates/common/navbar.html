@@ -1,0 +1,35 @@
+<!-- Left Nav (Logo) -->
+<a href="/" class="logo nav-item">
+    <img class="logo-img" src=/static/img/logo-civiwiki-tree-white.svg alt="CiviWiki" height="36px">
+    <span class="wordmark">CiviWiki</span>
+</a>
+
+<!-- Right Nav -->
+<div class="nav-menu right">
+    <div class="nav-menu-item button-icon" id="item-notifications">
+        <div id="notify-count-wrapper" class="hide">
+            <span id="live_notify_badge" class="">0</span>
+        </div>
+        <i class="material-icons" id="notify-icon">notifications_none</i>
+    </div>
+    <div class="nav-menu-item chip-menu-profile" id="js-toggle-menu">
+        <span class="label-username">{{ first_name }}</span>
+        <img class="chip-image-profile" src="{{ profile_image_thumb_url }}" alt="{{ username }}">
+        <i class="material-icons js-dropdown-icon">keyboard_arrow_down</i>
+        <i class="material-icons js-dropdown-icon hide">keyboard_arrow_up</i>
+    </div>
+    <div class="dropdown-menu-wrapper hide" id="js-dropdown-menu">
+        <div class="dropdown-menu">
+            {{# if (is_staff) { }}
+            <a class="dropdown-item" href="/invite">Invite</a>
+            <div class="divider"></div>
+            {{# }; }}
+            <a class="dropdown-item" href="/" id="my-feed">My Feed</a>
+            <a class="dropdown-item" id="my-profile-button" href="/profile">My Profile</a>
+            <div class="divider"></div>
+            <a class="dropdown-item" id="settings-dropdown" href="/settings">Settings</a>
+            <a class="dropdown-item" href="/auth/logout" id="logout">Sign Out</a>
+        </div>
+    </div>
+</div>
+

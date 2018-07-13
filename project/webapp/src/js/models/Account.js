@@ -21,9 +21,20 @@ const Account = Model.extend({
   idAttribute: 'username',
 
   fetchCurrent() {
-    const url = `${this.urlRoot}`;
-    this.fetch(url);
+    this.url = `${this.urlRoot}`;
+    this.fetch();
     return this;
+  },
+
+  fetchProfile() {
+    this.url = `/api/account_profile/${this.id}/`;
+    this.fetch();
+  },
+
+  fetchCard() {
+    this.url = `/api/account_profile/${this.id}/`;
+    this.fetch();
+    this.url = `${this.urlRoot}/${this.id}/`;
   },
 });
 

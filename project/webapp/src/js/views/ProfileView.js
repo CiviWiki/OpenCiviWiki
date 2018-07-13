@@ -1,37 +1,66 @@
 import { View } from 'backbone.marionette';
-
 import baseTemplate from 'Templates/layouts/profile.html';
-import followersTemplate from 'Templates/components/Profile/followers_tab.html';
-import followingTemplate from 'Templates/components/Profile/following_tab.html';
-import civisTemplate from 'Templates/components/Profile/my_civis_tab.html';
-import issuesTemplate from 'Templates/components/Profile/my_issues_tab.html';
 import profileSettingsTemplate from 'Templates/components/Profile/settings_tab.html';
 import sidebarTemplate from 'Templates/components/Profile/sidebar.html';
-import userCardTemplate from 'Templates/components/Account/card.html';
+import { Accounts, Threads, Civis } from '../collections';
+
+import TabView from '../components/Profile/Tab';
+import ProfileCivi from '../components/Profile/Civi';
+import ProfileIssue from '../components/Profile/Issue';
+import AccountChip from '../components/Account/Chip';
+import Representative from '../components/Profile/Representative';
 
 import 'Styles/account.less';
 
 const ProfileView = View.extend({
-  //   el: '#account',
   template: baseTemplate,
+
+  regions: {
+    civis: '#civis',
+    followers: '#followers',
+    following: '#following',
+    issues: '#issues',
+    myreps: '#myreps',
+    settings: '#settings',
+  },
+  ui: {
+    tabs: '.tabs',
+  },
 
   templateContext() {
     return {
-      currentUser: this.currentUser,
+      currentUser: this.getOption('context').username,
+      username: this.model.get('username'),
     };
   },
 
   initialize() {
-    this.currentUser = this.getOption('username');
+    this.currentUser = this.getOption('context').username;
+    this.username = this.model.get('username');
     this.isSave = false;
+
+    this.listenTo(this.model, 'sync', this.postSync);
+
+    return this;
   },
 
-  onRender() {
-    document.title = `${this.model.get('first_name')} ${this.model.get('last_name')}`;
+  postSync() {
+    // Handle Data
+    const civis = [];
+    _.each(this.model.get('history'), (civiData) => {
+      civis.push(JSON.parse(civiData));
+    });
+    this.model.set('civis', civis);
 
-    $('.account-tabs .tab').on('dragstart', () => false);
-    this.$el.find('.account-settings').pushpin({ top: $('.account-settings').offset().top });
-    this.$el.find('.scroll-col').height($(window).height());
+    this.tabTemplateContext = this.model.toJSON();
+    this.tabTemplateContext.currentUser = this.currentUser;
+
+    document.title = `${this.model.get('first_name')} ${this.model.get(
+      'last_name',
+    )} (@${this.model.get('username')})`;
+
+    // M.Pushpin.init(this.$el.find('.account-settings'));
+    this.renderView();
     this.postRender();
 
     if (_.find(this.model.get('followers'), follower => follower.username === this.currentUser)) {
@@ -42,47 +71,80 @@ const ProfileView = View.extend({
     }
   },
 
-  tabsRender() {
-    this.$('#civis')
-      .empty()
-      .append(civisTemplate);
-    this.$('#followers')
-      .empty()
-      .append(followersTemplate);
-    this.$('#following')
-      .empty()
-      .append(followingTemplate);
-    this.$('#issues')
-      .empty()
-      .append(issuesTemplate);
-    this.$('#mybills')
-      .empty()
-      .append(this.mybillsTemplate());
-    const settingsEl = this.$('#settings');
-    if (settingsEl.length) {
-      settingsEl.empty().append(profileSettingsTemplate);
-      M.updateTextFields();
+  renderView() {
+    if (this.isSave) {
+      this.postRender();
+    } else {
+      $('.account-tabs .tab').on('dragstart', () => false);
+      // this.$el.find('.account-settings').pushpin({ top: $('.account-settings').offset().top });
+      this.$el.find('.scroll-col').height($(window).height());
     }
   },
 
+  tabsRender() {
+    this.showChildView(
+      'civis',
+      new TabView({
+        collection: new Civis(this.model.get('civis')),
+        collectionChildView: ProfileCivi,
+        title: 'My Civi Activity',
+      }),
+    );
+    this.showChildView(
+      'followers',
+      new TabView({
+        collection: new Accounts(this.model.get('followers')),
+        collectionChildView: AccountChip,
+        title: `${this.model.get('followers').length} Followers`,
+      }),
+    );
+    this.showChildView(
+      'following',
+      new TabView({
+        collection: new Accounts(this.model.get('following')),
+        collectionChildView: AccountChip,
+        title: `${this.model.get('following').length} Following`,
+      }),
+    );
+    this.showChildView(
+      'issues',
+      new TabView({
+        collection: new Threads(this.model.get('issues')),
+        collectionChildView: ProfileIssue,
+        title: 'My Issues',
+      }),
+    );
+    this.showChildView(
+      'issues',
+      new TabView({
+        collection: new Accounts(this.model.get('myreps')),
+        collectionChildView: Representative,
+        title: 'My Representatives',
+      }),
+    );
+
+    if (this.username === this.currentUser) {
+      this.showChildView('settings', profileSettingsTemplate(this.tabTemplateContext));
+    }
+  },
   postRender() {
     // Timestamp the image with a cachebreaker so that proper refersh occurs
     this.model.set({ profile_image: `${this.model.get('profile_image')}?${new Date().getTime()}` });
     this.$el
       .find('.account-settings')
       .empty()
-      .append(sidebarTemplate);
+      .append(sidebarTemplate(this.tabTemplateContext));
     this.tabsRender();
-    M.AutoInit();
     this.isSave = false;
+
+    M.Tabs.init(this.getUI('tabs'));
+    M.updateTextFields();
   },
 
   events: {
     'click .follow-btn': 'followRequest',
     'submit #profile_image_form': 'handleFiles',
     'blur .save-account': 'saveAccount',
-    'mouseenter .user-chip-contents': 'showUserCard',
-    'mouseleave .user-chip-contents': 'hideUserCard',
     'click .toggle-solutions': 'toggleSolutions',
     'change .profile-image-pick': 'previewImage',
     'keypress .save-account': 'checkForEnter',
@@ -122,112 +184,6 @@ const ProfileView = View.extend({
       $(event.target).blur();
     }
   },
-
-  showUserCard(event) {
-    const view = this;
-    const { username } = event.currentTarget.dataset;
-    if (!$(`#usercard-${username}`).hasClass('open')) {
-      clearTimeout(this.showTimeout);
-      this.showTimeout = setTimeout(() => {
-        $.ajax({
-          type: 'POST',
-          url: `/api/account_card/${username}`,
-          success(data) {
-            const cardData = data;
-            cardData.isCurrentUser = false;
-            if (this.currentUser === data.username) {
-              cardData.isCurrentUser = true;
-            }
-            view
-              .$(event.currentTarget)
-              .parent()
-              .after(userCardTemplate(cardData));
-            // Hover Elements
-            const target = view.$(event.currentTarget);
-
-            const targetCard = view.$(`#usercard-${username}`);
-
-            targetCard
-              .stop()
-              .fadeIn('fast', () => {
-                // Positions
-                const pos = target.offset();
-
-                // Dimenions
-                const cardHeight = targetCard.height();
-                const chipHeight = target.height();
-                const documentHeight = $(window).height();
-                const scroll = view.$('.scroll-col').scrollTop();
-
-                let top;
-                if (
-                  target[0].getBoundingClientRect().top + cardHeight + chipHeight
-                  >= documentHeight
-                ) {
-                  top = pos.top + scroll - cardHeight - chipHeight - 2;
-                } else {
-                  top = pos.top + scroll + 25;
-                }
-                const left = target.position().left + 20;
-
-                // Determine placement of the hovercard
-                targetCard.css({
-                  top,
-                  left,
-                });
-              })
-              .addClass('open');
-          },
-          error() {
-            // No card for you!
-          },
-        });
-      }, 200);
-    }
-  },
-
-  hideUserCard(event) {
-    const view = this;
-    const { username } = event.currentTarget.dataset;
-    const card = view.$('.user-card');
-    if (`timeout-${username}` in view) {
-      clearTimeout(view[`timeout-${username}`]);
-    }
-    clearTimeout(view.showTimeout);
-    view[`timeout-${username}`] = setTimeout(() => {
-      card.fadeOut('fast', () => {
-        $(view).remove();
-      });
-    }, 200);
-    $(`#usercard-${username}`).hover(
-      () => {
-        if (`timeout-${username}` in view) {
-          clearTimeout(view[`timeout-${username}`]);
-        }
-      },
-      () => {
-        if (`timeout-${username}` in view) {
-          clearTimeout(view[`timeout-${username}`]);
-        }
-        view[`timeout-${username}`] = setTimeout(() => {
-          card.fadeOut('fast', () => {
-            $(view).remove();
-          });
-        }, 100);
-      },
-    );
-  },
-
-  // showRawRatings(event) {
-  //   $(event.target)
-  //     .closest('.rating')
-  //     .find('.rating-score')
-  //     .toggleClass('hide');
-  //   $(event.target)
-  //     .closest('.rating')
-  //     .find('.rating-percent')
-  //     .toggleClass('hide');
-  // },
 
   toggleImgButtons() {
     this.$('.profile-image-pick').toggleClass('hide');

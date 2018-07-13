@@ -1,10 +1,10 @@
 import { Object } from 'backbone.marionette';
 import { history } from 'backbone';
+import { Account } from './models';
 import RootView from './views/RootView';
 import FeedView from './views/FeedView';
-import ErrorView from './views/Error';
-// import { Account } from './models';
-// import ProfileView from './views/ProfileView';
+import ErrorView from './views/ErrorView';
+import ProfileView from './views/ProfileView';
 
 const AppController = Object.extend({
   initialize() {
@@ -21,20 +21,16 @@ const AppController = Object.extend({
 
   viewThread() {},
 
-  viewMyProfile() {
-    // console.log('view my profile');
-    // history.navigate(`profile/${this.context.username}`, { trigger: true });
-  },
+  viewProfile(username) {
+    this.account = new Account({ username });
 
-  viewProfile() {
-    // this.account = new Account({ username });
-    // const profileView = new ProfileView({
-    //   model: this.account,
-    //   options: this.getOption('context'),
-    // });
-    // this.account.fetch();
-    // this.rootView.renderContent(profileView);
-    console.log('view profile');
+    const profileView = new ProfileView({
+      model: this.account,
+      context: this.context,
+    });
+    this.account.fetchProfile();
+
+    this.rootView.renderContent(profileView);
   },
 
   showErrorPage() {

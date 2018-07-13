@@ -28,11 +28,15 @@ const EditCategoryModal = View.extend({
 
   ui: {
     categoryModal: '.categories-modal',
+    modalCloseButton: '.modal-close',
     modalSaveButton: '.change-category',
+    modalOverlay: '.modal-overlay',
   },
 
   events: {
     'click @ui.modalSaveButton': 'updatePreferredCategories',
+    'click @ui.modalCloseButton': 'closeModal',
+    'click @ui.modalOverlay': 'closeModal',
   },
 
   initialize() {

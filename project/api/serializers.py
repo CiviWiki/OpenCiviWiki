@@ -26,12 +26,14 @@ class AccountSerializer(serializers.ModelSerializer):
     location = serializers.ReadOnlyField()
 
     is_staff = serializers.ReadOnlyField(source='user.is_staff')
+    is_following = serializers.SerializerMethodField()
 
     class Meta:
         model = Account
         fields = ('username', 'first_name', 'last_name', 'about_me', 'location','email',
         'address', 'city', 'state', 'zip_code', 'country', 'longitude', 'latitude',
-        'profile_image', 'profile_image_url', 'profile_image_thumb_url', 'is_staff')
+        'profile_image', 'profile_image_url', 'profile_image_thumb_url', 'is_staff',
+        'is_following')
 
         extra_kwargs = {
             'email': WRITE_ONLY,
@@ -53,6 +55,16 @@ class AccountSerializer(serializers.ModelSerializer):
             return validation_form.clean_profile_image()
         else:
             raise serializers.ValidationError(validation_form.errors['profile_image'])
+    
+    def get_is_following(self, obj):
+        request = self.context.get("request")
+    
+        # Check for authenticated user
+        if request and hasattr(request, "user"):
+            account = Account.objects.get(user=request.user)
+            if obj in account.following.all():
+                return True 
+        return False
 
 
 class AccountListSerializer(serializers.ModelSerializer):

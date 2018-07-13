@@ -5,7 +5,12 @@ const Threads = Collection.extend({
   model: Thread,
   url: '/api/v1/threads',
 
-  comparator: model => -model.get('created').getTime(),
+  comparator: (model) => {
+    if (model.get('created')) {
+      return -model.get('created').getTime();
+    }
+    return model.id;
+  },
 
   fetchAll() {
     this.url = `${this.url}/all`;

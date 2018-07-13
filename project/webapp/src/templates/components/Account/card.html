@@ -1,0 +1,34 @@
+<div class="user-card card" id="usercard-{{ username }}" data-username="{{ username }}">
+    <div class="top">
+        <div class="profile_image">
+            <div class="medium-image-cropper">
+                <a href="/profile/{{ username }}">
+                    <img src="{{ profile_image_url }}" alt="profile image" class="responsive-img">
+                </a>
+            </div>
+        </div>
+        <a href="/profile/{{username}}" class="name">
+                {{first_name}} {{last_name}}
+            </a>
+        <div class="username">
+            <a href="/profile/{{ username }}">
+                @{{username}}
+            </a>
+        </div>
+    </div>
+    <div class="bottom">
+        <div class="location"><i class="mini material-icons">place</i>{{ location }}</div>
+        <div class="about-me center-block">{{ about_me }}</div>
+    </div>
+    {{# if (!isCurrentUser) { }}
+        {{# if (!is_following) { }}
+            <div class="buttons row">
+                <a class="waves-effect waves-light btn follow-btn col s12" data-username="{{username}}" data-follow-state="{{is_following}}">Follow</a>
+            </div>
+        {{# } else { }}
+            <div class="buttons row">
+                <a class="waves-effect waves-light btn follow-btn col s12 btn-secondary unfollow-btn" data-username="{{username}}" data-follow-state="{{is_following}}"></a>
+            </div>
+        {{# } }}
+    {{# } }}
+</div>

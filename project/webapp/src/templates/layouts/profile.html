@@ -1,0 +1,63 @@
+<div class="account-base">
+    <div class="row content">
+        <div class="col m2 push-m1 account-settings"></div>
+        <div class="col m8 push-m1 scroll-col">
+            <div class="row">
+                <div class="row top-bar sub-nav">
+                    <div class="account-tabs">
+                        <ul class="tabs transparent left">
+                            <li class="tab">
+                                <a class="active" href="#civis">MY CIVIS</a>
+                            </li>
+                            <li class="tab">
+                                <a href="#followers">FOLLOWERS</a>
+                            </li>
+                            <li class="tab">
+                                <a href="#following">FOLLOWING</a>
+                            </li>
+                            <li class="tab">
+                                <a href="#issues">MY ISSUES</a>
+                            </li>
+                            <li class="tab">
+                                <a href="#myreps">MY REPS</a>
+                            </li>
+                            {{# if (username === currentUser) { }}
+                            <li class="tab settings-tab">
+                                <a class="btn" href="#settings" id="edit-profile">
+                                <i class="mini material-icons">edit</i>EDIT PROFILE</a>
+                            </li>
+                            {{# } }}
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div id="civis" class="col s12">
+                    <div class="center " style="margin-top:25%;">
+                        <div class="preloader-wrapper big active">
+                            <div class="spinner-layer spinner-blue-only">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="gap-patch">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="followers" class="col s12"></div>
+                <div id="following" class="col s12"></div>
+                <div id="issues" class="col s12"></div>
+                <div id="myreps" class="col s12"></div>
+                {{# if (username === currentUser) { }}
+                <div id="settings" class="col s12"></div>
+                {{# } }}
+            </div>
+        </div>
+    </div>
+</div>

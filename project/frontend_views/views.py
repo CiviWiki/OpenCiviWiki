@@ -10,34 +10,23 @@ from django.template.response import TemplateResponse
 
 from api.models import Category, Account, Thread, Civi, Activity, Invitation
 from api.forms import UpdateProfileImage
+from api.serializers import AccountListSerializer
 from utils.constants import US_STATES
 from utils.custom_decorators import login_required, full_account
 
 
-def base_view(request, path=''):
+def base_view(request):
     if not request.user.is_authenticated():
         return TemplateResponse(request, 'static_templates/landing.html', {})
 
-    a = Account.objects.get(user=request.user)
-    if not a.full_account:
+    request_account = Account.objects.get(user=request.user)
+    if not request_account.full_account:
         return HttpResponseRedirect('/setup')
 
-    # categories = [{'id': c.id, 'name': c.name} for c in Category.objects.all()]
-
-    # all_categories = list(Category.objects.values_list('id', flat=True))
-    # user_categories = list(a.categories.values_list('id', flat=True)) or all_categories
-
-    # feed_threads = [Thread.objects.summarize(t) for t in Thread.objects.exclude(is_draft=True).order_by('-created')]
-    # top5_threads = list(Thread.objects.filter(is_draft=False).order_by('-num_views')[:5].values('id', 'title'))
-    # my_draft_threads = [Thread.objects.summarize(t) for t in Thread.objects.filter(author_id=a.id).exclude(is_draft=False).order_by('-created')]
-
-    # states = sorted(US_STATES, key=lambda s: s[1])
     context = {
         'username': request.user.username,
         'google_map_api_key': settings.GOOGLE_API_KEY
     }
-
-    # return TemplateResponse(request, 'feed.html', {'data': json.dumps(data)})
     return TemplateResponse(request, 'app.html', context)
 
 
@@ -46,19 +35,16 @@ def base_view(request, path=''):
 def user_profile(request, username=None):
     if not username:
         return HttpResponseRedirect('/profile/{0}'.format(request.user))
-
     else:
         try:
             user = User.objects.get(username=username)
         except User.DoesNotExist:
             return HttpResponseRedirect('/404')
-    data = {
-        'username': user,
-        'profile_image_form': UpdateProfileImage,
+    context = {
+        'username': request.user.username,
         'google_map_api_key': settings.GOOGLE_API_KEY,
-        'sunlight_api_key': settings.SUNLIGHT_API_KEY
     }
-    return TemplateResponse(request, 'account.html', data)
+    return TemplateResponse(request, 'app.html', context)
 
 @login_required
 def user_setup(request):
