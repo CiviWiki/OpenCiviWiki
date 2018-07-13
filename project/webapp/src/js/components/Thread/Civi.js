@@ -1,4 +1,5 @@
 import { View } from 'backbone.marionette';
+import LinkSelectView from './LinkSelect';
 
 const CiviView = View.extend({
   template: _.template($('#civi-template').html()),
@@ -20,7 +21,6 @@ const CiviView = View.extend({
 
   events: {
     'click .rating-button': 'clickRating',
-    // 'click .favorite': 'clickFavorite',
     'click .edit': 'clickEdit',
     'click .delete': 'deleteEdit',
     'click .edit-confirm': 'saveEdit',
@@ -33,15 +33,12 @@ const CiviView = View.extend({
     'input .civi-link-images': 'previewImageNames',
     'click #add-image-link-input': 'addImageLinkInput',
     'click #respond-button': 'addRebuttal',
-    // 'click .civi-grab-link': 'grabLink',
-    // vote
-    // changevote
   },
 
   addImageLinkInput() {
-    const link_images = this.$('.civi-link-images').length;
-    if (link_images > 20) {
-      Materialize.toast("Don't think you need any more...", 5000);
+    const linkImages = this.$('.civi-link-images').length;
+    if (linkImages > 20) {
+      M.toast({ html: "Don't think you need any more..." });
     } else {
       this.$('.image-link-list').append(
         '<input type="text" class="civi-link-images" placeholder="Paste your image link here..."/>',
@@ -49,170 +46,113 @@ const CiviView = View.extend({
     }
   },
 
-  previewImageNames(e) {
-    const attachment_input = this.$('#id_attachment_image');
-    const uploaded_images = attachment_input[0].files;
+  previewImageNames() {
+    const view = this;
+    const attachmentInput = this.$('#id_attachment_image');
+    const uploadedImages = attachmentInput[0].files;
     const $previewlist = this.$('.file-preview');
     $previewlist.empty();
     // File Upload Images
-    _.each(
-      uploaded_images,
-      (img_file) => {
-        $previewlist.append(
-          `<div class="link-lato gray-text preview-item ">${img_file.name}</div>`,
-        );
-      },
-      this,
-    );
+    _.each(uploadedImages, (imageFile) => {
+      $previewlist.append(`<div class="link-lato gray-text preview-item ">${imageFile.name}</div>`);
+    });
 
     // Link Images
-    this.attachment_links = [];
-    const link_images = $('.civi-link-images');
-    _.each(
-      link_images,
-      function (img_link) {
-        const link_value = img_link.value.trim();
-        if (link_value) {
-          $previewlist.append(
-            `<div class="link-lato gray-text preview-item ">${link_value}</div>`,
-          );
-          this.attachment_links.push(link_value);
-        }
-      },
-      this,
-    );
+    this.attachmentLinks = [];
+    const linkImages = $('.civi-link-images');
+    _.each(linkImages, (imageLink) => {
+      const linkValue = imageLink.value.trim();
+      if (linkValue) {
+        $previewlist.append(`<div class="link-lato gray-text preview-item ">${linkValue}</div>`);
+        view.attachmentLinks.push(linkValue);
+      }
+    });
 
     // Total images count
-    const image_total = uploaded_images.length + this.attachment_links.length;
-    if (image_total === 0) {
+    const imageTotal = uploadedImages.length + this.attachmentLinks.length;
+    if (imageTotal === 0) {
       $previewlist.prepend('<div>No Images</div>');
-    } else if (image_total === 1) {
+    } else if (imageTotal === 1) {
       $previewlist.prepend('<div>1 Image</div>');
     } else {
-      $previewlist.prepend(`<div>${image_total} Images</div>`);
+      $previewlist.prepend(`<div>${imageTotal} Images</div>`);
     }
 
-    this.attachmentCount = image_total;
+    this.attachmentCount = imageTotal;
   },
 
-  showImageForm(e) {
-    // HEREHERE
+  showImageForm() {
     this.$('.edit-images').removeClass('hide');
     this.$('#add-more-images').addClass('hide');
   },
 
-  viewImageModal(e) {
-    const img_src = $(e.currentTarget).attr('src');
+  viewImageModal(event) {
+    event.stopPropagation();
+    const imageSource = $(event.currentTarget).attr('src');
     const $modal = $('#civi-image-modal');
-    $('#civi-image-big').attr('src', img_src);
+    $('#civi-image-big').attr('src', imageSource);
     $modal.openModal();
-    e.stopPropagation();
-  },
-  // clean() function
-  clickFavorite(e) {
-    const _this = this;
-
-    if ($this.text() === 'star_border') {
-      $.ajax({
-        url: '/api/favorite_civi/',
-        type: 'POST',
-        data: {
-          civi_id: this.model.id,
-        },
-        success(response) {
-          Materialize.toast('Favorited Civi', 5000);
-          $this.text('star');
-        },
-        error(r) {
-          Materialize.toast('Could not favor the civi', 5000);
-        },
-      });
-    } else {
-      $.ajax({
-        url: '/api/favorite_civi/',
-        type: 'POST',
-        data: {
-          civi_id: this.model.id,
-        },
-        success(response) {
-          Materialize.toast('Favorited Civi', 5000);
-        },
-        error(r) {
-          Materialize.toast('Could not favor the civi', 5000);
-        },
-      });
-      $this.text('star_border');
-    }
   },
 
-  grabLink() {
-    e.stopPropagation();
-    Materialize.toast('Civi link copied to clipboard.', 1500);
+  grabLink(event) {
+    event.stopPropagation();
+    M.toast({ html: 'Civi link copied to clipboard.' });
   },
 
-  clickRating(e) {
-    e.stopPropagation();
-    const _this = this;
-    const $this = $(e.currentTarget);
+  clickRating(event) {
+    event.stopPropagation();
+    const view = this;
+    const $this = $(event.currentTarget);
 
     const rating = $this.data('rating');
-    const civi_id = $(e.currentTarget)
+    const civiId = $(event.currentTarget)
       .closest('.civi-card')
       .data('civi-id');
 
-    // if (this.can_edit) {
-    //     Materialize.toast('Trying to vote on your own civi? :}', 5000);
-    //     return;
-    // }
-    if (rating && civi_id) {
+    if (rating && civiId) {
       $.ajax({
         url: '/api/rate_civi/',
         type: 'POST',
         data: {
-          civi_id,
+          civiId,
           rating,
         },
         success(response) {
-          Materialize.toast('Voted!', 5000);
-          // var score = $this.find('.rate-value');
-          // var new_vote = parseInt(score.text())+ 1;
-          // score.text(new_vote);
-          console.log(response.data);
-          let prev_votes = _this.parentView.model.get('user_votes');
-          const prev_vote = _.findWhere(prev_votes, { civi_id });
-          if (!prev_vote) {
-            prev_votes.push(response.data);
-            _this.parentView.model.set('user_votes', prev_votes);
+          M.toast({ html: 'Voted!' });
+          let prevVotes = view.parentView.model.get('user_votes');
+          const prevVote = _.findWhere(prevVotes, { civiId });
+          if (!prevVote) {
+            prevVotes.push(response.data);
+            view.parentView.model.set('user_votes', prevVotes);
           } else {
-            prev_votes = _.reject(prev_votes, v => v.civi_id === civi_id);
-            prev_votes.push(response.data);
-            _this.parentView.model.set('user_votes', prev_votes);
+            prevVotes = _.reject(prevVotes, v => v.civiId === civiId);
+            prevVotes.push(response.data);
+            view.parentView.model.set('user_votes', prevVotes);
           }
 
-          if (_this.model.get('type') != 'response' && _this.model.get('type') != 'rebuttal') {
-            _this.parentView.initRecommended(); // THISTHIS
-            _this.parentView.renderBodyContents();
-            _this.parentView.processCiviScroll();
+          if (view.model.get('type') !== 'response' && view.model.get('type') !== 'rebuttal') {
+            view.parentView.initRecommended();
+            view.parentView.renderBodyContents();
+            view.parentView.processCiviScroll();
           }
 
-          _this.$('.rating-button').removeClass('current');
+          view.$('.rating-button').removeClass('current');
           $this.addClass('current');
         },
-        error(r) {
-          Materialize.toast('Could not vote :(', 5000);
+        error() {
+          M.toast({ html: 'Could not vote :(' });
         },
       });
     }
   },
 
-  clickEdit(e) {
-    e.stopPropagation();
-    // Populate with data TODO: move to a template
+  clickEdit(event) {
+    event.stopPropagation();
     this.$('.edit-civi-body').text(this.model.get('body'));
     this.$('.edit-civi-title').val(this.model.get('title'));
     this.$(`#${this.model.get('type')}-${this.model.id}`).prop('checked', true);
-    if (this.model.get('type') != 'response' && this.model.get('type') != 'rebuttal') {
-      this.magicSuggestView = new cw.LinkSelectView({
+    if (this.model.get('type') !== 'response' && this.model.get('type') !== 'rebuttal') {
+      this.magicSuggestView = new LinkSelectView({
         $el: this.$(`#magicsuggest-${this.model.id}`),
         civis: this.civis,
       });
@@ -238,19 +178,18 @@ const CiviView = View.extend({
     }
   },
 
-  clickNewType(e) {
-    const new_type = $(e.target)
+  clickNewType(event) {
+    const newType = $(event.target)
       .closest("input[type='radio']:checked")
       .val();
-    // var new_type = $("#civi-type-form input[type='radio']:checked").val();
-    if (new_type === 'problem') {
+    if (newType === 'problem') {
       this.$('.edit-links').addClass('hide');
       this.$(`#magicsuggest-${this.model.id}`).addClass('hide');
     } else {
       this.$('.edit-links').removeClass('hide');
       this.$(`#magicsuggest-${this.model.id}`).removeClass('hide');
     }
-    this.magicSuggestView.setLinkableData(new_type);
+    this.magicSuggestView.setLinkableData(newType);
     this.magicSuggestView.ms.clear();
   },
 
@@ -260,16 +199,15 @@ const CiviView = View.extend({
     this.parentView.newResponseView.show();
   },
 
-  addImageToDeleteList(e) {
-    const target = $(e.currentTarget);
-    const target_image = target.data('image-id');
-
-    this.imageRemoveList.push(target_image);
+  addImageToDeleteList(event) {
+    const target = $(event.currentTarget);
+    const targetImage = target.data('image-id');
+    this.imageRemoveList.push(targetImage);
     target.remove();
   },
 
-  closeEdit(e) {
-    e.stopPropagation();
+  closeEdit(event) {
+    event.stopPropagation();
     this.$('.edit-wrapper').addClass('hide');
     this.$('.edit-action').addClass('hide');
     this.$('.text-wrapper').removeClass('hide');
@@ -277,55 +215,57 @@ const CiviView = View.extend({
     this.$('.delete').removeClass('hide');
   },
 
-  saveEdit(e) {
-    e.stopPropagation();
-    const _this = this;
-    const c_type = this.model.get('type');
-    const new_body = this.$('.edit-civi-body')
+  saveEdit(event) {
+    event.stopPropagation();
+    const view = this;
+    const civiType = this.model.get('type');
+    const newBody = this.$('.edit-civi-body')
       .val()
       .trim();
-    new_title = this.$('.edit-civi-title')
+
+    const newTitle = this.$('.edit-civi-title')
       .val()
       .trim();
+
     let links;
-    if (c_type != 'response' && c_type != 'rebuttal') {
+    if (civiType !== 'response' && civiType !== 'rebuttal') {
       links = this.magicSuggestView.ms.getValue();
     } else {
       links = [];
     }
 
-    let new_type = this.$("#civi-type-form input[type='radio']:checked").val();
-    console.log(new_type);
-    if (!new_body || !new_title) {
-      Materialize.toast('Please do not leave fields blank', 5000);
+    let newType = this.$("#civi-type-form input[type='radio']:checked").val();
+    if (!newBody || !newTitle) {
+      M.toast({ html: 'Please do not leave fields blank' });
       return;
-    } if (
+    }
+    if (
       this.imageRemoveList.length === 0
       && this.attachmentCount === 0
-      && (new_body == this.model.get('body')
-        && new_title == this.model.get('title')
+      && (newBody === this.model.get('body')
+        && newTitle === this.model.get('title')
         && _.isEqual(links, this.model.get('links'))
-        && new_type == this.model.get('type'))
+        && newType === this.model.get('type'))
     ) {
-      this.closeEdit(e);
+      this.closeEdit(event);
       return;
     }
     let data;
 
-    if (c_type === 'response' || c_type === 'rebuttal') {
-      new_type = c_type;
+    if (civiType === 'response' || civiType === 'rebuttal') {
+      newType = civiType;
       data = {
         civi_id: this.model.id,
-        title: new_title,
-        body: new_body,
+        title: newTitle,
+        body: newBody,
       };
     } else {
       data = {
         civi_id: this.model.id,
-        title: new_title,
-        body: new_body,
+        title: newTitle,
+        body: newBody,
         links,
-        type: new_type,
+        type: newType,
       };
     }
 
@@ -337,104 +277,93 @@ const CiviView = View.extend({
       type: 'POST',
       data,
       success(response) {
-        _this.closeEdit(e);
-        // var score = $this.find('.rate-value');
-        // var new_vote = parseInt(score.text())+ 1;
-        // score.text(new_vote);
-        //
-        const attachment_input = _this.$('#id_attachment_image');
-        const uploaded_images = attachment_input[0].files;
-        if (_this.attachmentCount > 0) {
-          const formData = new FormData(_this.$('#attachment_image_form')[0]);
-          formData.set('civi_id', _this.model.id);
-          if (_this.attachment_links.length) {
-            _.each(_this.attachment_links, (img_link) => {
-              formData.append('attachment_links[]', img_link);
+        view.closeEdit(event);
+        // const attachmentInput = view.$('#id_attachment_image');
+        // const uploaded_images = attachmentInput[0].files;
+        if (view.attachmentCount > 0) {
+          const formData = new FormData(view.$('#attachment_image_form')[0]);
+          formData.set('civi_id', view.model.id);
+          if (view.attachment_links.length) {
+            _.each(view.attachment_links, (imageLink) => {
+              formData.append('attachment_links[]', imageLink);
             });
           }
 
           $.ajax({
             url: '/api/upload_images/',
             type: 'POST',
-            success(response2) {
-              Materialize.toast('Saved.', 5000);
+            success(imageResponse) {
+              M.toast({ html: 'Saved.' });
 
               // Set the models with new data and rerender
-              _this.model.set('title', new_title);
-              _this.model.set('body', new_body);
-              _this.model.set('links', links);
-              _this.model.set('type', new_type);
-              _this.model.set('attachments', response2.attachments);
-              _this.model.set('score', response.score);
-              if (_this.magicSuggestView) {
-                _this.magicSuggestView.remove();
+              view.model.set('title', newTitle);
+              view.model.set('body', newBody);
+              view.model.set('links', links);
+              view.model.set('type', newType);
+              view.model.set('attachments', imageResponse.attachments);
+              view.model.set('score', response.score);
+              if (view.magicSuggestView) {
+                view.magicSuggestView.remove();
               }
 
-              _this.render();
+              view.render();
 
-              if (
-                _this.model.get('type') != 'response'
-                  && _this.model.get('type') != 'rebuttal'
-              ) {
-                const parent_links = _this.model.get('links');
+              if (view.model.get('type') !== 'response' && view.model.get('type') !== 'rebuttal') {
+                const parentLinks = view.model.get('links');
                 _.each(
-                  parent_links,
-                  (parent_id) => {
-                    const parent_civi = _this.options.parentView.civis.get(parent_id);
-                    if (parent_civi) {
-                      const prev_links = parent_civi.get('links');
-                      prev_links.push(_this.model.id);
-                      parent_civi.set('links', prev_links);
+                  parentLinks,
+                  (parentId) => {
+                    const parentCivi = view.options.parentView.civis.get(parentId);
+                    if (parentCivi) {
+                      const prevLinks = parentCivi.get('links');
+                      prevLinks.push(view.model.id);
+                      parentCivi.set('links', prevLinks);
                     }
                   },
                   this,
                 );
 
-                _this.parentView.initRecommended(); // THISTHIS
-                _this.parentView.renderBodyContents();
-                _this.parentView.processCiviScroll();
+                view.parentView.initRecommended();
+                view.parentView.renderBodyContents();
+                view.parentView.processCiviScroll();
               }
             },
-            error(e) {
-              Materialize.toast(
-                'Civi was edited but one or more images could not be uploaded',
-                5000,
-              );
+            error(imageResponse) {
+              M.toast({
+                html: 'Civi was edited but one or more images could not be uploaded',
+              });
 
               // Set the models with new data and rerender
-              _this.model.set('title', new_title);
-              _this.model.set('body', new_body);
-              _this.model.set('links', links);
-              _this.model.set('type', new_type);
-              _this.model.set('attachments', response2.attachments);
-              _this.model.set('score', response.score);
-              if (_this.magicSuggestView) {
-                _this.magicSuggestView.remove();
+              view.model.set('title', newTitle);
+              view.model.set('body', newBody);
+              view.model.set('links', links);
+              view.model.set('type', newType);
+              view.model.set('attachments', imageResponse.attachments);
+              view.model.set('score', response.score);
+              if (view.magicSuggestView) {
+                view.magicSuggestView.remove();
               }
 
-              _this.render();
+              view.render();
 
-              if (
-                _this.model.get('type') != 'response'
-                  && _this.model.get('type') != 'rebuttal'
-              ) {
-                const parent_links = _this.model.get('links');
+              if (view.model.get('type') !== 'response' && view.model.get('type') !== 'rebuttal') {
+                const parentLinks = view.model.get('links');
                 _.each(
-                  parent_links,
-                  (parent_id) => {
-                    const parent_civi = _this.options.parentView.civis.get(parent_id);
-                    if (parent_civi) {
-                      const prev_links = parent_civi.get('links');
-                      prev_links.push(_this.model.id);
-                      parent_civi.set('links', prev_links);
+                  parentLinks,
+                  (parentId) => {
+                    const parentCivi = view.options.parentView.civis.get(parentId);
+                    if (parentCivi) {
+                      const prevLinks = parentCivi.get('links');
+                      prevLinks.push(view.model.id);
+                      parentCivi.set('links', prevLinks);
                     }
                   },
                   this,
                 );
 
-                _this.parentView.initRecommended(); // THISTHIS
-                _this.parentView.renderBodyContents();
-                _this.parentView.processCiviScroll();
+                view.parentView.initRecommended(); // THISTHIS
+                view.parentView.renderBodyContents();
+                view.parentView.processCiviScroll();
               }
             },
             data: formData,
@@ -443,69 +372,69 @@ const CiviView = View.extend({
             processData: false,
           });
         } else {
-          Materialize.toast('Saved', 5000);
+          M.toast({ html: 'Saved' });
 
           // Clean up previous links
-          if (_this.model.get('type') != 'response' && _this.model.get('type') != 'rebuttal') {
-            const orig_links = _this.model.get('links');
+          if (view.model.get('type') !== 'response' && view.model.get('type') !== 'rebuttal') {
+            const origLinks = view.model.get('links');
             _.each(
-              orig_links,
-              (parent_id) => {
-                const parent_civi = _this.options.parentView.civis.get(parent_id);
-                if (parent_civi) {
-                  const prev_links = parent_civi.get('links');
-                  const cleaned = _.without(prev_links, _this.model.id);
-                  parent_civi.set('links', cleaned);
+              origLinks,
+              (parentId) => {
+                const parentCivi = view.options.parentView.civis.get(parentId);
+                if (parentCivi) {
+                  const prevLinks = parentCivi.get('links');
+                  const cleaned = _.without(prevLinks, view.model.id);
+                  parentCivi.set('links', cleaned);
                 }
               },
               this,
             );
           }
           // Set the models with new data and rerender
-          _this.model.set('title', new_title);
-          _this.model.set('body', new_body);
-          _this.model.set('links', links);
-          _this.model.set('type', new_type);
-          _this.model.set('attachments', response.attachments);
-          _this.model.set('score', response.score);
-          if (_this.magicSuggestView) {
-            _this.magicSuggestView.remove();
+          view.model.set('title', newTitle);
+          view.model.set('body', newBody);
+          view.model.set('links', links);
+          view.model.set('type', newType);
+          view.model.set('attachments', response.attachments);
+          view.model.set('score', response.score);
+          if (view.magicSuggestView) {
+            view.magicSuggestView.remove();
           }
 
-          _this.render();
+          view.render();
 
-          if (_this.model.get('type') != 'response' && _this.model.get('type') != 'rebuttal') {
-            const parent_links = _this.model.get('links');
+          if (view.model.get('type') !== 'response' && view.model.get('type') !== 'rebuttal') {
+            const parentLinks = view.model.get('links');
             _.each(
-              parent_links,
-              (parent_id) => {
-                const parent_civi = _this.options.parentView.civis.get(parent_id);
-                if (parent_civi) {
-                  const prev_links = parent_civi.get('links');
-                  prev_links.push(_this.model.id);
-                  parent_civi.set('links', prev_links);
+              parentLinks,
+              (parentId) => {
+                const parentCivi = view.options.parentView.civis.get(parentId);
+                if (parentCivi) {
+                  const prevLinks = parentCivi.get('links');
+                  prevLinks.push(view.model.id);
+                  parentCivi.set('links', prevLinks);
                 }
               },
               this,
             );
 
-            _this.parentView.initRecommended(); // THISTHIS
-            _this.parentView.renderBodyContents();
-            _this.parentView.processCiviScroll();
+            view.parentView.initRecommended();
+            view.parentView.renderBodyContents();
+            view.parentView.processCiviScroll();
           }
         }
       },
-      error(r) {
-        Materialize.toast('Could not edit the civi', 5000);
-        _this.closeEdit(e);
-        _this.render();
+      error() {
+        M.toast({ html: 'Could not edit the civi' });
+        view.closeEdit(event);
+        view.render();
       },
     });
   },
 
-  deleteEdit(e) {
-    const _this = this;
-    e.stopPropagation();
+  deleteEdit(event) {
+    const view = this;
+    event.stopPropagation();
 
     $.ajax({
       url: '/api/delete_civi/',
@@ -513,24 +442,26 @@ const CiviView = View.extend({
       data: {
         civi_id: this.model.id,
       },
-      success(response) {
-        Materialize.toast('Deleted Civi succssfully', 5000);
-        _.each(_this.model.get('links'), (link) => {
-          const linked_civi = _this.civis.findWhere({ id: link });
-          const prev_links = linked_civi.get('links');
-          new_links = _.without(prev_links, _this.model.id);
-          linked_civi.set('links', new_links);
+      success() {
+        M.toast({ html: 'Deleted Civi succssfully' });
+        _.each(view.model.get('links'), (link) => {
+          const linkedCivi = view.civis.findWhere({ id: link });
+          const prevLinks = linkedCivi.get('links');
+          const newLinks = _.without(prevLinks, view.model.id);
+          linkedCivi.set('links', newLinks);
         });
 
-        _this.civis.remove(_this.model);
-        _this.remove();
-        _this.parentView.initRecommended();
-        _this.parentView.renderBodyContents();
-        _this.parentView.processCiviScroll();
+        view.civis.remove(view.model);
+        view.remove();
+        view.parentView.initRecommended();
+        view.parentView.renderBodyContents();
+        view.parentView.processCiviScroll();
       },
-      error(r) {
-        Materialize.toast('Could not delete the civi', 5000);
+      error() {
+        M.toast({ html: 'Could not delete the civi' });
       },
     });
   },
 });
+
+export default CiviView;

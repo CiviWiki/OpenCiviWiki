@@ -21,7 +21,7 @@ const EditThreadView = View.extend({
       this.$('.edit-thread-state-selection').removeClass('hide');
       this.$('#thread-state').val(this.model.get('state'));
     }
-    cw.materializeShit();
+    // cw.materializeShit();
   },
 
   events: {
@@ -79,82 +79,67 @@ const EditThreadView = View.extend({
     this.$('#link-image-form').removeClass('hide');
   },
 
-  editThread(e) {
-    const _this = this;
-    _this
-      .$(e.currentTarget)
+  editThread(event) {
+    const view = this;
+    view
+      .$(event.currentTarget)
       .addClass('disabled')
       .attr('disabled', true);
-
     const title = this.$el
       .find('#thread-title')
       .val()
       .trim();
-
-
     const summary = this.$el
       .find('#thread-body')
       .val()
       .trim();
-
-
     const level = this.$el.find('#thread-location').val();
-
-
-    const category_id = this.$el.find('#thread-category').val();
-
+    const categoryId = this.$el.find('#thread-category').val();
 
     let state = '';
     if (level === 'state') {
       state = this.$el.find('#thread-state').val();
     }
-    const thread_id = this.threadId;
-    console.log(title, summary, category_id, thread_id);
-    if (title && summary && category_id) {
+    const thread = this.threadId;
+    if (title && summary && categoryId) {
       $.ajax({
         url: '/api/edit_thread/',
         type: 'POST',
         data: {
           title,
           summary,
-          category_id,
-          thread_id,
+          category_id: categoryId,
+          thread_id: thread,
           level,
           state,
         },
         success(response) {
           const file = $('#thread_attachment_image').val();
-          const img_url = _this
+          const imageUrl = view
             .$('#link-image-form')
             .val()
             .trim();
-          if (_this.removeImage) {
+          if (view.removeImage) {
             // if file
-            if (_this.imageMode === 'upload' && file) {
-              const formData = new FormData(_this.$('#attachment_image_form')[0]);
+            if (view.imageMode === 'upload' && file) {
+              const formData = new FormData(view.$('#attachment_image_form')[0]);
               formData.set('thread_id', response.data.thread_id);
               $.ajax({
                 url: '/api/upload_image/',
                 type: 'POST',
-                success(response2) {
-                  Materialize.toast('Saved changes', 5000);
-                  // _this.hide();
+                success(imageResponse) {
+                  M.toast({ html: 'Saved changes' });
 
-                  new_data = response.data;
-                  _this.parentView.model.set('title', new_data.title);
-                  _this.parentView.model.set('summary', new_data.summary);
-                  _this.parentView.model.set('category', new_data.category);
-                  _this.parentView.model.set('level', new_data.level);
-                  _this.parentView.model.set('state', new_data.state);
-                  _this.parentView.model.set('location', new_data.location);
-                  _this.parentView.model.set('image', response2.image);
-                  _this.parentView.threadWikiRender();
+                  const newData = response.data;
+                  view.parentView.model.set(newData);
+                  view.parentView.model.set('image', imageResponse.image);
+                  view.parentView.threadWikiRender();
                 },
                 error(e) {
-                  Materialize.toast('ERROR: Image could not be uploaded', 5000);
-                  Materialize.toast(e.statusText, 5000);
-                  _this
-                    .$(e.currentTarget)
+                  M.toast({ html: 'ERROR: Image could not be uploaded' });
+                  M.toast({ html: e.statusText });
+                  view
+                    .$(event.currentTarget)
                     .removeClass('disabled')
                     .attr('disabled', false);
                 },
@@ -163,33 +148,28 @@ const EditThreadView = View.extend({
                 contentType: false,
                 processData: false,
               });
-            } else if (_this.imageMode === 'link' && img_url) {
+            } else if (view.imageMode === 'link' && imageUrl) {
               $.ajax({
                 url: '/api/upload_image/',
                 type: 'POST',
                 data: {
-                  link: img_url,
+                  link: imageUrl,
                   thread_id: response.data.thread_id,
                 },
-                success(response2) {
-                  Materialize.toast('Saved changes', 5000);
-                  _this.hide();
+                success(imageResponse) {
+                  M.toast({ html: 'Saved changes' });
+                  view.hide();
 
-                  new_data = response.data;
-                  _this.parentView.model.set('title', new_data.title);
-                  _this.parentView.model.set('summary', new_data.summary);
-                  _this.parentView.model.set('category', new_data.category);
-                  _this.parentView.model.set('level', new_data.level);
-                  _this.parentView.model.set('state', new_data.state);
-                  _this.parentView.model.set('location', new_data.location);
-                  _this.parentView.model.set('image', response2.image);
-                  _this.parentView.threadWikiRender();
+                  const newData = response.data;
+                  view.parentView.model.set(newData);
+                  view.parentView.model.set('image', imageResponse.image);
+                  view.parentView.threadWikiRender();
                 },
-                error(e) {
-                  Materialize.toast('ERROR: Image could not be uploaded', 5000);
-                  Materialize.toast(e.statusText, 5000);
-                  _this
-                    .$(e.currentTarget)
+                error(error) {
+                  M.toast({ html: 'ERROR: Image could not be uploaded' });
+                  M.toast({ html: error.statusText });
+                  view
+                    .$(event.currentTarget)
                     .removeClass('disabled')
                     .attr('disabled', false);
                 },
@@ -203,57 +183,46 @@ const EditThreadView = View.extend({
                   remove: true,
                   thread_id: response.data.thread_id,
                 },
-                success(response2) {
-                  Materialize.toast('Saved changes', 5000);
-                  // _this.hide();
+                success() {
+                  M.toast({ html: 'Saved changes' });
+                  // view.hide();
 
-                  new_data = response.data;
-                  _this.parentView.model.set('title', new_data.title);
-                  _this.parentView.model.set('summary', new_data.summary);
-                  _this.parentView.model.set('category', new_data.category);
-                  _this.parentView.model.set('image', response2.image);
-                  _this.parentView.model.set('level', new_data.level);
-                  _this.parentView.model.set('state', new_data.state);
-                  _this.parentView.model.set('location', new_data.location);
-                  _this.parentView.threadWikiRender();
+                  const newData = response.data;
+                  view.parentView.model.set(newData);
+                  view.parentView.threadWikiRender();
                 },
-                error(e) {
-                  Materialize.toast('ERROR: Image could not be uploaded', 5000);
-                  Materialize.toast(e.statusText, 5000);
-                  _this
-                    .$(e.currentTarget)
+                error(error) {
+                  M.toast({ html: 'ERROR: Image could not be uploaded' });
+                  M.toast({ html: error.statusText });
+                  view
+                    .$(event.currentTarget)
                     .removeClass('disabled')
                     .attr('disabled', false);
                 },
               });
             }
           } else {
-            Materialize.toast('Saved changes', 5000);
-            // _this.hide();
+            M.toast({ html: 'Saved changes' });
+            // view.hide();
 
             // New Data
-            new_data = response.data;
-            _this.parentView.model.set('title', new_data.title);
-            _this.parentView.model.set('summary', new_data.summary);
-            _this.parentView.model.set('category', new_data.category);
-            _this.parentView.model.set('level', new_data.level);
-            _this.parentView.model.set('state', new_data.state);
-            _this.parentView.model.set('location', new_data.location);
-            _this.parentView.threadWikiRender();
+            const newData = response.data;
+            view.parentView.model.set(newData);
+            view.parentView.threadWikiRender();
           }
         },
         error() {
-          Materialize.toast('Servor Error: Thread could not be edited', 5000);
-          _this
-            .$(e.currentTarget)
+          M.toast({ html: 'Servor Error: Thread could not be edited' });
+          view
+            .$(event.currentTarget)
             .removeClass('disabled')
             .attr('disabled', false);
         },
       });
     } else {
-      Materialize.toast('Please input all fields.', 5000);
-      _this
-        .$(e.currentTarget)
+      M.toast({ html: 'Please input all fields.' });
+      view
+        .$(event.currentTarget)
         .removeClass('disabled')
         .attr('disabled', false);
     }

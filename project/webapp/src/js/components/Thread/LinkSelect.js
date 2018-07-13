@@ -15,8 +15,6 @@ const LinkSelectView = View.extend({
   },
 
   render() {
-    const _this = this;
-
     this.ms = this.$el.magicSuggest({
       allowFreeEntries: false,
       groupBy: 'type',
@@ -43,20 +41,20 @@ const LinkSelectView = View.extend({
     });
   },
 
-  setLinkableData(c_type) {
-    const _this = this;
+  setLinkableData(civiType) {
+    const view = this;
     let linkableCivis = [];
-    if (c_type == 'cause') {
-      linkableCivis = _this.civis.where({ type: 'problem' });
-    } else if (c_type == 'solution') {
-      linkableCivis = _this.civis.where({ type: 'cause' });
+    if (civiType === 'cause') {
+      linkableCivis = view.civis.where({ type: 'problem' });
+    } else if (civiType === 'solution') {
+      linkableCivis = view.civis.where({ type: 'cause' });
     }
     const msdata = [];
-    _.each(linkableCivis, (c_model) => {
+    _.each(linkableCivis, (civiModel) => {
       const civi = {
-        id: c_model.get('id'),
-        type: c_model.get('type'),
-        title: c_model.get('title'),
+        id: civiModel.get('id'),
+        type: civiModel.get('type'),
+        title: civiModel.get('title'),
       };
       msdata.push(civi);
     });
