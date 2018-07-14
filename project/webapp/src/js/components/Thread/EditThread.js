@@ -1,19 +1,29 @@
 import { View } from 'backbone.marionette';
+import baseTemplate from 'Templates/components/Thread/edit_wiki.html';
 
 const EditThreadView = View.extend({
   el: '.thread-wiki-holder',
-  template: _.template($('#edit-wiki-template').html()),
-  initialize(options) {
-    this.options = options || {};
-    this.threadId = options.threadId;
-    this.parentView = options.parentView;
-    this.removeImage = false;
-    this.imageMode = '';
-    this.render();
+  element: '.thread-wiki-holder',
+  template: baseTemplate,
+
+  templateContext() {
+    return {
+      this: this,
+    };
   },
 
-  render() {
-    this.$el.empty().append(this.template());
+  initialize() {
+    this.model = this.getOption('model');
+    this.threadId = this.getOption('threadId');
+    this.parentView = this.getOption('parentView');
+    this.removeImage = false;
+    this.imageMode = '';
+    this.$element = $(this.element);
+  },
+
+  renderView() {
+    // this.$element.empty().append(this.wikiTemplate());
+    this.render();
     this.$('#thread-image-forms').addClass('hide');
 
     this.$('#thread-location').val(this.model.get('level'));
@@ -21,7 +31,9 @@ const EditThreadView = View.extend({
       this.$('.edit-thread-state-selection').removeClass('hide');
       this.$('#thread-state').val(this.model.get('state'));
     }
-    // cw.materializeShit();
+    M.updateTextFields();
+    M.FormSelect.init(document.querySelectorAll('select'));
+    
   },
 
   events: {
@@ -44,12 +56,12 @@ const EditThreadView = View.extend({
   },
 
   showStates() {
-    const level = this.$el.find('#thread-location').val();
+    const level = this.$element.find('#thread-location').val();
     if (level === 'state') {
       this.$('.edit-thread-state-selection').removeClass('hide');
     } else {
       this.$('.edit-thread-state-selection').addClass('hide');
-      this.$el.find('#thread-state').val('');
+      this.$element.find('#thread-state').val('');
     }
   },
 
@@ -85,33 +97,33 @@ const EditThreadView = View.extend({
       .$(event.currentTarget)
       .addClass('disabled')
       .attr('disabled', true);
-    const title = this.$el
+    const newTitle = this.$element
       .find('#thread-title')
       .val()
       .trim();
-    const summary = this.$el
+    const newSummary = this.$element
       .find('#thread-body')
       .val()
       .trim();
-    const level = this.$el.find('#thread-location').val();
-    const categoryId = this.$el.find('#thread-category').val();
+    const newLevel = this.$element.find('#thread-location').val();
+    const categoryId = this.$element.find('#thread-category').val();
 
-    let state = '';
-    if (level === 'state') {
-      state = this.$el.find('#thread-state').val();
+    let newState = '';
+    if (newLevel === 'state') {
+      newState = this.$element.find('#thread-state').val();
     }
     const thread = this.threadId;
-    if (title && summary && categoryId) {
+    if (newTitle && newSummary && categoryId) {
       $.ajax({
         url: '/api/edit_thread/',
         type: 'POST',
         data: {
-          title,
-          summary,
+          title: newTitle,
+          summary: newSummary,
           category_id: categoryId,
           thread_id: thread,
-          level,
-          state,
+          level: newLevel,
+          state: newState,
         },
         success(response) {
           const file = $('#thread_attachment_image').val();
@@ -185,7 +197,6 @@ const EditThreadView = View.extend({
                 },
                 success() {
                   M.toast({ html: 'Saved changes' });
-                  // view.hide();
 
                   const newData = response.data;
                   view.parentView.model.set(newData);

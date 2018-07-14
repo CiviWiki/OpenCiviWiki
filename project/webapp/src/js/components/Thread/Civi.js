@@ -1,21 +1,21 @@
 import { View } from 'backbone.marionette';
+import baseTemplate from 'Templates/components/Thread/civi.html';
 import LinkSelectView from './LinkSelect';
 
 const CiviView = View.extend({
-  template: _.template($('#civi-template').html()),
+  template: baseTemplate,
 
-  initialize(options) {
-    this.options = options || {};
-    this.can_edit = options.can_edit;
-    this.is_draft = options.is_draft;
-    this.can_respond = options.can_respond;
-    this.parentView = options.parentView;
+  initialize() {
+    this.can_edit = this.getOption('can_edit');
+    this.is_draft = this.getOption('is_draft');
+    this.can_respond = this.getOption('can_respond');
+    this.parentView = this.getOption('parentView');
     this.civis = this.parentView.civis;
     this.model.set('view', this);
-    this.render();
+    this.renderView();
   },
 
-  render() {
+  renderView() {
     this.$el.empty().append(this.template());
   },
 
@@ -114,7 +114,7 @@ const CiviView = View.extend({
         url: '/api/rate_civi/',
         type: 'POST',
         data: {
-          civiId,
+          civi_id: civiId,
           rating,
         },
         success(response) {

@@ -1,14 +1,15 @@
 import { View } from 'backbone.marionette';
+import baseTemplate from 'Templates/components/Thread/new_response.html';
 
 const NewResponseView = View.extend({
   el: '#new-response-box',
-  template: _.template($('#new-response-template').html()),
-  initialize(options) {
-    this.options = options || {};
+  template: baseTemplate,
+ 
+  initialize() {
     this.rebuttal_ref = '';
   },
 
-  render() {
+  onRender() {
     this.$el.empty().append(this.template());
     $('#add-new-response').hide();
 

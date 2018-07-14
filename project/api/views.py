@@ -188,7 +188,7 @@ class AccountViewSet(viewsets.ModelViewSet):
 class ThreadViewSet(viewsets.ModelViewSet):
     """ REST API viewset for Threads """
 
-    queryset = Thread.objects.filter(is_draft=False).order_by('-created')
+    queryset = Thread.objects.order_by('-created')
     serializer_class = ThreadDetailSerializer
     permission_classes = (IsOwnerOrReadOnly,)
     authentication_classes = AUTH_CLASSES
@@ -200,7 +200,7 @@ class ThreadViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """ allow rest api to filter by submissions """
-        queryset = Thread.objects.filter(is_draft=False)
+        queryset = Thread.objects.all()
         category_id = self.request.query_params.get('category_id', None)
         if category_id is not None:
             if category_id != 'all':

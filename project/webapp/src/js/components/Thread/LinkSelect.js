@@ -1,20 +1,22 @@
+import './Magicsuggest/magicsuggest-min';
+import './Magicsuggest/magicsuggest-min.css';
+
 import { View } from 'backbone.marionette';
 
 const LinkSelectView = View.extend({
   el: '#magicsuggest',
 
-  initialize(options) {
-    this.options = options || {};
-    this.civis = options.civis;
+  initialize() {
+    this.civis = this.getOption('civis');
 
-    this.$el = options.$el || this.$el;
+    this.$el = this.getOption('options').$el || this.$el;
     this.setElement(this.$el);
-    this.render();
+    this.renderView();
 
     return this;
   },
 
-  render() {
+  renderView() {
     this.ms = this.$el.magicSuggest({
       allowFreeEntries: false,
       groupBy: 'type',

@@ -21,14 +21,14 @@ const AppController = Object.extend({
   },
 
   viewThread(threadId) {
+    const appContext = this.context;
     const thread = new Thread({ id: threadId });
 
     const threadView = new ThreadView({
       model: thread,
-      context: this.context,
+      context: appContext,
     });
     thread.fetch();
-
     this.rootView.renderContent(threadView);
   },
 

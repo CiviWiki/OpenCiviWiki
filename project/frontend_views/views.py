@@ -67,55 +67,60 @@ def issue_thread(request, thread_id=None):
         return HttpResponseRedirect('/404')
 
     req_acct = Account.objects.get(user=request.user)
-    t = Thread.objects.get(id=thread_id)
-    c_qs = Civi.objects.filter(thread_id=thread_id).exclude(c_type='response')
-    c_scored = [c.dict_with_score(req_acct.id) for c in c_qs]
-    civis = sorted(c_scored, key=lambda c: c['score'], reverse=True)
+    thread = Thread.objects.get(id=thread_id)
+    # c_qs = Civi.objects.filter(thread_id=thread_id).exclude(c_type='response')
+    # c_scored = [c.dict_with_score(req_acct.id) for c in c_qs]
+    # civis = sorted(c_scored, key=lambda c: c['score'], reverse=True)
 
     #modify thread view count
-    t.num_civis = len(civis)
-    t.num_views = F('num_views') + 1
-    t.save()
-    t.refresh_from_db()
+    # t.num_civis = len(civis)
+    thread.num_views = F('num_views') + 1
+    thread.save()
+    # t.refresh_from_db()
 
-    thread_wiki_data = {
-        "thread_id": thread_id,
-        "title": t.title,
-        "summary": t.summary,
-        "image": t.image_url,
-        "author": {
-            "username": t.author.user.username,
-            "profile_image": t.author.profile_image_url,
-            "first_name": t.author.first_name,
-            "last_name": t.author.last_name
-        },
-        "contributors": [Account.objects.chip_summarize(a) for a in Account.objects.filter(pk__in=c_qs.distinct('author').values_list('author', flat=True))],
-        "category": {
-            "id": t.category.id,
-            "name": t.category.name
-        },
-        "categories": [{'id': c.id, 'name': c.name} for c in Category.objects.all()],
-        "states": sorted(US_STATES, key=lambda s: s[1]),
-        "created": t.created_date_str,
-        "level": t.level,
-        "state": t.state if t.level == "state" else "",
-        "location": t.level if not t.state else dict(US_STATES).get(t.state),
-        "num_civis": t.num_civis,
-        "num_views": t.num_views,
-        'user_votes': [{'civi_id':act.civi.id, 'activity_type': act.activity_type, 'c_type': act.civi.c_type} for act in Activity.objects.filter(thread=t.id, account=req_acct.id)]
-    }
-    thread_body_data = {
-        'civis': civis,
-    }
+    # thread_wiki_data = {
+    #     "thread_id": thread_id,
+    #     "title": t.title,
+    #     "summary": t.summary,
+    #     "image": t.image_url,
+    #     "author": {
+    #         "username": t.author.user.username,
+    #         "profile_image": t.author.profile_image_url,
+    #         "first_name": t.author.first_name,
+    #         "last_name": t.author.last_name
+    #     },
+    #     "contributors": [Account.objects.chip_summarize(a) for a in Account.objects.filter(pk__in=c_qs.distinct('author').values_list('author', flat=True))],
+    #     "category": {
+    #         "id": t.category.id,
+    #         "name": t.category.name
+    #     },
+    #     "categories": [{'id': c.id, 'name': c.name} for c in Category.objects.all()],
+    #     "states": sorted(US_STATES, key=lambda s: s[1]),
+    #     "created": t.created_date_str,
+    #     "level": t.level,
+    #     "state": t.state if t.level == "state" else "",
+    #     "location": t.level if not t.state else dict(US_STATES).get(t.state),
+    #     "num_civis": t.num_civis,
+    #     "num_views": t.num_views,
+    #     'user_votes': [{'civi_id':act.civi.id, 'activity_type': act.activity_type, 'c_type': act.civi.c_type} for act in Activity.objects.filter(thread=t.id, account=req_acct.id)]
+    # }
+    # thread_body_data = {
+    #     'civis': civis,
+    # }
 
-    data = {
-        'thread_id': thread_id,
-        'is_draft': t.is_draft,
-        'thread_wiki_data': json.dumps(thread_wiki_data),
-        'thread_body_data': json.dumps(thread_body_data)
-    }
+    # data = {
+    #     'thread_id': thread_id,
+    #     'is_draft': t.is_draft,
+    #     'thread_wiki_data': json.dumps(thread_wiki_data),
+    #     'thread_body_data': json.dumps(thread_body_data)
+    # }
 
-    return TemplateResponse(request, 'thread.html', data)
+    # return TemplateResponse(request, 'thread.html', data)
+    context = {
+        'username': request.user.username,
+        'google_map_api_key': settings.GOOGLE_API_KEY
+    }
+    return TemplateResponse(request, 'app.html', context)
 
 @login_required
 @full_account

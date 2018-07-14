@@ -1,17 +1,14 @@
 import { View } from 'backbone.marionette';
+import baseTemplate from 'Templates/components/Thread/new_civi.html';
 import { Civi } from '../../models';
 import LinkSelectView from './LinkSelect';
 import CiviView from './Civi';
 
 const NewCiviView = View.extend({
   el: '#new-civi-box',
-  template: _.template($('#new-civi-template').html()),
+  template: baseTemplate,
 
-  initialize(options) {
-    this.options = options || {};
-  },
-
-  render() {
+  onRender() {
     this.$el.empty().append(this.template());
 
     this.magicSuggestView = new LinkSelectView({

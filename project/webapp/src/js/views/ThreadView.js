@@ -1,11 +1,19 @@
 import { View } from 'backbone.marionette';
 
+import baseTemplate from 'Templates/components/Thread/thread_base.html';
+import threadWikiTemplate from 'Templates/components/Thread/thread_wiki.html';
+import threadBodyTemplate from 'Templates/components/Thread/thread_body.html';
+import threadResponseTemplate from 'Templates/components/Thread/thread_responses.html';
+import threadOutlineTemplate from 'Templates/components/Thread/thread_outline.html';
+import 'Styles/thread.less';
+
 import { Civi } from '../models';
-import { Responses } from '../collections';
+import { Civis, Responses, Categories } from '../collections';
 import EditThreadView from '../components/Thread/EditThread';
 import CiviView from '../components/Thread/Civi';
 import NewResponseView from '../components/Thread/NewResponse';
 import NewCiviView from '../components/Thread/NewCivi';
+import STATES from '../utils/states';
 
 const DEFAULTS = {
   types: ['problem', 'cause', 'solution'],
@@ -15,18 +23,31 @@ const DEFAULTS = {
 };
 
 const ThreadView = View.extend({
-  el: '#thread',
-  template: _.template($('#thread-template').html()),
-  wikiTemplate: _.template($('#thread-wiki-template').html()),
-  bodyTemplate: _.template($('#thread-body-template').html()),
-  responseWrapper: _.template($('#thread-response-template').html()),
-  outlineTemplate: _.template($('#outline-template').html()),
+  id: 'thread',
+  template: baseTemplate,
+  wikiTemplate: threadWikiTemplate,
+  bodyTemplate: threadBodyTemplate,
+  responseWrapper: threadResponseTemplate,
+  outlineTemplate: threadOutlineTemplate,
 
-  initialize(options) {
-    this.username = options.username;
-    this.civis = options.civis;
+  regions: {
+    threadWikiHolder: '.thread-wiki-holder',
+    threadBodyHolder: '.thread-body-holder',
+    civiOutline: '#civi-outline',
+    responsesBox: '.responses-box',
+  },
+
+  templateContext() {
+    return {
+      currentUser: this.getOption('context').username,
+      civis: this.model.get('civis'),
+      is_draft: this.is_draft,
+    };
+  },
+
+  initialize() {
+    this.username = this.getOption('context').username;
     this.navExpanded = true;
-    this.is_draft = options.is_draft;
 
     this.civiRecViewLimits = { problem: 0, cause: 0, solution: 0 };
     this.civiOtherViewLimits = { problem: 0, cause: 0, solution: 0 };
@@ -37,12 +58,11 @@ const ThreadView = View.extend({
     this.recommendedCivis = [];
     this.otherCivis = [];
     this.outlineCivis = {};
-    this.initRecommended();
 
-    this.responseCollection = new Responses({ threadId: this.model.threadId });
+    this.responseCollection = new Responses({ threadId: this.model.id });
 
     this.listenTo(this.responseCollection, 'sync', this.renderResponses);
-    this.render();
+    this.listenTo(this.model, 'sync', this.postSync);
   },
 
   initRecommended() {
@@ -133,13 +153,33 @@ const ThreadView = View.extend({
     );
   },
 
-  render() {
-    this.$el.empty().append(this.template());
+  postSync() {
+    const view = this;
+    view.civis = new Civis(view.model.get('civis'));
+    view.is_draft = view.model.get('is_draft');
+    if (view.model.get('level') === 'federal') {
+      view.model.set('location', 'federal');
+    } else {
+      view.model.set('location', STATES[this.model.get('state')]);
+    }
+    view.categories = new Categories();
+    view.categories.fetch({
+      success: () => {
+        view.model.set('categories', this.categories.toJSON());
+      },
+    });
+    view.model.set('states', STATES);
 
+    view.initRecommended();
+    view.renderView();
+    view.delegateEvents();
+  },
+
+  renderView() {
     this.editThreadView = new EditThreadView({
       model: this.model,
       parentView: this,
-      threadId: this.model.threadId,
+      threadId: this.model.id,
     });
 
     this.$('.thread-wiki-holder').addClass('hide');
@@ -160,7 +200,7 @@ const ThreadView = View.extend({
     if (this.$('.thread-wiki-holder').length) {
       this.$('.thread-wiki-holder')
         .empty()
-        .append(this.wikiTemplate());
+        .append(this.wikiTemplate(this.templateContext));
     }
   },
 
@@ -175,9 +215,12 @@ const ThreadView = View.extend({
         .empty()
         .append(this.bodyTemplate(bodyRenderData));
 
-      this.$('.main-thread').on('scroll', () => {
-        view.processCiviScroll();
-      });
+      this.$('.main-thread').on(
+        'scroll',
+        _.once(() => {
+          view.processCiviScroll();
+        }),
+      );
     }
   },
 
@@ -192,12 +235,11 @@ const ThreadView = View.extend({
 
   renderOutline() {
     const view = this;
-    if (this.civis.length === 0) {
-      this.$('#civi-outline')
-        .empty()
-        .append(this.outlineTemplate());
-    }
-
+    // if (this.civis.length === 0) {
+    //   this.$('#civi-outline')
+    //     .empty()
+    //     .append(this.outlineTemplate(this.templateContext()));
+    // }
     // Render Outline Template based on models
     const renderData = {
       problems: this.outlineCivis.problem,
@@ -300,24 +342,25 @@ const ThreadView = View.extend({
       this,
     );
 
-    // Calculate tracking
-    this.calcCiviLocations();
-    // Padding so you can scroll and track the last civi element;
-    const scrollPadding = this.$('.main-thread').height() - this.civiLocations[this.civiLocations.length - 1].height;
-    this.$('.civi-padding').height(scrollPadding - 8);
+    if (this.civis.length > 0) {
+      // Calculate tracking
+      this.calcCiviLocations();
+      // Padding so you can scroll and track the last civi element;
+      const scrollPadding = this.$('.main-thread').height() - this.civiLocations[this.civiLocations.length - 1].height;
+      this.$('.civi-padding').height(scrollPadding - 8);
 
-    // Vote indication
-    const outline = this.$('#civi-outline');
-    _.each(
-      this.model.get('user_votes'),
-      (vote) => {
-        outline.find(`#civi-nav-${vote.civi_id}`).addClass('nav-inactive');
-        const navItemState = outline.find(`#civi-nav-state-${vote.civi_id}`);
-        navItemState.addClass('voted').text('beenhere');
-      },
-      this,
-    );
-
+      // Vote indication
+      const outline = this.$('#civi-outline');
+      _.each(
+        this.model.get('user_votes'),
+        (vote) => {
+          outline.find(`#civi-nav-${vote.civi_id}`).addClass('nav-inactive');
+          const navItemState = outline.find(`#civi-nav-state-${vote.civi_id}`);
+          navItemState.addClass('voted').text('beenhere');
+        },
+        this,
+      );
+    }
     this.expandNav();
   },
 
@@ -408,7 +451,7 @@ const ThreadView = View.extend({
   renderResponses() {
     this.$('.responses-box')
       .empty()
-      .append(this.responseWrapper());
+      .append(this.responseWrapper({ this: this }));
     this.newResponseView = new NewResponseView({
       model: this.model,
       parentView: this,
@@ -730,20 +773,20 @@ const ThreadView = View.extend({
       url: '/api/edit_thread/',
       type: 'POST',
       data: {
-        thread_id: view.model.threadId,
+        thread_id: view.model.id,
         is_draft: false,
       },
       success() {
         view.is_draft = false;
-        M.toast('Thread is now public. Refreshing the page...');
+        M.toast({ html: 'Thread is now public. Refreshing the page...' });
         view.$('#js-publish-btn').hide();
         _.delay(window.location.reload, 1000);
       },
       error(response) {
         if (response.status === 403) {
-          M.toast('You do not have permission to publish the thread');
+          M.toast({ html: 'You do not have permission to publish the thread' });
         } else if (response.status === 500) {
-          M.toast('Server Error: Thread could not be published');
+          M.toast({ html: 'Server Error: Thread could not be published' });
           view
             .$(event.currentTarget)
             .removeClass('disabled')
@@ -762,7 +805,7 @@ const ThreadView = View.extend({
   },
 
   openEditThreadModal() {
-    this.editThreadView.render();
+    this.editThreadView.renderView();
   },
 });
 export default ThreadView;
