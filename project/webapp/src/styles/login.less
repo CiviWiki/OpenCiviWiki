@@ -1,10 +1,22 @@
 @import "base";
 
-body {
-    background: @dark-purple;
-    // background-image: url("../img/bg-tile-cube.svg");
-    // background-image: url("../img/bg-tile-cube.svg"),  linear-gradient(to bottom, #0E0038 30%, #260A66 100%);
-    // background-image: linear-gradient(to bottom, #0E0038 30%, #260A66 100%);
+#login {
+    background: @dark-purple; 
+    .logo {
+        color: @dark-white;
+        font-size: 2.5em;
+        font-weight: 400;
+        letter-spacing: 0.05em;
+        .wordmark {
+            margin-left: -15px;
+            margin-right:15px;
+            vertical-align: top;
+        }
+        .logo-img {
+            vertical-align: bottom;
+        }
+    }
+    
 }
 .entry-base {
     height: 100vh;
@@ -65,18 +77,4 @@ body {
     margin-right: auto;
     width: 100px;
     border-bottom: 3px solid @dark-white;
-}
-.logo {
-    color: @dark-white;
-    font-size: 2.5em;
-    font-weight: 400;
-    letter-spacing: 0.05em;
-    .wordmark {
-        margin-left: -15px;
-        margin-right:15px;
-        vertical-align: top;
-    }
-    .logo-img {
-        vertical-align: bottom;
-    }
 }

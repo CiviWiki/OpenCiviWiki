@@ -21,7 +21,7 @@ const GoogleMap = Model.extend({
   },
 
   initialize(options) {
-    if (options.coordinates) {
+    if (options) {
       this.setupMap(options.coordinates);
     } else {
       this.setupMap();

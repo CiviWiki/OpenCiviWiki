@@ -17,7 +17,7 @@ from utils.custom_decorators import login_required, full_account
 
 def base_view(request):
     if not request.user.is_authenticated():
-        return TemplateResponse(request, 'static_templates/landing.html', {})
+        return TemplateResponse(request, 'static_pages/landing.html', {})
 
     request_account = Account.objects.get(user=request.user)
     if not request_account.full_account:
@@ -84,11 +84,6 @@ def invite(request):
 
     invitations = Invitation.objects.filter_by_host(host_user=user).order_by("-date_created").all()
     invitees = [invitation.summarize() for invitation in invitations]
-    # response_data = {
-    #     'invitees': 
-    # }
-
-    # return TemplateResponse(request, 'invite.html', response_data)
 
     context = {
         'username': request.user.username,
@@ -114,21 +109,17 @@ def login_view(request):
 
     return TemplateResponse(request, 'app.html', {})
 
-
-def declaration(request):
-    return TemplateResponse(request, 'declaration.html', {})
-
 def landing_view(request):
-    return TemplateResponse(request, 'static_templates/landing.html', {})
+    return TemplateResponse(request, 'static_pages/landing.html', {})
 
 def how_it_works_view(request):
-    return TemplateResponse(request, 'static_templates/how_it_works.html', {})
+    return TemplateResponse(request, 'static_pages/how_it_works.html', {})
 
 def about_view(request):
-    return TemplateResponse(request, 'static_templates/about.html', {})
+    return TemplateResponse(request, 'static_pages/about.html', {})
 
 def support_us_view(request):
-    return TemplateResponse(request, 'static_templates/support_us.html', {})
+    return TemplateResponse(request, 'static_pages/support_us.html', {})
 
 """ CSV export function. Thread ID goes in, CSV HTTP response attachment goes out. """
 @csrf_exempt

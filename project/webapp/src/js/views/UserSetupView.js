@@ -227,6 +227,7 @@ const UserSetupView = View.extend({
     this.model.save(
       {},
       {
+        type: 'PATCH',
         success() {
           M.toast({ html: 'Success' });
           view.nextStep();
@@ -267,7 +268,7 @@ const UserSetupView = View.extend({
           }
         }
 
-        M.toast('Image Uploaded!', 5000);
+        M.toast({ html: 'Image Uploaded!' });
       },
       error(response) {
         if (response.status === 400) {

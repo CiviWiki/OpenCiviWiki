@@ -1,4 +1,6 @@
 import { View } from 'backbone.marionette';
+import 'materialize-css/dist/css/materialize.css';
+
 import entryTemplate from 'Templates/components/Login/entry_base.html';
 import loginTemplate from 'Templates/components/Login/login_base.html';
 import registerTemplate from 'Templates/components/Login/register_base.html';
@@ -6,6 +8,7 @@ import registerTemplate from 'Templates/components/Login/register_base.html';
 import 'Styles/login.less';
 
 const LoginView = View.extend({
+  id: 'login',
   template: entryTemplate,
   regions: {
     content: '#entry-content',
@@ -13,13 +16,9 @@ const LoginView = View.extend({
   initialize() {
     this.register = false;
   },
-  
+
   onRender() {
-    if (this.register) {
-      this.showChildView('content', new View({ template: registerTemplate }));
-    } else {
-      this.showChildView('content', new View({ template: loginTemplate }));
-    }
+    this.renderForms();
   },
 
   events: {
@@ -31,8 +30,16 @@ const LoginView = View.extend({
     'blur .login-input': 'usernameToLowerCase',
   },
 
+  renderForms() {
+    if (this.register) {
+      this.showChildView('content', new View({ template: registerTemplate }));
+    } else {
+      this.showChildView('content', new View({ template: loginTemplate }));
+    }
+  },
+
   checkForEnter(event) {
-    if (event.which === 13 && !e.shiftKey) {
+    if (event.which === 13 && !event.shiftKey) {
       event.preventDefault();
       this.login();
     }
@@ -70,9 +77,7 @@ const LoginView = View.extend({
         },
       });
     } else {
-      M.toast({
-        html: 'Please input your username and password',
-      });
+      M.toast({ html: 'Please input your username and password' });
     }
   },
 

@@ -37,7 +37,7 @@ const Notifications = Collection.extend({
         if (collection.consecutive_misfires < 10) {
           _.delay(collection.fetchUnread, 3000, collection);
         } else {
-          this.trigger('error');
+          collection.trigger('error');
         }
       },
     });

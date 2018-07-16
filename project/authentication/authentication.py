@@ -229,7 +229,7 @@ def activate_view(request, uidb64, token):
                 'content': "You have already verified your email",
                 'link': redirect_link
             }
-            return TemplateResponse(request, 'general-message.html', template_var)
+            return TemplateResponse(request, 'general_message.html', template_var)
         else:
             account.is_verified = True
             account.save()
@@ -243,7 +243,7 @@ def activate_view(request, uidb64, token):
                 'content': "Thank you for verifying your email with CiviWiki",
                 'link': redirect_link
             }
-            return TemplateResponse(request, 'general-message.html', template_var)
+            return TemplateResponse(request, 'general_message.html', template_var)
     else:
         # invalid link
         redirect_link = {
@@ -255,12 +255,12 @@ def activate_view(request, uidb64, token):
             'content': "Email could not be verified",
             'link': redirect_link
         }
-        return TemplateResponse(request, 'general-message.html', template_var)
+        return TemplateResponse(request, 'general_message.html', template_var)
 
 
 def recover_user():
     view_variables = {
-        'template_name': 'user/reset_by_email.html',
+        'template_name': 'authentication/reset_by_email.html',
         'post_reset_redirect': 'recovery_email_sent',
         'email_template_name': 'email/base_text_template.txt',
         'subject_template_name': 'email/base_email_template.html',
@@ -271,7 +271,7 @@ def recover_user():
 
 def password_reset_confirm():
     view_variables = {
-        'template_name': 'user/password_reset.html',
+        'template_name': 'authentication/password_reset.html',
         'set_password_form': PasswordResetForm
     }
 
@@ -288,7 +288,7 @@ def recover_user_sent(request):
         'content': "We've emailed you your username and instructions for setting your password. If an account exists with the email you entered, you should receive them shortly. If you don't receive an email, please make sure you've entered the address you registered with, and check your spam folder.", #TODO: move to string templates
         'link': redirect_link
     }
-    return TemplateResponse(request, 'general-message.html', template_var)
+    return TemplateResponse(request, 'general_message.html', template_var)
 
 def password_reset_complete(request):
     redirect_link = {
@@ -301,4 +301,4 @@ def password_reset_complete(request):
         'content': "Your password has been set. You may now go ahead and login.",
         'link': redirect_link
     }
-    return TemplateResponse(request, 'general-message.html', template_var)
+    return TemplateResponse(request, 'general_message.html', template_var)

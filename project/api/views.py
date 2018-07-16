@@ -107,7 +107,7 @@ class AccountViewSet(viewsets.ModelViewSet):
 
     queryset = Account.objects.all()
     lookup_field = 'user__username'
-    serializer_class = AccountListSerializer
+    serializer_class = AccountSerializer
     http_method_names = ['get', 'head', 'put', 'patch']
     permission_classes = (IsAccountOwnerOrReadOnly,)
 

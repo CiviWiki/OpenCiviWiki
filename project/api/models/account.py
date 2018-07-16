@@ -149,7 +149,7 @@ class Account(models.Model):
                     # Get US State from US States dictionary
                     us_state = dict(US_STATES).get(self.state)
 
-                    return '{state}'.format(us_state)
+                    return '{state}'.format(state=us_state)
                 else:
                     return 'NO LOCATION'
             else:

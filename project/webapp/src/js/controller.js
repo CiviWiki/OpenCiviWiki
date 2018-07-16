@@ -14,14 +14,16 @@ import UserSetupView from './views/UserSetupView';
 const AppController = Object.extend({
   initialize() {
     this.context = this.getOption('context');
-    this.rootView = new RootView({ context: this.context });
     this.app = this.getOption('app');
-    this.app.showView(this.rootView);
+    if (this.context.username) {
+      this.rootView = new RootView({ context: this.context });
+      this.app.showView(this.rootView);
+    }
   },
 
   viewLogin() {
     const loginView = new LoginView();
-    this.rootView.renderContent(loginView);
+    this.app.showView(loginView);
   },
 
   viewMainFeed() {
