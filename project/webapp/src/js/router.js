@@ -8,6 +8,7 @@ const Router = AppRouter.extend({
 
   appRoutes: {
     '': 'viewMainFeed',
+    'invite(/)': 'viewInvite',
     'profile/(:username)': 'viewProfile',
     'settings(/)': 'viewSettings',
     'setup(/)': 'viewSetup',

@@ -1,0 +1,19 @@
+<tr>
+    <td>{{email}}</td>
+    <td>{{date_invited}}</td>
+    {{# if (status == "sent") { }}
+    <td>
+        <div class="light-gray-text">
+            <i class="material-icons tiny">send</i> Invite Sent
+        </div>
+    </td>
+    {{# } else if (status == "registered") { }}
+    <td>
+        <a href="/profile/{{username}}" class="waves-light blue-text">
+            <i class="material-icons tiny">verified_user</i> Active
+        </a>
+    </td>
+    {{# } else { }}
+    <td>No Data</td>
+    {{# } }}
+</tr>

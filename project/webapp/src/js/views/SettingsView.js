@@ -9,7 +9,6 @@ import 'Styles/map.less';
 import 'Styles/utils.less';
 
 const SettingsView = View.extend({
-  //   el: '#settings',
   template: baseTemplate,
 
   regions: {

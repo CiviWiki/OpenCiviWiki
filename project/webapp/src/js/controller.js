@@ -7,6 +7,7 @@ import ProfileView from './views/ProfileView';
 import UserSetupView from './views/UserSetupView';
 import ThreadView from './views/ThreadView';
 import SettingsView from './views/SettingsView';
+import InviteView from './views/InviteView';
 
 const AppController = Object.extend({
   initialize() {
@@ -19,6 +20,14 @@ const AppController = Object.extend({
   viewMainFeed() {
     const feedView = new FeedView();
     this.rootView.renderContent(feedView);
+  },
+
+  viewInvite() {
+    this.context.data = JSON.parse(this.context.data);
+
+    const inviteView = new InviteView({ context: this.context });
+    this.rootView.renderContent(inviteView);
+    inviteView.renderInvitees();
   },
 
   viewProfile(username) {

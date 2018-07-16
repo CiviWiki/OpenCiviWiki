@@ -1,0 +1,41 @@
+<div class="container row">
+    <div class="section row"></div>
+    <div class="z-depth-1 white">
+        <div class="container">
+            <div class="section center">
+                <div class="title-lato">CiviWiki Invites</div>
+            </div>
+            <div class="row">
+                <h1 class="subtitle-lato">
+                    <i class="tiny material-icons">email</i> Invite New Users</h1>
+                <div class="section text">Add emails of those you want to invite to CiviWiki</div>
+                <div class="input-field white-background-input-field ">
+                    <textarea name="emails" id="emails" class="materialize-textarea "></textarea>
+                    <label for="emails">Send Invites To...</label>
+                </div>
+                <div class="input-field white-background-input-field ">
+                    <textarea name="custom_message" id="custom_message" class="materialize-textarea"></textarea>
+                    <label for="custom_message">Your Custom Invite Message (optional)</label>
+                </div>
+
+                <button id="send-invites" class="btn dark-blue-background">Invite</button>
+            </div>
+            <div class="section row">
+                <div class="subtitle-lato">
+                    <i class="tiny material-icons">recent_actors</i> My Invites</div>
+                <h6 class="grey-text">
+                    <span id="invitee-count"></span> Invitation(s)</h6>
+                <table class="striped">
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>Date Invited</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="invitee-list"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

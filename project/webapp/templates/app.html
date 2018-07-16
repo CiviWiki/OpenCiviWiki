@@ -19,7 +19,8 @@
 <script type="text/javascript">
 var context = {
     username: '{{ username }}',
-    GoogleAPIKey:'{{ google_map_api_key }}'
+    GoogleAPIKey:'{{ google_map_api_key }}',
+    data:'{{ data|escapejs }}'
 }
 startApp(context);
 </script>

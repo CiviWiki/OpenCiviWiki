@@ -84,11 +84,18 @@ def invite(request):
 
     invitations = Invitation.objects.filter_by_host(host_user=user).order_by("-date_created").all()
     invitees = [invitation.summarize() for invitation in invitations]
-    response_data = {
-        'invitees': json.dumps(invitees)
-    }
+    # response_data = {
+    #     'invitees': 
+    # }
 
-    return TemplateResponse(request, 'invite.html', response_data)
+    # return TemplateResponse(request, 'invite.html', response_data)
+
+    context = {
+        'username': request.user.username,
+        'google_map_api_key': settings.GOOGLE_API_KEY,
+        'data': json.dumps(invitees)
+    }
+    return TemplateResponse(request, 'app.html', context)
 
 
 @login_required
@@ -107,71 +114,6 @@ def login_view(request):
 
     return TemplateResponse(request, 'login.html', {})
 
-def beta_register(request, email='', token=''):
-    if not email or not token:
-        return HttpResponse('ERROR: BAD REQUEST')
-
-    try:
-        db_invite = Invitation.objects.get(invitee_email=email)
-    except Invitation.DoesNotExist:
-        return HttpResponse('ERROR: NO INVITATIONS EXIST FOR THIS EMAIL')
-
-    if db_invite.verification_code != token:
-        return HttpResponse('ERROR: BAD TOKEN')
-
-
-    is_registered = User.objects.filter(email=email).exists()
-
-
-    if is_registered:
-        # registered and has been given beta access
-        if request.user.is_authenticated():
-            invitee_user = request.user
-        else:
-            invitee_user = User.objects.get(email=email)
-
-        account = Account.objects.get(user=invitee_user)
-        if account.beta_access:
-            redirect_link = {
-                'href': "/",
-                'label': "Go to CiviWiki"
-            }
-            template_var = {
-                'title': "Already Registered for Beta",
-                'content': "You have already registered for a beta account",
-                'link': redirect_link
-            }
-            return TemplateResponse(request, 'general-message.html', template_var)
-        # registered but was not given beta access
-        else:
-            invitation = Invitation.objects.get(invitee_email=email)
-            invitation.invitee_user = invitee_user
-            invitation.save()
-
-            account = Account.objects.get(user=invitee_user)
-            account.beta_access = True
-            account.save()
-
-            redirect_link = {
-                'href': "/",
-                'label': "Go to CiviWiki"
-            }
-            template_var = {
-                'title': "Beta Access Granted",
-                'content': "You have now been granted beta access",
-                'link': redirect_link
-            }
-            return TemplateResponse(request, 'general-message.html', template_var)
-
-    template_var = {
-        'email': email,
-        'beta_token': token
-    }
-
-    return TemplateResponse(request, 'beta_register.html', template_var)
-
-def beta_view(request):
-    return TemplateResponse(request, 'beta_blocker.html', {})
 
 def declaration(request):
     return TemplateResponse(request, 'declaration.html', {})
