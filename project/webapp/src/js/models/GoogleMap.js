@@ -20,8 +20,12 @@ const GoogleMap = Model.extend({
     };
   },
 
-  initialize() {
-    this.setupMap();
+  initialize(options) {
+    if (options.coordinates) {
+      this.setupMap(options.coordinates);
+    } else {
+      this.setupMap();
+    }
   },
 
   setupMap(coordinates) {

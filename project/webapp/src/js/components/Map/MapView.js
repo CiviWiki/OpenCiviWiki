@@ -29,13 +29,13 @@ const MapView = View.extend({
         url,
         dataType: 'script',
         success() {
-          view.render();
+          view.renderView();
         },
       });
     }
   },
 
-  render() {
+  renderView() {
     const viewElement = $(`#${this.id}`);
     this.setElement(viewElement);
     this.$el.empty().append(this.template);

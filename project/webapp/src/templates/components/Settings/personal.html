@@ -1,8 +1,27 @@
-<div class="white-background-input-field input-field col s6">
-    <input class="save-account" id="first_name" type="text" value="{{this.model.get('first_name')}}">
-    <label for="first-name">First Name</label>
+<div class="subtitle-lato">Personal</div>
+<div class="white-background-input-field input-field col s12">
+    <input id="email" type="text" class="validate" value="{{ email }}" disabled>
+    <label for="email">Email</label>
 </div>
-<div class="white-background-input-field input-field col s6">
-    <input class="save-account" id="last_name" type="text" value="{{this.model.get('last_name')}}">
-    <label for="last-name">Last Name</label>
+<div class="white-background-input-field input-field col s12">
+    <input id="username" type="text" class="validate" value="{{ username }}" disabled>
+    <label for="username">Username</label>
+</div>
+<div id="settings-1">
+    <div class="white-background-input-field input-field col s6">
+        <input class="save-account" id="first_name" type="text" value="{{ first_name }}">
+        <label for="first-name">First Name</label>
+    </div>
+    <div class="white-background-input-field input-field col s6">
+        <input class="save-account" id="last_name" type="text" value="{{ last_name }}">
+        <label for="last-name">Last Name</label>
+    </div>
+</div>
+<div class="white-background-input-field input-field col s12">
+    <div class="section">
+        <label for="location">Location</label>
+
+        <div id="location-label-container"></div>
+        <div id="location"></div>
+    </div>
 </div>

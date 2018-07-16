@@ -1,51 +1,60 @@
 import { View } from 'backbone.marionette';
 
+import baseTemplate from 'Templates/layouts/settings.html';
+import { GoogleMap } from '../models';
+import MapView from '../components/Map/MapView';
+import Personal from '../components/Settings/Personal';
+
+import 'Styles/map.less';
+import 'Styles/utils.less';
+
 const SettingsView = View.extend({
-  el: '#settings',
+  //   el: '#settings',
+  template: baseTemplate,
 
-  initialize(options) {
-    this.options = options || {};
-    this.mapView = options.mapView;
-
-    this.template = _.template($('#settings-template').text());
-    this.settingsTemplate = _.template($('#settings-base').text());
-    this.personalTemplate = _.template($('#settings-personal').text());
-    this.locationLabelTemplate = _.template($('#location-label').text());
-
-    this.listenTo(this.model, 'change', this.renderAllLabels);
+  regions: {
+    personal: '#personal-settings',
   },
 
-  render() {
-    this.$el.html(this.template());
+  initialize() {
+    this.listenTo(this.model, 'change', this.renderView);
+  },
 
-    this.$('#settings-el').html(this.settingsTemplate());
+  renderView() {
+    const locationData = {
+      lng: this.model.get('longitude'),
+      lat: this.model.get('latitude'),
+    };
+    this.googleAPIKey = this.getOption('context').GoogleAPIKey;
+    this.mapView = new MapView({
+      model: new GoogleMap({ coordinates: locationData }),
+      googleMapsApiKey: this.googleAPIKey,
+    });
 
-    this.renderPersonal();
-
+    this.renderAllLabels();
     this.mapView.renderAndInitMap();
     this.listenTo(this.mapView.model, 'change:is_new', _.bind(this.saveLocation, this));
   },
 
   renderAllLabels() {
-    this.renderPersonal();
-    this.renderLocationLabel();
+    this.showChildView('personal', new Personal({ model: this.model }));
     M.updateTextFields();
-  },
-
-  renderPersonal() {
-    this.$('#settings-1').html(this.personalTemplate());
-  },
-
-  renderLocationLabel() {
-    this.$('#location-label-container').html(this.locationLabelTemplate());
   },
 
   events: {
     'blur .save-account': 'saveAccount',
+    'keypress .save-account': 'checkForEnter',
   },
 
-  saveAccount(e) {
-    const $this = $(e.target);
+  checkForEnter: (event) => {
+    if (event.which === 13 && !event.shiftKey) {
+      event.preventDefault();
+      $(event.target).blur();
+    }
+  },
+
+  saveAccount(event) {
+    const $this = $(event.target);
     const changeKey = $this.attr('id');
     const changeVal = $this.val().trim();
     const apiData = {};
@@ -71,10 +80,7 @@ const SettingsView = View.extend({
   saveLocation() {
     const view = this;
     const coordinates = this.mapView.model.get('coordinates');
-
-
     const address = this.mapView.model.get('address');
-
     if (!this.mapView.model.get('is_new')) return;
 
     if (coordinates && address) {

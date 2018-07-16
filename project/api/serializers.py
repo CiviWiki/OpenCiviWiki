@@ -11,18 +11,18 @@ class AccountSerializer(serializers.ModelSerializer):
     """
     General seralizer for a single model instance of a user account
     """
-    email = serializers.EmailField(allow_blank=False, write_only=True, source='user.email', required=False)
+    email = serializers.ReadOnlyField(source='user.email')
     username = serializers.ReadOnlyField(source='user.username')
 
     profile_image = serializers.ImageField(write_only=True, allow_empty_file=False, required=False)
     profile_image_url = serializers.ReadOnlyField()
     profile_image_thumb_url = serializers.ReadOnlyField()
 
-    address = serializers.CharField(allow_blank=True, write_only=True)
-    zip_code = serializers.CharField(allow_blank=True, write_only=True)
+    address = serializers.CharField(allow_blank=True)
+    zip_code = serializers.CharField(allow_blank=True)
 
-    longitude = serializers.FloatField(max_value=180, min_value=-180, write_only=True, required=False)
-    latitude = serializers.FloatField(max_value=90, min_value=-90, write_only=True, required=False)
+    longitude = serializers.FloatField(max_value=180, min_value=-180, required=False)
+    latitude = serializers.FloatField(max_value=90, min_value=-90, required=False)
     location = serializers.ReadOnlyField()
 
     is_staff = serializers.ReadOnlyField(source='user.is_staff')
@@ -36,7 +36,6 @@ class AccountSerializer(serializers.ModelSerializer):
         'is_following')
 
         extra_kwargs = {
-            'email': WRITE_ONLY,
             'city': WRITE_ONLY,
             'state': WRITE_ONLY,
             'country': WRITE_ONLY,
@@ -74,6 +73,7 @@ class AccountListSerializer(serializers.ModelSerializer):
     username = serializers.ReadOnlyField(source='user.username')
     first_name = serializers.ReadOnlyField()
     last_name = serializers.ReadOnlyField()
+    location = serializers.ReadOnlyField()
 
     profile_image_url = serializers.ReadOnlyField()
     profile_image_thumb_url = serializers.ReadOnlyField()
@@ -82,7 +82,8 @@ class AccountListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Account
-        fields = ('username', 'first_name', 'last_name', 'profile_image_url', 'profile_image_thumb_url', 'is_following')
+        fields = ('username', 'first_name', 'last_name', 'profile_image_url',
+        'profile_image_thumb_url', 'location', 'is_following')
 
     def get_is_following(self, obj):
         request = self.context.get("request")

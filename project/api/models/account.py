@@ -139,7 +139,7 @@ class Account(models.Model):
         a CITY, COUNTRY string for locations outside of the US
         """
         if self.country:
-            if self.country is "United States":
+            if self.country == "United States":
                 if self.city and self.state:
                     # Get US State from US States dictionary
                     us_state = dict(US_STATES).get(self.state)

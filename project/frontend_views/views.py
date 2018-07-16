@@ -93,19 +93,11 @@ def invite(request):
 
 @login_required
 def settings_view(request):
-
-    request_account = Account.objects.get(user=request.user)
-
-    response_data = {
+    context = {
         'username': request.user.username,
-        'email': request.user.email,
-        'google_map_api_key': settings.GOOGLE_API_KEY,
-        'sunlight_api_key': settings.SUNLIGHT_API_KEY,
-        'lng': request_account.longitude,
-        'lat': request_account.latitude
+        'google_map_api_key': settings.GOOGLE_API_KEY
     }
-
-    return TemplateResponse(request, 'user/settings.html', response_data)
+    return TemplateResponse(request, 'app.html', context)
 
 
 def login_view(request):

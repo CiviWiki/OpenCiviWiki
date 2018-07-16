@@ -1,5 +1,5 @@
 import { Object } from 'backbone.marionette';
-import { Account, Thread, User } from './models';
+import { Account, Thread } from './models';
 import RootView from './views/RootView';
 import FeedView from './views/FeedView';
 import ErrorView from './views/ErrorView';
@@ -21,18 +21,6 @@ const AppController = Object.extend({
     this.rootView.renderContent(feedView);
   },
 
-  viewThread(threadId) {
-    const appContext = this.context;
-    const thread = new Thread({ id: threadId });
-
-    const threadView = new ThreadView({
-      model: thread,
-      context: appContext,
-    });
-    thread.fetch();
-    this.rootView.renderContent(threadView);
-  },
-
   viewProfile(username) {
     const account = new Account({ username });
 
@@ -46,13 +34,13 @@ const AppController = Object.extend({
   },
 
   viewSettings() {
-    this.user = new User({ username: this.context.username });
-    const setupView = new SettingsView({
-      model: this.user,
+    this.account = new Account({ username: this.context.username });
+    const settingsView = new SettingsView({
+      model: this.account,
       context: this.context,
     });
     this.account.fetch();
-    this.rootView.renderContent(setupView);
+    this.rootView.renderContent(settingsView);
   },
 
   viewSetup() {
@@ -63,6 +51,18 @@ const AppController = Object.extend({
     });
     this.account.fetch();
     this.rootView.renderContent(setupView);
+  },
+
+  viewThread(threadId) {
+    const appContext = this.context;
+    const thread = new Thread({ id: threadId });
+
+    const threadView = new ThreadView({
+      model: thread,
+      context: appContext,
+    });
+    thread.fetch();
+    this.rootView.renderContent(threadView);
   },
 
   showErrorPage() {

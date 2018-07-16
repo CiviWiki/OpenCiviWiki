@@ -107,7 +107,7 @@ class AccountViewSet(viewsets.ModelViewSet):
 
     queryset = Account.objects.all()
     lookup_field = 'user__username'
-    serializer_class = AccountSerializer
+    serializer_class = AccountListSerializer
     http_method_names = ['get', 'head', 'put', 'patch']
     permission_classes = (IsAccountOwnerOrReadOnly,)
 
@@ -117,6 +117,14 @@ class AccountViewSet(viewsets.ModelViewSet):
         else:
             accounts = Account.objects.filter(user=self.request.user)
         serializer = AccountListSerializer(accounts, many=True)
+        return Response(serializer.data)
+    
+    def retrieve(self, request, user__username=None):
+        account = get_account(username=user__username)
+        if (self.request.user == account.user):
+            serializer = AccountSerializer(account)
+        else:
+            serializer = AccountListSerializer(account)
         return Response(serializer.data)
 
     @action(detail=True)
