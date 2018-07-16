@@ -2,7 +2,8 @@ from django.db import models
 
 
 class Bill(models.Model):
-    id = models.CharField(max_length=255, primary_key=True) # from sunlight
+    #id comes from the ProPublica PClient class
+    id = models.CharField(max_length=255, primary_key=True)
 
     title = models.CharField(max_length=1023)
     short_title = models.CharField(max_length=1023)
@@ -11,6 +12,5 @@ class Bill(models.Model):
     b_type = models.CharField(max_length=63)
 
     # status
-
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     last_modified = models.DateTimeField(auto_now=True, blank=True, null=True)

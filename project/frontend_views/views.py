@@ -78,7 +78,7 @@ def user_setup(request):
             'username': request.user.username,
             'email': request.user.email,
             'google_map_api_key': settings.GOOGLE_API_KEY,
-            'sunlight_api_key': settings.SUNLIGHT_API_KEY
+            'propublica_api_key': settings.PROPUBLICA_API_KEY
         }
         return TemplateResponse(request, 'user-setup.html', data)
 
@@ -173,7 +173,7 @@ def settings_view(request):
         'username': request.user.username,
         'email': request.user.email,
         'google_map_api_key': settings.GOOGLE_API_KEY,
-        'sunlight_api_key': settings.SUNLIGHT_API_KEY,
+        'propublica_api_key': settings.PROPUBLICA_API_KEY,
         'lng': request_account.longitude,
         'lat': request_account.latitude
     }

@@ -101,7 +101,7 @@ cw.MapView = BB.View.extend({
         options = options || {};
 
         this.googleMapsApiKey = options.googleMapsApiKey;
-        this.sunlightApiKey = options.sunlightApiKey;
+        this.propublicaApiKey = options.propublicaApiKey;
         return this;
     },
 
