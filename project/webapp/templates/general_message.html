@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    {% include "common/static_header.html" %}
+    <title>{{ title }}</title>
+</head>
+
+<body id="general_wrapper">
+    <div id="general">
+        <div id="general-section" class="center container section">
+            <div class="row">
+                <a href="/">
+                    <img src="{% static " img/logo-wordmark.png " %}">
+                </a>
+            </div>
+            <div class="section z-depth-1">
+                <div class="title-lato">{{ title }}</div>
+                <div class="row">
+                    <div class="container">
+                        <p class="grey-text container">{{ content }}</p>
+                    </div>
+                    {% if link %}
+                    <div class="section">
+                        <a class="btn dark-blue-background" href="{{ link.href }}">{{ link.label }}</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

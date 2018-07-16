@@ -1,13 +1,15 @@
 import { Object } from 'backbone.marionette';
 import { Account, Thread } from './models';
-import RootView from './views/RootView';
-import FeedView from './views/FeedView';
+
 import ErrorView from './views/ErrorView';
-import ProfileView from './views/ProfileView';
-import UserSetupView from './views/UserSetupView';
-import ThreadView from './views/ThreadView';
-import SettingsView from './views/SettingsView';
+import FeedView from './views/FeedView';
 import InviteView from './views/InviteView';
+import LoginView from './views/LoginView';
+import ProfileView from './views/ProfileView';
+import RootView from './views/RootView';
+import SettingsView from './views/SettingsView';
+import ThreadView from './views/ThreadView';
+import UserSetupView from './views/UserSetupView';
 
 const AppController = Object.extend({
   initialize() {
@@ -15,6 +17,11 @@ const AppController = Object.extend({
     this.rootView = new RootView({ context: this.context });
     this.app = this.getOption('app');
     this.app.showView(this.rootView);
+  },
+
+  viewLogin() {
+    const loginView = new LoginView();
+    this.rootView.renderContent(loginView);
   },
 
   viewMainFeed() {

@@ -112,7 +112,7 @@ def login_view(request):
         if request.user.is_active:
             return HttpResponseRedirect('/')
 
-    return TemplateResponse(request, 'login.html', {})
+    return TemplateResponse(request, 'app.html', {})
 
 
 def declaration(request):
