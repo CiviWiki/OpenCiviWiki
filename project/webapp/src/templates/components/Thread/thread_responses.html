@@ -1,0 +1,20 @@
+<div class="center section">
+    <div class="section">
+        {{# var parentCivi = civis.get(responseCollection.civiId); }}
+        <div class="link-lato">{{ parentCivi.get('type').toUpperCase() }}</div>
+        <div class="header-lato">{{ civis.get(responseCollection.civiId).get('title') }}</div>
+    </div>
+    <button class="btn add-response waves-effect" id="add-new-response">add response</button>
+    <div class="section">
+        <div id="new-response-box"></div>
+    </div>
+
+</div>
+
+{{# if (responseCollection.length > 0) { }}
+    <div id="response-list"></div>
+{{# } else { }}
+    <div class="no-state center section">
+        <div class="text title-lato">NO RESPONSES</div>
+    </div>
+{{# } }}

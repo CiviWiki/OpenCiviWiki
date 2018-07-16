@@ -1,0 +1,147 @@
+<div class="civi-card" id="civi-{{ id }}" data-civi-id="{{id}}">
+    <div class="row civi-header response-click">
+        <div class="col s9 no-pads civi-title-outer">
+            <div class="civi-type gray-text">{{ type }}</div>
+            <div class="civi-title">
+                <span class="text-wrapper">{{ title }}</span>
+            </div>
+            {{# if (can_edit) { }}
+            <div class="dark-background-input-field hide edit-wrapper edit-type">
+                <input class="edit-civi-title">
+            </div>
+            {{# } }}
+        </div>
+        <div class="col s3 no-pads civi-header-actions">
+            <div class="right">
+                {{# if (can_edit) { }}
+                <i class="mini material-icons edit">edit</i>
+                <i class="mini material-icons delete">delete_forever</i>
+
+                <i class="mini material-icons edit-action edit-confirm hide">save</i>
+                <i class="mini material-icons edit-action edit-cancel hide">close</i>
+                {{# } }}
+            </div>
+        </div>
+    </div>
+    <div class="civi-body">
+        <div class="civi-body-inner">
+            <span class="text-wrapper">{{ body }}</span>
+            {{# if (can_edit) { }}
+            <div class="white-background-input-field hide edit-wrapper">
+                <textarea type="text" class="materialize-textarea edit-civi-body" length="1000"></textarea>
+            </div>
+            {{# } }}
+        </div>
+        {{# if (attachments.length > 0) { }}
+        <div class="civi-attachments">
+            <div class="attachments-title gray-text">
+                ATTACHMENTS ({{ attachments.length }})
+            </div>
+
+            {{# _.each(attachments, function(attachment){ }}
+            <div class="attachments-item">
+                <img class="civi-image-thumb" src="{{attachment.image_url}}" width="50px" height="40px" />
+            </div>
+            {{# }, this); }}
+
+        </div>
+        {{# } }} {{# if (can_edit) { }}
+        <div class="hide edit-wrapper">
+            <div class="header-lato">Images:</div>
+            <div class="previous-civi-images">
+                {{# _.each(attachments, function(attachment){ }}
+                <div class="attachments-item delete-civi-image action-button" data-image-id="{{attachment.id}}">
+                    <div class="delete-image-overlay input">
+                        <i class="small material-icons">clear</i>
+                    </div>
+
+                    <img class="civi-image-thumb" src="{{attachment.image_url}}" width="50px" height="40px" />
+                </div>
+                {{# }); }}
+            </div>
+            <div class="section">
+                <button class="waves-effect waves-light btn btn-small" id="add-more-images">
+                    <i class="material-icons left">add</i>Add Images</button>
+                <div class="white-background-input-field hide edit-images">
+                    <div class="header-lato">Upload Images:</div>
+                    <form method="post" enctype="multipart/form-data" id="attachment_image_form">
+                        <div class="file-field input-field">
+                            <input class="upload-image btn waves-effect hide" type="submit" value="Upload" />
+                            <div class="btn btn-small attachment-image-pick dark-blue-background">
+                                <span>Add Images</span>
+                                <input id="id_attachment_image" name="attachment_image" type="file" multiple accept="image/*">
+                            </div>
+                            <div class="file-path-wrapper">
+                                <input class="file-path validate" type="text">
+                            </div>
+                        </div>
+
+                    </form>
+                    <div class="image-link-list">
+                        <input type="text" class="civi-link-images" placeholder="Paste your image link here..." />
+                    </div>
+                    <button class="waves-effect waves-teal btn-flat btn-small" id="add-image-link-input">+ Add Another Image Link</button>
+
+                    <div class="file-preview"></div>
+                </div>
+            </div>
+        </div>
+        {{# } }} {{# if (!is_draft) { }}
+        <div class="rating center">
+            <div class="rating-wrapper">
+                <div class="rating-name">DISAGREE</div>
+                <button class="rating-button vote vote_vneg" data-rating="vneg">
+                    <span class="rate-value"></span>
+                </button>
+            </div>
+            <div class="rating-wrapper">
+                <button class="rating-button vote vote_neg" data-rating="neg">
+                    <span class="rate-value"></span>
+                </button>
+            </div>
+            <div class="rating-wrapper">
+                <div class="rating-name">NEUTRAL</div>
+                <button class="rating-button vote vote_neutral" data-rating="neutral">
+                    <span class="rate-value"></span>
+                </button>
+            </div>
+            <div class="rating-wrapper">
+                <button class="rating-button vote vote_pos" data-rating="pos">
+                    <span class="rate-value"></span>
+                </button>
+            </div>
+            <div class="rating-wrapper">
+                <div class="rating-name">AGREE</div>
+                <button class="rating-button vote vote_vpos" data-rating="vpos">
+                    <span class="rate-value"></span>
+                </button>
+            </div>
+            <div class="rating-center center-block"></div>
+            <div class="temp-score">{{ Math.round( score, 2) }}</div>
+        </div>
+        {{# } }}
+    </div>
+    <div class="civi-footer">
+        <div class="author-photo-holder">
+            <div class="author-photo transparent" style="background-image: url('{{ author.profile_image }}'); background-size: 34px;">
+
+            </div>
+        </div>
+        <div class="author-info">
+            <a class="author-name purple-text bold-text" href="/profile/{{ author.username }}">
+                {{ author.first_name}} {{ author.last_name}}
+            </a>
+            <div class="created gray-text">
+                {{ created_str }}
+            </div>
+        </div>
+        <div class="right civi-footer-actions">
+            <div>
+                {{# if (can_respond ){ }}
+                <span class="link-lato input" id="respond-button">
+                    <i class="mini material-icons">comment</i> RESPOND</span>
+                {{# } }}
+            </div>
+        </div>
+    </div>
+</div>

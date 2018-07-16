@@ -12,7 +12,6 @@ const LinkSelectView = View.extend({
     this.$el = this.getOption('options').$el || this.$el;
     this.setElement(this.$el);
     this.renderView();
-
     return this;
   },
 
@@ -24,22 +23,9 @@ const LinkSelectView = View.extend({
       displayField: 'title',
       expandOnFocus: true,
       data: [],
-      renderer(data) {
-        return (
-          `<div class="link-lato" data-civi-id="${
-            data.id
-          }"><span class="gray-text">${
-            data.type
-          }</span> ${
-            data.title
-          }</div>`
-        );
-      },
-      selectionRenderer(data) {
-        return (
-          `<span class="gray-text bold-text">${data.type.toUpperCase()}</span> ${data.title}`
-        );
-      },
+      renderer: data => `<div class="link-lato" data-civi-id="${data.id}">
+      <span class="gray-text">${data.type}</span> ${data.title}</div>`,
+      selectionRenderer: data => `<span class="gray-text bold-text">${data.type.toUpperCase()}</span> ${data.title}`,
     });
   },
 

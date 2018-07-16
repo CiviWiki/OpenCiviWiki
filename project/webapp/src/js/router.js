@@ -8,9 +8,10 @@ const Router = AppRouter.extend({
 
   appRoutes: {
     '': 'viewMainFeed',
+    'profile/(:username)': 'viewProfile',
+    'settings(/)': 'viewSettings',
     'setup(/)': 'viewSetup',
     'thread/:threadId': 'viewThread',
-    'profile/(:username)': 'viewProfile',
     '*invalidRoute': 'showErrorPage',
   },
 });

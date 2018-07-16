@@ -1,8 +1,7 @@
 import { View } from 'backbone.marionette';
-import baseTemplate from 'Templates/components/Thread/new_civi.html';
+import baseTemplate from 'Templates/components/Thread/Civi/new_civi.html';
 import { Civi } from '../../models';
 import LinkSelectView from './LinkSelect';
-import CiviView from './Civi';
 
 const NewCiviView = View.extend({
   el: '#new-civi-box',
@@ -129,14 +128,12 @@ const NewCiviView = View.extend({
           title: newTitle,
           body: newBody,
           c_type: civiType,
-          thread_id: view.model.threadId,
+          thread_id: view.model.id,
           links: msLinks,
         },
         success(response) {
           const newCiviData = response.data;
           const newCivi = new Civi(newCiviData);
-          const canEdit = newCivi.get('author').username === view.options.parentView.username;
-
           //   const attachmentInput = view.$('#id_attachment_image');
           //   const uploadedImages = attachmentInput[0].files;
           if (view.attachmentCount > 0) {
@@ -154,14 +151,6 @@ const NewCiviView = View.extend({
               success(imageResponse) {
                 M.toast({ html: 'New civi created.' });
                 newCivi.set('attachments', imageResponse.attachments);
-
-                $(`#thread-${civiType}s`).append(
-                  new CiviView({
-                    model: newCivi,
-                    can_edit: canEdit,
-                    parentView: view.options.parentView,
-                  }).el,
-                );
                 view.options.parentView.civis.add(newCivi);
 
                 view.options.parentView.initRecommended();
@@ -172,15 +161,7 @@ const NewCiviView = View.extend({
               },
               error() {
                 M.toast({ html: 'Civi was created but one or more images could not be uploaded' });
-                $(`#thread-${civiType}s`).append(
-                  new CiviView({
-                    model: newCivi,
-                    can_edit: canEdit,
-                    parentView: view.options.parentView,
-                  }).el,
-                );
                 view.options.parentView.civis.add(newCivi);
-
                 view.options.parentView.initRecommended();
                 view.options.parentView.renderBodyContents();
 
@@ -195,13 +176,6 @@ const NewCiviView = View.extend({
             });
           } else {
             M.toast({ html: 'New civi created.' });
-            $(`#thread-${civiType}s`).append(
-              new CiviView({
-                model: newCivi,
-                can_edit: canEdit,
-                parentView: view.options.parentView,
-              }).el,
-            );
             view.options.parentView.civis.add(newCivi);
 
             const parentLinks = newCivi.get('links');

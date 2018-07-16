@@ -101,14 +101,14 @@ class CiviImageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CiviImage
-        fields = ('civi', 'title', 'image_url', 'created')
+        fields = ('id', 'civi', 'title', 'image_url', 'created')
 
 
 class CiviSerializer(serializers.ModelSerializer):
     author = AccountListSerializer()
     type = serializers.ChoiceField(choices=CIVI_TYPES, source='c_type')
     images = serializers.SlugRelatedField(many=True, read_only=True, slug_field='image_url')
-    attachments = serializers.SlugRelatedField(many=True, read_only=True, slug_field='image_url', source='images')
+    attachments = CiviImageSerializer(many=True, source='images')
     created = serializers.ReadOnlyField(source='created_date_str')
     score = serializers.SerializerMethodField()
     links = serializers.PrimaryKeyRelatedField(many=True, read_only=True, source="linked_civis")

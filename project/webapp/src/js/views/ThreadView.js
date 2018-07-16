@@ -1,18 +1,20 @@
 import { View } from 'backbone.marionette';
 
-import baseTemplate from 'Templates/components/Thread/thread_base.html';
-import threadWikiTemplate from 'Templates/components/Thread/thread_wiki.html';
-import threadBodyTemplate from 'Templates/components/Thread/thread_body.html';
-import threadResponseTemplate from 'Templates/components/Thread/thread_responses.html';
-import threadOutlineTemplate from 'Templates/components/Thread/thread_outline.html';
+import baseTemplate from 'Templates/layouts/thread.html';
 import 'Styles/thread.less';
 
 import { Civi } from '../models';
 import { Civis, Responses, Categories } from '../collections';
 import EditThreadView from '../components/Thread/EditThread';
-import CiviView from '../components/Thread/Civi';
+import ResponseView from '../components/Thread/Response';
+import CiviCollectionView from '../components/Thread/CiviCollection';
 import NewResponseView from '../components/Thread/NewResponse';
 import NewCiviView from '../components/Thread/NewCivi';
+import ThreadWikiView from '../components/Thread/ThreadWiki';
+import ThreadBodyView from '../components/Thread/ThreadBody';
+import ThreadOutlineView from '../components/Thread/ThreadOutline';
+import ResponsesView from '../components/Thread/Responses';
+
 import STATES from '../utils/states';
 
 const DEFAULTS = {
@@ -25,22 +27,22 @@ const DEFAULTS = {
 const ThreadView = View.extend({
   id: 'thread',
   template: baseTemplate,
-  wikiTemplate: threadWikiTemplate,
-  bodyTemplate: threadBodyTemplate,
-  responseWrapper: threadResponseTemplate,
-  outlineTemplate: threadOutlineTemplate,
 
   regions: {
     threadWikiHolder: '.thread-wiki-holder',
     threadBodyHolder: '.thread-body-holder',
     civiOutline: '#civi-outline',
     responsesBox: '.responses-box',
+    problem: '#thread-problems',
+    cause: '#thread-causes',
+    solution: '#thread-solutions',
   },
 
   templateContext() {
     return {
       currentUser: this.getOption('context').username,
-      civis: this.model.get('civis'),
+      civis: this.civis,
+      responseCollection: this.responseCollection,
       is_draft: this.is_draft,
     };
   },
@@ -155,7 +157,7 @@ const ThreadView = View.extend({
 
   postSync() {
     const view = this;
-    view.civis = new Civis(view.model.get('civis'));
+    view.civis = new Civis(view.model.get('civis'), { threadId: this.model.id });
     view.is_draft = view.model.get('is_draft');
     if (view.model.get('level') === 'federal') {
       view.model.set('location', 'federal');
@@ -168,20 +170,15 @@ const ThreadView = View.extend({
         view.model.set('categories', this.categories.toJSON());
       },
     });
+    view.model.set('num_civis', this.civis.length);
     view.model.set('states', STATES);
+    view.model.set('currentUser', this.username);
 
     view.initRecommended();
     view.renderView();
-    view.delegateEvents();
   },
 
   renderView() {
-    this.editThreadView = new EditThreadView({
-      model: this.model,
-      parentView: this,
-      threadId: this.model.id,
-    });
-
     this.$('.thread-wiki-holder').addClass('hide');
 
     this.threadWikiRender();
@@ -197,30 +194,17 @@ const ThreadView = View.extend({
   },
 
   threadWikiRender() {
-    if (this.$('.thread-wiki-holder').length) {
-      this.$('.thread-wiki-holder')
-        .empty()
-        .append(this.wikiTemplate(this.templateContext));
-    }
+    this.showChildView('threadWikiHolder', new ThreadWikiView({ model: this.model }));
   },
 
   threadBodyRender() {
     const view = this;
 
     if (this.$('.thread-body-holder').length) {
-      const bodyRenderData = {
-        is_draft: this.is_draft,
-      };
-      this.$('.thread-body-holder')
-        .empty()
-        .append(this.bodyTemplate(bodyRenderData));
-
-      this.$('.main-thread').on(
-        'scroll',
-        _.once(() => {
-          view.processCiviScroll();
-        }),
-      );
+      this.showChildView('threadBodyHolder', new ThreadBodyView({ model: this.model }));
+      this.$('.main-thread').on('scroll', () => {
+        view.processCiviScroll();
+      });
     }
   },
 
@@ -235,11 +219,9 @@ const ThreadView = View.extend({
 
   renderOutline() {
     const view = this;
-    // if (this.civis.length === 0) {
-    //   this.$('#civi-outline')
-    //     .empty()
-    //     .append(this.outlineTemplate(this.templateContext()));
-    // }
+    if (this.civis.length === 0) {
+      this.showChildView('civiOutline', new ThreadOutlineView());
+    }
     // Render Outline Template based on models
     const renderData = {
       problems: this.outlineCivis.problem,
@@ -311,9 +293,7 @@ const ThreadView = View.extend({
     renderData.count = count;
     renderData.is_draft = this.is_draft;
 
-    this.$('#civi-outline')
-      .empty()
-      .append(this.outlineTemplate(renderData));
+    this.showChildView('civiOutline', new ThreadOutlineView({ templateContext: renderData }));
     this.$('#recommended-switch').attr('checked', this.viewRecommended);
 
     if (this.viewRecommended) {
@@ -414,12 +394,13 @@ const ThreadView = View.extend({
 
         if (totalCount > limit && !this.is_draft) {
           civis = civis.slice(0, limit);
-          _.each(civis, this.civiRenderHelper, this);
+
+          this.civiRenderHelper(type, civis);
           this.$(`#thread-${type}s`).append(
             `<div class="${type}-loader civi-load-more"><span class="civi-show-count">${limit}/${totalCount} ${type}s</span> <span class="btn-loadmore" data-civi-type="${type}">View More +</span></div>`,
           );
         } else {
-          _.each(civis, this.civiRenderHelper, this);
+          this.civiRenderHelper(type, civis);
         }
 
         this.outlineCivis[type] = civis;
@@ -428,30 +409,34 @@ const ThreadView = View.extend({
     );
   },
 
-  civiRenderHelper(civi) {
-    this.$(`#thread-${civi.get('type')}s`).append(
-      new CiviView({
-        model: civi,
-        can_edit: civi.get('author').username === this.username,
-        is_draft: this.is_draft,
-        parentView: this,
-      }).el,
+  civiRenderHelper(type, civis) {
+    const context = {
+      is_draft: this.is_draft,
+      parentView: this,
+      civis: this.civis,
+      currentUser: this.username,
+    };
+
+    this.showChildView(
+      type,
+      new CiviCollectionView({ collection: new Civis(civis), templateContext: context }),
     );
   },
 
   renderVotes() {
     const savedVotes = this.model.get('user_votes');
     _.each(savedVotes, (vote) => {
-      this.$(`#civi-${vote.civi_id}`)
+      $(`#civi-${vote.civi_id}`)
         .find(`.${vote.activity_type}`)
         .addClass('current');
     });
   },
 
   renderResponses() {
-    this.$('.responses-box')
-      .empty()
-      .append(this.responseWrapper({ this: this }));
+    this.showChildView(
+      'responsesBox',
+      new ResponsesView({ templateContext: this.templateContext() }),
+    );
     this.newResponseView = new NewResponseView({
       model: this.model,
       parentView: this,
@@ -463,12 +448,17 @@ const ThreadView = View.extend({
         const canEdit = civi.get('author').username === this.username;
         const canRespond = this.civis.get(this.responseCollection.civiId).get('author').username === this.username;
 
-        const newCiviView = new CiviView({
-          model: civi,
+        const responseContext = {
           can_edit: canEdit,
           can_respond: canRespond,
           parentView: this,
           response: true,
+          is_draft: this.is_draft,
+        };
+
+        const newCiviView = new ResponseView({
+          model: civi,
+          templateContext: responseContext,
         });
         this.$('#response-list').append(newCiviView.el);
 
@@ -481,12 +471,17 @@ const ThreadView = View.extend({
         if (civi.get('rebuttal')) {
           const rebuttalModel = new Civi(civi.get('rebuttal'));
           const rebuttalCanEdit = rebuttalModel.get('author').username === this.username;
-          const rebuttalView = new CiviView({
-            model: rebuttalModel,
+
+          const rebuttalContext = {
             can_edit: rebuttalCanEdit,
             can_respond: false,
             parentView: this,
             response: true,
+            is_draft: this.is_draft,
+          };
+          const rebuttalView = new ResponseView({
+            model: rebuttalModel,
+            templateContext: rebuttalContext,
           });
           rebuttalView.$('.civi-card').addClass('push-right');
           newCiviView.el.after(rebuttalView.el);
@@ -653,16 +648,18 @@ const ThreadView = View.extend({
 
       this.currentCivi = $newCivi.attr('data-civi-id');
       if (!_.isUndefined(this.currentCivi)) {
-        this.responseCollection.civiId = this.currentCivi;
-        this.responseCollection.fetch();
+        if (this.responseCollection.civiId !== this.currentCivi) {
+          this.responseCollection.civiId = this.currentCivi;
+          this.responseCollection.fetch();
+          return;
+        }
       }
-    } else {
-      $currentCivi.removeClass('current');
-      this.$('.civi-card').removeClass('linked');
-
-      this.currentCivi = null;
-      this.$('.responses-box').empty();
     }
+    $currentCivi.removeClass('current');
+    this.$('.civi-card').removeClass('linked');
+
+    this.currentCivi = null;
+    this.$('.responses-box').empty();
   },
 
   drilldownCivi(e) {
@@ -780,7 +777,7 @@ const ThreadView = View.extend({
         view.is_draft = false;
         M.toast({ html: 'Thread is now public. Refreshing the page...' });
         view.$('#js-publish-btn').hide();
-        _.delay(window.location.reload, 1000);
+        _.delay(window.location.reload.bind(window.location), 1000);
       },
       error(response) {
         if (response.status === 403) {
@@ -805,7 +802,15 @@ const ThreadView = View.extend({
   },
 
   openEditThreadModal() {
-    this.editThreadView.renderView();
+    this.showChildView(
+      'threadWikiHolder',
+      new EditThreadView({
+        model: this.model,
+        parentView: this,
+        threadId: this.model.id,
+      }),
+    );
+    this.getChildView('threadWikiHolder').postRender();
   },
 });
 export default ThreadView;

@@ -1,0 +1,110 @@
+<div class="wiki-banner">
+    <div class="container">
+        <div class="row">
+            <div class="col s6">
+                <div class="wiki-title title-lato dark-white-text">{{ title }}</div>
+                <div class="wiki-stats light-gray-text">
+                    <span class="wiki-stat">{{ num_views }} Views</span>
+                    <span class="wiki-stat">{{ num_civis }} Civis</span>
+                </div>
+            </div>
+            <div class="wiki-image col s6">
+                <div class="thread-image-wrapper">
+                    <img class="thread-image-thumb" src="{{ image_url }}" alt="">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s3">
+                <div class="wiki-author">
+                    <div class="author-photo-holder">
+                        <div class="author-photo transparent" style="background-image: url('{{ author.profile_image_thumb_url }}'); background-size: 40px;"></div>
+                    </div>
+                    <div class="author-info">
+                        <a class="author-name bold-text" href="/profile/{{ author.username }}">{{ author.first_name }} {{author.last_name}}</a>
+                    </div>
+                </div>
+            </div>
+            {{# if (author.username === currentUser) { }}
+            <div class="col s3 wiki-edit-actions">
+                <div class="center">
+                    <div class="edit-thread-button">
+                        <i class="mini material-icons edit">edit</i>
+                        <span class="edit-text">EDIT THREAD</span>
+                    </div>
+                </div>
+            </div>
+            {{# } }}
+        </div>
+    </div>
+</div>
+<div class="wiki-body">
+    <div class="container">
+        <div class="row">
+
+            <div class="col s6">
+                <div class="wiki-body-header">
+                    <span class="wiki-header-category gray-text">
+                        <span class="black-text bold-text wiki-header-inner">Category:</span>{{ category.name}}</span>
+                    <span class="wiki-header-category gray-text">
+                        <span class="black-text bold-text wiki-header-inner">Location:</span>{{ location }}</span>
+                </div>
+            </div>
+            <div class="col s4">
+                <div class="wiki-edit hide">
+
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s8">
+                <div class="wiki-body-summary">
+                    <div class="black-text bold-text wiki-body-summary-title">
+                        Summary
+                    </div>
+                    <div class="gray-text wiki-body-summary-text">
+                        {{ summary }}
+                    </div>
+                </div>
+            </div>
+            <div class="col s4">
+                <div class="wiki-contributors">
+                    <div class="gray-text wiki-contributors-title">
+                        Top Contributors
+                    </div>
+                    <div class="wiki-contributors-list">
+                        <div class="row" style="padding: 0;">
+                            {{# _.each(contributors, function (contributor, idx) { }} {{# if (idx > 7) { return; } else { }}
+                            <div class="profile-button-wrapper col l3 m6 s12">
+                                <div class="profile-button-outer">
+                                    <a href="/profile/{{contributor.username}}" class="profile-button btn btn-large btn-floating profile-button transparent" style="background-image: url('{{contributor.profile_image_thumb_url}}'); background-size: 40px;"></a>
+                                </div>
+                            </div>
+                            {{# } }} {{# }); }} 
+                            {{# if (contributors.length > 8) { }}
+                            <div class="col s12">
+                                <span class="gray-text wiki-contributors-more">+{{ contributors.length - 8}} more</span>
+                            </div>
+                            {{# } }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12">
+                <div class="wiki-facts"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12">
+                <div class="wiki-enter-body">
+                    <button class="enter-body btn waves-effect">Go to Thread
+                        <i class="material-icons right">keyboard_arrow_down</i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -8,7 +8,8 @@ const Civis = Collection.extend({
   },
   comparator: 'threadId',
 
-  initialize() {
+  initialize(options) {
+    this.threadId = options.threadId;
     this.civiId = null;
   },
   filterByType(type) {

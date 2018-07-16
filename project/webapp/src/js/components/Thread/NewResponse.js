@@ -1,10 +1,10 @@
 import { View } from 'backbone.marionette';
-import baseTemplate from 'Templates/components/Thread/new_response.html';
+import baseTemplate from 'Templates/components/Thread/Civi/new_response.html';
 
 const NewResponseView = View.extend({
   el: '#new-response-box',
   template: baseTemplate,
- 
+
   initialize() {
     this.rebuttal_ref = '';
   },
@@ -109,7 +109,7 @@ const NewResponseView = View.extend({
           title: responseTitle,
           body: responseBody,
           c_type: civiType,
-          thread_id: this.model.threadId,
+          thread_id: this.model.id,
           related_civi: relatedCivi,
         },
         success(response) {

@@ -2,15 +2,8 @@ import { View } from 'backbone.marionette';
 import baseTemplate from 'Templates/components/Thread/edit_wiki.html';
 
 const EditThreadView = View.extend({
-  el: '.thread-wiki-holder',
   element: '.thread-wiki-holder',
   template: baseTemplate,
-
-  templateContext() {
-    return {
-      this: this,
-    };
-  },
 
   initialize() {
     this.model = this.getOption('model');
@@ -21,9 +14,7 @@ const EditThreadView = View.extend({
     this.$element = $(this.element);
   },
 
-  renderView() {
-    // this.$element.empty().append(this.wikiTemplate());
-    this.render();
+  postRender() {
     this.$('#thread-image-forms').addClass('hide');
 
     this.$('#thread-location').val(this.model.get('level'));
@@ -33,7 +24,6 @@ const EditThreadView = View.extend({
     }
     M.updateTextFields();
     M.FormSelect.init(document.querySelectorAll('select'));
-    
   },
 
   events: {
@@ -45,14 +35,6 @@ const EditThreadView = View.extend({
     'click #image-from-computer': 'showImageUploadForm',
     'click #image-from-link': 'showImageLinkForm',
     'change #thread-location': 'showStates',
-  },
-
-  show() {
-    this.$('.edit-thread-modal').openModal();
-  },
-
-  hide() {
-    this.$('.edit-thread-modal').closeModal();
   },
 
   showStates() {

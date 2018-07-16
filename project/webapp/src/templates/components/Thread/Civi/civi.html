@@ -1,0 +1,179 @@
+<div class="civi-card" id="civi-{{ id }}" data-civi-id="{{ id }}"  data-civi-links="{{ links }}">
+    <div class="row civi-header civi-click">
+        <div class="col s10 no-pads civi-title-outer">
+            <div class="civi-type gray-text">{{ type}}</div>
+            <div class="civi-title ">
+                <span class="text-wrapper">{{ title}}</span>
+
+                {{# if (author.username === currentUser) { }}
+                <div class="dark-background-input-field hide edit-wrapper edit-type">
+                    <form action="#" id="civi-type-form" class="edit-civi-type">
+                        <div class="civi-types">
+                            <label class="civi-type-button">
+                                <input class="with-gap" name="civi-type" type="radio" id="problem-{{ id}}" value="problem"/>
+                                <span for="problem-{{ id}}" class="civi-type-label">PROBLEM</span>
+                            </label>
+                            <label class="civi-type-button">
+                                <input class="with-gap" name="civi-type" type="radio" id="cause-{{ id}}" value="cause"/>
+                                <span for="cause-{{ id}}" class="civi-type-label">CAUSE</span>
+                            </label>
+                            <label class="civi-type-button">
+                                <input class="with-gap" name="civi-type" type="radio" id="solution-{{ id}}" value="solution"/>
+                                <span for="solution-{{ id}}" class="civi-type-label">SOLUTION</labspanel>
+                            </label>
+                        </div>
+                    </form>
+                    <input class="edit-civi-title">
+                </div>
+                {{# } }}
+            </div>
+        </div>
+        <div class="col s2 no-pads civi-header-actions">
+            <div class="right">
+
+                {{# if (author.username === currentUser) { }}
+                <i class="mini material-icons edit">edit</i>
+                <i class="mini material-icons delete">delete_forever</i>
+
+                <i class="mini material-icons edit-action edit-confirm hide">save</i>
+                <i class="mini material-icons edit-action edit-cancel hide">close</i>
+                {{# } }}
+                <!-- <i class="mini material-icons">flag</i> -->
+            </div>
+        </div>
+    </div>
+    <div class="civi-body">
+        <div class="civi-body-inner">
+            <span class="text-wrapper">{{ body }}</span>
+            {{# if (author.username === currentUser) { }}
+            <div class="white-background-input-field hide edit-wrapper">
+                <textarea type="text" class="materialize-textarea edit-civi-body" length="1000"></textarea>
+            </div>
+            {{# } }}
+        </div>
+        {{# if ( links.length > 0) { }}
+        <div class="civi-links text-wrapper">
+            <div class="links-title gray-text">
+                LINKED CIVIS ({{ links.length }})
+            </div>
+
+                {{# _.each( links, function(link){  }}
+                    {{# var civi = civis.findWhere({id: link})}}
+                    <div class="link-item">
+                        <span class="bold-text link-lato">{{civi.get('type')}}</span>
+                        <span class="gray-text">{{civi.get('title')}}</span>
+                    </div>
+                {{# }); }}
+
+        </div>
+        {{# } }}
+        {{# if ( attachments.length > 0) { }}
+        <div class="civi-attachments text-wrapper">
+            <div class="attachments-title gray-text">
+                ATTACHMENTS ({{ attachments.length}})
+            </div>
+
+                {{# _.each( attachments, function(attachment){  }}
+                    <div class="attachments-item">
+                        <img class="civi-image-thumb" src="{{attachment.image_url}}" width="50px" height="40px"/>
+                    </div>
+                {{# }); }}
+
+        </div>
+        {{# } }}
+        {{# if (author.username === currentUser) { }}
+            <div class="hide edit-wrapper">
+                <div class="header-lato edit-links hide">Links:</div>
+                <div class="edit-links hide" id="magicsuggest-{{ id}}"></div>
+                <div class="header-lato">Images:</div>
+                <div class="previous-civi-images">
+                        {{# _.each(attachments, function(attachment){  }}
+                            <div class="attachments-item delete-civi-image action-button" data-image-id="{{attachment.id}}">
+                                <div class="delete-image-overlay input"><i class="small material-icons">clear</i></div>
+                                <img class="civi-image-thumb" src="{{attachment.image_url}}" width="50px" height="40px"/>
+                            </div>
+                        {{# }); }}
+                    </div>
+                <div class="section">
+                    <button class="waves-effect waves-light btn btn-small" id="add-more-images"><i class="material-icons left">add</i>Add Images</button>
+                    <div class="white-background-input-field hide edit-images">
+                        <div class="header-lato">Upload Images:</div>
+                        <form method="post" enctype="multipart/form-data" id="attachment_image_form">
+                            <div class="file-field input-field">
+                                <input class="upload-image btn waves-effect hide" type="submit" value="Upload"/>
+                                <div class="btn btn-small attachment-image-pick dark-blue-background">
+                                    <span>Add Images</span>
+                                    <input id="id_attachment_image" name="attachment_image" type="file" multiple accept="image/*">
+                                </div>
+                              <div class="file-path-wrapper">
+                                <input class="file-path validate" type="text">
+                              </div>
+                            </div>
+
+                        </form>
+                        <div class="image-link-list">
+                            <input type="text" class="civi-link-images" placeholder="Paste your image link here..."/>
+                        </div>
+                        <button class="waves-effect waves-teal btn-flat btn-small" id="add-image-link-input">+ Add Another Image Link</button>
+
+                        <div class="file-preview"></div>
+                    </div>
+                </div>
+            </div>
+        {{# } }}
+        {{# if (!is_draft) { }}
+        <div class="rating center ">
+            <div class="rating-wrapper">
+                <div class="rating-name">DISAGREE</div>
+                <button class="rating-button vote vote_vneg" data-rating="vneg">
+                    <span class="rate-value"></span>
+                </button>
+            </div>
+            <div class="rating-wrapper">
+                <button class="rating-button vote vote_neg" data-rating="neg">
+                    <span class="rate-value"></span>
+                </button>
+            </div>
+            <div class="rating-wrapper">
+                <div class="rating-name">NEUTRAL</div>
+                <button class="rating-button vote vote_neutral" data-rating="neutral">
+                    <span class="rate-value"></span>
+                </button>
+            </div>
+            <div class="rating-wrapper">
+                <button class="rating-button vote vote_pos" data-rating="pos">
+                    <span class="rate-value"></span>
+                </button>
+            </div>
+            <div class="rating-wrapper">
+                <div class="rating-name">AGREE</div>
+                <button class="rating-button vote vote_vpos" data-rating="vpos">
+                    <span class="rate-value"></span>
+                </button>
+            </div>
+            <div class="rating-center center-block"></div>
+            <div class="temp-score">{{ Math.round( score, 2) }}</div>
+        </div>
+        {{# } }}
+    </div>
+    <div class="civi-footer">
+        <div class="author-photo-holder">
+            <div class="author-photo transparent" style="background-image: url('{{ author.profile_image_thumb_url }}'); background-size: 34px;">
+            </div>
+        </div>
+        <div class="author-info">
+            <a class="author-name purple-text bold-text" href="/profile/{{ author.username }}">
+                {{ author.first_name}} {{ author.last_name}}
+            </a>
+            <div class="created gray-text">
+                {{ created }}
+            </div>
+        </div>
+        <div class="right civi-footer-actions">
+            <div>
+                <!-- <i class="mini material-icons favorite">star_border</i> -->
+                <!-- <i class="mini material-icons civi-grab-link">link</i> -->
+            </div>
+        </div>
+    </div>
+</div>

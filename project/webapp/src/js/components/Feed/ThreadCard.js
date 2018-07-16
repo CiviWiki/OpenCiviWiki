@@ -1,5 +1,5 @@
 import { View } from 'backbone.marionette';
-import cardTemplate from 'Templates/components/Thread/card.html';
+import cardTemplate from 'Templates/components/Feed/Thread/card.html';
 
 const ThreadCard = View.extend({
   tagName: 'div',

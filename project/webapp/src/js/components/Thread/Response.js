@@ -1,8 +1,7 @@
 import { View } from 'backbone.marionette';
-import baseTemplate from 'Templates/components/Thread/Civi/civi.html';
-import LinkSelectView from './LinkSelect';
+import baseTemplate from 'Templates/components/Thread/Civi/response.html';
 
-const CiviView = View.extend({
+const ResponseView = View.extend({
   template: baseTemplate,
 
   events: {
@@ -12,7 +11,6 @@ const CiviView = View.extend({
     'click .edit-confirm': 'saveEdit',
     'click .edit-cancel': 'closeEdit',
     'click .civi-image-thumb': 'viewImageModal',
-    'change #civi-type-form': 'clickNewType',
     'click .delete-civi-image': 'addImageToDeleteList',
     'click #add-more-images': 'showImageForm',
     'change .attachment-image-pick': 'previewImageNames',
@@ -28,7 +26,12 @@ const CiviView = View.extend({
     this.parentView = this.getOption('templateContext').parentView;
     this.civis = this.getOption('templateContext').parentView.civis;
     this.model.set('view', this);
+    this.render();
   },
+
+  // render() {
+  //   this.$el.empty().append(this.template);
+  // },
 
   addImageLinkInput() {
     const linkImages = this.$('.civi-link-images').length;
@@ -126,12 +129,6 @@ const CiviView = View.extend({
             view.parentView.model.set('user_votes', prevVotes);
           }
 
-          if (view.model.get('type') !== 'response' && view.model.get('type') !== 'rebuttal') {
-            view.parentView.initRecommended();
-            view.parentView.renderBodyContents();
-            view.parentView.processCiviScroll();
-          }
-
           view.$('.rating-button').removeClass('current');
           $this.addClass('current');
         },
@@ -147,21 +144,9 @@ const CiviView = View.extend({
     this.$('.edit-civi-body').text(this.model.get('body'));
     this.$('.edit-civi-title').val(this.model.get('title'));
     this.$(`#${this.model.get('type')}-${this.model.id}`).prop('checked', true);
-    if (this.model.get('type') !== 'response' && this.model.get('type') !== 'rebuttal') {
-      this.magicSuggestView = new LinkSelectView({
-        $el: this.$(`#magicsuggest-${this.model.id}`),
-        civis: this.civis,
-      });
-      this.magicSuggestView.setLinkableData(this.model.get('type'));
-      const msValues = [];
-      _.each(this.model.get('links'), (civiId) => {
-        msValues.push(this.civis.get(civiId).toJSON());
-      });
-      this.magicSuggestView.ms.setValue(msValues);
-    }
+
     this.attachment_links = [];
     this.attachmentCount = 0;
-
     this.imageRemoveList = [];
 
     this.$('.edit-wrapper').removeClass('hide');
@@ -170,33 +155,14 @@ const CiviView = View.extend({
     this.$('.edit').addClass('hide');
     this.$('.delete').addClass('hide');
 
-    if (this.model.get('type') === 'response' || this.model.get('type') === 'rebuttal') {
-      this.$('.edit-links').addClass('hide');
-      this.$('#civi-type-form').addClass('hide');
-    } else if (this.model.get('type') === 'problem') {
-      this.$(`#magicsuggest-${this.model.id}`).addClass('hide');
-    }
-  },
-
-  clickNewType(event) {
-    const newType = $(event.target)
-      .closest("input[type='radio']:checked")
-      .val();
-    if (newType === 'problem') {
-      this.$('.edit-links').addClass('hide');
-      this.$(`#magicsuggest-${this.model.id}`).addClass('hide');
-    } else {
-      this.$('.edit-links').removeClass('hide');
-      this.$(`#magicsuggest-${this.model.id}`).removeClass('hide');
-    }
-    this.magicSuggestView.setLinkableData(newType);
-    this.magicSuggestView.ms.clear();
+    this.$('.edit-links').addClass('hide');
+    this.$('#civi-type-form').addClass('hide');
   },
 
   addRebuttal() {
     this.parentView.newResponseView.rebuttal_ref = this.model.id;
     this.parentView.newResponseView.render();
-    this.parentView.newResponseView.show();
+    // this.parentView.newResponseView.show();
   },
 
   addImageToDeleteList(event) {
@@ -218,7 +184,6 @@ const CiviView = View.extend({
   saveEdit(event) {
     event.stopPropagation();
     const view = this;
-    const civiType = this.model.get('type');
     const newBody = this.$('.edit-civi-body')
       .val()
       .trim();
@@ -227,14 +192,6 @@ const CiviView = View.extend({
       .val()
       .trim();
 
-    let links;
-    if (civiType !== 'response' && civiType !== 'rebuttal') {
-      links = this.magicSuggestView.ms.getValue();
-    } else {
-      links = [];
-    }
-
-    let newType = this.$("#civi-type-form input[type='radio']:checked").val();
     if (!newBody || !newTitle) {
       M.toast({ html: 'Please do not leave fields blank' });
       return;
@@ -243,31 +200,16 @@ const CiviView = View.extend({
       this.imageRemoveList.length === 0
       && this.attachmentCount === 0
       && (newBody === this.model.get('body')
-        && newTitle === this.model.get('title')
-        && _.isEqual(links, this.model.get('links'))
-        && newType === this.model.get('type'))
+        && newTitle === this.model.get('title'))
     ) {
       this.closeEdit(event);
       return;
     }
-
-    let data;
-    if (civiType === 'response' || civiType === 'rebuttal') {
-      newType = civiType;
-      data = {
-        civi_id: this.model.id,
-        title: newTitle,
-        body: newBody,
-      };
-    } else {
-      data = {
-        civi_id: this.model.id,
-        title: newTitle,
-        body: newBody,
-        links,
-        type: newType,
-      };
-    }
+    const data = {
+      civi_id: this.model.id,
+      title: newTitle,
+      body: newBody,
+    };
 
     if (this.imageRemoveList.length) {
       data.image_remove_list = this.imageRemoveList;
@@ -286,82 +228,27 @@ const CiviView = View.extend({
               formData.append('attachment_links[]', imageLink);
             });
           }
-
           $.ajax({
             url: '/api/upload_images/',
             type: 'POST',
-            success(imageResponse) {
+            success() {
               M.toast({ html: 'Saved.' });
-
-              // Set the models with new data and rerender
-              view.model.set('title', newTitle);
-              view.model.set('body', newBody);
-              view.model.set('links', links);
-              view.model.set('type', newType);
-              view.model.set('attachments', imageResponse.attachments);
-              view.model.set('score', response.score);
-              if (view.magicSuggestView) {
-                view.magicSuggestView.remove();
-              }
-
-              view.render();
-
-              if (view.model.get('type') !== 'response' && view.model.get('type') !== 'rebuttal') {
-                const parentLinks = view.model.get('links');
-                _.each(
-                  parentLinks,
-                  (parentId) => {
-                    const parentCivi = view.parentView.civis.get(parentId);
-                    if (parentCivi) {
-                      const prevLinks = parentCivi.get('links');
-                      prevLinks.push(view.model.id);
-                      parentCivi.set('links', prevLinks);
-                    }
-                  },
-                  this,
-                );
-
-                view.parentView.initRecommended();
-                view.parentView.renderBodyContents();
-                view.parentView.processCiviScroll();
-              }
             },
-            error(imageResponse) {
+            error() {
               M.toast({
                 html: 'Civi was edited but one or more images could not be uploaded',
               });
-
+            },
+            complete(imageResponse) {
               // Set the models with new data and rerender
               view.model.set('title', newTitle);
               view.model.set('body', newBody);
-              view.model.set('links', links);
-              view.model.set('type', newType);
               view.model.set('attachments', imageResponse.attachments);
               view.model.set('score', response.score);
-              if (view.magicSuggestView) {
-                view.magicSuggestView.remove();
-              }
-
               view.render();
 
-              if (view.model.get('type') !== 'response' && view.model.get('type') !== 'rebuttal') {
-                const parentLinks = view.model.get('links');
-                _.each(
-                  parentLinks,
-                  (parentId) => {
-                    const parentCivi = view.parentView.civis.get(parentId);
-                    if (parentCivi) {
-                      const prevLinks = parentCivi.get('links');
-                      prevLinks.push(view.model.id);
-                      parentCivi.set('links', prevLinks);
-                    }
-                  },
-                  this,
-                );
-
-                view.parentView.initRecommended();
-                view.parentView.renderBodyContents();
-                view.parentView.processCiviScroll();
+              if (view.model.get('type') === 'rebuttal') {
+                view.$('.civi-card').addClass('push-right');
               }
             },
             data: formData,
@@ -372,51 +259,16 @@ const CiviView = View.extend({
         } else {
           M.toast({ html: 'Saved' });
 
-          // Clean up previous links
-          const origLinks = view.model.get('links');
-          _.each(
-            origLinks,
-            (parentId) => {
-              const parentCivi = view.parentView.civis.get(parentId);
-              if (parentCivi) {
-                const prevLinks = parentCivi.get('links');
-                const cleaned = _.without(prevLinks, view.model.id);
-                parentCivi.set('links', cleaned);
-              }
-            },
-            this,
-          );
-
           // Set the models with new data and rerender
           view.model.set('title', newTitle);
           view.model.set('body', newBody);
-          view.model.set('links', links);
-          view.model.set('type', newType);
           view.model.set('attachments', response.attachments);
           view.model.set('score', response.score);
-          if (view.magicSuggestView) {
-            view.magicSuggestView.remove();
-          }
           view.render();
 
-
-          const parentLinks = view.model.get('links');
-          _.each(
-            parentLinks,
-            (parentId) => {
-              const parentCivi = view.parentView.civis.get(parentId);
-              if (parentCivi) {
-                const prevLinks = parentCivi.get('links');
-                prevLinks.push(view.model.id);
-                parentCivi.set('links', prevLinks);
-              }
-            },
-            this,
-          );
-
-          view.parentView.initRecommended();
-          view.parentView.renderBodyContents();
-          view.parentView.processCiviScroll();
+          if (view.model.get('type') === 'rebuttal') {
+            view.$('.civi-card').addClass('push-right');
+          }
         }
       },
       error() {
@@ -439,18 +291,8 @@ const CiviView = View.extend({
       },
       success() {
         M.toast({ html: 'Deleted Civi succssfully' });
-        _.each(view.model.get('links'), (link) => {
-          const linkedCivi = view.civis.findWhere({ id: link });
-          const prevLinks = linkedCivi.get('links');
-          const newLinks = _.without(prevLinks, view.model.id);
-          linkedCivi.set('links', newLinks);
-        });
-
         view.civis.remove(view.model);
         view.remove();
-        view.parentView.initRecommended();
-        view.parentView.renderBodyContents();
-        view.parentView.processCiviScroll();
       },
       error() {
         M.toast({ html: 'Could not delete the civi' });
@@ -459,4 +301,4 @@ const CiviView = View.extend({
   },
 });
 
-export default CiviView;
+export default ResponseView;
