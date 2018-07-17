@@ -6,7 +6,6 @@ module.exports = {
   context: path.resolve(__dirname, 'webapp'),
   entry: {
     app: './src/js/app.js',
-    // static: ["./static.js"]
   },
   output: {
     filename: '[name].[hash].js',

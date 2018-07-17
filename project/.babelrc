@@ -3,10 +3,10 @@
     [
       "module-resolver",
       {
-        "root": ["./webapp/src"],
+        "root": ["./project/webapp/src"],
         "alias": {
-          "Styles": "./webapp/src/styles",
-          "Templates": "./webapp/src/templates"
+          "Styles": "./project/webapp/src/styles",
+          "Templates": "./project/webapp/src/templates"
         }
       }
     ]
