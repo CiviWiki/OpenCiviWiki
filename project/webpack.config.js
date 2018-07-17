@@ -59,7 +59,7 @@ module.exports = {
   },
   plugins: [
     new BundleTracker({
-      filename: './webapp/static/webpack-stats.json',
+      filename: './project/webapp/static/webpack-stats.json',
     }),
     new webpack.ProvidePlugin({
       _: 'underscore',
