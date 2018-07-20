@@ -5,52 +5,10 @@ All the ProPublica functions, from the base client to intercting with their APIs
 import .json
 import .logging
 import .httplib2
+import. datetime
 
-from .utils import NotFound, CongressError, u
-#log = logging.getlogger('congress')  #Error logging
+#from .utils import NotFound, CongressError, u
 
-class PClient(object):
-    """
-    PClient deals with fetching responses from the ProPublica API, and dealing
-    with what is returned.
-
-    The httplib2 stuff is shamelessly stolen from StackOverflow
-    """
-
-    BASE_URI = "https://api.propublica.org/congress/v1"
-
-    def __init__(self, apikey=None, cache='.cache', http=None):
-        self.apikey = apikey
-
-        if isinstance(http, httplib2.Http):
-            self.http = http
-        else:
-            self.http = httpli2.Http(cache)
-
-    def fetch(self, path, parse=lambda r: r['results'][0]):
-        """
-        Makes the API request, WITH auth.
-        """
-
-        url = self.BASE_URL + path
-        headers = {'X-API-Key': self.apikey}
-        log.debug(url)
-        resp, content = self.http.request(url, headers=headers)
-        content = u(content)
-        content = json.loads(content)
-
-        #Error handling
-        if not content.get('status') == 'OK':
-            if content.get('status') == '404':
-                raise NotFound(path)
-            if "errors" in content and content['errors'][0]['error'] == "Record not Found":
-                raise NotFound(path)
-            raise CongressError(content, resp, url)
-
-        if callable(parse):
-            content = parse(content)
-
-        return content
 class VotesClient(PClient):
     #datetime needed here, for date based queries
     def votes_by_date(self, chamber, date=datetime.datetime.now()):
@@ -186,12 +144,10 @@ class BillsPClient(PClient):
 
 class Congress(PClient):
     """
-    Congress uses `httplib2 <https://github.com/httplib2/httplib2>`_, and caching is pluggable. By default,
-    it uses `httplib2.FileCache <https://httplib2.readthedocs.io/en/latest/libhttplib2.html#httplib2.FileCache>`_,
-    in a directory called ``.cache``, but it should also work with memcache
-    or anything else that exposes the same interface as FileCache (per httplib2 docs).
-    """
-#    """REWORD THE ABOVE"""
+    The Propublica Congress class uses httplib2, and caching is pluggable. By default,
+    it uses httplib2.FileCache in a directory called .cache, but it should also work
+    with memcache     or anything else that exposes the same interface as FileCache.
+    """   
     
     def __init__(self, apikey=None, cache='.cache', http=None):
         apikey = PROPUBLICA_APIKEY.
