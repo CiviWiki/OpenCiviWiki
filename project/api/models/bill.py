@@ -2,7 +2,11 @@ from django.db import models
 
 
 class Bill(models.Model):
-    #id comes from the ProPublica PClient class
+    """
+    The bill class converts a text post, such as a bill stub, into a db entry
+    """
+    
+    #id is the unique identifier for each db entry
     id = models.CharField(max_length=255, primary_key=True)
 
     title = models.CharField(max_length=1023)
