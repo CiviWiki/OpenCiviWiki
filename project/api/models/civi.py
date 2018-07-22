@@ -209,6 +209,7 @@ class Civi(models.Model):
             "author": {
                 'username': self.author.user.username,
                 'profile_image': self.author.profile_image_url,
+                'profile_image_thumb_url': self.author.profile_image_thumb_url,
                 'first_name': self.author.first_name,
                 'last_name': self.author.last_name
             },
