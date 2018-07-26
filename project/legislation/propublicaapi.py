@@ -5,9 +5,7 @@ All the ProPublica functions, from the base client to intercting with their APIs
 import .json
 import .logging
 import .httplib2
-import. datetime
-
-#from .utils import NotFound, CongressError, u
+import .datetime
 
 class VotesClient(PClient):
     #datetime needed here, for date based queries
@@ -80,7 +78,7 @@ class VotesClient(PClient):
         "How often is each member the lone no vote?"
         return self.by_type(chamber, 'loneno', congress)
 
-    def vtes_perfect(self, chamber, congress=CURRENT_CONGRESS):
+    def votes_perfect(self, chamber, congress=CURRENT_CONGRESS):
         "Who never misses a vote?"
         return self.by_type(chamber, 'perfect', congress)
 
@@ -154,14 +152,11 @@ class Congress(PClient):
 
         super(Congress, self).__init__(apikey, cache, http)
 
-        sel.fbills = BillsClient(self.apikey, cache, self.http)
+        self.bills = BillsClient(self.apikey, cache, self.http)
         self.committees = CommitteesClient(self.apikey, cache, self.http)
         self.members = MembersClient(self.apikey, cache, self.http)
         self.nominations = NominationsClient(self.apikey, cached, self.http)
         self.votes = VotesClient(self.apikey, cache, self.http)
-
-#Put Congress, and PClient together on one file, and the derived classes
-#on another few files.
 
 class CommitteesClient(PClient):
     def get(self, chamber, committee, congress=CURRENT_CONGRESS):
@@ -176,24 +171,3 @@ class CommitteesClient(PClient):
         path="{congress}/{chamber}/committees.json".format(
             congress=congress, chamber=chamber)
         return self.fetch(path)
-
-def get_legislator_and_district(account):
-    location = account.zip_code
-
-    #Getting it from the ProPublica page works while we are small, but there is a limit
-    #of 5000 requests per day, so we need to download, and store the info locally
-    #update it once per day
-
-    return NULL;
-
-def get_legislator_ids_by_lat_long(latitude, longitude):
-    """
-    Gets IDs by lat, long.
-    Pulls from stored location first, if that is empty, pull from ProPublica
-    """
-    leg_list = []
-
-    try:
-        legislators =
-        except BadRequestException:
-            return leg_list

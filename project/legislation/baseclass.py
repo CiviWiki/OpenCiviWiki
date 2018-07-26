@@ -62,7 +62,23 @@ class CongresscritterDB(Models.model):
         pass
     
     def makeDB(self, apikey, chamber):#finish
-        pass
+        id = models.UUIDField(primary_key=True)
+        name = models.charfield(max_length = 63)
+        state = models.charfield(max_length = 63)
+        abbr = models.charfield(max_length = 2)
+        #if senate, ward == 0, else, ward, if 255, error
+        ward = models.IntegerField(default=255)
+        roles = models.charfield(max_length = 1023)
+        #still need to see what else to include.  Party?
+
+        #titles = r.json()
+        #for title in titles['data']:
+        #    Title.objects.create(id=title['id'], name=title['name'])
+        #    context = {'titles': Title.objects.all()}
+            
+                                                        
+
+        
 
     def updateDB(self, apikey, chamber):
         pass
