@@ -1,0 +1,3 @@
+Drop in a folder for each section of ProPublica you want to access.  EG:  Congress, Congressional monies, Judicial actions, Public Policy, et al.
+
+That way, everything is kept nice and organized, as well as future proofed.
