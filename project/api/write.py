@@ -445,7 +445,7 @@ def uploadCiviImage(request):
                     civi_image.save()
 
             data = {
-                "attachments": [{'id': img.id, 'url': img.image_url} for img in c.images.all()],
+                "attachments": [{'id': img.id, 'image_url': img.image_url} for img in c.images.all()],
             }
             return JsonResponse(data)
 
