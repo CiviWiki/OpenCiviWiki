@@ -1,4 +1,4 @@
-import json, PIL, urllib.request, urllib.parse, urllib.error, uuid
+import json, PIL, urllib, uuid
 
 from notifications.signals import notify
 
@@ -15,7 +15,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from api.forms import UpdateProfileImage
 from api.models import Thread
 from api.tasks import send_mass_email
-from .models import Account, Activity, Category, Civi, CiviImage, Invitation
+from models import Account, Activity, Category, Civi, CiviImage, Invitation
 from utils.custom_decorators import require_post_params
 from utils.constants import US_STATES
 
@@ -81,7 +81,7 @@ def createCivi(request):
                 notify.send(
                     request.user, # Actor User
                     recipient=parent_civi.author.user, # Target User
-                    verb='responded to your civi', # Verb
+                    verb=u'responded to your civi', # Verb
                     action_object=civi, # Action Object
                     target=civi.thread, # Target Object
                     popup_string="{user} responded to your civi in {thread}".format(user=a.full_name, thread=civi.thread.title),
@@ -102,7 +102,7 @@ def createCivi(request):
                     notify.send(
                         request.user, # Actor User
                         recipient=act.user, # Target User
-                        verb='created a new civi', # Verb
+                        verb=u'created a new civi', # Verb
                         action_object=civi, # Action Object
                         target=civi.thread, # Target Object
                         popup_string="{user} created a new civi in the thread {thread}".format(user=a.full_name, thread=civi.thread.title),
@@ -437,7 +437,7 @@ def uploadCiviImage(request):
 
             if attachment_links:
                 for img_link in attachment_links:
-                    result = urllib.request.urlretrieve(img_link)
+                    result = urllib.urlretrieve(img_link)
                     img_file = File(open(result[0]))
                     if check_image_with_pil(img_file):
                         civi_image = CiviImage(title="", civi=c, image=img_file)
@@ -483,7 +483,7 @@ def uploadThreadImage(request):
 
             elif img_link:
                 thread.image.delete()
-                result = urllib.request.urlretrieve(img_link)
+                result = urllib.urlretrieve(img_link)
                 img_file = File(open(result[0]))
                 if check_image_with_pil(img_file):
                     thread.image = img_file
@@ -541,7 +541,7 @@ def requestFollow(request):
         notify.send(
             request.user, # Actor User
             recipient=target, # Target User
-            verb='is following you', # Verb
+            verb=u'is following you', # Verb
             target=target_account, # Target Object
             popup_string="{user} is now following you".format(user=account.full_name),
             link="/{}/{}".format("profile", request.user.username)
