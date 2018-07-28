@@ -6,7 +6,6 @@ from .thread import Thread
 
 class ActivityManager(models.Manager):
     def votes(self, civi_id):
-        """Returns the votes on a civi."""
         civi = Civi.objects.get(id=civi_id)
         votes = dict(
             votes_vneg=civi.votes_vneg,
@@ -19,9 +18,6 @@ class ActivityManager(models.Manager):
 
 
 class Activity(models.Model):
-    """Class Activity contains the account, thread, civi, votes, read, created
-       and last modified data for a civi.
-       """
     account = models.ForeignKey(Account, default=None, null=True)
     thread = models.ForeignKey(Thread, default=None, null=True)
     civi = models.ForeignKey(Civi, default=None, null=True)

@@ -6,9 +6,6 @@ from .thread import Thread
 
 
 class Notification(models.Model):
-    """
-    Provides an alert when you get a response to your civi.
-    """
     account = models.ForeignKey(Account, default=None, null=True)
     thread = models.ForeignKey(Thread, default=None, null=True)
     civi = models.ForeignKey(Civi, default=None, null=True) # always a solution or null
