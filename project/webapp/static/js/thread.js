@@ -1796,7 +1796,7 @@ cw.ThreadView = BB.View.extend({
         this.resizeBodyToWindow();
 
         this.renderOutline();//THISTHIS
-        this.renderBodyContents();
+        
         this.processCiviScroll();
     },
 
