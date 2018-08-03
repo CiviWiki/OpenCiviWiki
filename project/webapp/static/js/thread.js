@@ -1187,6 +1187,7 @@ cw.EditThreadView = BB.View.extend({
                                     _this.parentView.threadBodyRender();
                                     _this.parentView.renderBodyContents();
                                     _this.parentView.threadWikiRender();
+                                    _this.parentView.threadNavRender();
 
                                 },
                                 error: function(e){
@@ -1224,6 +1225,7 @@ cw.EditThreadView = BB.View.extend({
                                     _this.parentView.threadBodyRender();
                                     _this.parentView.renderBodyContents();
                                     _this.parentView.threadWikiRender();
+                                    _this.parentView.threadNavRender();
                                 },
                                 error: function(e){
                                     Materialize.toast('ERROR: Image could not be uploaded', 5000);
@@ -1255,6 +1257,7 @@ cw.EditThreadView = BB.View.extend({
                                     _this.parentView.threadBodyRender();
                                     _this.parentView.renderBodyContents();
                                     _this.parentView.threadWikiRender();
+                                    _this.parentView.threadNavRender();
                                 },
                                 error: function(e){
                                     Materialize.toast('ERROR: Image could not be uploaded', 5000);
@@ -1279,6 +1282,7 @@ cw.EditThreadView = BB.View.extend({
                         _this.parentView.threadBodyRender();
                         _this.parentView.renderBodyContents();
                         _this.parentView.threadWikiRender();
+                        _this.parentView.threadNavRender();
                     }
 
                 },
@@ -1358,10 +1362,12 @@ cw.ThreadView = BB.View.extend({
     template: _.template($('#thread-template').html()),
     wikiTemplate: _.template($('#thread-wiki-template').html()),
     bodyTemplate: _.template($('#thread-body-template').html()),
+    navTemplate: _.template($('#thread-nav-template').html()),
     responseWrapper: _.template($('#thread-response-template').html()),
     outlineTemplate: _.template($('#outline-template').html()),
 
     initialize: function (options) {
+        console.log('sanity check')
         options = options || {};
         this.username = options.username;
         this.civis = options.civis;
@@ -1485,6 +1491,7 @@ cw.ThreadView = BB.View.extend({
 
         this.threadWikiRender();
         this.threadBodyRender();
+        this.threadNavRender();
 
         // this.$('.scroll-col').height($(window).sheight() - this.$('.body-banner').height());
 
@@ -1514,11 +1521,21 @@ cw.ThreadView = BB.View.extend({
                 is_draft: this.is_draft,
             };
             this.$('.thread-body-holder').empty().append(this.bodyTemplate(bodyRenderData));
-
             this.$('.main-thread').on('scroll', function (e) {
                 _this.processCiviScroll();
             });
         }
+    },
+
+    threadNavRender: function () {
+      var _this = this;
+      var navRenderData = {
+          is_draft: this.is_draft,
+      };
+      this.$('.thread-nav').empty().append(this.navTemplate(navRenderData));
+      this.$('.main-thread').on('scroll', function (e) {
+            _this.processCiviScroll();
+      });
     },
 
     renderBodyContents: function () {
