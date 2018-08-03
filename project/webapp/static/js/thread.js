@@ -1184,8 +1184,6 @@ cw.EditThreadView = BB.View.extend({
                                     _this.parentView.model.set('state', new_data.state);
                                     _this.parentView.model.set('location', new_data.location);
                                     _this.parentView.model.set('image', response2.image);
-                                    _this.parentView.threadBodyRender();
-                                    _this.parentView.renderBodyContents();
                                     _this.parentView.threadWikiRender();
                                     _this.parentView.threadNavRender();
 
@@ -1222,8 +1220,6 @@ cw.EditThreadView = BB.View.extend({
                                     _this.parentView.model.set('state', new_data.state);
                                     _this.parentView.model.set('location', new_data.location);
                                     _this.parentView.model.set('image', response2.image);
-                                    _this.parentView.threadBodyRender();
-                                    _this.parentView.renderBodyContents();
                                     _this.parentView.threadWikiRender();
                                     _this.parentView.threadNavRender();
                                 },
@@ -1254,8 +1250,6 @@ cw.EditThreadView = BB.View.extend({
                                     _this.parentView.model.set('level', new_data.level);
                                     _this.parentView.model.set('state', new_data.state);
                                     _this.parentView.model.set('location', new_data.location);
-                                    _this.parentView.threadBodyRender();
-                                    _this.parentView.renderBodyContents();
                                     _this.parentView.threadWikiRender();
                                     _this.parentView.threadNavRender();
                                 },
@@ -1279,8 +1273,6 @@ cw.EditThreadView = BB.View.extend({
                         _this.parentView.model.set('level', new_data.level);
                         _this.parentView.model.set('state', new_data.state);
                         _this.parentView.model.set('location', new_data.location);
-                        _this.parentView.threadBodyRender();
-                        _this.parentView.renderBodyContents();
                         _this.parentView.threadWikiRender();
                         _this.parentView.threadNavRender();
                     }
@@ -1813,7 +1805,7 @@ cw.ThreadView = BB.View.extend({
         this.resizeBodyToWindow();
 
         this.renderOutline();//THISTHIS
-        
+
         this.processCiviScroll();
     },
 
