@@ -1184,6 +1184,8 @@ cw.EditThreadView = BB.View.extend({
                                     _this.parentView.model.set('state', new_data.state);
                                     _this.parentView.model.set('location', new_data.location);
                                     _this.parentView.model.set('image', response2.image);
+                                    _this.parentView.threadBodyRender();
+                                    _this.parentView.renderBodyContents();
                                     _this.parentView.threadWikiRender();
 
                                 },
@@ -1219,6 +1221,8 @@ cw.EditThreadView = BB.View.extend({
                                     _this.parentView.model.set('state', new_data.state);
                                     _this.parentView.model.set('location', new_data.location);
                                     _this.parentView.model.set('image', response2.image);
+                                    _this.parentView.threadBodyRender();
+                                    _this.parentView.renderBodyContents();
                                     _this.parentView.threadWikiRender();
                                 },
                                 error: function(e){
@@ -1248,6 +1252,8 @@ cw.EditThreadView = BB.View.extend({
                                     _this.parentView.model.set('level', new_data.level);
                                     _this.parentView.model.set('state', new_data.state);
                                     _this.parentView.model.set('location', new_data.location);
+                                    _this.parentView.threadBodyRender();
+                                    _this.parentView.renderBodyContents();
                                     _this.parentView.threadWikiRender();
                                 },
                                 error: function(e){
@@ -1270,6 +1276,8 @@ cw.EditThreadView = BB.View.extend({
                         _this.parentView.model.set('level', new_data.level);
                         _this.parentView.model.set('state', new_data.state);
                         _this.parentView.model.set('location', new_data.location);
+                        _this.parentView.threadBodyRender();
+                        _this.parentView.renderBodyContents();
                         _this.parentView.threadWikiRender();
                     }
 
@@ -1781,14 +1789,14 @@ cw.ThreadView = BB.View.extend({
 
     scrollToBody: function () {
         var _this = this;
-
         this.$('.thread-wiki-holder').addClass('hide');
         this.$('.thread-body-holder').removeClass('hide');
         this.$('.thread-body-holder').css({display: 'block'});
 
         this.resizeBodyToWindow();
 
-        this.renderOutline();
+        this.renderOutline();//THISTHIS
+        this.renderBodyContents();
         this.processCiviScroll();
     },
 
