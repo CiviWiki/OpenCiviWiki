@@ -378,4 +378,21 @@ cw.AccountView = BB.View.extend({
 
         return false;
     },
+
+	getLegislators: function(coordinates){
+		var _this = this;
+		$.ajax({
+			url: "http://openstates.org/api/v1/legislators/geo/?long=" + coordinates.lng + "&lat="+ coordinates.lng + "&fields=full_name", headers:{"X-APIKEY": this.ProPublicaApiKey}, dataType: "jsonp",
+				success: function(data, status){
+					_this.$('#rep-list').empty();
+					_.each(data.results, function(rep){
+						_this.$('#rep-text').addClass('hide');
+						_this.$('#rep-list').append(_this.repChipTemplate({ rep : rep }));
+				});
+			},
+		error: function(){
+			Materialize.toast("Get Legisator Error: Could not get representatives", 5000);
+		}
+	});
+    // }
 });

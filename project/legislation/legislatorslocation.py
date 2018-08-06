@@ -7,11 +7,15 @@ def get_legislator_and_district(account):
     """
     
     location = account.zip_code
+    sleg_list = []
+    rleg_list = []
 
     if ((location < 10000)||(location > 100000)):
         throw BadRequestException #custom error this
     else:  #valid zip
         #get state, and ward, then get congresscritter for ward
+        #Senator is just the state, House is the hard one
+        sleg_list = MembersClient.filter("senate", #current_congress, account.state, account.district)
         
 
     #Getting it from the ProPublica page works while we are small, but there is a limit
@@ -24,7 +28,7 @@ def get_legislator_and_district(account):
 
 def get_legislator_ids_by_lat_long(latitude, longitude):
     """
-    Gets IDs by lat, long.
+    Gets IDs by latitude and longitude.
     Pulls from stored location first, if that is empty, pull from ProPublica
     """
     leg_list = []
