@@ -1359,7 +1359,6 @@ cw.ThreadView = BB.View.extend({
     outlineTemplate: _.template($('#outline-template').html()),
 
     initialize: function (options) {
-        console.log('sanity check')
         options = options || {};
         this.username = options.username;
         this.civis = options.civis;
@@ -1519,6 +1518,8 @@ cw.ThreadView = BB.View.extend({
         }
     },
 
+    // Renders thread navbar element independently of main body.
+    // Useful for updating after thread edits are saved.
     threadNavRender: function () {
       var _this = this;
       var navRenderData = {
@@ -1804,7 +1805,7 @@ cw.ThreadView = BB.View.extend({
 
         this.resizeBodyToWindow();
 
-        this.renderOutline();//THISTHIS
+        this.renderOutline();
 
         this.processCiviScroll();
     },
