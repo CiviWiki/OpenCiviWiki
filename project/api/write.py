@@ -46,8 +46,7 @@ def new_thread(request):
 @require_post_params(params=['title', 'body', 'c_type', 'thread_id'])
 def createCivi(request):
     '''
-    USAGE:
-        use this function to insert a new connected civi into the database.
+    Use this function to insert a new connected civi into the database.
 
     :return: (200, ok) (400, missing required parameter) (500, internal error)
     '''

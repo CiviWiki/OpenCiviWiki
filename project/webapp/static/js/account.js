@@ -382,7 +382,7 @@ cw.AccountView = BB.View.extend({
 	getLegislators: function(coordinates){
 		var _this = this;
 		$.ajax({
-			url: "http://openstates.org/api/v1/legislators/geo/?long=" + coordinates.lng + "&lat="+ coordinates.lng + "&fields=full_name", headers:{"X-APIKEY": this.ProPublicaApiKey}, dataType: "jsonp",
+			url: "http://openstates.org/api/v1/legislators/geo/?long=" + coordinates.lng + "&lat="+ coordinates.lng + "&fields=full_name", headers:{"X-APIKEY": this.OPENSTATES_API_KEY}, dataType: "jsonp",
 				success: function(data, status){
 					_this.$('#rep-list').empty();
 					_.each(data.results, function(rep){
