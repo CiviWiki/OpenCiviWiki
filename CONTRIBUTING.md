@@ -52,6 +52,7 @@ The above command should be run in the same directory as the requirements.txt fi
 There are several environment variables that are needed for things to work properly:
 
 - PROPUBLICA_API_KEY
+- OPENSTATES_API_KEY
 - GOOGLE_MAP_API_KEY
 - REDIS_URL (optional)
 - AWS_STORAGE_BUCKET_NAME (optional)
