@@ -18,6 +18,8 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf import settings
 from django.views.static import serve
+from django.views.generic.base import RedirectView
+
 from api import urls as api
 from authentication import urls as auth
 from frontend_views import urls as frontend_views
@@ -30,6 +32,13 @@ urlpatterns = [
 ]
 
 urlpatterns += [
+    # A redirect for favicons at the root of the site
+    url(r'^favicon\.ico$', RedirectView.as_view(url='/static/favicon/favicon.ico')),
+    url(r'^favicon-32x32\.png$', RedirectView.as_view(url='/static/favicon/favicon-32x32.png')),
+    url(r'^apple-touch-icon\.png$', RedirectView.as_view(url='/static/favicon/apple-touch-icon.png')),
+    url(r'^mstile-144x144\.png$', RedirectView.as_view(url='/static/favicon/mstile-144x144.png')),
+
+    # Media and Static file Serve Setup.
     url(r'^media/(?P<path>.*)$',serve, {
         'document_root': settings.MEDIA_ROOT, 'show_indexes': True
     }),

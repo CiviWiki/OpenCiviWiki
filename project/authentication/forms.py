@@ -23,10 +23,10 @@ class AccountRegistrationForm(UserCreationForm):
     password = forms.CharField(required=True)
 
     error_message = {
-        'invalid_username': _("You may only use lowercase characters or numbers."),
+        'invalid_username': _("Usernames may only use lowercase characters or numbers."),
         'email_exists': _("An account exists for this email address."),
-        'username_exists': _("Sorry, this username is taken."),
-        'invalid_password': _("Password can't be entirely numeric."),
+        'username_exists': _("Sorry, this username already exists."),
+        'invalid_password': _("Password can not be entirely numeric."),
         'invalid_password_length': _("Password must be at least 4 characters.")
     }
 
@@ -84,7 +84,7 @@ class PasswordResetForm(SetPasswordForm):
     A form that lets a user reset their password
     """
     error_messages = dict(SetPasswordForm.error_messages, **{
-        'invalid_password': _("Password can't be entirely numeric."),
+        'invalid_password': _("Password can not be entirely numeric."),
         'invalid_password_length': _("Password must be at least 4 characters.")
     })
 
@@ -108,7 +108,7 @@ class RecoverUserForm(AuthRecoverUserForm):
              subject_template_name='email/base_text_template.txt',
              email_template_name='email/base_email_template.html',
              use_https=False, token_generator=default_token_generator,
-             from_email=None, request=None, html_email_template_name=None):
+             from_email=None, request=None, html_email_template_name=None, extra_email_context=None):
         """
         Generates a one-use only link for resetting password and sends to the
         user.

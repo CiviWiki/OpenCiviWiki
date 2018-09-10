@@ -13,6 +13,7 @@ from django.utils.crypto import salted_hmac
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.http import int_to_base36
+from django.views.decorators.debug import sensitive_post_parameters
 
 from api.tasks import send_email
 from api.models import Account, Invitation
@@ -37,12 +38,15 @@ class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
 account_activation_token = AccountActivationTokenGenerator()
 
 
+
+@sensitive_post_parameters('password')
 @require_post_params(params=['username', 'password'])
 def cw_login(request):
     '''
     USAGE:
 
     '''
+
     username = request.POST.get('username', '')
     password = request.POST.get('password', '')
     remember = request.POST.get('remember', 'false')
@@ -79,6 +83,7 @@ def cw_logout(request):
     logout(request)
     return HttpResponseRedirect('/')
 
+@sensitive_post_parameters('password')
 @require_post_params(params=['username', 'password', 'email'])
 def cw_register(request):
     form = AccountRegistrationForm(request.POST or None)
@@ -136,6 +141,7 @@ def cw_register(request):
     else:
         return HttpResponseBadRequest(reason="POST Method Required")
 
+@sensitive_post_parameters('password')
 @require_post_params(params=['username', 'password', 'email', 'beta_token'])
 def beta_register(request):
     """ Special registration request for beta access """
