@@ -129,13 +129,17 @@ class Account(models.Model):
 
     #custom "row-level" functionality (properties) for account models
     @property
+    def username(self):
+        return self.user.username
+
+    @property
     def location(self):
         """
         Constructs a CITY, STATE string for locations in the US,
         a CITY, COUNTRY string for locations outside of the US
         """
         if self.country:
-            if self.country is "United States":
+            if self.country == "United States":
                 if self.city and self.state:
                     # Get US State from US States dictionary
                     us_state = dict(US_STATES).get(self.state)
@@ -145,7 +149,7 @@ class Account(models.Model):
                     # Get US State from US States dictionary
                     us_state = dict(US_STATES).get(self.state)
 
-                    return '{state}'.format(us_state)
+                    return '{state}'.format(state=us_state)
                 else:
                     return 'NO LOCATION'
             else:

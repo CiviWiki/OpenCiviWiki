@@ -83,6 +83,12 @@ class Thread(models.Model):
     level = models.CharField(max_length=31, default='federal', choices=level_CHOICES)
     state = models.CharField(max_length=2, choices=US_STATES, blank=True)
 
+    def __str__(self):
+        return self.title
+
+    def __unicode__(self):
+        return self.title
+
     @property
     def image_url(self): #TODO: move this to utils
         if self.image and default_storage.exists(os.path.join(settings.MEDIA_ROOT, self.image.name)):
@@ -107,4 +113,3 @@ class Thread(models.Model):
     def created_date_str(self):
         d = self.created
         return "{0} {1}, {2}".format(month_name[d.month], d.day, d.year)
-
