@@ -2,9 +2,7 @@ from django.conf.urls import url, include
 from rest_framework.routers import DefaultRouter
 from api import views, read, write
 
-
-#TODO: RESTful API - http://www.django-rest-framework.org/
-router = DefaultRouter(trailing_slash=False)
+router = DefaultRouter()
 router.register(r'threads', views.ThreadViewSet)
 router.register(r'categories', views.CategoryViewSet)
 router.register(r'accounts', views.AccountViewSet)
