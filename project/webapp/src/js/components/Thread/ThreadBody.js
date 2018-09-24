@@ -8,7 +8,7 @@ const ThreadBodyView = View.extend({
   template: threadBodyTemplate,
 
   regions: {
-    threadNavHolder: '.thread-nav',
+    threadNavHolder: '.thread-nav-container',
   },
 
   onRender() {
