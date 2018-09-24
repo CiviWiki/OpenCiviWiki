@@ -128,6 +128,7 @@ const EditThreadView = View.extend({
                   view.parentView.model.set(newData);
                   view.parentView.model.set('image', imageResponse.image);
                   view.parentView.threadWikiRender();
+                  view.parentView.threadNavRender();
                 },
                 error(e) {
                   M.toast({ html: 'ERROR: Image could not be uploaded' });
@@ -158,6 +159,7 @@ const EditThreadView = View.extend({
                   view.parentView.model.set(newData);
                   view.parentView.model.set('image', imageResponse.image);
                   view.parentView.threadWikiRender();
+                  view.parentView.threadNavRender();
                 },
                 error(error) {
                   M.toast({ html: 'ERROR: Image could not be uploaded' });
@@ -183,6 +185,7 @@ const EditThreadView = View.extend({
                   const newData = response.data;
                   view.parentView.model.set(newData);
                   view.parentView.threadWikiRender();
+                  view.parentView.threadNavRender();
                 },
                 error(error) {
                   M.toast({ html: 'ERROR: Image could not be uploaded' });
@@ -202,6 +205,7 @@ const EditThreadView = View.extend({
             const newData = response.data;
             view.parentView.model.set(newData);
             view.parentView.threadWikiRender();
+            view.parentView.threadNavRender();
           }
         },
         error() {

@@ -1,48 +1,5 @@
-<nav class="thread-nav body-banner">
-    <div class="nav-wrapper">
-        <div class="nav-categories nav-item">
-            <div id="thread-meta">
-                <div class="meta-item">
-                    <span class="location"></span>
-                </div>
-                <div class="meta-item">
-                    <span class="thread-location">({{ location }})</span>
-                </div>
-                <div class="meta-item">
-                    <span class="body-category">{{ category.name}}</span>
-                </div>
+<nav class="thread-nav body-banner"></nav>
 
-                <div class="meta-item">
-                    <i class="mini material-icons">keyboard_arrow_right</i>
-                </div>
-                <div class="meta-item title-item">
-                    <span class="thread-title">{{ title }}</span>
-                    <i class="tiny material-icons background-info-link enter-wiki">assignment</i>
-                </div>
-                {{# if (is_draft) { }}
-                <div class="meta-item">
-                    <div class="add-button">
-                        <button class="publish-thread btn waves-effect dark-blue-background" id="js-publish-btn">
-                            <span class="text">Publish Thread</span>
-                        </button>
-                    </div>
-                </div>
-                {{# } }}
-                <div class="add-button">
-                    <button class="add-civi btn waves-effect right">
-                        <i class="material-icons left">note_add</i>
-                        <span class="text">Add Civi</span>
-                    </button>
-                </div>
-                <div class="add-button" style="margin-left: 4px">
-                    <a id="csv-export" href="{{ id }}/csv" class="btn waves-effect">
-                        <span class="text">Export</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</nav>
 <div class="col nav-column civi-outline">
     <div class="issue-outline">
         <div class="issue-outline-header gray-text bold-text">

@@ -31,6 +31,7 @@ const ThreadView = View.extend({
   regions: {
     threadWikiHolder: '.thread-wiki-holder',
     threadBodyHolder: '.thread-body-holder',
+    threadNavHolder: '.thread-nav',
     civiOutline: '#civi-outline',
     responsesBox: '.responses-box',
     problem: '#thread-problems',
@@ -206,6 +207,10 @@ const ThreadView = View.extend({
         view.processCiviScroll();
       });
     }
+  },
+
+  threadNavRender() {
+    this.getChildView('threadBodyHolder').threadNavRender();
   },
 
   renderBodyContents() {
