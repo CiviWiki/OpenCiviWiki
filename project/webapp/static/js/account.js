@@ -378,23 +378,26 @@ cw.AccountView = BB.View.extend({
 
         return false;
     },
-    // // SunlightAPI related functions
-    // getLegislators: function(coordinates){
-    //     var _this = this;
-    //     $.ajax({
-    //         url: "https://congress.api.sunlightfoundation.com/legislators/locate?latitude=" + coordinates.lat + "&longitude="+ coordinates.lng + "&callback=?",
-    //         headers:{"X-APIKEY": this.sunlightApiKey},
-    //         dataType: "jsonp",
-    //         success: function(data, status){
-    //             _this.$('#rep-list').empty();
-    //             _.each(data.results, function(rep){
-    //                 _this.$('#rep-text').addClass('hide');
-    //                 _this.$('#rep-list').append(_this.repChipTemplate({ rep : rep }));
-    //             });
-    //         },
-    //         error: function(){
-    //             Materialize.toast("Sunlight Error: Could not get representatives", 5000);
-    //         }
-    //     });
+    // Propublica/Openstates function to get legislators, URL is in this format until I can figure out what urls.py to put the path() into.
+    // recommended by StackOverflow:  https://stackoverflow.com/questions/43003136/how-to-invoke-a-django-function-without-redirecting-to-a-new-page
+    getLegislators: function(coordinates){
+        var _this = this;
+        $.ajax({
+            url: "~/legislation/openstates/pyopenstates.py",
+
+		data: {param: lat, long},
+
+		dataType: "jsonp",
+             success: function(data, status){
+                _this.$('#rep-list').empty();
+                _.each(data.results, function(rep){
+                    _this.$('#rep-text').addClass('hide');
+                    _this.$('#rep-list').append(_this.repChipTemplate({ rep : rep }));
+                });
+            },
+            error: function(){
+                Materialize.toast("OpenstatesError: Could not get representatives", 5000);
+            }
+        });
     // }
 });
