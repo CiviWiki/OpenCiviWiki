@@ -27,10 +27,11 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api/', include(api)),
     url(r'^auth/', include(auth)),
-    url('^inbox/notifications/', include('notifications.urls', namespace='notifications')),
 ]
 
+"As more legislative solutions are added, drop them in this urlpatterns, as needed"
 urlpatterns += [
-	path('openstates/', views.pyopenstates, name='openstates'),
-	path('propublica/', views.propublica, name='propublica')
+	url(r'^legislation/' include(legislation)),
+	path('openstates/', legislation.pyopenstates, name='openstates'),
+	path('propublica/', legislation.propublica, name='propublica')
 ]
