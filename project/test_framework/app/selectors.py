@@ -26,7 +26,7 @@ activity = ".profile-civi-list"
 edit_profile_butoon = "a.btn"
 about_me_field = "#about_me"
 my_feed_list = "#feed-list"
-manage_categories = "button.waves-cw-blue:nth-child(1)"
+manage_categories = "#manage-categories"
 choose_button = "button.modal-action:nth-child(1)"
 trending_issues = ".list-title"
 
