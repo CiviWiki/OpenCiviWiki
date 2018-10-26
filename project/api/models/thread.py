@@ -28,7 +28,6 @@ class ThreadManager(models.Manager):
             "summary": thread.summary[:thread_truncate_length] + (ellipsis_if_too_long),
             "created": "{0} {1}, {2}".format(month_name[thread.created.month], thread.created.day, thread.created.year),
             "category_id": thread.category.id,
-            "state": thread.state if thread.level == "state" else "federal",
             "location": thread.level if not thread.state else dict(US_STATES).get(thread.state),
             "image": thread.image_url
         }
