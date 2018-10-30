@@ -27,7 +27,7 @@ edit_profile_butoon = "a.btn"
 about_me_field = "#about_me"
 my_feed_list = "#feed-list"
 manage_categories = "#manage-categories"
-choose_button = "button.modal-action:nth-child(1)"
+choose_button = "#choose-category"
 trending_issues = ".list-title"
 
 # Threads
