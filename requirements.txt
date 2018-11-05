@@ -61,7 +61,7 @@ pylint==2.1.1
 pyOpenSSL==18.0.0
 pyopenstates==1.2.0
 python-dateutil==2.7.5
-pytz==2017.3
+pytz==2018.7
 redis==2.10.6
 requests==2.18.4
 service-identity==17.0.0
