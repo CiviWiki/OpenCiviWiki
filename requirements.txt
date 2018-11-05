@@ -2,7 +2,7 @@ amqp==2.3.2
 args==0.1.0
 asgi-redis==1.4.3
 asgiref==2.3.2
-asn1crypto==0.23.0
+asn1crypto==0.24.0
 astroid==1.5.3
 attrs==17.2.0
 autobahn==17.10.1
