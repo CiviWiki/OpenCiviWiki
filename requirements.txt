@@ -40,7 +40,7 @@ hyperframe==5.1.0
 hyperlink==18.0.0
 idna==2.7
 incremental==17.5.0
-ipaddress==1.0.18
+ipaddress==1.0.22
 isort==4.2.15
 jmespath==0.9.3
 jsonfield==2.0.2
