@@ -37,7 +37,7 @@ h2==3.0.1
 honcho==1.0.1
 hpack==3.0.0
 hyperframe==5.1.0
-hyperlink==17.3.1
+hyperlink==18.0.0
 idna==2.6
 incremental==17.5.0
 ipaddress==1.0.18
