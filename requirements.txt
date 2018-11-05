@@ -12,7 +12,7 @@ billiard==3.5.0.4
 boto==2.49.0
 celery==4.2.1
 certifi==2018.10.15
-cffi==1.11.2
+cffi==1.11.5
 channels==1.0.3
 chardet==3.0.4
 clint==0.5.1
