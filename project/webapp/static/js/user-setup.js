@@ -27,7 +27,7 @@ cw.UserSetupView = BB.View.extend({
     step2Template: _.template($('#step2-template').html()),
     step3Template: _.template($('#step3-template').html()),
 
-    initialize: function (options) {
+    initialize: function(options) {
         options = options || {};
 
         this.mapView = options.mapView;
@@ -35,7 +35,7 @@ cw.UserSetupView = BB.View.extend({
         return this;
     },
 
-    render: function () {
+    render: function() {
         if (this.currentStep === 0) {
             this.$el.empty().append(this.baseTemplate());
             this.$('#step0').empty().append(this.step0Template());
@@ -65,10 +65,12 @@ cw.UserSetupView = BB.View.extend({
             this.$('#step0').addClass('hide');
             this.$('#step1').removeClass('hide');
             this.currentStep = 1;
+            Materialize.updateTextFields();
         } else if (this.currentStep === 1) {
             var first_name = this.$el.find('#first-name').val(),
                 last_name = this.$el.find('#last-name').val(),
                 about_me = this.$el.find('#about-me').val();
+
 
             if (first_name && last_name && about_me) {
                 this.$el.find('#step1').addClass('hide');
