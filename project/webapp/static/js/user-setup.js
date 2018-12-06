@@ -71,7 +71,6 @@ cw.UserSetupView = BB.View.extend({
                 last_name = this.$el.find('#last-name').val(),
                 about_me = this.$el.find('#about-me').val();
 
-
             if (first_name && last_name && about_me) {
                 this.$el.find('#step1').addClass('hide');
                 this.$el.find('#step2').removeClass('hide');
@@ -93,6 +92,7 @@ cw.UserSetupView = BB.View.extend({
             this.currentStep = 1;
         }
     },
+
 
 
 // INPUT VALIDATION ============================================================
