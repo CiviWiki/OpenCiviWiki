@@ -95,7 +95,6 @@ cw.UserSetupView = BB.View.extend({
     },
 
 
-
 // INPUT VALIDATION ============================================================
     // limitInput(): limits the about-me input field  to 500 characters
     limitInput: function(e) {
