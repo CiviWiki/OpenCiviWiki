@@ -67,8 +67,8 @@ class PathAndRename(object):
 image_upload_path = PathAndRename('')
 
 class Thread(models.Model):
-    author = models.ForeignKey(Account, default=None, null=True)
-    category = models.ForeignKey(Category, default=None, null=True)
+    author = models.ForeignKey(Account, default=None, null=True, on_delete=models.SET_NULL)
+    category = models.ForeignKey(Category, default=None, null=True, on_delete=models.SET_NULL)
     facts = models.ManyToManyField(Fact)
 
     hashtags = models.ManyToManyField(Hashtag)

@@ -4,8 +4,8 @@ from .account import Account
 from .response import Response
 
 class Rebuttal(models.Model):
-    author = models.ForeignKey(Account, default=None, null=True)
-    response = models.ForeignKey(Response, default=None, null=True)
+    author = models.ForeignKey(Account, default=None, null=True, on_delete=models.SET_NULL)
+    response = models.ForeignKey(Response, default=None, null=True, on_delete=models.SET_NULL)
 
     body = models.TextField(max_length=1023)
 
