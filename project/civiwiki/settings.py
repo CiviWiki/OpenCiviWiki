@@ -173,8 +173,14 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 if 'CIVIWIKI_LOCAL_NAME' not in os.environ:
     STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
+    # DATABASES = {
+    #     'default': dj_database_url.parse(get_env_variable("DATABASE_URL"))
+    # }
     DATABASES = {
-        'default': dj_database_url.parse(get_env_variable("DATABASE_URL"))
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'mydatabase',
+        }
     }
 else:
     DATABASES = {
