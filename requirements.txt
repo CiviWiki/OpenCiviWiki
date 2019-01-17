@@ -13,7 +13,7 @@ boto==2.49.0
 celery==4.2.1
 certifi==2018.10.15
 cffi==1.11.5
-channels==2.1.5
+channels==2.1.6
 chardet==3.0.4
 clint==0.5.1
 configparser==3.5.0
