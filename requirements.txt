@@ -19,7 +19,7 @@ clint==0.5.1
 configparser==3.5.0
 constantly==15.1.0
 coreapi==2.3.3
-coverage==4.5.1
+coverage==4.5.2
 cryptography==2.3.1
 daphne==2.2.2
 dj-database-url==0.5.0
