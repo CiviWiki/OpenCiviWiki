@@ -5,8 +5,8 @@ from .representative import Representative
 
 
 class Vote(models.Model):
-    bill = models.ForeignKey(Bill, default=None, null=True)
-    representative = models.ForeignKey(Representative, default=None, null=True)
+    bill = models.ForeignKey(Bill, default=None, null=True, on_delete=models.SET_NULL)
+    representative = models.ForeignKey(Representative, default=None, null=True, on_delete=models.SET_NULL)
 
     vote_CHOICES = (
         ('yes', 'Yes'),

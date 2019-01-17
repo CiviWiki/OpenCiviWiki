@@ -4,7 +4,7 @@ Extends the default django user model
 """
 import os
 import uuid
-import StringIO
+from io import StringIO
 
 from django.contrib.auth.models import User
 from django.utils.deconstruct import deconstructible
