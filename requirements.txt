@@ -71,7 +71,7 @@ sunlight==1.2.9
 Twisted==18.9.0
 txaio==18.8.1
 urllib3==1.24.1
-vine==1.1.4
+vine==1.2.0
 whitenoise==4.1
 wrapt==1.10.11
 zope.interface==4.6.0
