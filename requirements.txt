@@ -5,7 +5,7 @@ asgiref==2.3.2
 asn1crypto==0.24.0
 astroid==2.0.4
 attrs==18.2.0
-autobahn==18.10.1
+autobahn==19.1.1
 Automat==0.7.0
 backports.functools-lru-cache==1.5
 billiard==3.5.0.4
