@@ -110,6 +110,7 @@ TEMPLATES = [
 
 
 WSGI_APPLICATION = 'civiwiki.wsgi.application'
+ASGI_APPLICATION = 'civiwiki.wsgi.application'
 
 
 # Global user privilege settings
