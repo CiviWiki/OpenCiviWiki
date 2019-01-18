@@ -36,7 +36,7 @@ gunicorn==19.9.0
 h2==3.0.1
 honcho==1.0.1
 hpack==3.0.0
-hyperframe==5.1.0
+hyperframe==5.2.0
 hyperlink==18.0.0
 idna==2.7
 incremental==17.5.0
