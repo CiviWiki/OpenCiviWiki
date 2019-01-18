@@ -24,7 +24,7 @@ from authentication import urls as auth
 from frontend_views import urls as frontend_views
 
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', admin.site.urls),
     url(r'^api/', include(api)),
     url(r'^auth/', include(auth)),
     url('^inbox/notifications/', include('notifications.urls', namespace='notifications')),
