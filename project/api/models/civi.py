@@ -245,7 +245,7 @@ class CiviImageManager(models.Manager):
 
 class CiviImage(models.Model):
     objects = CiviImageManager()
-    civi = models.ForeignKey(Civi, related_name='images', on_delete=models.SET_NULL)
+    civi = models.ForeignKey(Civi, related_name='images', on_delete=models.CASCADE)
     title = models.CharField(max_length=255, null=True, blank=True)
     image = models.ImageField(upload_to=image_upload_path, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
