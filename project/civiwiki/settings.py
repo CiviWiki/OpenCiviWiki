@@ -25,14 +25,11 @@ def get_env_variable(environment_variable, optional=False):
 # Devlopment Environment Control
 DEBUG = 'DEBUG' in os.environ
 
-if 'DJANGO_HOST' in os.environ:
-    DJANGO_HOST = get_env_variable("DJANGO_HOST")
-else:
-    DJANGO_HOST = 'LOCALHOST'
+DJANGO_HOST = os.environ.get('DJANGO_HOST', 'localhost')
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SECRET_KEY = get_env_variable("DJANGO_SECRET_KEY")
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'not-so-secret')
 ALLOWED_HOSTS = [".herokuapp.com", ".civiwiki.org", "127.0.0.1", "localhost"]
 
 
@@ -123,14 +120,12 @@ ADMINS = [('Development Team', 'dev@civiwiki.org')]
 
 
 # API keys
-SUNLIGHT_API_KEY = get_env_variable("SUNLIGHT_API_KEY")
-GOOGLE_API_KEY = get_env_variable("GOOGLE_MAP_API_KEY")
+SUNLIGHT_API_KEY = os.environ.get('SUNLIGHT_API_KEY', 'sunlight_123')
+GOOGLE_API_KEY = os.environ.get('GOOGLE_MAP_API_KEY', 'google_123')
 
 # Channels Setup
-if 'REDIS_URL' in os.environ:
-    REDIS_URL = get_env_variable("REDIS_URL")
-else:
-    REDIS_URL = 'redis://localhost:6379'
+REDIS_URL = os.environ.get('REDIS_URL', 'redis://localhost:6379')
+
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "asgi_redis.RedisChannelLayer",
