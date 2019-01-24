@@ -56,7 +56,7 @@ pyasn1==0.4.4
 pyasn1-modules==0.2.2
 pycodestyle==2.4.0
 pycparser==2.19
-pyflakes==2.0.0
+pyflakes==2.1.0
 pylint==2.1.1
 pyOpenSSL==18.0.0
 pyopenstates==1.2.0
