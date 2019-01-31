@@ -31,7 +31,7 @@ django-storages==1.7.1
 djangorestframework==3.9.0
 docutils==0.14
 enum34==1.1.6
-flake8==3.6.0
+flake8==3.7.3
 gunicorn==19.9.0
 h2==3.0.1
 honcho==1.0.1
