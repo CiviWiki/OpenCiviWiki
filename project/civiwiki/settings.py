@@ -41,7 +41,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'storages',
-    'channels',
     'civiwiki',
     'api',
     'rest_framework',
@@ -106,9 +105,9 @@ TEMPLATES = [
     },
 ]
 
-
-WSGI_APPLICATION = 'civiwiki.wsgi.application'
-ASGI_APPLICATION = 'civiwiki.asgi'
+#
+# WSGI_APPLICATION = 'civiwiki.wsgi'
+# ASGI_APPLICATION = 'civiwiki.asgi'
 
 
 # Global user privilege settings
@@ -124,26 +123,26 @@ SUNLIGHT_API_KEY = os.environ.get('SUNLIGHT_API_KEY', 'sunlight_123')
 GOOGLE_API_KEY = os.environ.get('GOOGLE_MAP_API_KEY', 'google_123')
 
 # Channels Setup
-REDIS_URL = os.environ.get('REDIS_URL', 'redis://localhost:6379')
+# REDIS_URL = os.environ.get('REDIS_URL', 'redis://localhost:6379')
 
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "asgi_redis.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [REDIS_URL],
-        },
-        "ROUTING": "civiwiki.routing.channel_routing",
-    },
-}
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "asgi_redis.RedisChannelLayer",
+#         "CONFIG": {
+#             "hosts": [REDIS_URL],
+#         },
+#         "ROUTING": "civiwiki.routing.channel_routing",
+#     },
+# }
 
 
 # Celery Task Runner Setup
-CELERY_BROKER_URL = REDIS_URL + '/0'
-CELERY_RESULT_BACKEND = CELERY_BROKER_URL
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIME_ZONE = TIME_ZONE
+# CELERY_BROKER_URL = REDIS_URL + '/0'
+# CELERY_RESULT_BACKEND = CELERY_BROKER_URL
+# CELERY_ACCEPT_CONTENT = ['application/json']
+# CELERY_TASK_SERIALIZER = 'json'
+# CELERY_RESULT_SERIALIZER = 'json'
+# CELERY_TIME_ZONE = TIME_ZONE
 
 
 # AWS S3 Setup
