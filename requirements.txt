@@ -8,7 +8,7 @@ attrs==18.2.0
 autobahn==18.10.1
 Automat==0.7.0
 backports.functools-lru-cache==1.5
-billiard==3.5.0.4
+billiard==3.6.0.0
 boto==2.49.0
 celery==4.2.1
 certifi==2018.10.15
