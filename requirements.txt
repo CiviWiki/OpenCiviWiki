@@ -4,7 +4,7 @@ asgi-redis==1.4.3
 asgiref==2.3.2
 asn1crypto==0.24.0
 astroid==2.0.4
-attrs==18.2.0
+attrs==17.2.0
 autobahn==17.10.1
 Automat==0.6.0
 backports.functools-lru-cache==1.4
