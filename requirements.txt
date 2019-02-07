@@ -11,7 +11,7 @@ backports.functools-lru-cache==1.5
 billiard==3.5.0.4
 boto==2.49.0
 celery==4.2.1
-certifi==2018.10.15
+certifi==2017.11.5
 cffi==1.11.2
 channels==1.0.3
 chardet==3.0.4
