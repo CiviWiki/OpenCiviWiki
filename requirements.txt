@@ -6,7 +6,7 @@ asn1crypto==0.24.0
 astroid==2.0.4
 attrs==18.2.0
 autobahn==18.10.1
-Automat==0.7.0
+Automat==0.6.0
 backports.functools-lru-cache==1.4
 billiard==3.5.0.3
 boto==2.48.0
