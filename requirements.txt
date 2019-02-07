@@ -10,7 +10,7 @@ Automat==0.7.0
 backports.functools-lru-cache==1.5
 billiard==3.5.0.4
 boto==2.49.0
-celery==4.2.1
+celery==4.1.0
 certifi==2017.11.5
 cffi==1.11.2
 channels==1.0.3
