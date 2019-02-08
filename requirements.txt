@@ -59,7 +59,7 @@ pycparser==2.18
 pyflakes==1.6.0
 pylint==1.7.2
 pyOpenSSL==17.3.0
-pyopenstates==1.1.0
+pyopenstates==1.2.0
 python-dateutil==2.6.1
 pytz==2017.3
 redis==2.10.6
