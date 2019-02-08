@@ -74,4 +74,4 @@ urllib3==1.22
 vine==1.1.4
 whitenoise==3.3.1
 wrapt==1.10.11
-zope.interface==4.4.3
+zope.interface==4.6.0
