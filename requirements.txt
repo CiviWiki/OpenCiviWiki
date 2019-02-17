@@ -62,7 +62,7 @@ pyOpenSSL==17.3.0
 pyopenstates==1.1.0
 python-dateutil==2.6.1
 pytz==2017.3
-redis==2.10.6
+redis==3.2.0
 requests==2.18.4
 service-identity==17.0.0
 singledispatch==3.4.0.3
