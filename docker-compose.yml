@@ -1,0 +1,35 @@
+version: "3.2"
+
+services:
+  db:
+    container_name: civiwiki-db
+    image: postgres:9.6.3
+    volumes:
+      - ./data/postgresql:/var/lib/postgresql/data
+    env_file:
+      - .env
+    restart: on-failure
+
+  redis:
+    container_name: civiwiki-redis
+    image: redis:5.0
+    volumes:
+    - ./data/postgresql:/var/lib/postgresql/data
+    env_file:
+    - .env
+    restart: on-failure
+
+  backend:
+    container_name: civiwiki-backend
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+    env_file:
+      - .env
+    restart: on-failure
+    tty: true
