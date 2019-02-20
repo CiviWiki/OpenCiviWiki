@@ -5,7 +5,7 @@ from rest_framework.documentation import include_docs_urls
 from api import views, read, write
 
 
-router = DefaultRouter()
+router = DefaultRouter(trailing_slash=False)
 router.register(r'threads', views.ThreadViewSet)
 router.register(r'categories', views.CategoryViewSet)
 router.register(r'accounts', views.AccountViewSet)

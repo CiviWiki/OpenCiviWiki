@@ -33,7 +33,7 @@ else:
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = get_env_variable("DJANGO_SECRET_KEY")
-ALLOWED_HOSTS = [".herokuapp.com", ".civiwiki.org", "127.0.0.1", "localhost"]
+ALLOWED_HOSTS = [".herokuapp.com", ".civiwiki.org", "127.0.0.1", "localhost", "0.0.0.0"]
 
 
 INSTALLED_APPS = (
@@ -179,7 +179,7 @@ if 'CIVIWIKI_LOCAL_NAME' not in os.environ:
 else:
     DATABASES = {
         'default': {
-            'HOST': 'localhost',
+            'HOST': get_env_variable('CIVIWIKI_LOCAL_DB_HOST', 'localhost'),
             'PORT': '5432',
             'NAME': get_env_variable("CIVIWIKI_LOCAL_NAME"),
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
