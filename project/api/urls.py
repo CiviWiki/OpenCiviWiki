@@ -4,7 +4,6 @@ from rest_framework.documentation import include_docs_urls
 
 from api import views, read, write
 
-
 router = DefaultRouter(trailing_slash=False)
 router.register(r'threads', views.ThreadViewSet)
 router.register(r'categories', views.CategoryViewSet)
@@ -32,12 +31,12 @@ urlpatterns += [
     url(r'^edit_civi/$', write.editCivi, name='edit civi'),
     url(r'^delete_civi/$', write.deleteCivi, name='delete civi'),
 
-    url(r'^invite/$',write.invite, name='invite users'),
-    url(r'^edituser/$',write.editUser, name='edit user'),
-    url(r'^upload_profile/$',write.uploadProfileImage, name='upload profile'),
-    url(r'^upload_images/$',write.uploadCiviImage, name='upload images'),
-    url(r'^upload_image/$',write.uploadThreadImage, name='upload image'),
-    url(r'^clear_profile/$',write.clearProfileImage, name='clear profile'),
+    url(r'^invite/$', write.invite, name='invite users'),
+    url(r'^edituser/$', write.editUser, name='edit user'),
+    url(r'^upload_profile/$', write.uploadProfileImage, name='upload profile'),
+    url(r'^upload_images/$', write.uploadCiviImage, name='upload images'),
+    url(r'^upload_image/$', write.uploadThreadImage, name='upload image'),
+    url(r'^clear_profile/$', write.clearProfileImage, name='clear profile'),
     url(r'^follow/$', write.requestFollow, name='follow user'),
     url(r'^unfollow/$', write.requestUnfollow, name='unfollow user'),
     url(r'^edit_user_categories/$', write.editUserCategories, name='edit user categories'),
