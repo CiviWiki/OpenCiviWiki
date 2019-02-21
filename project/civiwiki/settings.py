@@ -30,11 +30,9 @@ if 'DJANGO_HOST' in os.environ:
 else:
     DJANGO_HOST = 'LOCALHOST'
 
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = get_env_variable("DJANGO_SECRET_KEY")
 ALLOWED_HOSTS = [".herokuapp.com", ".civiwiki.org", "127.0.0.1", "localhost", "0.0.0.0"]
-
 
 INSTALLED_APPS = (
     'django.contrib.admin',
@@ -55,7 +53,6 @@ INSTALLED_APPS = (
     'corsheaders',
 )
 
-
 MIDDLEWARE_CLASSES = (
     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -68,13 +65,11 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
 )
 
-
-CSRF_USE_SESSIONS = True # Store the CSRF token in the users session instead of in a cookie
+CSRF_USE_SESSIONS = True  # Store the CSRF token in the users session instead of in a cookie
 
 CORS_ORIGIN_ALLOW_ALL = True
 ROOT_URLCONF = 'civiwiki.urls'
 LOGIN_URL = '/login'
-
 
 # SSL Setup
 if DJANGO_HOST is not 'LOCALHOST':
@@ -83,7 +78,6 @@ if DJANGO_HOST is not 'LOCALHOST':
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
 
-
 # Internationalization & Localization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
@@ -91,11 +85,10 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, "webapp/templates")], #TODO: Add non-webapp template directory
+        'DIRS': [os.path.join(BASE_DIR, "webapp/templates")],  # TODO: Add non-webapp template directory
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -108,9 +101,7 @@ TEMPLATES = [
     },
 ]
 
-
 WSGI_APPLICATION = 'civiwiki.wsgi.application'
-
 
 # Global user privilege settings
 CLOSED_BETA = False
@@ -119,7 +110,6 @@ if 'CLOSED_BETA' in os.environ:
 
 # Apex Contact for Production Errors
 ADMINS = [('Development Team', 'dev@civiwiki.org')]
-
 
 # API keys
 SUNLIGHT_API_KEY = get_env_variable("SUNLIGHT_API_KEY")
@@ -140,7 +130,6 @@ CHANNEL_LAYERS = {
     },
 }
 
-
 # Celery Task Runner Setup
 CELERY_BROKER_URL = REDIS_URL + '/0'
 CELERY_RESULT_BACKEND = CELERY_BROKER_URL
@@ -148,7 +137,6 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIME_ZONE = TIME_ZONE
-
 
 # AWS S3 Setup
 if 'AWS_STORAGE_BUCKET_NAME' not in os.environ:
@@ -167,7 +155,6 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'webapp/static'),
 )
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
 
 # Database
 if 'CIVIWIKI_LOCAL_NAME' not in os.environ:
@@ -188,7 +175,6 @@ else:
         },
     }
 
-
 # Email Backend Setup
 if 'EMAIL_HOST' not in os.environ:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -202,11 +188,9 @@ else:
     EMAIL_USE_SSL = True
     DEFAULT_FROM_EMAIL = EMAIL_HOST
 
-
 # Notification API Settings
 NOTIFICATIONS_SOFT_DELETE = True
 NOTIFICATIONS_USE_JSONFIELD = True
-
 
 # Django REST API Settings
 DEFAULT_RENDERER_CLASSES = (
