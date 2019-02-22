@@ -23,5 +23,7 @@ Join us on the following channels:
 - **Twitter:** [@CiviWiki](https://twitter.com/civiwiki)
 
 # Contribute
-See our [Contributing Guide](CONTRIBUTING.md) for instructions on how to contribute code.
+See our [Contributing Guide](readmes/CONTRIBUTING.md) for instructions on how to contribute code.
 
+# Testing
+See our [Testing Guide](readmes/testing.md) for instructions on how to test code.
