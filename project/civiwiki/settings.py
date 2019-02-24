@@ -211,3 +211,4 @@ REST_FRAMEWORK = {
 }
 # CORS Settings
 CORS_ORIGIN_ALLOW_ALL = True
+PROPUBLICA_API_KEY = get_env_variable("PROPUBLICA_API_KEY", optional=True)
