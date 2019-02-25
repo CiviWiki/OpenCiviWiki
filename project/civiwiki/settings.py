@@ -49,7 +49,6 @@ INSTALLED_APPS = (
     'authentication',
     'frontend_views',
     'notifications',
-    'legislation',
     'corsheaders',
 )
 
