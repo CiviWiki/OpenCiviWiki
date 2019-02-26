@@ -14,17 +14,15 @@ from django.db import models
 from PIL import Image, ImageOps
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
-
 from core.constants import US_STATES
 from .hashtag import Hashtag
 from .category import Category
 from .representative import Representative
 
-
 # Image manipulation constants
 PROFILE_IMG_SIZE = (171, 171)
 PROFILE_IMG_THUMB_SIZE = (40, 40)
-WHITE_BG = (255,255,255)
+WHITE_BG = (255, 255, 255)
 
 
 class AccountManager(models.Manager):
@@ -36,7 +34,8 @@ class AccountManager(models.Manager):
             "last_name": account.last_name,
             "about_me": account.about_me,
             "location": account.location,
-            "history": [Civi.objects.serialize(c) for c in Civi.objects.filter(author_id=account.id).order_by('-created')],
+            "history": [Civi.objects.serialize(c) for c in
+                        Civi.objects.filter(author_id=account.id).order_by('-created')],
             "profile_image": account.profile_image_url,
             "followers": self.followers(account),
             "following": self.following(account),
@@ -72,12 +71,12 @@ class AccountManager(models.Manager):
         }
         return data
 
-
     def followers(self, account):
         return [self.chip_summarize(follower) for follower in account.followers.all()]
 
     def following(self, account):
         return [self.chip_summarize(following) for following in account.following.all()]
+
 
 @deconstructible
 class PathAndRename(object):
@@ -127,7 +126,7 @@ class Account(models.Model):
     profile_image = models.ImageField(upload_to=profile_upload_path, blank=True, null=True)
     profile_image_thumb = models.ImageField(upload_to=profile_upload_path, blank=True, null=True)
 
-    #custom "row-level" functionality (properties) for account models
+    # custom "row-level" functionality (properties) for account models
     @property
     def username(self):
         return self.user.username

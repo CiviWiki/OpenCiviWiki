@@ -82,12 +82,13 @@ class Civi(models.Model):
     objects = CiviManager()
     author = models.ForeignKey(Account, related_name='civis', default=None, null=True)
     thread = models.ForeignKey(Thread, related_name='civis', default=None, null=True)
-    bill = models.ForeignKey(Bill, default=None, null=True) # null if not solution
+    bill = models.ForeignKey(Bill, default=None, null=True)  # null if not solution
 
     hashtags = models.ManyToManyField(Hashtag)
 
     linked_civis = models.ManyToManyField('self', related_name="links")
-    response_civis = models.ForeignKey('self', related_name="responses", default=None, null=True) #TODO: Probably remove this
+    response_civis = models.ForeignKey('self', related_name="responses", default=None,
+                                       null=True)  # TODO: Probably remove this
 
     title = models.CharField(max_length=255, blank=False, null=False)
     body = models.CharField(max_length=1023, blank=False, null=False)
@@ -167,8 +168,8 @@ class Civi(models.Model):
         # Calculate how long ago the post was created
         time_ago = (current_time - post_time.replace(tzinfo=None)).total_seconds() / 300
 
-        gravity = 1 # TODO: determine what the variable 'g' does
-        amp = math.pow(10,0)
+        gravity = 1  # TODO: determine what the variable 'g' does
+        amp = math.pow(10, 0)
 
         # Calculate rank based on positive, zero, or negative scores sum
         if scores_sum > 0:
@@ -176,21 +177,21 @@ class Civi(models.Model):
             # set votes total to 2 when votes['total'] is <= 1
             votes_total = votes['total'] if votes['total'] > 1 else 2
 
-            #step3 - A X*Log10V+Y + F + (##/T) = Rank Value
+            # step3 - A X*Log10V+Y + F + (##/T) = Rank Value
             rank = scores_sum * math.log10(votes_total) * amp + scores_sum + favorite + gravity / time_ago
 
         elif scores_sum == 0:
             # Get count of total votes
             votes_total = votes['total']
 
-            #step3 - B  V^2+Y + F + (##/T) = Rank Value
-            rank = votes_total**2 + scores_sum + favorite + gravity / time_ago
+            # step3 - B  V^2+Y + F + (##/T) = Rank Value
+            rank = votes_total ** 2 + scores_sum + favorite + gravity / time_ago
         elif scores_sum < 0:
             # TODO: determine why we set votes total to two when votes['tota'] is <= 1
             # set votes total to 2 when votes['total'] is <= 1
             votes_total = votes['total'] if votes['total'] > 1 else 2
 
-            #step3 - C
+            # step3 - C
             if abs(scores_sum) / votes_total <= 5:
                 rank = abs(scores_sum) * math.log10(votes_total) * amp + scores_sum + favorite + gravity / time_ago
             else:
@@ -239,9 +240,11 @@ class PathAndRename(object):
 
 image_upload_path = PathAndRename('')
 
+
 class CiviImageManager(models.Manager):
     def get_images(self):
         return
+
 
 class CiviImage(models.Model):
     objects = CiviImageManager()
@@ -255,5 +258,5 @@ class CiviImage(models.Model):
         if self.image and default_storage.exists(os.path.join(settings.MEDIA_ROOT, self.image.name)):
             return self.image.url
         else:
-            #NOTE: This default url will probably be changed later
+            # NOTE: This default url will probably be changed later
             return "/static/img/no_image_md.png"
