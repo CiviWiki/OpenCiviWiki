@@ -15,7 +15,7 @@ from PIL import Image, ImageOps
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
 
-from utils.constants import US_STATES
+from core.constants import US_STATES
 from .hashtag import Hashtag
 from .category import Category
 from .representative import Representative

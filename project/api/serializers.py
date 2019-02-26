@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from api.forms import UpdateProfileImage
 from api.models import Civi, Thread, Account, Category, CiviImage, Activity
-from utils.constants import CIVI_TYPES
+from core.constants import CIVI_TYPES
 
 WRITE_ONLY = {'write_only': True}
 

@@ -12,7 +12,7 @@ from .thread import Thread
 from .bill import Bill
 from .hashtag import Hashtag
 from .thread import Thread
-from utils.constants import CIVI_TYPES
+from core.constants import CIVI_TYPES
 
 
 class CiviManager(models.Manager):
