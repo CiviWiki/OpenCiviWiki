@@ -1,8 +1,26 @@
-from decimal import Decimal
+import json
 import datetime
 import collections
-import json
-from django.http import HttpResponse
+from decimal import Decimal
+from django.http import HttpResponse, Http404
+
+from django.shortcuts import get_object_or_404
+
+from api.models import Account
+
+
+def get_account(user=None, pk=None, username=None):
+    """ gets author based on the user """
+    if user:
+        return get_object_or_404(Account, user=user)
+    elif pk:
+        return get_object_or_404(Account, pk=pk)
+    elif username:
+        return get_object_or_404(Account, user__username=username)
+
+    else:
+        raise Http404
+
 
 def json_custom_parser(obj):
     """
@@ -13,7 +31,7 @@ def json_custom_parser(obj):
     elif not isinstance(obj, basestring) and isinstance(obj, collections.Iterable):
         return list(obj)
     elif isinstance(obj, datetime.datetime) or isinstance(obj, datetime.date):
-        dot_ix = 19 # 'YYYY-MM-DDTHH:MM:SS.mmmmmm+HH:MM'.find('.')
+        dot_ix = 19  # 'YYYY-MM-DDTHH:MM:SS.mmmmmm+HH:MM'.find('.')
         return obj.isoformat()[:dot_ix]
     else:
         raise TypeError(obj)

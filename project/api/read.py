@@ -2,8 +2,9 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.forms.models import model_to_dict
 
-from models import Account, Thread, Civi, Representative, Activity
-from utils import json_response
+from .models import Account, Thread, Civi, Representative, Activity
+from .utils import json_response
+
 
 def get_user(request, user):
     try:
@@ -13,6 +14,7 @@ def get_user(request, user):
         return JsonResponse(model_to_dict(a))
     except Account.DoesNotExist as e:
         return HttpResponseBadRequest(reason=str(e))
+
 
 def get_card(request, user):
     try:
@@ -24,6 +26,7 @@ def get_card(request, user):
         return HttpResponseBadRequest(reason=str(e))
     except Exception as e:
         return HttpResponseBadRequest(reason=str(e))
+
 
 def get_profile(request, user):
     try:
@@ -83,6 +86,7 @@ def get_profile(request, user):
     except Account.DoesNotExist as e:
         return HttpResponseBadRequest(reason=str(e))
 
+
 def get_rep(request, rep_id):
     # TODO: FINISH THIS
     try:
@@ -103,6 +107,7 @@ def get_rep(request, rep_id):
     except Account.DoesNotExist as e:
         return HttpResponseBadRequest(reason=str(e))
 
+
 def get_feed(request):
     try:
         feed_threads = [Thread.objects.summarize(t) for t in Thread.objects.order_by('-created')]
@@ -112,13 +117,14 @@ def get_feed(request):
     except Exception as e:
         return HttpResponseBadRequest(reason=str(e))
 
+
 def get_thread(request, thread_id):
     try:
         t = Thread.objects.get(id=thread_id)
         civis = Civi.objects.filter(thread_id=thread_id)
         req_a = Account.objects.get(user=request.user)
 
-        #TODO: move order by to frontend or accept optional arg
+        # TODO: move order by to frontend or accept optional arg
         c = civis.order_by('-created')
         c_scores = [ci.score(req_a.id) for ci in c]
         c_data = [Civi.objects.serialize_s(ci) for ci in c]
@@ -139,13 +145,15 @@ def get_thread(request, thread_id):
             },
             'category': model_to_dict(t.category),
             'created': t.created,
-            'contributors': [Account.objects.chip_summarize(a) for a in Account.objects.filter(pk__in=civis.distinct('author').values_list('author', flat=True))],
+            'contributors': [Account.objects.chip_summarize(a) for a in
+                             Account.objects.filter(pk__in=civis.distinct('author').values_list('author', flat=True))],
             'num_civis': t.num_civis,
             'num_views': t.num_views,
-            'votes': [{'civi_id':act.civi.id, 'activity_type': act.activity_type, 'acct': act.account.id} for act in Activity.objects.filter(thread=t.id, account=req_a.id)]
+            'votes': [{'civi_id': act.civi.id, 'activity_type': act.activity_type, 'acct': act.account.id} for act in
+                      Activity.objects.filter(thread=t.id, account=req_a.id)]
         }
 
-        #modify thread view count
+        # modify thread view count
         t.num_views = t.num_views + 1
         t.save()
 
@@ -153,12 +161,14 @@ def get_thread(request, thread_id):
     except Exception as e:
         return HttpResponseBadRequest(reason=str(e))
 
+
 def get_civi(request, civi_id):
     try:
         c = Civi.objects.serialize(Civi.objects.get(id=civi_id))
         return JsonResponse(c, safe=False)
     except Exception as e:
         return HttpResponseBadRequest(reason=str(e))
+
 
 def get_civis(request, thread_id):
     try:

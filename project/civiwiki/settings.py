@@ -196,17 +196,23 @@ DEFAULT_RENDERER_CLASSES = (
     'rest_framework.renderers.JSONRenderer',
 )
 
+DEFAULT_AUTHENTICATION_CLASSES = ('rest_framework.authentication.BasicAuthentication',)
+
 if DEBUG:
     # Browsable HTML - Enabled only in Debug mode (dev)
     DEFAULT_RENDERER_CLASSES = DEFAULT_RENDERER_CLASSES + (
         'rest_framework.renderers.BrowsableAPIRenderer',
     )
 
+    DEFAULT_AUTHENTICATION_CLASSES = ('api.authentication.CsrfExemptSessionAuthentication',) + \
+                                     DEFAULT_AUTHENTICATION_CLASSES
+
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
-    'DEFAULT_RENDERER_CLASSES': DEFAULT_RENDERER_CLASSES
+    'DEFAULT_RENDERER_CLASSES': DEFAULT_RENDERER_CLASSES,
+    'DEFAULT_AUTHENTICATION_CLASSES': DEFAULT_AUTHENTICATION_CLASSES
 }
 # CORS Settings
 CORS_ORIGIN_ALLOW_ALL = True

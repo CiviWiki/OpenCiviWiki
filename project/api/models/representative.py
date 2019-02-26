@@ -1,10 +1,7 @@
 from django.db import models
 
-from utils.constants import US_STATES
+from core.constants import US_STATES
 
-class RepresentativeManager(models.Manager):
-    def get_reps():
-        return
 
 class Representative(models.Model):
     first_name = models.CharField(max_length=63, blank=False)
@@ -13,7 +10,7 @@ class Representative(models.Model):
     about_me = models.CharField(max_length=511, blank=True)
 
     district = models.CharField(max_length=63, blank=True, null=True)
-    
+
     # junior or senior for senator
     senate_class = models.CharField(max_length=63, blank=True, null=True)
     state = models.CharField(max_length=63)
@@ -33,8 +30,6 @@ class Representative(models.Model):
 
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     last_modified = models.DateTimeField(auto_now=True, blank=True, null=True)
-
-    objects = RepresentativeManager()
 
     def summarize(self):
         data = {

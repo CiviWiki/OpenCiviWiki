@@ -10,8 +10,8 @@ from django.template.response import TemplateResponse
 
 from api.models import Category, Account, Thread, Civi, Activity, Invitation
 from api.forms import UpdateProfileImage
-from utils.constants import US_STATES
-from utils.custom_decorators import beta_blocker, login_required, full_account
+from core.constants import US_STATES
+from core.custom_decorators import beta_blocker, login_required, full_account
 
 
 def base_view(request):
@@ -31,7 +31,8 @@ def base_view(request):
 
     feed_threads = [Thread.objects.summarize(t) for t in Thread.objects.exclude(is_draft=True).order_by('-created')]
     top5_threads = list(Thread.objects.filter(is_draft=False).order_by('-num_views')[:5].values('id', 'title'))
-    my_draft_threads = [Thread.objects.summarize(t) for t in Thread.objects.filter(author_id=a.id).exclude(is_draft=False).order_by('-created')]
+    my_draft_threads = [Thread.objects.summarize(t) for t in
+                        Thread.objects.filter(author_id=a.id).exclude(is_draft=False).order_by('-created')]
 
     states = sorted(US_STATES, key=lambda s: s[1])
     data = {
@@ -66,13 +67,14 @@ def user_profile(request, username=None):
     }
     return TemplateResponse(request, 'account.html', data)
 
+
 @login_required
 @beta_blocker
 def user_setup(request):
     a = Account.objects.get(user=request.user)
     if a.full_account:
         return HttpResponseRedirect('/')
-        #start temp rep rendering TODO: REMOVE THIS
+        # start temp rep rendering TODO: REMOVE THIS
     else:
         data = {
             'username': request.user.username,
@@ -81,7 +83,6 @@ def user_setup(request):
             'sunlight_api_key': settings.SUNLIGHT_API_KEY
         }
         return TemplateResponse(request, 'user-setup.html', data)
-
 
 
 @login_required
@@ -97,7 +98,7 @@ def issue_thread(request, thread_id=None):
     c_scored = [c.dict_with_score(req_acct.id) for c in c_qs]
     civis = sorted(c_scored, key=lambda c: c['score'], reverse=True)
 
-    #modify thread view count
+    # modify thread view count
     t.num_civis = len(civis)
     t.num_views = F('num_views') + 1
     t.save()
@@ -114,7 +115,8 @@ def issue_thread(request, thread_id=None):
             "first_name": t.author.first_name,
             "last_name": t.author.last_name
         },
-        "contributors": [Account.objects.chip_summarize(a) for a in Account.objects.filter(pk__in=c_qs.distinct('author').values_list('author', flat=True))],
+        "contributors": [Account.objects.chip_summarize(a) for a in
+                         Account.objects.filter(pk__in=c_qs.distinct('author').values_list('author', flat=True))],
         "category": {
             "id": t.category.id,
             "name": t.category.name
@@ -127,7 +129,8 @@ def issue_thread(request, thread_id=None):
         "location": t.level if not t.state else dict(US_STATES).get(t.state),
         "num_civis": t.num_civis,
         "num_views": t.num_views,
-        'user_votes': [{'civi_id':act.civi.id, 'activity_type': act.activity_type, 'c_type': act.civi.c_type} for act in Activity.objects.filter(thread=t.id, account=req_acct.id)]
+        'user_votes': [{'civi_id': act.civi.id, 'activity_type': act.activity_type, 'c_type': act.civi.c_type} for act
+                       in Activity.objects.filter(thread=t.id, account=req_acct.id)]
     }
     thread_body_data = {
         'civis': civis,
@@ -141,6 +144,7 @@ def issue_thread(request, thread_id=None):
     }
 
     return TemplateResponse(request, 'thread.html', data)
+
 
 @login_required
 @beta_blocker
@@ -166,7 +170,6 @@ def invite(request):
 @login_required
 @beta_blocker
 def settings_view(request):
-
     request_account = Account.objects.get(user=request.user)
 
     response_data = {
@@ -188,6 +191,7 @@ def login_view(request):
 
     return TemplateResponse(request, 'login.html', {})
 
+
 def beta_register(request, email='', token=''):
     if not email or not token:
         return HttpResponse('ERROR: BAD REQUEST')
@@ -200,9 +204,7 @@ def beta_register(request, email='', token=''):
     if db_invite.verification_code != token:
         return HttpResponse('ERROR: BAD TOKEN')
 
-
     is_registered = User.objects.filter(email=email).exists()
-
 
     if is_registered:
         # registered and has been given beta access
@@ -251,25 +253,34 @@ def beta_register(request, email='', token=''):
 
     return TemplateResponse(request, 'beta_register.html', template_var)
 
+
 def beta_view(request):
     return TemplateResponse(request, 'beta_blocker.html', {})
+
 
 def declaration(request):
     return TemplateResponse(request, 'declaration.html', {})
 
+
 def landing_view(request):
     return TemplateResponse(request, 'static_templates/landing.html', {})
+
 
 def how_it_works_view(request):
     return TemplateResponse(request, 'static_templates/how_it_works.html', {})
 
+
 def about_view(request):
     return TemplateResponse(request, 'static_templates/about.html', {})
+
 
 def support_us_view(request):
     return TemplateResponse(request, 'static_templates/support_us.html', {})
 
+
 """ CSV export function. Thread ID goes in, CSV HTTP response attachment goes out. """
+
+
 @csrf_exempt
 def civi2csv(request, thread_id):
     import csv
