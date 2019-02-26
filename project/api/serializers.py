@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from api.forms import UpdateProfileImage
-from api.models import Civi, Thread, Account, Category, CiviImage, Activity
+from api.models import Civi, Thread, Account, Category, CiviImage, Activity, Bill
 from core.constants import CIVI_TYPES
 
 WRITE_ONLY = {'write_only': True}
@@ -249,3 +249,10 @@ class ThreadDetailSerializer(serializers.ModelSerializer):
                 for activity in user_activities]
         else:
             return []
+
+
+class BillSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Bill
+        fields = "__all__"
+        readonly_fields = "__all__"
