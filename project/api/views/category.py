@@ -6,7 +6,6 @@ from api.models import Thread, Category
 from api.serializers import ThreadSerializer, CategorySerializer
 
 
-
 class CategoryViewSet(ReadOnlyModelViewSet):
     """ REST API viewset for Categories """
 
