@@ -1,12 +1,21 @@
-import json, PIL, urllib, uuid
+import json
+import PIL
+import urllib
+import uuid
 
 from notifications.signals import notify
 
 # django packages
 from django.contrib.auth.models import User
-from django.http import JsonResponse, HttpResponse, HttpResponseServerError, HttpResponseForbidden, HttpResponseBadRequest
+from django.http import (
+    JsonResponse,
+    HttpResponse,
+    HttpResponseServerError,
+    HttpResponseForbidden,
+    HttpResponseBadRequest
+)
 
-from django.core.files import File   # need this for image file handling
+from django.core.files import File  # need this for image file handling
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.sites.shortcuts import get_current_site
@@ -18,6 +27,7 @@ from api.tasks import send_mass_email
 from models import Account, Activity, Category, Civi, CiviImage, Invitation
 from core.custom_decorators import require_post_params
 from core.constants import US_STATES
+
 
 @login_required
 @require_post_params(params=['title', 'summary', 'category_id'])
@@ -36,7 +46,8 @@ def new_thread(request):
     new_t = Thread(**new_thread_data)
     new_t.save()
 
-    return JsonResponse({'data': 'success', 'thread_id' : new_t.pk})
+    return JsonResponse({'data': 'success', 'thread_id': new_t.pk})
+
 
 @login_required
 @require_post_params(params=['title', 'body', 'c_type', 'thread_id'])
@@ -75,16 +86,19 @@ def createCivi(request):
 
             if parent_civi.author.user.username != request.user.username:
                 notify.send(
-                    request.user, # Actor User
-                    recipient=parent_civi.author.user, # Target User
-                    verb=u'responded to your civi', # Verb
-                    action_object=civi, # Action Object
-                    target=civi.thread, # Target Object
-                    popup_string="{user} responded to your civi in {thread}".format(user=a.full_name, thread=civi.thread.title),
+                    request.user,  # Actor User
+                    recipient=parent_civi.author.user,  # Target User
+                    verb=u'responded to your civi',  # Verb
+                    action_object=civi,  # Action Object
+                    target=civi.thread,  # Target Object
+                    popup_string="{user} responded to your civi in {thread}".format(
+                        user=a.full_name,
+                        thread=civi.thread.title
+                    ),
                     link="/{}/{}".format("thread", thread_id)
                 )
 
-        else: #not a reply, a regular civi
+        else:  # not a reply, a regular civi
             c_qs = Civi.objects.filter(thread_id=thread_id)
             accounts = Account.objects.filter(pk__in=c_qs.distinct('author').values_list('author', flat=True))
             data = {
@@ -94,21 +108,20 @@ def createCivi(request):
 
             for act in accounts:
                 if act.user.username != request.user.username:
-
                     notify.send(
-                        request.user, # Actor User
-                        recipient=act.user, # Target User
-                        verb=u'created a new civi', # Verb
-                        action_object=civi, # Action Object
-                        target=civi.thread, # Target Object
-                        popup_string="{user} created a new civi in the thread {thread}".format(user=a.full_name, thread=civi.thread.title),
+                        request.user,  # Actor User
+                        recipient=act.user,  # Target User
+                        verb=u'created a new civi',  # Verb
+                        action_object=civi,  # Action Object
+                        target=civi.thread,  # Target Object
+                        popup_string="{user} created a new civi in the thread {thread}".format(
+                            user=a.full_name,
+                            thread=civi.thread.title
+                        ),
                         link="/{}/{}".format("thread", thread_id)
                     )
 
-
-
-
-        return JsonResponse({'data' : civi.dict_with_score(a.id)})
+        return JsonResponse({'data': civi.dict_with_score(a.id)})
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
 
@@ -131,7 +144,6 @@ def rateCivi(request):
         prev_act = None
 
     try:
-
 
         activity_data = {
             'account': account,
@@ -162,7 +174,7 @@ def rateCivi(request):
             prev_act.activity_type = vote_val
             prev_act.save()
             data = {
-                'civi_id':prev_act.civi.id,
+                'civi_id': prev_act.civi.id,
                 'activity_type': prev_act.activity_type,
                 'c_type': prev_act.civi.c_type
             }
@@ -170,13 +182,14 @@ def rateCivi(request):
             act = Activity(**activity_data)
             act.save()
             data = {
-                'civi_id':act.civi.id,
+                'civi_id': act.civi.id,
                 'activity_type': act.activity_type,
                 'c_type': act.civi.c_type
             }
-        return JsonResponse({'data' : data})
+        return JsonResponse({'data': data})
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
+
 
 @login_required
 def editCivi(request):
@@ -209,9 +222,10 @@ def editCivi(request):
                 civi_image.delete()
 
         a = Account.objects.get(user=request.user)
-        return JsonResponse( c.dict_with_score(a.id))
+        return JsonResponse(c.dict_with_score(a.id))
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
+
 
 @login_required
 def deleteCivi(request):
@@ -228,9 +242,10 @@ def deleteCivi(request):
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
 
-#TODO 1: profile image file upload
-#TODO 2: redo user editing
-#TODO 3: django forms
+
+# TODO 1: profile image file upload
+# TODO 2: redo user editing
+# TODO 3: django forms
 # @login_required
 # def get_dist(request):
 #     '''
@@ -295,9 +310,11 @@ def editThread(request):
         return JsonResponse({'data': return_data})
 
 
+
 @login_required
 def uploadphoto(request):
     pass
+
 
 @login_required
 def editUser(request):
@@ -315,9 +332,9 @@ def editUser(request):
         interests = account.interests
 
     data = {
-        "first_name":request_data.get('first_name', account.first_name),
-        "last_name":request_data.get('last_name', account.last_name),
-        "about_me":request_data.get('about_me', account.about_me),
+        "first_name": request_data.get('first_name', account.first_name),
+        "last_name": request_data.get('last_name', account.last_name),
+        "about_me": request_data.get('about_me', account.about_me),
         "address": request_data.get('address', account.address),
         "city": request_data.get('city', account.city),
         "state": request_data.get('state', account.state),
@@ -337,6 +354,7 @@ def editUser(request):
     account.refresh_from_db()
 
     return JsonResponse(Account.objects.summarize(account))
+
 
 @login_required
 def uploadProfileImage(request):
@@ -375,12 +393,13 @@ def uploadProfileImage(request):
         else:
             response = {
                 'message': form.errors['profile_image'],
-                'error' : 'FORM_ERROR'
+                'error': 'FORM_ERROR'
             }
             return JsonResponse(response, status=400)
 
     else:
         return HttpResponseForbidden('allowed only via POST')
+
 
 @login_required
 def clearProfileImage(request):
@@ -397,6 +416,7 @@ def clearProfileImage(request):
             return HttpResponseServerError(reason=str("default"))
     else:
         return HttpResponseForbidden('allowed only via POST')
+
 
 @login_required
 def uploadCiviImage(request):
@@ -434,12 +454,14 @@ def uploadCiviImage(request):
     else:
         return HttpResponseForbidden('allowed only via POST')
 
+
 def check_image_with_pil(image_file):
     try:
         PIL.Image.open(image_file)
     except IOError:
         return False
     return True
+
 
 @login_required
 def uploadThreadImage(request):
@@ -484,6 +506,7 @@ def uploadThreadImage(request):
     else:
         return HttpResponseForbidden('allowed only via POST')
 
+
 @login_required
 @require_post_params(params=['target'])
 def requestFollow(request):
@@ -510,15 +533,15 @@ def requestFollow(request):
         target_account.followers.add(account)
         target_account.save()
         data = {
-            'username' : target.username,
+            'username': target.username,
             'follow_status': True
         }
 
         notify.send(
-            request.user, # Actor User
-            recipient=target, # Target User
-            verb=u'is following you', # Verb
-            target=target_account, # Target Object
+            request.user,  # Actor User
+            recipient=target,  # Target User
+            verb=u'is following you',  # Verb
+            target=target_account,  # Target Object
             popup_string="{user} is now following you".format(user=account.full_name),
             link="/{}/{}".format("profile", request.user.username)
         )
@@ -528,6 +551,7 @@ def requestFollow(request):
         return HttpResponseBadRequest(reason=str(e))
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
+
 
 @login_required
 @require_post_params(params=['target'])
@@ -574,7 +598,7 @@ def editUserCategories(request):
             account.save()
 
         data = {
-            'user_categories' : list(account.categories.values_list('id', flat=True)) or "all_categories"
+            'user_categories': list(account.categories.values_list('id', flat=True)) or "all_categories"
         }
         return JsonResponse({"result": data})
     except Account.DoesNotExist as e:
@@ -596,12 +620,14 @@ def invite(request):
 
         # TODO: Move this to string templates
         if custom_message:
-            email_body = "{host_name} has invited you to be part of CiviWiki Beta with the following message: {custom_message}".format(
+            email_body = ("{host_name} has invited you to be part of CiviWiki Beta "
+                          "with the following message: {custom_message}").format(
                 host_name=user_account.full_name,
                 custom_message=custom_message
             )
         else:
-            email_body = "{host_name} has invited you to be part of CiviWiki Beta. Follow the link below to get registered.".format(
+            email_body = ("{host_name} has invited you to be part of CiviWiki Beta. "
+                          "Follow the link below to get registered.").format(
                 host_name=user_account.full_name
             )
 
@@ -628,9 +654,9 @@ def invite(request):
                 )
 
                 email_context = {
-                    'title' : "You're Invited to Join CiviWiki Beta",
-                    'greeting' : "You're Invited to Join CiviWiki Beta",
-                    'body' : email_body,
+                    'title': "You're Invited to Join CiviWiki Beta",
+                    'greeting': "You're Invited to Join CiviWiki Beta",
+                    'body': email_body,
                     'link': url_with_code,
                     'recipient': [email]
                 }
@@ -646,11 +672,10 @@ def invite(request):
                 contexts=email_messages
             )
 
-
         if len(did_not_invite) == len(emails):
             response_data = {
                 "message": "Invitations exist for submitted email(s). No new invitations sent",
-                "error":"INVALID_EMAIL_DATA"
+                "error": "INVALID_EMAIL_DATA"
             }
             return JsonResponse(response_data, status=400)
 
@@ -667,6 +692,6 @@ def invite(request):
         # Return an 'invalid login' error message.
         response = {
             "message": 'Invalid Email Data',
-            "error":"INVALID_EMAIL_DATA"
+            "error": "INVALID_EMAIL_DATA"
         }
         return JsonResponse(response, status=400)

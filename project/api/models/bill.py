@@ -9,6 +9,7 @@ class BillSources:
     PROPUBLICA = "propublica"
     SOURCES = [(SUNLIGHT, SUNLIGHT), (PROPUBLICA, PROPUBLICA)]
 
+
 class Bill(models.Model):
     id = models.CharField(max_length=255, primary_key=True)  # from sunlight
 
