@@ -116,7 +116,8 @@ def cw_register(request):
                 # TODO: Move this to string templates
                 email_context = {
                     'title': 'Verify your email with CiviWiki',
-                    'body': "Welcome to CiviWiki! Follow the link below to verify your email with us. We're happy to have you on board :)",
+                    'body': ("Welcome to CiviWiki! Follow the link below to verify your email with us. "
+                             "We're happy to have you on board :)"),
                     'link': url_with_code
                 }
 
@@ -291,7 +292,10 @@ def recover_user_sent(request):
 
     template_var = {
         'title': "Email Sent",
-        'content': "We've emailed you your username and instructions for setting your password. If an account exists with the email you entered, you should receive them shortly. If you don't receive an email, please make sure you've entered the address you registered with, and check your spam folder.",
+        'content': ("We've emailed you your username and instructions for setting your password. "
+                    "If an account exists with the email you entered, you should receive them shortly. "
+                    "If you don't receive an email, please make sure you've entered the address you registered with, "
+                    "and check your spam folder."),
         # TODO: move to string templates
         'link': redirect_link
     }

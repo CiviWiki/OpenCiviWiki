@@ -26,7 +26,7 @@ class BillViewSet(ModelViewSet):
             return Response(status=400)
 
         found_bills = ProPublicaAPI().search(query)
-        bills_to_serialize =[]
+        bills_to_serialize = []
         for found_bill in found_bills:
             bill, _ = Bill.objects.get_or_create(id=found_bill['bill_id'])
             bill.update(found_bill)

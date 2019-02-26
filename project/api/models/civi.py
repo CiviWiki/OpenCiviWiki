@@ -1,4 +1,8 @@
-import os, json, datetime, math, uuid
+import os
+import json
+import datetime
+import math
+import uuid
 from calendar import month_name
 
 from django.core.files.storage import default_storage
@@ -49,7 +53,7 @@ class CiviManager(models.Manager):
 
     def serialize_s(self, civi, filter=None):
         # Get account profile image, or set to default image
-        profile_image_or_default = civi.author.profile_image.url if civi.author.profile_image else "/media/profile/default.png"
+        profile_image_or_default = civi.author.profile_image.url or "/media/profile/default.png"
 
         data = {
             "type": civi.c_type,
