@@ -15,7 +15,7 @@ from django.views.decorators.debug import sensitive_post_parameters
 from api.tasks import send_email
 from api.models import Account, Invitation
 from forms import AccountRegistrationForm, PasswordResetForm, RecoverUserForm
-from utils.custom_decorators import require_post_params
+from core.custom_decorators import require_post_params
 
 class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
     """ Token Generator for Email Confirmation """
