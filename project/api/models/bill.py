@@ -17,7 +17,7 @@ class Bill(models.Model):
     short_summary = models.CharField(max_length=1023)
     number = models.IntegerField(default=0)
     b_type = models.CharField(max_length=63)
-    source = models.CharField(max_length=50, choices=BillSources.SOURCES, default=BillSources.SUNLIGHT)
+    source = models.CharField(max_length=50, choices=BillSources.SOURCES, default=BillSources.PROPUBLICA)
 
     congress_url = models.URLField(null=True, blank=True)
     govtrack_url = models.URLField(null=True, blank=True)
@@ -31,6 +31,21 @@ class Bill(models.Model):
         if self.source == BillSources.PROPUBLICA:
             return self._get_propublica_api_details()
         return {}
+
+    def update(self, data=None):
+        if self.source == BillSources.PROPUBLICA:
+            self._update_pro_publica_bill(data)
+
+    def _update_pro_publica_bill(self, data=None):
+        data = data or self._get_propublica_api_details()
+        self.title = data['title']
+        self.short_title = data['short_title']
+        self.short_summary = data['summary_short']
+        self.number = data['number']
+        self.b_type = data['bill_type']
+        self.congress_url = data['congress_url']
+        self.govtrack_url = data['govtrack_url']
+        self.save()
 
     def _get_propublica_api_details(self):
         return ProPublicaAPI().get_by_id(self.id)
