@@ -31,7 +31,7 @@ def json_custom_parser(obj):
     elif not isinstance(obj, basestring) and isinstance(obj, collections.Iterable):
         return list(obj)
     elif isinstance(obj, datetime.datetime) or isinstance(obj, datetime.date):
-        dot_ix = 19 # 'YYYY-MM-DDTHH:MM:SS.mmmmmm+HH:MM'.find('.')
+        dot_ix = 19  # 'YYYY-MM-DDTHH:MM:SS.mmmmmm+HH:MM'.find('.')
         return obj.isoformat()[:dot_ix]
     else:
         raise TypeError(obj)

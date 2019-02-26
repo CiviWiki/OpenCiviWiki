@@ -30,10 +30,10 @@ class AccountSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Account
-        fields = ('username', 'first_name', 'last_name', 'about_me', 'location','email',
-        'address', 'city', 'state', 'zip_code', 'country', 'longitude', 'latitude',
-        'profile_image', 'profile_image_url', 'profile_image_thumb_url', 'is_staff',
-        'is_following')
+        fields = ('username', 'first_name', 'last_name', 'about_me', 'location', 'email',
+                  'address', 'city', 'state', 'zip_code', 'country', 'longitude', 'latitude',
+                  'profile_image', 'profile_image_url', 'profile_image_thumb_url', 'is_staff',
+                  'is_following')
 
         extra_kwargs = {
             'city': WRITE_ONLY,
@@ -83,7 +83,7 @@ class AccountListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
         fields = ('username', 'first_name', 'last_name', 'profile_image_url',
-        'profile_image_thumb_url', 'location', 'is_following')
+                  'profile_image_thumb_url', 'location', 'is_following')
 
     def get_is_following(self, obj):
         request = self.context.get("request")
@@ -117,7 +117,7 @@ class CiviSerializer(serializers.ModelSerializer):
     class Meta:
         model = Civi
         fields = ('id', 'thread', 'type', 'title', 'body', 'author', 'created', 'last_modified',
-        'votes', 'images', 'linked_civis', 'links', 'responses', 'score', 'attachments')
+                  'votes', 'images', 'linked_civis', 'links', 'responses', 'score', 'attachments')
 
     def get_score(self, obj):
         user = None
@@ -191,8 +191,8 @@ class ThreadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Thread
         fields = ('id', 'title', 'summary', 'author', 'image_url', 'civis', 'image',
-        'created', 'level', 'state', 'is_draft', 'category',
-        'num_views', 'num_civis', 'num_solutions')
+                  'created', 'level', 'state', 'is_draft', 'category',
+                  'num_views', 'num_civis', 'num_solutions')
 
 
 class ThreadListSerializer(serializers.ModelSerializer):
@@ -208,8 +208,8 @@ class ThreadListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Thread
         fields = ('id', 'title', 'summary', 'author', 'image_url', 'created',
-        'level', 'state', 'is_draft', 'category', 'num_views', 'num_civis',
-        'num_solutions')
+                  'level', 'state', 'is_draft', 'category', 'num_views', 'num_civis',
+                  'num_solutions')
 
 
 class ThreadDetailSerializer(serializers.ModelSerializer):
@@ -230,12 +230,13 @@ class ThreadDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Thread
         fields = ('id', 'title', 'summary', 'author', 'image_url', 'civis', 'image',
-        'created', 'level', 'state', 'is_draft', 'category',
-        'num_views', 'num_civis', 'num_solutions', 'contributors', 'user_votes')
+                  'created', 'level', 'state', 'is_draft', 'category',
+                  'num_views', 'num_civis', 'num_solutions', 'contributors', 'user_votes')
 
     def get_contributors(self, obj):
         issue_civis = Civi.objects.filter(thread__id=obj.id)
-        contributor_accounts = Account.objects.filter(pk__in=issue_civis.distinct('author').values_list('author', flat=True))
+        contributor_accounts = Account.objects.filter(
+            pk__in=issue_civis.distinct('author').values_list('author', flat=True))
         return AccountListSerializer(contributor_accounts, many=True).data
 
     def get_user_votes(self, obj):
@@ -243,6 +244,8 @@ class ThreadDetailSerializer(serializers.ModelSerializer):
 
         if request and hasattr(request, "user"):
             user_activities = Activity.objects.filter(thread=obj.id, account=request.user.id)
-            return [{'civi_id':activity.civi.id, 'activity_type': activity.activity_type, 'c_type': activity.civi.c_type} for activity in user_activities]
+            return [
+                {'civi_id': activity.civi.id, 'activity_type': activity.activity_type, 'c_type': activity.civi.c_type}
+                for activity in user_activities]
         else:
             return []

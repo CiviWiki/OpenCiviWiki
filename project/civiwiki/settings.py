@@ -204,7 +204,7 @@ if DEBUG:
         'rest_framework.renderers.BrowsableAPIRenderer',
     )
 
-    DEFAULT_AUTHENTICATION_CLASSES = ('api.authentication.CsrfExemptSessionAuthentication',) +\
+    DEFAULT_AUTHENTICATION_CLASSES = ('api.authentication.CsrfExemptSessionAuthentication',) + \
                                      DEFAULT_AUTHENTICATION_CLASSES
 
 REST_FRAMEWORK = {
