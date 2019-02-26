@@ -10,7 +10,7 @@ from .account import Account
 from .category import Category
 from .fact import Fact
 from .hashtag import Hashtag
-from utils.constants import US_STATES
+from core.constants import US_STATES
 
 class ThreadManager(models.Manager):
     #TODO: move this to read.py, try to be more query operation specific here

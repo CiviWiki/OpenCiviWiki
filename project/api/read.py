@@ -2,8 +2,8 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.forms.models import model_to_dict
 
-from models import Account, Thread, Civi, Representative, Activity
-from utils import json_response
+from .models import Account, Thread, Civi, Representative, Activity
+from .utils import json_response
 
 def get_user(request, user):
     try:
