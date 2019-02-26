@@ -12,8 +12,9 @@ from .fact import Fact
 from .hashtag import Hashtag
 from core.constants import US_STATES
 
+
 class ThreadManager(models.Manager):
-    #TODO: move this to read.py, try to be more query operation specific here
+    # TODO: move this to read.py, try to be more query operation specific here
     def summarize(self, thread):
         # Number of characters after which to truncate thread
         thread_truncate_length = 320
@@ -38,7 +39,7 @@ class ThreadManager(models.Manager):
         }
         stats_data = {
             "num_views": thread.num_views,
-            "num_civis": Civi.objects.all().filter(thread_id=thread.id).count(), # thread.num_civis,
+            "num_civis": Civi.objects.all().filter(thread_id=thread.id).count(),  # thread.num_civis,
             "num_solutions": thread.num_solutions
         }
 
@@ -51,6 +52,7 @@ class ThreadManager(models.Manager):
 
     def filter_by_category(self, categories):
         return self.all().filter(category__in=categories)
+
 
 @deconstructible
 class PathAndRename(object):
@@ -65,6 +67,7 @@ class PathAndRename(object):
 
 
 image_upload_path = PathAndRename('')
+
 
 class Thread(models.Model):
     author = models.ForeignKey(Account, default=None, null=True)
@@ -91,11 +94,11 @@ class Thread(models.Model):
         return self.title
 
     @property
-    def image_url(self): #TODO: move this to utils
+    def image_url(self):  # TODO: move this to utils
         if self.image and default_storage.exists(os.path.join(settings.MEDIA_ROOT, self.image.name)):
             return self.image.url
         else:
-            #NOTE: This default url will probably be changed later
+            # NOTE: This default url will probably be changed later
             return "/static/img/no_image_md.png"
 
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
