@@ -3,9 +3,10 @@ from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.contrib.sites.shortcuts import get_current_site
-from django.http import JsonResponse, HttpResponse, HttpResponseServerError, HttpResponseRedirect, HttpResponseBadRequest
+from django.http import JsonResponse, HttpResponse, HttpResponseServerError, HttpResponseRedirect, \
+    HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
-from django.template.response import TemplateResponse #TODO: move this out to views
+from django.template.response import TemplateResponse  # TODO: move this out to views
 from django.utils.crypto import salted_hmac
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -16,6 +17,7 @@ from api.tasks import send_email
 from api.models import Account, Invitation
 from forms import AccountRegistrationForm, PasswordResetForm, RecoverUserForm
 from core.custom_decorators import require_post_params
+
 
 class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
     """ Token Generator for Email Confirmation """
@@ -33,7 +35,6 @@ class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
 
 
 account_activation_token = AccountActivationTokenGenerator()
-
 
 
 @sensitive_post_parameters('password')
@@ -65,20 +66,22 @@ def cw_login(request):
         else:
             response = {
                 "message": 'Inactive user',
-                "error":"USER_INACTIVE"
+                "error": "USER_INACTIVE"
             }
             return JsonResponse(response, status=400)
     else:
         # Return an 'invalid login' error message.
         response = {
             "message": 'Invalid username or password',
-            "error":"INVALID_LOGIN"
+            "error": "INVALID_LOGIN"
         }
         return JsonResponse(response, status=400)
+
 
 def cw_logout(request):
     logout(request)
     return HttpResponseRedirect('/')
+
 
 @sensitive_post_parameters('password')
 @require_post_params(params=['username', 'password', 'email'])
@@ -112,8 +115,8 @@ def cw_register(request):
                 # Send Email Verification Message
                 # TODO: Move this to string templates
                 email_context = {
-                    'title' : 'Verify your email with CiviWiki',
-                    'body' : "Welcome to CiviWiki! Follow the link below to verify your email with us. We're happy to have you on board :)",
+                    'title': 'Verify your email with CiviWiki',
+                    'body': "Welcome to CiviWiki! Follow the link below to verify your email with us. We're happy to have you on board :)",
                     'link': url_with_code
                 }
 
@@ -132,11 +135,12 @@ def cw_register(request):
         else:
             response = {
                 'success': False,
-                'errors' : [error[0] for error in form.errors.values()]
+                'errors': [error[0] for error in form.errors.values()]
             }
             return JsonResponse(response, status=400)
     else:
         return HttpResponseBadRequest(reason="POST Method Required")
+
 
 @sensitive_post_parameters('password')
 @require_post_params(params=['username', 'password', 'email', 'beta_token'])
@@ -151,24 +155,23 @@ def beta_register(request):
         except Invitation.DoesNotExist:
             response_data = {
                 "message": "Beta invitation does not exist for this email",
-                "error":"NO_BETA_INVITE"
+                "error": "NO_BETA_INVITE"
             }
             return JsonResponse(response_data, status=400)
 
         if invitation.verification_code != beta_token:
             response_data = {
                 "message": "The beta token is not valid",
-                "error":"INVALID_BETA_TOKEN"
+                "error": "INVALID_BETA_TOKEN"
             }
             return JsonResponse(response_data, status=400)
 
     else:
         response_data = {
             "message": "Missing Beta Token",
-            "error":"MISSING_BETA_TOKEN"
+            "error": "MISSING_BETA_TOKEN"
         }
         return JsonResponse(response_data, status=400)
-
 
     form = AccountRegistrationForm(request.POST or None)
     if request.method == 'POST':
@@ -203,11 +206,12 @@ def beta_register(request):
         else:
             response = {
                 'success': False,
-                'errors' : [error[0] for error in form.errors.values()]
+                'errors': [error[0] for error in form.errors.values()]
             }
             return JsonResponse(response, status=400)
     else:
         return HttpResponseBadRequest(reason="POST Method Required")
+
 
 def activate_view(request, uidb64, token):
     try:
@@ -269,6 +273,7 @@ def recover_user():
 
     return view_variables
 
+
 def password_reset_confirm():
     view_variables = {
         'template_name': 'user/password_reset.html',
@@ -276,6 +281,7 @@ def password_reset_confirm():
     }
 
     return view_variables
+
 
 def recover_user_sent(request):
     redirect_link = {
@@ -285,10 +291,12 @@ def recover_user_sent(request):
 
     template_var = {
         'title': "Email Sent",
-        'content': "We've emailed you your username and instructions for setting your password. If an account exists with the email you entered, you should receive them shortly. If you don't receive an email, please make sure you've entered the address you registered with, and check your spam folder.", #TODO: move to string templates
+        'content': "We've emailed you your username and instructions for setting your password. If an account exists with the email you entered, you should receive them shortly. If you don't receive an email, please make sure you've entered the address you registered with, and check your spam folder.",
+        # TODO: move to string templates
         'link': redirect_link
     }
     return TemplateResponse(request, 'general-message.html', template_var)
+
 
 def password_reset_complete(request):
     redirect_link = {
