@@ -9,6 +9,7 @@ router.register(r'threads', views.ThreadViewSet)
 router.register(r'categories', views.CategoryViewSet)
 router.register(r'accounts', views.AccountViewSet)
 router.register(r'civis', views.CiviViewSet)
+router.register(r'bills', views.BillViewSet)
 
 urlpatterns = [
     url(r'^docs/', include_docs_urls(title='CiviWiki API', public=True)),
