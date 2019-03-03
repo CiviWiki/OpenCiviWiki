@@ -11,7 +11,7 @@ Django==1.11.7
 django-cors-headers==2.1.0
 django-notifications-hq==1.3
 django-storages==1.6.5
-djangorestframework==3.8.2
+djangorestframework==3.9.2
 flake8==3.4.1
 gunicorn==19.7.1
 honcho==1.0.1
