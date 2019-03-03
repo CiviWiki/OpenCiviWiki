@@ -15,7 +15,7 @@ djangorestframework==3.8.2
 flake8==3.4.1
 gunicorn==19.7.1
 honcho==1.0.1
-kombu==4.1.0
+kombu==4.4.0
 mock==2.0.0
 Pillow==4.3.0
 psycopg2==2.7.3.2
