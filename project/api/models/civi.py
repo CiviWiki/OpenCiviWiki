@@ -92,6 +92,7 @@ class Civi(models.Model):
     hashtags = models.ManyToManyField(Hashtag)
 
     linked_civis = models.ManyToManyField('self', related_name="links")
+    linked_bills = models.ManyToManyField(Bill, related_name="bills")
     response_civis = models.ForeignKey('self', related_name="responses", default=None,
                                        null=True)  # TODO: Probably remove this
 
