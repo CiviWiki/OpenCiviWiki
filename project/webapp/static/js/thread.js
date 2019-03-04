@@ -679,10 +679,16 @@ cw.NewCiviView = BB.View.extend({
         this.$el.empty().append(this.template());
         // $('.responses').height($('#new-civi-box').height() + $('.responses-box').height());
 
-        this.magicSuggestView = new cw.LinkSelectView({$el: this.$('#magicsuggest'), civis: this.options.parentView.civis});
+        this.magicSuggestView = new cw.LinkSelectView(
+            {$el: this.$('#magicsuggest'), civis: this.options.parentView.civis}
+        );
+        this.magicSuggestBillView = new cw.LinkSelectBillView(
+            {$el: this.$('#magicsuggestbills'), civis: this.options.parentView.civis}
+        );
 
         this.$('.edit-links').addClass('hide');
         this.$('#magicsuggest').addClass('hide');
+        this.$('#magicsuggestbills').addClass('hide');
 
         this.attachment_links = [];
         this.attachmentCount = 0;
@@ -758,6 +764,7 @@ cw.NewCiviView = BB.View.extend({
             body = this.$el.find('#civi-body').val(),
             c_type = this.$el.find('.civi-types > .current').val();
         var links = this.magicSuggestView.ms.getValue();
+        var bills = this.magicSuggestBillView.ms.getValue();
 
         this.$(e.currentTarget).addClass('disabled').attr('disabled', true);
 
@@ -781,7 +788,8 @@ cw.NewCiviView = BB.View.extend({
                     body: body,
                     c_type: c_type,
                     thread_id: _this.model.threadId,
-                    links: links
+                    links: links,
+                    bills: bills,
                 },
                 success: function (response) {
                     var new_civi_data = response.data;
@@ -892,9 +900,11 @@ cw.NewCiviView = BB.View.extend({
         if (c_type === "problem") {
             this.$('.edit-links').addClass('hide');
             this.$('#magicsuggest').addClass('hide');
+            this.$('#magicsuggestbills').addClass('hide');
         } else {
             this.$('.edit-links').removeClass('hide');
             this.$('#magicsuggest').removeClass('hide');
+            this.$('#magicsuggestbills').removeClass('hide');
             this.magicSuggestView.setLinkableData(c_type);
             this.magicSuggestView.ms.clear();
         }
@@ -1291,6 +1301,7 @@ cw.EditThreadView = BB.View.extend({
 });
 
 cw.OutlineView = BB.View.extend({});
+
 cw.LinkSelectView = BB.View.extend({
     el: '#magicsuggest',
 
@@ -1342,11 +1353,47 @@ cw.LinkSelectView = BB.View.extend({
             };
             msdata.push(civi);
         });
-        // console.log(msdata);
+        console.log(msdata);
         this.ms.setData(msdata);
 
         return this;
     },
+});
+
+cw.LinkSelectBillView = BB.View.extend({
+    el: '#magicsuggestbills',
+
+    initialize: function (options) {
+        this.options = options || {};
+
+        this.$el = options.$el || this.$el;
+        this.setElement(this.$el);
+        this.render();
+
+        return this;
+    },
+
+    render: function(){
+        var _this = this;
+
+        this.ms = this.$el.magicSuggest({
+            allowFreeEntries: false,
+            expandOnFocus: true,
+            valueField: 'id',
+            displayField: 'title',
+            data: "/api/v1/bills/search",
+            ajaxConfig: {
+                type: 'GET'
+            },
+            renderer: function(data){
+                return '<div class="link-lato" data-civi-id="' + data.id +
+                '"><span class="gray-text">'+data.number+'</span> ' + data.short_title + '</div>';
+            },
+            selectionRenderer: function(data){
+                return '<span class="gray-text bold-text">'+data.id+'</span>';
+            },
+        });
+    }
 });
 
 cw.ThreadView = BB.View.extend({
