@@ -5,7 +5,7 @@ from ..propublica import ProPublicaAPI
 
 
 class BillSources:
-    SUNLIGHT = "sunlight"
+    SUNLIGHT = "sunlight"  # we don't use sunlight in current implementation is just relic of the past
     PROPUBLICA = "propublica"
     SOURCES = [(SUNLIGHT, SUNLIGHT), (PROPUBLICA, PROPUBLICA)]
 
@@ -16,7 +16,7 @@ class Bill(models.Model):
     title = models.CharField(max_length=1023)
     short_title = models.CharField(max_length=1023)
     short_summary = models.CharField(max_length=1023)
-    number = models.IntegerField(default=0)
+    number = models.CharField(max_length=20)
     b_type = models.CharField(max_length=63)
     source = models.CharField(max_length=50, choices=BillSources.SOURCES, default=BillSources.PROPUBLICA)
 
@@ -39,13 +39,13 @@ class Bill(models.Model):
 
     def _update_pro_publica_bill(self, data=None):
         data = data or self._get_propublica_api_details()
-        self.title = data['title']
-        self.short_title = data['short_title']
-        self.short_summary = data['summary_short']
-        self.number = data['number']
-        self.b_type = data['bill_type']
-        self.congress_url = data['congress_url']
-        self.govtrack_url = data['govtrack_url']
+        self.title = data['title'] or ''
+        self.short_title = data['short_title'] or ''
+        self.short_summary = data['summary_short'] or ''
+        self.number = data['number'] or ''
+        self.b_type = data['bill_type'] or ''
+        self.congress_url = data['congressdotgov_url'] or ''
+        self.govtrack_url = data['govtrack_url'] or ''
         self.save()
 
     def _get_propublica_api_details(self):

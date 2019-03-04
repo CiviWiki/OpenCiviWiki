@@ -21,9 +21,9 @@ class BillViewSet(ModelViewSet):
         Gets the all found bills
         /bills/search?query=<query>
         """
-        query = request.get('query')
+        query = request.query_params.get('query')
         if not query:
-            return Response(status=400)
+            return Response([])
 
         found_bills = ProPublicaAPI().search(query)
         bills_to_serialize = []
