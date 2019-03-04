@@ -24,7 +24,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from api.forms import UpdateProfileImage
 from api.models import Thread
 from api.tasks import send_mass_email
-from models import Account, Activity, Category, Civi, CiviImage, Invitation
+from models import Account, Activity, Category, Civi, CiviImage, Invitation, Bill
 from core.custom_decorators import require_post_params
 from core.constants import US_STATES
 
@@ -73,10 +73,16 @@ def createCivi(request):
         civi = Civi(**data)
         civi.save()
         links = request.POST.getlist('links[]', '')
+        bills = request.POST.getlist('bills[]', '')
         if links:
             for civi_id in links:
                 linked_civi = Civi.objects.get(id=civi_id)
                 civi.linked_civis.add(linked_civi)
+
+        if bills:
+            for bill_id in bills:
+                linked_bill = Bill.objects.get(id=bill_id)
+                civi.linked_bills.add(linked_bill)
 
         # If response
         related_civi = request.POST.get('related_civi', '')

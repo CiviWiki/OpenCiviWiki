@@ -255,4 +255,3 @@ class BillSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bill
         fields = "__all__"
-        readonly_fields = "__all__"
