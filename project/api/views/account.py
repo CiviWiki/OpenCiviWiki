@@ -12,7 +12,7 @@ from api.serializers import (
 )
 
 from ..utils import get_account
-from ..permissions import IsAccountOwnerOrReadOnly
+from ..permissions import IsAccountOwnerOrDuringRegistrationOrReadOnly
 
 
 class AccountViewSet(ModelViewSet):
@@ -29,7 +29,7 @@ class AccountViewSet(ModelViewSet):
     lookup_field = 'user__username'
     serializer_class = AccountSerializer
     http_method_names = ['get', 'head', 'put', 'patch']
-    permission_classes = (IsAccountOwnerOrReadOnly,)
+    permission_classes = (IsAccountOwnerOrDuringRegistrationOrReadOnly,)
     authentication_classes = ()
 
     def list(self, request):
