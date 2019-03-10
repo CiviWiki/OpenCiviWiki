@@ -59,8 +59,12 @@
                 LINKED CIVIS ({{this.model.get('links').length}})
             </div>
 
+                {{# var bills = [] }}
                 {{# _.each(this.model.get('links'), function(link){  }}
                     {{# var civi = this.civis.findWhere({id: link})}}
+                    {{# _.map(civi.attributes.bills, function(x) {x.type = civi.get('type'); return x }); }}
+                    {{# console.log(civi.attributes.bills) }}
+                    {{# bills = bills.concat(civi.attributes.bills) }}
                     <div class="link-item">
                         <span class="bold-text link-lato">{{civi.get('type')}}</span>
                         <span class="gray-text">{{civi.get('title')}}</span>
@@ -68,6 +72,23 @@
                 {{# }, this); }}
 
         </div>
+            {{# if (bills.length > 0) { }}
+            <div class="civi-bills text-wrapper">
+                <div class="links-title gray-text">
+                    LINKED BILLS ({{bills.length}})
+                </div>
+
+                    {{# _.each(bills, function(bill){  }}
+                        <div class="bill-item">
+                            <a target="_blank" href="{{ bill.url }}">
+                                <span class="bold-text link-lato">{{bill.id}}</span>
+                            </a> ({{ bill.type }})
+                            <span class="gray-text">{{bill.short_title}}</span>
+                        </div>
+                    {{# }, this); }}
+
+            </div>
+            {{# } }}
         {{# } }}
         {{# if (this.model.get('attachments').length > 0) { }}
         <div class="civi-attachments text-wrapper">
