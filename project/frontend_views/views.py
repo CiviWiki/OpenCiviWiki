@@ -142,7 +142,6 @@ def issue_thread(request, thread_id=None):
         'thread_wiki_data': json.dumps(thread_wiki_data),
         'thread_body_data': json.dumps(thread_body_data)
     }
-
     return TemplateResponse(request, 'thread.html', data)
 
 
