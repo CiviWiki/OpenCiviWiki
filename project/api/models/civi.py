@@ -222,6 +222,7 @@ class Civi(models.Model):
             "votes": self.votes,
             "links": [civi for civi in self.linked_civis.all().values_list('id', flat=True)],
             "created": self.created_date_str,
+            "bills": [bill.display_properties for bill in self.linked_bills.all()],
             # Not Implemented Yet
             "hashtags": [],
             "attachments": [{'id': img.id, 'url': img.image_url} for img in self.images.all()],

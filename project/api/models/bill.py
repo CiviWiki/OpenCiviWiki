@@ -33,6 +33,10 @@ class Bill(models.Model):
             return self._get_propublica_api_details()
         return {}
 
+    @property
+    def display_properties(self):
+        return {'id': self.id, 'url': self.congress_url, 'short_title': self.short_title}
+
     def update(self, data=None):
         if self.source == BillSources.PROPUBLICA:
             self._update_pro_publica_bill(data)
