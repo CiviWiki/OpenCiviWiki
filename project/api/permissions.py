@@ -20,3 +20,12 @@ class IsAccountOwnerOrReadOnly(BasePermission):
                 (request.method in SAFE_METHODS) or
                 (obj.user == request.user)
         )
+
+
+class IsAccountOwnerOrDuringRegistrationOrReadOnly(IsAccountOwnerOrReadOnly):
+    def has_object_permission(self, request, view, obj):
+        if obj.full_account:
+            return super(
+                IsAccountOwnerOrDuringRegistrationOrReadOnly, self
+            ).has_object_permission(request, view, obj)
+        return True
