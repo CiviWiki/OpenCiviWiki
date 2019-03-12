@@ -5,9 +5,12 @@ Darius Calliet May 12, 2016
 Production settings file to select proper environment variables.
 """
 import os
+import sentry_sdk
+import dj_database_url
 
 from django.core.exceptions import ImproperlyConfigured
-import dj_database_url
+
+from sentry_sdk.integrations.django import DjangoIntegration
 
 
 def get_env_variable(environment_variable, optional=False):
@@ -21,6 +24,13 @@ def get_env_variable(environment_variable, optional=False):
             error = "Environment variable '{ev}' not found.".format(ev=environment_variable)
             raise ImproperlyConfigured(error)
 
+
+SENTRY_ADDRESS = get_env_variable('SENTRY_ADDRESS', optional=True)
+if SENTRY_ADDRESS:
+    sentry_sdk.init(
+        dsn=SENTRY_ADDRESS,
+        integrations=[DjangoIntegration()]
+    )
 
 # Devlopment Environment Control
 DEBUG = 'DEBUG' in os.environ
@@ -205,7 +215,7 @@ if DEBUG:
     )
 
     DEFAULT_AUTHENTICATION_CLASSES = (
-                                     'api.authentication.CsrfExemptSessionAuthentication',
+                                         'api.authentication.CsrfExemptSessionAuthentication',
                                      ) + DEFAULT_AUTHENTICATION_CLASSES
 
 REST_FRAMEWORK = {
