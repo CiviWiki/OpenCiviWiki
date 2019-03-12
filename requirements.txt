@@ -19,6 +19,7 @@ kombu==4.1.0
 mock==2.0.0
 Pillow==4.3.0
 psycopg2==2.7.3.2
+sentry-sdk==0.7.6
 sunlight==1.2.9
 urllib3==1.22
 whitenoise==3.3.1
