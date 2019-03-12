@@ -286,7 +286,7 @@ def civi2csv(request, thread_id):
     import csv
     thread = thread_id
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment, filename=' + thread + '.csv'
+    response['Content-Disposition'] = 'attachment; filename=' + thread + '.csv'
     writer = csv.writer(response, delimiter=',')
     for card in Civi.objects.filter(thread_id=thread):
         data = []
