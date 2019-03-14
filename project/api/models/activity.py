@@ -36,3 +36,11 @@ class Activity(models.Model):
 
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     last_modified = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+    @property
+    def is_voted_positively(self):
+        return self.activity_type.endswith('pos')
+
+    @property
+    def is_voted_negatively(self):
+        return self.activity_type.endswith('neg')
