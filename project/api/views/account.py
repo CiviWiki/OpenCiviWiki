@@ -2,7 +2,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from api.models import Thread, Account
+from api.models import Thread, Account, Activity
 from api.serializers import (
     ThreadSerializer,
     CategorySerializer,
@@ -112,4 +112,15 @@ class AccountViewSet(ModelViewSet):
         account = get_account(username=user__username)
         draft_threads = Thread.objects.filter(author=account, is_draft=False)
         serializer = ThreadSerializer(draft_threads, many=True, context={'request': request})
+        return Response(serializer.data)
+
+    @action(detail=True)
+    def bills(self, request, user__username=None):
+        """
+        Gets the civis of the selected account
+        /accounts/{username}/bills
+        """
+        account = get_account(username=user__username)
+        activities = Activity.objects.filter(account=account)
+        serializer = CiviSerializer(account_civis, many=True)
         return Response(serializer.data)
