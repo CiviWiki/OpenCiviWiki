@@ -25,5 +25,5 @@ urllib3==1.22
 whitenoise==3.3.1
 
 # Testing
-aloe==0.1.18
+aloe==0.1.19
 selenium==3.8.0
