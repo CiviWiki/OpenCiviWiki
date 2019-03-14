@@ -6,6 +6,7 @@ import uuid
 from notifications.signals import notify
 
 # django packages
+from django.db.models.query import F
 from django.contrib.auth.models import User
 from django.http import (
     JsonResponse,
@@ -149,52 +150,31 @@ def rateCivi(request):
     except Activity.DoesNotExist:
         prev_act = None
 
-    try:
+    activity_data = {
+        'account': account,
+        'thread': voted_civi.thread,
+        'civi': voted_civi,
+    }
 
-        activity_data = {
-            'account': account,
-            'thread': voted_civi.thread,
-            'civi': voted_civi,
-        }
+    activity_vote_key = 'votes_{}'.format(rating)
+    vote_val = 'vote_{}'.format(rating)
+    setattr(voted_civi, activity_vote_key, F(activity_vote_key) + 1)
+    voted_civi.save()
 
-        if rating == "vneg":
-            voted_civi.votes_vneg = voted_civi.votes_vneg + 1
-            vote_val = 'vote_vneg'
-        elif rating == "neg":
-            voted_civi.votes_neg = voted_civi.votes_neg + 1
-            vote_val = 'vote_neg'
-        elif rating == "neutral":
-            voted_civi.votes_neutral = voted_civi.votes_neutral + 1
-            vote_val = 'vote_neutral'
-        elif rating == "pos":
-            voted_civi.votes_pos = voted_civi.votes_pos + 1
-            vote_val = 'vote_pos'
-        elif rating == "vpos":
-            # c.votes_vpos = c.votes_vpos + 1
-            vote_val = 'vote_vpos'
-        activity_data['activity_type'] = vote_val
+    if prev_act:
+        prev_act.activity_type = vote_val
+        prev_act.save()
+        act = prev_act
+    else:
+        act = Activity(**activity_data)
+        act.save()
 
-        voted_civi.save()
-
-        if prev_act:
-            prev_act.activity_type = vote_val
-            prev_act.save()
-            data = {
-                'civi_id': prev_act.civi.id,
-                'activity_type': prev_act.activity_type,
-                'c_type': prev_act.civi.c_type
-            }
-        else:
-            act = Activity(**activity_data)
-            act.save()
-            data = {
-                'civi_id': act.civi.id,
-                'activity_type': act.activity_type,
-                'c_type': act.civi.c_type
-            }
-        return JsonResponse({'data': data})
-    except Exception as e:
-        return HttpResponseServerError(reason=str(e))
+    data = {
+        'civi_id': act.civi.id,
+        'activity_type': act.activity_type,
+        'c_type': act.civi.c_type
+    }
+    return JsonResponse({'data': data})
 
 
 @login_required
