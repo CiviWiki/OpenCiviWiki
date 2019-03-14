@@ -18,6 +18,7 @@ from core.constants import US_STATES
 from .hashtag import Hashtag
 from .category import Category
 from .representative import Representative
+from ..serializers import BillSerializer
 
 # Image manipulation constants
 PROFILE_IMG_SIZE = (171, 171)
@@ -39,6 +40,7 @@ class AccountManager(models.Manager):
             "profile_image": account.profile_image_url,
             "followers": self.followers(account),
             "following": self.following(account),
+            "my_bills": account.get_voted_bills()
         }
         return data
 
@@ -259,3 +261,28 @@ class Account(models.Model):
             return True
         else:
             return False
+
+    def get_voted_bills(self):
+        from .activity import Activity
+
+        activities = Activity.objects.filter(account=self).prefetch_related(
+            'civi__linked_bills', 'civi__linked_civis__linked_bills'
+        )
+        supported_bills = []
+        opposed_bills = []
+
+        for activity in activities.iterator():
+            if activity.is_voted_negatively:
+                self._add_linked_civis(supported_bills, activity)
+            elif activity.is_voted_positively:
+                self._add_linked_civis(opposed_bills, activity)
+
+        return {
+            'opposed_bills': BillSerializer(opposed_bills, many=True).data,
+            'supported_bills': BillSerializer(supported_bills, many=True).data,
+        }
+
+    def _add_linked_civis(self, aggregator, activity):
+        aggregator += activity.civi.linked_bills.all()
+        for linked_civi in activity.civi.linked_civis.iterator():
+            aggregator += linked_civi.linked_bills.all()

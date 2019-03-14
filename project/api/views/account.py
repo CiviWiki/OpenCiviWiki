@@ -2,13 +2,13 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from api.models import Thread, Account, Activity
+from api.models import Thread, Account
 from api.serializers import (
     ThreadSerializer,
     CategorySerializer,
     CiviSerializer,
     AccountSerializer,
-    AccountListSerializer
+    AccountListSerializer,
 )
 
 from ..utils import get_account
@@ -117,10 +117,8 @@ class AccountViewSet(ModelViewSet):
     @action(detail=True)
     def bills(self, request, user__username=None):
         """
-        Gets the civis of the selected account
+        Gets supported and opposed bills
         /accounts/{username}/bills
         """
         account = get_account(username=user__username)
-        activities = Activity.objects.filter(account=account)
-        serializer = CiviSerializer(account_civis, many=True)
-        return Response(serializer.data)
+        return Response(account.get_voted_bills())
