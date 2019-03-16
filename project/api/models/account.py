@@ -258,7 +258,7 @@ class Account(models.Model):
             return False
 
     def get_voted_bills(self):
-        from .activity import Activity
+        from .activity import Activity  # avoid circular dependency
 
         activities = Activity.objects.filter(account=self).prefetch_related(
             'civi__linked_bills', 'civi__linked_civis__linked_bills'
@@ -267,9 +267,9 @@ class Account(models.Model):
         opposed_bills = []
 
         for activity in activities.iterator():
-            if activity.is_voted_negatively:
+            if activity.is_negative_vote:
                 self._add_linked_civis(supported_bills, activity)
-            elif activity.is_voted_positively:
+            elif activity.is_positive_vote:
                 self._add_linked_civis(opposed_bills, activity)
 
         return {
