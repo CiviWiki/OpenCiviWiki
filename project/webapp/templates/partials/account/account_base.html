@@ -12,11 +12,8 @@
                             <li class="tab"><a href="#followers">FOLLOWERS</a></li>
                             <li class="tab"><a href="#following">FOLLOWING</a></li>
                             <li class="tab"><a href="#issues">MY ISSUES</a></li>
-                            {% if representative %}
                             <li class="tab"><a href="#mybills">MY BILLS</a></li>
-                            {% else%}
                             <li class="tab"><a href="#myreps">MY REPS</a></li>
-                            {% endif %}
                             {% if request.user.username == username|stringformat:"s" %}
                             <li class="tab settings-tab">
                                 <a class="btn" href="#settings" id="edit-profile"><i class="mini material-icons">edit</i>EDIT PROFILE</a>

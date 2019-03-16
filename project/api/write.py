@@ -162,6 +162,7 @@ def rateCivi(request):
 
     activity_vote_key = 'votes_{}'.format(rating)
     vote_val = 'vote_{}'.format(rating)
+    # F object doesn't cause losing data in case of race
     setattr(voted_civi, activity_vote_key, F(activity_vote_key) + 1)
     voted_civi.save()
 
