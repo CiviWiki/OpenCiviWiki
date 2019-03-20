@@ -18,7 +18,6 @@ from core.constants import US_STATES
 from .hashtag import Hashtag
 from .category import Category
 from .representative import Representative
-from ..serializers import BillSerializer
 
 # Image manipulation constants
 PROFILE_IMG_SIZE = (171, 171)
@@ -263,7 +262,8 @@ class Account(models.Model):
             return False
 
     def get_voted_bills(self):
-        from .activity import Activity  # avoid circular dependency
+        from .activity import Activity  # avoid circular dependencies
+        from ..serializers import BillSerializer
 
         activities = Activity.objects.filter(account=self).prefetch_related(
             'civi__linked_bills', 'civi__linked_civis__linked_bills'
