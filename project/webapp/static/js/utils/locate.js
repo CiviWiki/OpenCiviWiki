@@ -207,20 +207,23 @@ cw.MapView = BB.View.extend({
                 _this.model.set('coordinates', geolocation);
 
                 _this.model.get('geocoder').geocode({ 'location': geolocation }, function(results, status) {
+                    var info="";
                     if (status === 'OK') {
                         _this.$('#autocomplete').val(results[0].formatted_address);
                         var fullAddress = _this.getAddressFromComponents(results[0].address_components);
                         if (fullAddress.country !== "United States") {
                             fullAddress.state = "";
                             fullAddress.zipcode = "";
-                            Materialize.toast("<span>Please note that CiviWiki is optimized for the use in the U.S.</span>", 5000);
+                            info="<span>Please note that CiviWiki is optimized for the use in the U.S.</span>";
+                            materializeToast(info,5000);
                         }
                         _this.adjustMapCenter(geolocation);
                         _this.model.set('address', fullAddress);
                         _this.model.set('is_new', true);
 
                     } else {
-                        Materialize.toast('Geocode Error: ' + status, 2000);
+                        info='Geocode Error: ' + status;
+                        materializeToast(info,2000);
                     }
                     this.$('.progress').addClass('hide');
                     this.$('#browser-locate-btn').removeClass('disabled').attr('disabled', false);
@@ -228,16 +231,22 @@ cw.MapView = BB.View.extend({
 
                 });
             }, function(error) {
-                Materialize.toast("<span>We could not use your browser's location. Please try entering your location</span>", 2000);
+                info="<span>We could not use your browser's location. Please try entering your location</span>";
+                materializeToast(info,2000);
                 this.$('.progress').addClass('hide');
                 this.$('#autocomplete').removeClass('disabled').attr('disabled', false);
             });
         } else {
-            Materialize.toast("<span>We could not use your browser's location. Please try entering your location</span>", 2000);
+            info="<span>We could not use your browser's location. Please try entering your location</span>";
+            materializeToast(info,2000);
             this.$('.progress').addClass('hide');
             this.$('#autocomplete').removeClass('disabled').attr('disabled', false);
         }
     },
+    
+    materializeToast: function(info,duration){
+       Materialize.toast(info, duration);
+    }
 
     getAddressFromComponents: function(address_components) {
         // Component variables we are interested in
