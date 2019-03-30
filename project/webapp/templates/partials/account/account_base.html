@@ -43,11 +43,8 @@
                 <div id="followers" class="col s12"></div>
                 <div id="following" class="col s12"></div>
                 <div id="issues" class="col s12"></div>
-                {% if representative %}
                 <div id="mybills" class="col s12"></div>
-                {% else%}
                 <div id="myreps" class="col s12"></div>
-                {% endif %}
 
                 {% if request.user.username == username|stringformat:"s" %}
                 <div id="settings" class="col s12"></div>
