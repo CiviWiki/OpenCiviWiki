@@ -13,7 +13,7 @@
                         <ul class="list-group">
                             {{# _.each(this.model.get('my_bills').supported_bills, function (bill, index) { }}
                             <li class="list-group-item support-bill-elem" id="support-bill-{{ index }}">
-                                <a href="{{ bill.url }}" target="_blank">{{ bill.title }}</a>
+                                <a href="{{ bill.congress_url }}" target="_blank">{{ bill.title }}</a>
                             </li>
                             {{# }, this); }}
                         </ul>
@@ -26,7 +26,7 @@
                         <ul class="list-group">
                             {{# _.each(this.model.get('my_bills').opposed_bills, function (bill, index) { }}
                             <li class="list-group-item oppose-bill-elem" id="oppose-bill-{{ index }}">
-                                <a href="{{ bill.url }}" target="_blank">{{ bill.title }}</a>
+                                <a href="{{ bill.congress_url }}" target="_blank">{{ bill.title }}</a>
                             </li>
                             {{# }, this); }}
                         </ul>
