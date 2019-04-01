@@ -12,11 +12,8 @@
                             <li class="tab"><a href="#followers">FOLLOWERS</a></li>
                             <li class="tab"><a href="#following">FOLLOWING</a></li>
                             <li class="tab"><a href="#issues">MY ISSUES</a></li>
-                            {% if representative %}
                             <li class="tab"><a href="#mybills">MY BILLS</a></li>
-                            {% else%}
                             <li class="tab"><a href="#myreps">MY REPS</a></li>
-                            {% endif %}
                             {% if request.user.username == username|stringformat:"s" %}
                             <li class="tab settings-tab">
                                 <a class="btn" href="#settings" id="edit-profile"><i class="mini material-icons">edit</i>EDIT PROFILE</a>
@@ -46,11 +43,8 @@
                 <div id="followers" class="col s12"></div>
                 <div id="following" class="col s12"></div>
                 <div id="issues" class="col s12"></div>
-                {% if representative %}
                 <div id="mybills" class="col s12"></div>
-                {% else%}
                 <div id="myreps" class="col s12"></div>
-                {% endif %}
 
                 {% if request.user.username == username|stringformat:"s" %}
                 <div id="settings" class="col s12"></div>

@@ -104,11 +104,12 @@ class CiviSerializer(serializers.ModelSerializer):
     created = serializers.ReadOnlyField(source='created_date_str')
     score = serializers.SerializerMethodField()
     links = serializers.PrimaryKeyRelatedField(many=True, read_only=True, source="linked_civis")
+    bills = serializers.PrimaryKeyRelatedField(many=True, read_only=True, source="linked_bills")
 
     class Meta:
         model = Civi
         fields = ('id', 'thread', 'type', 'title', 'body', 'author', 'created', 'last_modified',
-                  'votes', 'images', 'linked_civis', 'links', 'responses', 'score', 'attachments')
+                  'votes', 'images', 'linked_civis', 'links', 'responses', 'score', 'attachments', 'bills')
 
     def get_score(self, obj):
         user = None

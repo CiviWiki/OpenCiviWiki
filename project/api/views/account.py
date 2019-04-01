@@ -8,7 +8,7 @@ from api.serializers import (
     CategorySerializer,
     CiviSerializer,
     AccountSerializer,
-    AccountListSerializer
+    AccountListSerializer,
 )
 
 from ..utils import get_account
@@ -113,3 +113,12 @@ class AccountViewSet(ModelViewSet):
         draft_threads = Thread.objects.filter(author=account, is_draft=False)
         serializer = ThreadSerializer(draft_threads, many=True, context={'request': request})
         return Response(serializer.data)
+
+    @action(detail=True)
+    def bills(self, request, user__username=None):
+        """
+        Gets supported and opposed bills
+        /accounts/{username}/bills
+        """
+        account = get_account(username=user__username)
+        return Response(account.get_voted_bills())
