@@ -22,7 +22,7 @@ def base_view(request):
         return HttpResponseRedirect('/beta')
     if not a.full_account:
         return HttpResponseRedirect('/setup')
-    if not 'login_user_image' in request.session.keys():
+    if 'login_user_image' not in request.session.keys():
         request.session["login_user_image"] = a.profile_image_thumb_url
 
     categories = [{'id': c.id, 'name': c.name} for c in Category.objects.all()]
