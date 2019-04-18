@@ -13,7 +13,6 @@ from api.forms import UpdateProfileImage
 from core.constants import US_STATES
 from core.custom_decorators import beta_blocker, login_required, full_account
 
-
 def base_view(request):
     if not request.user.is_authenticated():
         return TemplateResponse(request, 'static_templates/landing.html', {})
@@ -23,6 +22,8 @@ def base_view(request):
         return HttpResponseRedirect('/beta')
     if not a.full_account:
         return HttpResponseRedirect('/setup')
+    if not 'login_user_image' in request.session.keys():
+        request.session["login_user_image"] = a.profile_image_thumb_url
 
     categories = [{'id': c.id, 'name': c.name} for c in Category.objects.all()]
 
