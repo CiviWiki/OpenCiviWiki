@@ -11,6 +11,7 @@ from django.utils.deconstruct import deconstructible
 from django.core.files.storage import default_storage
 from django.conf import settings
 from django.db import models
+from django.db.models.signals import post_save
 from PIL import Image, ImageOps
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
@@ -18,6 +19,7 @@ from core.constants import US_STATES
 from .hashtag import Hashtag
 from .category import Category
 from .representative import Representative
+from ..representatives_fetcher import RepresentativesFetcher
 
 # Image manipulation constants
 PROFILE_IMG_SIZE = (171, 171)
@@ -290,3 +292,15 @@ class Account(models.Model):
             'opposed_bills': BillSerializer(opposed_bills, many=True).data,
             'supported_bills': BillSerializer(supported_bills, many=True).data,
         }
+
+
+def account_post_save(sender, instance, created, **kwargs):
+    if instance.address and instance.city and instance.state and instance.representatives.count() == 0:
+        address = "{} {} {}".format(instance.address, instance.city, instance.state)
+        representatives = RepresentativesFetcher().get_reps(address)
+        for rep_data in representatives:
+            rep, _ = Representative.objects.create_or_update_from_response(rep_data)
+            instance.representatives.add(rep)
+
+
+post_save.connect(account_post_save, sender=Account)
