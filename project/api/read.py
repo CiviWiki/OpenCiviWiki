@@ -68,37 +68,13 @@ def get_profile(request, user):
             result['issues'].append(my_issue_item)
 
         result['representatives'] = []
-        rep_ids = []
 
-        for bio_id in rep_ids:
-            rep = Representative.objects.get(bioguideID=bio_id)
-            if rep:
-                result['representatives'].append(rep.summarize())
+        for rep in a.representatives.all():
+            result['representatives'].append(rep.summarize())
 
         if request.user.username != user:
             ra = Account.objects.get(user=request.user)
             if user in ra.following.all():
-                result['follow_state'] = True
-            else:
-                result['follow_state'] = False
-        return JsonResponse(result)
-
-    except Account.DoesNotExist as e:
-        return HttpResponseBadRequest(reason=str(e))
-
-
-def get_rep(request, rep_id):
-    # TODO: FINISH THIS
-    try:
-        # Federal Representatives only
-        rep_user = Representative.objects.get(id=rep_id)
-        rep_account = Account.objects.get(user=rep_user)
-        result = Account.objects.summarize(rep_account)
-
-        result['representatives'] = []
-        if request.user.username != rep_user.username:
-            ra = Account.objects.get(user=request.user)
-            if rep_user.username in ra.following.all():
                 result['follow_state'] = True
             else:
                 result['follow_state'] = False
