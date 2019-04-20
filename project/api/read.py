@@ -70,7 +70,7 @@ def get_profile(request, user):
         result['representatives'] = []
 
         for rep in a.representatives.all():
-            result['representatives'].append(rep.summarize())
+            result['representatives'].append(rep.summarize(account=a))
 
         if request.user.username != user:
             ra = Account.objects.get(user=request.user)

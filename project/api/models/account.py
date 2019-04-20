@@ -258,7 +258,7 @@ class Account(models.Model):
         else:
             return False
 
-    def get_voted_bills(self):
+    def get_voted_bills(self, serialize=True):
         """
         Returns bills from civis user voted on. The logic behind is:
         1. If user voted negatively on cause civi -> bill is added to supported bills
@@ -289,8 +289,8 @@ class Account(models.Model):
                     supported_bills += activity.civi.linked_bills.all()
 
         return {
-            'opposed_bills': BillSerializer(opposed_bills, many=True).data,
-            'supported_bills': BillSerializer(supported_bills, many=True).data,
+            'opposed_bills': BillSerializer(opposed_bills, many=True).data if serialize else opposed_bills,
+            'supported_bills': BillSerializer(supported_bills, many=True).data if serialize else supported_bills,
         }
 
 

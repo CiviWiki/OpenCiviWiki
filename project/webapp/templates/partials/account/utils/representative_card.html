@@ -10,6 +10,12 @@
                 <div class="text-lato">Party: {{party}}</div>
             </div>
             <div class="subtitle-lato alignment">-</div>
+            <div class="section">
+                <div class="link-lato name"> Votes opposed like me: {{ votes.opposed_the_same }}</div>
+                <div class="link-lato name"> Votes opposed not like me: {{ votes.opposed_different }}</div>
+                <div class="link-lato name"> Votes supported not like me: {{ votes.supported_different }}</div>
+                <div class="link-lato name"> Votes supported like me: {{ votes.supported_the_same }}</div>
+            </div>
         </div>
     </div>
 </div>
