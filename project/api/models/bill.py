@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.postgres.fields import JSONField
 
 from ..propublica import ProPublicaAPI
 
@@ -27,6 +26,8 @@ class Bill(models.Model):
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     last_modified = models.DateTimeField(auto_now=True, blank=True, null=True)
 
+    is_voted_data_updated = models.BooleanField(default=False)
+
     @property
     def meta(self):
         if self.source == BillSources.PROPUBLICA:
@@ -37,9 +38,46 @@ class Bill(models.Model):
     def display_properties(self):
         return {'id': self.id, 'url': self.congress_url, 'short_title': self.short_title}
 
+    def update_votes_data(self):
+        self._update_votes()
+
+    def get_votes_for_reps(self, reps_list):
+        if not self.is_voted_data_updated:
+            self._update_votes()
+        return self._get_votes(reps_list)
+
     def update(self, data=None):
         if self.source == BillSources.PROPUBLICA:
             self._update_pro_publica_bill(data)
+
+    def _get_votes(self, reps_list):
+        from .vote import Vote  # to avoid circular dependencies
+        return Vote.objects.filter(bill=self, representative__in=reps_list)
+
+    def _update_votes(self):
+        # to avoid circular dependencies
+        from .representative import Representative
+        from .vote import Vote
+
+        data = self._get_propublica_api_details()
+        passage_vote = None
+        for vote in data['votes']:
+            if vote['question'] == 'On Passage':
+                passage_vote = vote
+                break
+
+        if passage_vote:
+            response = ProPublicaAPI().get_voting_info(passage_vote['api_url'])
+            for vote_data in response["votes"]["vote"]["positions"]:
+                rep, _ = Representative.objects.get_or_create(bioguide_id=vote_data["member_id"])
+                vote, created = Vote.objects.get_or_create(bill=self, representative=rep, defaults={
+                    'vote': vote_data['vote_position'].lower()
+                })
+                if not created:
+                    vote.vote = vote_data['vote_position'].lower()
+
+            self.is_voted_data_updated = True
+            self.save()
 
     def _update_pro_publica_bill(self, data=None):
         data = data or self._get_propublica_api_details()
