@@ -27,4 +27,9 @@ class ProPublicaAPI(object):
         api_rest = "{congress}/bills/{bill_id}.json".format(congress=congress, bill_id=bill_id)
         response = requests.get(self.URL.format(rest=api_rest), headers=self.auth_headers)
         response.raise_for_status()
-        return response.json()
+        return response.json()['results'][0]
+
+    def get_voting_info(self, url):
+        response = requests.get(url, headers=self.auth_headers)
+        response.raise_for_status()
+        return response.json()["results"]

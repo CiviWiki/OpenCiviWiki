@@ -5,8 +5,8 @@ from .representative import Representative
 
 
 class Vote(models.Model):
-    bill = models.ForeignKey(Bill, default=None, null=True)
-    representative = models.ForeignKey(Representative, default=None, null=True)
+    bill = models.ForeignKey(Bill)
+    representative = models.ForeignKey(Representative)
 
     vote_CHOICES = (
         ('yes', 'Yes'),
@@ -17,3 +17,6 @@ class Vote(models.Model):
 
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     last_modified = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+    class Meta:
+        unique_together = ('bill', 'representative')

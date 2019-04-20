@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from api.models import Bill
 from api.serializers import BillSerializer
 from api.propublica import ProPublicaAPI
+from api.tasks import gather_vote_data
 
 
 class BillViewSet(ModelViewSet):
@@ -28,7 +29,9 @@ class BillViewSet(ModelViewSet):
         found_bills = ProPublicaAPI().search(query)
         bills_to_serialize = []
         for found_bill in found_bills:
-            bill, _ = Bill.objects.get_or_create(id=found_bill['bill_id'])
+            bill, created = Bill.objects.get_or_create(id=found_bill['bill_id'])
+            if created:
+                gather_vote_data.apply_async((bill.id,), countdown=1)
             bill.update(found_bill)
             bills_to_serialize.append(bill)
 
