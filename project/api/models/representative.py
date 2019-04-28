@@ -61,13 +61,22 @@ class Representative(models.Model):
         if account:
             votes = {}
             bills = account.get_voted_bills(serialize=False)
-            supported_query = Vote.objects.filter(bill__in=bills["supported_bills"], representative=self)
-            opposed_query = Vote.objects.filter(bill__in=bills["opposed_bills"], representative=self)
-            votes["supported_the_same"] = supported_query.filter(vote="yes").count()
-            votes["supported_different"] = supported_query.filter(vote="no").count()
+            voted_same_count = Vote.objects.filter(
+                bill__in=bills["supported_bills"], representative=self, vote="yes"
+            ).count()
+            voted_same_count += Vote.objects.filter(
+                bill__in=bills["opposed_bills"], representative=self, vote="no"
+            ).count()
 
-            votes["opposed_the_same"] = opposed_query.filter(vote="no").count()
-            votes["opposed_different"] = opposed_query.filter(vote="yes").count()
+            voted_different_count = Vote.objects.filter(
+                bill__in=bills["supported_bills"], representative=self, vote="no"
+            ).count()
+            voted_different_count += Vote.objects.filter(
+                bill__in=bills["opposed_bills"], representative=self, vote="yes"
+            ).count()
+
+            votes["voted_same"] = voted_same_count
+            votes["voted_different"] = voted_different_count
 
             data["votes"] = votes
 
