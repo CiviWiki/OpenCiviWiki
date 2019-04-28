@@ -77,6 +77,9 @@ class Representative(models.Model):
 
             votes["voted_same"] = voted_same_count
             votes["voted_different"] = voted_different_count
+            voted_total = float(voted_same_count + voted_different_count)
+            votes["compatibility_score"] = voted_same_count / voted_total if voted_total else 0
+            votes["compatibility_percentage"] = votes["compatibility_score"] * 100
 
             data["votes"] = votes
 
