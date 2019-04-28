@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 from ..propublica import ProPublicaAPI
 
@@ -26,7 +27,7 @@ class Bill(models.Model):
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     last_modified = models.DateTimeField(auto_now=True, blank=True, null=True)
 
-    is_voted_data_updated = models.BooleanField(default=False)
+    vote_data_last_updated = models.DateTimeField(null=True, blank=True)
 
     @property
     def meta(self):
@@ -42,7 +43,7 @@ class Bill(models.Model):
         self._update_votes()
 
     def get_votes_for_reps(self, reps_list):
-        if not self.is_voted_data_updated:
+        if self.vote_data_last_updated is None:
             self._update_votes()
         return self._get_votes(reps_list)
 
@@ -76,7 +77,7 @@ class Bill(models.Model):
                 if not created:
                     vote.vote = vote_data['vote_position'].lower()
 
-            self.is_voted_data_updated = True
+            self.vote_data_last_updated = timezone.now()
             self.save()
 
     def _update_pro_publica_bill(self, data=None):
