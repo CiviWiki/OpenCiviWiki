@@ -6,5 +6,5 @@ class Command(BaseCommand):
     help = 'Gather votes data'
 
     def handle(self, *args, **options):
-        for bill in Bill.objects.filter(is_voted_data_updated=False).iterator():
+        for bill in Bill.objects.filter(vote_data_last_updated=None).iterator():
             bill.update_votes_data()
