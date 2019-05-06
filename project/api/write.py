@@ -282,6 +282,8 @@ def editThread(request):
         except Exception as e:
             return HttpResponseServerError(reason=str(e))
 
+        location = req_edit_thread.level if not req_edit_thread.state else dict(US_STATES).get(req_edit_thread.state)
+
         return_data = {
             'thread_id': thread_id,
             'title': req_edit_thread.title,
@@ -292,7 +294,7 @@ def editThread(request):
             },
             "level": req_edit_thread.level,
             "state": req_edit_thread.state if req_edit_thread.level == "state" else "",
-            "location": req_edit_thread.level if not req_edit_thread.state else dict(US_STATES).get(req_edit_thread.state),
+            "location": location,
         }
         return JsonResponse({'data': return_data})
 
