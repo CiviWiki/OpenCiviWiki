@@ -118,4 +118,3 @@ class Thread(models.Model):
     def created_date_str(self):
         d = self.created
         return "{0} {1}, {2}".format(month_name[d.month], d.day, d.year)
-
