@@ -4,3 +4,4 @@ pycodestyle: # Valid if scanner.linter is pycodestyle
   exclude:
     - migrations
     - tests
+    - test_framework
