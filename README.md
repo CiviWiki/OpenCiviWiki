@@ -1,4 +1,5 @@
 [![ComVer](https://img.shields.io/badge/ComVer-compliant-brightgreen.svg)](https://github.com/staltz/comver)
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
 [![Stories in Ready](https://badge.waffle.io/CiviWiki/OpenCiviWiki.png?label=next%20up&title=next%20tasks)](https://waffle.io/CiviWiki/OpenCiviWiki?utm_source=badge)
 [![Maintainability](https://api.codeclimate.com/v1/badges/5241b4275cc2dffe90f2/maintainability)](https://codeclimate.com/github/CiviWiki/OpenCiviWiki/maintainability)
 
@@ -27,3 +28,15 @@ See our [Contributing Guide](readmes/CONTRIBUTING.md) for instructions on how to
 
 # Testing
 See our [Testing Guide](readmes/testing.md) for instructions on how to test code.
+
+## Contributors
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore -->
+<table><tr><td align="center"><a href="https://github.com/mdwest"><img src="https://avatars1.githubusercontent.com/u/30572202?v=4" width="100px;" alt="Mitchell D. West"/><br /><sub><b>Mitchell D. West</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=mdwest" title="Code">💻</a> <a href="https://github.com/CiviWiki/OpenCiviWiki/issues?q=author%3Amdwest" title="Bug reports">🐛</a> <a href="#business-mdwest" title="Business development">💼</a> <a href="#financial-mdwest" title="Financial">💵</a> <a href="#fundingFinding-mdwest" title="Funding Finding">🔍</a> <a href="#ideas-mdwest" title="Ideas, Planning, & Feedback">🤔</a> <a href="#projectManagement-mdwest" title="Project Management">📆</a> <a href="#review-mdwest" title="Reviewed Pull Requests">👀</a></td></tr></table>
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
