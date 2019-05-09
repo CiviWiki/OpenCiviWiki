@@ -41,6 +41,15 @@
       "contributions": [
         "test"
       ]
+    },
+    {
+      "login": "petarPetrovBG",
+      "name": "Petar Petrov",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/20644034?v=4",
+      "profile": "https://github.com/petarPetrovBG",
+      "contributions": [
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
