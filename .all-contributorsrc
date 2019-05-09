@@ -142,6 +142,17 @@
         "infra",
         "ideas"
       ]
+    },
+    {
+      "login": "DCalliet",
+      "name": "Darius Calliet",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/6856645?v=4",
+      "profile": "https://github.com/DCalliet",
+      "contributions": [
+        "code",
+        "bug",
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
