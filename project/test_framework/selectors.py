@@ -43,7 +43,9 @@ first_civi = ".civi-title > span:nth-child(1)"
 create_thread_button = ".new-thread"
 thread_title = "#thread-title"
 thread_summary = "#thread-body"
-thread_type_dropdown = ".new-thread-level-selection > div:nth-child(1) > div:nth-child(1)"
+thread_type_dropdown = (
+    ".new-thread-level-selection > div:nth-child(1) > div:nth-child(1)"
+)
 thread_category_dropdown = ".new-thread-category-selection > div:nth-child(1) > div:nth-child(1) > input:nth-child(2)"
 thread_create_draft = ".draft-new-thread"
 thread_publish = "#js-publish-btn"

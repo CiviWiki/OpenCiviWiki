@@ -25,7 +25,7 @@ class CiviManager(models.Manager):
             "id": civi.id,
             "type": civi.c_type,
             "title": civi.title,
-            "body": civi.body[0:150]
+            "body": civi.body[0:150],
         }
 
     def serialize(self, civi, filter=None):
@@ -34,17 +34,19 @@ class CiviManager(models.Manager):
             "title": civi.title,
             "body": civi.body,
             "author": {
-                'username': civi.author.user.username,
-                'profile_image': civi.author.profile_image_url,
-                'first_name': civi.author.first_name,
-                'last_name': civi.author.last_name
+                "username": civi.author.user.username,
+                "profile_image": civi.author.profile_image_url,
+                "first_name": civi.author.first_name,
+                "last_name": civi.author.last_name,
             },
             "hashtags": [hashtag.title for hashtag in civi.hashtags.all()],
-            "created": "{0} {1}, {2}".format(month_name[civi.created.month], civi.created.day, civi.created.year),
+            "created": "{0} {1}, {2}".format(
+                month_name[civi.created.month], civi.created.day, civi.created.year
+            ),
             "attachments": [],
             "votes": civi.votes,
             "id": civi.id,
-            "thread_id": civi.thread.id
+            "thread_id": civi.thread.id,
         }
 
         if filter and filter in data:
@@ -53,7 +55,9 @@ class CiviManager(models.Manager):
 
     def serialize_s(self, civi, filter=None):
         # Get account profile image, or set to default image
-        profile_image_or_default = civi.author.profile_image.url or "/media/profile/default.png"
+        profile_image_or_default = (
+            civi.author.profile_image.url or "/media/profile/default.png"
+        )
 
         data = {
             "type": civi.c_type,
@@ -63,15 +67,19 @@ class CiviManager(models.Manager):
                 username=civi.author.user.username,
                 profile_image=profile_image_or_default,
                 first_name=civi.author.first_name,
-                last_name=civi.author.last_name
+                last_name=civi.author.last_name,
             ),
             "hashtags": [h.title for h in civi.hashtags.all()],
-            "created": "{0} {1}, {2}".format(month_name[civi.created.month], civi.created.day, civi.created.year),
+            "created": "{0} {1}, {2}".format(
+                month_name[civi.created.month], civi.created.day, civi.created.year
+            ),
             "attachments": [],
             "votes": civi.votes,
             "id": civi.id,
             "thread_id": civi.thread.id,
-            "links": [civi for civi in civi.linked_civis.all().values_list('id', flat=True)]
+            "links": [
+                civi for civi in civi.linked_civis.all().values_list("id", flat=True)
+            ],
         }
 
         if filter and filter in data:
@@ -79,27 +87,28 @@ class CiviManager(models.Manager):
         return data
 
     def thread_sorted_by_score(self, civis_queryset, req_acct_id):
-        queryset = civis_queryset.order_by('-created')
+        queryset = civis_queryset.order_by("-created")
         return sorted(queryset.all(), key=lambda c: c.score(req_acct_id), reverse=True)
 
 
 class Civi(models.Model):
     objects = CiviManager()
-    author = models.ForeignKey(Account, related_name='civis', default=None, null=True)
-    thread = models.ForeignKey(Thread, related_name='civis', default=None, null=True)
+    author = models.ForeignKey(Account, related_name="civis", default=None, null=True)
+    thread = models.ForeignKey(Thread, related_name="civis", default=None, null=True)
     bill = models.ForeignKey(Bill, default=None, null=True)  # null if not solution
 
     hashtags = models.ManyToManyField(Hashtag)
 
-    linked_civis = models.ManyToManyField('self', related_name="links")
+    linked_civis = models.ManyToManyField("self", related_name="links")
     linked_bills = models.ManyToManyField(Bill, related_name="bills")
-    response_civis = models.ForeignKey('self', related_name="responses", default=None,
-                                       null=True)  # TODO: Probably remove this
+    response_civis = models.ForeignKey(
+        "self", related_name="responses", default=None, null=True
+    )  # TODO: Probably remove this
 
     title = models.CharField(max_length=255, blank=False, null=False)
     body = models.CharField(max_length=1023, blank=False, null=False)
 
-    c_type = models.CharField(max_length=31, default='problem', choices=CIVI_TYPES)
+    c_type = models.CharField(max_length=31, default="problem", choices=CIVI_TYPES)
 
     votes_vneg = models.IntegerField(default=0)
     votes_neg = models.IntegerField(default=0)
@@ -115,15 +124,19 @@ class Civi(models.Model):
 
     def _get_votes(self):
         from activity import Activity
+
         activity_votes = Activity.objects.filter(civi=self)
 
         votes = {
-            'total': activity_votes.count() - activity_votes.filter(activity_type='vote_neutral').count(),
-            'votes_vneg': activity_votes.filter(activity_type='vote_vneg').count(),
-            'votes_neg': activity_votes.filter(activity_type='vote_neg').count(),
-            'votes_neutral': activity_votes.filter(activity_type='vote_neutral').count(),
-            'votes_pos': activity_votes.filter(activity_type='vote_pos').count(),
-            'votes_vpos': activity_votes.filter(activity_type='vote_vpos').count()
+            "total": activity_votes.count()
+            - activity_votes.filter(activity_type="vote_neutral").count(),
+            "votes_vneg": activity_votes.filter(activity_type="vote_vneg").count(),
+            "votes_neg": activity_votes.filter(activity_type="vote_neg").count(),
+            "votes_neutral": activity_votes.filter(
+                activity_type="vote_neutral"
+            ).count(),
+            "votes_pos": activity_votes.filter(activity_type="vote_pos").count(),
+            "votes_vpos": activity_votes.filter(activity_type="vote_vpos").count(),
         }
         return votes
 
@@ -155,17 +168,21 @@ class Civi(models.Model):
         votes = self.votes
 
         # Score each each type of vote, based on count for that type
-        vneg_score = votes['votes_vneg'] * vneg_weight
-        neg_score = votes['votes_neg'] * neg_weight
-        pos_score = votes['votes_pos'] * pos_weight
-        vpos_score = votes['votes_vpos'] * vpos_weight
+        vneg_score = votes["votes_vneg"] * vneg_weight
+        neg_score = votes["votes_neg"] * neg_weight
+        pos_score = votes["votes_pos"] * pos_weight
+        vpos_score = votes["votes_vpos"] * vpos_weight
 
         # Sum up all of the scores
         scores_sum = vneg_score + neg_score + pos_score + vpos_score
 
         if request_acct_id:
             account = Account.objects.get(id=request_acct_id)
-            scores_sum = (1 if self.author in account.following.all().values_list('id', flat=True) else 0)
+            scores_sum = (
+                1
+                if self.author in account.following.all().values_list("id", flat=True)
+                else 0
+            )
         else:
             scores_sum = 0
 
@@ -181,27 +198,42 @@ class Civi(models.Model):
         if scores_sum > 0:
             # TODO: determine why we set votes total to two when votes['total'] is <= 1
             # set votes total to 2 when votes['total'] is <= 1
-            votes_total = votes['total'] if votes['total'] > 1 else 2
+            votes_total = votes["total"] if votes["total"] > 1 else 2
 
             # step3 - A X*Log10V+Y + F + (##/T) = Rank Value
-            rank = scores_sum * math.log10(votes_total) * amp + scores_sum + favorite + gravity / time_ago
+            rank = (
+                scores_sum * math.log10(votes_total) * amp
+                + scores_sum
+                + favorite
+                + gravity / time_ago
+            )
 
         elif scores_sum == 0:
             # Get count of total votes
-            votes_total = votes['total']
+            votes_total = votes["total"]
 
             # step3 - B  V^2+Y + F + (##/T) = Rank Value
             rank = votes_total ** 2 + scores_sum + favorite + gravity / time_ago
         elif scores_sum < 0:
             # TODO: determine why we set votes total to two when votes['tota'] is <= 1
             # set votes total to 2 when votes['total'] is <= 1
-            votes_total = votes['total'] if votes['total'] > 1 else 2
+            votes_total = votes["total"] if votes["total"] > 1 else 2
 
             # step3 - C
             if abs(scores_sum) / votes_total <= 5:
-                rank = abs(scores_sum) * math.log10(votes_total) * amp + scores_sum + favorite + gravity / time_ago
+                rank = (
+                    abs(scores_sum) * math.log10(votes_total) * amp
+                    + scores_sum
+                    + favorite
+                    + gravity / time_ago
+                )
             else:
-                rank = scores_sum * math.log10(votes_total) * amp + scores_sum + favorite + gravity / time_ago
+                rank = (
+                    scores_sum * math.log10(votes_total) * amp
+                    + scores_sum
+                    + favorite
+                    + gravity / time_ago
+                )
 
         return rank
 
@@ -213,22 +245,26 @@ class Civi(models.Model):
             "title": self.title,
             "body": self.body,
             "author": {
-                'username': self.author.user.username,
-                'profile_image': self.author.profile_image_url,
-                'profile_image_thumb_url': self.author.profile_image_thumb_url,
-                'first_name': self.author.first_name,
-                'last_name': self.author.last_name
+                "username": self.author.user.username,
+                "profile_image": self.author.profile_image_url,
+                "profile_image_thumb_url": self.author.profile_image_thumb_url,
+                "first_name": self.author.first_name,
+                "last_name": self.author.last_name,
             },
             "votes": self.votes,
-            "links": [civi for civi in self.linked_civis.all().values_list('id', flat=True)],
+            "links": [
+                civi for civi in self.linked_civis.all().values_list("id", flat=True)
+            ],
             "created": self.created_date_str,
             "bills": [bill.display_properties for bill in self.linked_bills.all()],
             # Not Implemented Yet
             "hashtags": [],
-            "attachments": [{'id': img.id, 'url': img.image_url} for img in self.images.all()],
+            "attachments": [
+                {"id": img.id, "url": img.image_url} for img in self.images.all()
+            ],
         }
         if req_acct_id:
-            data['score'] = self.score(req_acct_id)
+            data["score"] = self.score(req_acct_id)
 
         return data
 
@@ -239,13 +275,13 @@ class PathAndRename(object):
         self.sub_path = sub_path
 
     def __call__(self, instance, filename):
-        extension = filename.split('.')[-1]
+        extension = filename.split(".")[-1]
         new_filename = str(uuid.uuid4())
-        filename = '{}.{}'.format(new_filename, extension)
+        filename = "{}.{}".format(new_filename, extension)
         return os.path.join(self.sub_path, filename)
 
 
-image_upload_path = PathAndRename('')
+image_upload_path = PathAndRename("")
 
 
 class CiviImageManager(models.Manager):
@@ -255,14 +291,16 @@ class CiviImageManager(models.Manager):
 
 class CiviImage(models.Model):
     objects = CiviImageManager()
-    civi = models.ForeignKey(Civi, related_name='images')
+    civi = models.ForeignKey(Civi, related_name="images")
     title = models.CharField(max_length=255, null=True, blank=True)
     image = models.ImageField(upload_to=image_upload_path, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
     @property
     def image_url(self):
-        if self.image and default_storage.exists(os.path.join(settings.MEDIA_ROOT, self.image.name)):
+        if self.image and default_storage.exists(
+            os.path.join(settings.MEDIA_ROOT, self.image.name)
+        ):
             return self.image.url
         else:
             # NOTE: This default url will probably be changed later
