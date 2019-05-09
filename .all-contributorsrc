@@ -115,6 +115,21 @@
         "bug",
         "ideas"
       ]
+    },
+    {
+      "login": "brylie",
+      "name": "Brylie Christopher Oxley",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/17307?v=4",
+      "profile": "https://bryliechristopheroxley.info",
+      "contributions": [
+        "code",
+        "bug",
+        "projectManagement",
+        "review",
+        "doc",
+        "infra",
+        "maintenance"
+      ]
     }
   ],
   "contributorsPerLine": 7,
