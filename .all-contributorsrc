@@ -1,0 +1,30 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "mdwest",
+      "name": "Mitchell D. West",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/30572202?v=4",
+      "profile": "https://github.com/mdwest",
+      "contributions": [
+        "code",
+        "bug",
+        "business",
+        "financial",
+        "fundingFinding",
+        "ideas",
+        "projectManagement",
+        "review"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "OpenCiviWiki",
+  "projectOwner": "CiviWiki",
+  "repoType": "github",
+  "repoHost": "https://github.com"
+}
