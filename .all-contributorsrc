@@ -1,0 +1,23 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "GokuMizuno",
+      "name": "Gordon Stangler",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/6818565?v=4",
+      "profile": "https://github.com/GokuMizuno",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "OpenCiviWiki",
+  "projectOwner": "CiviWiki",
+  "repoType": "github",
+  "repoHost": "https://github.com"
+}
