@@ -1,0 +1,23 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "Unit111",
+      "name": "Petar Petrov",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/5164528?v=4",
+      "profile": "https://github.com/Unit111",
+      "contributions": [
+        "test"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "OpenCiviWiki",
+  "projectOwner": "CiviWiki",
+  "repoType": "github",
+  "repoHost": "https://github.com"
+}
