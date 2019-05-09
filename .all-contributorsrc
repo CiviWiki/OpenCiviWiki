@@ -20,6 +20,18 @@
         "projectManagement",
         "review"
       ]
+    },
+    {
+      "login": "TomaszKolek",
+      "name": "Tomasz Kolek",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/5993758?v=4",
+      "profile": "https://www.linkedin.com/in/tomaszkolek",
+      "contributions": [
+        "code",
+        "test",
+        "security",
+        "review"
+      ]
     }
   ],
   "contributorsPerLine": 7,
