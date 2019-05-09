@@ -35,7 +35,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore -->
-<table><tr><td align="center"><a href="https://github.com/petarPetrovBG"><img src="https://avatars0.githubusercontent.com/u/20644034?v=4" width="100px;" alt="Petar Petrov"/><br /><sub><b>Petar Petrov</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=petarPetrovBG" title="Code">💻</a></td></tr></table>
+<table><tr><td align="center"><a href="https://github.com/petarPetrovBG"><img src="https://avatars0.githubusercontent.com/u/20644034?v=4" width="100px;" alt="Petar Petrov"/><br /><sub><b>Petar Petrov</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=petarPetrovBG" title="Code">💻</a> <a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=petarPetrovBG" title="Tests">⚠️</a></td></tr></table>
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
