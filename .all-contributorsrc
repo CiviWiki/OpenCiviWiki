@@ -104,6 +104,17 @@
         "ideas",
         "question"
       ]
+    },
+    {
+      "login": "GokuMizuno",
+      "name": "Gordon Stangler",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/6818565?v=4",
+      "profile": "https://github.com/GokuMizuno",
+      "contributions": [
+        "code",
+        "bug",
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
