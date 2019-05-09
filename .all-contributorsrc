@@ -191,6 +191,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "g1stavo",
+      "name": "Gustavo",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/22722936?v=4",
+      "profile": "https://g1stavo.github.io/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
