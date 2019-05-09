@@ -299,4 +299,3 @@ def password_reset_complete(request):
         "link": redirect_link,
     }
     return TemplateResponse(request, "general-message.html", template_var)
-
