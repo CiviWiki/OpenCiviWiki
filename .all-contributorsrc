@@ -130,6 +130,18 @@
         "infra",
         "maintenance"
       ]
+    },
+    {
+      "login": "dborstelmann",
+      "name": "Dan Borstelmann",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/6558873?v=4",
+      "profile": "https://github.com/dborstelmann",
+      "contributions": [
+        "code",
+        "bug",
+        "infra",
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
