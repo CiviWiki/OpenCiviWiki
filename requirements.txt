@@ -21,7 +21,7 @@ mock==2.0.0
 Pillow==4.3.0  # 5.4.1
 psycopg2==2.7.7
 redis==3.2.1
-sentry-sdk==0.7.10
+sentry-sdk==0.7.14
 sunlight==1.2.9
 urllib3==1.25.2
 whitenoise==3.3.1  # 4.1.2
