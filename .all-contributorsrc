@@ -1,0 +1,23 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "ryan-barrett",
+      "name": "Ryan Barrett",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/29344675?v=4",
+      "profile": "https://www.linkedin.com/in/ryan-barrett2/",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "OpenCiviWiki",
+  "projectOwner": "CiviWiki",
+  "repoType": "github",
+  "repoHost": "https://github.com"
+}
