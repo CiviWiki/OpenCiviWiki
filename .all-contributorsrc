@@ -77,6 +77,19 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "jl24",
+      "name": "JooHee Lee",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/12376696?v=4",
+      "profile": "https://github.com/jl24",
+      "contributions": [
+        "code",
+        "bug",
+        "doc",
+        "ideas",
+        "infra"
+      ]
     }
   ],
   "contributorsPerLine": 7,
