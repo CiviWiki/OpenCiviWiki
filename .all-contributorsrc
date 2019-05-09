@@ -91,6 +91,19 @@
         "infra",
         "question"
       ]
+    },
+    {
+      "login": "delta-plus",
+      "name": "delta-plus",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/25730621?v=4",
+      "profile": "https://github.com/delta-plus",
+      "contributions": [
+        "code",
+        "bug",
+        "doc",
+        "ideas",
+        "question"
+      ]
     }
   ],
   "contributorsPerLine": 7,
