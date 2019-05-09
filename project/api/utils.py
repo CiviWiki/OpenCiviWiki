@@ -40,5 +40,6 @@ def json_custom_parser(obj):
 def json_response(data, status=200):
     return HttpResponse(
         json.dumps(data, default=json_custom_parser),
-        content_type='application/json',
-        status=status)
+        content_type="application/json",
+        status=status,
+    )

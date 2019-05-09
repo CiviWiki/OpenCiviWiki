@@ -4,6 +4,7 @@ from .account import Account
 from .civi import Civi
 from .thread import Thread
 
+
 class ActivityManager(models.Manager):
     def votes(self, civi_id):
         civi = Civi.objects.get(id=civi_id)
@@ -12,7 +13,7 @@ class ActivityManager(models.Manager):
             votes_neg=civi.votes_neg,
             votes_neutral=civi.votes_neutral,
             votes_pos=civi.votes_pos,
-            votes_vpos=civi.votes_vpos
+            votes_vpos=civi.votes_vpos,
         )
         return votes
 
@@ -23,12 +24,12 @@ class Activity(models.Model):
     civi = models.ForeignKey(Civi, default=None, null=True)
 
     activity_CHOICES = (
-        ('vote_vneg', 'Vote Strongly Disagree'),
-        ('vote_neg', 'Vote Disagree'),
-        ('vote_neutral', 'Vote Neutral'),
-        ('vote_pos', 'Vote Agree'),
-        ('vote_vpos', 'Vote Strongly Agree'),
-        ('favorite', 'Favor a Civi')
+        ("vote_vneg", "Vote Strongly Disagree"),
+        ("vote_neg", "Vote Disagree"),
+        ("vote_neutral", "Vote Neutral"),
+        ("vote_pos", "Vote Agree"),
+        ("vote_vpos", "Vote Strongly Agree"),
+        ("favorite", "Favor a Civi"),
     )
     activity_type = models.CharField(max_length=255, choices=activity_CHOICES)
 
@@ -39,8 +40,8 @@ class Activity(models.Model):
 
     @property
     def is_positive_vote(self):
-        return self.activity_type.endswith('pos')
+        return self.activity_type.endswith("pos")
 
     @property
     def is_negative_vote(self):
-        return self.activity_type.endswith('neg')
+        return self.activity_type.endswith("neg")

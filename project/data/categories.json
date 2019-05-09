@@ -1,133 +1,156 @@
-[{
+[
+  {
     "fields": {
-        "name": "Agriculture"
+      "name": "Agriculture"
     },
     "model": "api.category",
     "pk": 0
-},{
+  },
+  {
     "fields": {
-        "name": "Environment"
+      "name": "Environment"
     },
     "model": "api.category",
     "pk": 1
-}, {
+  },
+  {
     "fields": {
-        "name": "Energy"
+      "name": "Energy"
     },
     "model": "api.category",
     "pk": 2
-}, {
+  },
+  {
     "fields": {
-        "name": "Public Health"
+      "name": "Public Health"
     },
     "model": "api.category",
     "pk": 3
-}, {
+  },
+  {
     "fields": {
-        "name": "Public Safety"
+      "name": "Public Safety"
     },
     "model": "api.category",
     "pk": 4
-}, {
+  },
+  {
     "fields": {
-        "name": "Taxes and Spending"
+      "name": "Taxes and Spending"
     },
     "model": "api.category",
     "pk": 5
-}, {
+  },
+  {
     "fields": {
-        "name": "Economic Issues"
+      "name": "Economic Issues"
     },
     "model": "api.category",
     "pk": 6
-}, {
+  },
+  {
     "fields": {
-        "name": "Foreign Policy"
+      "name": "Foreign Policy"
     },
     "model": "api.category",
     "pk": 7
-}, {
+  },
+  {
     "fields": {
-        "name": "Education"
+      "name": "Education"
     },
     "model": "api.category",
     "pk": 8
-}, {
+  },
+  {
     "fields": {
-        "name": "Defense"
+      "name": "Defense"
     },
     "model": "api.category",
     "pk": 9
-}, {
+  },
+  {
     "fields": {
-        "name": "Communications"
+      "name": "Communications"
     },
     "model": "api.category",
     "pk": 10
-}, {
+  },
+  {
     "fields": {
-        "name": "Judiciary"
+      "name": "Judiciary"
     },
     "model": "api.category",
     "pk": 11
-}, {
+  },
+  {
     "fields": {
-        "name": "Native American Affairs"
+      "name": "Native American Affairs"
     },
     "model": "api.category",
     "pk": 12
-}, {
+  },
+  {
     "fields": {
-        "name": "Immigration"
+      "name": "Immigration"
     },
     "model": "api.category",
     "pk": 13
-}, {
+  },
+  {
     "fields": {
-        "name": "Infrastructure"
+      "name": "Infrastructure"
     },
     "model": "api.category",
     "pk": 14
-}, {
+  },
+  {
     "fields": {
-        "name": "Science & Technology"
+      "name": "Science & Technology"
     },
     "model": "api.category",
     "pk": 15
-}, {
+  },
+  {
     "fields": {
-        "name": "Civil Rights"
+      "name": "Civil Rights"
     },
     "model": "api.category",
     "pk": 16
-}, {
+  },
+  {
     "fields": {
-        "name": "Governance"
+      "name": "Governance"
     },
     "model": "api.category",
     "pk": 17
-}, {
+  },
+  {
     "fields": {
-        "name": "Women's Issues"
+      "name": "Women's Issues"
     },
     "model": "api.category",
     "pk": 18
-}, {
+  },
+  {
     "fields": {
-        "name": "LGBTQIA Issues"
+      "name": "LGBTQIA Issues"
     },
     "model": "api.category",
     "pk": 19
-}, {
+  },
+  {
     "fields": {
-        "name": "Worker’s Rights"
+      "name": "Worker’s Rights"
     },
     "model": "api.category",
     "pk": 20
-}, {
+  },
+  {
     "fields": {
-        "name": "Other"
+      "name": "Other"
     },
     "model": "api.category",
     "pk": 21
-}]
+  }
+]

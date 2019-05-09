@@ -24,25 +24,36 @@ from authentication import urls as auth
 from frontend_views import urls as frontend_views
 
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^api/', include(api)),
-    url(r'^auth/', include(auth)),
-    url('^inbox/notifications/', include('notifications.urls', namespace='notifications')),
+    url(r"^admin/", include(admin.site.urls)),
+    url(r"^api/", include(api)),
+    url(r"^auth/", include(auth)),
+    url(
+        "^inbox/notifications/",
+        include("notifications.urls", namespace="notifications"),
+    ),
 ]
 
 urlpatterns += [
     # A redirect for favicons at the root of the site
-    url(r'^favicon\.ico$', RedirectView.as_view(url='/static/favicon/favicon.ico')),
-    url(r'^favicon-32x32\.png$', RedirectView.as_view(url='/static/favicon/favicon-32x32.png')),
-    url(r'^apple-touch-icon\.png$', RedirectView.as_view(url='/static/favicon/apple-touch-icon.png')),
-    url(r'^mstile-144x144\.png$', RedirectView.as_view(url='/static/favicon/mstile-144x144.png')),
-
+    url(r"^favicon\.ico$", RedirectView.as_view(url="/static/favicon/favicon.ico")),
+    url(
+        r"^favicon-32x32\.png$",
+        RedirectView.as_view(url="/static/favicon/favicon-32x32.png"),
+    ),
+    url(
+        r"^apple-touch-icon\.png$",
+        RedirectView.as_view(url="/static/favicon/apple-touch-icon.png"),
+    ),
+    url(
+        r"^mstile-144x144\.png$",
+        RedirectView.as_view(url="/static/favicon/mstile-144x144.png"),
+    ),
     # Media and Static file Serve Setup.
-    url(r'^media/(?P<path>.*)$',serve, {
-        'document_root': settings.MEDIA_ROOT, 'show_indexes': True
-    }),
-    url(r'^static/(?P<path>.*)$', serve, {
-        'document_root': settings.STATIC_ROOT
-    }),
-    url(r'^', include(frontend_views))
+    url(
+        r"^media/(?P<path>.*)$",
+        serve,
+        {"document_root": settings.MEDIA_ROOT, "show_indexes": True},
+    ),
+    url(r"^static/(?P<path>.*)$", serve, {"document_root": settings.STATIC_ROOT}),
+    url(r"^", include(frontend_views)),
 ]
