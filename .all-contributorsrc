@@ -50,6 +50,15 @@
       "contributions": [
         "test"
       ]
+    },
+    {
+      "login": "Sv3nman",
+      "name": "Steven Hitchcock",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/14117015?v=4",
+      "profile": "https://github.com/Sv3nman",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
