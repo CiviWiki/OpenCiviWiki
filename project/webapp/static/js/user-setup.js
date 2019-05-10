@@ -218,7 +218,6 @@ cw.UserSetupView = BB.View.extend({
   // SENDING REQUEST TO SERVER ===================================================
   setupUser: function() {
     var _this = this;
-    console.log("updated form element access to prevent not defined error");
 
     // Get data from step 1
     var first_name = $("#first-name").val();
@@ -231,7 +230,6 @@ cw.UserSetupView = BB.View.extend({
     // Get data from step 2
     // TODO: step 2 data
     if (first_name && last_name && about_me && coordinates && address) {
-      console.log("f", first_name, "l", last_name, "a", about_me);
       $.ajax({
         type: "POST",
         url: "/api/edituser/",
