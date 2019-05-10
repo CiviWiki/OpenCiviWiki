@@ -218,14 +218,15 @@ cw.UserSetupView = BB.View.extend({
   // SENDING REQUEST TO SERVER ===================================================
   setupUser: function() {
     var _this = this;
+    console.log("updated form element access to prevent not defined error");
 
     // Get data from step 1
-    var first_name = $("#first-name").val(),
-      last_name = $("#last-name").val(),
-      about_me = $("#about-me").val();
+    var first_name = $("#first-name").val();
+    var last_name = $("#last-name").val();
+    var about_me = $("#about-me").val();
 
-    var coordinates = this.mapView.model.get("coordinates"),
-      address = this.mapView.model.get("address");
+    var coordinates = this.mapView.model.get("coordinates");
+    var address = this.mapView.model.get("address");
 
     // Get data from step 2
     // TODO: step 2 data
