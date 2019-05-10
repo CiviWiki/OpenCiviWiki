@@ -251,14 +251,14 @@ cw.MapView = BB.View.extend({
                   fullAddress.zipcode = "";
                   info =
                     "<span>Please note that CiviWiki is optimized for the use in the U.S.</span>";
-                  materializeToast(info, 5000);
+                  Materialize.toast(info, 5000);
                 }
                 _this.adjustMapCenter(geolocation);
                 _this.model.set("address", fullAddress);
                 _this.model.set("is_new", true);
               } else {
                 info = "Geocode Error: " + status;
-                materializeToast(info, 2000);
+                Materialize.toast(info, 2000);
               }
               this.$(".progress").addClass("hide");
               this.$("#browser-locate-btn")
@@ -272,7 +272,7 @@ cw.MapView = BB.View.extend({
         function(error) {
           info =
             "<span>We could not use your browser's location. Please try entering your location</span>";
-          materializeToast(info, 2000);
+          Materialize.toast(info, 2000);
           this.$(".progress").addClass("hide");
           this.$("#autocomplete")
             .removeClass("disabled")
@@ -282,7 +282,7 @@ cw.MapView = BB.View.extend({
     } else {
       info =
         "<span>We could not use your browser's location. Please try entering your location</span>";
-      materializeToast(info, 2000);
+      Materialize.toast(info, 2000);
       this.$(".progress").addClass("hide");
       this.$("#autocomplete")
         .removeClass("disabled")
