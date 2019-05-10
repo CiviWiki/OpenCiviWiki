@@ -284,6 +284,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "alecxvs",
+      "name": "Alec Sears",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/513932?v=4",
+      "profile": "https://github.com/alecxvs",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
