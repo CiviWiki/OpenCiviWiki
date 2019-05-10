@@ -290,10 +290,6 @@ cw.MapView = BB.View.extend({
     }
   },
 
-  materializeToast: function(info, duration) {
-    Materialize.toast(info, duration);
-  },
-
   getAddressFromComponents: function(address_components) {
     // Component variables we are interested in
     var components = {
