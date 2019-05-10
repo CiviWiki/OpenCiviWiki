@@ -275,6 +275,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "richifuentes",
+      "name": "richifuentes",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/9931749?v=4",
+      "profile": "https://github.com/richifuentes",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
