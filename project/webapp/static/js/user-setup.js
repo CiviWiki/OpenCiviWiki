@@ -219,10 +219,14 @@ cw.UserSetupView = BB.View.extend({
   setupUser: function() {
     var _this = this;
 
+    // Get data from step 1
+    var first_name = this.$el.find("#first-name").val(),
+      last_name = this.$el.find("#last-name").val(),
+      about_me = this.$el.find("#about-me").val();
+
     var coordinates = this.mapView.model.get("coordinates"),
       address = this.mapView.model.get("address");
 
-    console.log(first_name, last_name, about_me, coordinates, address);
     // Get data from step 2
     // TODO: step 2 data
     if (first_name && last_name && about_me && coordinates && address) {
@@ -281,19 +285,6 @@ cw.UserSetupView = BB.View.extend({
             _this.$el.find(".loading").addClass("hide");
             _this.$el.find(".placeholder").addClass("hide");
           }
-          // var reader = new FileReader();
-          //
-          // reader.onload = function(e) {
-          //     var preview_image = _this.$el.find('.preview-image');
-          //     preview_image.attr('src', e.target.result);
-          //     // _this.resizeImage();
-          //     if (_this.$el.find('.preview-image').hasClass('hide')){
-          //         _this.toggleImgButtons();
-          //         _this.$el.find('.loading').addClass('hide');
-          //         _this.$el.find('.placeholder').addClass('hide');
-          //     }
-          // };
-          // reader.readAsDataURL(uploaded_image);
         }
 
         Materialize.toast("Image Uploaded!", 5000);
