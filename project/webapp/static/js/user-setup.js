@@ -157,8 +157,8 @@ cw.UserSetupView = BB.View.extend({
   },
 
   validateStep2: function() {
-    var coordinates = this.mapView.model.get("coordinates"),
-      address = this.mapView.model.get("address");
+    var coordinates = this.mapView.model.get("coordinates");
+    var address = this.mapView.model.get("address");
 
     if (_.isEmpty(coordinates) || _.isEmpty(address)) {
       this.$el
