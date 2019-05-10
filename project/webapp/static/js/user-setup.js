@@ -220,9 +220,9 @@ cw.UserSetupView = BB.View.extend({
     var _this = this;
 
     // Get data from step 1
-    var first_name = this.$el.find("#first-name").val(),
-      last_name = this.$el.find("#last-name").val(),
-      about_me = this.$el.find("#about-me").val();
+    var first_name = $("#first-name").val(),
+      last_name = $("#last-name").val(),
+      about_me = $("#about-me").val();
 
     var coordinates = this.mapView.model.get("coordinates"),
       address = this.mapView.model.get("address");
@@ -230,6 +230,7 @@ cw.UserSetupView = BB.View.extend({
     // Get data from step 2
     // TODO: step 2 data
     if (first_name && last_name && about_me && coordinates && address) {
+      console.log("f", first_name, "l", last_name, "a", about_me);
       $.ajax({
         type: "POST",
         url: "/api/edituser/",
