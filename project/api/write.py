@@ -262,40 +262,47 @@ def editThread(request):
 
     if not thread_id:
         return HttpResponseBadRequest(reason="Invalid Thread Reference")
-    else:
-        try:
-            req_edit_thread = Thread.objects.get(id=thread_id)
 
-            if request.user.username != req_edit_thread.author.user.username:
-                return HttpResponseBadRequest("No Edit Rights")
+    # Change Publish State to True
+    is_draft = request.POST.get('is_draft', True)
 
-            for param in non_required_params:
-                request_value = request.POST.get(param)
-                if request_value:
-                    setattr(req_edit_thread, param, request_value)
-            req_edit_thread.save()
-        except Exception as e:
-            return HttpResponseServerError(reason=str(e))
+    if not is_draft:
+        Thread.objects.filter(id=thread_id).update(is_draft=False)
+        return JsonResponse({'data': "Success"})
 
-        location = (
-            req_edit_thread.level
-            if not req_edit_thread.state
-            else dict(US_STATES).get(req_edit_thread.state)
-        )
+    try:
+        req_edit_thread = Thread.objects.get(id=thread_id)
 
-        return_data = {
-            "thread_id": thread_id,
-            "title": req_edit_thread.title,
-            "summary": req_edit_thread.summary,
-            "category": {
-                "id": req_edit_thread.category.id,
-                "name": req_edit_thread.category.name,
-            },
-            "level": req_edit_thread.level,
-            "state": req_edit_thread.state if req_edit_thread.level == "state" else "",
-            "location": location,
-        }
-        return JsonResponse({"data": return_data})
+        if request.user.username != req_edit_thread.author.user.username:
+            return HttpResponseBadRequest("No Edit Rights")
+
+        for param in non_required_params:
+            request_value = request.POST.get(param)
+            if request_value:
+                setattr(req_edit_thread, param, request_value)
+        req_edit_thread.save()
+    except Exception as e:
+        return HttpResponseServerError(reason=str(e))
+
+    location = (
+        req_edit_thread.level
+        if not req_edit_thread.state
+        else dict(US_STATES).get(req_edit_thread.state)
+    )
+
+    return_data = {
+        "thread_id": thread_id,
+        "title": req_edit_thread.title,
+        "summary": req_edit_thread.summary,
+        "category": {
+            "id": req_edit_thread.category.id,
+            "name": req_edit_thread.category.name,
+        },
+        "level": req_edit_thread.level,
+        "state": req_edit_thread.state if req_edit_thread.level == "state" else "",
+        "location": location,
+    }
+    return JsonResponse({"data": return_data})
 
 
 @login_required
