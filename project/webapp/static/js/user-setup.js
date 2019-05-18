@@ -81,9 +81,9 @@ cw.UserSetupView = BB.View.extend({
       this.$("#step1").removeClass("hide");
       this.currentStep = 1;
     } else if (this.currentStep === 1) {
-      var first_name = this.$el.find("#first-name").val(),
-        last_name = this.$el.find("#last-name").val(),
-        about_me = this.$el.find("#about-me").val();
+      var first_name = this.$el.find("#first-name").val();
+      var last_name = this.$el.find("#last-name").val();
+      var about_me = this.$el.find("#about-me").val();
 
       if (first_name && last_name && about_me) {
         this.$el.find("#step1").addClass("hide");
@@ -127,17 +127,19 @@ cw.UserSetupView = BB.View.extend({
 
   validateStep1: function() {
     var first_name = this.$el
-        .find("#first-name")
-        .val()
-        .trim(),
-      last_name = this.$el
-        .find("#last-name")
-        .val()
-        .trim(),
-      about_me = this.$el
-        .find("#about-me")
-        .val()
-        .trim();
+      .find("#first-name")
+      .val()
+      .trim();
+
+    var last_name = this.$el
+      .find("#last-name")
+      .val()
+      .trim();
+
+    var about_me = this.$el
+      .find("#about-me")
+      .val()
+      .trim();
 
     if (first_name && last_name && about_me) {
       this.model.set({
@@ -157,8 +159,8 @@ cw.UserSetupView = BB.View.extend({
   },
 
   validateStep2: function() {
-    var coordinates = this.mapView.model.get("coordinates"),
-      address = this.mapView.model.get("address");
+    var coordinates = this.mapView.model.get("coordinates");
+    var address = this.mapView.model.get("address");
 
     if (_.isEmpty(coordinates) || _.isEmpty(address)) {
       this.$el
@@ -219,12 +221,20 @@ cw.UserSetupView = BB.View.extend({
   setupUser: function() {
     var _this = this;
 
-    var coordinates = this.mapView.model.get("coordinates"),
-      address = this.mapView.model.get("address");
+    var coordinates = this.mapView.model.get("coordinates");
+    var address = this.mapView.model.get("address");
 
-    console.log(first_name, last_name, about_me, coordinates, address);
     // Get data from step 2
     // TODO: step 2 data
+    console.log(
+      "setupUser context:",
+      first_name,
+      last_name,
+      about_me,
+      coordinates,
+      address
+    );
+
     if (first_name && last_name && about_me && coordinates && address) {
       $.ajax({
         type: "POST",
