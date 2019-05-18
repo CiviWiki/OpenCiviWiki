@@ -1,0 +1,315 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "mdwest",
+      "name": "Mitchell D. West",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/30572202?v=4",
+      "profile": "https://github.com/mdwest",
+      "contributions": [
+        "code",
+        "bug",
+        "business",
+        "financial",
+        "fundingFinding",
+        "ideas",
+        "projectManagement",
+        "review"
+      ]
+    },
+    {
+      "login": "TomaszKolek",
+      "name": "Tomasz Kolek",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/5993758?v=4",
+      "profile": "https://www.linkedin.com/in/tomaszkolek",
+      "contributions": [
+        "code",
+        "test",
+        "security",
+        "review"
+      ]
+    },
+    {
+      "login": "Unit111",
+      "name": "Petar Petrov",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/5164528?v=4",
+      "profile": "https://github.com/Unit111",
+      "contributions": [
+        "test"
+      ]
+    },
+    {
+      "login": "petarPetrovBG",
+      "name": "Petar Petrov",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/20644034?v=4",
+      "profile": "https://github.com/petarPetrovBG",
+      "contributions": [
+        "test"
+      ]
+    },
+    {
+      "login": "Sv3nman",
+      "name": "Steven Hitchcock",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/14117015?v=4",
+      "profile": "https://github.com/Sv3nman",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ryan-barrett",
+      "name": "Ryan Barrett",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/29344675?v=4",
+      "profile": "https://www.linkedin.com/in/ryan-barrett2/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "WCollins3",
+      "name": "WCollins3",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/10867839?v=4",
+      "profile": "https://github.com/WCollins3",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "jl24",
+      "name": "JooHee Lee",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/12376696?v=4",
+      "profile": "https://github.com/jl24",
+      "contributions": [
+        "code",
+        "bug",
+        "doc",
+        "ideas",
+        "infra",
+        "question"
+      ]
+    },
+    {
+      "login": "delta-plus",
+      "name": "delta-plus",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/25730621?v=4",
+      "profile": "https://github.com/delta-plus",
+      "contributions": [
+        "code",
+        "bug",
+        "doc",
+        "ideas",
+        "question"
+      ]
+    },
+    {
+      "login": "GokuMizuno",
+      "name": "Gordon Stangler",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/6818565?v=4",
+      "profile": "https://github.com/GokuMizuno",
+      "contributions": [
+        "code",
+        "bug",
+        "ideas"
+      ]
+    },
+    {
+      "login": "brylie",
+      "name": "Brylie Christopher Oxley",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/17307?v=4",
+      "profile": "https://bryliechristopheroxley.info",
+      "contributions": [
+        "code",
+        "bug",
+        "projectManagement",
+        "review",
+        "doc",
+        "infra",
+        "maintenance"
+      ]
+    },
+    {
+      "login": "dborstelmann",
+      "name": "Dan Borstelmann",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/6558873?v=4",
+      "profile": "https://github.com/dborstelmann",
+      "contributions": [
+        "code",
+        "bug",
+        "infra",
+        "ideas"
+      ]
+    },
+    {
+      "login": "DCalliet",
+      "name": "Darius Calliet",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/6856645?v=4",
+      "profile": "https://github.com/DCalliet",
+      "contributions": [
+        "code",
+        "bug",
+        "ideas"
+      ]
+    },
+    {
+      "login": "tractaylor",
+      "name": "Trac Taylor",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/5148702?v=4",
+      "profile": "https://github.com/tractaylor",
+      "contributions": [
+        "code",
+        "bug",
+        "ideas"
+      ]
+    },
+    {
+      "login": "tomjohnhall",
+      "name": "Tom John Hall",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/21244070?v=4",
+      "profile": "http://dev.tomjohnhall.com/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "jstrang",
+      "name": "Jake Strang",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/9824957?v=4",
+      "profile": "https://github.com/jstrang",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "danielgrijalva",
+      "name": "Daniel Grijalva",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/11547406?v=4",
+      "profile": "https://github.com/danielgrijalva",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "g1stavo",
+      "name": "Gustavo",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/22722936?v=4",
+      "profile": "https://g1stavo.github.io/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "pscheid2",
+      "name": "Paul Scheid",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/6983738?v=4",
+      "profile": "https://github.com/pscheid2",
+      "contributions": [
+        "code",
+        "ideas",
+        "question"
+      ]
+    },
+    {
+      "login": "terrencetuy",
+      "name": "terrencetuy",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/13714060?v=4",
+      "profile": "https://github.com/terrencetuy",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "JonanOribe",
+      "name": "Jon Ander Oribe",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/11914201?v=4",
+      "profile": "https://github.com/JonanOribe",
+      "contributions": [
+        "code",
+        "bug"
+      ]
+    },
+    {
+      "login": "shaunak-gupta",
+      "name": "Shaunak",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/2604602?v=4",
+      "profile": "https://github.com/shaunak-gupta",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "dlarner3194",
+      "name": "Daniel Larner",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/17296992?v=4",
+      "profile": "https://github.com/dlarner3194",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "darcymeyer",
+      "name": "Darcy Meyer",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/15186598?v=4",
+      "profile": "https://github.com/darcymeyer",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Jazriel",
+      "name": "Javier Martínez",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/9085893?v=4",
+      "profile": "https://github.com/Jazriel",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "therohitramesh",
+      "name": "Rohit Ramesh",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/20316398?v=4",
+      "profile": "https://github.com/therohitramesh",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "richifuentes",
+      "name": "richifuentes",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/9931749?v=4",
+      "profile": "https://github.com/richifuentes",
+      "contributions": [
+        "bug",
+        "question",
+        "ideas"
+      ]
+    },
+    {
+      "login": "alecxvs",
+      "name": "Alec Sears",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/513932?v=4",
+      "profile": "https://github.com/alecxvs",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "Shreyas4991",
+      "name": "Shrys",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/4014341?v=4",
+      "profile": "https://github.com/Shreyas4991",
+      "contributions": [
+        "ideas",
+        "bug"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "OpenCiviWiki",
+  "projectOwner": "CiviWiki",
+  "repoType": "github",
+  "repoHost": "https://github.com"
+}
