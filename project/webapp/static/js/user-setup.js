@@ -229,17 +229,6 @@ cw.UserSetupView = BB.View.extend({
     var last_name = this.model.get("last_name");
     var about_me = this.model.get("about_me");
 
-    // Get data from step 2
-    // TODO: step 2 data
-    console.log(
-      "setupUser context:",
-      first_name,
-      last_name,
-      about_me,
-      coordinates,
-      address
-    );
-
     if (first_name && last_name && about_me && coordinates && address) {
       $.ajax({
         type: "POST",
