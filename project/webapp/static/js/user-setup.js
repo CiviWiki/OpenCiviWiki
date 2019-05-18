@@ -219,6 +219,9 @@ cw.UserSetupView = BB.View.extend({
 
   // SENDING REQUEST TO SERVER ===================================================
   setupUser: function() {
+    // preserve reference to 'this' for use in ajax callback
+    var _this = this;
+
     var coordinates = this.mapView.model.get("coordinates");
     var address = this.mapView.model.get("address");
 
@@ -260,7 +263,7 @@ cw.UserSetupView = BB.View.extend({
             '<span class="subtitle-lato white-text">Success</span>',
             5000
           );
-          this.nextStep();
+          _this.nextStep();
         },
         error: function(data) {
           if (data.status_code === 400) {
