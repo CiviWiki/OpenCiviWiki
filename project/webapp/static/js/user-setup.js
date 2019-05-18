@@ -215,34 +215,6 @@ cw.UserSetupView = BB.View.extend({
     e.preventDefault();
   },
 
-  // resizeImage(): resizes the curretly selected image to spare the server
-  resizeImage: function() {
-    // TODO: implement this
-    // var MAX_WIDTH = 500;
-    // var MAX_HEIGHT = 500;
-    // var img = document.getElementsByClassName("preview-image")[0];
-    // var iw=img.width;
-    // var ih=img.height;
-    //
-    // if (ih > MAX_HEIGHT || iw > MAX_WIDTH) {
-    //     var canvas = document.createElement("canvas");
-    //     var ctx = canvas.getContext("2d");
-    //
-    //     var scale=Math.min((MAX_WIDTH/iw),(MAX_HEIGHT/ih));
-    //     var sw=iw*scale;
-    //     var sh=ih*scale;
-    //
-    //     ctx.drawImage(img,
-    //         0,0,
-    //         iw,ih,
-    //         (canvas.width-sw)/2,(canvas.height-sh)/2,
-    //         iw*scale,ih*scale
-    //     );
-    //     var dataurl = canvas.toDataURL();
-    //     img.src = dataurl;
-    // }
-  },
-
   // SENDING REQUEST TO SERVER ===================================================
   setupUser: function() {
     var _this = this;
