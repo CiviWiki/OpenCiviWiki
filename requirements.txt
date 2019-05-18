@@ -1,7 +1,7 @@
 amqp==2.4.2
 asgi-redis==1.4.3
 boto==2.49.0
-celery==4.2.2
+celery==4.3.0
 channels==1.1.8  # 2.1.7
 coreapi==2.3.3
 coverage==4.5.3
