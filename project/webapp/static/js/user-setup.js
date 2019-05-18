@@ -286,19 +286,6 @@ cw.UserSetupView = BB.View.extend({
             _this.$el.find(".loading").addClass("hide");
             _this.$el.find(".placeholder").addClass("hide");
           }
-          // var reader = new FileReader();
-          //
-          // reader.onload = function(e) {
-          //     var preview_image = _this.$el.find('.preview-image');
-          //     preview_image.attr('src', e.target.result);
-          //     // _this.resizeImage();
-          //     if (_this.$el.find('.preview-image').hasClass('hide')){
-          //         _this.toggleImgButtons();
-          //         _this.$el.find('.loading').addClass('hide');
-          //         _this.$el.find('.placeholder').addClass('hide');
-          //     }
-          // };
-          // reader.readAsDataURL(uploaded_image);
         }
 
         Materialize.toast("Image Uploaded!", 5000);
