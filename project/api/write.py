@@ -256,13 +256,14 @@ def deleteCivi(request):
 
 @login_required
 def editThread(request):
-
     thread_id = request.POST.get('thread_id')
     title = request.POST.get('title')
     summary = request.POST.get('summary')
     category_id = request.POST.get('category_id')
     level = request.POST.get('level')
     state = request.POST.get('state')
+    is_draft = request.POST.get('is_draft')
+
     if not thread_id:
         return HttpResponseBadRequest(reason="Invalid Thread Reference")
     else:
@@ -278,6 +279,7 @@ def editThread(request):
             req_edit_thread.category_id = category_id
             req_edit_thread.level = level
             req_edit_thread.state = state
+            req_edit_thread.is_draft = is_draft
             req_edit_thread.save()
         except Exception as e:
             return HttpResponseServerError(reason=str(e))
@@ -288,10 +290,7 @@ def editThread(request):
             'thread_id': thread_id,
             'title': req_edit_thread.title,
             'summary': req_edit_thread.summary,
-            "category": {
-                "id": req_edit_thread.category.id,
-                "name": req_edit_thread.category.name
-            },
+            'category': req_edit_thread.category,
             "level": req_edit_thread.level,
             "state": req_edit_thread.state if req_edit_thread.level == "state" else "",
             "location": location,
