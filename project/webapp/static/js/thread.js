@@ -2130,6 +2130,12 @@ cw.ThreadView = BB.View.extend({
             type: 'POST',
             data: {
                 thread_id: _this.model.threadId,
+                title: _this.model.attributes.title,
+                summary: _this.model.attributes.summary,
+                // Why is categories an array, when only one category is ever chosen?
+                category_id: _this.model.attributes.categories[0].id,
+                level: _this.model.attributes.level,
+                state: _this.model.attributes.state,
                 is_draft: false,
             },
             success: function (response) {
