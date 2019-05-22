@@ -257,45 +257,46 @@ def deleteCivi(request):
 @login_required
 def editThread(request):
     thread_id = request.POST.get('thread_id')
-    title = request.POST.get('title')
-    summary = request.POST.get('summary')
-    category_id = request.POST.get('category_id')
-    level = request.POST.get('level')
-    state = request.POST.get('state')
+    non_required_params = ['title', 'summary', 'category_id', 'level', 'state']
     is_draft = request.POST.get('is_draft', True)
 
     if not thread_id:
         return HttpResponseBadRequest(reason="Invalid Thread Reference")
-    else:
-        try:
-            req_edit_thread = Thread.objects.get(id=thread_id)
 
-            category_id = request.POST.get('category_id')
-            if request.user.username != req_edit_thread.author.user.username:
-                return HttpResponseBadRequest("No Edit Rights")
+    if not is_draft:
+        Thread.objects.filter(id=thread_id).update(is_draft=False)
 
-            req_edit_thread.title = title
-            req_edit_thread.summary = summary
-            req_edit_thread.category_id = category_id
-            req_edit_thread.level = level
-            req_edit_thread.state = state
-            req_edit_thread.is_draft = is_draft
-            req_edit_thread.save()
-        except Exception as e:
-            return HttpResponseServerError(reason=str(e))
+        return JsonResponse({'data': "Success"})
 
-        location = req_edit_thread.level if not req_edit_thread.state else dict(US_STATES).get(req_edit_thread.state)
+    try:
+        req_edit_thread = Thread.objects.get(id=thread_id)
 
-        return_data = {
-            'thread_id': thread_id,
-            'title': req_edit_thread.title,
-            'summary': req_edit_thread.summary,
-            'category': req_edit_thread.category,
-            "level": req_edit_thread.level,
-            "state": req_edit_thread.state if req_edit_thread.level == "state" else "",
-            "location": location,
-        }
-        return JsonResponse({'data': return_data})
+        if request.user.username != req_edit_thread.author.user.username:
+            return HttpResponseBadRequest("No Edit Rights")
+
+        # set remaining parameters from request
+        for param in non_required_params:
+            request_value = request.POST.get(param)
+
+            if request_value:
+                setattr(req_edit_thread, param, request_value)
+        
+        req_edit_thread.save()
+    except Exception as e:
+        return HttpResponseServerError(reason=str(e))
+
+    location = req_edit_thread.level if not req_edit_thread.state else dict(US_STATES).get(req_edit_thread.state)
+
+    return_data = {
+        'thread_id': thread_id,
+        'title': req_edit_thread.title,
+        'summary': req_edit_thread.summary,
+        'category': req_edit_thread.category,
+        "level": req_edit_thread.level,
+        "state": req_edit_thread.state if req_edit_thread.level == "state" else "",
+        "location": location,
+    }
+    return JsonResponse({'data': return_data})
 
 
 
