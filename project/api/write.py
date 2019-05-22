@@ -262,7 +262,7 @@ def editThread(request):
     category_id = request.POST.get('category_id')
     level = request.POST.get('level')
     state = request.POST.get('state')
-    is_draft = request.POST.get('is_draft')
+    is_draft = request.POST.get('is_draft', True)
 
     if not thread_id:
         return HttpResponseBadRequest(reason="Invalid Thread Reference")
