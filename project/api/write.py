@@ -256,9 +256,9 @@ def deleteCivi(request):
 
 @login_required
 def editThread(request):
-    thread_id = request.POST.get('thread_id')
-    non_required_params = ['title', 'summary', 'category_id', 'level', 'state']
-    is_draft = request.POST.get('is_draft', True)
+    thread_id = request.POST.get("thread_id")
+    non_required_params = ["title", "summary", "category_id", "level", "state"]
+    is_draft = request.POST.get("is_draft", True)
 
     if not thread_id:
         return HttpResponseBadRequest(reason="Invalid Thread Reference")
@@ -280,7 +280,7 @@ def editThread(request):
 
             if request_value:
                 setattr(req_edit_thread, param, request_value)
-        
+ 
         req_edit_thread.save()
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
@@ -288,15 +288,18 @@ def editThread(request):
     location = req_edit_thread.level if not req_edit_thread.state else dict(US_STATES).get(req_edit_thread.state)
 
     return_data = {
-        'thread_id': thread_id,
-        'title': req_edit_thread.title,
-        'summary': req_edit_thread.summary,
-        'category': req_edit_thread.category,
+        "thread_id": thread_id,
+        "title": req_edit_thread.title,
+        "summary": req_edit_thread.summary,
+        "category": {
+            "id": req_edit_thread.category.id,
+            "name": req_edit_thread.category.name
+        },
         "level": req_edit_thread.level,
         "state": req_edit_thread.state if req_edit_thread.level == "state" else "",
         "location": location,
     }
-    return JsonResponse({'data': return_data})
+    return JsonResponse({"data": return_data})
 
 
 

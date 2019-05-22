@@ -118,7 +118,10 @@ def issue_thread(request, thread_id=None):
         },
         "contributors": [Account.objects.chip_summarize(a) for a in
                          Account.objects.filter(pk__in=c_qs.distinct('author').values_list('author', flat=True))],
-        "category": t.category,
+        "category": {
+            "id": t.category.id,
+            "name": t.category.name
+        },
         "categories": [{'id': c.id, 'name': c.name} for c in Category.objects.all()],
         "states": sorted(US_STATES, key=lambda s: s[1]),
         "created": t.created_date_str,
