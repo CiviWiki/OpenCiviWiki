@@ -280,7 +280,7 @@ def editThread(request):
 
             if request_value:
                 setattr(req_edit_thread, param, request_value)
- 
+
         req_edit_thread.save()
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
