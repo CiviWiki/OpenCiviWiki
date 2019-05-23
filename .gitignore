@@ -5,5 +5,4 @@
 media/
 staticfiles
 .idea
-.env
 data/
