@@ -323,6 +323,15 @@
       "contributions": [
         "userTesting"
       ]
+    },
+    {
+      "login": "torabshaikh",
+      "name": "Torab Shaikh",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/18557453?v=4",
+      "profile": "https://github.com/torabshaikh",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
