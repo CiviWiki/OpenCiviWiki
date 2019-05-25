@@ -1553,6 +1553,7 @@ cw.ThreadView = BB.View.extend({
     renderOutline: function(){
         var _this = this;
         if (this.civis.length === 0){
+            // render with mock data to prevent errors
             var mockData = {
                 is_draft: undefined,
                 count: 0,
@@ -1560,6 +1561,7 @@ cw.ThreadView = BB.View.extend({
                 causes: [],
                 solutions: []
             }
+            
             this.$('#civi-outline').empty().append(this.outlineTemplate(mockData));
         }
 
