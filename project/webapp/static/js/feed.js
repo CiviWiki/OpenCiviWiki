@@ -97,13 +97,16 @@ cw.FeedView = BB.View.extend({
         // Annotate each thread with category name
         var annotatedThreads = this.threads.map(function(thread) {
           var thread_category_id = thread.thread.category_id;
+          console.log("thread_category_id", thread_category_id);
 
-          var thread_category = categories.filter(function (category) {
+          var filtered_categories = categories.filter(function (category) {
+              console.log(category)
               return category.id === thread_category_id;
           });
-
-          if (thread_category_id && thread_category.length === 1) {
-            thread.thread.category_name = thread_category[0].name;
+          
+          console.log("thread_category length", filtered_categories.length)
+          if (thread_category_id && filtered_categories.length === 1) {
+            thread.thread.category_name = filtered_categories[0].name;
           } else {
             thread.thread.category_name = "ambiguous category";
           }
