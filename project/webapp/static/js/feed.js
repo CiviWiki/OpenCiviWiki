@@ -92,13 +92,34 @@ cw.FeedView = BB.View.extend({
     },
 
     renderFeedList: function() {
+        var categories = this.options.categories;
+
+        // Annotate each thread with category name
+        var annotatedThreads = this.threads.map(function(thread) {
+          var thread_category_id = thread.thread.category_id;
+
+          var thread_category = categories.filter(function (category) {
+              return category.id === thread_category_id;
+          });
+
+          if (thread_category_id && thread_category.length === 1) {
+            thread.thread.category_name = thread_category[0].name;
+          } else {
+            thread.thread.category_name = "ambiguous category";
+          }
+
+          return thread;
+        });
+    
         var template_var = {
-            'categories': this.options.categories,
-            'threads': this.threads
+          threads: this.threads
         };
-        this.$('#feed-list').empty().append(this.feedListTemplate(template_var));
-        this.$('.scroll-col').height($(window).height() - this.$('nav').height());
-    },
+    
+        this.$("#feed-list")
+          .empty()
+          .append(this.feedListTemplate(template_var));
+        this.$(".scroll-col").height($(window).height() - this.$("nav").height());
+      },
 
     setUserCategories: function (new_list) {
         this.options.user_categories = new_list;
