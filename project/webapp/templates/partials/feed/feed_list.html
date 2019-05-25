@@ -2,7 +2,7 @@
     {{# if (threads.length > 0) { }}
     {{# _.each(threads, function (t) {}}
         <div class="col s12">
-        {{= cw.underscorePartial('thread-card-template', ({thread_data: t, categories: categories}))}}
+        {{= cw.underscorePartial('thread-card-template', ({thread_data: t}))}}
         </div>
     {{# }, this); }}
     {{# } else { }}
