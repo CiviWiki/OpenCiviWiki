@@ -127,17 +127,6 @@ cw.CiviCollection = BB.Collection.extend({
     },
 });
 
-// cw.CiviSubCollection = BB.Collection.extend({
-//     model: cw.CiviModel,
-//     comparator: function(model) {
-//         return -model.get('score');
-//     },
-//
-//     initialize: function (options) {
-//         options = options || {};
-//     },
-// });
-
 cw.ResponseCollection = BB.Collection.extend({
     model: cw.CiviModel,
 
@@ -191,7 +180,6 @@ cw.CiviView =  BB.View.extend({
 
     events: {
         'click .rating-button': 'clickRating',
-        // 'click .favorite': 'clickFavorite',
         'click .edit': 'clickEdit',
         'click .delete': 'deleteEdit',
         'click .edit-confirm': 'saveEdit',
@@ -204,10 +192,6 @@ cw.CiviView =  BB.View.extend({
         'input .civi-link-images': 'previewImageNames',
         'click #add-image-link-input': 'addImageLinkInput',
         'click #respond-button': 'addRebuttal',
-        // 'click .civi-grab-link': 'grabLink',
-        // vote
-        // changevote
-
     },
 
     addImageLinkInput: function(){
@@ -268,7 +252,6 @@ cw.CiviView =  BB.View.extend({
         $modal.openModal();
         e.stopPropagation();
     },
-    // clean() function
     clickFavorite: function (e) {
         var _this = this;
 
@@ -319,10 +302,6 @@ cw.CiviView =  BB.View.extend({
         var rating = $this.data('rating');
         var civi_id = $(e.currentTarget).closest('.civi-card').data('civi-id');
 
-        // if (this.can_edit) {
-        //     Materialize.toast('Trying to vote on your own civi? :}', 5000);
-        //     return;
-        // }
         if (rating && civi_id){
             $.ajax({
                 url: '/api/rate_civi/',
@@ -750,7 +729,6 @@ cw.NewCiviView = BB.View.extend({
 
     cancelCivi: function () {
         this.$el.empty();
-        // $('.responses').height($('.responses-box').height());
     },
 
     createCivi: function (e) {
@@ -925,11 +903,6 @@ cw.NewResponseView = BB.View.extend({
         'input .civi-link-images': 'previewImageNames',
         'click #add-image-link-input': 'addImageLinkInput',
     },
-    //
-    // show: function () {
-    //     this.$('.new-response-modal').openModal();
-    // },
-    //
     hide: function () {
         $('#new-response-box').empty();
         $('#add-new-response').show();
@@ -1524,9 +1497,6 @@ cw.ThreadView = BB.View.extend({
         this.threadBodyRender();
         this.threadNavRender();
 
-        // this.$('.scroll-col').height($(window).sheight() - this.$('.body-banner').height());
-
-
         this.newCiviView = new cw.NewCiviView({
             model: this.model,
             parentView: this
@@ -1781,13 +1751,6 @@ cw.ThreadView = BB.View.extend({
         _.each(savedVotes, function(v){
             this.$('#civi-'+ v.civi_id).find("." +v.activity_type).addClass('current');
         });
-
-        // // Indicate vote status on nav
-        // _.each(['problem', 'cause', 'solution'], function(type){
-        //     if (this[type+'s'].length === 0) {
-        //         this.$('.' + type + '-nav>.civi-nav-header').addClass('nav-inactive');
-        //     }
-        // }, this);
     },
 
     renderResponses: function () {
@@ -1911,14 +1874,11 @@ cw.ThreadView = BB.View.extend({
         var threadPos = this.$('.main-thread').position().top;
         var scrollPos = this.$('.main-thread').scrollTop();
         this.civiLocations = [];
-        // this.civiTops = [];
-        // this.civiTargets =
+
         this.$('.civi-card').each(function (idx, civi) {
             var $civi = $(civi),
                 $civiTop = $civi.position().top + scrollPos - threadPos;
             _this.civiLocations.push({top: $civiTop, bottom: $civiTop + $civi.height(), height: $civi.height(), target: $civi, id: $civi.attr('data-civi-id')});
-            // _this.civiTops.push($civiTop);
-            // _this.civiTargets.push({top: $civiTop, target: $civi, id: $civi.data('civi-id') });
         });
     },
 
@@ -1930,29 +1890,6 @@ cw.ThreadView = BB.View.extend({
             return;
         }
 
-        // TODO: check if nav is folded, then just p-c-solution check
-        //
-        // if (firstTime) {
-        //     var $newNavCivi = _this.$('[data-civi-nav-id="' + _this.civiLocations[0].id + '"]');
-        //     $newNavCivi.addClass('current');
-        //
-        //     if (!_this.navExpanded) {
-        //         $($newNavCivi.closest('.civi-nav-wrapper').siblings()[0]).addClass('current');
-        //     }
-        //
-        //     _this.currentNavCivi = _this.civiLocations[0].id;
-        //     return;
-        // } else
-        // if (navChange) {
-        //     var $currentNavCivi = _this.$('[data-civi-nav-id="' + _this.currentNavCivi + '"]');
-        //
-        //     if (this.navExpanded) {
-        //         $($currentNavCivi.closest('.civi-nav-wrapper').siblings()[0]).removeClass('current');
-        //     } else {
-        //         $($currentNavCivi.closest('.civi-nav-wrapper').siblings()[0]).addClass('current');
-        //     }
-        //     return;
-        // }
         // 2. Go through list of heights to get current active civi
         var OFFSET = 100;
         var element = _.find(this.civiLocations, function (l) {
@@ -1960,6 +1897,7 @@ cw.ThreadView = BB.View.extend({
                 scrollPosition >= l.top - OFFSET &&
                 scrollPosition < l.bottom - OFFSET;
         }, this);
+
         // 3. Activate Corresponding Civi Card and Nav
         if (!element) return;
         else {
@@ -1973,10 +1911,7 @@ cw.ThreadView = BB.View.extend({
         var _this = this;
         this.currentNavCivi = id || this.currentNavCivi;
         var $currentNavCivi = _this.$('[data-civi-nav-id="' + _this.currentNavCivi + '"]');
-            // $newNavCivi = _this.$('[data-civi-nav-id="' + newCivi + '"]');
 
-
-        // $newNavCivi.addClass('current');
         if (!_this.navExpanded) {
             this.$('.civi-nav-header').removeClass('current');
             $($currentNavCivi.closest('.civi-nav-wrapper').siblings()[0]).addClass('current');
@@ -2006,7 +1941,6 @@ cw.ThreadView = BB.View.extend({
                 this.responseCollection.civiId = this.currentCivi;
                 this.responseCollection.fetch();
             }
-
 
         } else {
             $currentCivi.removeClass('current');
