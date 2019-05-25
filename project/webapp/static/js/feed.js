@@ -100,11 +100,14 @@ cw.FeedView = BB.View.extend({
           console.log("thread_category_id", thread_category_id);
 
           var filtered_categories = categories.filter(function (category) {
-              console.log(category)
-              return category.id === thread_category_id;
+              var thread_category_match = category.id === thread_category_id;
+              console.log(thread_category_match);
+
+              return thread_category_match;
           });
+          console.log(filtered_categories)
           
-          console.log("thread_category length", filtered_categories.length)
+          console.log("filtered_categories length", filtered_categories.length)
           if (thread_category_id && filtered_categories.length === 1) {
             thread.thread.category_name = filtered_categories[0].name;
           } else {
