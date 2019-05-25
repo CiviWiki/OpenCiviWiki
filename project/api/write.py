@@ -263,7 +263,8 @@ def editThread(request):
     if not thread_id:
         return HttpResponseBadRequest(reason="Invalid Thread Reference")
 
-    if not is_draft:
+    # for some reason this is not cast to boolean in the request
+    if is_draft == "false":
         Thread.objects.filter(id=thread_id).update(is_draft=False)
 
         return JsonResponse({'data': "Success"})
