@@ -1288,6 +1288,7 @@ cw.LinkSelectView = BB.View.extend({
             allowFreeEntries: false,
             groupBy: 'type',
             valueField: 'id',
+            id : 'civi_links',
             displayField: 'title',
             expandOnFocus: true,
             data: [],
