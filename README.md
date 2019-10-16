@@ -75,6 +75,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/torabshaikh"><img src="https://avatars0.githubusercontent.com/u/18557453?v=4" width="100px;" alt="Torab Shaikh"/><br /><sub><b>Torab Shaikh</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=torabshaikh" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/CaioSR"><img src="https://avatars1.githubusercontent.com/u/26325211?v=4" width="100px;" alt="Caio Shimada Rabello"/><br /><sub><b>Caio Shimada Rabello</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=CaioSR" title="Code">💻</a></td>
     <td align="center"><a href="https://in.linkedin.com/in/umr55766"><img src="https://avatars0.githubusercontent.com/u/16179313?v=4" width="100px;" alt="UMAIR MOHAMMAD"/><br /><sub><b>UMAIR MOHAMMAD</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=umr55766" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/HushOv"><img src="https://avatars2.githubusercontent.com/u/36056305?v=4" width="100px;" alt="Hush"/><br /><sub><b>Hush</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=HushOv" title="Code">💻</a></td>
   </tr>
 </table>
 
