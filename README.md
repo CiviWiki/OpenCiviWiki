@@ -20,7 +20,7 @@ Join us on the following channels:
 - [videos of our weekly planning meetings](https://archive.org/search.php?query=subject%3A%22CiviWiki%22&sort=-date) on Internet Archive
 - [live chat](https://riot.im/app/#/room/#CiviWiki:matrix.org) on Matrix
 - [development roadmap](https://waffle.io/CiviWiki/OpenCiviWiki) on Waffle.io
-- **Twitter:** [@CiviWiki](https://twitter.com/civiwiki)
+- [@CiviWiki](https://twitter.com/civiwiki) on Twitter
 
 # Contribute
 See our [Contributing Guide](readmes/CONTRIBUTING.md) for instructions on how to contribute code.
