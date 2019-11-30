@@ -33,21 +33,25 @@ from core.constants import US_STATES
 @login_required
 @require_post_params(params=['title', 'summary', 'category_id'])
 def new_thread(request):
-    new_thread_data = dict(
-        title=request.POST['title'],
-        summary=request.POST['summary'],
-        category_id=request.POST['category_id'],
-        author_id=request.user.id,
-        level=request.POST['level']
-    )
-    state = request.POST['state']
-    if state:
-        new_thread_data['state'] = state
+    try:
+        author = Account.objects.get(user=request.user)
+        new_thread_data = dict(
+            title=request.POST['title'],
+            summary=request.POST['summary'],
+            category_id=request.POST['category_id'],
+            author=author,
+            level=request.POST['level']
+        )
+        state = request.POST['state']
+        if state:
+            new_thread_data['state'] = state
 
-    new_t = Thread(**new_thread_data)
-    new_t.save()
+        new_t = Thread(**new_thread_data)
+        new_t.save()
 
-    return JsonResponse({'data': 'success', 'thread_id': new_t.pk})
+        return JsonResponse({'data': 'success', 'thread_id': new_t.pk})
+    except Exception as e:
+        return HttpResponseServerError(reason=str(e))
 
 
 @login_required
