@@ -17,7 +17,7 @@ flake8==3.4.1
 gunicorn==19.9.0
 honcho==1.0.1
 kombu==4.4.0
-mock==2.0.0
+mock==4.0.2
 Pillow==4.3.0  # 5.4.1
 psycopg2==2.7.7
 redis==3.2.1
