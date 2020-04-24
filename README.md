@@ -14,9 +14,9 @@ We are an open source, non-profit community, working to develop a democratic eng
 
 ##Requirements
 ###python modules
-   - celery
-   - sentry_sdk
-   - dj_database_url
+- celery
+- sentry_sdk
+- dj_database_url
 
 # Contact info
 Contact us on Twitter to join the team.
