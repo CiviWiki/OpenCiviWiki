@@ -360,11 +360,21 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "JDRanpariya",
+      "name": "JDRanpariya",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/51157407?v=4",
+      "profile": "https://github.com/JDRanpariya",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
   "projectName": "OpenCiviWiki",
   "projectOwner": "CiviWiki",
   "repoType": "github",
-  "repoHost": "https://github.com"
+  "repoHost": "https://github.com",
+  "skipCi": true
 }
