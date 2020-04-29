@@ -7,6 +7,8 @@ Production settings file to select proper environment variables.
 import os
 import sentry_sdk
 import dj_database_url
+# django environ imported
+import environ
 
 from django.core.exceptions import ImproperlyConfigured
 
@@ -77,7 +79,6 @@ MIDDLEWARE_CLASSES = (
 
 CSRF_USE_SESSIONS = True  # Store the CSRF token in the users session instead of in a cookie
 
-CORS_ORIGIN_ALLOW_ALL = True
 ROOT_URLCONF = 'civiwiki.urls'
 LOGIN_URL = '/login'
 
@@ -121,9 +122,13 @@ if 'CLOSED_BETA' in os.environ:
 # Apex Contact for Production Errors
 ADMINS = [('Development Team', 'dev@civiwiki.org')]
 
+# CORS Settings
+CORS_ORIGIN_ALLOW_ALL = True
+
 # API keys
 SUNLIGHT_API_KEY = get_env_variable("SUNLIGHT_API_KEY")
 GOOGLE_API_KEY = get_env_variable("GOOGLE_MAP_API_KEY")
+PROPUBLICA_API_KEY = get_env_variable("PROPUBLICA_API_KEY", optional=True)
 
 # Channels Setup
 if 'REDIS_URL' in os.environ:
@@ -226,6 +231,4 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': DEFAULT_RENDERER_CLASSES,
     'DEFAULT_AUTHENTICATION_CLASSES': DEFAULT_AUTHENTICATION_CLASSES
 }
-# CORS Settings
-CORS_ORIGIN_ALLOW_ALL = True
-PROPUBLICA_API_KEY = get_env_variable("PROPUBLICA_API_KEY", optional=True)
+
