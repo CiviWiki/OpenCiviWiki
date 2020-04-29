@@ -22,6 +22,7 @@ NOTIFICATIONS_USE_JSONFIELD = True
 BASE_DIR = environ.Path(__file__)   # get root of the project
 
 if env('DJANGO_HOST')==None :
+
     DJANGO_HOST = env.Str("DJANGO_HOST")
 else:
     DJANGO_HOST = 'LOCALHOST'

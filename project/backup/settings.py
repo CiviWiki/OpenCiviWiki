@@ -221,8 +221,8 @@ if DEBUG:
     )
 
     DEFAULT_AUTHENTICATION_CLASSES = (
-                                         'api.authentication.CsrfExemptSessionAuthentication',
-                                     ) + DEFAULT_AUTHENTICATION_CLASSES
+        'api.authentication.CsrfExemptSessionAuthentication',
+    ) + DEFAULT_AUTHENTICATION_CLASSES
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
@@ -231,4 +231,3 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': DEFAULT_RENDERER_CLASSES,
     'DEFAULT_AUTHENTICATION_CLASSES': DEFAULT_AUTHENTICATION_CLASSES
 }
-

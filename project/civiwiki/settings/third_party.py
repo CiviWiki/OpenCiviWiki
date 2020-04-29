@@ -46,8 +46,8 @@ if env('CLOSED_BETA'):
     CLOSED_BETA = env.str("CLOSED_BETA")
 
 
-#sentry-sdk
 
+#sentry-sdk
 
 SENTRY_ADDRESS = env('SENTRY_ADDRESS', optional=True)
 if SENTRY_ADDRESS:
@@ -55,7 +55,6 @@ if SENTRY_ADDRESS:
         dsn=SENTRY_ADDRESS,
         integrations=[DjangoIntegration()]
     )
-
 
 #django-rest-framework
 
@@ -76,8 +75,8 @@ if DEBUG:
     )
 
     DEFAULT_AUTHENTICATION_CLASSES = (
-                                         'api.authentication.CsrfExemptSessionAuthentication',
-                                     ) + DEFAULT_AUTHENTICATION_CLASSES
+        'api.authentication.CsrfExemptSessionAuthentication',
+    ) + DEFAULT_AUTHENTICATION_CLASSES
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
