@@ -95,7 +95,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
 # Database
-if env('CIVIWIKI_LOCAL_NAME'):
+if env('CIVIWIKI_LOCAL_NAME')==None:
     STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
     DATABASES = {
@@ -115,7 +115,7 @@ else:
 
 
 # Email Backend Setup
-if env('EMAIL_HOST'):
+if env('EMAIL_HOST')==None:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
     EMAIL_HOST_USER = "test@civiwiki.org"
 else:
@@ -126,3 +126,6 @@ else:
     EMAIL_HOST_PASSWORD = env.str("EMAIL_HOST_PASSWORD")
     EMAIL_USE_SSL = True
     DEFAULT_FROM_EMAIL = EMAIL_HOST
+
+=======
+

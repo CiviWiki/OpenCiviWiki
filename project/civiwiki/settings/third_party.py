@@ -47,10 +47,7 @@ if env('CLOSED_BETA'):
 
 
 
-
-# sentry-sdk
-
-
+#sentry-sdk
 
 SENTRY_ADDRESS = env('SENTRY_ADDRESS', optional=True)
 if SENTRY_ADDRESS:
@@ -59,11 +56,7 @@ if SENTRY_ADDRESS:
         integrations=[DjangoIntegration()]
     )
 
-
-
-
-
-# django-rest-framework
+#django-rest-framework
 
 # Devlopment Environment Control
 DEBUG = env('DEBUG')    # False if not in os.environ
@@ -92,3 +85,4 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': DEFAULT_RENDERER_CLASSES,
     'DEFAULT_AUTHENTICATION_CLASSES': DEFAULT_AUTHENTICATION_CLASSES
 }
+
