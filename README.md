@@ -13,10 +13,8 @@ We are an open source, non-profit community, working to develop a democratic eng
 * **Citizen/Representative Engagement.** CiviWiki's core goal is to engage citizens and their representatives, with the goal of making government more accountable. CiviWiki will achieve this goal in two ways. First, CiviWiki will organize user's policy profile and compare it to every political candidate in the user's district. This quick, detailed, comparison will help users make informed votes, and we believe increased voter confidence will increase voter turnout. Second, CiviWiki will collect anonymized user data and forward district level statistics to representatives. With a critical mass of users, we believe timely district level polling data will influence representatives' votes.
 
 ## Requirements
-### Python modules
-- celery
-- sentry_sdk
-- dj_database_url
+To install all required modules use the following command in project dir:
+`pip install -r requirements.txt`
 
 # Contact info
 Contact us on Twitter to join the team.
