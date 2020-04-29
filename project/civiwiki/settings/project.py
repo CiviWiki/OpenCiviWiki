@@ -21,14 +21,14 @@ NOTIFICATIONS_USE_JSONFIELD = True
 
 BASE_DIR = environ.Path(__file__)   # get root of the project
 
-if env('DJANGO_HOST') :
+if env('DJANGO_HOST')==None :
     DJANGO_HOST = env.Str("DJANGO_HOST")
 else:
     DJANGO_HOST = 'LOCALHOST'
 
 
 # SSL Setup
-if DJANGO_HOST is not 'LOCALHOST':
+if env(DJANGO_HOST)==None:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
@@ -47,7 +47,7 @@ ADMINS = [('Development Team', 'dev@civiwiki.org')]
 
 public_root = BASE_DIR.path('public/')
 
-if env('AWS_STORAGE_BUCKET_NAME'):
+if env('AWS_STORAGE_BUCKET_NAME')==None:
     MEDIA_URL = '/media/'
     MEDIA_ROOT = public_root('media')
 else:
