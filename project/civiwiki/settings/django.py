@@ -127,5 +127,4 @@ else:
     EMAIL_USE_SSL = True
     DEFAULT_FROM_EMAIL = EMAIL_HOST
 
-
-
+    
