@@ -70,7 +70,7 @@ LOGIN_URL = '/login'
 
 
 
-#Frontend files
+# Frontend files
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -126,6 +126,3 @@ else:
     EMAIL_HOST_PASSWORD = env.str("EMAIL_HOST_PASSWORD")
     EMAIL_USE_SSL = True
     DEFAULT_FROM_EMAIL = EMAIL_HOST
-
-
-
