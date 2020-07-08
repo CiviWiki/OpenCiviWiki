@@ -34,32 +34,32 @@ Use instruction from one of points below:
 There are two files, located in the `/data` directory, that contain initial categories and congressional data. Run the following commands to initialize the congressional and categories data:
 
 ```py
-python manage.py loaddata data/congress.json
+python3 manage.py loaddata data/congress.json
 ```
 
 ```py
-python manage.py loaddata data/categories.json
+python3 manage.py loaddata data/categories.json
 ```
 
 ### Collect static files
 Certain resources, such as CSS and JavaScript files, need to be served from a static directory. Run the following command to collect static files for Django to serve:
 
 ```py
-python manage.py collectstatic
+python3 manage.py collectstatic
 ```
 
 ### Create super user
 You will need a super user in order to log in and manage CiviWiki:
 
 ```py
-python manage.py createsuperuser
+python3 manage.py createsuperuser
 ```
 
 ## Run CiviWiki
 If the above steps are complete, we can start CiviWiki:
 
 ```py
-python manage.py runserver
+python3 manage.py runserver
 ```
 
 ## Register initial user
