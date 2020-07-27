@@ -369,6 +369,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "Di-ref",
+      "name": "Di-ref",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/61465302?v=4",
+      "profile": "https://github.com/Di-ref",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
