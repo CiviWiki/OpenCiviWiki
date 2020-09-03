@@ -1,4 +1,4 @@
-amqp==2.4.2
+amqp==5.0.0
 asgi-redis==1.4.3
 boto==2.49.0
 celery==4.2.2
