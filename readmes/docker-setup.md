@@ -23,7 +23,7 @@ Execute docker command:
     docker-compose up
 
 
-and that's it! Service should be available on address `0.0.0.0:8000`
+and that's it! Service should be available on address `http://0.0.0.0:8000`
 
 ## Log into docker console
 Go to docker-shell to execute `./manage.py` commands by executing:
