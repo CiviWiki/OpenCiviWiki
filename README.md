@@ -15,8 +15,8 @@ We are an open source, non-profit community, working to develop a democratic eng
 ## Requirements
 First Check Python is installed or not by typing in command line
 `python --version`
-if python is not installed, go to python wesite and download it
-then do below step
+if python is not installed, go to python website and download it
+then do this >
 To install all required modules use the following command in project dir:
 `pip install -r requirements.txt`
 
