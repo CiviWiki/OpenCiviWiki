@@ -13,11 +13,12 @@ We are an open source, non-profit community, working to develop a democratic eng
 * **Citizen/Representative Engagement.** CiviWiki's core goal is to engage citizens and their representatives, with the goal of making government more accountable. CiviWiki will achieve this goal in two ways. First, CiviWiki will organize user's policy profile and compare it to every political candidate in the user's district. This quick, detailed, comparison will help users make informed votes, and we believe increased voter confidence will increase voter turnout. Second, CiviWiki will collect anonymized user data and forward district level statistics to representatives. With a critical mass of users, we believe timely district level polling data will influence representatives' votes.
 
 ## Requirements
-To install all required modules use the following command in project dir:
+To install all required modules use the following command in project directory:
+
 `pip install -r requirements.txt`
 
 # Contact info
-Contact us on Twitter to join the team.
+Contact us on [Twitter](https://twitter.com/civiwiki) to join the team.
 
 Join us on the following channels:
 - [development discussions](https://www.loomio.org/g/ET40tXUC/openciviwiki) on Loomio
@@ -92,7 +93,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind is welcomed!
 
 # Testing
-See our [Testing Guide](readmes/testing.md) for instructions on how to test code.
+See our [Testing Guide](readmes/testing.md) for instructions on how to test the code.
