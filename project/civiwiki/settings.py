@@ -13,13 +13,15 @@ from django.core.exceptions import ImproperlyConfigured
 from sentry_sdk.integrations.django import DjangoIntegration
 
 
-def get_env_variable(environment_variable, optional=False):
+def get_env_variable(environment_variable, optional=False, default=None):
     """Get the environment variable or return exception"""
     try:
         return os.environ[environment_variable]
     except KeyError:
         if optional:
             return ''
+        elif default:
+            return default
         else:
             error = "Environment variable '{ev}' not found.".format(ev=environment_variable)
             raise ImproperlyConfigured(error)
@@ -41,7 +43,7 @@ else:
     DJANGO_HOST = 'LOCALHOST'
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SECRET_KEY = get_env_variable("DJANGO_SECRET_KEY")
+SECRET_KEY = get_env_variable("DJANGO_SECRET_KEY", default='TEST_KEY_FOR_DEVELOPMENT')
 ALLOWED_HOSTS = [".herokuapp.com", ".civiwiki.org", "127.0.0.1", "localhost", "0.0.0.0"]
 
 INSTALLED_APPS = (
