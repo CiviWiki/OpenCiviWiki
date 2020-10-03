@@ -25,7 +25,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from api.forms import UpdateProfileImage
 from api.models import Thread
 from api.tasks import send_mass_email
-from models import Account, Activity, Category, Civi, CiviImage, Invitation, Bill
+from .models import Account, Activity, Category, Civi, CiviImage, Invitation, Bill
 from core.custom_decorators import require_post_params
 from core.constants import US_STATES
 
