@@ -75,6 +75,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 )
 
 CSRF_USE_SESSIONS = True  # Store the CSRF token in the users session instead of in a cookie
@@ -170,7 +171,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Database
 if 'CIVIWIKI_LOCAL_NAME' not in os.environ:
-    STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
     DATABASES = {
         'default': dj_database_url.parse(get_env_variable("DATABASE_URL"))
