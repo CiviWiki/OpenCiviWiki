@@ -2,7 +2,7 @@
 [![Stories in Ready](https://badge.waffle.io/CiviWiki/OpenCiviWiki.png?label=next%20up&title=next%20tasks)](https://waffle.io/CiviWiki/OpenCiviWiki?utm_source=badge)
 [![Maintainability](https://api.codeclimate.com/v1/badges/5241b4275cc2dffe90f2/maintainability)](https://codeclimate.com/github/CiviWiki/OpenCiviWiki/maintainability)
 
-# Welcome to Civiwiki!
+# Welcome to Civiwiki website!
 
 We are an open source, non-profit community, working to develop a democratic engagement web system.
 
@@ -12,11 +12,11 @@ We are an open source, non-profit community, working to develop a democratic eng
 * **Personalized Policy Feed.** CiviWiki intelligently personalizes users' feed in two meaningful ways. First, the issues promoted to users' feed will be personalized to the user's expressed interests, and the timeliness of the issue. Second, the structure of the issue topics break policy positions into bite-sized contentions we call Civies. Each Civi is logically related to the rest of the topic. Based on the user's support, opposition, or neutrality to each Civi, CiviWiki promotes different relevant content.
 * **Citizen/Representative Engagement.** CiviWiki's core goal is to engage citizens and their representatives, with the goal of making government more accountable. CiviWiki will achieve this goal in two ways. First, CiviWiki will organize user's policy profile and compare it to every political candidate in the user's district. This quick, detailed, comparison will help users make informed votes, and we believe increased voter confidence will increase voter turnout. Second, CiviWiki will collect anonymized user data and forward district level statistics to representatives. With a critical mass of users, we believe timely district level polling data will influence representatives' votes.
 
-## Requirements
+## Requirements for Civiwiki
 To install all required modules use the following command in project dir:
 `pip install -r requirements.txt`
 
-# Contact info
+# Contact information
 Contact us on Twitter to join the team.
 
 Join us on the following channels:
@@ -26,10 +26,10 @@ Join us on the following channels:
 - [development roadmap](https://waffle.io/CiviWiki/OpenCiviWiki) on Waffle.io
 - [@CiviWiki](https://twitter.com/civiwiki) on Twitter
 
-# Contribute
+# Contribute to Civiwiki
 See our [Contributing Guide](readmes/CONTRIBUTING.md) for instructions on how to contribute code.
 
-## Contributors
+## About our Contributors
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
