@@ -1,5 +1,4 @@
 [![ComVer](https://img.shields.io/badge/ComVer-compliant-brightgreen.svg)](https://github.com/staltz/comver)
-[![Stories in Ready](https://badge.waffle.io/CiviWiki/OpenCiviWiki.png?label=next%20up&title=next%20tasks)](https://waffle.io/CiviWiki/OpenCiviWiki?utm_source=badge)
 [![Maintainability](https://api.codeclimate.com/v1/badges/5241b4275cc2dffe90f2/maintainability)](https://codeclimate.com/github/CiviWiki/OpenCiviWiki/maintainability)
 
 # Welcome to Civiwiki!
