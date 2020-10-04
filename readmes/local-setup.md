@@ -9,7 +9,7 @@ The following packages are required to start developing CiviWiki:
 The following instructions assume you have already cloned this repository.
 
 ### Requirements
-You will need a virtual environment with Python 2.7 installed.
+You will need a virtual environment with Python 3.7 installed.
 
 Once your virtual environment is active, run the following command to install the requirements:
 
