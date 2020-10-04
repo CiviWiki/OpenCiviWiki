@@ -6,44 +6,34 @@ Production settings file to select proper environment variables.
 """
 import os
 import sentry_sdk
-import dj_database_url
+import environ
 
 from django.core.exceptions import ImproperlyConfigured
 
 from sentry_sdk.integrations.django import DjangoIntegration
 
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+# reading .env file
+environ.Env.read_env()
 
-def get_env_variable(environment_variable, optional=False, default=None):
-    """Get the environment variable or return exception"""
-    try:
-        return os.environ[environment_variable]
-    except KeyError:
-        if optional:
-            return ''
-        elif default:
-            return default
-        else:
-            error = "Environment variable '{ev}' not found.".format(ev=environment_variable)
-            raise ImproperlyConfigured(error)
+# False if not in os.environ
+DEBUG = env('DEBUG')
 
+if not DEBUG:
+    SENTRY_ADDRESS = env('SENTRY_ADDRESS')
+    if SENTRY_ADDRESS:
+        sentry_sdk.init(
+            dsn=SENTRY_ADDRESS,
+            integrations=[DjangoIntegration()]
+        )
 
-SENTRY_ADDRESS = get_env_variable('SENTRY_ADDRESS', optional=True)
-if SENTRY_ADDRESS:
-    sentry_sdk.init(
-        dsn=SENTRY_ADDRESS,
-        integrations=[DjangoIntegration()]
-    )
-
-# Devlopment Environment Control
-DEBUG = 'DEBUG' in os.environ
-
-if 'DJANGO_HOST' in os.environ:
-    DJANGO_HOST = get_env_variable("DJANGO_HOST")
-else:
-    DJANGO_HOST = 'LOCALHOST'
+DJANGO_HOST = env("DJANGO_HOST", default='LOCALHOST')
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SECRET_KEY = get_env_variable("DJANGO_SECRET_KEY", default='TEST_KEY_FOR_DEVELOPMENT')
+SECRET_KEY = env("DJANGO_SECRET_KEY", default='TEST_KEY_FOR_DEVELOPMENT')
 ALLOWED_HOSTS = [".herokuapp.com", ".civiwiki.org", "127.0.0.1", "localhost", "0.0.0.0"]
 
 INSTALLED_APPS = (
@@ -85,7 +75,7 @@ ROOT_URLCONF = 'civiwiki.urls'
 LOGIN_URL = '/login'
 
 # SSL Setup
-if DJANGO_HOST is not 'LOCALHOST':
+if DJANGO_HOST != 'LOCALHOST':
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
@@ -117,22 +107,17 @@ TEMPLATES = [
 WSGI_APPLICATION = 'civiwiki.wsgi.application'
 
 # Global user privilege settings
-CLOSED_BETA = False
-if 'CLOSED_BETA' in os.environ:
-    CLOSED_BETA = get_env_variable("CLOSED_BETA")
+CLOSED_BETA = env("CLOSED_BETA", default=False)
 
 # Apex Contact for Production Errors
 ADMINS = [('Development Team', 'dev@civiwiki.org')]
 
 # API keys
-SUNLIGHT_API_KEY = get_env_variable("SUNLIGHT_API_KEY")
-GOOGLE_API_KEY = get_env_variable("GOOGLE_MAP_API_KEY")
+SUNLIGHT_API_KEY = env("SUNLIGHT_API_KEY")
+GOOGLE_API_KEY = env("GOOGLE_MAP_API_KEY")
 
 # Channels Setup
-if 'REDIS_URL' in os.environ:
-    REDIS_URL = get_env_variable("REDIS_URL")
-else:
-    REDIS_URL = 'redis://localhost:6379'
+REDIS_URL = env("REDIS_URL", default='redis://localhost:6379')
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "asgi_redis.RedisChannelLayer",
@@ -156,9 +141,9 @@ if 'AWS_STORAGE_BUCKET_NAME' not in os.environ:
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 else:
-    AWS_STORAGE_BUCKET_NAME = get_env_variable("AWS_STORAGE_BUCKET_NAME")
-    AWS_S3_ACCESS_KEY_ID = get_env_variable("AWS_S3_ACCESS_KEY_ID")
-    AWS_S3_SECRET_ACCESS_KEY = get_env_variable("AWS_S3_SECRET_ACCESS_KEY")
+    AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
+    AWS_S3_ACCESS_KEY_ID = env("AWS_S3_ACCESS_KEY_ID")
+    AWS_S3_SECRET_ACCESS_KEY = env("AWS_S3_SECRET_ACCESS_KEY")
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
     AWS_S3_SECURE_URLS = False
     AWS_QUERYSTRING_AUTH = False
@@ -174,17 +159,17 @@ if 'CIVIWIKI_LOCAL_NAME' not in os.environ:
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
     DATABASES = {
-        'default': dj_database_url.parse(get_env_variable("DATABASE_URL"))
+        'default': env.db()
     }
 else:
     DATABASES = {
         'default': {
-            'HOST': get_env_variable('CIVIWIKI_LOCAL_DB_HOST', 'localhost'),
+            'HOST': env('CIVIWIKI_LOCAL_DB_HOST', 'localhost'),
             'PORT': '5432',
-            'NAME': get_env_variable("CIVIWIKI_LOCAL_NAME"),
+            'NAME': env("CIVIWIKI_LOCAL_NAME"),
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'USER': get_env_variable("CIVIWIKI_LOCAL_USERNAME"),
-            'PASSWORD': get_env_variable("CIVIWIKI_LOCAL_PASSWORD"),
+            'USER': env("CIVIWIKI_LOCAL_USERNAME"),
+            'PASSWORD': env("CIVIWIKI_LOCAL_PASSWORD"),
         },
     }
 
@@ -194,10 +179,10 @@ if 'EMAIL_HOST' not in os.environ:
     EMAIL_HOST_USER = "test@civiwiki.org"
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-    EMAIL_HOST = get_env_variable("EMAIL_HOST")
-    EMAIL_PORT = get_env_variable("EMAIL_PORT")
-    EMAIL_HOST_USER = get_env_variable("EMAIL_HOST_USER")
-    EMAIL_HOST_PASSWORD = get_env_variable("EMAIL_HOST_PASSWORD")
+    EMAIL_HOST = env("EMAIL_HOST")
+    EMAIL_PORT = env("EMAIL_PORT")
+    EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+    EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
     EMAIL_USE_SSL = True
     DEFAULT_FROM_EMAIL = EMAIL_HOST
 
@@ -231,4 +216,4 @@ REST_FRAMEWORK = {
 }
 # CORS Settings
 CORS_ORIGIN_ALLOW_ALL = True
-PROPUBLICA_API_KEY = get_env_variable("PROPUBLICA_API_KEY", optional=True)
+PROPUBLICA_API_KEY = env("PROPUBLICA_API_KEY", default='TEST')
