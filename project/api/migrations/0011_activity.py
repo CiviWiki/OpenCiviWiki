@@ -19,9 +19,9 @@ class Migration(migrations.Migration):
                 ('read', models.BooleanField(default=False)),
                 ('created', models.DateTimeField(auto_now_add=True, null=True)),
                 ('last_modified', models.DateTimeField(auto_now=True, null=True)),
-                ('account', models.ForeignKey(default=None, to='api.Account', null=True)),
-                ('civi', models.ForeignKey(default=None, to='api.Civi', null=True)),
-                ('thread', models.ForeignKey(default=None, to='api.Thread', null=True)),
+                ('account', models.ForeignKey(default=None, to='api.Account', null=True, on_delete=models.PROTECT)),
+                ('civi', models.ForeignKey(default=None, to='api.Civi', null=True, on_delete=models.PROTECT)),
+                ('thread', models.ForeignKey(default=None, to='api.Thread', null=True, on_delete=models.PROTECT)),
             ],
         ),
     ]

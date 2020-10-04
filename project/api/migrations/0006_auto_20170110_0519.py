@@ -34,7 +34,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='civi',
             name='response_civis',
-            field=models.ForeignKey(related_name='responses', to='api.Civi', null=True),
+            field=models.ForeignKey(related_name='responses', to='api.Civi', null=True, on_delete=models.PROTECT),
         ),
         migrations.AlterField(
             model_name='civi',

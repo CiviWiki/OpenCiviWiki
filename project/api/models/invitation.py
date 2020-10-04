@@ -46,10 +46,10 @@ class Invitation(models.Model):
 
     objects = InvitationManager()
 
-    host_user = models.ForeignKey(User, default=None, null=True, related_name="hosts")
+    host_user = models.ForeignKey(User, default=None, null=True, related_name="hosts", on_delete=models.PROTECT)
     invitee_email = models.EmailField(default=None, null=False)
     verification_code = models.CharField(max_length=31, null=False)
-    invitee_user = models.ForeignKey(User, default=None, null=True, related_name="invitees")
+    invitee_user = models.ForeignKey(User, default=None, null=True, related_name="invitees", on_delete=models.PROTECT)
 
     date_created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     #TODO: Invitation type

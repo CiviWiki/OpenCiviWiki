@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf import settings
+from django.urls import path
 from django.views.static import serve
 from django.views.generic.base import RedirectView
 
@@ -24,7 +25,7 @@ from authentication import urls as auth
 from frontend_views import urls as frontend_views
 
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
+    path('admin/', admin.site.urls),
     url(r'^api/', include(api)),
     url(r'^auth/', include(auth)),
     url('^inbox/notifications/', include('notifications.urls', namespace='notifications')),

@@ -16,7 +16,7 @@ class AccountCommonSerializer(serializers.ModelSerializer):
         request = self.context.get("request")
 
         # Check for authenticated user
-        if request and hasattr(request, "user") and request.user.is_authenticated():
+        if request and hasattr(request, "user") and request.user.is_authenticated:
             account = Account.objects.get(user=request.user)
             if obj in account.following.all():
                 return True

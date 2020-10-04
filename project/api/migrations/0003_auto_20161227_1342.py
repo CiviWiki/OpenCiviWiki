@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
                 ('party', models.CharField(max_length=127)),
                 ('created', models.DateTimeField(auto_now_add=True, null=True)),
                 ('last_modified', models.DateTimeField(auto_now=True, null=True)),
-                ('account', models.ForeignKey(default=None, to='api.Account', null=True)),
+                ('account', models.ForeignKey(default=None, to='api.Account', null=True, on_delete=models.PROTECT)),
             ],
         ),
         migrations.AddField(
@@ -57,7 +57,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='civi',
             name='bill',
-            field=models.ForeignKey(default=None, to='api.Bill', null=True),
+            field=models.ForeignKey(default=None, to='api.Bill', null=True, on_delete=models.PROTECT),
         ),
         migrations.CreateModel(
             name='Vote',
@@ -66,8 +66,8 @@ class Migration(migrations.Migration):
                 ('vote', models.CharField(default=b'abstain', max_length=31, choices=[(b'yes', b'Yes'), (b'no', b'No'), (b'abstain', b'Abstain')])),
                 ('created', models.DateTimeField(auto_now_add=True, null=True)),
                 ('last_modified', models.DateTimeField(auto_now=True, null=True)),
-                ('bill', models.ForeignKey(default=None, to='api.Bill', null=True)),
-                ('representative', models.ForeignKey(default=None, to='api.Representative', null=True)),
+                ('bill', models.ForeignKey(default=None, to='api.Bill', null=True, on_delete=models.PROTECT)),
+                ('representative', models.ForeignKey(default=None, to='api.Representative', null=True, on_delete=models.PROTECT)),
             ],
         ),
         migrations.CreateModel(
@@ -83,18 +83,18 @@ class Migration(migrations.Migration):
                 ('votes_vpos', models.IntegerField(default=0)),
                 ('created', models.DateTimeField(auto_now_add=True, null=True)),
                 ('last_modified', models.DateTimeField(auto_now=True, null=True)),
-                ('bill', models.ForeignKey(default=None, to='api.Bill', null=True)),
+                ('bill', models.ForeignKey(default=None, to='api.Bill', null=True, on_delete=models.PROTECT)),
             ],
         ),
         migrations.AddField(
             model_name='rationale',
             name='vote',
-            field=models.ForeignKey(default=None, to='api.Vote', null=True),
+            field=models.ForeignKey(default=None, to='api.Vote', null=True, on_delete=models.PROTECT),
         ),
         migrations.AddField(
             model_name='rationale',
             name='representative',
-            field=models.ForeignKey(default=None, to='api.Representative', null=True),
+            field=models.ForeignKey(default=None, to='api.Representative', null=True, on_delete=models.PROTECT),
         ),
 
     ]

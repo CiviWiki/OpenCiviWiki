@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
                 ('image', models.ImageField(null=True, upload_to=api.models.civi.PathAndRename(b'/'), blank=True)),
                 ('created', models.DateTimeField(auto_now_add=True, null=True)),
                 ('last_modified', models.DateTimeField(auto_now=True, null=True)),
-                ('civi', models.ForeignKey(related_name='images', to='api.Civi')),
+                ('civi', models.ForeignKey(related_name='images', to='api.Civi', on_delete=models.PROTECT)),
             ],
         ),
         migrations.AddField(
