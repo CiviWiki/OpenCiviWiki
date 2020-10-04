@@ -18,9 +18,9 @@ class ActivityManager(models.Manager):
 
 
 class Activity(models.Model):
-    account = models.ForeignKey(Account, default=None, null=True)
-    thread = models.ForeignKey(Thread, default=None, null=True)
-    civi = models.ForeignKey(Civi, default=None, null=True)
+    account = models.ForeignKey(Account, default=None, null=True, on_delete=models.PROTECT)
+    thread = models.ForeignKey(Thread, default=None, null=True, on_delete=models.PROTECT)
+    civi = models.ForeignKey(Civi, default=None, null=True, on_delete=models.PROTECT)
 
     activity_CHOICES = (
         ('vote_vneg', 'Vote Strongly Disagree'),

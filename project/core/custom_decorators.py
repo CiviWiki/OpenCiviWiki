@@ -42,7 +42,7 @@ def full_account(func):
 def login_required(func):
     @wraps(func)
     def inner(request, *args, **kwargs):
-        if not request.user.is_authenticated():
+        if not request.user.is_authenticated:
             return HttpResponseRedirect('/')
         return func(request, *args, **kwargs)
     return inner

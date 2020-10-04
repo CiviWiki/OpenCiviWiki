@@ -57,7 +57,7 @@ class Migration(migrations.Migration):
                 # ('votes_vpos', models.IntegerField(default=0)),
                 ('created', models.DateTimeField(auto_now_add=True, null=True)),
                 ('last_modified', models.DateTimeField(auto_now=True, null=True)),
-                ('author', models.ForeignKey(default=None, to='api.Account', null=True)),
+                ('author', models.ForeignKey(default=None, to='api.Account', null=True, on_delete=models.PROTECT)),
 
             ],
         ),
@@ -89,7 +89,7 @@ class Migration(migrations.Migration):
                 ('votes_vpos', models.IntegerField(default=0)),
                 ('created', models.DateTimeField(auto_now_add=True, null=True)),
                 ('last_modified', models.DateTimeField(auto_now=True, null=True)),
-                ('author', models.ForeignKey(default=None, to='api.Account', null=True)),
+                ('author', models.ForeignKey(default=None, to='api.Account', null=True, on_delete=models.PROTECT)),
             ],
         ),
 
@@ -106,14 +106,14 @@ class Migration(migrations.Migration):
                 ('votes_vpos', models.IntegerField(default=0)),
                 ('created', models.DateTimeField(auto_now_add=True, null=True)),
                 ('last_modified', models.DateTimeField(auto_now=True, null=True)),
-                ('author', models.ForeignKey(default=None, to='api.Account', null=True)),
-                ('civi', models.ForeignKey(default=None, to='api.Civi', null=True)),
+                ('author', models.ForeignKey(default=None, to='api.Account', null=True, on_delete=models.PROTECT)),
+                ('civi', models.ForeignKey(default=None, to='api.Civi', null=True, on_delete=models.PROTECT)),
             ],
         ),
         migrations.AddField(
             model_name='rebuttal',
             name='response',
-            field=models.ForeignKey(default=None, to='api.Response', null=True),
+            field=models.ForeignKey(default=None, to='api.Response', null=True, on_delete=models.PROTECT),
         ),
         migrations.AddField(
             model_name='civi',
@@ -144,6 +144,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='account',
             name='user',
-            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.PROTECT),
         ),
     ]

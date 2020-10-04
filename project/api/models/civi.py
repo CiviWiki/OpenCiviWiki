@@ -85,16 +85,16 @@ class CiviManager(models.Manager):
 
 class Civi(models.Model):
     objects = CiviManager()
-    author = models.ForeignKey(Account, related_name='civis', default=None, null=True)
-    thread = models.ForeignKey(Thread, related_name='civis', default=None, null=True)
-    bill = models.ForeignKey(Bill, default=None, null=True)  # null if not solution
+    author = models.ForeignKey(Account, related_name='civis', default=None, null=True, on_delete=models.PROTECT)
+    thread = models.ForeignKey(Thread, related_name='civis', default=None, null=True, on_delete=models.PROTECT)
+    bill = models.ForeignKey(Bill, default=None, null=True, on_delete=models.PROTECT)  # null if not solution
 
     hashtags = models.ManyToManyField(Hashtag)
 
     linked_civis = models.ManyToManyField('self', related_name="links")
     linked_bills = models.ManyToManyField(Bill, related_name="bills")
     response_civis = models.ForeignKey('self', related_name="responses", default=None,
-                                       null=True)  # TODO: Probably remove this
+                                       null=True, on_delete=models.PROTECT)  # TODO: Probably remove this
 
     title = models.CharField(max_length=255, blank=False, null=False)
     body = models.CharField(max_length=1023, blank=False, null=False)
@@ -255,7 +255,7 @@ class CiviImageManager(models.Manager):
 
 class CiviImage(models.Model):
     objects = CiviImageManager()
-    civi = models.ForeignKey(Civi, related_name='images')
+    civi = models.ForeignKey(Civi, related_name='images', on_delete=models.PROTECT)
     title = models.CharField(max_length=255, null=True, blank=True)
     image = models.ImageField(upload_to=image_upload_path, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)

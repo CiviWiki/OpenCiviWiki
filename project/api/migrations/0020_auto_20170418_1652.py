@@ -19,8 +19,8 @@ class Migration(migrations.Migration):
                 ('invitee_email', models.EmailField(default=None, max_length=254)),
                 ('verification_code', models.CharField(max_length=31)),
                 ('date_created', models.DateTimeField(auto_now_add=True, null=True)),
-                ('host_user', models.ForeignKey(related_name='hosts', default=None, to=settings.AUTH_USER_MODEL, null=True)),
-                ('invitee_user', models.ForeignKey(related_name='invitees', default=None, to=settings.AUTH_USER_MODEL, null=True)),
+                ('host_user', models.ForeignKey(related_name='hosts', default=None, to=settings.AUTH_USER_MODEL, null=True, on_delete=models.PROTECT)),
+                ('invitee_user', models.ForeignKey(related_name='invitees', default=None, to=settings.AUTH_USER_MODEL, null=True, on_delete=models.PROTECT)),
             ],
         ),
     ]

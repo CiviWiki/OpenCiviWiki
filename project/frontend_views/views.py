@@ -15,7 +15,7 @@ from core.custom_decorators import beta_blocker, login_required, full_account
 
 
 def base_view(request):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return TemplateResponse(request, 'static_templates/landing.html', {})
 
     a = Account.objects.get(user=request.user)
@@ -185,7 +185,7 @@ def settings_view(request):
 
 
 def login_view(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         if request.user.is_active:
             return HttpResponseRedirect('/')
 
@@ -208,7 +208,7 @@ def beta_register(request, email='', token=''):
 
     if is_registered:
         # registered and has been given beta access
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             invitee_user = request.user
         else:
             invitee_user = User.objects.get(email=email)
