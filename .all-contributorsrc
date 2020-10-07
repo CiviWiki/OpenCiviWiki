@@ -378,6 +378,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "BrianPainter",
+      "name": "Brian Painter",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/1342663?v=4",
+      "profile": "https://github.com/BrianPainter",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
