@@ -9,39 +9,44 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0031_auto_20190418_1554'),
+        ("api", "0031_auto_20190418_1554"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='bill',
-            name='is_voted_data_updated',
+            model_name="bill",
+            name="is_voted_data_updated",
             field=models.BooleanField(default=False),
         ),
         migrations.AlterField(
-            model_name='representative',
-            name='end_date',
+            model_name="representative",
+            name="end_date",
             field=models.DateField(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name='representative',
-            name='start_date',
+            model_name="representative",
+            name="start_date",
             field=models.DateField(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name='vote',
-            name='bill',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='api.Bill'),
+            model_name="vote",
+            name="bill",
+            field=models.ForeignKey(
+                default=1, on_delete=django.db.models.deletion.CASCADE, to="api.Bill"
+            ),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='vote',
-            name='representative',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='api.Representative'),
+            model_name="vote",
+            name="representative",
+            field=models.ForeignKey(
+                default=1,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="api.Representative",
+            ),
             preserve_default=False,
         ),
         migrations.AlterUniqueTogether(
-            name='vote',
-            unique_together=set([('bill', 'representative')]),
+            name="vote", unique_together=set([("bill", "representative")]),
         ),
     ]

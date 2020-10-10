@@ -9,33 +9,49 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0026_account_country'),
+        ("api", "0026_account_country"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='bill',
-            name='congress_url',
+            model_name="bill",
+            name="congress_url",
             field=models.URLField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='bill',
-            name='govtrack_url',
+            model_name="bill",
+            name="govtrack_url",
             field=models.URLField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='bill',
-            name='source',
-            field=models.CharField(choices=[(b'sunlight', b'sunlight'), (b'propublica', b'propublica')], default=b'sunlight', max_length=50),
+            model_name="bill",
+            name="source",
+            field=models.CharField(
+                choices=[(b"sunlight", b"sunlight"), (b"propublica", b"propublica")],
+                default=b"sunlight",
+                max_length=50,
+            ),
         ),
         migrations.AlterField(
-            model_name='civi',
-            name='author',
-            field=models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='civis', to='api.Account'),
+            model_name="civi",
+            name="author",
+            field=models.ForeignKey(
+                default=None,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="civis",
+                to="api.Account",
+            ),
         ),
         migrations.AlterField(
-            model_name='civi',
-            name='thread',
-            field=models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='civis', to='api.Thread'),
+            model_name="civi",
+            name="thread",
+            field=models.ForeignKey(
+                default=None,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="civis",
+                to="api.Thread",
+            ),
         ),
     ]

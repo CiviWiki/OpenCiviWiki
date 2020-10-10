@@ -20,11 +20,15 @@ def open_menu(menu):
 
 def get_settings():
     settings = {
-        "email": world.browser.find_element_by_css_selector(email_field).get_attribute("value"),
-        "username": world.browser.find_element_by_css_selector(username_field).get_attribute("value"),
+        "email": world.browser.find_element_by_css_selector(email_field).get_attribute(
+            "value"
+        ),
+        "username": world.browser.find_element_by_css_selector(
+            username_field
+        ).get_attribute("value"),
         "first name": find_element(first_name_field).get_attribute("value"),
         "last name": find_element(last_name_field).get_attribute("value"),
-        "location": find_element(location_field).text
+        "location": find_element(location_field).text,
     }
     return settings
 
@@ -52,12 +56,18 @@ def set_settings():
         find_element(last_name_field).clear()
         find_element(last_name_field).send_keys(last_name_1)
 
-    if location_1.replace(", DC, United States", "") in find_element(location_field).text:
+    if (
+        location_1.replace(", DC, United States", "")
+        in find_element(location_field).text
+    ):
         find_element(location_set).send_keys(location_2)
         time.sleep(1)
         find_element(location_set).send_keys(Keys.DOWN)
         find_element(location_set).send_keys(Keys.RETURN)
-    elif location_2.replace(", NY, United States", "") in find_element(location_field).text:
+    elif (
+        location_2.replace(", NY, United States", "")
+        in find_element(location_field).text
+    ):
         find_element(location_set).send_keys(location_1)
         time.sleep(1)
         find_element(location_set).send_keys(Keys.DOWN)

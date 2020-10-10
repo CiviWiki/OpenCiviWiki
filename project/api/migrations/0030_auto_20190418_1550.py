@@ -12,56 +12,36 @@ def remove_reps(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('api', '0029_civi_linked_bills'),
+        ("api", "0029_civi_linked_bills"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='representative',
-            old_name='bioguideID',
-            new_name='bioguide_id',
+            model_name="representative", old_name="bioguideID", new_name="bioguide_id",
         ),
         migrations.RenameField(
-            model_name='representative',
-            old_name='term_end',
-            new_name='end_date',
+            model_name="representative", old_name="term_end", new_name="end_date",
         ),
         migrations.RenameField(
-            model_name='representative',
-            old_name='first_name',
-            new_name='name',
+            model_name="representative", old_name="first_name", new_name="name",
         ),
         migrations.RenameField(
-            model_name='representative',
-            old_name='term_start',
-            new_name='start_date',
+            model_name="representative", old_name="term_start", new_name="start_date",
         ),
-        migrations.RemoveField(
-            model_name='representative',
-            name='about_me',
-        ),
-        migrations.RemoveField(
-            model_name='representative',
-            name='last_name',
-        ),
-        migrations.RemoveField(
-            model_name='representative',
-            name='level',
-        ),
-        migrations.RemoveField(
-            model_name='representative',
-            name='official_full_name',
-        ),
-        migrations.RemoveField(
-            model_name='representative',
-            name='senate_class',
-        ),
+        migrations.RemoveField(model_name="representative", name="about_me",),
+        migrations.RemoveField(model_name="representative", name="last_name",),
+        migrations.RemoveField(model_name="representative", name="level",),
+        migrations.RemoveField(model_name="representative", name="official_full_name",),
+        migrations.RemoveField(model_name="representative", name="senate_class",),
         migrations.AddField(
-            model_name='representative',
-            name='chamber',
-            field=models.CharField(choices=[(b'house', b'House'), (b'senate', b'Senate')], default='senate',
-                                   max_length=200),
+            model_name="representative",
+            name="chamber",
+            field=models.CharField(
+                choices=[(b"house", b"House"), (b"senate", b"Senate")],
+                default="senate",
+                max_length=200,
+            ),
             preserve_default=False,
         ),
-        migrations.RunPython(remove_reps)
+        migrations.RunPython(remove_reps),
     ]
