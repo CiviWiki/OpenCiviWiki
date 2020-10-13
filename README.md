@@ -86,6 +86,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/JDRanpariya"><img src="https://avatars3.githubusercontent.com/u/51157407?v=4" width="100px;" alt=""/><br /><sub><b>JDRanpariya</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=JDRanpariya" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/Di-ref"><img src="https://avatars1.githubusercontent.com/u/61465302?v=4" width="100px;" alt=""/><br /><sub><b>Di-ref</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=Di-ref" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/BrianPainter"><img src="https://avatars2.githubusercontent.com/u/1342663?v=4" width="100px;" alt=""/><br /><sub><b>Brian Painter</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=BrianPainter" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/AnkanDas22"><img src="https://avatars1.githubusercontent.com/u/30185594?v=4" width="100px;" alt=""/><br /><sub><b>Ankan Das</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=AnkanDas22" title="Documentation">📖</a></td>
   </tr>
 </table>
 
