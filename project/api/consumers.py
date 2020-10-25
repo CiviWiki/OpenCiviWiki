@@ -31,7 +31,7 @@ def ws_connect(message):
 @channel_session
 def ws_message(message):
     Group("chat-%s" % message.channel_session["room"]).send(
-        {"text": message["text"],}
+        {"text": message["text"], }
     )
 
 
@@ -53,7 +53,7 @@ def thread_message(message, thread_id):
     # username = Account.objects.get(user=message.user.id)
     username = message.user.username
     Group("thread-%s" % thread_id).send(
-        {"text": "User " + str(username) + " says: " + message["text"],}
+        {"text": "User " + str(username) + " says: " + message["text"], }
     )
 
 

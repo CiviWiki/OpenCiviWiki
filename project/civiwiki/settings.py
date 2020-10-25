@@ -122,7 +122,7 @@ REDIS_URL = env("REDIS_URL", default="redis://localhost:6379")
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "asgi_redis.RedisChannelLayer",
-        "CONFIG": {"hosts": [REDIS_URL],},
+        "CONFIG": {"hosts": [REDIS_URL], },
         "ROUTING": "civiwiki.routing.channel_routing",
     },
 }

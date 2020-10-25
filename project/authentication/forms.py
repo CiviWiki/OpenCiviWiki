@@ -138,7 +138,10 @@ class RecoverUserForm(AuthRecoverUserForm):
             domain = get_current_site(request).domain
             base_url = "http://{domain}/auth/password_reset/{uid}/{token}/"
             url_with_code = base_url.format(domain=domain, uid=uid, token=token)
-            email_body = "You're receiving this email because you requested an account recovery email for your user account at {domain}. Your username for this email is: {username}. If you also need to reset your password, please go to the following page and choose a new password.".format(
+            email_body = """
+            You're receiving this email because you requested an account recovery email for your user account 
+            at {domain}. Your username for this email is: {username}. If you also need to reset your password, please 
+            go to the following page and choose a new password.""".format(
                 domain=domain, username=user.username
             )
 
