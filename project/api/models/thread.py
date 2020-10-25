@@ -26,6 +26,7 @@ class ThreadManager(models.Manager):
         )
 
         from .civi import Civi
+
         thread_data = {
             "id": thread.id,
             "title": thread.title,
