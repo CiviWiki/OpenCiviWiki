@@ -133,8 +133,7 @@ class Civi(models.Model):
         return self.title
 
     def _get_votes(self):
-        from activity import Activity
-
+        from .activity import Activity
         activity_votes = Activity.objects.filter(civi=self)
 
         votes = {
