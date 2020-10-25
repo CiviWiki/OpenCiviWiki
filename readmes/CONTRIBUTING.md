@@ -2,7 +2,7 @@
 
 Make sure to search beforehand to see if the issue has been previously reported.
 
-The issue tracker should not be used for personal support requests. Please direct those to our [live chat](https://riot.im/app/#/room/#CiviWiki:matrix.org)
+The issue tracker should not be used for personal support requests. Please direct those to our [live chat](https://riot.im/app/#/room/#CiviWiki:matrix.org).
 
 ## Bug Reports
 Please try to have as much detail as possible when creating a bug report.
@@ -77,8 +77,8 @@ We use Compatibile Versioning in this project.
 
 Given a version number MAJOR.MINOR, increment the:
 
-MAJOR version when you make backwards-incompatible updates of any kind
-MINOR version when you make 100% backwards-compatible updates
+MAJOR version when you make backwards-incompatible updates of any kind.
+MINOR version when you make 100% backwards-compatible updates.
 Additional labels for pre-release and build metadata are available as extensions to the MAJOR.MINOR format.
 
 ## How is this different to SemVer?
