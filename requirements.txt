@@ -1,6 +1,6 @@
 Django==2.2.16
 django-cors-headers==3.5.0
-django-extensions==3.0.9
+django-extensions==3.1.0
 django-storages==1.10.1
 django-notifications-hq==1.6.0
 djangorestframework==3.12.1
