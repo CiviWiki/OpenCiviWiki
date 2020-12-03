@@ -6,7 +6,7 @@ django-notifications-hq==1.6.0
 djangorestframework==3.12.1
 whitenoise==5.2.0
 channels==1.1.8
-celery==5.0.0
+celery==5.0.3
 asgi-redis==1.4.3
 coreapi==2.3.3
 psycopg2==2.8.6
