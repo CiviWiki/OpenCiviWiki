@@ -11,7 +11,7 @@ asgi-redis==1.4.3
 coreapi==2.3.3
 psycopg2==2.8.6
 Pillow==7.2.0
-requests==2.24.0
+requests==2.25.1
 django-environ==0.4.5
 sunlight==1.2.9
 
