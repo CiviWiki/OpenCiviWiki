@@ -5,7 +5,7 @@ django-storages==1.10.1
 django-notifications-hq==1.6.0
 djangorestframework==3.12.1
 whitenoise==5.2.0
-channels==1.1.8
+channels==3.0.3
 celery==5.0.0
 asgi-redis==1.4.3
 coreapi==2.3.3
