@@ -16,6 +16,7 @@ from django.template.loader import render_to_string
 
 from celery import shared_task
 
+
 @shared_task(name="send_email")
 def send_email(subject="", recipient_list="", context=None):
     """ Construct and send a multipart/alternative email """

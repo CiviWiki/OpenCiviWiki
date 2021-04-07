@@ -4,6 +4,7 @@ from django.core.files.images import get_image_dimensions
 from django.contrib.auth.models import User
 from .models import Account
 
+
 class UpdatePassword(forms.ModelForm):
     """
     Form for updating User Password

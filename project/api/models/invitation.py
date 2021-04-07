@@ -4,6 +4,7 @@ Handles beta/website access invitations
 from django.contrib.auth.models import User
 from django.db import models
 
+
 class InvitationManager(models.Manager):
     """
     Custom query set manager for the Invitation model

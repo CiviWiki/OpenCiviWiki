@@ -14,7 +14,6 @@ from channels.auth import channel_session_user, channel_session_user_from_http
 # 4. A Civi is Deleted
 
 
-
 # Connected to websocket.connect
 @channel_session
 def ws_connect(message):

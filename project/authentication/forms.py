@@ -14,6 +14,7 @@ from django.utils.translation import ugettext_lazy as _
 from api.tasks import send_email as task_send_email
 from .reserved_usernames import RESERVED_USERNAMES
 
+
 class AccountRegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True)
     username = forms.CharField(required=True)

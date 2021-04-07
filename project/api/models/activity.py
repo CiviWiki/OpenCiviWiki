@@ -4,6 +4,7 @@ from .account import Account
 from .civi import Civi
 from .thread import Thread
 
+
 class ActivityManager(models.Manager):
     def votes(self, civi_id):
         civi = Civi.objects.get(id=civi_id)
