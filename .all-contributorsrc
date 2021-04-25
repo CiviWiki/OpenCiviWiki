@@ -405,6 +405,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "harsha0609",
+      "name": "Harsha Vardhan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/24893016?v=4",
+      "profile": "https://github.com/harsha0609",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
