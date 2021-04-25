@@ -28,6 +28,7 @@ class Migration(migrations.Migration):
                 ('zip_code', models.CharField(max_length=6, null=True)),
                 ('fed_district', models.CharField(default=None, max_length=63, null=True)),
                 ('state_district', models.CharField(default=None, max_length=63, null=True)),
+                ('beta_access', models.BooleanField(default=False)),
                 ('full_account', models.BooleanField(default=False)),
                 ('profile_image', models.ImageField(default=b'profile/default.png', null=True, upload_to=api.models.account.PathAndRename(b'profile/'), blank=True)),
             ],

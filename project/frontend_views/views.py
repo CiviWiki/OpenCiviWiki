@@ -19,6 +19,8 @@ def base_view(request):
         return TemplateResponse(request, 'static_templates/landing.html', {})
 
     a = Account.objects.get(user=request.user)
+    if not a.beta_access:
+        return HttpResponseRedirect('/beta')
     if not a.full_account:
         return HttpResponseRedirect('/setup')
     if 'login_user_image' not in request.session.keys():
@@ -146,19 +148,6 @@ def issue_thread(request, thread_id=None):
 def create_group(request):
     return TemplateResponse(request, 'newgroup.html', {})
 
-
-@login_required
-@user_passes_test(lambda u: u.is_staff)
-def invite(request):
-    user = User.objects.get(username=request.user.username)
-
-    invitations = Invitation.objects.filter_by_host(host_user=user).order_by("-date_created").all()
-    invitees = [invitation.summarize() for invitation in invitations]
-    response_data = {
-        'invitees': json.dumps(invitees)
-    }
-
-    return TemplateResponse(request, 'invite.html', response_data)
 
 
 @login_required
