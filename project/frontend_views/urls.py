@@ -3,7 +3,6 @@ from . import views as v
 
 urlpatterns = [
     url(r'^login$', v.login_view, name='login'),
-    url(r'^beta$', v.beta_view, name='beta'),
     url(r'^about$', v.about_view, name='about'),
     url(r'^support_us$', v.support_us_view, name='support us'),
     url(r'^howitworks$', v.how_it_works_view, name='how it works'),

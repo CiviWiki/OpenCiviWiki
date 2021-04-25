@@ -100,8 +100,7 @@ def cw_register(request):
                 user = authenticate(username=username, password=password)
 
                 account = Account(user=user)
-                if not settings.CLOSED_BETA:
-                    account.beta_access = True
+                account.beta_access = True
                 account.save()
 
                 user.is_active = True
