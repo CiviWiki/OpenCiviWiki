@@ -4,10 +4,12 @@ Handles beta/website access invitations
 from django.contrib.auth.models import User
 from django.db import models
 
+
 class InvitationManager(models.Manager):
     """
     Custom query set manager for the Invitation model
     """
+
     def filter_by_host(self, host_user=None):
         """
         Gets the queryset of invited persons by the host user or all if not specified
@@ -46,14 +48,18 @@ class Invitation(models.Model):
 
     objects = InvitationManager()
 
-    host_user = models.ForeignKey(User, default=None, null=True, related_name="hosts")
+    host_user = models.ForeignKey(
+        User, default=None, null=True, related_name="hosts", on_delete=models.PROTECT
+    )
     invitee_email = models.EmailField(default=None, null=False)
     verification_code = models.CharField(max_length=31, null=False)
-    invitee_user = models.ForeignKey(User, default=None, null=True, related_name="invitees")
+    invitee_user = models.ForeignKey(
+        User, default=None, null=True, related_name="invitees", on_delete=models.PROTECT
+    )
 
     date_created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-    #TODO: Invitation type
-    #TODO: Invitation limit
+    # TODO: Invitation type
+    # TODO: Invitation limit
 
     @property
     def date_registered(self):
@@ -65,18 +71,18 @@ class Invitation(models.Model):
 
     def summarize(self):
         data = {
-            'email': self.invitee_email,
-            'username': '',
-            'date_registered': '',
-            'date_invited': str(self.date_created),
-            'date_recent_activity': '',
+            "email": self.invitee_email,
+            "username": "",
+            "date_registered": "",
+            "date_invited": str(self.date_created),
+            "date_recent_activity": "",
         }
 
         if self.invitee_user:
-            data['status'] = 'registered'
-            data['username'] = self.invitee_user.username
-            data['date_registered'] = str(self.date_registered)
+            data["status"] = "registered"
+            data["username"] = self.invitee_user.username
+            data["date_registered"] = str(self.date_registered)
         else:
-            data['status'] = 'sent'
+            data["status"] = "sent"
 
         return data

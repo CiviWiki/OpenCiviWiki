@@ -305,11 +305,121 @@
         "ideas",
         "bug"
       ]
+    },
+    {
+      "login": "SunflowerPKU",
+      "name": "Xin Tan",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/23006864?v=4",
+      "profile": "https://github.com/SunflowerPKU",
+      "contributions": [
+        "userTesting"
+      ]
+    },
+    {
+      "login": "jgbmattos",
+      "name": "jgbmattos",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/10090364?v=4",
+      "profile": "https://github.com/jgbmattos",
+      "contributions": [
+        "userTesting"
+      ]
+    },
+    {
+      "login": "torabshaikh",
+      "name": "Torab Shaikh",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/18557453?v=4",
+      "profile": "https://github.com/torabshaikh",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "CaioSR",
+      "name": "Caio Shimada Rabello",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/26325211?v=4",
+      "profile": "https://github.com/CaioSR",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "umr55766",
+      "name": "UMAIR MOHAMMAD",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/16179313?v=4",
+      "profile": "https://in.linkedin.com/in/umr55766",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "HushOv",
+      "name": "Hush",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/36056305?v=4",
+      "profile": "https://github.com/HushOv",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "JDRanpariya",
+      "name": "JDRanpariya",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/51157407?v=4",
+      "profile": "https://github.com/JDRanpariya",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "Di-ref",
+      "name": "Di-ref",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/61465302?v=4",
+      "profile": "https://github.com/Di-ref",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "BrianPainter",
+      "name": "Brian Painter",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/1342663?v=4",
+      "profile": "https://github.com/BrianPainter",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "AnkanDas22",
+      "name": "Ankan Das",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/30185594?v=4",
+      "profile": "https://github.com/AnkanDas22",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "gteti",
+      "name": "gteti",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/51110452?v=4",
+      "profile": "https://github.com/gteti",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "harsha0609",
+      "name": "Harsha Vardhan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/24893016?v=4",
+      "profile": "https://github.com/harsha0609",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
   "projectName": "OpenCiviWiki",
   "projectOwner": "CiviWiki",
   "repoType": "github",
-  "repoHost": "https://github.com"
+  "repoHost": "https://github.com",
+  "skipCi": true
 }

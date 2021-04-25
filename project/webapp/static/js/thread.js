@@ -127,17 +127,6 @@ cw.CiviCollection = BB.Collection.extend({
     },
 });
 
-// cw.CiviSubCollection = BB.Collection.extend({
-//     model: cw.CiviModel,
-//     comparator: function(model) {
-//         return -model.get('score');
-//     },
-//
-//     initialize: function (options) {
-//         options = options || {};
-//     },
-// });
-
 cw.ResponseCollection = BB.Collection.extend({
     model: cw.CiviModel,
 
@@ -163,7 +152,6 @@ cw.ThreadModel = BB.Model.extend({
     },
 
     parse: function(data){
-        console.log(data);
         return data;
     },
 
@@ -192,7 +180,6 @@ cw.CiviView =  BB.View.extend({
 
     events: {
         'click .rating-button': 'clickRating',
-        // 'click .favorite': 'clickFavorite',
         'click .edit': 'clickEdit',
         'click .delete': 'deleteEdit',
         'click .edit-confirm': 'saveEdit',
@@ -205,10 +192,6 @@ cw.CiviView =  BB.View.extend({
         'input .civi-link-images': 'previewImageNames',
         'click #add-image-link-input': 'addImageLinkInput',
         'click #respond-button': 'addRebuttal',
-        // 'click .civi-grab-link': 'grabLink',
-        // vote
-        // changevote
-
     },
 
     addImageLinkInput: function(){
@@ -269,7 +252,6 @@ cw.CiviView =  BB.View.extend({
         $modal.openModal();
         e.stopPropagation();
     },
-    // clean() function
     clickFavorite: function (e) {
         var _this = this;
 
@@ -320,10 +302,6 @@ cw.CiviView =  BB.View.extend({
         var rating = $this.data('rating');
         var civi_id = $(e.currentTarget).closest('.civi-card').data('civi-id');
 
-        // if (this.can_edit) {
-        //     Materialize.toast('Trying to vote on your own civi? :}', 5000);
-        //     return;
-        // }
         if (rating && civi_id){
             $.ajax({
                 url: '/api/rate_civi/',
@@ -334,10 +312,7 @@ cw.CiviView =  BB.View.extend({
                 },
                 success: function (response) {
                     Materialize.toast('Voted!', 5000);
-                    // var score = $this.find('.rate-value');
-                    // var new_vote = parseInt(score.text())+ 1;
-                    // score.text(new_vote);
-                    console.log(response.data);
+
                     var prev_votes = _this.parentView.model.get('user_votes');
                     var prev_vote = _.findWhere(prev_votes, {civi_id: civi_id});
                     if (!prev_vote) {
@@ -449,7 +424,7 @@ cw.CiviView =  BB.View.extend({
         }
 
         var new_type = this.$("#civi-type-form input[type='radio']:checked").val();
-        console.log(new_type);
+
         if (!new_body || !new_title){
             Materialize.toast('Please do not leave fields blank', 5000);
             return;
@@ -754,7 +729,6 @@ cw.NewCiviView = BB.View.extend({
 
     cancelCivi: function () {
         this.$el.empty();
-        // $('.responses').height($('.responses-box').height());
     },
 
     createCivi: function (e) {
@@ -862,16 +836,10 @@ cw.NewCiviView = BB.View.extend({
                             }
 
                         }, this);
-                        // if(c_type ==='problem'){
-                        //     this.recommendedCivis.push(new_civi.id);
-                        //     this.otherCivis.push(new_civi.id);
-                        // }
+
                         _this.options.parentView.initRecommended();
                         _this.options.parentView.renderBodyContents(); //TODO: move renders into listeners
-                        // _.each(new_civi.get('links'), function(link){
-                        //     console.log(link);
-                        //     _this.options.parentView.civis.findWhere({id: link}).view.render();
-                        // });
+
                         _this.$el.empty();
                     }
 
@@ -935,11 +903,6 @@ cw.NewResponseView = BB.View.extend({
         'input .civi-link-images': 'previewImageNames',
         'click #add-image-link-input': 'addImageLinkInput',
     },
-    //
-    // show: function () {
-    //     this.$('.new-response-modal').openModal();
-    // },
-    //
     hide: function () {
         $('#new-response-box').empty();
         $('#add-new-response').show();
@@ -1148,16 +1111,18 @@ cw.EditThreadView = BB.View.extend({
         var _this = this;
         _this.$(e.currentTarget).addClass('disabled').attr('disabled', true);
 
-        var title = this.$el.find('#thread-title').val().trim(),
-            summary = this.$el.find('#thread-body').val().trim(),
-            level = this.$el.find('#thread-location').val(),
-            category_id = this.$el.find('#thread-category').val(),
-            state="";
+        var title = this.$el.find('#thread-title').val().trim();
+        var summary = this.$el.find('#thread-body').val().trim();
+        var level = this.$el.find('#thread-location').val();
+        var category_id = this.$el.find('#thread-category').val();
+        var state="";
+        
         if (level === "state" ) {
             state = this.$el.find('#thread-state').val();
         }
+
         var thread_id = this.threadId;
-        console.log(title, summary, category_id, thread_id);
+        
         if (title && summary && category_id) {
             $.ajax({
                 url: '/api/edit_thread/',
@@ -1323,6 +1288,7 @@ cw.LinkSelectView = BB.View.extend({
             allowFreeEntries: false,
             groupBy: 'type',
             valueField: 'id',
+            id : 'civi_links',
             displayField: 'title',
             expandOnFocus: true,
             data: [],
@@ -1353,7 +1319,7 @@ cw.LinkSelectView = BB.View.extend({
             };
             msdata.push(civi);
         });
-        console.log(msdata);
+
         this.ms.setData(msdata);
 
         return this;
@@ -1404,6 +1370,7 @@ cw.ThreadView = BB.View.extend({
     navTemplate: _.template($('#thread-nav-template').html()),
     responseWrapper: _.template($('#thread-response-template').html()),
     outlineTemplate: _.template($('#outline-template').html()),
+  
 
     initialize: function (options) {
         options = options || {};
@@ -1531,9 +1498,6 @@ cw.ThreadView = BB.View.extend({
         this.threadBodyRender();
         this.threadNavRender();
 
-        // this.$('.scroll-col').height($(window).sheight() - this.$('.body-banner').height());
-
-
         this.newCiviView = new cw.NewCiviView({
             model: this.model,
             parentView: this
@@ -1590,7 +1554,16 @@ cw.ThreadView = BB.View.extend({
     renderOutline: function(){
         var _this = this;
         if (this.civis.length === 0){
-            this.$('#civi-outline').empty().append(this.outlineTemplate());
+            // render with mock data to prevent errors
+            var mockData = {
+                is_draft: undefined,
+                count: 0,
+                problems: [],
+                causes: [],
+                solutions: []
+            }
+            
+            this.$('#civi-outline').empty().append(this.outlineTemplate(mockData));
         }
 
         // Render Outline Template based on models
@@ -1638,6 +1611,7 @@ cw.ThreadView = BB.View.extend({
         }
 
         var count;
+
         if (this.is_draft) {
             count = {
                 problem: highlightCount.problem,
@@ -1657,6 +1631,7 @@ cw.ThreadView = BB.View.extend({
         count.totalOther = this.civiOtherViewTotals.problem + this.civiOtherViewTotals.cause + this.civiOtherViewTotals.solution - recCount.problem - otherCount.cause - otherCount.solution;
 
         renderData.count = count;
+
         renderData.is_draft = this.is_draft;
 
         this.$('#civi-outline').empty().append(this.outlineTemplate(renderData));
@@ -1686,8 +1661,14 @@ cw.ThreadView = BB.View.extend({
 
         // Calculate tracking
         this.calcCiviLocations();
-        // Padding so you can scroll and track the last civi element;
-        var scrollPadding = this.$('.main-thread').height() - this.civiLocations[this.civiLocations.length-1].height;
+
+        var scrollPadding = 100;
+        
+        if (this.civiLocations.length) {
+            // Padding so you can scroll and track the last civi element;
+            scrollPadding = this.$('.main-thread').height() - this.civiLocations[this.civiLocations.length-1].height;
+        }
+        
         this.$('.civi-padding').height(scrollPadding - 8);
 
         // Vote indication
@@ -1758,15 +1739,10 @@ cw.ThreadView = BB.View.extend({
             this.outlineCivis[type] = civis;
 
         }, this);
-
-
-
-        // _.each(this.civis.filterByType('cause'), this.civiRenderHelper, this);
-        // _.each(this.civis.filterByType('solution'), this.civiRenderHelper, this);
     },
 
     civiRenderHelper: function(civi){
-        var is_draft = this.is_draft;
+        var is_draft = civi.is_draft;
         var can_edit = civi.get('author').username == this.username ? true : false;
         this.$('#thread-'+civi.get('type')+'s').append(new cw.CiviView({model: civi, can_edit: can_edit, is_draft: is_draft, parentView: this}).el);
 
@@ -1778,13 +1754,6 @@ cw.ThreadView = BB.View.extend({
         _.each(savedVotes, function(v){
             this.$('#civi-'+ v.civi_id).find("." +v.activity_type).addClass('current');
         });
-
-        // // Indicate vote status on nav
-        // _.each(['problem', 'cause', 'solution'], function(type){
-        //     if (this[type+'s'].length === 0) {
-        //         this.$('.' + type + '-nav>.civi-nav-header').addClass('nav-inactive');
-        //     }
-        // }, this);
     },
 
     renderResponses: function () {
@@ -1908,14 +1877,11 @@ cw.ThreadView = BB.View.extend({
         var threadPos = this.$('.main-thread').position().top;
         var scrollPos = this.$('.main-thread').scrollTop();
         this.civiLocations = [];
-        // this.civiTops = [];
-        // this.civiTargets =
+
         this.$('.civi-card').each(function (idx, civi) {
             var $civi = $(civi),
                 $civiTop = $civi.position().top + scrollPos - threadPos;
             _this.civiLocations.push({top: $civiTop, bottom: $civiTop + $civi.height(), height: $civi.height(), target: $civi, id: $civi.attr('data-civi-id')});
-            // _this.civiTops.push($civiTop);
-            // _this.civiTargets.push({top: $civiTop, target: $civi, id: $civi.data('civi-id') });
         });
     },
 
@@ -1927,29 +1893,6 @@ cw.ThreadView = BB.View.extend({
             return;
         }
 
-        // TODO: check if nav is folded, then just p-c-solution check
-        //
-        // if (firstTime) {
-        //     var $newNavCivi = _this.$('[data-civi-nav-id="' + _this.civiLocations[0].id + '"]');
-        //     $newNavCivi.addClass('current');
-        //
-        //     if (!_this.navExpanded) {
-        //         $($newNavCivi.closest('.civi-nav-wrapper').siblings()[0]).addClass('current');
-        //     }
-        //
-        //     _this.currentNavCivi = _this.civiLocations[0].id;
-        //     return;
-        // } else
-        // if (navChange) {
-        //     var $currentNavCivi = _this.$('[data-civi-nav-id="' + _this.currentNavCivi + '"]');
-        //
-        //     if (this.navExpanded) {
-        //         $($currentNavCivi.closest('.civi-nav-wrapper').siblings()[0]).removeClass('current');
-        //     } else {
-        //         $($currentNavCivi.closest('.civi-nav-wrapper').siblings()[0]).addClass('current');
-        //     }
-        //     return;
-        // }
         // 2. Go through list of heights to get current active civi
         var OFFSET = 100;
         var element = _.find(this.civiLocations, function (l) {
@@ -1957,6 +1900,7 @@ cw.ThreadView = BB.View.extend({
                 scrollPosition >= l.top - OFFSET &&
                 scrollPosition < l.bottom - OFFSET;
         }, this);
+
         // 3. Activate Corresponding Civi Card and Nav
         if (!element) return;
         else {
@@ -1970,10 +1914,7 @@ cw.ThreadView = BB.View.extend({
         var _this = this;
         this.currentNavCivi = id || this.currentNavCivi;
         var $currentNavCivi = _this.$('[data-civi-nav-id="' + _this.currentNavCivi + '"]');
-            // $newNavCivi = _this.$('[data-civi-nav-id="' + newCivi + '"]');
 
-
-        // $newNavCivi.addClass('current');
         if (!_this.navExpanded) {
             this.$('.civi-nav-header').removeClass('current');
             $($currentNavCivi.closest('.civi-nav-wrapper').siblings()[0]).addClass('current');
@@ -1998,38 +1939,11 @@ cw.ThreadView = BB.View.extend({
             $newCivi.addClass('current');
             var civi_id = $newCivi.data('civi-id');
 
-            // var links = this.civis.get(civi_id).get('links');
-            // // var links_related = [];
-            // // _.each(links, function(link){
-            // //     links_related = this.$('#civi-'+link).data('civi-links');
-            // //     console.log(links_related);
-            // //     if (!links_related) return;
-            // //     if (links_related.length > 1){
-            // //         links_related= links_related.split(",").map(Number);
-            // //     } else {
-            // //         links_related = parseInt(links_related);
-            // //     }
-            // //
-            // //     links = _.union(links, links_related);
-            // // },this);
-            // // console.log(links);
-            //
-            // _.each(this.$('.civi-card'), function(civiCard){
-            //     // console.log(links, $(civiCard).data('civi-id'));
-            //
-            //     if (links.indexOf($(civiCard).data('civi-id')) == -1 ){
-            //         $(civiCard).removeClass('linked');
-            //     } else {
-            //         $(civiCard).addClass('linked');
-            //     }
-            // });
-
             this.currentCivi = $newCivi.attr('data-civi-id');
             if (!_.isUndefined(this.currentCivi)){
                 this.responseCollection.civiId = this.currentCivi;
                 this.responseCollection.fetch();
             }
-
 
         } else {
             $currentCivi.removeClass('current');
@@ -2130,6 +2044,12 @@ cw.ThreadView = BB.View.extend({
             type: 'POST',
             data: {
                 thread_id: _this.model.threadId,
+                title: _this.model.attributes.title,
+                summary: _this.model.attributes.summary,
+                // Why is categories an array, when only one category is ever chosen?
+                category_id: _this.model.attributes.categories[0].id,
+                level: _this.model.attributes.level,
+                state: _this.model.attributes.state,
                 is_draft: false,
             },
             success: function (response) {

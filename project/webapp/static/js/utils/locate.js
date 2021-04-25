@@ -272,7 +272,7 @@ cw.MapView = BB.View.extend({
         function(error) {
           info =
             "<span>We could not use your browser's location. Please try entering your location</span>";
-          Materialize.toast(info, 2000);
+          Materialize.toast(info, 9000);
           this.$(".progress").addClass("hide");
           this.$("#autocomplete")
             .removeClass("disabled")
@@ -282,7 +282,7 @@ cw.MapView = BB.View.extend({
     } else {
       info =
         "<span>We could not use your browser's location. Please try entering your location</span>";
-      Materialize.toast(info, 2000);
+      Materialize.toast(info, 9000);
       this.$(".progress").addClass("hide");
       this.$("#autocomplete")
         .removeClass("disabled")
