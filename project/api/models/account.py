@@ -30,18 +30,21 @@ WHITE_BG = (255, 255, 255)
 class AccountManager(models.Manager):
     def summarize(self, account):
         from .civi import Civi
+
         data = {
             "username": account.user.username,
             "first_name": account.first_name,
             "last_name": account.last_name,
             "about_me": account.about_me,
             "location": account.location,
-            "history": [Civi.objects.serialize(c) for c in
-                        Civi.objects.filter(author_id=account.id).order_by('-created')],
+            "history": [
+                Civi.objects.serialize(c)
+                for c in Civi.objects.filter(author_id=account.id).order_by("-created")
+            ],
             "profile_image": account.profile_image_url,
             "followers": self.followers(account),
             "following": self.following(account),
-            "my_bills": account.get_voted_bills()
+            "my_bills": account.get_voted_bills(),
         }
         return data
 
@@ -59,18 +62,23 @@ class AccountManager(models.Manager):
         about_me_truncate_length = 150
 
         # If 'about me' text is longer than 150 characters... add elipsis (truncate)
-        ellipsis_if_too_long = '' if len(account.about_me) <= about_me_truncate_length else '...'
+        ellipsis_if_too_long = (
+            "" if len(account.about_me) <= about_me_truncate_length else "..."
+        )
 
         data = {
             "id": account.user.id,
             "username": account.user.username,
             "first_name": account.first_name,
             "last_name": account.last_name,
-            "about_me": account.about_me[:about_me_truncate_length] + (ellipsis_if_too_long),
+            "about_me": account.about_me[:about_me_truncate_length]
+            + (ellipsis_if_too_long),
             "location": account.get_location(),
             "profile_image": account.profile_image_url,
-            "follow_state": True if account in request_account.following.all() else False,
-            "request_account": request_account.first_name
+            "follow_state": True
+            if account in request_account.following.all()
+            else False,
+            "request_account": request_account.first_name,
         }
         return data
 
@@ -87,13 +95,13 @@ class PathAndRename(object):
         self.sub_path = sub_path
 
     def __call__(self, instance, filename):
-        extension = filename.split('.')[-1]
+        extension = filename.split(".")[-1]
         new_filename = str(uuid.uuid4())
-        filename = '{}.{}'.format(new_filename, extension)
+        filename = "{}.{}".format(new_filename, extension)
         return os.path.join(self.sub_path, filename)
 
 
-profile_upload_path = PathAndRename('')
+profile_upload_path = PathAndRename("")
 
 
 class Account(models.Model):
@@ -102,8 +110,12 @@ class Account(models.Model):
     last_name = models.CharField(max_length=63, blank=False)
     about_me = models.CharField(max_length=511, blank=True)
 
-    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=False, default=0)
-    latitude = models.DecimalField(max_digits=9, decimal_places=6, null=False, default=0)
+    longitude = models.DecimalField(
+        max_digits=9, decimal_places=6, null=False, default=0
+    )
+    latitude = models.DecimalField(
+        max_digits=9, decimal_places=6, null=False, default=0
+    )
     address = models.CharField(max_length=255, null=True)
     city = models.CharField(max_length=63, blank=True)
     state = models.CharField(max_length=2, choices=US_STATES, blank=True)
@@ -112,21 +124,31 @@ class Account(models.Model):
 
     fed_district = models.CharField(max_length=63, default=None, null=True)
     state_district = models.CharField(max_length=63, default=None, null=True)
-    representatives = models.ManyToManyField(Representative, related_name='account')
+    representatives = models.ManyToManyField(Representative, related_name="account")
 
-    categories = models.ManyToManyField(Category, related_name='user_categories', symmetrical=False)
-    interests = models.ManyToManyField(Hashtag, related_name='interests')
-    ai_interests = models.ManyToManyField(Hashtag, related_name='ai_interests')
+    categories = models.ManyToManyField(
+        Category, related_name="user_categories", symmetrical=False
+    )
+    interests = models.ManyToManyField(Hashtag, related_name="interests")
+    ai_interests = models.ManyToManyField(Hashtag, related_name="ai_interests")
 
-    followers = models.ManyToManyField('self', related_name='follower', symmetrical=False)
-    following = models.ManyToManyField('self', related_name='followings', symmetrical=False)
+    followers = models.ManyToManyField(
+        "self", related_name="follower", symmetrical=False
+    )
+    following = models.ManyToManyField(
+        "self", related_name="followings", symmetrical=False
+    )
 
     is_verified = models.BooleanField(default=False)
     full_account = models.BooleanField(default=False)
 
     objects = AccountManager()
-    profile_image = models.ImageField(upload_to=profile_upload_path, blank=True, null=True)
-    profile_image_thumb = models.ImageField(upload_to=profile_upload_path, blank=True, null=True)
+    profile_image = models.ImageField(
+        upload_to=profile_upload_path, blank=True, null=True
+    )
+    profile_image_thumb = models.ImageField(
+        upload_to=profile_upload_path, blank=True, null=True
+    )
 
     # custom "row-level" functionality (properties) for account models
     @property
@@ -141,17 +163,19 @@ class Account(models.Model):
                     # Get US State from US States dictionary
                     us_state = dict(US_STATES).get(self.state)
 
-                    return u'{city}, {state}'.format(city=self.city, state=us_state)
+                    return u"{city}, {state}".format(city=self.city, state=us_state)
                 elif self.state:
                     # Get US State from US States dictionary
                     us_state = dict(US_STATES).get(self.state)
 
-                    return '{state}'.format(state=us_state)
+                    return "{state}".format(state=us_state)
                 else:
-                    return 'NO LOCATION'
+                    return "NO LOCATION"
             else:
                 if self.city:
-                    return u'{city}, {country}'.format(city=self.city, country=self.country)
+                    return u"{city}, {country}".format(
+                        city=self.city, country=self.country
+                    )
                 else:
                     return self.country
 
@@ -159,9 +183,8 @@ class Account(models.Model):
     def full_name(self):
         "Returns the person's full name."
 
-        full_name = '{first_name} {last_name}'.format(
-            first_name=self.first_name,
-            last_name=self.last_name
+        full_name = "{first_name} {last_name}".format(
+            first_name=self.first_name, last_name=self.last_name
         )
         return full_name
 
@@ -205,7 +228,6 @@ class Account(models.Model):
 
         super(Account, self).save(*args, **kwargs)
 
-    
     def resize_profile_image(self):
         """
         Resizes and crops the user uploaded image and creates a thumbnail version of it
@@ -216,39 +238,41 @@ class Account(models.Model):
         profile_image.load()
 
         # Resize image
-        profile_image = ImageOps.fit(profile_image, PROFILE_IMG_SIZE, Image.ANTIALIAS, centering=(0.5, 0.5))
+        profile_image = ImageOps.fit(
+            profile_image, PROFILE_IMG_SIZE, Image.ANTIALIAS, centering=(0.5, 0.5)
+        )
 
         # Convert to JPG image format with white background
-        if profile_image.mode not in ('L', 'RGB'):
+        if profile_image.mode not in ("L", "RGB"):
             white_bg_img = Image.new("RGB", PROFILE_IMG_SIZE, WHITE_BG)
             white_bg_img.paste(profile_image, mask=profile_image.split()[3])
             profile_image = white_bg_img
 
         # Save new cropped image
         tmp_image_file = io.StringIO()
-        profile_image.save(tmp_image_file, 'JPEG', quality=90)
+        profile_image.save(tmp_image_file, "JPEG", quality=90)
         tmp_image_file.seek(0)
         self.profile_image = InMemoryUploadedFile(
             tmp_image_file,
-            'ImageField',
+            "ImageField",
             self.profile_image.name,
-            'image/jpeg',
+            "image/jpeg",
             tmp_image_file.len,
-            None
+            None,
         )
         # Make a Thumbnail Image for the new resized image
         thumb_image = profile_image.copy()
         thumb_image.thumbnail(PROFILE_IMG_THUMB_SIZE, resample=Image.ANTIALIAS)
         tmp_image_file = io.StringIO()
-        thumb_image.save(tmp_image_file, 'JPEG', quality=90)
+        thumb_image.save(tmp_image_file, "JPEG", quality=90)
         tmp_image_file.seek(0)
         self.profile_image_thumb = InMemoryUploadedFile(
             tmp_image_file,
-            'ImageField',
+            "ImageField",
             self.profile_image.name,
-            'image/jpeg',
+            "image/jpeg",
             tmp_image_file.len,
-            None
+            None,
         )
 
     def is_full_account(self):
@@ -270,31 +294,40 @@ class Account(models.Model):
         from ..serializers import BillSerializer
 
         activities = Activity.objects.filter(account=self).prefetch_related(
-            'civi__linked_bills', 'civi__linked_civis__linked_bills'
+            "civi__linked_bills", "civi__linked_civis__linked_bills"
         )
         supported_bills = []
         opposed_bills = []
 
         for activity in activities.iterator():
             if activity.is_negative_vote:
-                if activity.civi.c_type == 'cause':
+                if activity.civi.c_type == "cause":
                     supported_bills += activity.civi.linked_bills.all()
-                elif activity.civi.c_type == 'solution':
+                elif activity.civi.c_type == "solution":
                     opposed_bills += activity.civi.linked_bills.all()
             elif activity.is_positive_vote:
-                if activity.civi.c_type == 'cause':
+                if activity.civi.c_type == "cause":
                     opposed_bills += activity.civi.linked_bills.all()
-                elif activity.civi.c_type == 'solution':
+                elif activity.civi.c_type == "solution":
                     supported_bills += activity.civi.linked_bills.all()
 
         return {
-            'opposed_bills': BillSerializer(opposed_bills, many=True).data if serialize else opposed_bills,
-            'supported_bills': BillSerializer(supported_bills, many=True).data if serialize else supported_bills,
+            "opposed_bills": BillSerializer(opposed_bills, many=True).data
+            if serialize
+            else opposed_bills,
+            "supported_bills": BillSerializer(supported_bills, many=True).data
+            if serialize
+            else supported_bills,
         }
 
 
 def account_post_save(sender, instance, created, **kwargs):
-    if instance.address and instance.city and instance.state and instance.representatives.count() == 0:
+    if (
+        instance.address
+        and instance.city
+        and instance.state
+        and instance.representatives.count() == 0
+    ):
         address = "{} {} {}".format(instance.address, instance.city, instance.state)
         representatives = RepresentativesFetcher().get_reps(address)
         for rep_data in representatives:

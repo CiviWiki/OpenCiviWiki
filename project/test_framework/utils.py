@@ -33,7 +33,8 @@ def find_elements_by_class(selector):
 # Returns a single WebElement found by a CSS Selector
 def find_element(selector):
     element = WebDriverWait(world.browser, webDriverWaitInSeconds).until(
-        EC.element_to_be_clickable((By.CSS_SELECTOR, selector)))
+        EC.element_to_be_clickable((By.CSS_SELECTOR, selector))
+    )
     return element
 
 
@@ -45,7 +46,8 @@ def find_element_by_class(selector):
 # Returns a single WebElement found by Name
 def find_element_by_name(selector):
     element = WebDriverWait(world.browser, webDriverWaitInSeconds).until(
-        EC.element_to_be_clickable((By.NAME, selector)))
+        EC.element_to_be_clickable((By.NAME, selector))
+    )
     return element
 
 
