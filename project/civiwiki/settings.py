@@ -5,12 +5,12 @@ Darius Calliet May 12, 2016
 Production settings file to select proper environment variables.
 """
 import os
-#import sentry_sdk
+# import sentry_sdk
 import environ
 
 from django.core.exceptions import ImproperlyConfigured
 
-#from sentry_sdk.integrations.django import DjangoIntegration
+# from sentry_sdk.integrations.django import DjangoIntegration
 env = environ.Env()
 
 # reading .env file
