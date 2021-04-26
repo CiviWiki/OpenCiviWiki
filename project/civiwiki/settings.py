@@ -5,12 +5,9 @@ Darius Calliet May 12, 2016
 Production settings file to select proper environment variables.
 """
 import os
-import sentry_sdk
 import environ
 
 from django.core.exceptions import ImproperlyConfigured
-
-from sentry_sdk.integrations.django import DjangoIntegration
 
 env = environ.Env(
     # set casting, default value
@@ -21,11 +18,6 @@ environ.Env.read_env()
 
 # False if not in os.environ
 DEBUG = env("DEBUG")
-
-if not DEBUG:
-    SENTRY_ADDRESS = env("SENTRY_ADDRESS")
-    if SENTRY_ADDRESS:
-        sentry_sdk.init(dsn=SENTRY_ADDRESS, integrations=[DjangoIntegration()])
 
 DJANGO_HOST = env("DJANGO_HOST", default="LOCALHOST")
 
