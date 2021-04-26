@@ -5,34 +5,31 @@ Darius Calliet May 12, 2016
 Production settings file to select proper environment variables.
 """
 import os
-import sentry_sdk
+#import sentry_sdk
 import environ
 
 from django.core.exceptions import ImproperlyConfigured
 
-from sentry_sdk.integrations.django import DjangoIntegration
+#from sentry_sdk.integrations.django import DjangoIntegration
+env = environ.Env()
 
-env = environ.Env(
-    # set casting, default value
-    DEBUG=(bool, False)
-)
 # reading .env file
 environ.Env.read_env()
 
-# False if not in os.environ
-DEBUG = env('DEBUG')
+DEBUG = env('DEBUG', default=False)
 
-if not DEBUG:
-    SENTRY_ADDRESS = env('SENTRY_ADDRESS')
-    if SENTRY_ADDRESS:
-        sentry_sdk.init(
-            dsn=SENTRY_ADDRESS,
-            integrations=[DjangoIntegration()]
-        )
+# if not DEBUG:
+#     SENTRY_ADDRESS = env('SENTRY_ADDRESS')
+#     if SENTRY_ADDRESS:
+#         sentry_sdk.init(
+#             dsn=SENTRY_ADDRESS,
+#             integrations=[DjangoIntegration()]
+#         )
 
-DJANGO_HOST = env("DJANGO_HOST", default='LOCALHOST')
+DJANGO_HOST = env("DJANGO_HOST", default='localhost')
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(PROJECT_DIR)
 SECRET_KEY = env("DJANGO_SECRET_KEY", default='TEST_KEY_FOR_DEVELOPMENT')
 ALLOWED_HOSTS = [".herokuapp.com", ".civiwiki.org", "127.0.0.1", "localhost", "0.0.0.0"]
 
@@ -75,11 +72,11 @@ ROOT_URLCONF = 'civiwiki.urls'
 LOGIN_URL = '/login'
 
 # SSL Setup
-if DJANGO_HOST != 'LOCALHOST':
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    SECURE_SSL_REDIRECT = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
+# if DJANGO_HOST != 'localhost':
+#     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+#     SECURE_SSL_REDIRECT = True
+#     SESSION_COOKIE_SECURE = True
+#     CSRF_COOKIE_SECURE = True
 
 # Internationalization & Localization
 LANGUAGE_CODE = 'en-us'
@@ -91,7 +88,7 @@ USE_TZ = True
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, "webapp/templates")],  # TODO: Add non-webapp template directory
+        'DIRS': [os.path.join(PROJECT_DIR, "webapp/templates")],  # TODO: Add non-webapp template directory
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -113,33 +110,33 @@ CLOSED_BETA = env("CLOSED_BETA", default=False)
 ADMINS = [('Development Team', 'dev@civiwiki.org')]
 
 # API keys
-SUNLIGHT_API_KEY = env("SUNLIGHT_API_KEY")
-GOOGLE_API_KEY = env("GOOGLE_MAP_API_KEY")
+# SUNLIGHT_API_KEY = env("SUNLIGHT_API_KEY")
+# GOOGLE_API_KEY = env("GOOGLE_MAP_API_KEY")
 
 # Channels Setup
-REDIS_URL = env("REDIS_URL", default='redis://localhost:6379')
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "asgi_redis.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [REDIS_URL],
-        },
-        "ROUTING": "civiwiki.routing.channel_routing",
-    },
-}
+# REDIS_URL = env("REDIS_URL", default='redis://localhost:6379')
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "asgi_redis.RedisChannelLayer",
+#         "CONFIG": {
+#             "hosts": [REDIS_URL],
+#         },
+#         "ROUTING": "civiwiki.routing.channel_routing",
+#     },
+# }
 
 # Celery Task Runner Setup
-CELERY_BROKER_URL = REDIS_URL + '/0'
-CELERY_RESULT_BACKEND = CELERY_BROKER_URL
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIME_ZONE = TIME_ZONE
+# CELERY_BROKER_URL = REDIS_URL + '/0'
+# CELERY_RESULT_BACKEND = CELERY_BROKER_URL
+# CELERY_ACCEPT_CONTENT = ['application/json']
+# CELERY_TASK_SERIALIZER = 'json'
+# CELERY_RESULT_SERIALIZER = 'json'
+# CELERY_TIME_ZONE = TIME_ZONE
 
 # AWS S3 Setup
 if 'AWS_STORAGE_BUCKET_NAME' not in os.environ:
     MEDIA_URL = '/media/'
-    MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+    MEDIA_ROOT = os.path.join(PROJECT_DIR, "media")
 else:
     AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
     AWS_S3_ACCESS_KEY_ID = env("AWS_S3_ACCESS_KEY_ID")
@@ -150,28 +147,34 @@ else:
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'webapp/static'),
+    os.path.join(PROJECT_DIR, 'webapp/static'),
 )
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(PROJECT_DIR, 'staticfiles')
 
 # Database
-if 'CIVIWIKI_LOCAL_NAME' not in os.environ:
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
+# if 'CIVIWIKI_LOCAL_NAME' not in os.environ:
+#     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-    DATABASES = {
-        'default': env.db()
-    }
-else:
-    DATABASES = {
-        'default': {
-            'HOST': env('CIVIWIKI_LOCAL_DB_HOST', 'localhost'),
-            'PORT': '5432',
-            'NAME': env("CIVIWIKI_LOCAL_NAME"),
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'USER': env("CIVIWIKI_LOCAL_USERNAME"),
-            'PASSWORD': env("CIVIWIKI_LOCAL_PASSWORD"),
-        },
-    }
+#     DATABASES = {
+#         'default': env.db()
+#     }
+# else:
+#     DATABASES = {
+#         'default': {
+#             'HOST': env('CIVIWIKI_LOCAL_DB_HOST', 'localhost'),
+#             'PORT': '5432',
+#             'NAME': env("CIVIWIKI_LOCAL_NAME"),
+#             'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#             'USER': env("CIVIWIKI_LOCAL_USERNAME"),
+#             'PASSWORD': env("CIVIWIKI_LOCAL_PASSWORD"),
+#         },
+#     }
 
 # Email Backend Setup
 if 'EMAIL_HOST' not in os.environ:
@@ -216,4 +219,4 @@ REST_FRAMEWORK = {
 }
 # CORS Settings
 CORS_ORIGIN_ALLOW_ALL = True
-PROPUBLICA_API_KEY = env("PROPUBLICA_API_KEY", default='TEST')
+# PROPUBLICA_API_KEY = env("PROPUBLICA_API_KEY", default='TEST')
