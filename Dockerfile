@@ -1,4 +1,4 @@
-FROM python:2.7
+FROM python:3.7.4
 EXPOSE 8000
 ENV PYTHONUNBUFFERED 1
 WORKDIR /app
@@ -24,8 +24,6 @@ RUN apt-get -y update && apt-get install -y --no-install-recommends google-chrom
   apt-get clean && \
   rm -rf /var/lib/apt/lists/*
 
-RUN wget https://chromedriver.storage.googleapis.com/2.46/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && rm chromedriver_linux64.zip
-RUN mv chromedriver /usr/bin/chromedriver && chown root:root /usr/bin/chromedriver && chmod +x /usr/bin/chromedriver
 RUN wget https://selenium-release.storage.googleapis.com/3.9/selenium-server-standalone-3.9.0.jar && mv selenium-server-standalone-3.9.0.jar /usr/selenium-server-standalone.jar
 
 RUN pip install --upgrade \
