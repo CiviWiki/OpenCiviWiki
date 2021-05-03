@@ -25,7 +25,7 @@ class ThreadManager(models.Manager):
             "" if len(thread.summary) <= thread_truncate_length else "..."
         )
 
-        from civi import Civi
+        from .civi import Civi
 
         thread_data = {
             "id": thread.id,
