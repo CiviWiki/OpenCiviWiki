@@ -153,7 +153,7 @@ if "CIVIWIKI_LOCAL_NAME" not in os.environ:
 else:
     DATABASES = {
         "default": {
-            "HOST": env("CIVIWIKI_LOCAL_DB_HOST", "localhost"),
+            "HOST": env("CIVIWIKI_LOCAL_DB_HOST", default="localhost"),
             "PORT": "5432",
             "NAME": env("CIVIWIKI_LOCAL_NAME"),
             "ENGINE": "django.db.backends.postgresql_psycopg2",
