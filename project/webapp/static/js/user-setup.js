@@ -25,7 +25,6 @@ cw.UserSetupView = BB.View.extend({
   step0Template: _.template($("#step0-template").html()),
   step1Template: _.template($("#step1-template").html()),
   step2Template: _.template($("#step2-template").html()),
-  step3Template: _.template($("#step3-template").html()),
 
   initialize: function(options) {
     options = options || {};
@@ -49,18 +48,6 @@ cw.UserSetupView = BB.View.extend({
         .empty()
         .append(this.step2Template())
         .toggleClass("hide");
-      this.$("#step3")
-        .empty()
-        .append(this.step3Template())
-        .toggleClass("hide");
-
-      // Init map view for locating the user
-      this.mapView.renderAndInitMap();
-      this.listenTo(
-        this.mapView.model,
-        "change",
-        _.bind(this.validateStep2, this)
-      );
     }
   },
 
@@ -88,7 +75,6 @@ cw.UserSetupView = BB.View.extend({
       if (first_name && last_name && about_me) {
         this.$el.find("#step1").addClass("hide");
         this.$el.find("#step2").removeClass("hide");
-        this.mapView.resizeMap().adjustMapCenter();
         this.currentStep = 2;
       } else {
         Materialize.toast(
@@ -96,9 +82,6 @@ cw.UserSetupView = BB.View.extend({
           5000
         );
       }
-    } else if (this.currentStep === 2) {
-      this.$("#step2").addClass("hide");
-      this.$("#step3").removeClass("hide");
     }
   },
 
@@ -148,39 +131,13 @@ cw.UserSetupView = BB.View.extend({
         about_me: about_me
       });
 
-      this.$el.find(".next").removeClass("disabled");
+      this.$el.find(".finish").removeClass("disabled");
       this.$el.find(".help-text.invalid").addClass("hide");
       this.$el.find(".help-text.valid").removeClass("hide");
     } else {
-      this.$el.find(".next").addClass("disabled");
+      this.$el.find(".finish").addClass("disabled");
       this.$el.find(".help-text.valid").addClass("hide");
       this.$el.find(".help-text.invalid").removeClass("hide");
-    }
-  },
-
-  validateStep2: function() {
-    var coordinates = this.mapView.model.get("coordinates");
-    var address = this.mapView.model.get("address");
-
-    if (_.isEmpty(coordinates) || _.isEmpty(address)) {
-      this.$el
-        .find(".finish")
-        .addClass("disabled")
-        .attr("disabled", true);
-    } else {
-      this.model.set({
-        longitude: coordinates.lng,
-        latitude: coordinates.lat,
-        address: address.address,
-        city: address.city,
-        state: address.state,
-        zip_code: address.zipcode
-      });
-
-      this.$el
-        .find(".finish")
-        .removeClass("disabled")
-        .attr("disabled", false);
     }
   },
 
@@ -222,14 +179,11 @@ cw.UserSetupView = BB.View.extend({
     // preserve reference to 'this' for use in ajax callback
     var _this = this;
 
-    var coordinates = this.mapView.model.get("coordinates");
-    var address = this.mapView.model.get("address");
-
     var first_name = this.model.get("first_name");
     var last_name = this.model.get("last_name");
     var about_me = this.model.get("about_me");
 
-    if (first_name && last_name && about_me && coordinates && address) {
+    if (first_name && last_name && about_me) {
       $.ajax({
         type: "POST",
         url: "/api/edituser/",
@@ -238,14 +192,6 @@ cw.UserSetupView = BB.View.extend({
           about_me: about_me,
           first_name: first_name,
           last_name: last_name,
-          coordinates: coordinates,
-          address: address.address,
-          city: address.city,
-          state: address.state,
-          zip_code: address.zipcode,
-          country: address.country,
-          longitude: coordinates.lng,
-          latitude: coordinates.lat
         },
         success: function(data) {
           Materialize.toast(
