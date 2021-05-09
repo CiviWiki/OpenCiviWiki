@@ -7,13 +7,13 @@ Production settings file to select proper environment variables.
 import os
 
 # False if not in os.environ
-DEBUG = os.getenv("DEBUG",False)
+DEBUG = os.getenv("DEBUG", False)
 
 # defaults to second value if not found in os.environ
-DJANGO_HOST = os.getenv("DJANGO_HOST","LOCALHOST")
+DJANGO_HOST = os.getenv("DJANGO_HOST", "LOCALHOST")
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY","TEST_KEY_FOR_DEVELOPMENT")
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "TEST_KEY_FOR_DEVELOPMENT")
 ALLOWED_HOSTS = [".herokuapp.com", ".civiwiki.org", "127.0.0.1", "localhost", "0.0.0.0"]
 
 INSTALLED_APPS = (
@@ -193,4 +193,4 @@ REST_FRAMEWORK = {
 }
 # CORS Settings
 CORS_ORIGIN_ALLOW_ALL = True
-PROPUBLICA_API_KEY = os.getenv("PROPUBLICA_API_KEY","TEST")
+PROPUBLICA_API_KEY = os.getenv("PROPUBLICA_API_KEY", "TEST")
