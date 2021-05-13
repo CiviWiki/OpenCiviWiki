@@ -13,7 +13,6 @@ cw.AccountModel = BB.Model.extend({
             followers: [],
             following: [],
             issues: [],
-            representatives: []
         };
     },
     url: function () {
@@ -43,7 +42,6 @@ cw.AccountView = BB.View.extend({
     followersTemplate: _.template($('#followers-template').html()),
     followingTemplate: _.template($('#following-template').html()),
     myissuesTemplate: _.template($('#my-issues-template').html()),
-    myrepsTemplate: _.template($('#my-reps-template').html()),
     mybillsTemplate: _.template($('#my-bills-template').html()),
 
     // Partials
@@ -91,7 +89,6 @@ cw.AccountView = BB.View.extend({
         this.$('#followers').empty().append(this.followersTemplate());
         this.$('#following').empty().append(this.followingTemplate());
         this.$('#issues').empty().append(this.myissuesTemplate());
-        this.$('#myreps').empty().append(this.myrepsTemplate());
         this.$('#mybills').empty().append(this.mybillsTemplate());
         var settingsEl = this.$('#settings');
         if (settingsEl.length) {
