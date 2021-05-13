@@ -36,8 +36,6 @@ def get_profile(request, user):
         a = Account.objects.get(user=u)
         result = Account.objects.summarize(a)
 
-        result["representatives"] = []
-
         result["issues"] = []
         voted_solutions = Activity.objects.filter(
             account=a.id, civi__c_type="solution", activity_type__contains="pos"
@@ -71,11 +69,6 @@ def get_profile(request, user):
                 "solutions": solutions,
             }
             result["issues"].append(my_issue_item)
-
-        result["representatives"] = []
-
-        for rep in a.representatives.all():
-            result["representatives"].append(rep.summarize(account=a))
 
         if request.user.username != user:
             ra = Account.objects.get(user=request.user)
