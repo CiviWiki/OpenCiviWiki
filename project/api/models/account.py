@@ -18,8 +18,6 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from core.constants import US_STATES
 from .hashtag import Hashtag
 from .category import Category
-from .representative import Representative
-from ..representatives_fetcher import RepresentativesFetcher
 
 # Image manipulation constants
 PROFILE_IMG_SIZE = (171, 171)
