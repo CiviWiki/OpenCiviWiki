@@ -93,6 +93,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/tberm"><img src="https://avatars.githubusercontent.com/u/49910363?v=4?s=100" width="100px;" alt=""/><br /><sub><b>tberm</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=tberm" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/PyDrummer"><img src="https://avatars.githubusercontent.com/u/62918152?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Anthony B.</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=PyDrummer" title="Code">💻</a></td>
   </tr>
 </table>
 
