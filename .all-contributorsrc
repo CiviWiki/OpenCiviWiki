@@ -423,6 +423,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "tberm",
+      "name": "tberm",
+      "avatar_url": "https://avatars.githubusercontent.com/u/49910363?v=4",
+      "profile": "https://github.com/tberm",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
