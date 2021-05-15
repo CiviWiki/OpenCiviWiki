@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.forms.models import model_to_dict
 
-from .models import Account, Thread, Civi, Representative, Activity
+from .models import Account, Thread, Civi, Activity
 from .utils import json_response
 
 
@@ -35,8 +35,6 @@ def get_profile(request, user):
         u = User.objects.get(username=user)
         a = Account.objects.get(user=u)
         result = Account.objects.summarize(a)
-
-        result["representatives"] = []
 
         result["issues"] = []
         voted_solutions = Activity.objects.filter(
@@ -71,11 +69,6 @@ def get_profile(request, user):
                 "solutions": solutions,
             }
             result["issues"].append(my_issue_item)
-
-        result["representatives"] = []
-
-        for rep in a.representatives.all():
-            result["representatives"].append(rep.summarize(account=a))
 
         if request.user.username != user:
             ra = Account.objects.get(user=request.user)

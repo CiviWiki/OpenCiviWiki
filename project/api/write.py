@@ -338,13 +338,6 @@ def editUser(request):
         "first_name": request_data.get("first_name", account.first_name),
         "last_name": request_data.get("last_name", account.last_name),
         "about_me": request_data.get("about_me", account.about_me),
-        "address": request_data.get("address", account.address),
-        "city": request_data.get("city", account.city),
-        "state": request_data.get("state", account.state),
-        "zip_code": request_data.get("zip_code", account.zip_code),
-        "longitude": request_data.get("longitude", account.longitude),
-        "latitude": request_data.get("latitude", account.latitude),
-        "country": request_data.get("country", account.country),
     }
 
     account.__dict__.update(data)

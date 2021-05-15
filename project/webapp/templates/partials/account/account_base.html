@@ -13,7 +13,6 @@
                             <li class="tab"><a href="#following">FOLLOWING</a></li>
                             <li class="tab"><a href="#issues">MY ISSUES</a></li>
                             <li class="tab"><a href="#mybills">MY BILLS</a></li>
-                            <li class="tab"><a href="#myreps">MY REPS</a></li>
                             {% if request.user.username == username|stringformat:"s" %}
                             <li class="tab">
                                 <a href="#settings">EDIT PROFILE</a>
@@ -44,7 +43,6 @@
                 <div id="following" class="col s12"></div>
                 <div id="issues" class="col s12"></div>
                 <div id="mybills" class="col s12"></div>
-                <div id="myreps" class="col s12"></div>
 
                 {% if request.user.username == username|stringformat:"s" %}
                 <div id="settings" class="col s12"></div>

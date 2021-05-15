@@ -7,7 +7,6 @@ from .hashtag import Hashtag
 from .notification import Notification
 from .rationale import Rationale
 from .rebuttal import Rebuttal
-from .representative import Representative
 from .response import Response
 from .thread import Thread
 from .vote import Vote

@@ -414,6 +414,33 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "obafemiolorungbon",
+      "name": "Obafemi Joseph Olorungbon",
+      "avatar_url": "https://avatars.githubusercontent.com/u/62023238?v=4",
+      "profile": "https://github.com/obafemiolorungbon",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "tberm",
+      "name": "tberm",
+      "avatar_url": "https://avatars.githubusercontent.com/u/49910363?v=4",
+      "profile": "https://github.com/tberm",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "PyDrummer",
+      "name": "Anthony B.",
+      "avatar_url": "https://avatars.githubusercontent.com/u/62918152?v=4",
+      "profile": "https://github.com/PyDrummer",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
