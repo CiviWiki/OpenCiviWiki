@@ -18,8 +18,6 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from core.constants import US_STATES
 from .hashtag import Hashtag
 from .category import Category
-from .representative import Representative
-from ..representatives_fetcher import RepresentativesFetcher
 
 # Image manipulation constants
 PROFILE_IMG_SIZE = (171, 171)
@@ -36,7 +34,6 @@ class AccountManager(models.Manager):
             "first_name": account.first_name,
             "last_name": account.last_name,
             "about_me": account.about_me,
-            "location": account.location,
             "history": [
                 Civi.objects.serialize(c)
                 for c in Civi.objects.filter(author_id=account.id).order_by("-created")
@@ -73,7 +70,6 @@ class AccountManager(models.Manager):
             "last_name": account.last_name,
             "about_me": account.about_me[:about_me_truncate_length]
             + (ellipsis_if_too_long),
-            "location": account.get_location(),
             "profile_image": account.profile_image_url,
             "follow_state": True
             if account in request_account.following.all()
@@ -110,22 +106,6 @@ class Account(models.Model):
     last_name = models.CharField(max_length=63, blank=False)
     about_me = models.CharField(max_length=511, blank=True)
 
-    longitude = models.DecimalField(
-        max_digits=9, decimal_places=6, null=False, default=0
-    )
-    latitude = models.DecimalField(
-        max_digits=9, decimal_places=6, null=False, default=0
-    )
-    address = models.CharField(max_length=255, null=True)
-    city = models.CharField(max_length=63, blank=True)
-    state = models.CharField(max_length=2, choices=US_STATES, blank=True)
-    zip_code = models.CharField(max_length=6, null=True)
-    country = models.CharField(max_length=63, blank=True, default="United States")
-
-    fed_district = models.CharField(max_length=63, default=None, null=True)
-    state_district = models.CharField(max_length=63, default=None, null=True)
-    representatives = models.ManyToManyField(Representative, related_name="account")
-
     categories = models.ManyToManyField(
         Category, related_name="user_categories", symmetrical=False
     )
@@ -150,35 +130,6 @@ class Account(models.Model):
     profile_image_thumb = models.ImageField(
         upload_to=profile_upload_path, blank=True, null=True
     )
-
-    # custom "row-level" functionality (properties) for account models
-    @property
-    def location(self):
-        """
-        Constructs a CITY, STATE string for locations in the US,
-        a CITY, COUNTRY string for locations outside of the US
-        """
-        if self.country:
-            if self.country == "United States":
-                if self.city and self.state:
-                    # Get US State from US States dictionary
-                    us_state = dict(US_STATES).get(self.state)
-
-                    return u"{city}, {state}".format(city=self.city, state=us_state)
-                elif self.state:
-                    # Get US State from US States dictionary
-                    us_state = dict(US_STATES).get(self.state)
-
-                    return "{state}".format(state=us_state)
-                else:
-                    return "NO LOCATION"
-            else:
-                if self.city:
-                    return u"{city}, {country}".format(
-                        city=self.city, country=self.country
-                    )
-                else:
-                    return self.country
 
     @property
     def full_name(self):
@@ -277,7 +228,7 @@ class Account(models.Model):
         )
 
     def is_full_account(self):
-        if self.first_name and self.last_name and self.longitude and self.latitude:
+        if self.first_name and self.last_name:
             return True
         else:
             return False
@@ -320,20 +271,3 @@ class Account(models.Model):
             if serialize
             else supported_bills,
         }
-
-
-def account_post_save(sender, instance, created, **kwargs):
-    if (
-        instance.address
-        and instance.city
-        and instance.state
-        and instance.representatives.count() == 0
-    ):
-        address = "{} {} {}".format(instance.address, instance.city, instance.state)
-        representatives = RepresentativesFetcher().get_reps(address)
-        for rep_data in representatives:
-            rep, _ = Representative.objects.create_or_update_from_response(rep_data)
-            instance.representatives.add(rep)
-
-
-post_save.connect(account_post_save, sender=Account)

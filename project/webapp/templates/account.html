@@ -26,9 +26,6 @@
 <script id="bill-template" type="text/template">
     {% include "partials/account/utils/account_bill.html" %}
 </script>
-<script id="location-template" type="text/template">
-    {% include "partials/user-setup/map.html" %}
-</script>
 <script id="rep-chip-template" type="text/template">
     {% verbatim %}
     <div class="rep bold-text purple-text chip">
@@ -50,9 +47,6 @@
 </script>
 <script id="my-issues-template" type="text/template">
     {% include "partials/account/tabs/my_issues.html" %}
-</script>
-<script id="my-reps-template" type="text/template">
-    {% include "partials/account/tabs/my_reps.html" %}
 </script>
 <script id="my-bills-template" type="text/template">
     {% include "partials/account/tabs/my_bills.html" %}
@@ -80,9 +74,7 @@
 <script type="text/javascript" src="{% static "js/account.js" %}"></script>
 
 <script type="text/javascript">
-    // var googleMapsApiKey = "{{ google_map_api_key }}";
     // var sunlightApiKey = "{{ sunlight_api_key }}";
-    // var mapView = new cw.MapView({model: new cw.Map(), googleMapsApiKey: googleMapsApiKey, sunlightApiKey: sunlightApiKey});
 
     var username = '{{username}}';
     var current_user = '{{request.user.username}}'
@@ -92,9 +84,7 @@
 
     var accountView = new cw.AccountView({
         model: accountModel,
-        // mapView: mapView,
         current_user: current_user,
-        // googleMapsApiKey: googleMapsApiKey,
         // sunlightApiKey: sunlightApiKey
     });
     accountModel.fetch();
