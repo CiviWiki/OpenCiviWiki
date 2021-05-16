@@ -44,7 +44,6 @@ class AccountManager(models.Manager):
             "profile_image": account.profile_image_url,
             "followers": self.followers(account),
             "following": self.following(account),
-            "my_bills": account.get_voted_bills(),
         }
         return data
 
@@ -281,46 +280,6 @@ class Account(models.Model):
             return True
         else:
             return False
-
-    def get_voted_bills(self, serialize=True):
-        """
-        Returns bills from civis user voted on. The logic behind is:
-        1. If user voted negatively on cause civi -> bill is added to supported bills
-        2. If user voted positively on cause civi -> bill is added to opposed bills
-        3. If user voted negatively on solution civi -> bill is added to opposed bills
-        4. If user voted positively on solution civi -> bill is added to supported bills
-        :return:
-        """
-        from .activity import Activity  # avoid circular dependencies
-        from ..serializers import BillSerializer
-
-        activities = Activity.objects.filter(account=self).prefetch_related(
-            "civi__linked_bills", "civi__linked_civis__linked_bills"
-        )
-        supported_bills = []
-        opposed_bills = []
-
-        for activity in activities.iterator():
-            if activity.is_negative_vote:
-                if activity.civi.c_type == "cause":
-                    supported_bills += activity.civi.linked_bills.all()
-                elif activity.civi.c_type == "solution":
-                    opposed_bills += activity.civi.linked_bills.all()
-            elif activity.is_positive_vote:
-                if activity.civi.c_type == "cause":
-                    opposed_bills += activity.civi.linked_bills.all()
-                elif activity.civi.c_type == "solution":
-                    supported_bills += activity.civi.linked_bills.all()
-
-        return {
-            "opposed_bills": BillSerializer(opposed_bills, many=True).data
-            if serialize
-            else opposed_bills,
-            "supported_bills": BillSerializer(supported_bills, many=True).data
-            if serialize
-            else supported_bills,
-        }
-
 
 def account_post_save(sender, instance, created, **kwargs):
     if (

@@ -1,12 +1,10 @@
 from django.db import models
 
-from .bill import Bill
 from .representative import Representative
 from .vote import Vote
 
 
 class Rationale(models.Model):
-    bill = models.ForeignKey(Bill, default=None, null=True, on_delete=models.PROTECT)
     representative = models.ForeignKey(
         Representative, default=None, null=True, on_delete=models.PROTECT
     )
