@@ -98,7 +98,6 @@ ADMINS = [("Development Team", "dev@civiwiki.org")]
 
 # API keys
 # returns None if not found in os.environ
-SUNLIGHT_API_KEY = os.getenv("SUNLIGHT_API_KEY")
 GOOGLE_API_KEY = os.getenv("GOOGLE_MAP_API_KEY")
 
 # Channels Setup

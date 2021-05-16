@@ -120,7 +120,6 @@
 <script type="text/javascript" src="{% static "js/utils/locate.js" %}"></script>
 <script type="text/javascript">
     var googleMapsApiKey = "{{ google_map_api_key }}";
-    var sunlightApiKey = "{{ sunlight_api_key }}";
 
     location_data = {
         lng: {{lng}},
@@ -128,7 +127,7 @@
     }
 
     var mapModel = new cw.Map({coordinates: location_data});
-    var mapView = new cw.MapView({model: mapModel, googleMapsApiKey: googleMapsApiKey, sunlightApiKey: sunlightApiKey});
+    var mapView = new cw.MapView({model: mapModel, googleMapsApiKey: googleMapsApiKey});
 
     var data = {};
     data.username = '{{user.username}}';
