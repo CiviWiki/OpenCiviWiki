@@ -143,16 +143,24 @@ if "CIVIWIKI_LOCAL_NAME" not in os.environ:
 
     DATABASES = {"default": os.getenv("DATABASE_URL")}
 else:
-    DATABASES = {
-        "default": {
-            "HOST": os.getenv("CIVIWIKI_LOCAL_DB_HOST", "localhost"),
-            "PORT": "5432",
-            "NAME": os.getenv("CIVIWIKI_LOCAL_NAME"),
-            "ENGINE": "django.db.backends.postgresql_psycopg2",
-            "USER": os.getenv("CIVIWIKI_LOCAL_USERNAME"),
-            "PASSWORD": os.getenv("CIVIWIKI_LOCAL_PASSWORD"),
-        },
-    }
+    if DEBUG:
+        DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+            }
+        }
+    else:
+        DATABASES = {
+            "default": {
+                "HOST": os.getenv("CIVIWIKI_LOCAL_DB_HOST", "localhost"),
+                "PORT": "5432",
+                "NAME": os.getenv("CIVIWIKI_LOCAL_NAME"),
+                "ENGINE": "django.db.backends.postgresql_psycopg2",
+                "USER": os.getenv("CIVIWIKI_LOCAL_USERNAME"),
+                "PASSWORD": os.getenv("CIVIWIKI_LOCAL_PASSWORD"),
+            },
+        }
 
 # Email Backend Setup
 if "EMAIL_HOST" not in os.environ:
