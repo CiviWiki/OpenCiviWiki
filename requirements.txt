@@ -1,18 +1,17 @@
-Django==2.2.16
+Django==3.2.3
 django-cors-headers==3.5.0
 django-extensions==3.0.9
 django-storages==1.10.1
 django-notifications-hq==1.6.0
 djangorestframework==3.12.1
 whitenoise==5.2.0
-channels==1.1.8
 celery==5.0.0
-asgi-redis==1.4.3
-coreapi==2.3.3
-psycopg2==2.8.6
+
+# psycopg2==2.8.6
+psycopg2-binary==2.8.6
 Pillow==7.2.0
 requests==2.24.0
-sunlight==1.2.9
+
 
 # Packages for development/testing
 coverage==4.5.3
@@ -23,4 +22,5 @@ selenium==3.141.0
 
 # Packages for production
 gunicorn==19.9.0
-honcho==1.0.1
+
+
