@@ -2,6 +2,7 @@
 Account Model
 Extends the default django user model
 """
+
 import os
 import uuid
 import io

@@ -1,3 +1,8 @@
+"""
+Activity Model
+Records user activity
+"""
+
 from django.db import models
 
 from .account import Account

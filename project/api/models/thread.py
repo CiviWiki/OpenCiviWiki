@@ -1,3 +1,8 @@
+"""
+Thread model
+Maintains threads
+"""
+
 import os
 import uuid
 from calendar import month_name

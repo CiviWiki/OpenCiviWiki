@@ -1,3 +1,8 @@
+"""
+Civi Model
+The main model for Civi
+"""
+
 import os
 import json
 import datetime
