@@ -1,3 +1,8 @@
+"""
+Response model
+Records user response
+"""
+
 from django.db import models
 
 from .account import Account
