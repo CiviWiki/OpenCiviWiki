@@ -236,31 +236,6 @@ def deleteCivi(request):
         return HttpResponseServerError(reason=str(e))
 
 
-# TODO 1: profile image file upload
-# TODO 2: redo user editing
-# TODO 3: django forms
-# @login_required
-# def get_dist(request):
-#     '''
-#     Upon First registering or changing location information gets representative codes and addes them to the user array
-#     '''
-#     request = urllib2.Request("https://congress.api.sunlightfoundation.com/")
-#
-#     #S3tting the key as the value of an X-APIKEY HTTP request header.
-#     data = {
-#     "apikey": APIKEY,
-#     "fields": [],
-#
-#     }
-#     request.add_data(json.dumps(data))
-#
-#     response = urllib2.urlopen(request)
-#     resp_parsed = json.loads(response.read())
-#     reps = [for rep in resp_parsed.data]
-#     Account.user(request.user).representatives = reps
-#
-
-
 @login_required
 def editThread(request):
     thread_id = request.POST.get("thread_id")
