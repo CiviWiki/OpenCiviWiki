@@ -24,3 +24,5 @@ selenium==3.141.0
 # Packages for production
 gunicorn==19.9.0
 honcho==1.0.1
+
+django-taggit==1.4.0
