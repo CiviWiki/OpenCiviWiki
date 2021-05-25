@@ -5,13 +5,12 @@ WORKDIR /app
 
 # Install build dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-  build-essential \
-  apt-get clean
+  build-essential
 
 # Install Pillow dependencies
 RUN apt-get install -y --no-install-recommends \
-  ibtiff5-dev \
-  libjpeg8-dev \
+  libtiff5-dev \
+  libjpeg-dev \
   libopenjp2-7-dev \
   zlib1g-dev \
   libfreetype6-dev \
