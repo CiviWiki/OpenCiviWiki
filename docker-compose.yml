@@ -8,7 +8,6 @@ services:
       - ./data/postgresql:/var/lib/postgresql/data
     env_file:
       - .env
-    restart: on-failure
 
   redis:
     container_name: civiwiki-redis
@@ -17,7 +16,6 @@ services:
     - ./data/postgresql:/var/lib/postgresql/data
     env_file:
     - .env
-    restart: on-failure
 
   backend:
     container_name: civiwiki-backend
@@ -31,5 +29,4 @@ services:
       - redis
     env_file:
       - .env
-    restart: on-failure
     tty: true
