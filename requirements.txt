@@ -9,7 +9,7 @@ channels==1.1.8
 celery==5.0.0
 asgi-redis==1.4.3
 coreapi==2.3.3
-psycopg2==2.8.6
+psycopg2-binary==2.8.6
 Pillow==7.2.0
 requests==2.24.0
 
@@ -18,7 +18,6 @@ coverage==4.5.3
 flake8==3.4.1
 mock==2.0.0
 aloe==0.1.19
-selenium==3.141.0
 
 # Packages for production
 gunicorn==19.9.0
