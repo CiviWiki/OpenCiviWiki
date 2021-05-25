@@ -3,21 +3,9 @@ EXPOSE 8000
 ENV PYTHONUNBUFFERED 1
 WORKDIR /app
 
-
 RUN apt-get update && apt-get install -y --no-install-recommends \
-  git \
-  gcc \
-  vim \
   build-essential \
-  unzip \
-  xvfb \
-  libxi6 \
-  libgconf-2-4 \
-  default-jdk \
-  supervisor && \
-  apt-get clean && /
-
-RUN wget https://selenium-release.storage.googleapis.com/3.9/selenium-server-standalone-3.9.0.jar && mv selenium-server-standalone-3.9.0.jar /usr/selenium-server-standalone.jar
+  apt-get clean &&
 
 RUN pip install --upgrade \
     pip \
