@@ -15,7 +15,7 @@ from django.utils.deconstruct import deconstructible
 from .account import Account
 from .category import Category
 from .fact import Fact
-from .hashtag import Hashtag
+from taggit.managers import TaggableManager
 from core.constants import US_STATES
 
 
@@ -91,7 +91,7 @@ class Thread(models.Model):
     )
     facts = models.ManyToManyField(Fact)
 
-    hashtags = models.ManyToManyField(Hashtag)
+    hashtags = TaggableManager()
 
     title = models.CharField(max_length=127, blank=False, null=False)
     summary = models.CharField(max_length=4095, blank=False, null=False)

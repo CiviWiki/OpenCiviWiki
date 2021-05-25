@@ -19,10 +19,9 @@ from django.utils.deconstruct import deconstructible
 from .account import Account
 from .thread import Thread
 from .bill import Bill
-from .hashtag import Hashtag
 from .thread import Thread
 from core.constants import CIVI_TYPES
-
+from taggit.managers import TaggableManager
 
 class CiviManager(models.Manager):
     def summarize(self, civi):
@@ -108,7 +107,7 @@ class Civi(models.Model):
         Bill, default=None, null=True, on_delete=models.PROTECT
     )  # null if not solution
 
-    hashtags = models.ManyToManyField(Hashtag)
+    hashtags = TaggableManager()
 
     linked_civis = models.ManyToManyField("self", related_name="links")
     linked_bills = models.ManyToManyField(Bill, related_name="bills")
