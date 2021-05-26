@@ -1,14 +1,13 @@
-FROM python:3.7
+FROM python:3.7-slim-buster
 EXPOSE 8000
 ENV PYTHONUNBUFFERED 1
 WORKDIR /app
 
-# Install build dependencies
+# Install build and Pillow dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-  build-essential
-
-# Install Pillow dependencies
-RUN apt-get install -y --no-install-recommends \
+  # build
+  build-essential \
+  # Pillow
   libtiff5-dev \
   libjpeg-dev \
   libopenjp2-7-dev \
@@ -22,7 +21,7 @@ RUN apt-get install -y --no-install-recommends \
   libharfbuzz-dev \
   libfribidi-dev \
   libxcb1-dev
-
+ 
 # Upgrade pip and friends
 RUN pip install --upgrade \
     pip \
