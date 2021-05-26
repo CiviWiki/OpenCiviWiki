@@ -1,24 +1,28 @@
-FROM python:3.7
+FROM python:3.7-slim-buster
 EXPOSE 8000
 ENV PYTHONUNBUFFERED 1
 WORKDIR /app
 
-
+# Install build and Pillow dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-  git \
-  gcc \
-  vim \
+  # build
   build-essential \
-  unzip \
-  xvfb \
-  libxi6 \
-  libgconf-2-4 \
-  default-jdk \
-  supervisor && \
-  apt-get clean && /
-
-RUN wget https://selenium-release.storage.googleapis.com/3.9/selenium-server-standalone-3.9.0.jar && mv selenium-server-standalone-3.9.0.jar /usr/selenium-server-standalone.jar
-
+  # Pillow
+  libtiff5-dev \
+  libjpeg-dev \
+  libopenjp2-7-dev \
+  zlib1g-dev \
+  libfreetype6-dev \
+  liblcms2-dev \
+  libwebp-dev \
+  tcl8.6-dev \
+  tk8.6-dev \
+  python3-tk \
+  libharfbuzz-dev \
+  libfribidi-dev \
+  libxcb1-dev
+ 
+# Upgrade pip and friends
 RUN pip install --upgrade \
     pip \
     wheel \

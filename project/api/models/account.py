@@ -2,6 +2,7 @@
 Account Model
 Extends the default django user model
 """
+
 import os
 import uuid
 import io
@@ -11,7 +12,6 @@ from django.utils.deconstruct import deconstructible
 from django.core.files.storage import default_storage
 from django.conf import settings
 from django.db import models
-from django.db.models.signals import post_save
 from PIL import Image, ImageOps
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
@@ -41,7 +41,6 @@ class AccountManager(models.Manager):
             "profile_image": account.profile_image_url,
             "followers": self.followers(account),
             "following": self.following(account),
-            "my_bills": account.get_voted_bills(),
         }
         return data
 

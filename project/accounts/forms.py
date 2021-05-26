@@ -31,6 +31,7 @@ class AccountRegistrationForm(UserCreationForm):
             - Invalid_Password - Password can not be entirely numeric
             - Invalid_Password_Length - Password must be at least 4 characters
     """
+
     email = forms.EmailField(required=True)
     username = forms.CharField(required=True)
     password = forms.CharField(required=True)
@@ -60,6 +61,7 @@ class AccountRegistrationForm(UserCreationForm):
 
         Returns email
         """
+
         email = self.cleaned_data.get("email")
 
         if User.objects.filter(email=email).exists():
@@ -77,6 +79,7 @@ class AccountRegistrationForm(UserCreationForm):
 
         Retruns username
         """
+
         username = self.cleaned_data.get("username")
 
         if not re.match(r"^[0-9a-z]*$", username):
@@ -100,6 +103,7 @@ class AccountRegistrationForm(UserCreationForm):
 
         Retruns password
         """
+
         password = self.cleaned_data.get("password")
 
         if len(password) < 4:
@@ -112,6 +116,7 @@ class AccountRegistrationForm(UserCreationForm):
 
     def save(self, commit=True):
         """ Saves new users to Civiwiki """
+
         user = super(AccountRegistrationForm, self).save(commit=False)
         user.email = self.cleaned_data["email"]
 
@@ -144,6 +149,7 @@ class PasswordResetForm(SetPasswordForm):
 
         Retruns new password
         """
+
         password = self.cleaned_data.get("new_password1")
 
         if len(password) < 4:

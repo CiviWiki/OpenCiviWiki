@@ -1,3 +1,7 @@
+"""
+Hastag Model
+"""
+
 from django.db import models
 
 

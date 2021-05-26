@@ -1,3 +1,0 @@
-web: daphne civiwiki.asgi:channel_layer --port $PORT --bind 0.0.0.0 -v2
-worker: PYTHONUNBUFFERED=1 python manage.py runworker -v2
-celery: celery -A civiwiki worker --app=civiwiki.celery:app -l info

@@ -1,3 +1,8 @@
+"""
+Notification model
+Notifies users about new followers or replies.
+"""
+
 from django.db import models
 
 from .account import Account

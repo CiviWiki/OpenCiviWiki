@@ -1,3 +1,7 @@
+"""
+Gathering all models here
+"""
+
 from .account import Account
 from .bill import Bill
 from .category import Category

@@ -25,11 +25,11 @@ INSTALLED_APPS = (
     "django.contrib.staticfiles",
     "django_extensions",
     "storages",
-    "channels",
-    "civiwiki",
+    "core",  # TODO: consider removing this, if we can move the decorators, etc. to an actual app
     "api",
     "rest_framework",
-    "authentication",
+    "accounts",
+    "threads",
     "frontend_views",
     "notifications",
     "corsheaders",
@@ -53,7 +53,7 @@ CSRF_USE_SESSIONS = (
 )
 
 CORS_ORIGIN_ALLOW_ALL = True
-ROOT_URLCONF = "civiwiki.urls"
+ROOT_URLCONF = "core.urls"
 LOGIN_URL = "/login"
 
 # SSL Setup
@@ -88,38 +88,10 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "civiwiki.wsgi.application"
-
-# Global user privilege settings
-CLOSED_BETA = os.getenv("CLOSED_BETA", False)
+WSGI_APPLICATION = "core.wsgi.application"
 
 # Apex Contact for Production Errors
 ADMINS = [("Development Team", "dev@civiwiki.org")]
-
-# API keys
-# returns None if not found in os.environ
-SUNLIGHT_API_KEY = os.getenv("SUNLIGHT_API_KEY")
-GOOGLE_API_KEY = os.getenv("GOOGLE_MAP_API_KEY")
-
-# Channels Setup
-REDIS_URL = os.getenv("REDIS_URL", default="redis://localhost:6379")
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "asgi_redis.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [REDIS_URL],
-        },
-        "ROUTING": "civiwiki.routing.channel_routing",
-    },
-}
-
-# Celery Task Runner Setup
-CELERY_BROKER_URL = REDIS_URL + "/0"
-CELERY_RESULT_BACKEND = CELERY_BROKER_URL
-CELERY_ACCEPT_CONTENT = ["application/json"]
-CELERY_TASK_SERIALIZER = "json"
-CELERY_RESULT_SERIALIZER = "json"
-CELERY_TIME_ZONE = TIME_ZONE
 
 # AWS S3 Setup
 if "AWS_STORAGE_BUCKET_NAME" not in os.environ:
@@ -137,21 +109,22 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "webapp/static"),)
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
-# Database
+# TODO: re-organize and simplify staticfiles settings
 if "CIVIWIKI_LOCAL_NAME" not in os.environ:
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-    DATABASES = {"default": os.getenv("DATABASE_URL")}
+# Use DATABASE_URL in production
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if DATABASE_URL is not None:
+    DATABASES = {"default": DATABASE_URL}
 else:
+    # Default to sqlite for simplicity in development
     DATABASES = {
         "default": {
-            "HOST": os.getenv("CIVIWIKI_LOCAL_DB_HOST", "localhost"),
-            "PORT": "5432",
-            "NAME": os.getenv("CIVIWIKI_LOCAL_NAME"),
-            "ENGINE": "django.db.backends.postgresql_psycopg2",
-            "USER": os.getenv("CIVIWIKI_LOCAL_USERNAME"),
-            "PASSWORD": os.getenv("CIVIWIKI_LOCAL_PASSWORD"),
-        },
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR + "/" + "db.sqlite3",
+        }
     }
 
 # Email Backend Setup
@@ -191,6 +164,6 @@ REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": DEFAULT_RENDERER_CLASSES,
     "DEFAULT_AUTHENTICATION_CLASSES": DEFAULT_AUTHENTICATION_CLASSES,
 }
+
 # CORS Settings
 CORS_ORIGIN_ALLOW_ALL = True
-PROPUBLICA_API_KEY = os.getenv("PROPUBLICA_API_KEY", "TEST")

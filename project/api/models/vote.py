@@ -1,3 +1,8 @@
+"""
+Votes model
+Helps users to submit votes
+"""
+
 from django.db import models
 
 from .bill import Bill

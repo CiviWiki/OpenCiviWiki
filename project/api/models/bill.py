@@ -1,3 +1,6 @@
+"""
+Bill model
+"""
 from django.db import models
 from django.utils import timezone
 
@@ -5,13 +8,12 @@ from ..propublica import ProPublicaAPI
 
 
 class BillSources:
-    SUNLIGHT = "sunlight"  # we don't use sunlight in current implementation is just relic of the past
     PROPUBLICA = "propublica"
-    SOURCES = [(SUNLIGHT, SUNLIGHT), (PROPUBLICA, PROPUBLICA)]
+    SOURCES = [(PROPUBLICA, PROPUBLICA)]
 
 
 class Bill(models.Model):
-    id = models.CharField(max_length=255, primary_key=True)  # from sunlight
+    id = models.CharField(max_length=255, primary_key=True)
 
     title = models.CharField(max_length=1023)
     short_title = models.CharField(max_length=1023)

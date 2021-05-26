@@ -74,7 +74,6 @@
 <script type="text/javascript" src="{% static "js/account.js" %}"></script>
 
 <script type="text/javascript">
-    // var sunlightApiKey = "{{ sunlight_api_key }}";
 
     var username = '{{username}}';
     var current_user = '{{request.user.username}}'
@@ -85,7 +84,6 @@
     var accountView = new cw.AccountView({
         model: accountModel,
         current_user: current_user,
-        // sunlightApiKey: sunlightApiKey
     });
     accountModel.fetch();
     accountView.render();
