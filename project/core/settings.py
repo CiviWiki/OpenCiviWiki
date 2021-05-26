@@ -26,10 +26,11 @@ INSTALLED_APPS = (
     "django_extensions",
     "storages",
     "channels",
-    "civiwiki",
+    "core",  # TODO: consider removing this, if we can move the decorators, etc. to an actual app
     "api",
     "rest_framework",
-    "authentication",
+    "accounts",
+    "threads",
     "frontend_views",
     "notifications",
     "corsheaders",
@@ -53,7 +54,7 @@ CSRF_USE_SESSIONS = (
 )
 
 CORS_ORIGIN_ALLOW_ALL = True
-ROOT_URLCONF = "civiwiki.urls"
+ROOT_URLCONF = "core.urls"
 LOGIN_URL = "/login"
 
 # SSL Setup
@@ -88,7 +89,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "civiwiki.wsgi.application"
+WSGI_APPLICATION = "core.wsgi.application"
 
 # Apex Contact for Production Errors
 ADMINS = [("Development Team", "dev@civiwiki.org")]

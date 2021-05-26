@@ -21,13 +21,13 @@ from django.views.static import serve
 from django.views.generic.base import RedirectView
 
 from api import urls as api
-from authentication import urls as auth
+from accounts import urls as accounts_urls
 from frontend_views import urls as frontend_views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     url(r"^api/", include(api)),
-    url(r"^auth/", include(auth)),
+    url(r"^auth/", include(accounts_urls)),
     url(
         "^inbox/notifications/",
         include("notifications.urls", namespace="notifications"),
