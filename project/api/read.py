@@ -24,7 +24,7 @@ def get_card(request, user):
     """
     USAGE:
         This is used to get a card
-    """ 
+    """
     try:
         u = User.objects.get(username=user)
         a = Account.objects.get(user=u)
