@@ -30,6 +30,7 @@ INSTALLED_APPS = (
     "api",
     "rest_framework",
     "accounts",
+    "threads",
     "frontend_views",
     "notifications",
     "corsheaders",
