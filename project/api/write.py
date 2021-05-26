@@ -34,7 +34,7 @@ from core.constants import US_STATES
 @require_post_params(params=["title", "summary", "category_id"])
 def new_thread(request):
     """
-    USAGE: 
+    USAGE:
         Use this function when a user creates a new thread.
 
     Data needed to create new thread:
@@ -327,7 +327,7 @@ def editThread(request):
 
 @login_required
 def uploadphoto(request):
-    """ 
+    """
         This function is a work in progress
         Eventually will be used to allow users to upload photos
     """

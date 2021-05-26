@@ -25,7 +25,7 @@ from core.custom_decorators import require_post_params
 
 
 class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
-    """ Token Generator for Email Confirmation """
+    """ Token Generator for Email Confirmation"""
 
     key_salt = "django.contrib.auth.tokens.PasswordResetTokenGenerator"
 
@@ -229,8 +229,8 @@ def beta_register(request):
 
 
 def activate_view(request, uidb64, token):
-    """ 
-        This shows different views to the user when they are verifying 
+    """
+        This shows different views to the user when they are verifying
         their account based on whether they are already verified or not.
     """
     try:

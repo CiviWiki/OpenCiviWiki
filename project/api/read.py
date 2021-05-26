@@ -8,7 +8,7 @@ from .utils import json_response
 
 def get_user(request, user):
     """
-    USAGE: 
+    USAGE:
         This is used to get a user
     """
     try:
@@ -22,7 +22,7 @@ def get_user(request, user):
 
 def get_card(request, user):
     """
-    USAGE: 
+    USAGE:
         This is used to get a card
     """ 
     try:
@@ -40,8 +40,8 @@ def get_card(request, user):
 
 def get_profile(request, user):
     """
-    USAGE: 
-       This is used to get a user profile 
+    USAGE:
+       This is used to get a user profile
     """
     try:
         u = User.objects.get(username=user)
@@ -96,8 +96,8 @@ def get_profile(request, user):
 
 def get_feed(request):
     """
-    USAGE: 
-       This is used to get a feed for a user 
+    USAGE:
+       This is used to get a feed for a user
     """
     try:
         feed_threads = [
@@ -112,8 +112,8 @@ def get_feed(request):
 
 def get_thread(request, thread_id):
     """
-    USAGE: 
-       This is used to get a requested thread 
+    USAGE:
+       This is used to get a requested thread
     """
     try:
         t = Thread.objects.get(id=thread_id)
@@ -172,8 +172,8 @@ def get_thread(request, thread_id):
 
 def get_civi(request, civi_id):
     """
-    USAGE: 
-       This is used to get a specified Civi 
+    USAGE:
+       This is used to get a specified Civi
     """
     try:
         c = Civi.objects.serialize(Civi.objects.get(id=civi_id))
@@ -184,8 +184,8 @@ def get_civi(request, civi_id):
 
 def get_civis(request, thread_id):
     """
-    USAGE: 
-       This is used ot get a group of specified Civis 
+    USAGE:
+       This is used ot get a group of specified Civis
     """
     try:
         c = [Civi.objects.serialize(c) for c in Civi.objects.filter(thread=thread_id)]
@@ -196,8 +196,8 @@ def get_civis(request, thread_id):
 
 def get_responses(request, thread_id, civi_id):
     """
-    USAGE: 
-       This is used to get responses for a Civi 
+    USAGE:
+       This is used to get responses for a Civi
     """
     try:
         req_acct = Account.objects.get(user=request.user)

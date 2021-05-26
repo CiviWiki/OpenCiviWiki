@@ -25,7 +25,7 @@ class AccountRegistrationForm(UserCreationForm):
         - Email     - from registration form
         - Username  - from registration form
         - Password  - from registration form
-        - Error_Message 
+        - Error_Message
             - Invalid_Username - Usernames may only use lowercase characters or numbers
             - Email_Exists - An account exists for this email address
             - Invalid_Password - Password can not be entirely numeric
@@ -73,7 +73,7 @@ class AccountRegistrationForm(UserCreationForm):
 
         Requirements:
             - Username can only be made of lower case alphanumeric values
-            - Username cannot match entries from RESERVED_USERNAMES 
+            - Username cannot match entries from RESERVED_USERNAMES
 
         Retruns username
         """

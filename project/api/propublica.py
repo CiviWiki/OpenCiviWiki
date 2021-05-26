@@ -11,7 +11,7 @@ class ProPublicaAPI(object):
 
     def search(self, query=None):
         """
-        USAGE: 
+        USAGE:
             This is used to serarch propublica.org
         """
         if not self.api_key:
@@ -29,7 +29,7 @@ class ProPublicaAPI(object):
 
     def get_by_id(self, bill_id):
         """
-        USAGE: 
+        USAGE:
             This is used to get a specific bill by ID from propublica.org
         """
         if not self.api_key:
@@ -47,7 +47,7 @@ class ProPublicaAPI(object):
 
     def get_voting_info(self, url):
         """
-        USAGE: 
+        USAGE:
             This is used to get voting info from propublica.org
         """
         response = requests.get(url, headers=self.auth_headers)
