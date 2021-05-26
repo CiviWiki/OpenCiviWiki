@@ -33,6 +33,7 @@ INSTALLED_APPS = (
     "frontend_views",
     "notifications",
     "corsheaders",
+    "taggit",
 )
 
 MIDDLEWARE = [
