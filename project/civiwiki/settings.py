@@ -136,30 +136,23 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "webapp/static"),)
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
-# Database
+
 if "CIVIWIKI_LOCAL_NAME" not in os.environ:
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-    DATABASES = {"default": os.getenv("DATABASE_URL")}
+# Use DATABASE_URL in production
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if DATABASE_URL is not None:
+    DATABASES = {"default": DATABASE_URL}
 else:
-    if DEBUG:
-        DATABASES = {
-            "default": {
-                "ENGINE": "django.db.backends.sqlite3",
-                "NAME": BASE_DIR + "/" + "db.sqlite3",
-            }
+    # Default to sqlite for simplicity in development
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR + "/" + "db.sqlite3",
         }
-    else:
-        DATABASES = {
-            "default": {
-                "HOST": os.getenv("CIVIWIKI_LOCAL_DB_HOST", "localhost"),
-                "PORT": "5432",
-                "NAME": os.getenv("CIVIWIKI_LOCAL_NAME"),
-                "ENGINE": "django.db.backends.postgresql_psycopg2",
-                "USER": os.getenv("CIVIWIKI_LOCAL_USERNAME"),
-                "PASSWORD": os.getenv("CIVIWIKI_LOCAL_PASSWORD"),
-            },
-        }
+    }
 
 # Email Backend Setup
 if "EMAIL_HOST" not in os.environ:
@@ -198,6 +191,7 @@ REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": DEFAULT_RENDERER_CLASSES,
     "DEFAULT_AUTHENTICATION_CLASSES": DEFAULT_AUTHENTICATION_CLASSES,
 }
+
 # CORS Settings
 CORS_ORIGIN_ALLOW_ALL = True
 PROPUBLICA_API_KEY = os.getenv("PROPUBLICA_API_KEY", "TEST")
