@@ -7,6 +7,10 @@ from .utils import json_response
 
 
 def get_user(request, user):
+    """
+    USAGE:
+        This is used to get a user
+    """
     try:
         u = User.objects.get(username=user)
         a = Account.objects.get(user=u)
@@ -17,6 +21,10 @@ def get_user(request, user):
 
 
 def get_card(request, user):
+    """
+    USAGE:
+        This is used to get a card
+    """
     try:
         u = User.objects.get(username=user)
         a = Account.objects.get(user=u)
@@ -31,6 +39,10 @@ def get_card(request, user):
 
 
 def get_profile(request, user):
+    """
+    USAGE:
+       This is used to get a user profile
+    """
     try:
         u = User.objects.get(username=user)
         a = Account.objects.get(user=u)
@@ -83,6 +95,10 @@ def get_profile(request, user):
 
 
 def get_feed(request):
+    """
+    USAGE:
+       This is used to get a feed for a user
+    """
     try:
         feed_threads = [
             Thread.objects.summarize(t) for t in Thread.objects.order_by("-created")
@@ -95,6 +111,10 @@ def get_feed(request):
 
 
 def get_thread(request, thread_id):
+    """
+    USAGE:
+       This is used to get a requested thread
+    """
     try:
         t = Thread.objects.get(id=thread_id)
         civis = Civi.objects.filter(thread_id=thread_id)
@@ -151,6 +171,10 @@ def get_thread(request, thread_id):
 
 
 def get_civi(request, civi_id):
+    """
+    USAGE:
+       This is used to get a specified Civi
+    """
     try:
         c = Civi.objects.serialize(Civi.objects.get(id=civi_id))
         return JsonResponse(c, safe=False)
@@ -159,6 +183,10 @@ def get_civi(request, civi_id):
 
 
 def get_civis(request, thread_id):
+    """
+    USAGE:
+       This is used ot get a group of specified Civis
+    """
     try:
         c = [Civi.objects.serialize(c) for c in Civi.objects.filter(thread=thread_id)]
         return JsonResponse(c)
@@ -167,6 +195,10 @@ def get_civis(request, thread_id):
 
 
 def get_responses(request, thread_id, civi_id):
+    """
+    USAGE:
+       This is used to get responses for a Civi
+    """
     try:
         req_acct = Account.objects.get(user=request.user)
         c_qs = Civi.objects.get(id=civi_id).responses.all()

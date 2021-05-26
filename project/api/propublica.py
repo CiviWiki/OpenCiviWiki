@@ -10,6 +10,10 @@ class ProPublicaAPI(object):
         self.auth_headers = {"X-API-Key": self.api_key}
 
     def search(self, query=None):
+        """
+        USAGE:
+            This is used to serarch propublica.org
+        """
         if not self.api_key:
             return {}
         api_rest = "bills/search.json"
@@ -24,6 +28,10 @@ class ProPublicaAPI(object):
         return response.json()["results"][0]["bills"]
 
     def get_by_id(self, bill_id):
+        """
+        USAGE:
+            This is used to get a specific bill by ID from propublica.org
+        """
         if not self.api_key:
             return {}
 
@@ -38,6 +46,10 @@ class ProPublicaAPI(object):
         return response.json()["results"][0]
 
     def get_voting_info(self, url):
+        """
+        USAGE:
+            This is used to get voting info from propublica.org
+        """
         response = requests.get(url, headers=self.auth_headers)
         response.raise_for_status()
         return response.json()["results"]
