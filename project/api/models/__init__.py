@@ -7,7 +7,6 @@ from .bill import Bill
 from .category import Category
 from .civi import Civi, CiviImage
 from .fact import Fact
-from .hashtag import Hashtag
 from .notification import Notification
 from .rationale import Rationale
 from .rebuttal import Rebuttal

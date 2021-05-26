@@ -16,7 +16,6 @@ from PIL import Image, ImageOps
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
 from core.constants import US_STATES
-from .hashtag import Hashtag
 from taggit.managers import TaggableManager
 from .category import Category
 
@@ -110,7 +109,6 @@ class Account(models.Model):
         Category, related_name="user_categories", symmetrical=False
     )
     tags = TaggableManager()
-    ai_interests = models.ManyToManyField(Hashtag, related_name="ai_interests")
 
     followers = models.ManyToManyField(
         "self", related_name="follower", symmetrical=False
