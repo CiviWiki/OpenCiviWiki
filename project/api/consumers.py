@@ -18,6 +18,7 @@ from channels.auth import channel_session_user, channel_session_user_from_http
 # Connected to websocket.connect
 @channel_session
 def ws_connect(message):
+    """Connects a user to a channels session """
     # Accept connection
     message.reply_channel.send({"accept": True})
     # Work out room name from path (ignore slashes)
@@ -30,6 +31,7 @@ def ws_connect(message):
 # Connected to websocket.receive
 @channel_session
 def ws_message(message):
+    """ Sends a message to the session the user is connected to."""
     Group("chat-%s" % message.channel_session["room"]).send(
         {
             "text": message["text"],
@@ -40,11 +42,13 @@ def ws_message(message):
 # Connected to websocket.disconnect
 @channel_session
 def ws_disconnect(message):
+    """ Disconnects a user form a chat channel"""
     Group("chat-%s" % message.channel_session["room"]).discard(message.reply_channel)
 
 
 @channel_session_user_from_http
 def thread_connect(message, thread_id):
+    """ Connects a user to a threads chat"""
     Group("thread-%s" % thread_id).add(message.reply_channel)
     # Accept the connection request
     message.reply_channel.send({"accept": True})
@@ -52,6 +56,7 @@ def thread_connect(message, thread_id):
 
 @channel_session_user
 def thread_message(message, thread_id):
+    """Gets a thread message from a user and displays it."""
     # username = Account.objects.get(user=message.user.id)
     username = message.user.username
     Group("thread-%s" % thread_id).send(
@@ -63,4 +68,5 @@ def thread_message(message, thread_id):
 
 @channel_session
 def thread_disconnect(message, thread_id):
+    """ Disconnects a user from a channel session"""
     Group("thread-%s" % thread_id).discard(message.reply_channel)

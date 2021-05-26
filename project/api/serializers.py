@@ -76,6 +76,7 @@ class AccountSerializer(AccountCommonSerializer):
         }
 
     def validate_profile_image(self, value):
+        """This function is used to validate the profile image before added to the user profile"""
         request = self.context["request"]
         validation_form = UpdateProfileImage(request.POST, request.FILES)
 
@@ -92,7 +93,7 @@ class AccountSerializer(AccountCommonSerializer):
 
 class AccountListSerializer(AccountCommonSerializer):
     """
-    Seralizer for multiple account model instances
+    Serializer for multiple account model instances
     """
 
     first_name = serializers.ReadOnlyField()
@@ -116,6 +117,7 @@ class AccountListSerializer(AccountCommonSerializer):
 
 
 class CiviImageSerializer(serializers.ModelSerializer):
+    """ """
     image_url = serializers.ReadOnlyField()
     created = serializers.ReadOnlyField()
 
@@ -125,6 +127,7 @@ class CiviImageSerializer(serializers.ModelSerializer):
 
 
 class CiviSerializer(serializers.ModelSerializer):
+    """ """
     author = AccountListSerializer()
     type = serializers.ChoiceField(choices=CIVI_TYPES, source="c_type")
     images = serializers.SlugRelatedField(
@@ -162,6 +165,7 @@ class CiviSerializer(serializers.ModelSerializer):
         )
 
     def get_score(self, obj):
+        """ """
         user = None
         request = self.context.get("request")
 
@@ -179,6 +183,7 @@ class CiviSerializer(serializers.ModelSerializer):
 
 
 class CiviListSerializer(serializers.ModelSerializer):
+    """ """
     author = AccountListSerializer()
     type = serializers.CharField(source="c_type")
     created = serializers.ReadOnlyField(source="created_date_str")
@@ -189,12 +194,14 @@ class CiviListSerializer(serializers.ModelSerializer):
 
 
 class CategoryListSerializer(serializers.ModelSerializer):
+    """ """
     class Meta:
         model = Category
         fields = ("id", "name")
 
 
 class CategorySerializer(serializers.ModelSerializer):
+    """ """
     preferred = serializers.SerializerMethodField()
 
     class Meta:
@@ -219,6 +226,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class ThreadSerializer(serializers.ModelSerializer):
+    """ """
     author = AccountListSerializer(required=False)
     category = CategoryListSerializer()
 
@@ -256,6 +264,7 @@ class ThreadSerializer(serializers.ModelSerializer):
 
 
 class ThreadListSerializer(serializers.ModelSerializer):
+    """ """
     author = AccountListSerializer(required=False)
     category = CategoryListSerializer()
 
@@ -285,6 +294,7 @@ class ThreadListSerializer(serializers.ModelSerializer):
 
 
 class ThreadDetailSerializer(serializers.ModelSerializer):
+    """ """
     author = AccountListSerializer(required=False)
     category = CategoryListSerializer()
 
@@ -324,6 +334,7 @@ class ThreadDetailSerializer(serializers.ModelSerializer):
         )
 
     def get_contributors(self, obj):
+        """This function gets the list of contributors for Civiwiki"""
         issue_civis = Civi.objects.filter(thread__id=obj.id)
         contributor_accounts = Account.objects.filter(
             pk__in=issue_civis.distinct("author").values_list("author", flat=True)
@@ -331,6 +342,7 @@ class ThreadDetailSerializer(serializers.ModelSerializer):
         return AccountListSerializer(contributor_accounts, many=True).data
 
     def get_user_votes(self, obj):
+        """This function gets the user votes"""
         request = self.context.get("request")
 
         if request and hasattr(request, "user"):
@@ -350,6 +362,7 @@ class ThreadDetailSerializer(serializers.ModelSerializer):
 
 
 class BillSerializer(serializers.ModelSerializer):
+    """ """
     class Meta:
         model = Bill
         fields = "__all__"

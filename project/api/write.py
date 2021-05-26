@@ -33,6 +33,13 @@ from core.constants import US_STATES
 @login_required
 @require_post_params(params=["title", "summary", "category_id"])
 def new_thread(request):
+    """
+    USAGE: 
+        Use this function when a user creates a new thread.
+
+    Data needed to create new thread:
+        - Title, Summary, Category, Author, Level, State
+    """
     try:
         author = Account.objects.get(user=request.user)
         new_thread_data = dict(
@@ -59,7 +66,7 @@ def new_thread(request):
 def createCivi(request):
     """
     USAGE:
-        use this function to insert a new connected civi into the database.
+        Use this function to insert a new connected civi into the database.
 
     :return: (200, ok) (400, missing required parameter) (500, internal error)
     """
@@ -140,6 +147,7 @@ def createCivi(request):
 @login_required
 @require_post_params(params=["civi_id", "rating"])
 def rateCivi(request):
+    """ Use this function to rate a Civi """
     civi_id = request.POST.get("civi_id", "")
     rating = request.POST.get("rating", "")
     account = Account.objects.get(user=request.user)
@@ -186,6 +194,7 @@ def rateCivi(request):
 
 @login_required
 def editCivi(request):
+    """ Use this function to edit an existing Civi"""
     civi_id = request.POST.get("civi_id", "")
     title = request.POST.get("title", "")
     body = request.POST.get("body", "")
@@ -222,6 +231,7 @@ def editCivi(request):
 
 @login_required
 def deleteCivi(request):
+    """ Use this function to delete an existing Civi """
     civi_id = request.POST.get("civi_id", "")
 
     c = Civi.objects.get(id=civi_id)
@@ -263,6 +273,7 @@ def deleteCivi(request):
 
 @login_required
 def editThread(request):
+    """ Use this function to edit an existing thread """
     thread_id = request.POST.get("thread_id")
     non_required_params = ["title", "summary", "category_id", "level", "state"]
     is_draft = request.POST.get("is_draft", True)
@@ -316,6 +327,10 @@ def editThread(request):
 
 @login_required
 def uploadphoto(request):
+    """ 
+        This function is a work in progress
+        Eventually will be used to allow users to upload photos
+    """
     pass
 
 
@@ -354,6 +369,7 @@ def editUser(request):
 
 @login_required
 def uploadProfileImage(request):
+    """ This function is used to allow users to upload profile photos """
     if request.method == "POST":
         form = UpdateProfileImage(request.POST, request.FILES)
         if form.is_valid():
@@ -388,6 +404,7 @@ def uploadProfileImage(request):
 
 @login_required
 def clearProfileImage(request):
+    """ This function is used to delete a profile image """
     if request.method == "POST":
         try:
             account = Account.objects.get(user=request.user)
@@ -405,6 +422,7 @@ def clearProfileImage(request):
 
 @login_required
 def uploadCiviImage(request):
+    """This function is used to upload an image for a Civi"""
     if request.method == "POST":
         r = request.POST
         civi_id = r.get("civi_id")
@@ -445,6 +463,7 @@ def uploadCiviImage(request):
 
 
 def check_image_with_pil(image_file):
+    """This function uses the PIL library to make sure the image format is supported"""
     try:
         PIL.Image.open(image_file)
     except IOError:
@@ -454,6 +473,7 @@ def check_image_with_pil(image_file):
 
 @login_required
 def uploadThreadImage(request):
+    """This function is used to upload an image to a thread"""
     if request.method == "POST":
         r = request.POST
         thread_id = r.get("thread_id")
@@ -595,6 +615,7 @@ def editUserCategories(request):
 @login_required
 @user_passes_test(lambda u: u.is_staff)
 def invite(request):
+    """This function is used to invite other people to the Civiwiki Beta"""
     emails = request.POST.getlist("emailList[]", "")
     custom_message = request.POST.get("custom_message", "")
 

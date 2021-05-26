@@ -47,6 +47,9 @@ account_activation_token = AccountActivationTokenGenerator()
 def cw_login(request):
     """
     USAGE:
+        This is used to authenticate the user and log them in.
+
+    :returns (200, ok) (400, Inactive User) (400, Invalid username or password)
 
     """
 
@@ -78,6 +81,7 @@ def cw_login(request):
 
 
 def cw_logout(request):
+    """ Use this to logout the current user """
     logout(request)
     return HttpResponseRedirect("/")
 
@@ -85,6 +89,18 @@ def cw_logout(request):
 @sensitive_post_parameters("password")
 @require_post_params(params=["username", "password", "email"])
 def cw_register(request):
+    """
+    USAGE:
+        This is used to register new users to civiwiki
+
+    PROCESS:
+        - Gets new users username and password
+        - Sets the user to active
+        - Then creates a new user verification link and emails it to the new user
+
+    Return:
+        (200, ok) (500, Internal Error)
+    """
     form = AccountRegistrationForm(request.POST or None)
     if request.method == "POST":
         # Form Validation
@@ -213,6 +229,10 @@ def beta_register(request):
 
 
 def activate_view(request, uidb64, token):
+    """ 
+        This shows different views to the user when they are verifying 
+        their account based on whether they are already verified or not.
+    """
     try:
         uid = force_text(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=uid)
@@ -253,6 +273,10 @@ def activate_view(request, uidb64, token):
 
 
 def recover_user():
+    """
+    USAGE:
+        Used to recover a lost username.
+    """
     view_variables = {
         "template_name": "user/reset_by_email.html",
         "post_reset_redirect": "recovery_email_sent",
@@ -265,6 +289,10 @@ def recover_user():
 
 
 def password_reset_confirm():
+    """
+    USAGE:
+        Used to recover a lost password.
+    """
     view_variables = {
         "template_name": "user/password_reset.html",
         "set_password_form": PasswordResetForm,
@@ -274,6 +302,10 @@ def password_reset_confirm():
 
 
 def recover_user_sent(request):
+    """
+    USAGE:
+        Displays to the user that the user recover request was sent.
+    """
     redirect_link = {"href": "/", "label": "Back to Main"}
 
     template_var = {
@@ -291,6 +323,10 @@ def recover_user_sent(request):
 
 
 def password_reset_complete(request):
+    """
+    USAGE:
+        Displays to the user that their password was reset.
+    """
     redirect_link = {"href": "/login", "label": "Login"}
 
     template_var = {
