@@ -468,6 +468,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "North15",
+      "name": "Jacob North",
+      "avatar_url": "https://avatars.githubusercontent.com/u/34386437?v=4",
+      "profile": "http://jacob-north.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
