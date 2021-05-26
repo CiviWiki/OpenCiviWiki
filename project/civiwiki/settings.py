@@ -90,15 +90,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "civiwiki.wsgi.application"
 
-# Global user privilege settings
-CLOSED_BETA = os.getenv("CLOSED_BETA", False)
-
 # Apex Contact for Production Errors
 ADMINS = [("Development Team", "dev@civiwiki.org")]
-
-# API keys
-# returns None if not found in os.environ
-GOOGLE_API_KEY = os.getenv("GOOGLE_MAP_API_KEY")
 
 # AWS S3 Setup
 if "AWS_STORAGE_BUCKET_NAME" not in os.environ:
@@ -174,4 +167,3 @@ REST_FRAMEWORK = {
 
 # CORS Settings
 CORS_ORIGIN_ALLOW_ALL = True
-PROPUBLICA_API_KEY = os.getenv("PROPUBLICA_API_KEY", "TEST")
