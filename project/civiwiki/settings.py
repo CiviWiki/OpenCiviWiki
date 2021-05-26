@@ -29,7 +29,7 @@ INSTALLED_APPS = (
     "civiwiki",
     "api",
     "rest_framework",
-    "authentication",
+    "accounts",
     "frontend_views",
     "notifications",
     "corsheaders",
