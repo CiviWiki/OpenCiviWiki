@@ -1,8 +1,8 @@
+# Welcome to Civiwiki
+
 [![ComVer](https://img.shields.io/badge/ComVer-compliant-brightgreen.svg)](https://github.com/staltz/comver)
 [![Stories in Ready](https://badge.waffle.io/CiviWiki/OpenCiviWiki.png?label=next%20up&title=next%20tasks)](https://waffle.io/CiviWiki/OpenCiviWiki?utm_source=badge)
 [![Maintainability](https://api.codeclimate.com/v1/badges/5241b4275cc2dffe90f2/maintainability)](https://codeclimate.com/github/CiviWiki/OpenCiviWiki/maintainability)
-
-# Welcome to Civiwiki!
 
 We are an open source, non-profit community, working to develop a democratic engagement web system.
 
@@ -13,21 +13,36 @@ We are an open source, non-profit community, working to develop a democratic eng
 * **Citizen/Representative Engagement.** CiviWiki's core goal is to engage citizens and their representatives, with the goal of making government more accountable. CiviWiki will achieve this goal in two ways. First, CiviWiki will organize user's policy profile and compare it to every political candidate in the user's district. This quick, detailed, comparison will help users make informed votes, and we believe increased voter confidence will increase voter turnout. Second, CiviWiki will collect anonymized user data and forward district level statistics to representatives. With a critical mass of users, we believe timely district level polling data will influence representatives' votes.
 
 ## Requirements
-To install all required modules use the following command in project dir:
-`pip install -r requirements.txt`
+
+To install all required modules, complete the following steps:
+
+1. make sure you are in the repository root directory
+2. create a Python virtual environment (named `env`)
+    * `python -m venv env`
+3. use the following command in project dir:
+    * `pip install -r requirements.txt`
+
+Or, if you prefer, you can use Docker compose:
+
+```sh
+docker-compose up
+```
 
 # Contact info
+
 Contact us on Twitter to join the team.
 
 Join us on the following channels:
-- [development discussions](https://www.loomio.org/g/ET40tXUC/openciviwiki) on Loomio
-- [videos of our weekly planning meetings](https://archive.org/search.php?query=subject%3A%22CiviWiki%22&sort=-date) on Internet Archive
-- [live chat](https://riot.im/app/#/room/#CiviWiki:matrix.org) on Matrix
-- [development roadmap](https://waffle.io/CiviWiki/OpenCiviWiki) on Waffle.io
-- [@CiviWiki](https://twitter.com/civiwiki) on Twitter
+
+* [development discussions](https://www.loomio.org/g/ET40tXUC/openciviwiki) on Loomio
+* [videos of our weekly planning meetings](https://archive.org/search.php?query=subject%3A%22CiviWiki%22&sort=-date) on Internet Archive
+* [live chat](https://riot.im/app/#/room/#CiviWiki:matrix.org) on Matrix
+* [development roadmap](https://waffle.io/CiviWiki/OpenCiviWiki) on Waffle.io
+* [@CiviWiki](https://twitter.com/civiwiki) on Twitter
 
 # Contribute
-See our [Contributing Guide](readmes/CONTRIBUTING.md) for instructions on how to contribute code.
+
+See our [Contributing Guide](docs/contributing/CONTRIBUTING.md) for instructions on how to contribute code.
 
 ## Contributors
 
@@ -89,6 +104,16 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/AnkanDas22"><img src="https://avatars1.githubusercontent.com/u/30185594?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ankan Das</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=AnkanDas22" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/gteti"><img src="https://avatars1.githubusercontent.com/u/51110452?v=4?s=100" width="100px;" alt=""/><br /><sub><b>gteti</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=gteti" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/harsha0609"><img src="https://avatars.githubusercontent.com/u/24893016?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Harsha Vardhan</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=harsha0609" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/obafemiolorungbon"><img src="https://avatars.githubusercontent.com/u/62023238?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Obafemi Joseph Olorungbon</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=obafemiolorungbon" title="Code">💻</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/tberm"><img src="https://avatars.githubusercontent.com/u/49910363?v=4?s=100" width="100px;" alt=""/><br /><sub><b>tberm</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=tberm" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/PyDrummer"><img src="https://avatars.githubusercontent.com/u/62918152?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Anthony B.</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=PyDrummer" title="Code">💻</a></td>
+    <td align="center"><a href="http://facebook.com/fardeen.es7"><img src="https://avatars.githubusercontent.com/u/43882976?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Md. Fardeen Ehsan Shawon</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=fardeenes7" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://bandism.net/"><img src="https://avatars.githubusercontent.com/u/22633385?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ikko Ashimine</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=eltociear" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/abhiprojectz"><img src="https://avatars.githubusercontent.com/u/64596494?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Abhi </b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=abhiprojectz" title="Code">💻</a></td>
+    <td align="center"><a href="http://jacob-north.com"><img src="https://avatars.githubusercontent.com/u/34386437?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jacob North</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=North15" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/loukikstudent"><img src="https://avatars.githubusercontent.com/u/35080655?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Loukik Bhangale</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=loukikstudent" title="Code">💻</a></td>
   </tr>
 </table>
 
@@ -100,4 +125,5 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
 
 # Testing
-See our [Testing Guide](readmes/testing.md) for instructions on how to test code.
+
+See our [Testing Guide](docs/contributing/testing.md) for instructions on how to test code.

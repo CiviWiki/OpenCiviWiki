@@ -18,6 +18,20 @@ from .reserved_usernames import RESERVED_USERNAMES
 
 
 class AccountRegistrationForm(UserCreationForm):
+    """
+    This class is used to register new account in Civiwiki
+
+    Components:
+        - Email     - from registration form
+        - Username  - from registration form
+        - Password  - from registration form
+        - Error_Message
+            - Invalid_Username - Usernames may only use lowercase characters or numbers
+            - Email_Exists - An account exists for this email address
+            - Invalid_Password - Password can not be entirely numeric
+            - Invalid_Password_Length - Password must be at least 4 characters
+    """
+
     email = forms.EmailField(required=True)
     username = forms.CharField(required=True)
     password = forms.CharField(required=True)
@@ -42,6 +56,12 @@ class AccountRegistrationForm(UserCreationForm):
         fields = ("username", "email", "password")
 
     def clean_email(self):
+        """
+        Used to make sure user entered email address is a valid email address
+
+        Returns email
+        """
+
         email = self.cleaned_data.get("email")
 
         if User.objects.filter(email=email).exists():
@@ -50,6 +70,16 @@ class AccountRegistrationForm(UserCreationForm):
         return email
 
     def clean_username(self):
+        """
+        Used to make sure that usernames meet the Civiwiki standards
+
+        Requirements:
+            - Username can only be made of lower case alphanumeric values
+            - Username cannot match entries from RESERVED_USERNAMES
+
+        Retruns username
+        """
+
         username = self.cleaned_data.get("username")
 
         if not re.match(r"^[0-9a-z]*$", username):
@@ -64,6 +94,16 @@ class AccountRegistrationForm(UserCreationForm):
         return username
 
     def clean_password(self):
+        """
+        Used to make sure that passwords meet the Civiwiki standards
+
+        Requirements:
+            - At least 4 characters in length
+            - Cannot be all numbers
+
+        Retruns password
+        """
+
         password = self.cleaned_data.get("password")
 
         if len(password) < 4:
@@ -75,6 +115,8 @@ class AccountRegistrationForm(UserCreationForm):
         return password
 
     def save(self, commit=True):
+        """ Saves new users to Civiwiki """
+
         user = super(AccountRegistrationForm, self).save(commit=False)
         user.email = self.cleaned_data["email"]
 
@@ -98,6 +140,16 @@ class PasswordResetForm(SetPasswordForm):
     )
 
     def clean_new_password1(self):
+        """
+        Used to make sure that new passwords meet the Civiwiki standards
+
+        Must be:
+            - At least 4 characters in length
+            - Cannot be all numbers
+
+        Retruns new password
+        """
+
         password = self.cleaned_data.get("new_password1")
 
         if len(password) < 4:

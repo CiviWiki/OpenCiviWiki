@@ -19,6 +19,7 @@ class IsAccountOwnerOrReadOnly(BasePermission):
 
 
 class IsAccountOwnerOrDuringRegistrationOrReadOnly(IsAccountOwnerOrReadOnly):
+    """ """
     def has_object_permission(self, request, view, obj):
         if obj.full_account:
             return super(

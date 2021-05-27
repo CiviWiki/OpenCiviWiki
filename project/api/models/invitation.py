@@ -1,4 +1,5 @@
 """
+Invitation Model
 Handles beta/website access invitations
 """
 from django.contrib.auth.models import User

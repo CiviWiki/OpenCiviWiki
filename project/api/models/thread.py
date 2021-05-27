@@ -1,3 +1,8 @@
+"""
+Thread model
+Maintains threads
+"""
+
 import os
 import uuid
 from calendar import month_name
@@ -10,7 +15,7 @@ from django.utils.deconstruct import deconstructible
 from .account import Account
 from .category import Category
 from .fact import Fact
-from .hashtag import Hashtag
+from taggit.managers import TaggableManager
 from core.constants import US_STATES
 
 
@@ -25,7 +30,7 @@ class ThreadManager(models.Manager):
             "" if len(thread.summary) <= thread_truncate_length else "..."
         )
 
-        from civi import Civi
+        from .civi import Civi
 
         thread_data = {
             "id": thread.id,
@@ -86,7 +91,7 @@ class Thread(models.Model):
     )
     facts = models.ManyToManyField(Fact)
 
-    hashtags = models.ManyToManyField(Hashtag)
+    tags = TaggableManager()
 
     title = models.CharField(max_length=127, blank=False, null=False)
     summary = models.CharField(max_length=4095, blank=False, null=False)

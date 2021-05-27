@@ -5,24 +5,15 @@ Darius Calliet May 12, 2016
 Production settings file to select proper environment variables.
 """
 import os
-import environ
-
-from django.core.exceptions import ImproperlyConfigured
-
-env = environ.Env(
-    # set casting, default value
-    DEBUG=(bool, False)
-)
-# reading .env file
-environ.Env.read_env()
 
 # False if not in os.environ
-DEBUG = env("DEBUG")
+DEBUG = os.getenv("DEBUG", False)
 
-DJANGO_HOST = env("DJANGO_HOST", default="LOCALHOST")
+# defaults to second value if not found in os.environ
+DJANGO_HOST = os.getenv("DJANGO_HOST", "LOCALHOST")
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SECRET_KEY = env("DJANGO_SECRET_KEY", default="TEST_KEY_FOR_DEVELOPMENT")
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "TEST_KEY_FOR_DEVELOPMENT")
 ALLOWED_HOSTS = [".herokuapp.com", ".civiwiki.org", "127.0.0.1", "localhost", "0.0.0.0"]
 
 INSTALLED_APPS = (
@@ -34,14 +25,15 @@ INSTALLED_APPS = (
     "django.contrib.staticfiles",
     "django_extensions",
     "storages",
-    "channels",
-    "civiwiki",
+    "core",  # TODO: consider removing this, if we can move the decorators, etc. to an actual app
     "api",
     "rest_framework",
-    "authentication",
+    "accounts",
+    "threads",
     "frontend_views",
     "notifications",
     "corsheaders",
+    "taggit",
 )
 
 MIDDLEWARE = [
@@ -62,7 +54,7 @@ CSRF_USE_SESSIONS = (
 )
 
 CORS_ORIGIN_ALLOW_ALL = True
-ROOT_URLCONF = "civiwiki.urls"
+ROOT_URLCONF = "core.urls"
 LOGIN_URL = "/login"
 
 # SSL Setup
@@ -97,46 +89,19 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "civiwiki.wsgi.application"
-
-# Global user privilege settings
-CLOSED_BETA = env("CLOSED_BETA", default=False)
+WSGI_APPLICATION = "core.wsgi.application"
 
 # Apex Contact for Production Errors
 ADMINS = [("Development Team", "dev@civiwiki.org")]
-
-# API keys
-SUNLIGHT_API_KEY = env("SUNLIGHT_API_KEY")
-GOOGLE_API_KEY = env("GOOGLE_MAP_API_KEY")
-
-# Channels Setup
-REDIS_URL = env("REDIS_URL", default="redis://localhost:6379")
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "asgi_redis.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [REDIS_URL],
-        },
-        "ROUTING": "civiwiki.routing.channel_routing",
-    },
-}
-
-# Celery Task Runner Setup
-CELERY_BROKER_URL = REDIS_URL + "/0"
-CELERY_RESULT_BACKEND = CELERY_BROKER_URL
-CELERY_ACCEPT_CONTENT = ["application/json"]
-CELERY_TASK_SERIALIZER = "json"
-CELERY_RESULT_SERIALIZER = "json"
-CELERY_TIME_ZONE = TIME_ZONE
 
 # AWS S3 Setup
 if "AWS_STORAGE_BUCKET_NAME" not in os.environ:
     MEDIA_URL = "/media/"
     MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 else:
-    AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
-    AWS_S3_ACCESS_KEY_ID = env("AWS_S3_ACCESS_KEY_ID")
-    AWS_S3_SECRET_ACCESS_KEY = env("AWS_S3_SECRET_ACCESS_KEY")
+    AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
+    AWS_S3_ACCESS_KEY_ID = os.getenv("AWS_S3_ACCESS_KEY_ID")
+    AWS_S3_SECRET_ACCESS_KEY = os.getenv("AWS_S3_SECRET_ACCESS_KEY")
     DEFAULT_FILE_STORAGE = "storages.backends.s3boto.S3BotoStorage"
     AWS_S3_SECURE_URLS = False
     AWS_QUERYSTRING_AUTH = False
@@ -145,21 +110,22 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "webapp/static"),)
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
-# Database
+# TODO: re-organize and simplify staticfiles settings
 if "CIVIWIKI_LOCAL_NAME" not in os.environ:
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-    DATABASES = {"default": env.db()}
+# Use DATABASE_URL in production
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if DATABASE_URL is not None:
+    DATABASES = {"default": DATABASE_URL}
 else:
+    # Default to sqlite for simplicity in development
     DATABASES = {
         "default": {
-            "HOST": env("CIVIWIKI_LOCAL_DB_HOST", "localhost"),
-            "PORT": "5432",
-            "NAME": env("CIVIWIKI_LOCAL_NAME"),
-            "ENGINE": "django.db.backends.postgresql_psycopg2",
-            "USER": env("CIVIWIKI_LOCAL_USERNAME"),
-            "PASSWORD": env("CIVIWIKI_LOCAL_PASSWORD"),
-        },
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR + "/" + "db.sqlite3",
+        }
     }
 
 # Email Backend Setup
@@ -168,10 +134,10 @@ if "EMAIL_HOST" not in os.environ:
     EMAIL_HOST_USER = "test@civiwiki.org"
 else:
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-    EMAIL_HOST = env("EMAIL_HOST")
-    EMAIL_PORT = env("EMAIL_PORT")
-    EMAIL_HOST_USER = env("EMAIL_HOST_USER")
-    EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+    EMAIL_HOST = os.getenv("EMAIL_HOST")
+    EMAIL_PORT = os.getenv("EMAIL_PORT")
+    EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+    EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
     EMAIL_USE_SSL = True
     DEFAULT_FROM_EMAIL = EMAIL_HOST
 
@@ -199,6 +165,6 @@ REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": DEFAULT_RENDERER_CLASSES,
     "DEFAULT_AUTHENTICATION_CLASSES": DEFAULT_AUTHENTICATION_CLASSES,
 }
+
 # CORS Settings
 CORS_ORIGIN_ALLOW_ALL = True
-PROPUBLICA_API_KEY = env("PROPUBLICA_API_KEY", default="TEST")

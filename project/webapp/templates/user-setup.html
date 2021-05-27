@@ -18,12 +18,6 @@
 <script id="step2-template" type="text/template">
     {% include "partials/user-setup/step2.html" %}
 </script>
-<script id="step3-template" type="text/template">
-    {% include "partials/user-setup/step3.html" %}
-</script>
-<script id="location-template" type="text/template">
-    {% include "partials/user-setup/map.html" %}
-</script>
 <script id="rep-chip-template" type="text/template">
     {% verbatim %}
     <div class="rep bold-text purple-text chip">
@@ -38,15 +32,11 @@
 </body>
 
 <script type="text/javascript" src="{% static "js/user-setup.js" %}"></script>
-<script type="text/javascript" src="{% static "js/utils/locate.js" %}"></script>
 <script type="text/javascript">
-    var googleMapsApiKey = "{{ google_map_api_key }}";
-    var sunlightApiKey = "{{ sunlight_api_key }}";
     var accountUsername= "{{ username }}";
     var accountModel = new cw.AccountModel({username: accountUsername});
 
-    var mapView = new cw.MapView({model: new cw.Map(), googleMapsApiKey: googleMapsApiKey, sunlightApiKey: sunlightApiKey});
-    var setupView = new cw.UserSetupView({model: accountModel, mapView: mapView});
+    var setupView = new cw.UserSetupView({model: accountModel});
     accountModel.fetch();
 </script>
 </html>

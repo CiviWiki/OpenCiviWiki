@@ -1,3 +1,8 @@
+"""
+Rationale Model
+Counts votes
+"""
+
 from django.db import models
 
 from .representative import Representative

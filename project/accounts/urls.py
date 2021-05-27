@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from django.contrib.auth import views as auth_views
-from authentication import authentication
+from . import authentication
 
 urlpatterns = [
     url(r"^login", authentication.cw_login, name="login"),

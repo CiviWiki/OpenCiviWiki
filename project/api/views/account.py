@@ -33,6 +33,7 @@ class AccountViewSet(ModelViewSet):
     authentication_classes = ()
 
     def list(self, request):
+        """ """
         if self.request.user.is_staff:
             accounts = Account.objects.all()
         else:
@@ -41,6 +42,7 @@ class AccountViewSet(ModelViewSet):
         return Response(serializer.data)
 
     def retrieve(self, request, user__username=None):
+        """ """
         account = get_account(username=user__username)
         if self.request.user == account.user:
             serializer = AccountSerializer(account)

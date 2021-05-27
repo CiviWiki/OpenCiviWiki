@@ -75,6 +75,15 @@ class UpdateProfileImage(forms.ModelForm):
     profile_image = forms.ImageField()
 
     def clean_profile_image(self):
+        """
+        This function is used to make sure that profile images follow Civiwiki standards.
+
+        Requirements:
+            - Height cannot exceed 960px
+            - Width cannot exceed 1280px
+            - Image must be (jpg, jpeg, pjeg, png)
+            - File size cannot exceed 2MB
+        """
         profile_image = self.cleaned_data["profile_image"]
 
         try:
