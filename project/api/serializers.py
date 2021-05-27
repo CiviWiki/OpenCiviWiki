@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from api.forms import UpdateProfileImage
-from api.models import Civi, Thread, Account, Category, CiviImage, Activity, Bill
+from api.models import Civi, Thread, Account, Category, CiviImage, Activity
 from core.constants import CIVI_TYPES
 
 WRITE_ONLY = {"write_only": True}
@@ -139,9 +139,6 @@ class CiviSerializer(serializers.ModelSerializer):
     links = serializers.PrimaryKeyRelatedField(
         many=True, read_only=True, source="linked_civis"
     )
-    bills = serializers.PrimaryKeyRelatedField(
-        many=True, read_only=True, source="linked_bills"
-    )
 
     class Meta:
         model = Civi
@@ -161,7 +158,6 @@ class CiviSerializer(serializers.ModelSerializer):
             "responses",
             "score",
             "attachments",
-            "bills",
         )
 
     def get_score(self, obj):
@@ -359,10 +355,3 @@ class ThreadDetailSerializer(serializers.ModelSerializer):
             ]
         else:
             return []
-
-
-class BillSerializer(serializers.ModelSerializer):
-    """ """
-    class Meta:
-        model = Bill
-        fields = "__all__"

@@ -18,7 +18,6 @@ from django.utils.deconstruct import deconstructible
 
 from .account import Account
 from .thread import Thread
-from .bill import Bill
 from taggit.managers import TaggableManager
 from .thread import Thread
 from core.constants import CIVI_TYPES
@@ -104,14 +103,10 @@ class Civi(models.Model):
     thread = models.ForeignKey(
         Thread, related_name="civis", default=None, null=True, on_delete=models.PROTECT
     )
-    bill = models.ForeignKey(
-        Bill, default=None, null=True, on_delete=models.PROTECT
-    )  # null if not solution
 
     tags = TaggableManager()
 
     linked_civis = models.ManyToManyField("self", related_name="links")
-    linked_bills = models.ManyToManyField(Bill, related_name="bills")
     response_civis = models.ForeignKey(
         "self",
         related_name="responses",
@@ -271,7 +266,6 @@ class Civi(models.Model):
                 civi for civi in self.linked_civis.all().values_list("id", flat=True)
             ],
             "created": self.created_date_str,
-            "bills": [bill.display_properties for bill in self.linked_bills.all()],
             # Not Implemented Yet
             "hashtags": [],
             "attachments": [
