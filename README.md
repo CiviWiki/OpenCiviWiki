@@ -113,6 +113,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://bandism.net/"><img src="https://avatars.githubusercontent.com/u/22633385?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ikko Ashimine</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=eltociear" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/abhiprojectz"><img src="https://avatars.githubusercontent.com/u/64596494?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Abhi </b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=abhiprojectz" title="Code">💻</a></td>
     <td align="center"><a href="http://jacob-north.com"><img src="https://avatars.githubusercontent.com/u/34386437?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jacob North</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=North15" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/loukikstudent"><img src="https://avatars.githubusercontent.com/u/35080655?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Loukik Bhangale</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=loukikstudent" title="Code">💻</a></td>
   </tr>
 </table>
 
