@@ -5,16 +5,8 @@ Counts votes
 
 from django.db import models
 
-from .representative import Representative
-from .vote import Vote
-
 
 class Rationale(models.Model):
-    representative = models.ForeignKey(
-        Representative, default=None, null=True, on_delete=models.PROTECT
-    )
-    vote = models.ForeignKey(Vote, default=None, null=True, on_delete=models.PROTECT)
-
     title = models.CharField(max_length=127)
     body = models.TextField(max_length=4095)
 
