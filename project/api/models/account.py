@@ -231,18 +231,3 @@ class Account(models.Model):
         else:
             return False
 
-def account_post_save(sender, instance, created, **kwargs):
-    if (
-        instance.address
-        and instance.city
-        and instance.state
-        and instance.representatives.count() == 0
-    ):
-        address = "{} {} {}".format(instance.address, instance.city, instance.state)
-        representatives = RepresentativesFetcher().get_reps(address)
-        for rep_data in representatives:
-            rep, _ = Representative.objects.create_or_update_from_response(rep_data)
-            instance.representatives.add(rep)
-
-
-post_save.connect(account_post_save, sender=Account)
