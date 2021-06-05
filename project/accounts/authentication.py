@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.contrib.auth import authenticate, logout, login
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import (
@@ -22,6 +22,8 @@ from api.tasks import send_email
 from api.models import Account, Invitation
 from .forms import AccountRegistrationForm, PasswordResetForm, RecoverUserForm
 from core.custom_decorators import require_post_params
+
+User = get_user_model()
 
 
 class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
@@ -102,7 +104,6 @@ def cw_register(request):
     Return:
         (200, ok) (500, Internal Error)
     """
-
     form = AccountRegistrationForm(request.POST or None)
     if request.method == "POST":
         # Form Validation
@@ -117,7 +118,7 @@ def cw_register(request):
                 user = authenticate(username=username, password=password)
 
                 account = Account(user=user)
-                if not settings.CLOSED_BETA:
+                if hasattr(settings, 'CLOSED_BETA') and not settings.CLOSED_BETA:
                     account.beta_access = True
                 account.save()
 

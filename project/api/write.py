@@ -7,7 +7,7 @@ from notifications.signals import notify
 
 # django packages
 from django.db.models.query import F
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.http import (
     JsonResponse,
     HttpResponse,
@@ -28,6 +28,8 @@ from api.tasks import send_mass_email
 from .models import Account, Activity, Category, Civi, CiviImage, Invitation
 from core.custom_decorators import require_post_params
 from core.constants import US_STATES
+
+User = get_user_model()
 
 
 @login_required

@@ -1,0 +1,24 @@
+
+<html>
+<head>
+    {% load staticfiles %}
+    {% include "base/links.html" %}
+    {% include "base/less_headers/login_less.html" %}
+    <title>{% block title %}CiviWiki{% endblock %}</title>
+</head>
+<body>
+{% include 'accounts/register/header.html' %}
+<div class="entry-base center-align valign-wrapper">
+    <div class="entry-forms">
+        <div class="card wrapper z-depth-3">
+                <div class="card-content" id="entry-content">
+                    {% block content %}{% endblock %}
+                </div>
+            </div>
+            <div class="back-to-main">
+                <a class="text" href="/"><i class="material-icons mini">keyboard_backspace</i>Back to Main</a>
+            </div>
+    </div>
+</div>
+</body>
+</html>
