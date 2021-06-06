@@ -313,12 +313,6 @@ def editUser(request):
     request_data = request.POST
     user = request.user
     account = Account.objects.get(user=user)
-    interests = request_data.get("interests", False)
-
-    if interests:
-        interests = list(interests)
-    else:
-        interests = account.interests
 
     data = {
         "first_name": request_data.get("first_name", account.first_name),

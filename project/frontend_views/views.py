@@ -194,8 +194,6 @@ def settings_view(request):
         "username": request.user.username,
         "email": request.user.email,
         "google_map_api_key": settings.GOOGLE_API_KEY,
-        "lng": request_account.longitude,
-        "lat": request_account.latitude,
     }
 
     return TemplateResponse(request, "user/settings.html", response_data)
