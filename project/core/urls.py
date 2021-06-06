@@ -13,6 +13,8 @@ Including another URLconf
     1. Add an import:  from blog import urls as blog_urls
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
+import django.contrib.auth.views as auth_views
+
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf import settings
@@ -22,12 +24,25 @@ from django.views.generic.base import RedirectView
 
 from api import urls as api
 from accounts import urls as accounts_urls
+from accounts.views import RegisterView
 from frontend_views import urls as frontend_views
+
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     url(r"^api/", include(api)),
     url(r"^auth/", include(accounts_urls)),
+
+    # New accounts paths. These currently implement user registration/authentication in
+    # parallel to the current authentication.
+    path('accounts/register/', RegisterView.as_view(), name='accounts_register'),
+    path(
+        'accounts/login/',
+        auth_views.LoginView.as_view(template_name='accounts/register/login.html'),
+        name='accounts_login',
+    ),
+
     url(
         "^inbox/notifications/",
         include("notifications.urls", namespace="notifications"),
@@ -57,4 +72,5 @@ urlpatterns += [
     ),
     url(r"^static/(?P<path>.*)$", serve, {"document_root": settings.STATIC_ROOT}),
     url(r"^", include(frontend_views)),
+
 ]
