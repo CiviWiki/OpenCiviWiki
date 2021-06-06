@@ -64,7 +64,6 @@ cw.LoginView = BB.View.extend({
                     window.location.replace('/');
                 },
                 error: function (data) {
-                    console.log(data.responseJSON);
                     if (data.status === 400 && data.responseJSON) {
                         Materialize.toast(data.responseJSON.message, 5000);
                     } else {
