@@ -117,6 +117,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/Swanand01"><img src="https://avatars.githubusercontent.com/u/75439077?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Swanand01</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=Swanand01" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/a7madnassar"><img src="https://avatars.githubusercontent.com/u/2473403?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ahmed Nassar</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=a7madnassar" title="Code">💻</a></td>
   </tr>
 </table>
 
