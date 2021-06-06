@@ -7,13 +7,13 @@ import os
 import uuid
 import io
 
-from django.contrib.auth.models import User
 from django.utils.deconstruct import deconstructible
 from django.core.files.storage import default_storage
 from django.conf import settings
 from django.db import models
 from PIL import Image, ImageOps
 from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.contrib.auth import get_user_model
 
 from core.constants import US_STATES
 from taggit.managers import TaggableManager
@@ -23,6 +23,9 @@ from .category import Category
 PROFILE_IMG_SIZE = (171, 171)
 PROFILE_IMG_THUMB_SIZE = (40, 40)
 WHITE_BG = (255, 255, 255)
+
+# get custom user model
+User = get_user_model()
 
 
 class AccountManager(models.Manager):

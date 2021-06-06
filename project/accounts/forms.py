@@ -1,23 +1,29 @@
 import re
 
 from django import forms
-from django.contrib.auth.models import User
 from django.contrib.auth.forms import (
     UserCreationForm,
     SetPasswordForm,
     PasswordResetForm as AuthRecoverUserForm,
 )
+from django.forms.models import ModelForm
+from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import ugettext_lazy as _
 
+
 from api.tasks import send_email as task_send_email
 from .reserved_usernames import RESERVED_USERNAMES
 
 
-class AccountRegistrationForm(UserCreationForm):
+User = get_user_model()
+
+
+class AccountRegistrationForm(ModelForm):
     """
     This class is used to register new account in Civiwiki
 
@@ -34,7 +40,7 @@ class AccountRegistrationForm(UserCreationForm):
 
     email = forms.EmailField(required=True)
     username = forms.CharField(required=True)
-    password = forms.CharField(required=True)
+    password = forms.CharField(required=True, widget=forms.PasswordInput())
 
     error_message = {
         "invalid_username": _(
@@ -45,11 +51,6 @@ class AccountRegistrationForm(UserCreationForm):
         "invalid_password": _("Password can not be entirely numeric."),
         "invalid_password_length": _("Password must be at least 4 characters."),
     }
-
-    def __init__(self, *args, **kargs):
-        super(AccountRegistrationForm, self).__init__(*args, **kargs)
-        self.fields["password1"].required = False
-        self.fields["password2"].required = False
 
     class Meta:
         model = User
@@ -113,17 +114,6 @@ class AccountRegistrationForm(UserCreationForm):
             raise forms.ValidationError(self.error_message["invalid_password"])
 
         return password
-
-    def save(self, commit=True):
-        """ Saves new users to Civiwiki """
-
-        user = super(AccountRegistrationForm, self).save(commit=False)
-        user.email = self.cleaned_data["email"]
-
-        if commit:
-            user.save()
-
-        return user
 
 
 class PasswordResetForm(SetPasswordForm):
