@@ -1,5 +1,4 @@
 from functools import wraps
-from django.utils.decorators import available_attrs
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
 from api.models import Account
 
@@ -13,7 +12,7 @@ USAGE:
 
 def require_post_params(params):
     def decorator(func):
-        @wraps(func, assigned=available_attrs(func))
+        @wraps(func)
         def inner(request, *args, **kwargs):
             if not all(param in request.POST for param in params):
                 missing_params = " ".join([p for p in params if p not in request.POST])
