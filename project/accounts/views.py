@@ -25,7 +25,6 @@ from .models import User
 class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
     """Token Generator for Email Confirmation"""
 
-
     key_salt = "django.contrib.auth.tokens.PasswordResetTokenGenerator"
 
     def _make_token_with_timestamp(self, user, timestamp):
@@ -38,8 +37,10 @@ class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
         return "%s-%s" % (ts_b36, hash)
 
 
-
 class RegisterView(FormView):
+    """
+    A form view that handles user registration.
+    """
     template_name = 'accounts/register/register.html'
     form_class = AccountRegistrationForm
     success_url = '/beta'
