@@ -17,7 +17,7 @@ We are an open source, non-profit community, working to develop a democratic eng
 To install all required modules, complete the following steps:
 
 1. make sure you are in the repository root directory
-2. create a Python virtual environment (named `env`)
+2. create a Python 3.7+ virtual environment (named `env`)
     * `python -m venv env`
 3. use the following command in project dir:
     * `pip install -r requirements.txt`
