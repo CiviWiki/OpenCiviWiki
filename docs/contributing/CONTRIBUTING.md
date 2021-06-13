@@ -2,7 +2,7 @@
 
 Make sure to search beforehand to see if the issue has been previously reported.
 
-The issue tracker should not be used for personal support requests. Please direct those to our [live chat](https://riot.im/app/#/room/#CiviWiki:matrix.org)
+The issue tracker should not be used for personal support requests. Please direct those to our [live chat](https://discord.gg/zkAe55bEkh)
 
 ## Bug Reports
 Please try to have as much detail as possible when creating a bug report.
@@ -22,7 +22,7 @@ A good example should contain:
 A good bug report will help direct developers to solve the problem at hand without wasting time trying to figure out the problem in the first place.
 
 ## Feature Requests/Enhancements
-If you have a budding idea or a feature that requires a more community-involved discussion, consider having the development discussion on the [live chat](https://riot.im/app/#/room/#CiviWiki:matrix.org) or create a thread on [loomio](https://www.loomio.org/g/ET40tXUC/openciviwiki). This will allow for a well-thought-out issue that will more likely be in line with the goal of the project.
+If you have a budding idea or a feature that requires a more community-involved discussion, consider having the development discussion on the [live chat](https://discord.gg/zkAe55bEkh) or create a thread on [loomio](https://www.loomio.org/g/ET40tXUC/openciviwiki). This will allow for a well-thought-out issue that will more likely be in line with the goal of the project.
 
 # Set-up instructions
 Use instruction from one of points below:
