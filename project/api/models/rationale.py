@@ -1,15 +1,12 @@
-from django.db import models
+"""
+Rationale Model
+Counts votes
+"""
 
-from .bill import Bill
-from .representative import Representative
-from .vote import Vote
+from django.db import models
 
 
 class Rationale(models.Model):
-    bill = models.ForeignKey(Bill, default=None, null=True, on_delete=models.PROTECT)
-    representative = models.ForeignKey(Representative, default=None, null=True, on_delete=models.PROTECT)
-    vote = models.ForeignKey(Vote, default=None, null=True, on_delete=models.PROTECT)
-
     title = models.CharField(max_length=127)
     body = models.TextField(max_length=4095)
 

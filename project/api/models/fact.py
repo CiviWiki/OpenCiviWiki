@@ -1,4 +1,9 @@
+"""
+Fact model
+"""
+
 from django.db import models
+
 
 class Fact(models.Model):
     body = models.CharField(max_length=511)
