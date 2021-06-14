@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0025_thread_is_draft'),
+        ("api", "0025_thread_is_draft"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='account',
-            name='country',
-            field=models.CharField(blank=True, default=b'United States', max_length=63),
+            model_name="account",
+            name="country",
+            field=models.CharField(blank=True, default=b"United States", max_length=63),
         ),
     ]

@@ -47,7 +47,9 @@ def create_thread(thread_type, title, summary, category):
     find_element(thread_summary).send_keys(summary)
     find_element(thread_type_dropdown).click()
 
-    for element in find_element(thread_type_dropdown).find_elements_by_css_selector("*"):
+    for element in find_element(thread_type_dropdown).find_elements_by_css_selector(
+        "*"
+    ):
         if element.text == thread_type:
             element.click()
             break

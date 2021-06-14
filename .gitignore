@@ -208,3 +208,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# IDE ignores
+.vscode
