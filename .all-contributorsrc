@@ -541,6 +541,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "NdagiStanley",
+      "name": "Stanley Ndagi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15629602?v=4",
+      "profile": "https://stanmd.tk",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
