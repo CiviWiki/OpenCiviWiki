@@ -14,9 +14,9 @@ requests==2.25.1
 django-taggit==1.4.0
 
 # Packages for development/testing
+mock==4.0.3
 coverage==5.5
 flake8==3.9.2
-mock==2.0.0
 aloe==0.1.19
 
 # Packages for production
