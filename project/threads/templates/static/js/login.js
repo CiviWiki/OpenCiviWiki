@@ -51,7 +51,7 @@ cw.LoginView = BB.View.extend({
     login: function () {
         var username = this.$el.find('#username').val(),
             password = this.$el.find('#password').val();
-
+        
         if (username && password) {
             $.ajax({
                 type: 'POST',

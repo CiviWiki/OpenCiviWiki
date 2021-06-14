@@ -75,7 +75,7 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
-            os.path.join(BASE_DIR, "webapp/templates")
+            os.path.join(BASE_DIR, "threads/templates/threads"), os.path.join(BASE_DIR, "accounts/templates/accounts")
         ],  # TODO: Add non-webapp template directory
         "APP_DIRS": True,
         "OPTIONS": {
@@ -107,7 +107,7 @@ else:
     AWS_QUERYSTRING_AUTH = False
 
 STATIC_URL = "/static/"
-STATICFILES_DIRS = (os.path.join(BASE_DIR, "webapp/static"),)
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "threads/templates/static"),)
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # TODO: re-organize and simplify staticfiles settings
