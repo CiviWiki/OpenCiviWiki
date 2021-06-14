@@ -24,7 +24,7 @@ def get_account(user=None, pk=None, username=None):
 
 def json_custom_parser(obj):
     """
-        A custom json parser to handle json.dumps calls properly for Decimal and Datetime data types.
+    A custom json parser to handle json.dumps calls properly for Decimal and Datetime data types.
     """
     if isinstance(obj, Decimal):
         return str(obj)
@@ -40,5 +40,6 @@ def json_custom_parser(obj):
 def json_response(data, status=200):
     return HttpResponse(
         json.dumps(data, default=json_custom_parser),
-        content_type='application/json',
-        status=status)
+        content_type="application/json",
+        status=status,
+    )

@@ -1,3 +1,8 @@
+"""
+Thread model
+Maintains threads
+"""
+
 import os
 import uuid
 from calendar import month_name
@@ -10,7 +15,7 @@ from django.utils.deconstruct import deconstructible
 from .account import Account
 from .category import Category
 from .fact import Fact
-from .hashtag import Hashtag
+from taggit.managers import TaggableManager
 from core.constants import US_STATES
 
 
@@ -21,34 +26,41 @@ class ThreadManager(models.Manager):
         thread_truncate_length = 320
 
         # If thread length is longer than truncate length... add elipsis (truncate)
-        ellipsis_if_too_long = '' if len(thread.summary) <= thread_truncate_length else '...'
+        ellipsis_if_too_long = (
+            "" if len(thread.summary) <= thread_truncate_length else "..."
+        )
 
-        from civi import Civi
+        from .civi import Civi
+
         thread_data = {
             "id": thread.id,
             "title": thread.title,
             "summary": thread.summary[:thread_truncate_length] + (ellipsis_if_too_long),
-            "created": "{0} {1}, {2}".format(month_name[thread.created.month], thread.created.day, thread.created.year),
+            "created": "{0} {1}, {2}".format(
+                month_name[thread.created.month],
+                thread.created.day,
+                thread.created.year,
+            ),
             "category_id": thread.category.id,
-            "location": thread.level if not thread.state else dict(US_STATES).get(thread.state),
-            "image": thread.image_url
+            "location": thread.level
+            if not thread.state
+            else dict(US_STATES).get(thread.state),
+            "image": thread.image_url,
         }
         author_data = {
             "username": thread.author.user.username,
             "full_name": thread.author.full_name,
-            "profile_image": thread.author.profile_image_url
+            "profile_image": thread.author.profile_image_url,
         }
         stats_data = {
             "num_views": thread.num_views,
-            "num_civis": Civi.objects.all().filter(thread_id=thread.id).count(),  # thread.num_civis,
-            "num_solutions": thread.num_solutions
+            "num_civis": Civi.objects.all()
+            .filter(thread_id=thread.id)
+            .count(),  # thread.num_civis,
+            "num_solutions": thread.num_solutions,
         }
 
-        data = {
-            "thread": thread_data,
-            "author": author_data,
-            "stats": stats_data
-        }
+        data = {"thread": thread_data, "author": author_data, "stats": stats_data}
         return data
 
     def filter_by_category(self, categories):
@@ -61,31 +73,35 @@ class PathAndRename(object):
         self.sub_path = sub_path
 
     def __call__(self, instance, filename):
-        extension = filename.split('.')[-1]
+        extension = filename.split(".")[-1]
         new_filename = str(uuid.uuid4())
-        filename = '{}.{}'.format(new_filename, extension)
+        filename = "{}.{}".format(new_filename, extension)
         return os.path.join(self.sub_path, filename)
 
 
-image_upload_path = PathAndRename('')
+image_upload_path = PathAndRename("")
 
 
 class Thread(models.Model):
-    author = models.ForeignKey(Account, default=None, null=True, on_delete=models.PROTECT)
-    category = models.ForeignKey(Category, default=None, null=True, on_delete=models.PROTECT)
+    author = models.ForeignKey(
+        Account, default=None, null=True, on_delete=models.PROTECT
+    )
+    category = models.ForeignKey(
+        Category, default=None, null=True, on_delete=models.PROTECT
+    )
     facts = models.ManyToManyField(Fact)
 
-    hashtags = models.ManyToManyField(Hashtag)
+    tags = TaggableManager()
 
     title = models.CharField(max_length=127, blank=False, null=False)
     summary = models.CharField(max_length=4095, blank=False, null=False)
     image = models.ImageField(upload_to=image_upload_path, blank=True, null=True)
 
     level_CHOICES = (
-        ('federal', 'Federal'),
-        ('state', 'State'),
+        ("federal", "Federal"),
+        ("state", "State"),
     )
-    level = models.CharField(max_length=31, default='federal', choices=level_CHOICES)
+    level = models.CharField(max_length=31, default="federal", choices=level_CHOICES)
     state = models.CharField(max_length=2, choices=US_STATES, blank=True)
 
     def __str__(self):
@@ -96,7 +112,9 @@ class Thread(models.Model):
 
     @property
     def image_url(self):  # TODO: move this to utils
-        if self.image and default_storage.exists(os.path.join(settings.MEDIA_ROOT, self.image.name)):
+        if self.image and default_storage.exists(
+            os.path.join(settings.MEDIA_ROOT, self.image.name)
+        ):
             return self.image.url
         else:
             # NOTE: This default url will probably be changed later

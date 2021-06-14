@@ -16,6 +16,7 @@ from django.template.loader import render_to_string
 
 from celery import shared_task
 
+
 @shared_task(name="send_email")
 def send_email(subject="", recipient_list="", context=None):
     """ Construct and send a multipart/alternative email """
@@ -25,15 +26,15 @@ def send_email(subject="", recipient_list="", context=None):
 
     email_context = context
 
-    msg_plain = render_to_string('email/base_text_template.txt', email_context)
-    msg_html = render_to_string('email/base_email_template.html', email_context)
+    msg_plain = render_to_string("email/base_text_template.txt", email_context)
+    msg_html = render_to_string("email/base_email_template.html", email_context)
 
     send_mail(
-        subject, #Subject Line
-        msg_plain, # text/plain Content
-        settings.EMAIL_HOST_USER, # Sender Email (default: support@civiwiki.org)
-        recipient_list, # Target Email
-        html_message=msg_html, # text/html Content
+        subject,  # Subject Line
+        msg_plain,  # text/plain Content
+        settings.EMAIL_HOST_USER,  # Sender Email (default: support@civiwiki.org)
+        recipient_list,  # Target Email
+        html_message=msg_html,  # text/html Content
     )
 
     return "success"
@@ -47,32 +48,24 @@ def send_mass_email(subject="", contexts=None):
         return "Insufficient values"
 
     # Manually open connection to the SMTP server specified in settings.py
-    connection = get_connection() # uses SMTP server specified in settings.py
+    connection = get_connection()  # uses SMTP server specified in settings.py
     connection.open()
 
     messages = []
     for email_context in contexts:
-        msg_plain = render_to_string('email/base_text_template.txt', email_context)
-        msg_html = render_to_string('email/base_email_template.html', email_context)
+        msg_plain = render_to_string("email/base_text_template.txt", email_context)
+        msg_html = render_to_string("email/base_email_template.html", email_context)
 
         msg = EmailMultiAlternatives(
-            subject, #Subject Line
-            msg_plain, # text/plain Content
-            settings.EMAIL_HOST_USER, # Sender Email (default: support@civiwiki.org)
-            email_context['recipient'], # Target Email
+            subject,  # Subject Line
+            msg_plain,  # text/plain Content
+            settings.EMAIL_HOST_USER,  # Sender Email (default: support@civiwiki.org)
+            email_context["recipient"],  # Target Email
             connection=connection,
         )
-        msg.attach_alternative(msg_html, "text/html")# text/html Content
+        msg.attach_alternative(msg_html, "text/html")  # text/html Content
         messages.append(msg)
 
     connection.send_messages(messages)
 
     return "success"
-
-
-@shared_task(name="gather_vote_data")
-def gather_vote_data(bill_id):
-    """ Gathers vote data """
-    from api.models.bill import Bill
-    bill = Bill.objects.get(id=bill_id)
-    bill.update_votes_data()
