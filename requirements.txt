@@ -14,7 +14,7 @@ django-taggit==1.4.0
 
 # Packages for development/testing
 coverage==4.5.3
-flake8==3.4.1
+flake8==3.9.2
 mock==2.0.0
 aloe==0.1.19
 
