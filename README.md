@@ -119,6 +119,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/jithenshriyan"><img src="https://avatars.githubusercontent.com/u/67240543?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jithen Shriyan</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=jithenshriyan" title="Code">💻</a></td>
     <td align="center"><a href="http://www.linkedin.com/in/shourya-shikhar"><img src="https://avatars.githubusercontent.com/u/55531939?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Shourya Shikhar</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=danger-ahead" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/max1204"><img src="https://avatars.githubusercontent.com/u/20409353?v=4?s=100" width="100px;" alt=""/><br /><sub><b>max1204</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=max1204" title="Code">💻</a></td>
+    <td align="center"><a href="https://soumallyadev.live"><img src="https://avatars.githubusercontent.com/u/55331884?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Soumallya Dev</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=soumallyadev07" title="Code">💻</a></td>
   </tr>
 </table>
 
