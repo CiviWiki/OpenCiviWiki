@@ -8,18 +8,22 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0027_auto_20190226_1001'),
+        ("api", "0027_auto_20190226_1001"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='bill',
-            name='number',
+            model_name="bill",
+            name="number",
             field=models.CharField(max_length=20),
         ),
         migrations.AlterField(
-            model_name='bill',
-            name='source',
-            field=models.CharField(choices=[(b'sunlight', b'sunlight'), (b'propublica', b'propublica')], default=b'propublica', max_length=50),
+            model_name="bill",
+            name="source",
+            field=models.CharField(
+                choices=[(b"sunlight", b"sunlight"), (b"propublica", b"propublica")],
+                default=b"propublica",
+                max_length=50,
+            ),
         ),
     ]

@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0028_auto_20190304_1834'),
+        ("api", "0028_auto_20190304_1834"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='civi',
-            name='linked_bills',
-            field=models.ManyToManyField(related_name='bills', to='api.Bill'),
+            model_name="civi",
+            name="linked_bills",
+            field=models.ManyToManyField(related_name="bills", to="api.Bill"),
         ),
     ]

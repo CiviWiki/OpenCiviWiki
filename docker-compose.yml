@@ -8,16 +8,6 @@ services:
       - ./data/postgresql:/var/lib/postgresql/data
     env_file:
       - .env
-    restart: on-failure
-
-  redis:
-    container_name: civiwiki-redis
-    image: redis:5.0
-    volumes:
-    - ./data/postgresql:/var/lib/postgresql/data
-    env_file:
-    - .env
-    restart: on-failure
 
   backend:
     container_name: civiwiki-backend
@@ -28,8 +18,6 @@ services:
       - "8000:8000"
     depends_on:
       - db
-      - redis
     env_file:
       - .env
-    restart: on-failure
     tty: true

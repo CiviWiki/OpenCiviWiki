@@ -1,10 +1,18 @@
+"""
+Response model
+Records user response
+"""
+
 from django.db import models
 
 from .account import Account
 from .civi import Civi
 
+
 class Response(models.Model):
-    author = models.ForeignKey(Account, default=None, null=True, on_delete=models.PROTECT)
+    author = models.ForeignKey(
+        Account, default=None, null=True, on_delete=models.PROTECT
+    )
     civi = models.ForeignKey(Civi, default=None, null=True, on_delete=models.PROTECT)
 
     title = models.CharField(max_length=127)
