@@ -26,13 +26,14 @@ class AccountViewSet(ModelViewSet):
     """
 
     queryset = Account.objects.all()
-    lookup_field = 'user__username'
+    lookup_field = "user__username"
     serializer_class = AccountSerializer
-    http_method_names = ['get', 'head', 'put', 'patch']
+    http_method_names = ["get", "head", "put", "patch"]
     permission_classes = (IsAccountOwnerOrDuringRegistrationOrReadOnly,)
     authentication_classes = ()
 
     def list(self, request):
+        """ """
         if self.request.user.is_staff:
             accounts = Account.objects.all()
         else:
@@ -41,8 +42,9 @@ class AccountViewSet(ModelViewSet):
         return Response(serializer.data)
 
     def retrieve(self, request, user__username=None):
+        """ """
         account = get_account(username=user__username)
-        if (self.request.user == account.user):
+        if self.request.user == account.user:
             serializer = AccountSerializer(account)
         else:
             serializer = AccountListSerializer(account)
@@ -100,7 +102,9 @@ class AccountViewSet(ModelViewSet):
         """
         account = get_account(username=user__username)
         draft_threads = Thread.objects.filter(author=account).exclude(is_draft=False)
-        serializer = ThreadSerializer(draft_threads, many=True, context={'request': request})
+        serializer = ThreadSerializer(
+            draft_threads, many=True, context={"request": request}
+        )
         return Response(serializer.data)
 
     @action(detail=True)
@@ -111,14 +115,7 @@ class AccountViewSet(ModelViewSet):
         """
         account = get_account(username=user__username)
         draft_threads = Thread.objects.filter(author=account, is_draft=False)
-        serializer = ThreadSerializer(draft_threads, many=True, context={'request': request})
+        serializer = ThreadSerializer(
+            draft_threads, many=True, context={"request": request}
+        )
         return Response(serializer.data)
-
-    @action(detail=True)
-    def bills(self, request, user__username=None):
-        """
-        Gets supported and opposed bills
-        /accounts/{username}/bills
-        """
-        account = get_account(username=user__username)
-        return Response(account.get_voted_bills())
