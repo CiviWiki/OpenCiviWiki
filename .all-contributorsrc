@@ -513,6 +513,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "danger-ahead",
+      "name": "Shourya Shikhar",
+      "avatar_url": "https://avatars.githubusercontent.com/u/55531939?v=4",
+      "profile": "http://www.linkedin.com/in/shourya-shikhar",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
