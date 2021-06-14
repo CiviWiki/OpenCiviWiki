@@ -10,7 +10,7 @@ celery==5.0.0
 coreapi==2.3.3
 psycopg2-binary==2.8.6
 Pillow==7.2.0
-requests==2.24.0
+requests==2.25.1
 django-taggit==1.4.0
 
 # Packages for development/testing
