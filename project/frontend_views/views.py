@@ -21,7 +21,6 @@ def base_view(request):
         return TemplateResponse(request, "static_templates/landing.html", {})
 
     a = Account.objects.get(user=request.user)
-    
     if "login_user_image" not in request.session.keys():
         request.session["login_user_image"] = a.profile_image_thumb_url
 
