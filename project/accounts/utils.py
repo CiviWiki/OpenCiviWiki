@@ -2,7 +2,6 @@ from django.conf import settings
 from django.core.mail import send_mail
 
 
-
 def send_email(subject, message, sender, recipient_list, html_message=None):
     """ A wrapper around Django's send email."""
 

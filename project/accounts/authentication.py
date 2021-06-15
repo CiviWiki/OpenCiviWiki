@@ -20,7 +20,6 @@ from django.views.decorators.debug import sensitive_post_parameters
 from django.template.loader import render_to_string
 
 
-#from api.tasks import send_email
 from accounts.utils import send_email
 from api.models import Account, Invitation
 from .forms import AccountRegistrationForm, PasswordResetForm, RecoverUserForm
@@ -147,7 +146,6 @@ def cw_register(request):
             # Create a New Account
             try:
                 user = User.objects.create_user(username, email, password)
-                #user = authenticate(username=username, password=password)
 
                 account = Account(user=user)
                 if hasattr(settings, 'CLOSED_BETA') and not settings.CLOSED_BETA:
