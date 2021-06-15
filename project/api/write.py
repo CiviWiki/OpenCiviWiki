@@ -317,8 +317,6 @@ def editUser(request):
 
     if interests:
         interests = list(interests)
-    else:
-        interests = account.interests
 
     data = {
         "first_name": request_data.get("first_name", account.first_name),

@@ -114,29 +114,7 @@ cw.MapView = BB.View.extend({
   initialize: function(options) {
     options = options || {};
 
-    this.googleMapsApiKey = options.googleMapsApiKey;
     return this;
-  },
-
-  renderAndInitMap: function(elId) {
-    var _this = this;
-    this.id = elId || this.id;
-    this.setElement($("#" + this.id));
-
-    if (!this.loadedAPI) {
-      this.loadedAPI = true;
-      var url =
-        "https://maps.googleapis.com/maps/api/js?key=" +
-        _this.googleMapsApiKey +
-        "&libraries=places";
-      $.ajax({
-        url: url,
-        dataType: "script",
-        success: function() {
-          _this.render();
-        }
-      });
-    }
   },
 
   render: function() {
