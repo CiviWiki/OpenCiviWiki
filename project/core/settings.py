@@ -169,10 +169,8 @@ REST_FRAMEWORK = {
 # CORS Settings
 CORS_ORIGIN_ALLOW_ALL = True
 
-
 # Custom User model
 AUTH_USER_MODEL = 'accounts.User'
-
 
 LOGIN_REDIRECT_URL = '/beta'
 

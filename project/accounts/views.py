@@ -20,6 +20,7 @@ from api.tasks import send_email
 
 from .forms import AccountRegistrationForm
 from .models import User
+from .authentication import send_activation_email
 
 
 class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
@@ -43,15 +44,14 @@ class RegisterView(FormView):
     """
     template_name = 'accounts/register/register.html'
     form_class = AccountRegistrationForm
-    success_url = '/beta'
+    success_url = '/'
 
     def _create_user(self, form):
         username = form.cleaned_data['username']
         password = form.cleaned_data['password']
         email = form.cleaned_data['email']
 
-        User.objects.create_user(username, email, password)
-        user = authenticate(username=username, password=password)
+        user = User.objects.create_user(username, email, password)
 
         account = Account(user=user)
         if hasattr(settings, 'CLOSED_BETA') and not settings.CLOSED_BETA:
@@ -64,31 +64,8 @@ class RegisterView(FormView):
         return user
 
     def _send_email(self, user):
-        account_activation_token = AccountActivationTokenGenerator()
-        uid = urlsafe_base64_encode(force_bytes(user.pk))
-        token = account_activation_token.make_token(user)
         domain = get_current_site(self.request).domain
-        base_url = "http://{domain}/auth/activate_account/{uid}/{token}/"
-        url_with_code = base_url.format(domain=domain, uid=uid, token=token)
-        # Send Email Verification Message
-        # TODO: Move this to string templates
-        email_context = {
-            "title": "Verify your email with CiviWiki",
-            "body": (
-                "Welcome to CiviWiki! Follow the link below to verify your email with us. "
-                "We're happy to have you on board :)"
-            ),
-            "link": url_with_code,
-        }
-
-        if hasattr(settings, 'DEBUG') and settings.DEBUG:
-            return
-
-        send_email.delay(
-            subject="CiviWiki Account Setup",
-            recipient_list=[user.email],
-            context=email_context,
-        )
+        send_activation_email(user, domain)
 
     def _login(self, user):
         login(self.request, user)

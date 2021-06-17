@@ -17,11 +17,14 @@ from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.http import int_to_base36
 from django.views.decorators.debug import sensitive_post_parameters
+from django.template.loader import render_to_string
 
-from api.tasks import send_email
+
+from accounts.utils import send_email
 from api.models import Account, Invitation
 from .forms import AccountRegistrationForm, PasswordResetForm, RecoverUserForm
 from core.custom_decorators import require_post_params
+
 
 User = get_user_model()
 
@@ -43,6 +46,34 @@ class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
 
 
 account_activation_token = AccountActivationTokenGenerator()
+
+
+def send_activation_email(user, domain):
+    uid = urlsafe_base64_encode(force_bytes(user.pk))
+    token = account_activation_token.make_token(user)
+    base_url = "http://{domain}/auth/activate_account/{uid}/{token}/"
+    url_with_code = base_url.format(domain=domain, uid=uid, token=token)
+    # Send Email Verification Message
+    # TODO: Move this to string templates
+    context = {
+        "title": "Verify your email with CiviWiki",
+        "body": (
+            "Welcome to CiviWiki! Follow the link below to verify your email with us. "
+            "We're happy to have you on board :)"
+        ),
+        "link": url_with_code,
+    }
+
+    message = render_to_string("email/base_text_template.txt", context)
+    html_message = render_to_string("email/base_email_template.html", context)
+    sender = settings.EMAIL_HOST_USER
+    send_email(
+        subject="CiviWiki Account Setup",
+        message=message,
+        sender=sender,
+        recipient_list=[user.email],
+        html_message=html_message
+    )
 
 
 @sensitive_post_parameters("password")
@@ -114,8 +145,7 @@ def cw_register(request):
 
             # Create a New Account
             try:
-                User.objects.create_user(username, email, password)
-                user = authenticate(username=username, password=password)
+                user = User.objects.create_user(username, email, password)
 
                 account = Account(user=user)
                 if hasattr(settings, 'CLOSED_BETA') and not settings.CLOSED_BETA:
@@ -125,27 +155,9 @@ def cw_register(request):
                 user.is_active = True
                 user.save()
 
-                uid = urlsafe_base64_encode(force_bytes(user.pk))
-                token = account_activation_token.make_token(user)
                 domain = get_current_site(request).domain
-                base_url = "http://{domain}/auth/activate_account/{uid}/{token}/"
-                url_with_code = base_url.format(domain=domain, uid=uid, token=token)
-                # Send Email Verification Message
-                # TODO: Move this to string templates
-                email_context = {
-                    "title": "Verify your email with CiviWiki",
-                    "body": (
-                        "Welcome to CiviWiki! Follow the link below to verify your email with us. "
-                        "We're happy to have you on board :)"
-                    ),
-                    "link": url_with_code,
-                }
 
-                send_email.delay(
-                    subject="CiviWiki Account Setup",
-                    recipient_list=[email],
-                    context=email_context,
-                )
+                send_activation_email(user, domain)
 
                 login(request, user)
                 return HttpResponse()
