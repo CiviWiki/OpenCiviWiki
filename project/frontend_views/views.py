@@ -74,7 +74,6 @@ def user_profile(request, username=None):
     data = {
         "username": user,
         "profile_image_form": UpdateProfileImage,
-        "google_map_api_key": settings.GOOGLE_API_KEY,
     }
     return TemplateResponse(request, "account.html", data)
 
@@ -90,7 +89,6 @@ def user_setup(request):
         data = {
             "username": request.user.username,
             "email": request.user.email,
-            "google_map_api_key": settings.GOOGLE_API_KEY,
         }
         return TemplateResponse(request, "user-setup.html", data)
 
@@ -193,7 +191,6 @@ def settings_view(request):
     response_data = {
         "username": request.user.username,
         "email": request.user.email,
-        "google_map_api_key": settings.GOOGLE_API_KEY,
     }
 
     return TemplateResponse(request, "user/settings.html", response_data)

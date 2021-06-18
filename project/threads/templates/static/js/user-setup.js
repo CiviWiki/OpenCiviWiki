@@ -29,7 +29,6 @@ cw.UserSetupView = BB.View.extend({
   initialize: function(options) {
     options = options || {};
 
-    this.mapView = options.mapView;
     this.listenTo(this.model, "sync", this.render);
     return this;
   },

@@ -14,7 +14,7 @@ Execute below command:
 
     cp .env_sample .env
  
-Then, fill `DJANGO_SECRET_KEY` and `GOOGLE_MAP_API_KEY` in `.env` file.
+Then, fill `DJANGO_SECRET_KEY` in `.env` file.
 
 
 ## Requirements
