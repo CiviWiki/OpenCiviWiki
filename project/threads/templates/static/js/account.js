@@ -308,8 +308,6 @@ cw.AccountView = BB.View.extend({
     saveLocation: function () {
         var _this = this;
 
-        var coordinates = this.mapView.model.get('coordinates'),
-            address = this.mapView.model.get('address');
 
         if (!_.isEmpty(coordinates) && !_.isEmpty(address)) {
             $.ajax({
