@@ -122,6 +122,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://soumallyadev.live"><img src="https://avatars.githubusercontent.com/u/55331884?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Soumallya Dev</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=soumallyadev07" title="Code">💻</a></td>
     <td align="center"><a href="https://stanmd.tk"><img src="https://avatars.githubusercontent.com/u/15629602?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Stanley Ndagi</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=NdagiStanley" title="Documentation">📖</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/shashankks0987"><img src="https://avatars.githubusercontent.com/u/47640763?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Shashank KS</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=shashankks0987" title="Code">💻</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-restore -->
