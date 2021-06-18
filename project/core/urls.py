@@ -36,9 +36,9 @@ urlpatterns = [
 
     # New accounts paths. These currently implement user registration/authentication in
     # parallel to the current authentication.
-    path('accounts/register/', RegisterView.as_view(), name='accounts_register'),
+    path('accounts/register', RegisterView.as_view(), name='accounts_register'),
     path(
-        'accounts/login/',
+        'accounts/login',
         auth_views.LoginView.as_view(template_name='accounts/register/login.html'),
         name='accounts_login',
     ),

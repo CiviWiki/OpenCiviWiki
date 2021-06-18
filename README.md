@@ -1,7 +1,6 @@
 # Welcome to Civiwiki
 
 [![ComVer](https://img.shields.io/badge/ComVer-compliant-brightgreen.svg)](https://github.com/staltz/comver)
-[![Stories in Ready](https://badge.waffle.io/CiviWiki/OpenCiviWiki.png?label=next%20up&title=next%20tasks)](https://waffle.io/CiviWiki/OpenCiviWiki?utm_source=badge)
 [![Maintainability](https://api.codeclimate.com/v1/badges/5241b4275cc2dffe90f2/maintainability)](https://codeclimate.com/github/CiviWiki/OpenCiviWiki/maintainability)
 
 We are an open source, non-profit community, working to develop a democratic engagement web system.
@@ -37,7 +36,6 @@ Join us on the following channels:
 * [development discussions](https://www.loomio.org/g/ET40tXUC/openciviwiki) on Loomio
 * [videos of our weekly planning meetings](https://archive.org/search.php?query=subject%3A%22CiviWiki%22&sort=-date) on Internet Archive
 * [live chat](https://riot.im/app/#/room/#CiviWiki:matrix.org) on Matrix
-* [development roadmap](https://waffle.io/CiviWiki/OpenCiviWiki) on Waffle.io
 * [@CiviWiki](https://twitter.com/civiwiki) on Twitter
 
 # Contribute
@@ -98,7 +96,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/HushOv"><img src="https://avatars2.githubusercontent.com/u/36056305?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Hush</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=HushOv" title="Code">💻</a> <a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=HushOv" title="Documentation">📖</a></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://github.com/JDRanpariya"><img src="https://avatars3.githubusercontent.com/u/51157407?v=4?s=100" width="100px;" alt=""/><br /><sub><b>JDRanpariya</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=JDRanpariya" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/JDRanpariya"><img src="https://avatars3.githubusercontent.com/u/51157407?v=4?s=100" width="100px;" alt=""/><br /><sub><b>JDRanpariya</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=JDRanpariya" title="Documentation">📖</a> <a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=JDRanpariya" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/Di-ref"><img src="https://avatars1.githubusercontent.com/u/61465302?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Di-ref</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=Di-ref" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/BrianPainter"><img src="https://avatars2.githubusercontent.com/u/1342663?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Brian Painter</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=BrianPainter" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/AnkanDas22"><img src="https://avatars1.githubusercontent.com/u/30185594?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ankan Das</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=AnkanDas22" title="Documentation">📖</a></td>
@@ -118,6 +116,11 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="https://github.com/Swanand01"><img src="https://avatars.githubusercontent.com/u/75439077?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Swanand01</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=Swanand01" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/a7madnassar"><img src="https://avatars.githubusercontent.com/u/2473403?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ahmed Nassar</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=a7madnassar" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/jithenshriyan"><img src="https://avatars.githubusercontent.com/u/67240543?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jithen Shriyan</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=jithenshriyan" title="Code">💻</a></td>
+    <td align="center"><a href="http://www.linkedin.com/in/shourya-shikhar"><img src="https://avatars.githubusercontent.com/u/55531939?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Shourya Shikhar</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=danger-ahead" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/max1204"><img src="https://avatars.githubusercontent.com/u/20409353?v=4?s=100" width="100px;" alt=""/><br /><sub><b>max1204</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=max1204" title="Code">💻</a></td>
+    <td align="center"><a href="https://soumallyadev.live"><img src="https://avatars.githubusercontent.com/u/55331884?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Soumallya Dev</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=soumallyadev07" title="Code">💻</a></td>
+    <td align="center"><a href="https://stanmd.tk"><img src="https://avatars.githubusercontent.com/u/15629602?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Stanley Ndagi</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=NdagiStanley" title="Documentation">📖</a></td>
   </tr>
 </table>
 

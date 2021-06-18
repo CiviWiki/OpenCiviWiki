@@ -367,7 +367,8 @@
       "avatar_url": "https://avatars3.githubusercontent.com/u/51157407?v=4",
       "profile": "https://github.com/JDRanpariya",
       "contributions": [
-        "doc"
+        "doc",
+        "code"
       ]
     },
     {
@@ -503,6 +504,51 @@
       "profile": "https://github.com/a7madnassar",
       "contributions": [
         "code"
+      ]
+    },
+    {
+      "login": "jithenshriyan",
+      "name": "Jithen Shriyan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/67240543?v=4",
+      "profile": "https://github.com/jithenshriyan",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "danger-ahead",
+      "name": "Shourya Shikhar",
+      "avatar_url": "https://avatars.githubusercontent.com/u/55531939?v=4",
+      "profile": "http://www.linkedin.com/in/shourya-shikhar",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "max1204",
+      "name": "max1204",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20409353?v=4",
+      "profile": "https://github.com/max1204",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "soumallyadev07",
+      "name": "Soumallya Dev",
+      "avatar_url": "https://avatars.githubusercontent.com/u/55331884?v=4",
+      "profile": "https://soumallyadev.live",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "NdagiStanley",
+      "name": "Stanley Ndagi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15629602?v=4",
+      "profile": "https://stanmd.tk",
+      "contributions": [
+        "doc"
       ]
     }
   ],
