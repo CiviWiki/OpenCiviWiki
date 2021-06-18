@@ -124,8 +124,6 @@
         lat: {{lat}}
     }
 
-    var mapModel = new cw.Map({coordinates: location_data});
-    var mapView = new cw.MapView({model: mapModel});
 
     var data = {};
     data.username = '{{user.username}}';
@@ -135,7 +133,6 @@
     var userModel = new cw.UserModel(data);
     var settingsView = new cw.SettingsView({
         model: userModel,
-        mapView: mapView,
     });
 
     userModel.fetch();
