@@ -5,7 +5,6 @@ cw.UserModel = BB.Model.extend({
         return {
             username: "",
             email: "",
-            location: "",
         };
     },
     url: function () {
@@ -31,7 +30,6 @@ cw.SettingsView = BB.View.extend({
         this.template = _.template($('#settings-template').text());
         this.settingsTemplate = _.template($('#settings-base').text());
         this.personalTemplate = _.template($('#settings-personal').text());
-        this.locationLabelTemplate = _.template($('#location-label').text());
 
         this.listenTo(this.model, 'change', this.renderAllLabels);
     },
@@ -46,16 +44,11 @@ cw.SettingsView = BB.View.extend({
 
     renderAllLabels:function() {
         this.renderPersonal();
-        this.renderLocationLabel();
         Materialize.updateTextFields();
     },
 
     renderPersonal: function() {
         this.$('#settings-1').html(this.personalTemplate());
-    },
-
-    renderLocationLabel: function() {
-        this.$('#location-label-container').html(this.locationLabelTemplate());
     },
 
     events: {

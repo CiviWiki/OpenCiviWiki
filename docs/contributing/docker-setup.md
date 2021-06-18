@@ -7,7 +7,6 @@ The following packages are required to start developing CiviWiki:
 Below variables are also needed:
 
 - [DJANGO SECRET KEY](https://www.miniwebtool.com/django-secret-key-generator/)
-- [GOOGLE MAP KEY](https://developers.google.com/maps/documentation/javascript/get-api-key)
 
 ## Environment variables file
 Execute below command:
