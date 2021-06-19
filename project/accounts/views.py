@@ -16,7 +16,6 @@ from django.utils.crypto import salted_hmac
 from django.utils.http import urlsafe_base64_encode
 
 from api.models.account import Account
-from api.tasks import send_email
 
 from .forms import AccountRegistrationForm
 from .models import User
