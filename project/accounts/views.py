@@ -14,6 +14,7 @@ from django.utils.encoding import force_bytes
 from django.utils.http import int_to_base36
 from django.utils.crypto import salted_hmac
 from django.utils.http import urlsafe_base64_encode
+from django.urls import reverse_lazy
 
 from api.models.account import Account
 
@@ -76,3 +77,24 @@ class RegisterView(FormView):
         self._login(user)
 
         return super(RegisterView, self).form_valid(form)
+
+
+class PasswordResetView(auth_views.PasswordResetView):
+    template_name = 'accounts/users/password_reset.html'
+    email_template_name = 'accounts/users/password_reset_email.html'
+    subject_template_name = 'accounts/users/password_reset_subject.txt'
+    from_email = settings.EMAIL_HOST_USER
+    success_url = reverse_lazy('accounts_password_reset_done')
+
+
+class PasswordResetDoneView(auth_views.PasswordResetDoneView):
+    template_name = 'accounts/users/password_reset_done.html'
+
+
+class PasswordResetConfirmView(auth_views.PasswordResetConfirmView):
+    template_name = 'accounts/users/password_reset_confirm.html'
+    success_url = reverse_lazy('accounts_password_reset_complete')
+
+
+class PasswordResetCompleteView(auth_views.PasswordResetCompleteView):
+    template_name = 'accounts/users/password_reset_complete.html'
