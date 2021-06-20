@@ -22,7 +22,6 @@ The above command should be run in the same directory as the requirements.txt fi
 ### Environment variables
 There are several environment variables that are needed for things to work properly:
 
-- GOOGLE_MAP_API_KEY
 - REDIS_URL (optional)
 - AWS_STORAGE_BUCKET_NAME (optional)
 - AWS_S3_ACCESS_KEY_ID (optional)
@@ -39,9 +38,6 @@ You can save some time and declare those environmental variables all at once wit
 
 # CiviWiki (Django)
 export DJANGO_SECRET_KEY=**********
-
-# Third party
-export GOOGLE_MAP_API_KEY=**********
 
 # PostgreSQL
 export CIVIWIKI_LOCAL_NAME=civiwiki

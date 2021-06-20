@@ -50,7 +50,6 @@ cw.AccountView = BB.View.extend({
 
     initialize: function (options) {
         options = options || {};
-        // this.mapView = options.mapView;
         this.current_user = options.current_user;
         this.isSave = false;
 
@@ -305,40 +304,7 @@ cw.AccountView = BB.View.extend({
             }
         });
     },
-    saveLocation: function () {
-        var _this = this;
-
-
-        if (!_.isEmpty(coordinates) && !_.isEmpty(address)) {
-            $.ajax({
-                type: 'POST',
-                url: '/api/edituser/',
-                data: {
-                    coordinates: coordinates,
-                    address: address.address,
-                    city: address.city,
-                    state: address.state,
-                    zip_code: address.zipcode,
-                    longitude: coordinates.lng,
-                    latitude: coordinates.lat,
-                },
-                success: function (data) {
-                    Materialize.toast('<span class="subtitle-lato white-text">Location Changed</span>', 5000);
-                    _this.isSave = true;
-                    _this.model.fetch();
-                },
-                error: function (data) {
-                    if (data.status_code === 400) {
-                        Materialize.toast(data.message, 5000);
-                    } else if (data.status_code === 500) {
-                        Materialize.toast('Internal Server Error', 5000);
-                    } else {
-                        Materialize.toast(data.statusText, 5000);
-                    }
-                }
-            });
-        }
-    },
+    
     handleFiles: function(e) {
         e.preventDefault();
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Settings</title>
-    {% load staticfiles %}
+    {% load static %}
     {% include "base/links.html" %}
     <link type="text/css" rel="stylesheet/less" href="{% static "less/base.less" %}"/>
     <link type="text/css" rel="stylesheet/less" href="{% static "less/utils.less" %}"/>
@@ -34,9 +34,6 @@
 {% endverbatim %}
 </script>
 
-<script id="location-template" type="text/template">
-    {% include "partials/user-setup/map.html" %}
-</script>
 <script id="rep-chip-template" type="text/template">
     {% verbatim %}
     <div class="rep bold-text purple-text chip">
@@ -59,17 +56,6 @@
 {% endverbatim %}
 </script>
 
-<script id="location-label" type="text/template">
-{% verbatim %}
-    <div class="section">
-        <div class="location-info">
-            <i class="mini material-icons">place</i>
-            <span>{{this.model.get('location')}}</span>
-        </div>
-    </div>
-{% endverbatim %}
-</script>
-
 <script id="settings-base" type="text/template">
 {% verbatim %}
     <div class="subtitle-lato">Personal</div>
@@ -82,14 +68,6 @@
             <label for="username">Username</label>
         </div>
         <div id="settings-1"></div>
-        <div class="white-background-input-field input-field col s12">
-            <div class="section">
-                <label for="location">Location</label>
-
-                <div id="location-label-container"></div>
-                <div id="location"></div>
-            </div>
-        </div>
     </div>
 {% endverbatim %}
 </script>
@@ -117,14 +95,7 @@
 </body>
 
 <script type="text/javascript" src="{% static "js/settings.js" %}"></script>
-<script type="text/javascript" src="{% static "js/utils/locate.js" %}"></script>
 <script type="text/javascript">
-    location_data = {
-        lng: {{lng}},
-        lat: {{lat}}
-    }
-
-
     var data = {};
     data.username = '{{user.username}}';
     data.email = '{{user.email}}';
