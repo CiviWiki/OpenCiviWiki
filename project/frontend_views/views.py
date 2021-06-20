@@ -13,16 +13,14 @@ from api.forms import UpdateProfileImage
 from core.constants import US_STATES
 from core.custom_decorators import beta_blocker, login_required, full_account
 
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 def base_view(request):
     if not request.user.is_authenticated:
         return TemplateResponse(request, "static_templates/landing.html", {})
 
     a = Account.objects.get(user=request.user)
-    if not a.beta_access:
-        return HttpResponseRedirect("/beta")
-    if not a.full_account:
-        return HttpResponseRedirect("/setup")
     if "login_user_image" not in request.session.keys():
         request.session["login_user_image"] = a.profile_image_thumb_url
 
@@ -61,7 +59,6 @@ def base_view(request):
 
 
 @login_required
-@beta_blocker
 @full_account
 def user_profile(request, username=None):
     if not username:
@@ -79,7 +76,6 @@ def user_profile(request, username=None):
 
 
 @login_required
-@beta_blocker
 def user_setup(request):
     a = Account.objects.get(user=request.user)
     if a.full_account:
@@ -94,7 +90,6 @@ def user_setup(request):
 
 
 @login_required
-@beta_blocker
 @full_account
 def issue_thread(request, thread_id=None):
     if not thread_id:
@@ -161,7 +156,6 @@ def issue_thread(request, thread_id=None):
 
 
 @login_required
-@beta_blocker
 @full_account
 def create_group(request):
     return TemplateResponse(request, "newgroup.html", {})
@@ -184,9 +178,7 @@ def invite(request):
 
 
 @login_required
-@beta_blocker
 def settings_view(request):
-    request_account = Account.objects.get(user=request.user)
 
     response_data = {
         "username": request.user.username,
