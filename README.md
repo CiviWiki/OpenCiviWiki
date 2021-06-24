@@ -124,6 +124,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/shashankks0987"><img src="https://avatars.githubusercontent.com/u/47640763?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Shashank KS</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=shashankks0987" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/Floyd-Droid"><img src="https://avatars.githubusercontent.com/u/67757904?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jourdon Floyd</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=Floyd-Droid" title="Documentation">📖</a></td>
   </tr>
 </table>
 
