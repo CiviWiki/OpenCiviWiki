@@ -1,10 +1,3 @@
-## Prerequisites
-The following packages are required to start developing CiviWiki:
-
-- PostgreSQL
-- Redis
-    - [Redis installation instructions](https://redis.io/topics/quickstart)
-
 ## Set-up
 The following instructions assume you have already cloned this repository.
 
@@ -20,13 +13,12 @@ pip install -r requirements.txt
 The above command should be run in the same directory as the requirements.txt file.
 
 ### Environment variables
-There are several environment variables that are needed for things to work properly:
+Certain environment variables may be required depending on your local setup. For instance, CiviWiki uses SQLite by default, but you can alternatively set up a PostgreSQL database and provide the necessary environment variables. The following environment variables are optional:
 
-- REDIS_URL (optional)
-- AWS_STORAGE_BUCKET_NAME (optional)
-- AWS_S3_ACCESS_KEY_ID (optional)
-- AWS_S3_SECRET_ACCESS_KEY (optional)
-- DATABASE_URL (optional)
+- AWS_STORAGE_BUCKET_NAME
+- AWS_S3_ACCESS_KEY_ID
+- AWS_S3_SECRET_ACCESS_KEY
+- DATABASE_URL
 - CIVIWIKI_LOCAL_NAME - database name in local PostgreSQL instance
 - CIVIWIKI_LOCAL_USERNAME - username in local PostgreSQL instance with rights to database
 - CIVIWIKI_LOCAL_PASSWORD - password for database user
@@ -35,9 +27,6 @@ You can save some time and declare those environmental variables all at once wit
 
 ```sh
 #! /bin/bash
-
-# CiviWiki (Django)
-export DJANGO_SECRET_KEY=**********
 
 # PostgreSQL
 export CIVIWIKI_LOCAL_NAME=civiwiki
