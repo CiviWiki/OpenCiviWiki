@@ -559,6 +559,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Floyd-Droid",
+      "name": "Jourdon Floyd",
+      "avatar_url": "https://avatars.githubusercontent.com/u/67757904?v=4",
+      "profile": "https://github.com/Floyd-Droid",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
