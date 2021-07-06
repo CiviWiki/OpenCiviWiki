@@ -10,7 +10,7 @@ coreapi==2.3.3
 psycopg2-binary==2.9.1
 Pillow==7.2.0
 requests==2.25.1
-django-taggit==1.5.0
+django-taggit==1.5.1
 
 # Packages for development/testing
 mock==4.0.3
