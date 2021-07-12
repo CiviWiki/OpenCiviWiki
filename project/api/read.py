@@ -92,15 +92,10 @@ def get_profile(request, user):
             else:
                 result["follow_state"] = False
 
-        print(result)
         return JsonResponse(result)
 
     except Account.DoesNotExist as e:
         return HttpResponseBadRequest(reason=str(e))
-
-    except Exception as e:
-        print('HEY! HEY!')
-        return(e)
 
 
 def get_feed(request):
