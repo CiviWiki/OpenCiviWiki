@@ -55,9 +55,11 @@ def get_profile(request, user):
             account=a.id, civi__c_type="solution", activity_type__contains="pos"
         )
 
-        solution_threads = voted_solutions.distinct().values_list(
-            "thread__id", flat=True
-        )
+        # solution_threads = voted_solutions.distinct().values_list(
+        #     "thread__id", flat=True
+        # )
+
+        solution_threads = voted_solutions.values("thread__id").distinct()
 
         for thread_id in solution_threads:
             t = Thread.objects.get(id=thread_id)
