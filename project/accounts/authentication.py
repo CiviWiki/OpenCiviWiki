@@ -21,15 +21,15 @@ from django.template.loader import render_to_string
 
 
 from accounts.utils import send_email
-from accounts.models import Account
-from .forms import AccountRegistrationForm, PasswordResetForm, RecoverUserForm
+from accounts.models import Profile
+from .forms import ProfileRegistrationForm, PasswordResetForm, RecoverUserForm
 from core.custom_decorators import require_post_params
 
 
 User = get_user_model()
 
 
-class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
+class ProfileActivationTokenGenerator(PasswordResetTokenGenerator):
     """Token Generator for Email Confirmation"""
 
 
@@ -45,7 +45,7 @@ class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
         return "%s-%s" % (ts_b36, hash)
 
 
-account_activation_token = AccountActivationTokenGenerator()
+account_activation_token = ProfileActivationTokenGenerator()
 
 
 def send_activation_email(user, domain):
@@ -68,7 +68,7 @@ def send_activation_email(user, domain):
     html_message = render_to_string("email/base_email_template.html", context)
     sender = settings.EMAIL_HOST_USER
     send_email(
-        subject="CiviWiki Account Setup",
+        subject="CiviWiki Profile Setup",
         message=message,
         sender=sender,
         recipient_list=[user.email],
@@ -99,7 +99,7 @@ def cw_login(request):
 
         if user.is_active:
 
-            account = get_object_or_404(Account, user=user)
+            account = get_object_or_404(Profile, user=user)
             request.session["login_user_firstname"] = account.first_name
             request.session["login_user_image"] = account.profile_image_thumb_url
 
@@ -135,7 +135,7 @@ def cw_register(request):
     Return:
         (200, ok) (500, Internal Error)
     """
-    form = AccountRegistrationForm(request.POST or None)
+    form = ProfileRegistrationForm(request.POST or None)
     if request.method == "POST":
         # Form Validation
         if form.is_valid():
@@ -143,11 +143,11 @@ def cw_register(request):
             password = form.clean_password()
             email = form.clean_email()
 
-            # Create a New Account
+            # Create a New Profile
             try:
                 user = User.objects.create_user(username, email, password)
 
-                account = Account(user=user)
+                account = Profile(user=user)
                 account.save()
 
                 user.is_active = True
@@ -187,7 +187,7 @@ def activate_view(request, uidb64, token):
         user = None
 
     if user is not None and account_activation_token.check_token(user, token):
-        account = Account.objects.get(user=user)
+        account = Profile.objects.get(user=user)
         if account.is_verified:
             redirect_link = {"href": "/", "label": "Back to Main"}
             template_var = {

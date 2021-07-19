@@ -10,7 +10,7 @@ from django.core.files.storage import default_storage
 from django.conf import settings
 from django.db import models
 
-from accounts.models import Account
+from accounts.models import Profile
 from .category import Category
 from .fact import Fact
 from taggit.managers import TaggableManager
@@ -71,7 +71,7 @@ image_upload_path = PathAndRename("")
 
 class Thread(models.Model):
     author = models.ForeignKey(
-        Account, default=None, null=True, on_delete=models.PROTECT
+        Profile, default=None, null=True, on_delete=models.PROTECT
     )
     category = models.ForeignKey(
         Category, default=None, null=True, on_delete=models.PROTECT

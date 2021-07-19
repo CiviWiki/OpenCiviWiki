@@ -14,7 +14,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.conf import settings
 
-from accounts.models import Account
+from accounts.models import Profile
 from .thread import Thread
 from taggit.managers import TaggableManager
 from .thread import Thread
@@ -57,7 +57,7 @@ class CiviManager(models.Manager):
         return json.dumps(data, cls=DjangoJSONEncoder)
 
     def serialize_s(self, civi, filter=None):
-        # Get account profile image, or set to default image
+        # Get profile profile image, or set to default image
         profile_image_or_default = (
             civi.author.profile_image.url or "/media/profile/default.png"
         )
@@ -97,7 +97,7 @@ class CiviManager(models.Manager):
 class Civi(models.Model):
     objects = CiviManager()
     author = models.ForeignKey(
-        Account, related_name="civis", default=None, null=True, on_delete=models.PROTECT
+        Profile, related_name="civis", default=None, null=True, on_delete=models.PROTECT
     )
     thread = models.ForeignKey(
         Thread, related_name="civis", default=None, null=True, on_delete=models.PROTECT
@@ -186,10 +186,10 @@ class Civi(models.Model):
         scores_sum = vneg_score + neg_score + pos_score + vpos_score
 
         if request_acct_id:
-            account = Account.objects.get(id=request_acct_id)
+            profile = Profile.objects.get(id=request_acct_id)
             scores_sum = (
                 1
-                if self.author in account.following.all().values_list("id", flat=True)
+                if self.author in profile.following.all().values_list("id", flat=True)
                 else 0
             )
         else:

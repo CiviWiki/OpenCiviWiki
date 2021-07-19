@@ -11,18 +11,18 @@ class IsOwnerOrReadOnly(BasePermission):
         )
 
 
-class IsAccountOwnerOrReadOnly(BasePermission):
+class IsProfileOwnerOrReadOnly(BasePermission):
     """ Custom API permission to check if request user is the owner of the account """
 
     def has_object_permission(self, request, view, obj):
         return (request.method in SAFE_METHODS) or (obj.user == request.user)
 
 
-class IsAccountOwnerOrDuringRegistrationOrReadOnly(IsAccountOwnerOrReadOnly):
+class IsProfileOwnerOrDuringRegistrationOrReadOnly(IsProfileOwnerOrReadOnly):
     """ """
     def has_object_permission(self, request, view, obj):
         if obj.full_account:
             return super(
-                IsAccountOwnerOrDuringRegistrationOrReadOnly, self
+                IsProfileOwnerOrDuringRegistrationOrReadOnly, self
             ).has_object_permission(request, view, obj)
         return True

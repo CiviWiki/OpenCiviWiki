@@ -17,15 +17,15 @@ from django.utils.http import urlsafe_base64_encode
 from django.urls import reverse_lazy
 from django.template.response import TemplateResponse
 
-from accounts.models import Account
+from accounts.models import Profile
 from core.custom_decorators import login_required
 
-from .forms import AccountRegistrationForm, UpdateAccount
+from .forms import ProfileRegistrationForm, UpdateProfile
 from .models import User
 from .authentication import send_activation_email
 
 
-class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
+class ProfileActivationTokenGenerator(PasswordResetTokenGenerator):
     """Token Generator for Email Confirmation"""
 
     key_salt = "django.contrib.auth.tokens.PasswordResetTokenGenerator"
@@ -46,7 +46,7 @@ class RegisterView(FormView):
     """
 
     template_name = "accounts/register/register.html"
-    form_class = AccountRegistrationForm
+    form_class = ProfileRegistrationForm
     success_url = "/"
 
     def _create_user(self, form):
@@ -56,7 +56,7 @@ class RegisterView(FormView):
 
         user = User.objects.create_user(username, email, password)
 
-        account = Account(user=user)
+        account = Profile(user=user)
         account.save()
 
         user.is_active = True
@@ -105,8 +105,8 @@ class PasswordResetCompleteView(auth_views.PasswordResetCompleteView):
 def settings_view(request):
     account = request.user.account_set.first()
     if request.method == "POST":
-        instance = Account.objects.get(user=request.user)
-        form = UpdateAccount(
+        instance = Profile.objects.get(user=request.user)
+        form = UpdateProfile(
             request.POST,
             initial={"username": request.user.username, "email": request.user.email},
             instance=instance,
@@ -114,7 +114,7 @@ def settings_view(request):
         if form.is_valid():
             form.save()
     else:
-        form = UpdateAccount(
+        form = UpdateProfile(
             initial={
                 "username": request.user.username,
                 "email": request.user.email,
