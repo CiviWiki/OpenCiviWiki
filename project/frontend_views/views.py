@@ -141,7 +141,9 @@ def issue_thread(request, thread_id=None):
         },
         "contributors": [
             Profile.objects.chip_summarize(a)
-            for a in Profile.objects.filter(pk__in=c_qs.values("author").distinct())
+            for a in Profile.objects.filter(
+                pk__in=civis.distinct("author").values_list("author", flat=True)
+            )
         ],
         "category": {"id": t.category.id, "name": t.category.name},
         "categories": [{"id": c.id, "name": c.name} for c in Category.objects.all()],
