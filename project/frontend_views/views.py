@@ -8,7 +8,8 @@ from django.db.models import F
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template.response import TemplateResponse
 
-from api.models import Category, Account, Thread, Civi, Activity, Invitation
+from api.models import Category, Thread, Civi, Activity, Invitation
+from accounts.model import Profile
 from api.forms import UpdateProfileImage
 from core.constants import US_STATES
 from core.custom_decorators import beta_blocker, login_required, full_account
@@ -20,7 +21,7 @@ def base_view(request):
     if not request.user.is_authenticated:
         return TemplateResponse(request, "static_templates/landing.html", {})
 
-    a = Account.objects.get(user=request.user)
+    a = Profile.objects.get(user=request.user)
     if "login_user_image" not in request.session.keys():
         request.session["login_user_image"] = a.profile_image_thumb_url
 
@@ -77,7 +78,7 @@ def user_profile(request, username=None):
 
 @login_required
 def user_setup(request):
-    a = Account.objects.get(user=request.user)
+    a = Profile.objects.get(user=request.user)
     if a.full_account:
         return HttpResponseRedirect("/")
         # start temp rep rendering TODO: REMOVE THIS
@@ -95,7 +96,7 @@ def issue_thread(request, thread_id=None):
     if not thread_id:
         return HttpResponseRedirect("/404")
 
-    req_acct = Account.objects.get(user=request.user)
+    req_acct = Profile.objects.get(user=request.user)
     t = Thread.objects.get(id=thread_id)
     c_qs = Civi.objects.filter(thread_id=thread_id).exclude(c_type="response")
     c_scored = [c.dict_with_score(req_acct.id) for c in c_qs]
@@ -119,8 +120,8 @@ def issue_thread(request, thread_id=None):
             "last_name": t.author.last_name,
         },
         "contributors": [
-            Account.objects.chip_summarize(a)
-            for a in Account.objects.filter(
+            Profile.objects.chip_summarize(a)
+            for a in Profile.objects.filter(
                 pk__in=c_qs.distinct("author").values_list("author", flat=True)
             )
         ],
@@ -217,7 +218,7 @@ def beta_register(request, email="", token=""):
         else:
             invitee_user = User.objects.get(email=email)
 
-        account = Account.objects.get(user=invitee_user)
+        account = Profile.objects.get(user=invitee_user)
         if account.beta_access:
             redirect_link = {"href": "/", "label": "Go to CiviWiki"}
             template_var = {
@@ -232,7 +233,7 @@ def beta_register(request, email="", token=""):
             invitation.invitee_user = invitee_user
             invitation.save()
 
-            account = Account.objects.get(user=invitee_user)
+            account = Profile.objects.get(user=invitee_user)
             account.beta_access = True
             account.save()
 
