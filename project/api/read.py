@@ -54,9 +54,8 @@ def get_profile(request, user):
         voted_solutions = Activity.objects.filter(
             account=a.id, civi__c_type="solution", activity_type__contains="pos"
         )
-        solution_threads = voted_solutions.distinct("thread__id").values_list(
-            "thread__id", flat=True
-        )
+
+        solution_threads = voted_solutions.values("thread__id").distinct()
 
         for thread_id in solution_threads:
             t = Thread.objects.get(id=thread_id)
@@ -90,6 +89,7 @@ def get_profile(request, user):
                 result["follow_state"] = True
             else:
                 result["follow_state"] = False
+
         return JsonResponse(result)
 
     except Account.DoesNotExist as e:

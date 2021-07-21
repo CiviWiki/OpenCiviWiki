@@ -114,7 +114,7 @@ def createCivi(request):
         else:  # not a reply, a regular civi
             c_qs = Civi.objects.filter(thread_id=thread_id)
             accounts = Account.objects.filter(
-                pk__in=c_qs.distinct("author").values_list("author", flat=True)
+                pk__in=c_qs.values("author").distinct()
             )
             data = {
                 "command": "add",
@@ -325,9 +325,10 @@ def editUser(request):
     try:
         account.save()
     except Exception as e:
+        # print('EXCEPTION THROWN HERE!! ')
         return HttpResponseServerError(reason=str(e))
 
-    account.refresh_from_db()
+        account.refresh_from_db()
 
     return JsonResponse(Account.objects.summarize(account))
 
