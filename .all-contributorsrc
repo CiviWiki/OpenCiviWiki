@@ -568,6 +568,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "jabrielcjones",
+      "name": "Jabriel Jones",
+      "avatar_url": "https://avatars.githubusercontent.com/u/32472383?v=4",
+      "profile": "https://github.com/jabrielcjones",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
