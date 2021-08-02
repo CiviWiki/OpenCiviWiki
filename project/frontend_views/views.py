@@ -121,7 +121,7 @@ def issue_thread(request, thread_id=None):
         "contributors": [
             Account.objects.chip_summarize(a)
             for a in Account.objects.filter(
-                pk__in=c_qs.distinct("author").values_list("author", flat=True)
+                pk__in=c_qs.values("author").distinct()
             )
         ],
         "category": {"id": t.category.id, "name": t.category.name},
