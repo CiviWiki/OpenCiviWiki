@@ -43,7 +43,7 @@ class CiviManager(models.Manager):
                 "first_name": civi.author.first_name,
                 "last_name": civi.author.last_name,
             },
-            "hashtags": [hashtag.title for hashtag in civi.hashtags.all()],
+            "tags": [tag.title for tag in civi.tags.all()],
             "created": "{0} {1}, {2}".format(
                 month_name[civi.created.month], civi.created.day, civi.created.year
             ),
@@ -73,7 +73,7 @@ class CiviManager(models.Manager):
                 first_name=civi.author.first_name,
                 last_name=civi.author.last_name,
             ),
-            "hashtags": [h.title for h in civi.hashtags.all()],
+            "tags": [h.title for h in civi.tags.all()],
             "created": "{0} {1}, {2}".format(
                 month_name[civi.created.month], civi.created.day, civi.created.year
             ),
@@ -267,7 +267,7 @@ class Civi(models.Model):
             ],
             "created": self.created_date_str,
             # Not Implemented Yet
-            "hashtags": [],
+            "tags": [],
             "attachments": [
                 {"id": img.id, "url": img.image_url} for img in self.images.all()
             ],
