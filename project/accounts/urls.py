@@ -11,7 +11,6 @@ urlpatterns = [
         authentication.activate_view,
         name="activate_account",
     ),
-    url(r"^beta_register", authentication.beta_register, name="beta_register"),
     url(
         r"^forgot/$",
         auth_views.PasswordResetView.as_view(),

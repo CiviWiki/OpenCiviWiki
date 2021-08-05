@@ -148,8 +148,6 @@ def cw_register(request):
                 user = User.objects.create_user(username, email, password)
 
                 account = Account(user=user)
-                if hasattr(settings, 'CLOSED_BETA') and not settings.CLOSED_BETA:
-                    account.beta_access = True
                 account.save()
 
                 user.is_active = True
@@ -158,74 +156,6 @@ def cw_register(request):
                 domain = get_current_site(request).domain
 
                 send_activation_email(user, domain)
-
-                login(request, user)
-                return HttpResponse()
-
-            except Exception as e:
-                return HttpResponseServerError(reason=str(e))
-
-        else:
-            response = {
-                "success": False,
-                "errors": [error[0] for error in form.errors.values()],
-            }
-            return JsonResponse(response, status=400)
-    else:
-        return HttpResponseBadRequest(reason="POST Method Required")
-
-
-@sensitive_post_parameters("password")
-@require_post_params(params=["username", "password", "email", "beta_token"])
-def beta_register(request):
-    """ Special registration request for beta access """
-    # Beta Check
-    beta_token = request.POST.get("beta_token", "")
-    if beta_token:
-        email = request.POST.get("email" "")
-        try:
-            invitation = Invitation.objects.get(invitee_email=email)
-        except Invitation.DoesNotExist:
-            response_data = {
-                "message": "Beta invitation does not exist for this email",
-                "error": "NO_BETA_INVITE",
-            }
-            return JsonResponse(response_data, status=400)
-
-        if invitation.verification_code != beta_token:
-            response_data = {
-                "message": "The beta token is not valid",
-                "error": "INVALID_BETA_TOKEN",
-            }
-            return JsonResponse(response_data, status=400)
-
-    else:
-        response_data = {"message": "Missing Beta Token", "error": "MISSING_BETA_TOKEN"}
-        return JsonResponse(response_data, status=400)
-
-    form = AccountRegistrationForm(request.POST or None)
-    if request.method == "POST":
-        # Form Validation
-        if form.is_valid():
-            username = form.clean_username()
-            password = form.clean_password()
-            email = form.clean_email()
-
-            # Create a New Account
-            try:
-                User.objects.create_user(username, email, password)
-                user = authenticate(username=username, password=password)
-                account = Account(user=user)
-                account.beta_access = True
-                account.is_verfied = True
-                account.save()
-
-                invitation = Invitation.objects.get(invitee_email=email)
-                invitation.invitee_user = user
-                invitation.save()
-
-                user.is_active = True
-                user.save()
 
                 login(request, user)
                 return HttpResponse()

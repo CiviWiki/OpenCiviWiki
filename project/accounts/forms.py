@@ -78,7 +78,7 @@ class AccountRegistrationForm(ModelForm):
             - Username can only be made of lower case alphanumeric values
             - Username cannot match entries from RESERVED_USERNAMES
 
-        Retruns username
+        Returns username
         """
 
         username = self.cleaned_data.get("username")
@@ -102,7 +102,7 @@ class AccountRegistrationForm(ModelForm):
             - At least 4 characters in length
             - Cannot be all numbers
 
-        Retruns password
+        Returns password
         """
 
         password = self.cleaned_data.get("password")
@@ -137,7 +137,7 @@ class PasswordResetForm(SetPasswordForm):
             - At least 4 characters in length
             - Cannot be all numbers
 
-        Retruns new password
+        Returns new password
         """
 
         password = self.cleaned_data.get("new_password1")
