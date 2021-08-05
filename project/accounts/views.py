@@ -54,8 +54,6 @@ class RegisterView(FormView):
         user = User.objects.create_user(username, email, password)
 
         account = Account(user=user)
-        if hasattr(settings, 'CLOSED_BETA') and not settings.CLOSED_BETA:
-            account.beta_access = True
         account.save()
 
         user.is_active = True
