@@ -12,4 +12,3 @@ from .rebuttal import Rebuttal
 from .response import Response
 from .thread import Thread
 from .activity import Activity
-from .invitation import Invitation

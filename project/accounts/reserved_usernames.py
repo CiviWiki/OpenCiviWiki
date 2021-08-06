@@ -65,8 +65,6 @@ RESERVED_USERNAMES = [
     "ideas",
     "index",
     "info",
-    "invitations",
-    "invite",
     "job",
     "jobs",
     "json",

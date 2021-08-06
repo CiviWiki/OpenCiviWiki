@@ -25,7 +25,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from api.forms import UpdateProfileImage
 from api.models import Thread
 from accounts.utils import send_mass_email
-from .models import Account, Activity, Category, Civi, CiviImage, Invitation
+from .models import Account, Activity, Category, Civi, CiviImage
 from core.custom_decorators import require_post_params
 from core.constants import US_STATES
 
@@ -576,86 +576,3 @@ def editUserCategories(request):
         return HttpResponseBadRequest(reason=str(e))
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
-
-
-@login_required
-@user_passes_test(lambda u: u.is_staff)
-def invite(request):
-    """This function is used to invite other people to the Civiwiki Beta"""
-    emails = request.POST.getlist("emailList[]", "")
-    custom_message = request.POST.get("custom_message", "")
-
-    if emails:
-        user = User.objects.get(username=request.user.username)
-        user_account = Account.objects.get(user=user)
-        did_not_invite = []
-
-        # TODO: Move this to string templates
-        if custom_message:
-            email_body = (
-                "{host_name} has invited you to be part of CiviWiki Beta "
-                "with the following message: {custom_message}"
-            ).format(host_name=user_account.full_name, custom_message=custom_message)
-        else:
-            email_body = (
-                "{host_name} has invited you to be part of CiviWiki Beta. "
-                "Follow the link below to get registered."
-            ).format(host_name=user_account.full_name)
-
-        email_messages = []
-        valid_emails = []
-        for email in emails:
-            if Invitation.objects.filter(invitee_email=email).exists():
-                did_not_invite.append(email)
-            else:
-                valid_emails.append(email)
-                verification_hash = uuid.uuid4().hex[:31]
-                data = {
-                    "host_user": user,
-                    "invitee_email": email,
-                    "verification_code": verification_hash,
-                }
-
-                domain = get_current_site(request).domain
-                base_url = "http://{domain}/beta_register/{email}/{token}"
-                url_with_code = base_url.format(
-                    domain=domain, email=email, token=verification_hash
-                )
-
-                email_context = {
-                    "title": "You're Invited to Join CiviWiki Beta",
-                    "greeting": "You're Invited to Join CiviWiki Beta",
-                    "body": email_body,
-                    "link": url_with_code,
-                    "recipient": [email],
-                }
-                email_messages.append(email_context)
-
-                new_invitation = Invitation(**data)
-                new_invitation.save()
-
-        if email_messages:
-            email_subject = "Invitation to CiviWiki"
-            send_mass_email(subject=email_subject, contexts=email_messages)
-
-        if len(did_not_invite) == len(emails):
-            response_data = {
-                "message": "Invitations exist for submitted email(s). No new invitations sent",
-                "error": "INVALID_EMAIL_DATA",
-            }
-            return JsonResponse(response_data, status=400)
-
-        invitations = (
-            Invitation.objects.filter_by_host(host_user=user)
-            .order_by("-date_created")
-            .all()
-        )
-        invitees = [invitation.summarize() for invitation in invitations]
-
-        response_data = {"did_not_invite": did_not_invite, "invitees": invitees}
-        return JsonResponse(response_data)
-
-    else:
-        # Return an 'invalid login' error message.
-        response = {"message": "Invalid Email Data", "error": "INVALID_EMAIL_DATA"}
-        return JsonResponse(response, status=400)

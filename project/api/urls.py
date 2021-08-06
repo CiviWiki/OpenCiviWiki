@@ -34,7 +34,6 @@ urlpatterns += [
     url(r"^rate_civi/$", write.rateCivi, name="rate civi"),
     url(r"^edit_civi/$", write.editCivi, name="edit civi"),
     url(r"^delete_civi/$", write.deleteCivi, name="delete civi"),
-    url(r"^invite/$", write.invite, name="invite users"),
     url(r"^edituser/$", write.editUser, name="edit user"),
     url(r"^upload_profile/$", write.uploadProfileImage, name="upload profile"),
     url(r"^upload_images/$", write.uploadCiviImage, name="upload images"),
