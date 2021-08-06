@@ -134,7 +134,7 @@ def get_thread(request, thread_id):
         data = {
             "title": t.title,
             "summary": t.summary,
-            "hashtags": t.hashtags.all().values(),
+            "tags": t.tags.all().values(),
             "author": {
                 "username": t.author.user.username,
                 "profile_image": t.author.profile_image.url
