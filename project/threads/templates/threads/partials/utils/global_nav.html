@@ -5,7 +5,7 @@
     <div class="nav-wrapper ">
         <!-- Left Nav (Logo) -->
         <a href="/" class="logo nav-item">
-            <img class="logo-img" src="{% static "img/logo-civiwiki-tree-white.svg" %}" alt="CiviWiki" height="36px">
+            <img class="logo-img" src="{% static 'img/logo-civiwiki-tree-white.svg' %}" alt="CiviWiki" height="36px">
             <span class="wordmark">CiviWiki</span>
         </a>
 
@@ -25,10 +25,6 @@
             </div>
             <div class="dropdown-menu-wrapper hide" id="js-dropdown-menu">
                 <div class="dropdown-menu">
-                    {% if request.user.is_staff %}
-                    <a class="dropdown-item" href="/invite">Invite</a>
-                    <div class="divider"></div>
-                    {% endif %}
                     <a class="dropdown-item" href="/" id="my-feed">My Feed</a>
                     <a class="dropdown-item" id="my-profile-button" href="/profile">My Profile</a>
                     <div class="divider"></div>
@@ -57,7 +53,7 @@
     {% include "partials/notifications/notification_item.html" %}
 </script>
 
-<script type="text/javascript" src="{% static "js/notifications.js" %}"></script>
+<script type="text/javascript" src="{% static 'js/notifications.js' %}"></script>
 <script src="{% static 'notifications/notify.js' %}" type="text/javascript"></script>
 {% register_notify_callbacks fetch=99 callbacks='fill_notification_list,fill_notification_badge,render_notifications' %}
 
