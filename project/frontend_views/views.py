@@ -9,7 +9,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template.response import TemplateResponse
 
 
-from api.models import Category, Account, Thread, Civi, Activity, Invitation
+from api.models import Category, Account, Thread, Civi, Activity
 from api.forms import UpdateProfileImage, UpdateAccount
 from core.constants import US_STATES
 from core.custom_decorators import login_required, full_account
@@ -166,9 +166,10 @@ def create_group(request):
 def settings_view(request):
     account = request.user.account_set.first()
     if request.method == 'POST':
+        instance = Account.objects.get(user = request.user)
         form = UpdateAccount(request.POST,initial={
                 'username' : request.user.username,
-                'email'  : request.user.email})
+                'email'  : request.user.email},instance=instance)
         if form.is_valid():
             form.save()
     else:
