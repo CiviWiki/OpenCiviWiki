@@ -127,6 +127,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/Floyd-Droid"><img src="https://avatars.githubusercontent.com/u/67757904?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jourdon Floyd</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=Floyd-Droid" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/jabrielcjones"><img src="https://avatars.githubusercontent.com/u/32472383?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jabriel Jones</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=jabrielcjones" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/dummy26"><img src="https://avatars.githubusercontent.com/u/40134444?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Aniket Banyal</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=dummy26" title="Documentation">📖</a> <a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=dummy26" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/Shadyaobuya"><img src="https://avatars.githubusercontent.com/u/79209638?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Shadyaobuya</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=Shadyaobuya" title="Code">💻</a></td>
   </tr>
 </table>
 
