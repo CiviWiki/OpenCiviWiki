@@ -66,7 +66,7 @@ urlpatterns = [
         PasswordResetCompleteView.as_view(),
         name='accounts_password_reset_complete',
     ),
-    url(r"^settings$",settings_view, name="settings"),
+    url(r"^settings$", settings_view, name="settings"),
     url(
         "^inbox/notifications/",
         include("notifications.urls", namespace="notifications"),

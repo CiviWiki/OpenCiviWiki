@@ -199,6 +199,7 @@ class RecoverUserForm(AuthRecoverUserForm):
                 html_message=html_message,
             )
 
+
 class UpdateAccount(forms.ModelForm):
     """
     Form for updating Account data

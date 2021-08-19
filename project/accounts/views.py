@@ -107,7 +107,7 @@ def settings_view(request):
         instance = Account.objects.get(user=request.user)
         form = UpdateAccount(request.POST, initial={
                 'username': request.user.username,
-                'email' : request.user.email}, instance=instance)
+                'email': request.user.email}, instance=instance)
         if form.is_valid():
             form.save()
     else:
