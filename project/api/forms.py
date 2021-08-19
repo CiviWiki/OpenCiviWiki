@@ -7,7 +7,7 @@ User = get_user_model()
 
 
 class UpdatePassword(forms.ModelForm):
-    """
+    """>
     Form for updating User Password
     """
 
@@ -48,24 +48,6 @@ class UpdatePassword(forms.ModelForm):
         else:
             raise forms.ValidationError("Both password fields need to be filled out.")
         return clean_data
-
-
-class UpdateAccount(forms.ModelForm):
-    """
-    Form for updating Account data
-    """
-
-    class Meta:
-        model = Account
-        fields = ["first_name", "last_name", "about_me", "profile_image", 'username', 'email']
-
-    first_name = forms.CharField(label="First Name", max_length=63, required=False)
-    last_name = forms.CharField(label="Last Name", max_length=63, required=False)
-    about_me = forms.CharField(label="About Me", max_length=511, required=False)
-    email = forms.EmailField(label="Email", disabled=True)
-    username = forms.CharField(label='Username', disabled=True)
-    profile_image = forms.ImageField(required=False)
-
 
 class UpdateProfileImage(forms.ModelForm):
     """

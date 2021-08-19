@@ -15,10 +15,12 @@ from django.utils.http import int_to_base36
 from django.utils.crypto import salted_hmac
 from django.utils.http import urlsafe_base64_encode
 from django.urls import reverse_lazy
+from django.template.response import TemplateResponse
 
 from api.models.account import Account
+from core.custom_decorators import login_required
 
-from .forms import AccountRegistrationForm
+from .forms import AccountRegistrationForm, UpdateAccount
 from .models import User
 from .authentication import send_activation_email
 
@@ -96,3 +98,24 @@ class PasswordResetConfirmView(auth_views.PasswordResetConfirmView):
 
 class PasswordResetCompleteView(auth_views.PasswordResetCompleteView):
     template_name = 'accounts/users/password_reset_complete.html'
+
+
+@login_required
+def settings_view(request):
+    account = request.user.account_set.first()
+    if request.method == 'POST':
+        instance = Account.objects.get(user=request.user)
+        form = UpdateAccount(request.POST, initial={
+                'username': request.user.username,
+                'email' : request.user.email}, instance=instance)
+        if form.is_valid():
+            form.save()
+    else:
+        form = UpdateAccount(initial={
+            'username': request.user.username,
+            'email': request.user.email,
+            'first_name': account.first_name or None,
+            'last_name': account.last_name or None,
+            'about_me': account.about_me or None
+            })
+    return TemplateResponse(request, "user/update_settings.html", {'form': form})

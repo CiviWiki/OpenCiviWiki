@@ -10,7 +10,7 @@ from django.template.response import TemplateResponse
 
 
 from api.models import Category, Account, Thread, Civi, Activity
-from api.forms import UpdateProfileImage, UpdateAccount
+from api.forms import UpdateProfileImage
 from core.constants import US_STATES
 from core.custom_decorators import login_required, full_account
 
@@ -160,27 +160,6 @@ def issue_thread(request, thread_id=None):
 @full_account
 def create_group(request):
     return TemplateResponse(request, "newgroup.html", {})
-
-
-@login_required
-def settings_view(request):
-    account = request.user.account_set.first()
-    if request.method == 'POST':
-        instance = Account.objects.get(user = request.user)
-        form = UpdateAccount(request.POST,initial={
-                'username' : request.user.username,
-                'email'  : request.user.email},instance=instance)
-        if form.is_valid():
-            form.save()
-    else:
-        form = UpdateAccount(initial={
-            'username':request.user.username,
-            'email':request.user.email,
-            'first_name':account.first_name or None,
-            'last_name':account.last_name or None,
-            'about_me':account.about_me or None
-            })
-    return TemplateResponse(request, "user/update_settings.html",{'form' : form})
 
 
 def login_view(request):
