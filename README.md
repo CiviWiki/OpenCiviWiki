@@ -128,6 +128,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
     <td align="center"><a href="https://github.com/jabrielcjones"><img src="https://avatars.githubusercontent.com/u/32472383?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jabriel Jones</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=jabrielcjones" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/dummy26"><img src="https://avatars.githubusercontent.com/u/40134444?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Aniket Banyal</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=dummy26" title="Documentation">📖</a> <a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=dummy26" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/Shadyaobuya"><img src="https://avatars.githubusercontent.com/u/79209638?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Shadyaobuya</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=Shadyaobuya" title="Code">💻</a></td>
+    <td align="center"><a href="https://anshu-jindal.github.io/portfolio1/"><img src="https://avatars.githubusercontent.com/u/62394488?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Anshu Jindal</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=Anshu-jindal" title="Documentation">📖</a></td>
   </tr>
 </table>
 
