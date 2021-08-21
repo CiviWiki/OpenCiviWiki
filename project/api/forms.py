@@ -7,7 +7,7 @@ User = get_user_model()
 
 
 class UpdatePassword(forms.ModelForm):
-    """>
+    """
     Form for updating User Password
     """
 
@@ -48,6 +48,7 @@ class UpdatePassword(forms.ModelForm):
         else:
             raise forms.ValidationError("Both password fields need to be filled out.")
         return clean_data
+
 
 class UpdateProfileImage(forms.ModelForm):
     """
