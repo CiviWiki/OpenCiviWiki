@@ -11,7 +11,6 @@ urlpatterns = [
     url(r"^thread/(?P<thread_id>\w+)$", v.issue_thread, name="issue thread"),
     url(r"^setup$", v.user_setup, name="user setup"),
     url(r"^profile$", v.user_profile, name="default_profile"),
-    url(r"^settings$", v.settings_view, name="settings"),
     url(r"^$", v.base_view, name="base"),
     url(r"^thread/(?P<thread_id>\w+)/csv$", v.civi2csv, name="civi2csv"),
 ]

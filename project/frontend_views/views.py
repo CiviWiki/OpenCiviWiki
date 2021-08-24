@@ -8,6 +8,7 @@ from django.db.models import F
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template.response import TemplateResponse
 
+
 from api.models import Category, Account, Thread, Civi, Activity
 from api.forms import UpdateProfileImage
 from core.constants import US_STATES
@@ -159,17 +160,6 @@ def issue_thread(request, thread_id=None):
 @full_account
 def create_group(request):
     return TemplateResponse(request, "newgroup.html", {})
-
-
-@login_required
-def settings_view(request):
-
-    response_data = {
-        "username": request.user.username,
-        "email": request.user.email,
-    }
-
-    return TemplateResponse(request, "user/settings.html", response_data)
 
 
 def login_view(request):

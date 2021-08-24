@@ -25,7 +25,7 @@ from django.views.generic.base import RedirectView
 from api import urls as api
 from accounts import urls as accounts_urls
 from accounts.views import (RegisterView, PasswordResetView, PasswordResetDoneView,
-                            PasswordResetConfirmView, PasswordResetCompleteView)
+                            PasswordResetConfirmView, PasswordResetCompleteView, settings_view)
 from frontend_views import urls as frontend_views
 
 
@@ -66,6 +66,7 @@ urlpatterns = [
         PasswordResetCompleteView.as_view(),
         name='accounts_password_reset_complete',
     ),
+    url(r"^settings$", settings_view, name="settings"),
     url(
         "^inbox/notifications/",
         include("notifications.urls", namespace="notifications"),

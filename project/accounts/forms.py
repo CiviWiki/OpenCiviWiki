@@ -15,10 +15,11 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
 
 from accounts.utils import send_email
 from .reserved_usernames import RESERVED_USERNAMES
-
+from api.models import Account
 
 User = get_user_model()
 
@@ -155,9 +156,19 @@ class RecoverUserForm(AuthRecoverUserForm):
     """
     Send custom recovery mail with a task runner mostly taken from PasswordResetForm in auth
     """
-    def save(self, domain_override=None, subject_template_name=None, email_template_name=None,
-             use_https=False, token_generator=default_token_generator, from_email=None,
-             request=None, html_email_template_name=None, extra_email_context=None):
+
+    def save(
+        self,
+        domain_override=None,
+        subject_template_name=None,
+        email_template_name=None,
+        use_https=False,
+        token_generator=default_token_generator,
+        from_email=None,
+        request=None,
+        html_email_template_name=None,
+        extra_email_context=None,
+    ):
         """
         Generates a one-use only link for resetting password and sends to the
         user.
@@ -197,3 +208,27 @@ class RecoverUserForm(AuthRecoverUserForm):
                 recipient_list=[email],
                 html_message=html_message,
             )
+
+
+class UpdateAccount(forms.ModelForm):
+    """
+    Form for updating Account data
+    """
+
+    class Meta:
+        model = Account
+        fields = [
+            "first_name",
+            "last_name",
+            "about_me",
+            "profile_image",
+            "username",
+            "email",
+        ]
+
+    first_name = forms.CharField(label="First Name", max_length=63, required=False)
+    last_name = forms.CharField(label="Last Name", max_length=63, required=False)
+    about_me = forms.CharField(label="About Me", max_length=511, required=False)
+    email = forms.EmailField(label="Email", disabled=True)
+    username = forms.CharField(label="Username", disabled=True)
+    profile_image = forms.ImageField(required=False)
