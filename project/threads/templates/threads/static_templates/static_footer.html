@@ -1,15 +1,16 @@
 <!-- Footer for static pages -->
 {% load static %}
+{% load i18n %}
 
 <footer class="page-footer static-footer">
     <!-- Top block for external links -->
     <div class="container">
         <div class="row center">
             <div class="col s6 m3 push-m6 right-align">
-                <div class="external-link-header subtitle-lato grey-text">Connect with Us</div>
+                <div class="external-link-header subtitle-lato grey-text">{% trans "Connect with Us" %}</div>
                 <div class="external-links grey-text text-darken-2 right-align">
                     <div class="external-link-item">
-                        <a class="grey-text text-darken-1" href="mailto:mitchell@civiwiki.org">Email</a>
+                        <a class="grey-text text-darken-1" href="mailto:mitchell@civiwiki.org">{% trans "Email" %}</a>
                     </div>
                     <div class="external-link-item">
                         <a class="grey-text text-darken-1" href="https://www.facebook.com/CiviWiki/" target="_blank">Facebook</a>
@@ -20,18 +21,18 @@
                 </div>
             </div>
             <div class="col s6 m3 push-m6 right-align">
-                <div class="external-link-header subtitle-lato grey-text">Developers</div>
+                <div class="external-link-header subtitle-lato grey-text">{% trans "Developers" %}</div>
                 <div class="external-links grey-text text-darken-2 right-align">
                     <div class="external-link-item">
                         <a class="grey-text text-darken-1" href="https://github.com/CiviWiki/OpenCiviWiki" target="_blank">GitHub</a></div>
                     <div class="external-link-item">
-                        <a class="grey-text text-darken-1" href="https://github.com/CiviWiki/OpenCiviWiki/issues" target="_blank">Open Issues</a>
+                        <a class="grey-text text-darken-1" href="https://github.com/CiviWiki/OpenCiviWiki/issues" target="_blank">{% trans "Open Issues" %}</a>
                     </div>
                     <div class="external-link-item">
-                        <a class="grey-text text-darken-1" href="https://waffle.io/CiviWiki/OpenCiviWiki" target="_blank">Development Roadmap</a>
+                        <a class="grey-text text-darken-1" href="https://waffle.io/CiviWiki/OpenCiviWiki" target="_blank">{% trans "Development Roadmap" %}</a>
                     </div>
                     <div class="external-link-item">
-                        <a class="grey-text text-darken-1" href="https://riot.im/app/#/room/#CiviWiki:matrix.org" target="_blank">Live Chat on Matrix</a>
+                        <a class="grey-text text-darken-1" href="https://riot.im/app/#/room/#CiviWiki:matrix.org" target="_blank">{% trans "Live Chat on Matrix" %}</a>
                     </div>
                 </div>
             </div>
@@ -44,7 +45,7 @@
                 <a href="/"><object class="logo-img" type="image/svg+xml" data="{% static "img/logo-civiwiki-tree-white.svg" %}" height="32px"></object><span class="wordmark">CiviWiki</span></a>
                 <div class="footer-right right">
                     <!-- TODO: <a class="grey-text" href="policy">Privacy Policy</a> | -->
-                    <a class="grey-text" href="mailto:mitchell@civiwiki.org">Contact Us (mitchell@civiwiki.org)</a>
+                    <a class="grey-text" href="mailto:mitchell@civiwiki.org">{% trans "Contact Us" %} (mitchell@civiwiki.org)</a>
                 </div>
             </div>
         </div>
