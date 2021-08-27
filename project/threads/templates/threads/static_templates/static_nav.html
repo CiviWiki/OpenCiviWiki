@@ -1,5 +1,7 @@
 <!-- Navbar for static pages -->
 {% load static %}
+{% load i18n %}
+
 
 <nav class="static-nav transparent">
     <div class="nav-wrapper">
@@ -11,10 +13,10 @@
 
         <!-- Right Nav -->
         <ul class="right hide-on-med-and-down">
-            <li><a class="dark-white-text menu-text" href="howitworks">how it works</a></li>
-            <li><a class="dark-white-text menu-text" href="about">about us</a></li>
-            <li><a class="dark-white-text menu-text" href="support_us">support us</a></li>
-            <li><a href="login" class="waves-effect waves-light btn login-btn">Login / Sign Up</a></li>
+            <li><a class="dark-white-text menu-text" href="howitworks">{% trans "how it works" %}</a></li>
+            <li><a class="dark-white-text menu-text" href="about">{% trans "about us" %}</a></li>
+            <li><a class="dark-white-text menu-text" href="support_us">{% trans "support us" %}</a></li>
+            <li><a href="login" class="waves-effect waves-light btn login-btn">{% trans "Login" %} / {% trans "Sign Up" %}</a></li>
         </ul>
 
         <!-- Side Nav for mobile view-->
