@@ -7,7 +7,8 @@ Production settings file to select proper environment variables.
 import os
 
 # False if not in os.environ
-DEBUG = os.getenv("DEBUG", False)
+DEBUG = os.getenv("DEBUG", True)
+print(DEBUG, 'DEBUGDEBUGDEBUGDEBUGDEBUGDEBUG')
 
 # defaults to second value if not found in os.environ
 DJANGO_HOST = os.getenv("DJANGO_HOST", "LOCALHOST")
@@ -45,7 +46,6 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     # 'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
-    "django.middleware.locale.LocaleMiddleware"
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
