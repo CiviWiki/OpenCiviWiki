@@ -8,7 +8,6 @@ import os
 
 # False if not in os.environ
 DEBUG = os.getenv("DEBUG", True)
-print(DEBUG, 'DEBUGDEBUGDEBUGDEBUGDEBUGDEBUG')
 
 # defaults to second value if not found in os.environ
 DJANGO_HOST = os.getenv("DJANGO_HOST", "LOCALHOST")
