@@ -34,6 +34,8 @@ def get_card(request, user):
             a, Account.objects.get(user=request.user)
         )
         return JsonResponse(result)
+    except User.DoesNotExist:
+        return HttpResponseBadRequest(reason=f"User with username {user} not found")
     except Account.DoesNotExist as e:
         return HttpResponseBadRequest(reason=str(e))
     except Exception as e:
@@ -168,6 +170,10 @@ def get_thread(request, thread_id):
         t.save()
 
         return json_response(data)
+    except Thread.DoesNotExist:
+        return HttpResponseBadRequest(reason=f"Thread with id:{thread_id} does not exist")
+    except Account.DoesNotExist:
+        return HttpResponseBadRequest(reason=f"Account with username:{request.user.username} does not exist")
     except Exception as e:
         return HttpResponseBadRequest(reason=str(e))
 
@@ -215,5 +221,9 @@ def get_responses(request, thread_id, civi_id):
         civis = sorted(c_scored, key=lambda c: c["score"], reverse=True)
 
         return JsonResponse(civis, safe=False)
+    except Account.DoesNotExist:
+        return HttpResponseBadRequest(reason=f"Account with user:{request.user.username} does not exist")
+    except Civi.DoesNotExist:
+        return HttpResponseBadRequest(reason=f"Civi with id:{civi_id} does not exist")
     except Exception as e:
         return HttpResponseBadRequest(reason=str(e))
