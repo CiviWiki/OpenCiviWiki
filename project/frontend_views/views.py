@@ -17,6 +17,7 @@ from core.custom_decorators import login_required, full_account
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
+
 def base_view(request):
     if not request.user.is_authenticated:
         return TemplateResponse(request, "static_templates/landing.html", {})
