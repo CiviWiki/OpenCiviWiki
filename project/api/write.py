@@ -59,6 +59,8 @@ def new_thread(request):
         new_t.save()
 
         return JsonResponse({"data": "success", "thread_id": new_t.pk})
+    except Account.DoesNotExist:
+        return HttpResponseServerError(reason=f"Account with user:{request.user.username} does not exist")
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
 
@@ -272,6 +274,8 @@ def editThread(request):
                 setattr(req_edit_thread, param, request_value)
 
         req_edit_thread.save()
+    except Thread.DoesNotExist:
+        return HttpResponseServerError(reason=f"Thread with id:{thread_id} does not exist")
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
 
@@ -357,6 +361,11 @@ def uploadProfileImage(request):
 
                 response = {"profile_image": account.profile_image_url}
                 return JsonResponse(response, status=200)
+
+            except Account.DoesNotExist:
+                response = {"message": f"Account with user {request.user.username} does not exist",
+                            "error": "ACCOUNT_ERROR"}
+                return JsonResponse(response, status=400)
             except Exception as e:
                 response = {"message": str(e), "error": "MODEL_ERROR"}
                 return JsonResponse(response, status=400)
@@ -380,6 +389,8 @@ def clearProfileImage(request):
             account.save()
 
             return HttpResponse("Image Deleted")
+        except Account.DoesNotExist:
+            return HttpResponseServerError(reason=f"Account with id:{request.user.username} does not exist")
         except Exception:
             return HttpResponseServerError(reason=str("default"))
     else:
@@ -420,6 +431,8 @@ def uploadCiviImage(request):
             }
             return JsonResponse(data)
 
+        except Civi.DoesNotExist:
+            return HttpResponseServerError(reason=f"Civi with id:{civi_id} does not exist")
         except Exception as e:
             return HttpResponseServerError(
                 reason=(str(e) + civi_id + str(request.FILES))
@@ -474,6 +487,8 @@ def uploadThreadImage(request):
             data = {"image": thread.image_url}
             return JsonResponse(data)
 
+        except Thread.DoesNotExist:
+            return HttpResponseServerError(reason=f"Thread with id:{thread_id} does not exist")
         except Exception as e:
             return HttpResponseServerError(reason=(str(e)))
     else:
@@ -537,15 +552,21 @@ def requestUnfollow(request):
     :return: (200, okay, list of friend information) (400, bad lookup) (500, error)
     """
     try:
-        account = Account.objects.get(user=request.user)
-        target = User.objects.get(username=request.POST.get("target", -1))
-        target_account = Account.objects.get(user=target)
+        username = request.POST.get("target")
+        if username:
+            account = Account.objects.get(user=request.user)
+            target = User.objects.get(username=username)
+            target_account = Account.objects.get(user=target)
 
-        account.following.remove(target_account)
-        account.save()
-        target_account.followers.remove(account)
-        target_account.save()
-        return JsonResponse({"result": "Success"})
+            account.following.remove(target_account)
+            account.save()
+            target_account.followers.remove(account)
+            target_account.save()
+            return JsonResponse({"result": "Success"})
+        return HttpResponseBadRequest(reason=f"username cannot be empty ")
+
+    except User.DoesNotExist:
+        return HttpResponseBadRequest(reason=f"User with username {username} does not exist")
     except Account.DoesNotExist as e:
         return HttpResponseBadRequest(reason=str(e))
     except Exception as e:
