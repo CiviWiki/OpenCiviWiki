@@ -23,9 +23,6 @@
 <script id="rep-template" type="text/template">
     {% include "partials/account/utils/representative_card.html" %}
 </script>
-<script id="bill-template" type="text/template">
-    {% include "partials/account/utils/account_bill.html" %}
-</script>
 <script id="rep-chip-template" type="text/template">
     {% verbatim %}
     <div class="rep bold-text purple-text chip">
@@ -48,9 +45,6 @@
 <script id="my-issues-template" type="text/template">
     {% include "partials/account/tabs/my_issues.html" %}
 </script>
-<script id="my-bills-template" type="text/template">
-    {% include "partials/account/tabs/my_bills.html" %}
-</script>
 
 
 <!-- account base templates -->
@@ -71,7 +65,7 @@
     <div id="account"></div>
 </body>
 
-<script type="text/javascript" src="{% static "js/account.js" %}"></script>
+<script type="text/javascript" src="{% static 'js/account.js' %}"></script>
 
 <script type="text/javascript">
 

@@ -31,11 +31,7 @@ Use instruction from one of points below:
 * [Local setup](local-setup.md)
 
 ### Populate initial data
-There are two files, located in the `/data` directory, that contain initial categories and congressional data. Run the following commands to initialize the congressional and categories data:
-
-```py
-python manage.py loaddata data/congress.json
-```
+There is a file `categories.json`, located in the `/data` directory, that contains initial categories data. Run the following command to initialize the categories data:
 
 ```py
 python manage.py loaddata data/categories.json

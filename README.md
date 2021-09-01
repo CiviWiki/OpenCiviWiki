@@ -3,13 +3,13 @@
 [![ComVer](https://img.shields.io/badge/ComVer-compliant-brightgreen.svg)](https://github.com/staltz/comver)
 [![Maintainability](https://api.codeclimate.com/v1/badges/5241b4275cc2dffe90f2/maintainability)](https://codeclimate.com/github/CiviWiki/OpenCiviWiki/maintainability)
 
-We are an open source, non-profit community, working to develop a democratic engagement web system.
+We are an open-source, non-profit community, working to develop a democratic engagement web system.
 
 ## Why CiviWiki?
 
-* **Democratically Contributed Media.** As the name CiviWiki implies, our core content will be contributed by volunteers on our Wiki. Our topic format is modular. The structure allows both a community of volunteers to collaborate on a single political issue, and reserves space for dissenting opinions.
-* **Personalized Policy Feed.** CiviWiki intelligently personalizes users' feed in two meaningful ways. First, the issues promoted to users' feed will be personalized to the user's expressed interests, and the timeliness of the issue. Second, the structure of the issue topics break policy positions into bite-sized contentions we call Civies. Each Civi is logically related to the rest of the topic. Based on the user's support, opposition, or neutrality to each Civi, CiviWiki promotes different relevant content.
-* **Citizen/Representative Engagement.** CiviWiki's core goal is to engage citizens and their representatives, with the goal of making government more accountable. CiviWiki will achieve this goal in two ways. First, CiviWiki will organize user's policy profile and compare it to every political candidate in the user's district. This quick, detailed, comparison will help users make informed votes, and we believe increased voter confidence will increase voter turnout. Second, CiviWiki will collect anonymized user data and forward district level statistics to representatives. With a critical mass of users, we believe timely district level polling data will influence representatives' votes.
+* **Democratically Contributed Media.** As the name CiviWiki implies, our core content will be contributed by volunteers on our Wiki. Our topic format is modular. The structure allows both a community of volunteers to collaborate on a single political issue and reserves space for dissenting opinions.
+* **Personalized Policy Feed.** CiviWiki intelligently personalizes users' feed in two meaningful ways. First, the issues promoted to users' feed will be personalized to the user's expressed interests, and the timeliness of the issue. Second, the structure of the issue topics breaks policy positions into bite-sized contentions we call Civies. Each Civi is logically related to the rest of the topic. Based on the user's support, opposition, or neutrality to each Civi, CiviWiki promotes different relevant content.
+* **Citizen/Representative Engagement.** CiviWiki's core goal is to engage citizens and their representatives, with the goal of making government more accountable. CiviWiki will achieve this goal in two ways. First, CiviWiki will organize the user's policy profile and compare it to every political candidate in the user's district. This quick, detailed, comparison will help users make informed votes, and we believe increased voter confidence will increase voter turnout. Second, CiviWiki will collect anonymized user data and forward district-level statistics to representatives. With a critical mass of users, we believe timely district-level polling data will influence representatives' votes.
 
 ## Requirements
 
@@ -44,7 +44,7 @@ See our [Contributing Guide](docs/contributing/CONTRIBUTING.md) for instructions
 
 ## Contributors
 
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
@@ -125,6 +125,14 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="https://github.com/shashankks0987"><img src="https://avatars.githubusercontent.com/u/47640763?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Shashank KS</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=shashankks0987" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/Floyd-Droid"><img src="https://avatars.githubusercontent.com/u/67757904?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jourdon Floyd</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=Floyd-Droid" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/jabrielcjones"><img src="https://avatars.githubusercontent.com/u/32472383?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jabriel Jones</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=jabrielcjones" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/dummy26"><img src="https://avatars.githubusercontent.com/u/40134444?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Aniket Banyal</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=dummy26" title="Documentation">📖</a> <a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=dummy26" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/Shadyaobuya"><img src="https://avatars.githubusercontent.com/u/79209638?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Shadyaobuya</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=Shadyaobuya" title="Code">💻</a></td>
+    <td align="center"><a href="https://anshu-jindal.github.io/portfolio1/"><img src="https://avatars.githubusercontent.com/u/62394488?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Anshu Jindal</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=Anshu-jindal" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/wassafshahzad"><img src="https://avatars.githubusercontent.com/u/25094157?v=4?s=100" width="100px;" alt=""/><br /><sub><b>wassaf shahzad</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=wassafshahzad" title="Code">💻</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/mharyam"><img src="https://avatars.githubusercontent.com/u/21172249?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Maryam Yusuf</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=mharyam" title="Code">💻</a></td>
   </tr>
 </table>
 
@@ -133,7 +141,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind are welcome!
 
 # Testing
 

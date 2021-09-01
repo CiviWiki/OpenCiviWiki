@@ -15,10 +15,12 @@ from django.utils.http import int_to_base36
 from django.utils.crypto import salted_hmac
 from django.utils.http import urlsafe_base64_encode
 from django.urls import reverse_lazy
+from django.template.response import TemplateResponse
 
 from api.models.account import Account
+from core.custom_decorators import login_required
 
-from .forms import AccountRegistrationForm
+from .forms import AccountRegistrationForm, UpdateAccount
 from .models import User
 from .authentication import send_activation_email
 
@@ -29,12 +31,12 @@ class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
     key_salt = "django.contrib.auth.tokens.PasswordResetTokenGenerator"
 
     def _make_token_with_timestamp(self, user, timestamp):
-        """ Token function pulled from Django 1.11 """
+        """Token function pulled from Django 1.11"""
         ts_b36 = int_to_base36(timestamp)
 
-        hash = salted_hmac(
-            self.key_salt, str(user.pk) + str(timestamp)
-        ).hexdigest()[::2]
+        hash = salted_hmac(self.key_salt, str(user.pk) + str(timestamp)).hexdigest()[
+            ::2
+        ]
         return "%s-%s" % (ts_b36, hash)
 
 
@@ -42,20 +44,19 @@ class RegisterView(FormView):
     """
     A form view that handles user registration.
     """
-    template_name = 'accounts/register/register.html'
+
+    template_name = "accounts/register/register.html"
     form_class = AccountRegistrationForm
-    success_url = '/'
+    success_url = "/"
 
     def _create_user(self, form):
-        username = form.cleaned_data['username']
-        password = form.cleaned_data['password']
-        email = form.cleaned_data['email']
+        username = form.cleaned_data["username"]
+        password = form.cleaned_data["password"]
+        email = form.cleaned_data["email"]
 
         user = User.objects.create_user(username, email, password)
 
         account = Account(user=user)
-        if hasattr(settings, 'CLOSED_BETA') and not settings.CLOSED_BETA:
-            account.beta_access = True
         account.save()
 
         user.is_active = True
@@ -80,21 +81,46 @@ class RegisterView(FormView):
 
 
 class PasswordResetView(auth_views.PasswordResetView):
-    template_name = 'accounts/users/password_reset.html'
-    email_template_name = 'accounts/users/password_reset_email.html'
-    subject_template_name = 'accounts/users/password_reset_subject.txt'
+    template_name = "accounts/users/password_reset.html"
+    email_template_name = "accounts/users/password_reset_email.html"
+    subject_template_name = "accounts/users/password_reset_subject.txt"
     from_email = settings.EMAIL_HOST_USER
-    success_url = reverse_lazy('accounts_password_reset_done')
+    success_url = reverse_lazy("accounts_password_reset_done")
 
 
 class PasswordResetDoneView(auth_views.PasswordResetDoneView):
-    template_name = 'accounts/users/password_reset_done.html'
+    template_name = "accounts/users/password_reset_done.html"
 
 
 class PasswordResetConfirmView(auth_views.PasswordResetConfirmView):
-    template_name = 'accounts/users/password_reset_confirm.html'
-    success_url = reverse_lazy('accounts_password_reset_complete')
+    template_name = "accounts/users/password_reset_confirm.html"
+    success_url = reverse_lazy("accounts_password_reset_complete")
 
 
 class PasswordResetCompleteView(auth_views.PasswordResetCompleteView):
-    template_name = 'accounts/users/password_reset_complete.html'
+    template_name = "accounts/users/password_reset_complete.html"
+
+
+@login_required
+def settings_view(request):
+    account = request.user.account_set.first()
+    if request.method == "POST":
+        instance = Account.objects.get(user=request.user)
+        form = UpdateAccount(
+            request.POST,
+            initial={"username": request.user.username, "email": request.user.email},
+            instance=instance,
+        )
+        if form.is_valid():
+            form.save()
+    else:
+        form = UpdateAccount(
+            initial={
+                "username": request.user.username,
+                "email": request.user.email,
+                "first_name": account.first_name or None,
+                "last_name": account.last_name or None,
+                "about_me": account.about_me or None,
+            }
+        )
+    return TemplateResponse(request, "accounts/utils/update_settings.html", {"form": form})

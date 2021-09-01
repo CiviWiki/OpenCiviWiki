@@ -25,7 +25,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from api.forms import UpdateProfileImage
 from api.models import Thread
 from accounts.utils import send_mass_email
-from .models import Account, Activity, Category, Civi, CiviImage, Invitation
+from .models import Account, Activity, Category, Civi, CiviImage
 from core.custom_decorators import require_post_params
 from core.constants import US_STATES
 
@@ -59,6 +59,8 @@ def new_thread(request):
         new_t.save()
 
         return JsonResponse({"data": "success", "thread_id": new_t.pk})
+    except Account.DoesNotExist:
+        return HttpResponseServerError(reason=f"Account with user:{request.user.username} does not exist")
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
 
@@ -114,7 +116,7 @@ def createCivi(request):
         else:  # not a reply, a regular civi
             c_qs = Civi.objects.filter(thread_id=thread_id)
             accounts = Account.objects.filter(
-                pk__in=c_qs.distinct("author").values_list("author", flat=True)
+                pk__in=c_qs.values("author").distinct()
             )
             data = {
                 "command": "add",
@@ -272,6 +274,8 @@ def editThread(request):
                 setattr(req_edit_thread, param, request_value)
 
         req_edit_thread.save()
+    except Thread.DoesNotExist:
+        return HttpResponseServerError(reason=f"Thread with id:{thread_id} does not exist")
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
 
@@ -325,9 +329,10 @@ def editUser(request):
     try:
         account.save()
     except Exception as e:
+        # print('EXCEPTION THROWN HERE!! ')
         return HttpResponseServerError(reason=str(e))
 
-    account.refresh_from_db()
+        account.refresh_from_db()
 
     return JsonResponse(Account.objects.summarize(account))
 
@@ -356,6 +361,11 @@ def uploadProfileImage(request):
 
                 response = {"profile_image": account.profile_image_url}
                 return JsonResponse(response, status=200)
+
+            except Account.DoesNotExist:
+                response = {"message": f"Account with user {request.user.username} does not exist",
+                            "error": "ACCOUNT_ERROR"}
+                return JsonResponse(response, status=400)
             except Exception as e:
                 response = {"message": str(e), "error": "MODEL_ERROR"}
                 return JsonResponse(response, status=400)
@@ -379,6 +389,8 @@ def clearProfileImage(request):
             account.save()
 
             return HttpResponse("Image Deleted")
+        except Account.DoesNotExist:
+            return HttpResponseServerError(reason=f"Account with id:{request.user.username} does not exist")
         except Exception:
             return HttpResponseServerError(reason=str("default"))
     else:
@@ -419,6 +431,8 @@ def uploadCiviImage(request):
             }
             return JsonResponse(data)
 
+        except Civi.DoesNotExist:
+            return HttpResponseServerError(reason=f"Civi with id:{civi_id} does not exist")
         except Exception as e:
             return HttpResponseServerError(
                 reason=(str(e) + civi_id + str(request.FILES))
@@ -473,6 +487,8 @@ def uploadThreadImage(request):
             data = {"image": thread.image_url}
             return JsonResponse(data)
 
+        except Thread.DoesNotExist:
+            return HttpResponseServerError(reason=f"Thread with id:{thread_id} does not exist")
         except Exception as e:
             return HttpResponseServerError(reason=(str(e)))
     else:
@@ -536,15 +552,21 @@ def requestUnfollow(request):
     :return: (200, okay, list of friend information) (400, bad lookup) (500, error)
     """
     try:
-        account = Account.objects.get(user=request.user)
-        target = User.objects.get(username=request.POST.get("target", -1))
-        target_account = Account.objects.get(user=target)
+        username = request.POST.get("target")
+        if username:
+            account = Account.objects.get(user=request.user)
+            target = User.objects.get(username=username)
+            target_account = Account.objects.get(user=target)
 
-        account.following.remove(target_account)
-        account.save()
-        target_account.followers.remove(account)
-        target_account.save()
-        return JsonResponse({"result": "Success"})
+            account.following.remove(target_account)
+            account.save()
+            target_account.followers.remove(account)
+            target_account.save()
+            return JsonResponse({"result": "Success"})
+        return HttpResponseBadRequest(reason=f"username cannot be empty ")
+
+    except User.DoesNotExist:
+        return HttpResponseBadRequest(reason=f"User with username {username} does not exist")
     except Account.DoesNotExist as e:
         return HttpResponseBadRequest(reason=str(e))
     except Exception as e:
@@ -575,86 +597,3 @@ def editUserCategories(request):
         return HttpResponseBadRequest(reason=str(e))
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
-
-
-@login_required
-@user_passes_test(lambda u: u.is_staff)
-def invite(request):
-    """This function is used to invite other people to the Civiwiki Beta"""
-    emails = request.POST.getlist("emailList[]", "")
-    custom_message = request.POST.get("custom_message", "")
-
-    if emails:
-        user = User.objects.get(username=request.user.username)
-        user_account = Account.objects.get(user=user)
-        did_not_invite = []
-
-        # TODO: Move this to string templates
-        if custom_message:
-            email_body = (
-                "{host_name} has invited you to be part of CiviWiki Beta "
-                "with the following message: {custom_message}"
-            ).format(host_name=user_account.full_name, custom_message=custom_message)
-        else:
-            email_body = (
-                "{host_name} has invited you to be part of CiviWiki Beta. "
-                "Follow the link below to get registered."
-            ).format(host_name=user_account.full_name)
-
-        email_messages = []
-        valid_emails = []
-        for email in emails:
-            if Invitation.objects.filter(invitee_email=email).exists():
-                did_not_invite.append(email)
-            else:
-                valid_emails.append(email)
-                verification_hash = uuid.uuid4().hex[:31]
-                data = {
-                    "host_user": user,
-                    "invitee_email": email,
-                    "verification_code": verification_hash,
-                }
-
-                domain = get_current_site(request).domain
-                base_url = "http://{domain}/beta_register/{email}/{token}"
-                url_with_code = base_url.format(
-                    domain=domain, email=email, token=verification_hash
-                )
-
-                email_context = {
-                    "title": "You're Invited to Join CiviWiki Beta",
-                    "greeting": "You're Invited to Join CiviWiki Beta",
-                    "body": email_body,
-                    "link": url_with_code,
-                    "recipient": [email],
-                }
-                email_messages.append(email_context)
-
-                new_invitation = Invitation(**data)
-                new_invitation.save()
-
-        if email_messages:
-            email_subject = "Invitation to CiviWiki"
-            send_mass_email(subject=email_subject, contexts=email_messages)
-
-        if len(did_not_invite) == len(emails):
-            response_data = {
-                "message": "Invitations exist for submitted email(s). No new invitations sent",
-                "error": "INVALID_EMAIL_DATA",
-            }
-            return JsonResponse(response_data, status=400)
-
-        invitations = (
-            Invitation.objects.filter_by_host(host_user=user)
-            .order_by("-date_created")
-            .all()
-        )
-        invitees = [invitation.summarize() for invitation in invitations]
-
-        response_data = {"did_not_invite": did_not_invite, "invitees": invitees}
-        return JsonResponse(response_data)
-
-    else:
-        # Return an 'invalid login' error message.
-        response = {"message": "Invalid Email Data", "error": "INVALID_EMAIL_DATA"}
-        return JsonResponse(response, status=400)

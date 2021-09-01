@@ -120,7 +120,6 @@ class Account(models.Model):
         "self", related_name="followings", symmetrical=False
     )
 
-    beta_access = models.BooleanField(default=False)
     is_verified = models.BooleanField(default=False)
     full_account = models.BooleanField(default=False)
 

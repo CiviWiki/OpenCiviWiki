@@ -568,6 +568,61 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "jabrielcjones",
+      "name": "Jabriel Jones",
+      "avatar_url": "https://avatars.githubusercontent.com/u/32472383?v=4",
+      "profile": "https://github.com/jabrielcjones",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "dummy26",
+      "name": "Aniket Banyal",
+      "avatar_url": "https://avatars.githubusercontent.com/u/40134444?v=4",
+      "profile": "https://github.com/dummy26",
+      "contributions": [
+        "doc",
+        "code"
+      ]
+    },
+    {
+      "login": "Shadyaobuya",
+      "name": "Shadyaobuya",
+      "avatar_url": "https://avatars.githubusercontent.com/u/79209638?v=4",
+      "profile": "https://github.com/Shadyaobuya",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Anshu-jindal",
+      "name": "Anshu Jindal",
+      "avatar_url": "https://avatars.githubusercontent.com/u/62394488?v=4",
+      "profile": "https://anshu-jindal.github.io/portfolio1/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "wassafshahzad",
+      "name": "wassaf shahzad",
+      "avatar_url": "https://avatars.githubusercontent.com/u/25094157?v=4",
+      "profile": "https://github.com/wassafshahzad",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "mharyam",
+      "name": "Maryam Yusuf",
+      "avatar_url": "https://avatars.githubusercontent.com/u/21172249?v=4",
+      "profile": "https://github.com/mharyam",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

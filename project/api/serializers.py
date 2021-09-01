@@ -333,7 +333,7 @@ class ThreadDetailSerializer(serializers.ModelSerializer):
         """This function gets the list of contributors for Civiwiki"""
         issue_civis = Civi.objects.filter(thread__id=obj.id)
         contributor_accounts = Account.objects.filter(
-            pk__in=issue_civis.distinct("author").values_list("author", flat=True)
+            pk__in=issue_civis.values("author").distinct()
         )
         return AccountListSerializer(contributor_accounts, many=True).data
 

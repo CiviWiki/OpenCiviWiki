@@ -8,13 +8,15 @@ from django.db.models import F
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template.response import TemplateResponse
 
-from api.models import Category, Account, Thread, Civi, Activity, Invitation
+
+from api.models import Category, Account, Thread, Civi, Activity
 from api.forms import UpdateProfileImage
 from core.constants import US_STATES
-from core.custom_decorators import beta_blocker, login_required, full_account
+from core.custom_decorators import login_required, full_account
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
+
 
 def base_view(request):
     if not request.user.is_authenticated:
@@ -121,7 +123,7 @@ def issue_thread(request, thread_id=None):
         "contributors": [
             Account.objects.chip_summarize(a)
             for a in Account.objects.filter(
-                pk__in=c_qs.distinct("author").values_list("author", flat=True)
+                pk__in=c_qs.values("author").distinct()
             )
         ],
         "category": {"id": t.category.id, "name": t.category.name},
@@ -161,96 +163,12 @@ def create_group(request):
     return TemplateResponse(request, "newgroup.html", {})
 
 
-@login_required
-@user_passes_test(lambda u: u.is_staff)
-def invite(request):
-    user = User.objects.get(username=request.user.username)
-
-    invitations = (
-        Invitation.objects.filter_by_host(host_user=user)
-        .order_by("-date_created")
-        .all()
-    )
-    invitees = [invitation.summarize() for invitation in invitations]
-    response_data = {"invitees": json.dumps(invitees)}
-
-    return TemplateResponse(request, "invite.html", response_data)
-
-
-@login_required
-def settings_view(request):
-
-    response_data = {
-        "username": request.user.username,
-        "email": request.user.email,
-    }
-
-    return TemplateResponse(request, "user/settings.html", response_data)
-
-
 def login_view(request):
     if request.user.is_authenticated:
         if request.user.is_active:
             return HttpResponseRedirect("/")
 
     return TemplateResponse(request, "login.html", {})
-
-
-def beta_register(request, email="", token=""):
-    if not email or not token:
-        return HttpResponse("ERROR: BAD REQUEST")
-
-    try:
-        db_invite = Invitation.objects.get(invitee_email=email)
-    except Invitation.DoesNotExist:
-        return HttpResponse("ERROR: NO INVITATIONS EXIST FOR THIS EMAIL")
-
-    if db_invite.verification_code != token:
-        return HttpResponse("ERROR: BAD TOKEN")
-
-    is_registered = User.objects.filter(email=email).exists()
-
-    if is_registered:
-        # registered and has been given beta access
-        if request.user.is_authenticated:
-            invitee_user = request.user
-        else:
-            invitee_user = User.objects.get(email=email)
-
-        account = Account.objects.get(user=invitee_user)
-        if account.beta_access:
-            redirect_link = {"href": "/", "label": "Go to CiviWiki"}
-            template_var = {
-                "title": "Already Registered for Beta",
-                "content": "You have already registered for a beta account",
-                "link": redirect_link,
-            }
-            return TemplateResponse(request, "general-message.html", template_var)
-        # registered but was not given beta access
-        else:
-            invitation = Invitation.objects.get(invitee_email=email)
-            invitation.invitee_user = invitee_user
-            invitation.save()
-
-            account = Account.objects.get(user=invitee_user)
-            account.beta_access = True
-            account.save()
-
-            redirect_link = {"href": "/", "label": "Go to CiviWiki"}
-            template_var = {
-                "title": "Beta Access Granted",
-                "content": "You have now been granted beta access",
-                "link": redirect_link,
-            }
-            return TemplateResponse(request, "general-message.html", template_var)
-
-    template_var = {"email": email, "beta_token": token}
-
-    return TemplateResponse(request, "beta_register.html", template_var)
-
-
-def beta_view(request):
-    return TemplateResponse(request, "beta_blocker.html", {})
 
 
 def declaration(request):

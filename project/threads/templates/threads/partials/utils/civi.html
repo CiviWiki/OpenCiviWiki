@@ -67,24 +67,6 @@
                 {{# }, this); }}
 
         </div>
-            {{# var bills = this.model.get('bills') }}
-            {{# if (bills.length > 0) { }}
-            <div class="civi-bills text-wrapper">
-                <div class="links-title gray-text">
-                    LINKED BILLS ({{bills.length}})
-                </div>
-
-                    {{# _.each(bills, function(bill){  }}
-                        <div class="bill-item">
-                            <a target="_blank" href="{{ bill.url }}">
-                                <span class="bold-text link-lato">{{bill.id}}</span>
-                            </a> ({{ this.model.get('type') }})
-                            <span class="gray-text">{{bill.short_title}}</span>
-                        </div>
-                    {{# }, this); }}
-
-            </div>
-            {{# } }}
         {{# } }}
         {{# if (this.model.get('attachments').length > 0) { }}
         <div class="civi-attachments text-wrapper">

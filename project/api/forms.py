@@ -50,21 +50,6 @@ class UpdatePassword(forms.ModelForm):
         return clean_data
 
 
-class UpdateAccount(forms.ModelForm):
-    """
-    Form for updating Account data
-    """
-
-    class Meta:
-        model = Account
-        fields = ["first_name", "last_name", "about_me", "profile_image"]
-
-    first_name = forms.CharField(label="First Name", max_length=63, required=False)
-    last_name = forms.CharField(label="Last Name", max_length=63, required=False)
-    about_me = forms.CharField(label="About Me", max_length=511, required=False)
-    profile_image = forms.ImageField(required=False)
-
-
 class UpdateProfileImage(forms.ModelForm):
     """
     Form for updating profile image
