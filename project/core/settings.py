@@ -148,7 +148,7 @@ NOTIFICATIONS_USE_JSONFIELD = True
 # Django REST API Settings
 DEFAULT_RENDERER_CLASSES = ("rest_framework.renderers.JSONRenderer",)
 
-DEFAULT_AUTHENTICATION_CLASSES = ("rest_framework.authentication.BasicAuthentication",)
+DEFAULT_AUTHENTICATION_CLASSES = ("rest_framework.authentication.SessionAuthentication",)
 
 if DEBUG:
     # Browsable HTML - Enabled only in Debug mode (dev)
