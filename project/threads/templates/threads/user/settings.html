@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Settings</title>
     {% load static %}
+    {% load i18n %}
     {% include "base/links.html" %}
     <link type="text/css" rel="stylesheet/less" href="{% static "less/base.less" %}"/>
     <link type="text/css" rel="stylesheet/less" href="{% static "less/utils.less" %}"/>
@@ -23,25 +24,25 @@
 {% verbatim %}
     <div class="white-background-input-field input-field col s6">
         <input class="save-account" id="first_name" type="text" value="{{this.model.get('first_name')}}">
-        <label for="first-name">First Name</label>
+        <label for="first-name">{% trans "First Name" %} </label>
     </div>
     <div class="white-background-input-field input-field col s6">
         <input class="save-account" id="last_name" type="text" value="{{this.model.get('last_name')}}">
-        <label for="last-name">Last Name</label>
+        <label for="last-name">{% trans "Last Name" %}</label>
     </div>
 {% endverbatim %}
 </script>
 
 <script id="settings-base" type="text/template">
 {% verbatim %}
-    <div class="subtitle-lato">Personal</div>
+    <div class="subtitle-lato">{% trans "Personal" %} </div>
         <div class="white-background-input-field input-field col s12">
             <input id="email" type="text" class="validate" value="{{this.model.get('email')}}" disabled>
-            <label for="email">Email</label>
+            <label for="email">{% trans "Email" %}</label>
         </div>
         <div class="white-background-input-field input-field col s12">
             <input id="username" type="text" class="validate" value="{{this.model.get('username')}}" disabled>
-            <label for="username">Username</label>
+            <label for="username">{% trans "Username" %} </label>
         </div>
         <div id="settings-1"></div>
     </div>
@@ -54,7 +55,7 @@
         <div class="z-depth-1 white">
             <div class="container">
                 <div class="section center">
-                    <div class="title-lato">My Settings</div>
+                    <div class="title-lato">{% trans "My Settings" %} </div>
 
                 </div>
                 <div class="row">
