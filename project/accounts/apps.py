@@ -1,6 +1,4 @@
 from django.apps import AppConfig
-from rest_framework.viewsets import ModelViewSet
-
 
 
 class AccountsConfig(AppConfig):
