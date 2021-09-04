@@ -13,7 +13,9 @@ from api.serializers import (
     AccountListSerializer,
 )
 
+
 class AccountViewSet(ModelViewSet):
+
     """
     REST API viewset for an Account
     retrieve:
