@@ -118,7 +118,8 @@ class AccountViewSet(ModelViewSet):
             draft_threads, many=True, context={"request": request}
         )
         return Response(serializer.data)
-    
+
+
     """
     Return the given user based a username.
     list:
