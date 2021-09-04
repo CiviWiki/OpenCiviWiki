@@ -645,6 +645,15 @@
         "content",
         "translation"
       ]
+    },
+    {
+      "login": "Germlord",
+      "name": "Steven Hitchcock",
+      "avatar_url": "https://avatars.githubusercontent.com/u/34950441?v=4",
+      "profile": "https://github.com/Germlord",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
