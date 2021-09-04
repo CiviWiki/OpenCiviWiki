@@ -2,6 +2,9 @@
 
 [![ComVer](https://img.shields.io/badge/ComVer-compliant-brightgreen.svg)](https://github.com/staltz/comver)
 [![Maintainability](https://api.codeclimate.com/v1/badges/5241b4275cc2dffe90f2/maintainability)](https://codeclimate.com/github/CiviWiki/OpenCiviWiki/maintainability)
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-66-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 We are an open-source, non-profit community, working to develop a democratic engagement web system.
 
