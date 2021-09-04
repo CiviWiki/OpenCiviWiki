@@ -332,3 +332,4 @@ class UpdateProfileImage(forms.ModelForm):
             pass
 
         return profile_image
+
