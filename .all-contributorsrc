@@ -635,6 +635,7 @@
     }
   ],
   "contributorsPerLine": 7,
+  "contributorsSortAlphabetically": true,
   "projectName": "OpenCiviWiki",
   "projectOwner": "CiviWiki",
   "repoType": "github",
