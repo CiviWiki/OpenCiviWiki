@@ -12,6 +12,10 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.contrib.auth import get_user_model
 from core.constants import US_STATES
 
+from taggit.managers import TaggableManager
+
+from api.models.category import Category
+
 
 class User(AbstractUser):
     """
@@ -34,7 +38,7 @@ User = get_user_model()
 
 class AccountManager(models.Manager):
     def summarize(self, account):
-        from .civi import Civi
+        from api.models.civi import Civi
 
         data = {
             "username": account.user.username,
