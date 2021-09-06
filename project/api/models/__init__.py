@@ -2,7 +2,6 @@
 Gathering all models here
 """
 
-from .account import Account
 from .category import Category
 from .civi import Civi, CiviImage
 from .fact import Fact

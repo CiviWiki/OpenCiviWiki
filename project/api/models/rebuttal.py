@@ -5,7 +5,7 @@ Extends local Account and Response model
 
 from django.db import models
 
-from .account import Account
+from accounts.models import Account
 from .response import Response
 
 

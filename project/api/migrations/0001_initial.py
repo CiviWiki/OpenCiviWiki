@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.db import migrations, models
 from django.conf import settings
-import api.models.account
+import accounts.models
 
 
 class Migration(migrations.Migration):
@@ -114,7 +114,7 @@ class Migration(migrations.Migration):
                     models.ImageField(
                         default=b"profile/default.png",
                         null=True,
-                        upload_to=api.models.account.PathAndRename(b"profile/"),
+                        upload_to=accounts.models.PathAndRename(b"profile/"),
                         blank=True,
                     ),
                 ),

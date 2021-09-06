@@ -5,7 +5,7 @@ Notifies users about new followers or replies.
 
 from django.db import models
 
-from .account import Account
+from accounts.models import Account
 from .civi import Civi
 from .thread import Thread
 

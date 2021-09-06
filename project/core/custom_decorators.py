@@ -1,6 +1,6 @@
 from functools import wraps
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
-from api.models import Account
+from accounts.models import Account
 
 """
 USAGE:

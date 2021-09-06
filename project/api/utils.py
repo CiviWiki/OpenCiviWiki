@@ -6,7 +6,7 @@ from django.http import HttpResponse, Http404
 
 from django.shortcuts import get_object_or_404
 
-from api.models import Account
+from accounts.models import Account
 
 
 def get_account(user=None, pk=None, username=None):

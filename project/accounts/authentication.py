@@ -21,7 +21,7 @@ from django.template.loader import render_to_string
 
 
 from accounts.utils import send_email
-from api.models import Account
+from accounts.models import Account
 from .forms import AccountRegistrationForm, PasswordResetForm, RecoverUserForm
 from core.custom_decorators import require_post_params
 

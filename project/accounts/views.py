@@ -17,7 +17,7 @@ from django.utils.http import urlsafe_base64_encode
 from django.urls import reverse_lazy
 from django.template.response import TemplateResponse
 
-from api.models.account import Account
+from accounts.models import Account
 from core.custom_decorators import login_required
 
 from .forms import AccountRegistrationForm, UpdateAccount

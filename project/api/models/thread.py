@@ -12,7 +12,7 @@ from django.conf import settings
 from django.db import models
 from django.utils.deconstruct import deconstructible
 
-from .account import Account
+from accounts.models import Account
 from .category import Category
 from .fact import Fact
 from taggit.managers import TaggableManager

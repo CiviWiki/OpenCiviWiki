@@ -19,7 +19,7 @@ from django.conf import settings
 
 from accounts.utils import send_email
 from .reserved_usernames import RESERVED_USERNAMES
-from api.models import Account
+from accounts.models import Account
 
 User = get_user_model()
 

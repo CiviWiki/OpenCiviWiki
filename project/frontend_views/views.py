@@ -9,7 +9,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template.response import TemplateResponse
 
 
-from api.models import Category, Account, Thread, Civi, Activity
+from api.models import Category, Thread, Civi, Activity
+from accounts.models import Account
 from api.forms import UpdateProfileImage
 from core.constants import US_STATES
 from core.custom_decorators import login_required, full_account

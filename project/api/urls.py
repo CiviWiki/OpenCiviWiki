@@ -1,6 +1,5 @@
 from django.conf.urls import url, include
 from rest_framework.routers import DefaultRouter
-from rest_framework.documentation import include_docs_urls
 
 from api import views, read, write
 
@@ -11,7 +10,6 @@ router.register(r"accounts", views.AccountViewSet)
 router.register(r"civis", views.CiviViewSet)
 
 urlpatterns = [
-    url(r"^docs/", include_docs_urls(title="CiviWiki API", public=True)),
     url(r"^v1/", include(router.urls)),
 ]
 

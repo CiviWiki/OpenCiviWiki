@@ -16,7 +16,7 @@ from django.db import models
 from django.conf import settings
 from django.utils.deconstruct import deconstructible
 
-from .account import Account
+from accounts.models import Account
 from .thread import Thread
 from taggit.managers import TaggableManager
 from .thread import Thread
