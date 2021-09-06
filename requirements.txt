@@ -6,7 +6,6 @@ django-notifications-hq==1.6.0
 django-storages==1.11.1
 
 whitenoise==5.3.0
-coreapi==2.3.3
 psycopg2-binary==2.9.1
 
 django-taggit==1.5.1
@@ -17,7 +16,13 @@ requests==2.26.0
 mock==4.0.3
 coverage==5.5
 flake8==3.9.2
-aloe==0.1.19
+
+# Disabling test framework
+# as it was preventing pip install
+# Add back in when issue is resolved
+# or set up "devenvironment" dependencies
+# e.g. via Poetry package manager
+# aloe==0.1.19
 
 # Packages for production
 gunicorn==20.1.0
