@@ -3,10 +3,10 @@ description: Create a bug report or other issue
 
 title: "<Enter a brief description here>"
 
-labels: [Triage]
+labels: [triage]
 
 assignees:
-  - Brylie
+  - brylie
 body:
   - type: markdown
     attributes:
