@@ -1,0 +1,47 @@
+name: Issue Template
+description: Create an Issue
+
+title: "<Enter a brief description here> "
+
+labels: [Triage]
+
+assignees:
+  - Brylie
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this Bug/Issue report!
+  - type: input
+    attributes:
+      label: Description
+
+      description: Can you please elaborate your Issue here?
+      placeholder: Tell us what you found.
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What should have happened?
+      description: If this issue is causing unexpected behavior, what should happen differently?
+      placeholder: I expected...
+    validations:
+      required: false
+
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: What browsers are you seeing the problem on?
+      multiple: true
+      options:
+        - Firefox
+        - Chrome
+        - Safari
+        - Microsoft Edge
+  - type: textarea
+    id: multimedia
+    attributes:
+      label: Further details
+      description: Please copy and paste any relevant log output or multimedia.
+      placeholder: Please add log file or your multimedia (screenshots and video) here
