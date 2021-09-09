@@ -43,7 +43,7 @@ To install all required modules, complete the following steps:
 2. create a Python 3.7+ virtual environment (named `env`)
     * `python -m venv env`
 3. use the following command in project dir:
-    * `pip install -r requirements.txt`
+    * `pip install -r requirements/dev.txt`
 4. change into project directory
     * `cd project`
 
