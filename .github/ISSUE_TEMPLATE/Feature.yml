@@ -2,7 +2,7 @@ name: Feature request
 
 description: Suggest a feature or improvement
 
-title: "[Issue]: <Your Issue's brief Description goes here> "
+title: "<Briefely describe your idea here> "
 labels: [community, triage, help wanted]
 
 body:
@@ -10,13 +10,10 @@ body:
     attributes:
       value: |
         Thanks for taking the time to share your ideas. Your efforts are appreciated by the community.
-
   - type: input
     attributes:
       label: Idea summary
-
       description: Please briefly describe your idea
-
     validations:
       required: true
   - type: textarea
@@ -24,7 +21,5 @@ body:
     attributes:
       label: Further details
       description: If desired, provide a detailed explanation about your idea and suggestion
-
-
     validations:
-      required: true
+      required: false
