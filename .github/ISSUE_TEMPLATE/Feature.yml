@@ -2,7 +2,7 @@ name: Feature request
 
 description: Suggest a feature or improvement
 
-title: "<Briefely describe your idea here> "
+title: "<Add a brief title for your idea> "
 labels: [community, triage, help wanted]
 
 body:
