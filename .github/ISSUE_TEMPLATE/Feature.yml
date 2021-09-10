@@ -1,44 +1,29 @@
 name: Issue Template
-description: File/Create an Issue
+description: Suggest a feature or improvement
+
 title: "[Issue]: <Your Issue's brief Description goes here> "
-labels: [community, good first issue, triage, help wanted]
-assignees:
-  - brylie
+labels: [community, triage, help wanted]
+
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking your time off to fill in this form for a new idea. Your efforts are appreciated by the community.
+        Thanks for taking the time to share your ideas. Your efforts are appreciated by the community.
+
   - type: input
     attributes:
-      label: Idea Template
-      description: Can you please elaborate your Idea briefly here?
-      placeholder: Tell us what we can do .
+      label: Idea summary
+
+      description: Please briefly describe your idea
+
     validations:
       required: true
   - type: textarea
     id: elaboration
     attributes:
-      label: Idea Explanation
-      description: Give us a detailed explanation about your idea and suggestion
-      placeholder: Tell us what you wish to see.
-      value: "A new idea"
+      label: Further details
+      description: If desired, provide a detailed explanation about your idea and suggestion
+
+
     validations:
       required: true
-  - type: dropdown
-    id: browsers
-    attributes:
-      label: Is this  a browser specific suggestion, if so mark the browsers you wish to see the changes?
-      multiple: true
-      options:  
-        - Firefox
-        - Chrome
-        - Safari
-        - Microsoft Edge
-  - type: textarea
-    id: multimedia
-    attributes:
-      label: Relevant log output
-      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
-      placeholder: Please upload your multimedia(screenshots and video) here
-      
