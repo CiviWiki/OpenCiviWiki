@@ -20,6 +20,6 @@ body:
     id: elaboration
     attributes:
       label: Further details
-      description: If desired, provide a detailed explanation about your idea and suggestion
+      description: If desired, provide a detailed explanation about your idea
     validations:
       required: false
