@@ -214,12 +214,13 @@ class UpdateAccount(forms.ModelForm):
     """
     Form for updating Account data
     """
-    def __init__(self, *args, **kwargs): 
+
+    def __init__(self, *args, **kwargs):
         readonly = kwargs.pop("readonly", False)
-        super(UpdateAccount, self).__init__(*args, **kwargs)                       
+        super(UpdateAccount, self).__init__(*args, **kwargs)
         if readonly:
             self.disable_fields()
-    
+
     def disable_fields(self):
         for _, field in self.fields.items():
             field.disabled = True
@@ -341,4 +342,3 @@ class UpdateProfileImage(forms.ModelForm):
             pass
 
         return profile_image
-
