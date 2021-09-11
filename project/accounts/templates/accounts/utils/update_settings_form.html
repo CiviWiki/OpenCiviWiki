@@ -40,7 +40,9 @@
             </div>
         </div>
         <div class="row center">
-            <input class='btn' type='submit' value="Save Changes"></input>
-        </div>
+            {%if not readonly %}
+                <input class='btn' type='submit' value="Save Changes"></input>
+            {% endif%}
+            </div>
     </form>
 </div>
