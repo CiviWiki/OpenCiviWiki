@@ -1,9 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 import os
-import uuid
 import io
-from django.utils.deconstruct import deconstructible
 from django.core.files.storage import default_storage
 from django.conf import settings
 from django.db import models
@@ -15,6 +13,7 @@ from core.constants import US_STATES
 from taggit.managers import TaggableManager
 
 from api.models.category import Category
+from common.utils import PathAndRename
 
 
 class User(AbstractUser):
@@ -93,18 +92,6 @@ class AccountManager(models.Manager):
 
     def following(self, account):
         return [self.chip_summarize(following) for following in account.following.all()]
-
-
-@deconstructible
-class PathAndRename(object):
-    def __init__(self, sub_path):
-        self.sub_path = sub_path
-
-    def __call__(self, instance, filename):
-        extension = filename.split(".")[-1]
-        new_filename = str(uuid.uuid4())
-        filename = "{}.{}".format(new_filename, extension)
-        return os.path.join(self.sub_path, filename)
 
 
 profile_upload_path = PathAndRename("")
@@ -240,17 +227,3 @@ class Account(models.Model):
             return True
         else:
             return False
-
-@deconstructible
-class PathAndRename(object):
-    def __init__(self, sub_path):
-        self.sub_path = sub_path
-
-    def __call__(self, instance, filename):
-        extension = filename.split(".")[-1]
-        new_filename = str(uuid.uuid4())
-        filename = "{}.{}".format(new_filename, extension)
-        return os.path.join(self.sub_path, filename)
-
-
-profile_upload_path = PathAndRename("")

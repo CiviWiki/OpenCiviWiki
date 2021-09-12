@@ -4,19 +4,18 @@ Maintains threads
 """
 
 import os
-import uuid
 from calendar import month_name
 
 from django.core.files.storage import default_storage
 from django.conf import settings
 from django.db import models
-from django.utils.deconstruct import deconstructible
 
 from accounts.models import Account
 from .category import Category
 from .fact import Fact
 from taggit.managers import TaggableManager
 from core.constants import US_STATES
+from common.utils import PathAndRename
 
 
 class ThreadManager(models.Manager):
@@ -65,18 +64,6 @@ class ThreadManager(models.Manager):
 
     def filter_by_category(self, categories):
         return self.all().filter(category__in=categories)
-
-
-@deconstructible
-class PathAndRename(object):
-    def __init__(self, sub_path):
-        self.sub_path = sub_path
-
-    def __call__(self, instance, filename):
-        extension = filename.split(".")[-1]
-        new_filename = str(uuid.uuid4())
-        filename = "{}.{}".format(new_filename, extension)
-        return os.path.join(self.sub_path, filename)
 
 
 image_upload_path = PathAndRename("")
