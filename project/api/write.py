@@ -1,7 +1,6 @@
 import json
 import PIL
 import urllib
-import uuid
 
 from notifications.signals import notify
 
@@ -18,13 +17,10 @@ from django.http import (
 
 from django.core.files import File  # need this for image file handling
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.decorators import user_passes_test
-from django.contrib.sites.shortcuts import get_current_site
 
 # civi packages
 from api.forms import UpdateProfileImage
 from api.models import Thread
-from accounts.utils import send_mass_email
 from .models import Activity, Category, Civi, CiviImage
 from accounts.models import Account
 from core.custom_decorators import require_post_params
