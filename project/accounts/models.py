@@ -125,12 +125,9 @@ class Account(models.Model):
 
     @property
     def full_name(self):
-        "Returns the person's full name."
+        """Returns the person's full name."""
 
-        full_name = "{first_name} {last_name}".format(
-            first_name=self.first_name, last_name=self.last_name
-        )
-        return full_name
+        return f"{self.first_name} {self.last_name}"
 
     @property
     def profile_image_url(self):
