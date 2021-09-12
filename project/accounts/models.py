@@ -1,4 +1,3 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser
 import os
 import io
@@ -8,7 +7,6 @@ from django.db import models
 from PIL import Image, ImageOps
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.contrib.auth import get_user_model
-from core.constants import US_STATES
 
 from taggit.managers import TaggableManager
 
@@ -77,8 +75,7 @@ class AccountManager(models.Manager):
             "username": account.user.username,
             "first_name": account.first_name,
             "last_name": account.last_name,
-            "about_me": account.about_me[:about_me_truncate_length]
-            + (ellipsis_if_too_long),
+            "about_me": account.about_me[:about_me_truncate_length] + ellipsis_if_too_long,
             "profile_image": account.profile_image_url,
             "follow_state": True
             if account in request_account.following.all()
