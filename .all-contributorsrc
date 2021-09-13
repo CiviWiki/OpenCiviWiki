@@ -656,6 +656,24 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "gorkemarslan",
+      "name": "gorkemarslan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/16780927?v=4",
+      "profile": "https://github.com/gorkemarslan",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "alanCalvillo-Wizeline",
+      "name": "Alan Calvillo",
+      "avatar_url": "https://avatars.githubusercontent.com/u/72406611?v=4",
+      "profile": "https://github.com/alanCalvillo-Wizeline",
+      "contributions": [
+        "review"
+      ]
     }
   ],
   "contributorsPerLine": 7,
