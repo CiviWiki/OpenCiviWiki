@@ -1,20 +1,17 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser
 import os
-import uuid
 import io
-from django.utils.deconstruct import deconstructible
 from django.core.files.storage import default_storage
 from django.conf import settings
 from django.db import models
 from PIL import Image, ImageOps
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.contrib.auth import get_user_model
-from core.constants import US_STATES
 
 from taggit.managers import TaggableManager
 
 from api.models.category import Category
+from common.utils import PathAndRename
 
 
 class User(AbstractUser):
@@ -78,8 +75,7 @@ class AccountManager(models.Manager):
             "username": account.user.username,
             "first_name": account.first_name,
             "last_name": account.last_name,
-            "about_me": account.about_me[:about_me_truncate_length]
-            + (ellipsis_if_too_long),
+            "about_me": account.about_me[:about_me_truncate_length] + ellipsis_if_too_long,
             "profile_image": account.profile_image_url,
             "follow_state": True
             if account in request_account.following.all()
@@ -93,18 +89,6 @@ class AccountManager(models.Manager):
 
     def following(self, account):
         return [self.chip_summarize(following) for following in account.following.all()]
-
-
-@deconstructible
-class PathAndRename(object):
-    def __init__(self, sub_path):
-        self.sub_path = sub_path
-
-    def __call__(self, instance, filename):
-        extension = filename.split(".")[-1]
-        new_filename = str(uuid.uuid4())
-        filename = "{}.{}".format(new_filename, extension)
-        return os.path.join(self.sub_path, filename)
 
 
 profile_upload_path = PathAndRename("")
@@ -141,12 +125,9 @@ class Account(models.Model):
 
     @property
     def full_name(self):
-        "Returns the person's full name."
+        """Returns the person's full name."""
 
-        full_name = "{first_name} {last_name}".format(
-            first_name=self.first_name, last_name=self.last_name
-        )
-        return full_name
+        return f"{self.first_name} {self.last_name}"
 
     @property
     def profile_image_url(self):
@@ -173,9 +154,6 @@ class Account(models.Model):
                 return self.profile_image_thumb.url
 
         return "/static/img/no_image_md.png"
-
-    def __init__(self, *args, **kwargs):
-        super(Account, self).__init__(*args, **kwargs)
 
     def save(self, *args, **kwargs):
         """Image crop/resize and thumbnail creation"""
@@ -240,17 +218,3 @@ class Account(models.Model):
             return True
         else:
             return False
-
-@deconstructible
-class PathAndRename(object):
-    def __init__(self, sub_path):
-        self.sub_path = sub_path
-
-    def __call__(self, instance, filename):
-        extension = filename.split(".")[-1]
-        new_filename = str(uuid.uuid4())
-        filename = "{}.{}".format(new_filename, extension)
-        return os.path.join(self.sub_path, filename)
-
-
-profile_upload_path = PathAndRename("")

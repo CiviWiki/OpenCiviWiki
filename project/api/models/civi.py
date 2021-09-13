@@ -7,20 +7,19 @@ import os
 import json
 import datetime
 import math
-import uuid
 from calendar import month_name
 
 from django.core.files.storage import default_storage
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.conf import settings
-from django.utils.deconstruct import deconstructible
 
 from accounts.models import Account
 from .thread import Thread
 from taggit.managers import TaggableManager
 from .thread import Thread
 from core.constants import CIVI_TYPES
+from common.utils import PathAndRename
 
 
 class CiviManager(models.Manager):
@@ -276,18 +275,6 @@ class Civi(models.Model):
             data["score"] = self.score(req_acct_id)
 
         return data
-
-
-@deconstructible
-class PathAndRename(object):
-    def __init__(self, sub_path):
-        self.sub_path = sub_path
-
-    def __call__(self, instance, filename):
-        extension = filename.split(".")[-1]
-        new_filename = str(uuid.uuid4())
-        filename = "{}.{}".format(new_filename, extension)
-        return os.path.join(self.sub_path, filename)
 
 
 image_upload_path = PathAndRename("")
