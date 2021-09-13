@@ -665,6 +665,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "alanCalvillo-Wizeline",
+      "name": "Alan Calvillo",
+      "avatar_url": "https://avatars.githubusercontent.com/u/72406611?v=4",
+      "profile": "https://github.com/alanCalvillo-Wizeline",
+      "contributions": [
+        "review"
+      ]
     }
   ],
   "contributorsPerLine": 7,
