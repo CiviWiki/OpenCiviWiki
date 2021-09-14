@@ -56,8 +56,8 @@ class RegisterView(FormView):
 
         user = User.objects.create_user(username, email, password)
 
-        account = Profile(user=user)
-        account.save()
+        profile = Profile(user=user)
+        profile.save()
 
         user.is_active = True
         user.save()
@@ -103,7 +103,7 @@ class PasswordResetCompleteView(auth_views.PasswordResetCompleteView):
 
 @login_required
 def settings_view(request):
-    account = request.user.account_set.first()
+    profile = request.user.profile_set.first()
     if request.method == "POST":
         instance = Profile.objects.get(user=request.user)
         form = UpdateProfile(
@@ -118,9 +118,9 @@ def settings_view(request):
             initial={
                 "username": request.user.username,
                 "email": request.user.email,
-                "first_name": account.first_name or None,
-                "last_name": account.last_name or None,
-                "about_me": account.about_me or None,
+                "first_name": profile.first_name or None,
+                "last_name": profile.last_name or None,
+                "about_me": profile.about_me or None,
             }
         )
     return TemplateResponse(request, "accounts/utils/update_settings.html", {"form": form})
