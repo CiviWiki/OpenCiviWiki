@@ -16,12 +16,13 @@ from django.utils.crypto import salted_hmac
 from django.utils.http import urlsafe_base64_encode
 from django.urls import reverse_lazy
 from django.template.response import TemplateResponse
+from django.contrib.auth import get_user_model
 
 from accounts.models import Profile
 from core.custom_decorators import login_required
 
-from .forms import ProfileRegistrationForm, UpdateProfile
-from .models import User
+from accounts.forms import UserRegistrationForm, UpdateProfile
+
 from .authentication import send_activation_email
 
 
@@ -46,7 +47,7 @@ class RegisterView(FormView):
     """
 
     template_name = "accounts/register/register.html"
-    form_class = ProfileRegistrationForm
+    form_class = UserRegistrationForm
     success_url = "/"
 
     def _create_user(self, form):
@@ -54,13 +55,8 @@ class RegisterView(FormView):
         password = form.cleaned_data["password"]
         email = form.cleaned_data["email"]
 
-        user = User.objects.create_user(username, email, password)
-
-        profile = Profile(user=user)
-        profile.save()
-
-        user.is_active = True
-        user.save()
+        user = get_user_model().objects.create_user(username, email, password)
+        Profile.objects.create(user=user)
 
         return user
 

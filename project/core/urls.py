@@ -22,7 +22,7 @@ from django.views.static import serve
 from django.views.generic.base import RedirectView
 
 from api import urls as api
-from accounts.views import (RegisterView, PasswordResetView, PasswordResetDoneView,
+from accounts.views import (PasswordResetView, PasswordResetDoneView,
                             PasswordResetConfirmView, PasswordResetCompleteView, settings_view)
 from frontend_views import urls as frontend_views
 
@@ -31,7 +31,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include('accounts.urls')),
     url(r"^api/", include(api)),
-    path('accounts/register', RegisterView.as_view(), name='accounts_register'),
     path(
         'accounts/password_reset',
         PasswordResetView.as_view(),
