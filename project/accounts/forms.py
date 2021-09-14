@@ -19,12 +19,12 @@ from django.conf import settings
 
 from accounts.utils import send_email
 from .reserved_usernames import RESERVED_USERNAMES
-from accounts.models import Account
+from accounts.models import Profile
 
 User = get_user_model()
 
 
-class AccountRegistrationForm(ModelForm):
+class ProfileRegistrationForm(ModelForm):
     """
     This class is used to register new account in Civiwiki
 
@@ -189,7 +189,7 @@ class RecoverUserForm(AuthRecoverUserForm):
             email_body = body_txt.format(domain=domain, username=user.username)
 
             context = {
-                "title": "Account Recovery for CiviWiki",
+                "title": "Profile Recovery for CiviWiki",
                 "greeting": "Recover your account on CiviWiki",
                 "body": email_body,
                 "link": url_with_code,
@@ -202,7 +202,7 @@ class RecoverUserForm(AuthRecoverUserForm):
             html_message = render_to_string(html_message_template, context)
             sender = settings.EMAIL_HOST_USER
             send_email(
-                subject="Account Recovery for CiviWiki",
+                subject="Profile Recovery for CiviWiki",
                 message=message,
                 sender=settings.EMAIL_HOST_USER,
                 recipient_list=[email],
@@ -210,13 +210,23 @@ class RecoverUserForm(AuthRecoverUserForm):
             )
 
 
-class UpdateAccount(forms.ModelForm):
+class UpdateProfile(forms.ModelForm):
     """
-    Form for updating Account data
+    Form for updating Profile data
     """
 
+    def __init__(self, *args, **kwargs):
+        readonly = kwargs.pop("readonly", False)
+        super(UpdateProfile, self).__init__(*args, **kwargs)
+        if readonly:
+            self.disable_fields()
+
+    def disable_fields(self):
+        for _, field in self.fields.items():
+            field.disabled = True
+
     class Meta:
-        model = Account
+        model = Profile
         fields = [
             "first_name",
             "last_name",
@@ -287,7 +297,7 @@ class UpdateProfileImage(forms.ModelForm):
     """
 
     class Meta:
-        model = Account
+        model = Profile
         fields = ["profile_image"]
 
     profile_image = forms.ImageField()
@@ -332,4 +342,3 @@ class UpdateProfileImage(forms.ModelForm):
             pass
 
         return profile_image
-

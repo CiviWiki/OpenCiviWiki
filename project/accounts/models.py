@@ -33,68 +33,68 @@ WHITE_BG = (255, 255, 255)
 User = get_user_model()
 
 
-class AccountManager(models.Manager):
-    def summarize(self, account):
+class ProfileManager(models.Manager):
+    def summarize(self, profile):
         from api.models.civi import Civi
 
         data = {
-            "username": account.user.username,
-            "first_name": account.first_name,
-            "last_name": account.last_name,
-            "about_me": account.about_me,
+            "username": profile.user.username,
+            "first_name": profile.first_name,
+            "last_name": profile.last_name,
+            "about_me": profile.about_me,
             "history": [
                 Civi.objects.serialize(c)
-                for c in Civi.objects.filter(author_id=account.id).order_by("-created")
+                for c in Civi.objects.filter(author_id=profile.id).order_by("-created")
             ],
-            "profile_image": account.profile_image_url,
-            "followers": self.followers(account),
-            "following": self.following(account),
+            "profile_image": profile.profile_image_url,
+            "followers": self.followers(profile),
+            "following": self.following(profile),
         }
         return data
 
-    def chip_summarize(self, account):
+    def chip_summarize(self, profile):
         data = {
-            "username": account.user.username,
-            "first_name": account.first_name,
-            "last_name": account.last_name,
-            "profile_image": account.profile_image_url,
+            "username": profile.user.username,
+            "first_name": profile.first_name,
+            "last_name": profile.last_name,
+            "profile_image": profile.profile_image_url,
         }
         return data
 
-    def card_summarize(self, account, request_account):
+    def card_summarize(self, profile, request_profile):
         # Length at which to truncate 'about me' text
         about_me_truncate_length = 150
 
         # If 'about me' text is longer than 150 characters... add elipsis (truncate)
         ellipsis_if_too_long = (
-            "" if len(account.about_me) <= about_me_truncate_length else "..."
+            "" if len(profile.about_me) <= about_me_truncate_length else "..."
         )
 
         data = {
-            "id": account.user.id,
-            "username": account.user.username,
-            "first_name": account.first_name,
-            "last_name": account.last_name,
-            "about_me": account.about_me[:about_me_truncate_length] + ellipsis_if_too_long,
-            "profile_image": account.profile_image_url,
+            "id": profile.user.id,
+            "username": profile.user.username,
+            "first_name": profile.first_name,
+            "last_name": profile.last_name,
+            "about_me": profile.about_me[:about_me_truncate_length] + ellipsis_if_too_long,
+            "profile_image": profile.profile_image_url,
             "follow_state": True
-            if account in request_account.following.all()
+            if profile in request_profile.following.all()
             else False,
-            "request_account": request_account.first_name,
+            "request_profile": request_profile.first_name,
         }
         return data
 
-    def followers(self, account):
-        return [self.chip_summarize(follower) for follower in account.followers.all()]
+    def followers(self, profile):
+        return [self.chip_summarize(follower) for follower in profile.followers.all()]
 
-    def following(self, account):
-        return [self.chip_summarize(following) for following in account.following.all()]
+    def following(self, profile):
+        return [self.chip_summarize(following) for following in profile.following.all()]
 
 
 profile_upload_path = PathAndRename("")
 
 
-class Account(models.Model):
+class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=63, blank=False)
     last_name = models.CharField(max_length=63, blank=False)
@@ -113,9 +113,9 @@ class Account(models.Model):
     )
 
     is_verified = models.BooleanField(default=False)
-    full_account = models.BooleanField(default=False)
+    full_profile = models.BooleanField(default=False)
 
-    objects = AccountManager()
+    objects = ProfileManager()
     profile_image = models.ImageField(
         upload_to=profile_upload_path, blank=True, null=True
     )
@@ -155,16 +155,19 @@ class Account(models.Model):
 
         return "/static/img/no_image_md.png"
 
+    def __init__(self, *args, **kwargs):
+        super(Profile, self).__init__(*args, **kwargs)
+
     def save(self, *args, **kwargs):
-        """Image crop/resize and thumbnail creation"""
+        """ Image crop/resize and thumbnail creation """
 
         # New Profile image --
         if self.profile_image:
             self.resize_profile_image()
 
-        self.full_account = self.is_full_account()
+        self.full_profile = self.is_full_profile()
 
-        super(Account, self).save(*args, **kwargs)
+        super(Profile, self).save(*args, **kwargs)
 
     def resize_profile_image(self):
         """
@@ -213,7 +216,7 @@ class Account(models.Model):
             None,
         )
 
-    def is_full_account(self):
+    def is_full_profile(self):
         if self.first_name and self.last_name:
             return True
         else:

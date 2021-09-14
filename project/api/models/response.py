@@ -5,13 +5,13 @@ Records user response
 
 from django.db import models
 
-from accounts.models import Account
+from accounts.models import Profile
 from .civi import Civi
 
 
 class Response(models.Model):
     author = models.ForeignKey(
-        Account, default=None, null=True, on_delete=models.PROTECT
+        Profile, default=None, null=True, on_delete=models.PROTECT
     )
     civi = models.ForeignKey(Civi, default=None, null=True, on_delete=models.PROTECT)
 

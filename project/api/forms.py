@@ -1,7 +1,7 @@
 from django import forms
 from django.core.files.images import get_image_dimensions
 from django.contrib.auth import get_user_model
-from accounts.models import Account
+from accounts.models import Profile
 
 User = get_user_model()
 
@@ -56,7 +56,7 @@ class UpdateProfileImage(forms.ModelForm):
     """
 
     class Meta:
-        model = Account
+        model = Profile
         fields = ["profile_image"]
 
     profile_image = forms.ImageField()

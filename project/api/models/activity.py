@@ -5,7 +5,7 @@ Records user activity
 
 from django.db import models
 
-from accounts.models import Account
+from accounts.models import Profile
 from .civi import Civi
 from .thread import Thread
 
@@ -25,7 +25,7 @@ class ActivityManager(models.Manager):
 
 class Activity(models.Model):
     account = models.ForeignKey(
-        Account, default=None, null=True, on_delete=models.PROTECT
+        Profile, default=None, null=True, on_delete=models.PROTECT
     )
     thread = models.ForeignKey(
         Thread, default=None, null=True, on_delete=models.PROTECT

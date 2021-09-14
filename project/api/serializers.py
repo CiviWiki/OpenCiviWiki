@@ -2,13 +2,13 @@ from rest_framework import serializers
 
 from api.forms import UpdateProfileImage
 from api.models import Civi, Thread, Category, CiviImage, Activity
-from accounts.models import Account
+from accounts.models import Profile
 from core.constants import CIVI_TYPES
 
 WRITE_ONLY = {"write_only": True}
 
 
-class AccountCommonSerializer(serializers.ModelSerializer):
+class ProfileCommonSerializer(serializers.ModelSerializer):
     """ Common serializer for specific account serializers"""
 
     username = serializers.ReadOnlyField(source="user.username")
@@ -19,13 +19,13 @@ class AccountCommonSerializer(serializers.ModelSerializer):
 
         # Check for authenticated user
         if request and hasattr(request, "user") and request.user.is_authenticated:
-            account = Account.objects.get(user=request.user)
+            account = Profile.objects.get(user=request.user)
             if obj in account.following.all():
                 return True
         return False
 
 
-class AccountSerializer(AccountCommonSerializer):
+class ProfileSerializer(ProfileCommonSerializer):
     """
     General seralizer for a single model instance of a user account
     """
@@ -48,7 +48,7 @@ class AccountSerializer(AccountCommonSerializer):
     is_staff = serializers.ReadOnlyField(source="user.is_staff")
 
     class Meta:
-        model = Account
+        model = Profile
         fields = (
             "username",
             "first_name",
@@ -83,7 +83,7 @@ class AccountSerializer(AccountCommonSerializer):
 
         if validation_form.is_valid():
             # Clean up previous images
-            account = Account.objects.get(user=request.user)
+            account = Profile.objects.get(user=request.user)
             account.profile_image.delete()
             account.profile_image_thumb.delete()
 
@@ -92,7 +92,7 @@ class AccountSerializer(AccountCommonSerializer):
             raise serializers.ValidationError(validation_form.errors["profile_image"])
 
 
-class AccountListSerializer(AccountCommonSerializer):
+class ProfileListSerializer(ProfileCommonSerializer):
     """
     Serializer for multiple account model instances
     """
@@ -105,7 +105,7 @@ class AccountListSerializer(AccountCommonSerializer):
     profile_image_thumb_url = serializers.ReadOnlyField()
 
     class Meta:
-        model = Account
+        model = Profile
         fields = (
             "username",
             "first_name",
@@ -129,7 +129,7 @@ class CiviImageSerializer(serializers.ModelSerializer):
 
 class CiviSerializer(serializers.ModelSerializer):
     """ """
-    author = AccountListSerializer()
+    author = ProfileListSerializer()
     type = serializers.ChoiceField(choices=CIVI_TYPES, source="c_type")
     images = serializers.SlugRelatedField(
         many=True, read_only=True, slug_field="image_url"
@@ -175,13 +175,13 @@ class CiviSerializer(serializers.ModelSerializer):
         if user.is_anonymous():
             return 0
         else:
-            account = Account.objects.get(user=user)
+            account = Profile.objects.get(user=user)
             return obj.score(account.id)
 
 
 class CiviListSerializer(serializers.ModelSerializer):
     """ """
-    author = AccountListSerializer()
+    author = ProfileListSerializer()
     type = serializers.CharField(source="c_type")
     created = serializers.ReadOnlyField(source="created_date_str")
 
@@ -218,13 +218,13 @@ class CategorySerializer(serializers.ModelSerializer):
         if user.is_anonymous():
             return True
 
-        account = Account.objects.get(user=user)
+        account = Profile.objects.get(user=user)
         return obj.id in account.categories.values_list("id", flat=True)
 
 
 class ThreadSerializer(serializers.ModelSerializer):
     """ """
-    author = AccountListSerializer(required=False)
+    author = ProfileListSerializer(required=False)
     category = CategoryListSerializer()
 
     civis = serializers.HyperlinkedRelatedField(
@@ -262,7 +262,7 @@ class ThreadSerializer(serializers.ModelSerializer):
 
 class ThreadListSerializer(serializers.ModelSerializer):
     """ """
-    author = AccountListSerializer(required=False)
+    author = ProfileListSerializer(required=False)
     category = CategoryListSerializer()
 
     created = serializers.ReadOnlyField()
@@ -292,7 +292,7 @@ class ThreadListSerializer(serializers.ModelSerializer):
 
 class ThreadDetailSerializer(serializers.ModelSerializer):
     """ """
-    author = AccountListSerializer(required=False)
+    author = ProfileListSerializer(required=False)
     category = CategoryListSerializer()
 
     civis = CiviSerializer(many=True)
@@ -333,10 +333,10 @@ class ThreadDetailSerializer(serializers.ModelSerializer):
     def get_contributors(self, obj):
         """This function gets the list of contributors for Civiwiki"""
         issue_civis = Civi.objects.filter(thread__id=obj.id)
-        contributor_accounts = Account.objects.filter(
+        contributor_accounts = Profile.objects.filter(
             pk__in=issue_civis.values("author").distinct()
         )
-        return AccountListSerializer(contributor_accounts, many=True).data
+        return ProfileListSerializer(contributor_accounts, many=True).data
 
     def get_user_votes(self, obj):
         """This function gets the user votes"""

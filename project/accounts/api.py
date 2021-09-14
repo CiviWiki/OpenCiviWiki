@@ -1,23 +1,23 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from api.permissions import IsAccountOwnerOrDuringRegistrationOrReadOnly
-
+from api.permissions import IsProfileOwnerOrDuringRegistrationOrReadOnly
+from api.utils import get_account
 from api.models import Thread
-from accounts.models import Account
+from accounts.models import Profile
 from api.serializers import (
     ThreadSerializer,
     CategorySerializer,
     CiviSerializer,
-    AccountSerializer,
-    AccountListSerializer,
+    ProfileSerializer,
+    ProfileListSerializer,
 )
 
 
-class AccountViewSet(ModelViewSet):
+class ProfileViewSet(ModelViewSet):
 
     """
-    REST API viewset for an Account
+    REST API viewset for an Profile
     retrieve:
     Return the given user based a username.
 
@@ -25,29 +25,29 @@ class AccountViewSet(ModelViewSet):
     Return a list of all the existing users. Only with privileged access.
     """
 
-    queryset = Account.objects.all()
+    queryset = Profile.objects.all()
     lookup_field = "user__username"
-    serializer_class = AccountSerializer
+    serializer_class = ProfileSerializer
     http_method_names = ["get", "head", "put", "patch"]
-    permission_classes = (IsAccountOwnerOrDuringRegistrationOrReadOnly,)
+    permission_classes = (IsProfileOwnerOrDuringRegistrationOrReadOnly,)
     authentication_classes = ()
 
     def list(self, request):
         """ """
         if self.request.user.is_staff:
-            accounts = Account.objects.all()
+            accounts = Profile.objects.all()
         else:
-            accounts = Account.objects.filter(user=self.request.user)
-        serializer = AccountListSerializer(accounts, many=True)
+            accounts = Profile.objects.filter(user=self.request.user)
+        serializer = ProfileListSerializer(accounts, many=True)
         return Response(serializer.data)
 
     def retrieve(self, request, user__username=None):
         """ """
         account = get_account(username=user__username)
         if self.request.user == account.user:
-            serializer = AccountSerializer(account)
+            serializer = ProfileSerializer(account)
         else:
-            serializer = AccountListSerializer(account)
+            serializer = ProfileListSerializer(account)
         return Response(serializer.data)
 
     @action(detail=True)
@@ -69,7 +69,7 @@ class AccountViewSet(ModelViewSet):
         """
         account = get_account(username=user__username)
         account_followers = account.followers.all()
-        serializer = AccountListSerializer(account_followers, many=True)
+        serializer = ProfileListSerializer(account_followers, many=True)
         return Response(serializer.data)
 
     @action(detail=True)
@@ -80,7 +80,7 @@ class AccountViewSet(ModelViewSet):
         """
         account = get_account(username=user__username)
         account_followings = account.following.all()
-        serializer = AccountListSerializer(account_followings, many=True)
+        serializer = ProfileListSerializer(account_followings, many=True)
         return Response(serializer.data)
 
     @action(detail=True)
