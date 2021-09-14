@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.contrib.auth import logout, login
+from django.contrib.auth import login
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.contrib.sites.shortcuts import get_current_site
@@ -7,7 +7,6 @@ from django.http import (
     JsonResponse,
     HttpResponse,
     HttpResponseServerError,
-    HttpResponseRedirect,
     HttpResponseBadRequest,
 )
 from django.template.response import TemplateResponse  # TODO: move this out to views
@@ -73,13 +72,6 @@ def send_activation_email(user, domain):
         recipient_list=[user.email],
         html_message=html_message
     )
-
-
-def cw_logout(request):
-    """Use this to logout the current user """
-
-    logout(request)
-    return HttpResponseRedirect("/")
 
 
 @sensitive_post_parameters("password")
