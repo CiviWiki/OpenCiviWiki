@@ -2,7 +2,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from api.permissions import IsAccountOwnerOrDuringRegistrationOrReadOnly
-
+from api.utils import get_account
 from api.models import Thread
 from accounts.models import Account
 from api.serializers import (

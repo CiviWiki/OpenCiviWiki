@@ -11,11 +11,13 @@ from django.template.response import TemplateResponse
 
 from api.models import Category, Thread, Civi, Activity
 from accounts.models import Account
+from accounts.forms import UpdateAccount
 from api.forms import UpdateProfileImage
 from core.constants import US_STATES
 from core.custom_decorators import login_required, full_account
 
 from django.contrib.auth import get_user_model
+
 User = get_user_model()
 
 
@@ -64,18 +66,34 @@ def base_view(request):
 @login_required
 @full_account
 def user_profile(request, username=None):
-    if not username:
-        return HttpResponseRedirect("/profile/{0}".format(request.user))
-    else:
-        try:
-            user = User.objects.get(username=username)
-        except User.DoesNotExist:
-            return HttpResponseRedirect("/404")
-    data = {
-        "username": user,
-        "profile_image_form": UpdateProfileImage,
-    }
-    return TemplateResponse(request, "account.html", data)
+    if request.method == "GET":
+        if not username:
+            return HttpResponseRedirect("/profile/{0}".format(request.user))
+        else:
+            is_owner = username == request.user.username
+            try:
+                user = User.objects.get(username=username)
+                account = user.account_set.first()
+            except User.DoesNotExist:
+                return HttpResponseRedirect("/404")
+
+        form = UpdateAccount(
+            initial={
+                "username": user.username,
+                "email": user.email,
+                "first_name": account.first_name or None,
+                "last_name": account.last_name or None,
+                "about_me": account.about_me or None,
+            },
+            readonly=True,
+        )
+        data = {
+            "username": user,
+            "profile_image_form": UpdateProfileImage,
+            "form": form if is_owner else None,
+            "readonly": True,
+        }
+        return TemplateResponse(request, "account.html", data)
 
 
 @login_required
@@ -123,9 +141,7 @@ def issue_thread(request, thread_id=None):
         },
         "contributors": [
             Account.objects.chip_summarize(a)
-            for a in Account.objects.filter(
-                pk__in=c_qs.values("author").distinct()
-            )
+            for a in Account.objects.filter(pk__in=c_qs.values("author").distinct())
         ],
         "category": {"id": t.category.id, "name": t.category.name},
         "categories": [{"id": c.id, "name": c.name} for c in Category.objects.all()],
