@@ -1,9 +1,14 @@
 from django.conf.urls import url
-from django.contrib.auth import views as auth_views
+from django.urls import path
+from django.contrib.auth import views
 from . import authentication
 
 urlpatterns = [
-    url(r"^login", authentication.cw_login, name="login"),
+    path(
+        'login/',
+        views.LoginView.as_view(template_name='accounts/register/login.html'),
+        name='accounts_login',
+    ),
     url(r"^logout", authentication.cw_logout, name="logout"),
     url(r"^register", authentication.cw_register, name="register"),
     url(
@@ -13,7 +18,7 @@ urlpatterns = [
     ),
     url(
         r"^forgot/$",
-        auth_views.PasswordResetView.as_view(),
+        views.PasswordResetView.as_view(),
         authentication.recover_user(),
         name="password_reset",
     ),
@@ -24,7 +29,7 @@ urlpatterns = [
     ),
     url(
         r"^password_reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$",
-        auth_views.PasswordResetConfirmView.as_view(),
+        views.PasswordResetConfirmView.as_view(),
         authentication.password_reset_confirm(),
         name="password_reset_confirm",
     ),

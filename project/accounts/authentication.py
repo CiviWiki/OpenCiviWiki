@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.contrib.auth import authenticate, logout, login
+from django.contrib.auth import logout, login
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.contrib.sites.shortcuts import get_current_site
@@ -10,7 +10,6 @@ from django.http import (
     HttpResponseRedirect,
     HttpResponseBadRequest,
 )
-from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse  # TODO: move this out to views
 from django.utils.crypto import salted_hmac
 from django.utils.encoding import force_bytes, force_text
@@ -74,43 +73,6 @@ def send_activation_email(user, domain):
         recipient_list=[user.email],
         html_message=html_message
     )
-
-
-@sensitive_post_parameters("password")
-@require_post_params(params=["username", "password"])
-def cw_login(request):
-    """
-    USAGE:
-        This is used to authenticate the user and log them in.
-
-    :returns (200, ok) (400, Inactive User) (400, Invalid username or password)
-    """
-
-    username = request.POST.get("username", "")
-    password = request.POST.get("password", "")
-    remember = request.POST.get("remember", "false")
-
-    user = authenticate(username=username, password=password)
-    if user is not None:
-        if remember == "false":
-            request.session.set_expiry(0)
-
-        login(request, user)
-
-        if user.is_active:
-
-            account = get_object_or_404(Profile, user=user)
-            request.session["login_user_firstname"] = account.first_name
-            request.session["login_user_image"] = account.profile_image_thumb_url
-
-            return HttpResponse()
-        else:
-            response = {"message": "Inactive user", "error": "USER_INACTIVE"}
-            return JsonResponse(response, status=400)
-    else:
-        # Return an 'invalid login' error message.
-        response = {"message": "Invalid username or password", "error": "INVALID_LOGIN"}
-        return JsonResponse(response, status=400)
 
 
 def cw_logout(request):
