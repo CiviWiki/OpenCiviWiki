@@ -1,6 +1,6 @@
 from functools import wraps
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
-from accounts.models import Account
+from accounts.models import Profile
 
 """
 USAGE:
@@ -28,7 +28,7 @@ def require_post_params(params):
 def full_account(func):
     @wraps(func)
     def inner(request, *args, **kwargs):
-        account = Account.objects.get(user=request.user)
+        account = Profile.objects.get(user=request.user)
         if not account.full_account:
             return HttpResponseRedirect("/setup")
         return func(request, *args, **kwargs)

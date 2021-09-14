@@ -22,7 +22,7 @@ from django.contrib.auth.decorators import login_required
 from api.forms import UpdateProfileImage
 from api.models import Thread
 from .models import Activity, Category, Civi, CiviImage
-from accounts.models import Account
+from accounts.models import Profile
 from core.custom_decorators import require_post_params
 from core.constants import US_STATES
 
@@ -40,7 +40,7 @@ def new_thread(request):
         - Title, Summary, Category, Author, Level, State
     """
     try:
-        author = Account.objects.get(user=request.user)
+        author = Profile.objects.get(user=request.user)
         new_thread_data = dict(
             title=request.POST["title"],
             summary=request.POST["summary"],
@@ -56,8 +56,8 @@ def new_thread(request):
         new_t.save()
 
         return JsonResponse({"data": "success", "thread_id": new_t.pk})
-    except Account.DoesNotExist:
-        return HttpResponseServerError(reason=f"Account with user:{request.user.username} does not exist")
+    except Profile.DoesNotExist:
+        return HttpResponseServerError(reason=f"Profile with user:{request.user.username} does not exist")
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
 
@@ -72,10 +72,10 @@ def createCivi(request):
     :return: (200, ok) (400, missing required parameter) (500, internal error)
     """
 
-    a = Account.objects.get(user=request.user)
+    a = Profile.objects.get(user=request.user)
     thread_id = request.POST.get("thread_id")
     data = {
-        "author": Account.objects.get(user=request.user),
+        "author": Profile.objects.get(user=request.user),
         "title": request.POST.get("title", ""),
         "body": request.POST.get("body", ""),
         "c_type": request.POST.get("c_type", ""),
@@ -112,7 +112,7 @@ def createCivi(request):
 
         else:  # not a reply, a regular civi
             c_qs = Civi.objects.filter(thread_id=thread_id)
-            accounts = Account.objects.filter(
+            accounts = Profile.objects.filter(
                 pk__in=c_qs.values("author").distinct()
             )
             data = {
@@ -145,7 +145,7 @@ def rateCivi(request):
     """ Use this function to rate a Civi """
     civi_id = request.POST.get("civi_id", "")
     rating = request.POST.get("rating", "")
-    account = Account.objects.get(user=request.user)
+    account = Profile.objects.get(user=request.user)
 
     voted_civi = Civi.objects.get(id=civi_id)
 
@@ -218,7 +218,7 @@ def editCivi(request):
                 civi_image = CiviImage.objects.get(id=image_id)
                 civi_image.delete()
 
-        a = Account.objects.get(user=request.user)
+        a = Profile.objects.get(user=request.user)
         return JsonResponse(c.dict_with_score(a.id))
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
@@ -309,11 +309,11 @@ def uploadphoto(request):
 @login_required
 def editUser(request):
     """
-    Edit Account Model
+    Edit Profile Model
     """
     request_data = request.POST
     user = request.user
-    account = Account.objects.get(user=user)
+    account = Profile.objects.get(user=user)
 
     data = {
         "first_name": request_data.get("first_name", account.first_name),
@@ -331,7 +331,7 @@ def editUser(request):
 
         account.refresh_from_db()
 
-    return JsonResponse(Account.objects.summarize(account))
+    return JsonResponse(Profile.objects.summarize(account))
 
 
 @login_required
@@ -341,7 +341,7 @@ def uploadProfileImage(request):
         form = UpdateProfileImage(request.POST, request.FILES)
         if form.is_valid():
             try:
-                account = Account.objects.get(user=request.user)
+                account = Profile.objects.get(user=request.user)
 
                 # Clean up previous image
                 account.profile_image.delete()
@@ -359,8 +359,8 @@ def uploadProfileImage(request):
                 response = {"profile_image": account.profile_image_url}
                 return JsonResponse(response, status=200)
 
-            except Account.DoesNotExist:
-                response = {"message": f"Account with user {request.user.username} does not exist",
+            except Profile.DoesNotExist:
+                response = {"message": f"Profile with user {request.user.username} does not exist",
                             "error": "ACCOUNT_ERROR"}
                 return JsonResponse(response, status=400)
             except Exception as e:
@@ -379,15 +379,15 @@ def clearProfileImage(request):
     """ This function is used to delete a profile image """
     if request.method == "POST":
         try:
-            account = Account.objects.get(user=request.user)
+            account = Profile.objects.get(user=request.user)
 
             # Clean up previous image
             account.profile_image.delete()
             account.save()
 
             return HttpResponse("Image Deleted")
-        except Account.DoesNotExist:
-            return HttpResponseServerError(reason=f"Account with id:{request.user.username} does not exist")
+        except Profile.DoesNotExist:
+            return HttpResponseServerError(reason=f"Profile with id:{request.user.username} does not exist")
         except Exception:
             return HttpResponseServerError(reason=str("default"))
     else:
@@ -509,9 +509,9 @@ def requestFollow(request):
         return HttpResponseBadRequest(reason="You cannot follow yourself, silly!")
 
     try:
-        account = Account.objects.get(user=request.user)
+        account = Profile.objects.get(user=request.user)
         target = User.objects.get(username=request.POST.get("target", -1))
-        target_account = Account.objects.get(user=target)
+        target_account = Profile.objects.get(user=target)
 
         account.following.add(target_account)
         account.save()
@@ -529,7 +529,7 @@ def requestFollow(request):
         )
 
         return JsonResponse({"result": data})
-    except Account.DoesNotExist as e:
+    except Profile.DoesNotExist as e:
         return HttpResponseBadRequest(reason=str(e))
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
@@ -551,9 +551,9 @@ def requestUnfollow(request):
     try:
         username = request.POST.get("target")
         if username:
-            account = Account.objects.get(user=request.user)
+            account = Profile.objects.get(user=request.user)
             target = User.objects.get(username=username)
-            target_account = Account.objects.get(user=target)
+            target_account = Profile.objects.get(user=target)
 
             account.following.remove(target_account)
             account.save()
@@ -564,7 +564,7 @@ def requestUnfollow(request):
 
     except User.DoesNotExist:
         return HttpResponseBadRequest(reason=f"User with username {username} does not exist")
-    except Account.DoesNotExist as e:
+    except Profile.DoesNotExist as e:
         return HttpResponseBadRequest(reason=str(e))
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
@@ -578,7 +578,7 @@ def editUserCategories(request):
 
     """
     try:
-        account = Account.objects.get(user=request.user)
+        account = Profile.objects.get(user=request.user)
         categories = [int(i) for i in request.POST.getlist("categories[]")]
         account.categories.clear()
         for category in categories:
@@ -590,7 +590,7 @@ def editUserCategories(request):
             or "all_categories"
         }
         return JsonResponse({"result": data})
-    except Account.DoesNotExist as e:
+    except Profile.DoesNotExist as e:
         return HttpResponseBadRequest(reason=str(e))
     except Exception as e:
         return HttpResponseServerError(reason=str(e))

@@ -6,17 +6,17 @@ from django.http import HttpResponse, Http404
 
 from django.shortcuts import get_object_or_404
 
-from accounts.models import Account
+from accounts.models import Profile
 
 
 def get_account(user=None, pk=None, username=None):
     """ gets author based on the user """
     if user:
-        return get_object_or_404(Account, user=user)
+        return get_object_or_404(Profile, user=user)
     elif pk:
-        return get_object_or_404(Account, pk=pk)
+        return get_object_or_404(Profile, pk=pk)
     elif username:
-        return get_object_or_404(Account, user__username=username)
+        return get_object_or_404(Profile, user__username=username)
 
     else:
         raise Http404
