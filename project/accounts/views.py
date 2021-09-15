@@ -7,7 +7,7 @@ This module will include views for the accounts app.
 from django.conf import settings
 from django.views.generic.edit import FormView
 from django.contrib.auth import views as auth_views
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import login
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes
@@ -16,12 +16,13 @@ from django.utils.crypto import salted_hmac
 from django.utils.http import urlsafe_base64_encode
 from django.urls import reverse_lazy
 from django.template.response import TemplateResponse
+from django.contrib.auth import get_user_model
 
 from accounts.models import Profile
 from core.custom_decorators import login_required
 
-from .forms import ProfileRegistrationForm, UpdateProfile
-from .models import User
+from accounts.forms import UserRegistrationForm, UpdateProfile
+
 from .authentication import send_activation_email
 
 
@@ -46,7 +47,7 @@ class RegisterView(FormView):
     """
 
     template_name = "accounts/register/register.html"
-    form_class = ProfileRegistrationForm
+    form_class = UserRegistrationForm
     success_url = "/"
 
     def _create_user(self, form):
@@ -54,13 +55,8 @@ class RegisterView(FormView):
         password = form.cleaned_data["password"]
         email = form.cleaned_data["email"]
 
-        user = User.objects.create_user(username, email, password)
-
-        account = Profile(user=user)
-        account.save()
-
-        user.is_active = True
-        user.save()
+        user = get_user_model().objects.create_user(username, email, password)
+        Profile.objects.create(user=user)
 
         return user
 
@@ -103,7 +99,7 @@ class PasswordResetCompleteView(auth_views.PasswordResetCompleteView):
 
 @login_required
 def settings_view(request):
-    account = request.user.account_set.first()
+    profile = request.user.profile_set.first()
     if request.method == "POST":
         instance = Profile.objects.get(user=request.user)
         form = UpdateProfile(
@@ -118,9 +114,9 @@ def settings_view(request):
             initial={
                 "username": request.user.username,
                 "email": request.user.email,
-                "first_name": account.first_name or None,
-                "last_name": account.last_name or None,
-                "about_me": account.about_me or None,
+                "first_name": profile.first_name or None,
+                "last_name": profile.last_name or None,
+                "about_me": profile.about_me or None,
             }
         )
     return TemplateResponse(request, "accounts/utils/update_settings.html", {"form": form})

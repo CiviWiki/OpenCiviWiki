@@ -2,13 +2,11 @@ import re
 from django.core.files.images import get_image_dimensions
 from django import forms
 from django.contrib.auth.forms import (
-    UserCreationForm,
     SetPasswordForm,
     PasswordResetForm as AuthRecoverUserForm,
 )
 from django.forms.models import ModelForm
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes
@@ -24,9 +22,9 @@ from accounts.models import Profile
 User = get_user_model()
 
 
-class ProfileRegistrationForm(ModelForm):
+class UserRegistrationForm(ModelForm):
     """
-    This class is used to register new account in Civiwiki
+    This class is used to register a new user in Civiwiki
 
     Components:
         - Email     - from registration form

@@ -1,11 +1,17 @@
 from django.conf.urls import url
+from django.urls import path
 from django.contrib.auth import views as auth_views
+from accounts.views import RegisterView
 from . import authentication
 
 urlpatterns = [
-    url(r"^login", authentication.cw_login, name="login"),
-    url(r"^logout", authentication.cw_logout, name="logout"),
-    url(r"^register", authentication.cw_register, name="register"),
+    path(
+        'login/',
+        auth_views.LoginView.as_view(template_name='accounts/register/login.html'),
+        name='accounts_login',
+    ),
+    path('logout/', auth_views.LogoutView.as_view(), name='accounts_logout'),
+    path('register/', RegisterView.as_view(), name='accounts_register'),
     url(
         r"^activate_account/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$",
         authentication.activate_view,

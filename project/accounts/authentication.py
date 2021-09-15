@@ -1,29 +1,17 @@
 from django.conf import settings
-from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
-from django.contrib.sites.shortcuts import get_current_site
-from django.http import (
-    JsonResponse,
-    HttpResponse,
-    HttpResponseServerError,
-    HttpResponseRedirect,
-    HttpResponseBadRequest,
-)
-from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse  # TODO: move this out to views
 from django.utils.crypto import salted_hmac
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.http import int_to_base36
-from django.views.decorators.debug import sensitive_post_parameters
 from django.template.loader import render_to_string
 
 
 from accounts.utils import send_email
 from accounts.models import Profile
-from .forms import ProfileRegistrationForm, PasswordResetForm, RecoverUserForm
-from core.custom_decorators import require_post_params
+from .forms import PasswordResetForm, RecoverUserForm
 
 
 User = get_user_model()
@@ -74,103 +62,6 @@ def send_activation_email(user, domain):
         recipient_list=[user.email],
         html_message=html_message
     )
-
-
-@sensitive_post_parameters("password")
-@require_post_params(params=["username", "password"])
-def cw_login(request):
-    """
-    USAGE:
-        This is used to authenticate the user and log them in.
-
-    :returns (200, ok) (400, Inactive User) (400, Invalid username or password)
-    """
-
-    username = request.POST.get("username", "")
-    password = request.POST.get("password", "")
-    remember = request.POST.get("remember", "false")
-
-    user = authenticate(username=username, password=password)
-    if user is not None:
-        if remember == "false":
-            request.session.set_expiry(0)
-
-        login(request, user)
-
-        if user.is_active:
-
-            account = get_object_or_404(Profile, user=user)
-            request.session["login_user_firstname"] = account.first_name
-            request.session["login_user_image"] = account.profile_image_thumb_url
-
-            return HttpResponse()
-        else:
-            response = {"message": "Inactive user", "error": "USER_INACTIVE"}
-            return JsonResponse(response, status=400)
-    else:
-        # Return an 'invalid login' error message.
-        response = {"message": "Invalid username or password", "error": "INVALID_LOGIN"}
-        return JsonResponse(response, status=400)
-
-
-def cw_logout(request):
-    """Use this to logout the current user """
-
-    logout(request)
-    return HttpResponseRedirect("/")
-
-
-@sensitive_post_parameters("password")
-@require_post_params(params=["username", "password", "email"])
-def cw_register(request):
-    """
-    USAGE:
-        This is used to register new users to civiwiki
-
-    PROCESS:
-        - Gets new users username and password
-        - Sets the user to active
-        - Then creates a new user verification link and emails it to the new user
-
-    Return:
-        (200, ok) (500, Internal Error)
-    """
-    form = ProfileRegistrationForm(request.POST or None)
-    if request.method == "POST":
-        # Form Validation
-        if form.is_valid():
-            username = form.clean_username()
-            password = form.clean_password()
-            email = form.clean_email()
-
-            # Create a New Profile
-            try:
-                user = User.objects.create_user(username, email, password)
-
-                account = Profile(user=user)
-                account.save()
-
-                user.is_active = True
-                user.save()
-
-                domain = get_current_site(request).domain
-
-                send_activation_email(user, domain)
-
-                login(request, user)
-                return HttpResponse()
-
-            except Exception as e:
-                return HttpResponseServerError(reason=str(e))
-
-        else:
-            response = {
-                "success": False,
-                "errors": [error[0] for error in form.errors.values()],
-            }
-            return JsonResponse(response, status=400)
-    else:
-        return HttpResponseBadRequest(reason="POST Method Required")
 
 
 def activate_view(request, uidb64, token):

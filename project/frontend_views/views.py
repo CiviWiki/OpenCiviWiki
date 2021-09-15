@@ -182,14 +182,6 @@ def create_group(request):
     return TemplateResponse(request, "newgroup.html", {})
 
 
-def login_view(request):
-    if request.user.is_authenticated:
-        if request.user.is_active:
-            return HttpResponseRedirect("/")
-
-    return TemplateResponse(request, "login.html", {})
-
-
 def declaration(request):
     return TemplateResponse(request, "declaration.html", {})
 
