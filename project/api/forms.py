@@ -3,8 +3,6 @@ from django.core.files.images import get_image_dimensions
 from django.contrib.auth import get_user_model
 from accounts.models import Profile
 
-User = get_user_model()
-
 
 class UpdatePassword(forms.ModelForm):
     """
@@ -12,7 +10,7 @@ class UpdatePassword(forms.ModelForm):
     """
 
     class Meta:
-        model = User
+        model = get_user_model()
         fields = ["password", "verify"]
 
     password = forms.CharField(

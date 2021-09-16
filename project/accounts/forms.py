@@ -19,8 +19,6 @@ from accounts.utils import send_email
 from .reserved_usernames import RESERVED_USERNAMES
 from accounts.models import Profile
 
-User = get_user_model()
-
 
 class UserRegistrationForm(ModelForm):
     """
@@ -52,7 +50,7 @@ class UserRegistrationForm(ModelForm):
     }
 
     class Meta:
-        model = User
+        model = get_user_model()
         fields = ("username", "email", "password")
 
     def clean_email(self):

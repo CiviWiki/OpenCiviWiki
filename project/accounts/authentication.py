@@ -14,9 +14,6 @@ from accounts.models import Profile
 from .forms import PasswordResetForm, RecoverUserForm
 
 
-User = get_user_model()
-
-
 class ProfileActivationTokenGenerator(PasswordResetTokenGenerator):
     """Token Generator for Email Confirmation"""
 
@@ -69,6 +66,8 @@ def activate_view(request, uidb64, token):
         This shows different views to the user when they are verifying
         their account based on whether they are already verified or not.
     """
+
+    User = get_user_model()
 
     try:
         uid = force_text(urlsafe_base64_decode(uidb64))
