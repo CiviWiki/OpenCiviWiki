@@ -62,7 +62,7 @@ class UserRegistrationForm(ModelForm):
 
         email = self.cleaned_data.get("email")
 
-        if User.objects.filter(email=email).exists():
+        if get_user_model().objects.filter(email=email).exists():
             raise forms.ValidationError(self.error_message["email_exists"])
 
         return email
@@ -84,7 +84,7 @@ class UserRegistrationForm(ModelForm):
             raise forms.ValidationError(self.error_message["invalid_username"])
 
         if (
-            User.objects.filter(username=username).exists()
+            get_user_model().objects.filter(username=username).exists()
             or username in RESERVED_USERNAMES
         ):
             raise forms.ValidationError(self.error_message["username_exists"])
@@ -200,7 +200,7 @@ class RecoverUserForm(AuthRecoverUserForm):
             send_email(
                 subject="Profile Recovery for CiviWiki",
                 message=message,
-                sender=settings.EMAIL_HOST_USER,
+                sender=sender,
                 recipient_list=[email],
                 html_message=html_message,
             )
