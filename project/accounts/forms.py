@@ -240,16 +240,13 @@ class UpdateProfile(forms.ModelForm):
     profile_image = forms.ImageField(required=False)
 
 
-User = get_user_model()
-
-
 class UpdatePassword(forms.ModelForm):
     """
     Form for updating User Password
     """
 
     class Meta:
-        model = User
+        model = get_user_model()
         fields = ["password", "verify"]
 
     password = forms.CharField(
