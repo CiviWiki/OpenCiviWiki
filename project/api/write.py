@@ -26,8 +26,6 @@ from accounts.models import Profile
 from core.custom_decorators import require_post_params
 from core.constants import US_STATES
 
-User = get_user_model()
-
 
 @login_required
 @require_post_params(params=["title", "summary", "category_id"])
@@ -508,6 +506,8 @@ def requestFollow(request):
     if request.user.username == request.POST.get("target", -1):
         return HttpResponseBadRequest(reason="You cannot follow yourself, silly!")
 
+    User = get_user_model()
+
     try:
         account = Profile.objects.get(user=request.user)
         target = User.objects.get(username=request.POST.get("target", -1))
@@ -548,6 +548,9 @@ def requestUnfollow(request):
 
     :return: (200, okay, list of friend information) (400, bad lookup) (500, error)
     """
+
+    User = get_user_model()
+
     try:
         username = request.POST.get("target")
         if username:

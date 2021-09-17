@@ -6,14 +6,15 @@ from .models import Thread, Civi, Activity
 from accounts.models import Profile
 from .utils import json_response
 
-User = get_user_model()
-
 
 def get_user(request, user):
     """
     USAGE:
         This is used to get a user
     """
+
+    User = get_user_model()
+
     try:
         u = User.objects.get(username=user)
         a = Profile.objects.get(user=u)
@@ -28,6 +29,9 @@ def get_card(request, user):
     USAGE:
         This is used to get a card
     """
+
+    User = get_user_model()
+
     try:
         u = User.objects.get(username=user)
         a = Profile.objects.get(user=u)
@@ -48,6 +52,9 @@ def get_profile(request, user):
     USAGE:
        This is used to get a user profile
     """
+
+    User = get_user_model()
+
     try:
         u = User.objects.get(username=user)
         a = Profile.objects.get(user=u)
