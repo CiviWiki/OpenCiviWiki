@@ -21,7 +21,7 @@ class IsProfileOwnerOrReadOnly(BasePermission):
 class IsProfileOwnerOrDuringRegistrationOrReadOnly(IsProfileOwnerOrReadOnly):
     """ """
     def has_object_permission(self, request, view, obj):
-        if obj.full_account:
+        if obj.full_profile:
             return super(
                 IsProfileOwnerOrDuringRegistrationOrReadOnly, self
             ).has_object_permission(request, view, obj)
