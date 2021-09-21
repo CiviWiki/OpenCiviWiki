@@ -5,8 +5,6 @@ title: "<Enter a brief description here>"
 
 labels: [triage]
 
-assignees:
-  - brylie
 body:
   - type: markdown
     attributes:
