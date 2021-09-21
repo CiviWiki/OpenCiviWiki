@@ -23,7 +23,7 @@ from django.views.generic.base import RedirectView
 
 from api import urls as api
 from accounts.views import (PasswordResetView, PasswordResetDoneView,
-                            PasswordResetConfirmView, PasswordResetCompleteView, settings_view)
+                            PasswordResetConfirmView, PasswordResetCompleteView)
 from frontend_views import urls as frontend_views
 
 

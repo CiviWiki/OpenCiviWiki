@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from accounts.views import RegisterView
+from accounts.views import RegisterView, SettingsView, ProfileActivationView
 from . import authentication
 
 urlpatterns = [
@@ -12,11 +12,8 @@ urlpatterns = [
     ),
     path('logout/', auth_views.LogoutView.as_view(), name='accounts_logout'),
     path('register/', RegisterView.as_view(), name='accounts_register'),
-    url(
-        r"^activate_account/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$",
-        authentication.activate_view,
-        name="activate_account",
-    ),
+    path('settings/', SettingsView.as_view(), name='accounts_settings'),
+    path('activate_account/<uidb64>/<token>/', ProfileActivationView.as_view(), name='accounts_activate'),
     url(
         r"^forgot/$",
         auth_views.PasswordResetView.as_view(),
