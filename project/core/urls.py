@@ -32,24 +32,24 @@ urlpatterns = [
     path("", include('accounts.urls')),
     url(r"^api/", include(api)),
     path(
-        'accounts/password_reset',
+        'accounts/password_reset/',
         PasswordResetView.as_view(),
         name='accounts_password_reset',
     ),
 
     path(
-        'accounts/password_reset_done',
+        'accounts/password_reset_done/',
         PasswordResetDoneView.as_view(),
         name='accounts_password_reset_done',
     ),
     path(
-        'accounts/password_reset_confirm/<uidb64>/<token>',
+        'accounts/password_reset_confirm/<uidb64>/<token>/',
         PasswordResetConfirmView.as_view(),
         name='accounts_password_reset_confirm',
     ),
 
     path(
-        'accounts/password_reset_complete',
+        'accounts/password_reset_complete/',
         PasswordResetCompleteView.as_view(),
         name='accounts_password_reset_complete',
     ),
