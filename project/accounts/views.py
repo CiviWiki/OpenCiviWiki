@@ -12,10 +12,8 @@ from django.contrib.auth import views as auth_views
 from django.contrib.auth import login
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.contrib.sites.shortcuts import get_current_site
-from django.utils.encoding import force_bytes
 from django.utils.http import int_to_base36
 from django.utils.crypto import salted_hmac
-from django.utils.http import urlsafe_base64_encode
 from django.urls import reverse_lazy
 from django.contrib.auth import get_user_model
 from django.utils.encoding import force_str
@@ -26,7 +24,7 @@ from accounts.models import Profile
 
 from accounts.forms import UserRegistrationForm, ProfileEditForm
 
-from .authentication import send_activation_email
+from accounts.authentication import send_activation_email, account_activation_token
 
 
 class ProfileActivationTokenGenerator(PasswordResetTokenGenerator):
@@ -38,10 +36,8 @@ class ProfileActivationTokenGenerator(PasswordResetTokenGenerator):
         """Token function pulled from Django 1.11"""
         ts_b36 = int_to_base36(timestamp)
 
-        hash = salted_hmac(self.key_salt, str(user.pk) + str(timestamp)).hexdigest()[
-            ::2
-        ]
-        return "%s-%s" % (ts_b36, hash)
+        hash_string = salted_hmac(self.key_salt, str(user.pk) + str(timestamp)).hexdigest()[::2]
+        return "%s-%s" % (ts_b36, hash_string)
 
 
 class RegisterView(FormView):
