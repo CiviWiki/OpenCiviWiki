@@ -3,18 +3,17 @@ import json
 from django.conf import settings
 from django.contrib.auth.decorators import user_passes_test
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.models import User
 from django.db.models import F
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template.response import TemplateResponse
-
+from django.contrib.auth import get_user_model
 
 from api.models import Category, Thread, Civi, Activity
 from accounts.models import Profile
 from accounts.forms import UpdateProfile
 from api.forms import UpdateProfileImage
 from core.constants import US_STATES
-from core.custom_decorators import login_required, full_account
+from core.custom_decorators import login_required, full_profile
 
 
 def base_view(request):
@@ -60,8 +59,9 @@ def base_view(request):
 
 
 @login_required
-@full_account
+@full_profile
 def user_profile(request, username=None):
+    User = get_user_model()
     if request.method == "GET":
         if not username:
             return HttpResponseRedirect("/profile/{0}".format(request.user))
@@ -69,7 +69,7 @@ def user_profile(request, username=None):
             is_owner = username == request.user.username
             try:
                 user = User.objects.get(username=username)
-                account = user.account_set.first()
+                profile = user.profile_set.first()
             except User.DoesNotExist:
                 return HttpResponseRedirect("/404")
 
@@ -77,9 +77,9 @@ def user_profile(request, username=None):
             initial={
                 "username": user.username,
                 "email": user.email,
-                "first_name": account.first_name or None,
-                "last_name": account.last_name or None,
-                "about_me": account.about_me or None,
+                "first_name": profile.first_name or None,
+                "last_name": profile.last_name or None,
+                "about_me": profile.about_me or None,
             },
             readonly=True,
         )
@@ -94,8 +94,8 @@ def user_profile(request, username=None):
 
 @login_required
 def user_setup(request):
-    a = Profile.objects.get(user=request.user)
-    if a.full_account:
+    profile = Profile.objects.get(user=request.user)
+    if profile.full_profile:
         return HttpResponseRedirect("/")
         # start temp rep rendering TODO: REMOVE THIS
     else:
@@ -107,7 +107,7 @@ def user_setup(request):
 
 
 @login_required
-@full_account
+@full_profile
 def issue_thread(request, thread_id=None):
     if not thread_id:
         return HttpResponseRedirect("/404")
@@ -173,7 +173,7 @@ def issue_thread(request, thread_id=None):
 
 
 @login_required
-@full_account
+@full_profile
 def create_group(request):
     return TemplateResponse(request, "newgroup.html", {})
 

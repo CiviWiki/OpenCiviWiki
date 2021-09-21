@@ -25,11 +25,11 @@ def require_post_params(params):
     return decorator
 
 
-def full_account(func):
+def full_profile(func):
     @wraps(func)
     def inner(request, *args, **kwargs):
-        account = Profile.objects.get(user=request.user)
-        if not account.full_account:
+        profile = Profile.objects.get(user=request.user)
+        if not profile.full_profile:
             return HttpResponseRedirect("/setup")
         return func(request, *args, **kwargs)
 
