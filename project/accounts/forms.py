@@ -206,14 +206,14 @@ class RecoverUserForm(AuthRecoverUserForm):
             )
 
 
-class UpdateProfile(forms.ModelForm):
+class ProfileEditForm(forms.ModelForm):
     """
     Form for updating Profile data
     """
 
     def __init__(self, *args, **kwargs):
         readonly = kwargs.pop("readonly", False)
-        super(UpdateProfile, self).__init__(*args, **kwargs)
+        super(ProfileEditForm, self).__init__(*args, **kwargs)
         if readonly:
             self.disable_fields()
 

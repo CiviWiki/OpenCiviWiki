@@ -21,7 +21,7 @@ from django.contrib.auth import get_user_model
 from accounts.models import Profile
 from core.custom_decorators import login_required
 
-from accounts.forms import UserRegistrationForm, UpdateProfile
+from accounts.forms import UserRegistrationForm, ProfileEditForm
 
 from .authentication import send_activation_email
 
