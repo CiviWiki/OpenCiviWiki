@@ -93,3 +93,77 @@ class RegisterViewTests(TestCase):
                                      "email": "newuser@email.com",
                                      'password': "password123"})
         self.assertRedirects(response, expected_url=reverse('base'), status_code=302, target_status_code=200)
+
+
+class SettingsViewTests(BaseTestCase):
+    """A class to test settings view"""
+
+    def setUp(self) -> None:
+        super(SettingsViewTests, self).setUp()
+        self.profile.first_name = "Gorkem"
+        self.profile.last_name = "Arslan"
+        self.profile.save()
+        self.client.login(username=self.user.username, password="password123")
+        self.url = reverse('accounts_settings')
+        self.response = self.client.get(self.url)
+
+    def test_template_name(self):
+        """Whether the correct template is used"""
+
+        self.assertTemplateUsed(self.response, 'accounts/utils/update_settings.html')
+
+    def test_contains_existing_data(self):
+        """Whether the existing data is available"""
+
+        self.assertContains(self.response, "Gorkem")
+        self.assertContains(self.response, "Arslan")
+
+    def test_anonymous_users_are_redirected_to_login_page(self):
+        """Whether anonymous users are redirected to the login page"""
+
+        self.client.logout()
+        self.response = self.client.get(self.url)
+        expected_url = reverse('accounts_login') + '?next=' + reverse('accounts_settings')
+        self.assertRedirects(response=self.response, expected_url=expected_url,
+                             status_code=302, target_status_code=200, msg_prefix='',
+                             fetch_redirect_response=True)
+
+
+class ProfileActivationViewTests(TestCase):
+    """A class to test profile activation view"""
+
+    def setUp(self) -> None:
+        self.response = self.client.post(reverse('accounts_register'),
+                                         {'username': "newuser",
+                                          "email": "newuser@email.com",
+                                          'password': "password123"})
+        self.user = get_user_model().objects.get(username="newuser")
+        self.profile = Profile.objects.get(user=self.user)
+        self.activation_link = self.response.context[0]['link']
+
+    def test_activation_link(self):
+        """Whether the activation link works as expected"""
+
+        self.assertFalse(self.profile.is_verified)
+        response = self.client.get(self.activation_link)
+        self.profile.refresh_from_db()
+        self.assertTrue(self.profile.is_verified)
+        self.assertTemplateUsed(response, "general-message.html")
+        self.assertContains(response, "Email Verification Successful")
+
+    def test_activation_link_with_a_verified_user(self):
+        """Whether a verified user is welcomed by already verified page"""
+
+        self.client.get(self.activation_link)
+        response = self.client.get(self.activation_link)
+        self.assertTemplateUsed(response, "general-message.html")
+        self.assertContains(response, "Email Already Verified")
+
+    def test_invalid_action_link(self):
+        """Whether a verified user is welcomed by verification error page"""
+
+        invalid_link = self.activation_link[:-10] + '12345/'
+        response = self.client.get(invalid_link)
+        self.assertFalse(self.profile.is_verified)
+        self.assertTemplateUsed(response, "general-message.html")
+        self.assertContains(response, "Email Verification Error")

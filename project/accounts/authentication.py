@@ -1,26 +1,23 @@
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.template.response import TemplateResponse  # TODO: move this out to views
 from django.utils.crypto import salted_hmac
-from django.utils.encoding import force_bytes, force_text
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 from django.utils.http import int_to_base36
 from django.template.loader import render_to_string
 
 
 from accounts.utils import send_email
-from accounts.models import Profile
 from .forms import PasswordResetForm, RecoverUserForm
 
 
 class ProfileActivationTokenGenerator(PasswordResetTokenGenerator):
     """Token Generator for Email Confirmation"""
 
-
     key_salt = "django.contrib.auth.tokens.PasswordResetTokenGenerator"
 
-    def _make_token_with_timestamp(self, user, timestamp):
+    def _make_token_with_timestamp(self, user, timestamp, legacy=False):
         """ Token function pulled from Django 1.11 """
         ts_b36 = int_to_base36(timestamp)
 
@@ -36,7 +33,7 @@ account_activation_token = ProfileActivationTokenGenerator()
 def send_activation_email(user, domain):
     uid = urlsafe_base64_encode(force_bytes(user.pk))
     token = account_activation_token.make_token(user)
-    base_url = "http://{domain}/auth/activate_account/{uid}/{token}/"
+    base_url = "http://{domain}/activate_account/{uid}/{token}/"
     url_with_code = base_url.format(domain=domain, uid=uid, token=token)
     # Send Email Verification Message
     # TODO: Move this to string templates
@@ -59,53 +56,6 @@ def send_activation_email(user, domain):
         recipient_list=[user.email],
         html_message=html_message
     )
-
-
-def activate_view(request, uidb64, token):
-    """
-        This shows different views to the user when they are verifying
-        their account based on whether they are already verified or not.
-    """
-
-    User = get_user_model()
-
-    try:
-        uid = force_text(urlsafe_base64_decode(uidb64))
-        user = User.objects.get(pk=uid)
-
-    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-        user = None
-
-    if user is not None and account_activation_token.check_token(user, token):
-        account = Profile.objects.get(user=user)
-        if account.is_verified:
-            redirect_link = {"href": "/", "label": "Back to Main"}
-            template_var = {
-                "title": "Email Already Verified",
-                "content": "You have already verified your email",
-                "link": redirect_link,
-            }
-            return TemplateResponse(request, "general-message.html", template_var)
-        else:
-            account.is_verified = True
-            account.save()
-
-            redirect_link = {"href": "/", "label": "Back to Main"}
-            template_var = {
-                "title": "Email Verification Successful",
-                "content": "Thank you for verifying your email with CiviWiki",
-                "link": redirect_link,
-            }
-            return TemplateResponse(request, "general-message.html", template_var)
-    else:
-        # invalid link
-        redirect_link = {"href": "/", "label": "Back to Main"}
-        template_var = {
-            "title": "Email Verification Error",
-            "content": "Email could not be verified",
-            "link": redirect_link,
-        }
-        return TemplateResponse(request, "general-message.html", template_var)
 
 
 def recover_user():

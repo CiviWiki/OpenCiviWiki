@@ -10,7 +10,7 @@ from django.contrib.auth import get_user_model
 
 from api.models import Category, Thread, Civi, Activity
 from accounts.models import Profile
-from accounts.forms import UpdateProfile
+from accounts.forms import ProfileEditForm
 from api.forms import UpdateProfileImage
 from core.constants import US_STATES
 from core.custom_decorators import login_required, full_profile
@@ -73,7 +73,7 @@ def user_profile(request, username=None):
             except User.DoesNotExist:
                 return HttpResponseRedirect("/404")
 
-        form = UpdateProfile(
+        form = ProfileEditForm(
             initial={
                 "username": user.username,
                 "email": user.email,
