@@ -20,10 +20,8 @@ class ProfileActivationTokenGenerator(PasswordResetTokenGenerator):
         """ Token function pulled from Django 1.11 """
         ts_b36 = int_to_base36(timestamp)
 
-        hash = salted_hmac(
-            self.key_salt, str(user.pk) + str(timestamp)
-        ).hexdigest()[::2]
-        return "%s-%s" % (ts_b36, hash)
+        hash_string = salted_hmac(self.key_salt, str(user.pk) + str(timestamp)).hexdigest()[::2]
+        return "%s-%s" % (ts_b36, hash_string)
 
 
 account_activation_token = ProfileActivationTokenGenerator()
