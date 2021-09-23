@@ -20,6 +20,7 @@ class Fact(models.Model):
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     last_modified = models.DateTimeField(auto_now=True, blank=True, null=True)
 
+
 class Category(models.Model):
     name = models.CharField(max_length=63)
 
@@ -30,7 +31,7 @@ class Category(models.Model):
         return self.name
 
     def __unicode__(self):
-        return self.name    
+        return self.name
 
 
 class ThreadManager(models.Manager):
@@ -391,8 +392,6 @@ class Civi(models.Model):
         return data
 
 
-
-
 class Notification(models.Model):
     account = models.ForeignKey(
         Profile, default=None, null=True, on_delete=models.PROTECT
@@ -450,6 +449,7 @@ class Response(models.Model):
 
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     last_modified = models.DateTimeField(auto_now=True, blank=True, null=True)
+
 
 image_upload_path = PathAndRename("")
 
