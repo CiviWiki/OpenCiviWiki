@@ -1,10 +1,7 @@
 import re
 from django.core.files.images import get_image_dimensions
 from django import forms
-from django.contrib.auth.forms import (
-    SetPasswordForm,
-    PasswordResetForm as AuthRecoverUserForm,
-)
+from django.contrib.auth.forms import PasswordResetForm as AuthRecoverUserForm
 from django.forms.models import ModelForm
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
@@ -109,41 +106,6 @@ class UserRegistrationForm(ModelForm):
 
         if password.isdigit():
             raise forms.ValidationError(self.error_message["invalid_password"])
-
-        return password
-
-
-class PasswordResetForm(SetPasswordForm):
-    """
-    A form that lets a user reset their password
-    """
-
-    error_messages = dict(
-        SetPasswordForm.error_messages,
-        **{
-            "invalid_password": _("Password can not be entirely numeric."),
-            "invalid_password_length": _("Password must be at least 4 characters."),
-        }
-    )
-
-    def clean_new_password1(self):
-        """
-        Used to make sure that new passwords meet the Civiwiki standards
-
-        Must be:
-            - At least 4 characters in length
-            - Cannot be all numbers
-
-        Returns new password
-        """
-
-        password = self.cleaned_data.get("new_password1")
-
-        if len(password) < 4:
-            raise forms.ValidationError(self.error_messages["invalid_password_length"])
-
-        if password.isdigit():
-            raise forms.ValidationError(self.error_messages["invalid_password"])
 
         return password
 

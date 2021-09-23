@@ -9,7 +9,7 @@ from django.template.loader import render_to_string
 
 
 from accounts.utils import send_email
-from .forms import PasswordResetForm, RecoverUserForm
+from .forms import RecoverUserForm
 
 
 class ProfileActivationTokenGenerator(PasswordResetTokenGenerator):
@@ -70,20 +70,6 @@ def recover_user():
         "email_template_name": "email/base_text_template.txt",
         "subject_template_name": "email/base_email_template.html",
         "password_reset_form": RecoverUserForm,
-    }
-
-    return view_variables
-
-
-def password_reset_confirm():
-    """
-    USAGE:
-        Used to recover a lost password.
-    """
-
-    view_variables = {
-        "template_name": "user/password_reset.html",
-        "set_password_form": PasswordResetForm,
     }
 
     return view_variables
