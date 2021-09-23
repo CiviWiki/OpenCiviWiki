@@ -1,18 +1,9 @@
 import re
 from django.core.files.images import get_image_dimensions
 from django import forms
-from django.contrib.auth.forms import PasswordResetForm as AuthRecoverUserForm
 from django.forms.models import ModelForm
 from django.contrib.auth import get_user_model
-from django.contrib.auth.tokens import default_token_generator
-from django.contrib.sites.shortcuts import get_current_site
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
-from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
-from django.conf import settings
-
-from accounts.utils import send_email
 from .reserved_usernames import RESERVED_USERNAMES
 from accounts.models import Profile
 
@@ -108,64 +99,6 @@ class UserRegistrationForm(ModelForm):
             raise forms.ValidationError(self.error_message["invalid_password"])
 
         return password
-
-
-class RecoverUserForm(AuthRecoverUserForm):
-    """
-    Send custom recovery mail with a task runner mostly taken from PasswordResetForm in auth
-    """
-
-    def save(
-        self,
-        domain_override=None,
-        subject_template_name=None,
-        email_template_name=None,
-        use_https=False,
-        token_generator=default_token_generator,
-        from_email=None,
-        request=None,
-        html_email_template_name=None,
-        extra_email_context=None,
-    ):
-        """
-        Generates a one-use only link for resetting password and sends to the
-        user.
-        """
-        email = self.cleaned_data["email"]
-
-        for user in self.get_users(email):
-            uid = urlsafe_base64_encode(force_bytes(user.pk))
-            token = token_generator.make_token(user)
-            domain = get_current_site(request).domain
-            base_url = "http://{domain}/auth/password_reset/{uid}/{token}/"
-            url_with_code = base_url.format(domain=domain, uid=uid, token=token)
-            body_txt = """You're receiving this email because you requested an account recovery
-                          email for your user account at {domain}. Your username for this email
-                          is: {username}. If you also need to reset your password, please go to
-                          the following page and choose a new password."""
-
-            email_body = body_txt.format(domain=domain, username=user.username)
-
-            context = {
-                "title": "Profile Recovery for CiviWiki",
-                "greeting": "Recover your account on CiviWiki",
-                "body": email_body,
-                "link": url_with_code,
-            }
-
-            text_message_template = "email/base_text_template.txt"
-            html_message_template = "email/base_email_template.html"
-
-            message = render_to_string(text_message_template, context)
-            html_message = render_to_string(html_message_template, context)
-            sender = settings.EMAIL_HOST_USER
-            send_email(
-                subject="Profile Recovery for CiviWiki",
-                message=message,
-                sender=sender,
-                recipient_list=[email],
-                html_message=html_message,
-            )
 
 
 class ProfileEditForm(forms.ModelForm):

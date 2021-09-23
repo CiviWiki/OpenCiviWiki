@@ -10,34 +10,15 @@ from django.views.generic.edit import FormView, UpdateView
 from django.views import View
 from django.contrib.auth import views as auth_views
 from django.contrib.auth import login
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.contrib.sites.shortcuts import get_current_site
-from django.utils.http import int_to_base36
-from django.utils.crypto import salted_hmac
 from django.urls import reverse_lazy
 from django.contrib.auth import get_user_model
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from django.template.response import TemplateResponse
-
 from accounts.models import Profile
-
 from accounts.forms import UserRegistrationForm, ProfileEditForm
-
 from accounts.authentication import send_activation_email, account_activation_token
-
-
-class ProfileActivationTokenGenerator(PasswordResetTokenGenerator):
-    """Token Generator for Email Confirmation"""
-
-    key_salt = "django.contrib.auth.tokens.PasswordResetTokenGenerator"
-
-    def _make_token_with_timestamp(self, user, timestamp):
-        """Token function pulled from Django 1.11"""
-        ts_b36 = int_to_base36(timestamp)
-
-        hash_string = salted_hmac(self.key_salt, str(user.pk) + str(timestamp)).hexdigest()[::2]
-        return "%s-%s" % (ts_b36, hash_string)
 
 
 class RegisterView(FormView):
