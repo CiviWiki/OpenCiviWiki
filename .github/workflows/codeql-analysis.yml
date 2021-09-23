@@ -1,0 +1,19 @@
+name: "Code scanning"
+
+on:
+  push:
+    branches-ignore:
+      - dependabot/** 
+  pull_request: {}
+jobs:
+  CodeQL:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v1
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v1
+        with:
+          languages: python, javascript
