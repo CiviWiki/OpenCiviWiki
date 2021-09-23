@@ -19,6 +19,7 @@ from django.template.response import TemplateResponse
 from accounts.models import Profile
 from accounts.forms import UserRegistrationForm, ProfileEditForm
 from accounts.authentication import send_activation_email, account_activation_token
+from django.http import HttpResponseRedirect
 
 
 class RegisterView(FormView):
@@ -146,3 +147,21 @@ class ProfileActivationView(View):
                 "link": redirect_link,
             }
             return TemplateResponse(request, "general-message.html", template_var)
+
+
+class ProfileSetupView(LoginRequiredMixin, View):
+    """A view to make the user profile full_profile"""
+
+    login_url = 'accounts_login'
+
+    def get(self, request):
+        profile = Profile.objects.get(user=request.user)
+        if profile.full_profile:
+            return HttpResponseRedirect("/")
+            # start temp rep rendering TODO: REMOVE THIS
+        else:
+            data = {
+                "username": request.user.username,
+                "email": request.user.email,
+            }
+            return TemplateResponse(request, "user-setup.html", data)

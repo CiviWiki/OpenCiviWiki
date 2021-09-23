@@ -1,7 +1,7 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from accounts.views import (RegisterView, SettingsView, ProfileActivationView, PasswordResetView, PasswordResetDoneView,
-                            PasswordResetConfirmView, PasswordResetCompleteView)
+                            PasswordResetConfirmView, PasswordResetCompleteView, ProfileSetupView)
 
 urlpatterns = [
     path(
@@ -33,4 +33,5 @@ urlpatterns = [
         PasswordResetCompleteView.as_view(),
         name='accounts_password_reset_complete',
     ),
+    path('setup/', ProfileSetupView.as_view(), name="accounts_profile_setup"),
 ]
