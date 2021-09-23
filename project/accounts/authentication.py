@@ -7,7 +7,6 @@ from django.utils.http import urlsafe_base64_encode
 from django.utils.http import int_to_base36
 from django.template.loader import render_to_string
 
-
 from accounts.utils import send_email
 from .forms import RecoverUserForm
 
@@ -92,22 +91,6 @@ def recover_user_sent(request):
             "and check your spam folder."
         ),
         # TODO: move to string templates
-        "link": redirect_link,
-    }
-    return TemplateResponse(request, "general-message.html", template_var)
-
-
-def password_reset_complete(request):
-    """
-    USAGE:
-        Displays to the user that their password was reset.
-    """
-
-    redirect_link = {"href": "/login", "label": "Login"}
-
-    template_var = {
-        "title": "Password reset complete",
-        "content": "Your password has been set. You may now go ahead and login.",
         "link": redirect_link,
     }
     return TemplateResponse(request, "general-message.html", template_var)
