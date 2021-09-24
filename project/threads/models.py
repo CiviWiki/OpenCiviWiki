@@ -73,9 +73,6 @@ class Thread(models.Model):
     author = models.ForeignKey(
         Profile, default=None, null=True, on_delete=models.PROTECT
     )
-    category = models.ForeignKey(
-        Category, default=None, null=True, on_delete=models.PROTECT
-    )
     facts = models.ManyToManyField(Fact)
 
     tags = TaggableManager()
