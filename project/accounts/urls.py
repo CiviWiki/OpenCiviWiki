@@ -1,8 +1,7 @@
-from django.conf.urls import url
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from accounts.views import RegisterView, SettingsView, ProfileActivationView
-from . import authentication
+from accounts.views import (RegisterView, SettingsView, ProfileActivationView, PasswordResetView, PasswordResetDoneView,
+                            PasswordResetConfirmView, PasswordResetCompleteView, ProfileSetupView)
 
 urlpatterns = [
     path(
@@ -14,26 +13,25 @@ urlpatterns = [
     path('register/', RegisterView.as_view(), name='accounts_register'),
     path('settings/', SettingsView.as_view(), name='accounts_settings'),
     path('activate_account/<uidb64>/<token>/', ProfileActivationView.as_view(), name='accounts_activate'),
-    url(
-        r"^forgot/$",
-        auth_views.PasswordResetView.as_view(),
-        authentication.recover_user(),
-        name="password_reset",
+    path(
+        'accounts/password_reset/',
+        PasswordResetView.as_view(),
+        name='accounts_password_reset',
     ),
-    url(
-        r"^recovery_email_sent/$",
-        authentication.recover_user_sent,
-        name="recovery_email_sent",
+    path(
+        'accounts/password_reset_done/',
+        PasswordResetDoneView.as_view(),
+        name='accounts_password_reset_done',
     ),
-    url(
-        r"^password_reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$",
-        auth_views.PasswordResetConfirmView.as_view(),
-        authentication.password_reset_confirm(),
-        name="password_reset_confirm",
+    path(
+        'accounts/password_reset_confirm/<uidb64>/<token>/',
+        PasswordResetConfirmView.as_view(),
+        name='accounts_password_reset_confirm',
     ),
-    url(
-        r"^password_reset/done/$",
-        authentication.password_reset_complete,
-        name="password_reset_complete",
+    path(
+        'accounts/password_reset_complete/',
+        PasswordResetCompleteView.as_view(),
+        name='accounts_password_reset_complete',
     ),
+    path('setup/', ProfileSetupView.as_view(), name="accounts_profile_setup"),
 ]

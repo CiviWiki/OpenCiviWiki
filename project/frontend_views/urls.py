@@ -8,7 +8,6 @@ urlpatterns = [
     url(r"^profile/(?P<username>[a-zA-Z0-9-_]*)$", v.user_profile, name="profile"),
     url(r"^profile/rep/(?P<username>\d+)$", v.user_profile, name="profile"),
     url(r"^thread/(?P<thread_id>\w+)$", v.issue_thread, name="issue thread"),
-    url(r"^setup$", v.user_setup, name="user setup"),
     url(r"^profile$", v.user_profile, name="default_profile"),
     url(r"^$", v.base_view, name="base"),
     url(r"^thread/(?P<thread_id>\w+)/csv$", v.civi2csv, name="civi2csv"),
