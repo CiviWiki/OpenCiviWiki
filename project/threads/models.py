@@ -20,6 +20,7 @@ class Fact(models.Model):
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     last_modified = models.DateTimeField(auto_now=True, blank=True, null=True)
 
+
 class ThreadManager(models.Manager):
     # TODO: move this to read.py, try to be more query operation specific here
     def summarize(self, thread):
