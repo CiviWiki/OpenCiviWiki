@@ -156,7 +156,7 @@ if DEBUG:
     )
 
     DEFAULT_AUTHENTICATION_CLASSES = (
-        "api.authentication.CsrfExemptSessionAuthentication",
+        "accounts.authentication.CsrfExemptSessionAuthentication",
     ) + DEFAULT_AUTHENTICATION_CLASSES
 
 REST_FRAMEWORK = {
