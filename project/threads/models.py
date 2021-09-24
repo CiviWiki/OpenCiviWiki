@@ -13,6 +13,17 @@ from django.db import models
 from taggit.managers import TaggableManager
 from django.core.serializers.json import DjangoJSONEncoder
 
+class Category(models.Model):
+    name = models.CharField(max_length=63)
+
+    created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    last_modified = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+    def __unicode__(self):
+        return self.name
 
 class Fact(models.Model):
     body = models.CharField(max_length=511)
@@ -73,6 +84,9 @@ image_upload_path = PathAndRename("")
 class Thread(models.Model):
     author = models.ForeignKey(
         Profile, default=None, null=True, on_delete=models.PROTECT
+    )
+    category = models.ForeignKey(
+        Category, default=None, null=True, on_delete=models.PROTECT
     )
     facts = models.ManyToManyField(Fact)
 
