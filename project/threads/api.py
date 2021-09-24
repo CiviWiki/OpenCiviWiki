@@ -1,14 +1,15 @@
-import json
-import datetime
 import collections
+import datetime
+import json
 from decimal import Decimal
-from django.db import models
-from django.contrib.auth import get_user_model
-from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse
-from django.forms.models import model_to_dict
 
-from .models import Thread, Civi, Activity
 from accounts.models import Profile
+from django.contrib.auth import get_user_model
+from django.db import models
+from django.forms.models import model_to_dict
+from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
+
+from .models import Activity, Civi, Thread
 
 
 def json_custom_parser(obj):
