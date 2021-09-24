@@ -7,27 +7,24 @@ from decimal import Decimal
 import PIL
 from accounts.models import Profile
 from core.constants import US_STATES
-from django.contrib.auth import get_user_model
+from core.custom_decorators import require_post_params
 from django import forms
-
+from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
+from django.core.files import File
+from django.core.files.images import get_image_dimensions
 # django packages
 from django.db.models.query import F
 from django.forms.models import model_to_dict
-from django.contrib.auth.decorators import login_required
-from django.http import (HttpResponse,
-                         HttpResponseBadRequest,
-                         HttpResponseServerError,
-                         HttpResponseForbidden,
+from django.http import (HttpResponse, HttpResponseBadRequest,
+                         HttpResponseForbidden, HttpResponseServerError,
                          JsonResponse)
-from django.core.files.images import get_image_dimensions
-from django.core.files import File
-
 from notifications.signals import notify
-from .models import Activity, Civi, CiviImage
+
 # civi packages
 from api.models import Thread
-from core.custom_decorators import require_post_params
-from .models import Activity, Civi, Thread
+
+from .models import Activity, Civi, CiviImage, Thread
 
 
 @login_required
