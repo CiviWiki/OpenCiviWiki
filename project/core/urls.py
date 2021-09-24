@@ -27,7 +27,8 @@ from frontend_views import urls as frontend_views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", include('accounts.urls')),
+    path("", include('accounts.urls.urls')),
+    path("api/", include('accounts.urls.api')),
     url(r"^api/", include(api)),
     url(
         "^inbox/notifications/",

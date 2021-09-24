@@ -5,14 +5,7 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.utils.http import int_to_base36
 from django.template.loader import render_to_string
-from rest_framework import authentication
 from accounts.utils import send_email
-
-
-class CsrfExemptSessionAuthentication(authentication.SessionAuthentication):
-    """ """
-    def enforce_csrf(self, request):
-        return
 
 
 class ProfileActivationTokenGenerator(PasswordResetTokenGenerator):
