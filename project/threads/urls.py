@@ -32,16 +32,4 @@ urlpatterns += [
     url(r"^rate_civi/$", write.rateCivi, name="rate civi"),
     url(r"^edit_civi/$", write.editCivi, name="edit civi"),
     url(r"^delete_civi/$", write.deleteCivi, name="delete civi"),
-    url(r"^edituser/$", write.editUser, name="edit user"),
-    url(r"^upload_profile/$", write.uploadProfileImage, name="upload profile"),
-    url(r"^upload_images/$", write.uploadCiviImage, name="upload images"),
-    url(r"^upload_image/$", write.uploadThreadImage, name="upload image"),
-    url(r"^clear_profile/$", write.clearProfileImage, name="clear profile"),
-    url(r"^follow/$", write.requestFollow, name="follow user"),
-    url(r"^unfollow/$", write.requestUnfollow, name="unfollow user"),
-    url(
-        r"^edit_user_categories/$",
-        write.editUserCategories,
-        name="edit user categories",
-    ),
 ]
