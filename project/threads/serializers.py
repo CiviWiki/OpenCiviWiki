@@ -7,13 +7,6 @@ from .models import Activity, Category, Civi, CiviImage, Thread
 
 WRITE_ONLY = {"write_only": True}
 
-class CategoryListSerializer(serializers.ModelSerializer):
-    """ """
-    class Meta:
-        model = Category
-        fields = ("id", "name")
-
-
 class CiviImageSerializer(serializers.ModelSerializer):
     """ """
     image_url = serializers.ReadOnlyField()
