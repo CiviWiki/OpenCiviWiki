@@ -14,9 +14,6 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    url(r"^account_data/(?P<user>[-\w]+)/$", read.get_user, name="get user"),
-    url(r"^account_profile/(?P<user>[-\w]+)/$", read.get_profile, name="get profile"),
-    url(r"^account_card/(?P<user>[-\w]+)$", read.get_card, name="get card"),
     url(r"^thread_data/(?P<thread_id>\w+)/$", read.get_thread, name="get thread"),
     url(r"^civi_data/(?P<civi_id>\w+)$", read.get_civi, name="get civi"),
     url(r"^threads/(?P<thread_id>\w+)/civis$", read.get_civis, name="get civis"),
