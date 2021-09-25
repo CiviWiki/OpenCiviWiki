@@ -8,8 +8,7 @@ from django.contrib.auth import get_user_model
 
 from api.models import Category, Thread, Civi, Activity
 from accounts.models import Profile
-from accounts.forms import ProfileEditForm
-from api.forms import UpdateProfileImage
+from accounts.forms import ProfileEditForm, UpdateProfileImage
 from core.constants import US_STATES
 from core.custom_decorators import login_required, full_profile
 
