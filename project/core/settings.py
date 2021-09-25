@@ -1,9 +1,3 @@
-"""
-Django settings for civiwiki project.
-Darius Calliet May 12, 2016
-
-Production settings file to select proper environment variables.
-"""
 import os
 
 # False if not in os.environ
@@ -26,7 +20,6 @@ INSTALLED_APPS = (
     "django_extensions",
     "storages",
     "core",  # TODO: consider removing this, if we can move the decorators, etc. to an actual app
-    "api",
     "rest_framework",
     "accounts",
     "threads",
@@ -147,22 +140,19 @@ NOTIFICATIONS_USE_JSONFIELD = True
 # Django REST API Settings
 DEFAULT_RENDERER_CLASSES = ("rest_framework.renderers.JSONRenderer",)
 
-DEFAULT_AUTHENTICATION_CLASSES = ("rest_framework.authentication.SessionAuthentication",)
-
 if DEBUG:
     # Browsable HTML - Enabled only in Debug mode (dev)
     DEFAULT_RENDERER_CLASSES = DEFAULT_RENDERER_CLASSES + (
         "rest_framework.renderers.BrowsableAPIRenderer",
     )
 
-    DEFAULT_AUTHENTICATION_CLASSES = (
-        "api.authentication.CsrfExemptSessionAuthentication",
-    ) + DEFAULT_AUTHENTICATION_CLASSES
-
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "DEFAULT_RENDERER_CLASSES": DEFAULT_RENDERER_CLASSES,
-    "DEFAULT_AUTHENTICATION_CLASSES": DEFAULT_AUTHENTICATION_CLASSES,
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    )
 }
 
 # CORS Settings
