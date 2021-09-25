@@ -21,9 +21,6 @@ from django.http import (HttpResponse, HttpResponseBadRequest,
                          JsonResponse)
 from notifications.signals import notify
 
-# civi packages
-from api.models import Thread
-
 from .models import Activity, Civi, CiviImage, Thread
 
 
@@ -434,13 +431,6 @@ def edit_thread(request):
         "location": location,
     }
     return JsonResponse({"data": return_data})
-
-
-
-        except AttributeError:
-            pass
-
-        return profile_image
 
 def json_custom_parser(obj):
     """
