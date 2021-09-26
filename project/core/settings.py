@@ -34,6 +34,7 @@ INSTALLED_APPS = (
     "notifications",
     "corsheaders",
     "taggit",
+    "categories",
 )
 
 MIDDLEWARE = [

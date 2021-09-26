@@ -2,7 +2,7 @@
 Gathering all models here
 """
 
-from .category import Category
+
 from .civi import Civi, CiviImage
 from .fact import Fact
 from .notification import Notification
