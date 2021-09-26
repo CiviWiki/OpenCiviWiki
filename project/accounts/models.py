@@ -169,10 +169,10 @@ class Profile(models.Model):
         """
         Resizes and crops the user uploaded image and creates a thumbnail version of it
         """
-        profile_image_field = self.profile_image
-        image_file = io.StringIO(profile_image_field.read())
-        profile_image = Image.open(image_file)
-        profile_image.load()
+        #profile_image_field = self.profile_image
+        #image_file = io.StringIO(profile_image_field.read())
+        profile_image = Image.open(self.profile_image)
+        #profile_image.load()
 
         # Resize image
         profile_image = ImageOps.fit(
@@ -186,7 +186,7 @@ class Profile(models.Model):
             profile_image = white_bg_img
 
         # Save new cropped image
-        tmp_image_file = io.StringIO()
+        tmp_image_file = io.BytesIO()
         profile_image.save(tmp_image_file, "JPEG", quality=90)
         tmp_image_file.seek(0)
         self.profile_image = InMemoryUploadedFile(
@@ -194,21 +194,23 @@ class Profile(models.Model):
             "ImageField",
             self.profile_image.name,
             "image/jpeg",
-            tmp_image_file.len,
+            profile_image.tell(),
             None,
         )
         # Make a Thumbnail Image for the new resized image
         thumb_image = profile_image.copy()
+
         thumb_image.thumbnail(PROFILE_IMG_THUMB_SIZE, resample=Image.ANTIALIAS)
-        tmp_image_file = io.StringIO()
-        thumb_image.save(tmp_image_file, "JPEG", quality=90)
-        tmp_image_file.seek(0)
+        tmp_thumb_file = io.BytesIO()
+        thumb_image.save(tmp_thumb_file, "JPEG", quality=90)
+        tmp_thumb_file.seek(0)
+
         self.profile_image_thumb = InMemoryUploadedFile(
-            tmp_image_file,
+            tmp_thumb_file,
             "ImageField",
             self.profile_image.name,
             "image/jpeg",
-            tmp_image_file.len,
+            thumb_image.tell(),
             None,
         )
 
