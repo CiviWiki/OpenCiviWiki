@@ -1,5 +1,6 @@
 from rest_framework import serializers
-
+from .models import Category
+from accounts.models import Profile
 
 class CategoryListSerializer(serializers.ModelSerializer):
     """ """
