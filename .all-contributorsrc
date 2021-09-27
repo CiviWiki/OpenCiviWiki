@@ -612,7 +612,9 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/25094157?v=4",
       "profile": "https://github.com/wassafshahzad",
       "contributions": [
-        "code"
+        "code",
+        "test",
+        "infra"
       ]
     }
   ],
