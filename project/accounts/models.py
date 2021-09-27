@@ -169,11 +169,7 @@ class Profile(models.Model):
         """
         Resizes and crops the user uploaded image and creates a thumbnail version of it
         """
-        #profile_image_field = self.profile_image
-        #image_file = io.StringIO(profile_image_field.read())
         profile_image = Image.open(self.profile_image)
-        #profile_image.load()
-
         # Resize image
         profile_image = ImageOps.fit(
             profile_image, PROFILE_IMG_SIZE, Image.ANTIALIAS, centering=(0.5, 0.5)
