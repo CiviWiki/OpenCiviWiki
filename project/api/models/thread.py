@@ -11,7 +11,7 @@ from django.conf import settings
 from django.db import models
 
 from accounts.models import Profile
-from .category import Category
+from categories.models import Category
 from .fact import Fact
 from taggit.managers import TaggableManager
 from core.constants import US_STATES

@@ -2,8 +2,9 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from api.models import Thread, Category
+from api.models import Thread
 from api.serializers import ThreadSerializer, CategorySerializer
+from categories.models import Category
 
 
 class CategoryViewSet(ReadOnlyModelViewSet):

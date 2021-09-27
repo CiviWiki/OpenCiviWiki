@@ -1,8 +1,9 @@
 from rest_framework import serializers
 
-from api.models import Civi, Thread, Category, CiviImage, Activity
+from api.models import Civi, Thread, CiviImage, Activity
 from accounts.models import Profile
 from accounts.serializers import ProfileListSerializer
+from categories.models import Category
 from core.constants import CIVI_TYPES
 
 WRITE_ONLY = {"write_only": True}
