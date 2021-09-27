@@ -1,17 +1,17 @@
 """
 Rebuttal model
-Extends local Account and Response model
+Extends local Profile and Response model
 """
 
 from django.db import models
 
-from .account import Account
+from accounts.models import Profile
 from .response import Response
 
 
 class Rebuttal(models.Model):
     author = models.ForeignKey(
-        Account, default=None, null=True, on_delete=models.PROTECT
+        Profile, default=None, null=True, on_delete=models.PROTECT
     )
     response = models.ForeignKey(
         Response, default=None, null=True, on_delete=models.PROTECT

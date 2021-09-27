@@ -1,27 +1,23 @@
 import json
 
-from django.conf import settings
-from django.contrib.auth.decorators import user_passes_test
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.models import User
 from django.db.models import F
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template.response import TemplateResponse
-
-
-from api.models import Category, Account, Thread, Civi, Activity
-from api.forms import UpdateProfileImage
-from core.constants import US_STATES
-from core.custom_decorators import login_required, full_account
-
 from django.contrib.auth import get_user_model
-User = get_user_model()
+
+from api.models import Category, Thread, Civi, Activity
+from accounts.models import Profile
+from accounts.forms import ProfileEditForm, UpdateProfileImage
+from core.constants import US_STATES
+from core.custom_decorators import login_required, full_profile
+
 
 def base_view(request):
     if not request.user.is_authenticated:
         return TemplateResponse(request, "static_templates/landing.html", {})
 
-    a = Account.objects.get(user=request.user)
+    a = Profile.objects.get(user=request.user)
     if "login_user_image" not in request.session.keys():
         request.session["login_user_image"] = a.profile_image_thumb_url
 
@@ -60,43 +56,46 @@ def base_view(request):
 
 
 @login_required
-@full_account
+@full_profile
 def user_profile(request, username=None):
-    if not username:
-        return HttpResponseRedirect("/profile/{0}".format(request.user))
-    else:
-        try:
-            user = User.objects.get(username=username)
-        except User.DoesNotExist:
-            return HttpResponseRedirect("/404")
-    data = {
-        "username": user,
-        "profile_image_form": UpdateProfileImage,
-    }
-    return TemplateResponse(request, "account.html", data)
+    User = get_user_model()
+    if request.method == "GET":
+        if not username:
+            return HttpResponseRedirect("/profile/{0}".format(request.user))
+        else:
+            is_owner = username == request.user.username
+            try:
+                user = User.objects.get(username=username)
+                profile = user.profile_set.first()
+            except User.DoesNotExist:
+                return HttpResponseRedirect("/404")
 
-
-@login_required
-def user_setup(request):
-    a = Account.objects.get(user=request.user)
-    if a.full_account:
-        return HttpResponseRedirect("/")
-        # start temp rep rendering TODO: REMOVE THIS
-    else:
+        form = ProfileEditForm(
+            initial={
+                "username": user.username,
+                "email": user.email,
+                "first_name": profile.first_name or None,
+                "last_name": profile.last_name or None,
+                "about_me": profile.about_me or None,
+            },
+            readonly=True,
+        )
         data = {
-            "username": request.user.username,
-            "email": request.user.email,
+            "username": user,
+            "profile_image_form": UpdateProfileImage,
+            "form": form if is_owner else None,
+            "readonly": True,
         }
-        return TemplateResponse(request, "user-setup.html", data)
+        return TemplateResponse(request, "account.html", data)
 
 
 @login_required
-@full_account
+@full_profile
 def issue_thread(request, thread_id=None):
     if not thread_id:
         return HttpResponseRedirect("/404")
 
-    req_acct = Account.objects.get(user=request.user)
+    req_acct = Profile.objects.get(user=request.user)
     t = Thread.objects.get(id=thread_id)
     c_qs = Civi.objects.filter(thread_id=thread_id).exclude(c_type="response")
     c_scored = [c.dict_with_score(req_acct.id) for c in c_qs]
@@ -120,9 +119,9 @@ def issue_thread(request, thread_id=None):
             "last_name": t.author.last_name,
         },
         "contributors": [
-            Account.objects.chip_summarize(a)
-            for a in Account.objects.filter(
-                pk__in=c_qs.values("author").distinct()
+            Profile.objects.chip_summarize(a)
+            for a in Profile.objects.filter(
+                pk__in=civis.distinct("author").values_list("author", flat=True)
             )
         ],
         "category": {"id": t.category.id, "name": t.category.name},
@@ -157,17 +156,9 @@ def issue_thread(request, thread_id=None):
 
 
 @login_required
-@full_account
+@full_profile
 def create_group(request):
     return TemplateResponse(request, "newgroup.html", {})
-
-
-def login_view(request):
-    if request.user.is_authenticated:
-        if request.user.is_active:
-            return HttpResponseRedirect("/")
-
-    return TemplateResponse(request, "login.html", {})
 
 
 def declaration(request):

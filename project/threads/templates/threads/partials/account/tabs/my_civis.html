@@ -1,13 +1,15 @@
+{% load i18n %}
 {% verbatim %}
+
 <div class="profile-civi-list col s12">
     <div class="row tab-title">
-        <div class="col s6 title-lato">My Civi Activity</div>
+        <div class="col s6 title-lato">{% trans "My Civi Activity" %} </div>
         <div class="sort-options col s2 push-s4 section">
-            <label>View By:</label>
+            <label>{% trans "View By:" %} </label>
             <select class="browser-default">
-            <option value="1" selected>Recent</option>
-            <option value="2">Popular</option>
-            <option value="3">Top</option>
+            <option value="1" selected>{% trans "Recent" %} </option>
+            <option value="2">{% trans "Popular" %} </option>
+            <option value="3">{% trans "Top" %} </option>
             </select>
         </div>
     </div>
@@ -21,7 +23,7 @@
         <div class="section no-state">
             <div class="container">
                 <div class="section">
-                    <div class="center title-lato text">NO CIVIS</div>
+                    <div class="center title-lato text">{% trans "No Civis" %} </div>
                 </div>
             </div>
         </div>

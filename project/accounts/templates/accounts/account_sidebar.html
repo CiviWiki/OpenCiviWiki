@@ -1,4 +1,6 @@
 {% verbatim %}
+{% load i18n %}
+
 <div class="profile-image">
     <div class="big-image-cropper z-depth-1">
         <img class=" responsive-img " src={{this.model.get('profile_image')}}>
@@ -14,7 +16,7 @@
             <div class="location"><i class="mini material-icons">place</i>{{this.model.get('location')}}</div>
         </div>
         <div class="section">
-            <div class="section-title">ABOUT ME</div>
+            <div class="section-title">{% trans "About Me" %}</div>
             <div class="divider"></div>
             <div class="about-me">{{this.model.get('about_me')}}</div>
         </div>

@@ -55,7 +55,6 @@ CSRF_USE_SESSIONS = (
 
 CORS_ORIGIN_ALLOW_ALL = True
 ROOT_URLCONF = "core.urls"
-LOGIN_URL = "/login"
 
 # SSL Setup
 if DJANGO_HOST != "LOCALHOST":
@@ -148,22 +147,19 @@ NOTIFICATIONS_USE_JSONFIELD = True
 # Django REST API Settings
 DEFAULT_RENDERER_CLASSES = ("rest_framework.renderers.JSONRenderer",)
 
-DEFAULT_AUTHENTICATION_CLASSES = ("rest_framework.authentication.BasicAuthentication",)
-
 if DEBUG:
     # Browsable HTML - Enabled only in Debug mode (dev)
     DEFAULT_RENDERER_CLASSES = DEFAULT_RENDERER_CLASSES + (
         "rest_framework.renderers.BrowsableAPIRenderer",
     )
 
-    DEFAULT_AUTHENTICATION_CLASSES = (
-        "api.authentication.CsrfExemptSessionAuthentication",
-    ) + DEFAULT_AUTHENTICATION_CLASSES
-
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "DEFAULT_RENDERER_CLASSES": DEFAULT_RENDERER_CLASSES,
-    "DEFAULT_AUTHENTICATION_CLASSES": DEFAULT_AUTHENTICATION_CLASSES,
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    )
 }
 
 # CORS Settings
@@ -172,11 +168,12 @@ CORS_ORIGIN_ALLOW_ALL = True
 # Custom User model
 AUTH_USER_MODEL = 'accounts.User'
 
-APPEND_SLASH = False
-
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
+# Login Logout URLS
+LOGIN_URL = "login/"
 LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -185,7 +182,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
         'OPTIONS': {
-            'min_length': 8,
+            'min_length': 4,
         }
     },
     {

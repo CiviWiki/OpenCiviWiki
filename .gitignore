@@ -1,9 +1,10 @@
 *.pyc
+VirtualEnv
 */.DS_Store
 *.DS_Store
 .DS_Store
 media/
-staticfiles
+/project/staticfiles/*
 .idea
 .env
 data/
@@ -207,3 +208,6 @@ dmypy.json
 
 # IDE ignores
 .vscode
+
+# keep staticfiles directory
+!project/staticfiles/.gitkeep

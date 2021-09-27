@@ -18,7 +18,8 @@
         "fundingFinding",
         "ideas",
         "projectManagement",
-        "review"
+        "review",
+        "doc"
       ]
     },
     {
@@ -503,7 +504,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/2473403?v=4",
       "profile": "https://github.com/a7madnassar",
       "contributions": [
-        "code"
+        "code",
+        "infra"
       ]
     },
     {
@@ -616,9 +618,78 @@
         "test",
         "infra"
       ]
+    },
+    {
+      "login": "mharyam",
+      "name": "Maryam Yusuf",
+      "avatar_url": "https://avatars.githubusercontent.com/u/21172249?v=4",
+      "profile": "https://github.com/mharyam",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "AbhijithGanesh",
+      "name": "Abhijith Ganesh",
+      "avatar_url": "https://avatars.githubusercontent.com/u/67182544?v=4",
+      "profile": "https://abhijithganesh.github.io",
+      "contributions": [
+        "code",
+        "projectManagement",
+        "doc"
+      ]
+    },
+    {
+      "login": "vishalda",
+      "name": "Vishal D A",
+      "avatar_url": "https://avatars.githubusercontent.com/u/67089703?v=4",
+      "profile": "https://linktr.ee/Vishal_D_A",
+      "contributions": [
+        "code",
+        "content",
+        "translation"
+      ]
+    },
+    {
+      "login": "Germlord",
+      "name": "Steven Hitchcock",
+      "avatar_url": "https://avatars.githubusercontent.com/u/34950441?v=4",
+      "profile": "https://github.com/Germlord",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "gorkemarslan",
+      "name": "gorkemarslan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/16780927?v=4",
+      "profile": "https://github.com/gorkemarslan",
+      "contributions": [
+        "code",
+        "test"
+      ]
+    },
+    {
+      "login": "alanCalvillo-Wizeline",
+      "name": "Alan Calvillo",
+      "avatar_url": "https://avatars.githubusercontent.com/u/72406611?v=4",
+      "profile": "https://github.com/alanCalvillo-Wizeline",
+      "contributions": [
+        "review"
+      ]
+    },
+    {
+      "login": "anurag629",
+      "name": "Anurag verma",
+      "avatar_url": "https://avatars.githubusercontent.com/u/78868769?v=4",
+      "profile": "https://github.com/anurag629",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
+  "contributorsSortAlphabetically": true,
   "projectName": "OpenCiviWiki",
   "projectOwner": "CiviWiki",
   "repoType": "github",

@@ -7,20 +7,19 @@ import os
 import json
 import datetime
 import math
-import uuid
 from calendar import month_name
 
 from django.core.files.storage import default_storage
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.conf import settings
-from django.utils.deconstruct import deconstructible
 
-from .account import Account
+from accounts.models import Profile
 from .thread import Thread
 from taggit.managers import TaggableManager
 from .thread import Thread
 from core.constants import CIVI_TYPES
+from common.utils import PathAndRename
 
 
 class CiviManager(models.Manager):
@@ -58,7 +57,7 @@ class CiviManager(models.Manager):
         return json.dumps(data, cls=DjangoJSONEncoder)
 
     def serialize_s(self, civi, filter=None):
-        # Get account profile image, or set to default image
+        # Get profile profile image, or set to default image
         profile_image_or_default = (
             civi.author.profile_image.url or "/media/profile/default.png"
         )
@@ -98,7 +97,7 @@ class CiviManager(models.Manager):
 class Civi(models.Model):
     objects = CiviManager()
     author = models.ForeignKey(
-        Account, related_name="civis", default=None, null=True, on_delete=models.PROTECT
+        Profile, related_name="civis", default=None, null=True, on_delete=models.PROTECT
     )
     thread = models.ForeignKey(
         Thread, related_name="civis", default=None, null=True, on_delete=models.PROTECT
@@ -187,10 +186,10 @@ class Civi(models.Model):
         scores_sum = vneg_score + neg_score + pos_score + vpos_score
 
         if request_acct_id:
-            account = Account.objects.get(id=request_acct_id)
+            profile = Profile.objects.get(id=request_acct_id)
             scores_sum = (
                 1
-                if self.author in account.following.all().values_list("id", flat=True)
+                if self.author in profile.following.all().values_list("id", flat=True)
                 else 0
             )
         else:
@@ -276,18 +275,6 @@ class Civi(models.Model):
             data["score"] = self.score(req_acct_id)
 
         return data
-
-
-@deconstructible
-class PathAndRename(object):
-    def __init__(self, sub_path):
-        self.sub_path = sub_path
-
-    def __call__(self, instance, filename):
-        extension = filename.split(".")[-1]
-        new_filename = str(uuid.uuid4())
-        filename = "{}.{}".format(new_filename, extension)
-        return os.path.join(self.sub_path, filename)
 
 
 image_upload_path = PathAndRename("")

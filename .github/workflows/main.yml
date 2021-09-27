@@ -1,0 +1,33 @@
+name: CI Workflow
+
+on:
+  pull_request:
+    branches : [ develop ]
+  
+  workflow_dispatch: 
+  
+  push:
+
+jobs:
+  python-tests:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements/dev.txt
+        pip install pytest-django
+    - name: Run migrations
+      run: python project/manage.py migrate
+    - name: Run tests
+      env:
+        CIVIWIKI_LOCAL_NAME : True
+        DJANGO_SETTINGS_MODULE: core.settings
+      run: |
+        cd project
+        pytest -p no:warning

@@ -5,39 +5,21 @@ This module will include views for the accounts app.
 """
 
 from django.conf import settings
-from django.views.generic.edit import FormView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.edit import FormView, UpdateView
+from django.views import View
 from django.contrib.auth import views as auth_views
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.contrib.auth import login
 from django.contrib.sites.shortcuts import get_current_site
-from django.utils.encoding import force_bytes
-from django.utils.http import int_to_base36
-from django.utils.crypto import salted_hmac
-from django.utils.http import urlsafe_base64_encode
 from django.urls import reverse_lazy
+from django.contrib.auth import get_user_model
+from django.utils.encoding import force_str
+from django.utils.http import urlsafe_base64_decode
 from django.template.response import TemplateResponse
-
-from api.models.account import Account
-from core.custom_decorators import login_required
-
-from .forms import AccountRegistrationForm, UpdateAccount
-from .models import User
-from .authentication import send_activation_email
-
-
-class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
-    """Token Generator for Email Confirmation"""
-
-    key_salt = "django.contrib.auth.tokens.PasswordResetTokenGenerator"
-
-    def _make_token_with_timestamp(self, user, timestamp):
-        """Token function pulled from Django 1.11"""
-        ts_b36 = int_to_base36(timestamp)
-
-        hash = salted_hmac(self.key_salt, str(user.pk) + str(timestamp)).hexdigest()[
-            ::2
-        ]
-        return "%s-%s" % (ts_b36, hash)
+from accounts.models import Profile
+from accounts.forms import UserRegistrationForm, ProfileEditForm
+from accounts.authentication import send_activation_email, account_activation_token
+from django.http import HttpResponseRedirect
 
 
 class RegisterView(FormView):
@@ -46,7 +28,7 @@ class RegisterView(FormView):
     """
 
     template_name = "accounts/register/register.html"
-    form_class = AccountRegistrationForm
+    form_class = UserRegistrationForm
     success_url = "/"
 
     def _create_user(self, form):
@@ -54,13 +36,8 @@ class RegisterView(FormView):
         password = form.cleaned_data["password"]
         email = form.cleaned_data["email"]
 
-        user = User.objects.create_user(username, email, password)
-
-        account = Account(user=user)
-        account.save()
-
-        user.is_active = True
-        user.save()
+        user = get_user_model().objects.create_user(username, email, password)
+        Profile.objects.create(user=user)
 
         return user
 
@@ -101,26 +78,90 @@ class PasswordResetCompleteView(auth_views.PasswordResetCompleteView):
     template_name = "accounts/users/password_reset_complete.html"
 
 
-@login_required
-def settings_view(request):
-    account = request.user.account_set.first()
-    if request.method == "POST":
-        instance = Account.objects.get(user=request.user)
-        form = UpdateAccount(
-            request.POST,
-            initial={"username": request.user.username, "email": request.user.email},
-            instance=instance,
-        )
-        if form.is_valid():
-            form.save()
-    else:
-        form = UpdateAccount(
-            initial={
+class SettingsView(LoginRequiredMixin, UpdateView):
+    """A form view to edit Profile"""
+
+    login_url = 'accounts_login'
+    form_class = ProfileEditForm
+    success_url = reverse_lazy('accounts_settings')
+    template_name = 'accounts/utils/update_settings.html'
+
+    def get_object(self, queryset=None):
+        return Profile.objects.get(user=self.request.user)
+
+    def get_initial(self):
+        profile = Profile.objects.get(user=self.request.user)
+        self.initial.update({
+            "username": profile.user.username,
+            "email": profile.user.email,
+            "first_name": profile.first_name or None,
+            "last_name": profile.last_name or None,
+            "about_me": profile.about_me or None,
+        })
+        return super(SettingsView, self).get_initial()
+
+
+class ProfileActivationView(View):
+    """
+        This shows different views to the user when they are verifying
+        their account based on whether they are already verified or not.
+    """
+
+    def get(self, request, uidb64, token):
+
+        User = get_user_model()
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+
+        if user is not None and account_activation_token.check_token(user, token):
+            profile = Profile.objects.get(user=user)
+            if profile.is_verified:
+                redirect_link = {"href": "/", "label": "Back to Main"}
+                template_var = {
+                    "title": "Email Already Verified",
+                    "content": "You have already verified your email",
+                    "link": redirect_link,
+                }
+                return TemplateResponse(request, "general-message.html", template_var)
+            else:
+                profile.is_verified = True
+                profile.save()
+
+                redirect_link = {"href": "/", "label": "Back to Main"}
+                template_var = {
+                    "title": "Email Verification Successful",
+                    "content": "Thank you for verifying your email with CiviWiki",
+                    "link": redirect_link,
+                }
+                return TemplateResponse(request, "general-message.html", template_var)
+        else:
+            # invalid link
+            redirect_link = {"href": "/", "label": "Back to Main"}
+            template_var = {
+                "title": "Email Verification Error",
+                "content": "Email could not be verified",
+                "link": redirect_link,
+            }
+            return TemplateResponse(request, "general-message.html", template_var)
+
+
+class ProfileSetupView(LoginRequiredMixin, View):
+    """A view to make the user profile full_profile"""
+
+    login_url = 'accounts_login'
+
+    def get(self, request):
+        profile = Profile.objects.get(user=request.user)
+        if profile.full_profile:
+            return HttpResponseRedirect("/")
+            # start temp rep rendering TODO: REMOVE THIS
+        else:
+            data = {
                 "username": request.user.username,
                 "email": request.user.email,
-                "first_name": account.first_name or None,
-                "last_name": account.last_name or None,
-                "about_me": account.about_me or None,
             }
-        )
-    return TemplateResponse(request, "accounts/utils/update_settings.html", {"form": form})
+            return TemplateResponse(request, "user-setup.html", data)
