@@ -7,7 +7,6 @@ router = DefaultRouter(trailing_slash=False)
 router.register(r"threads", views.ThreadViewSet)
 router.register(r"categories", views.CategoryViewSet)
 router.register(r"civis", views.CiviViewSet)
-router.register(r"accounts", views.ProfileViewSet)
 
 urlpatterns = [
     url(r"^v1/", include(router.urls)),
