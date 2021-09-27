@@ -9,7 +9,7 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 
 from taggit.managers import TaggableManager
 
-from api.models.category import Category
+from api.models import Category
 from common.utils import PathAndRename
 
 
