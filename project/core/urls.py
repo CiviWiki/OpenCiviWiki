@@ -22,37 +22,14 @@ from django.views.static import serve
 from django.views.generic.base import RedirectView
 
 from api import urls as api
-from accounts.views import (PasswordResetView, PasswordResetDoneView,
-                            PasswordResetConfirmView, PasswordResetCompleteView)
 from frontend_views import urls as frontend_views
 
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", include('accounts.urls')),
+    path("", include('accounts.urls.urls')),
+    path("api/", include('accounts.urls.api')),
     url(r"^api/", include(api)),
-    path(
-        'accounts/password_reset/',
-        PasswordResetView.as_view(),
-        name='accounts_password_reset',
-    ),
-
-    path(
-        'accounts/password_reset_done/',
-        PasswordResetDoneView.as_view(),
-        name='accounts_password_reset_done',
-    ),
-    path(
-        'accounts/password_reset_confirm/<uidb64>/<token>/',
-        PasswordResetConfirmView.as_view(),
-        name='accounts_password_reset_confirm',
-    ),
-
-    path(
-        'accounts/password_reset_complete/',
-        PasswordResetCompleteView.as_view(),
-        name='accounts_password_reset_complete',
-    ),
     url(
         "^inbox/notifications/",
         include("notifications.urls", namespace="notifications"),
