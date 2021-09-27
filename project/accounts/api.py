@@ -23,7 +23,8 @@ from api.models import Thread, Civi, Activity
 from accounts.models import Profile
 from categories.models import Category
 from api.utils import json_response
-from api.serializers import ThreadSerializer, CategorySerializer, CiviSerializer
+from api.serializers import ThreadSerializer, CiviSerializer
+from categories.serializers import CategorySerializer
 from core.custom_decorators import require_post_params
 
 
