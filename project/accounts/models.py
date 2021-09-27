@@ -71,7 +71,8 @@ class ProfileManager(models.Manager):
             "username": profile.user.username,
             "first_name": profile.first_name,
             "last_name": profile.last_name,
-            "about_me": profile.about_me[:about_me_truncate_length] + ellipsis_if_too_long,
+            "about_me": profile.about_me[:about_me_truncate_length]
+            + ellipsis_if_too_long,
             "profile_image": profile.profile_image_url,
             "follow_state": True
             if profile in request_profile.following.all()
@@ -155,7 +156,7 @@ class Profile(models.Model):
         super(Profile, self).__init__(*args, **kwargs)
 
     def save(self, *args, **kwargs):
-        """ Image crop/resize and thumbnail creation """
+        """Image crop/resize and thumbnail creation"""
 
         # New Profile image --
         if self.profile_image:
