@@ -26,7 +26,6 @@ INSTALLED_APPS = (
     "django_extensions",
     "storages",
     "core",  # TODO: consider removing this, if we can move the decorators, etc. to an actual app
-    "api",
     "rest_framework",
     "accounts",
     "threads",
