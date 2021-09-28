@@ -21,7 +21,7 @@ from django.conf import settings
 from django.views.static import serve
 from django.views.generic.base import RedirectView
 
-from api import urls as api
+from threads import urls as api
 from frontend_views import urls as frontend_views
 
 
