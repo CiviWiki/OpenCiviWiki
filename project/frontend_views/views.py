@@ -6,7 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.contrib.auth import get_user_model
 
-from api.models import Thread, Civi, Activity
+from threads.models import Thread, Civi, Activity
 from accounts.models import Profile
 from accounts.forms import ProfileEditForm, UpdateProfileImage
 from categories.models import Category
