@@ -9,19 +9,6 @@ from django.shortcuts import get_object_or_404
 from accounts.models import Profile
 
 
-def get_account(user=None, pk=None, username=None):
-    """ gets author based on the user """
-    if user:
-        return get_object_or_404(Profile, user=user)
-    elif pk:
-        return get_object_or_404(Profile, pk=pk)
-    elif username:
-        return get_object_or_404(Profile, user__username=username)
-
-    else:
-        raise Http404
-
-
 def json_custom_parser(obj):
     """
     A custom json parser to handle json.dumps calls properly for Decimal and Datetime data types.
