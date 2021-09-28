@@ -1,7 +1,8 @@
 from rest_framework import serializers
 
-from api.forms import UpdateProfileImage
-from api.models import Civi, Thread, Category, CiviImage, Activity
+from accounts.forms import UpdateProfileImage
+from api.models import Civi, Thread, CiviImage, Activity
+from categories.models import Category
 from accounts.models import Profile
 from core.constants import CIVI_TYPES
 
