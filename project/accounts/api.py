@@ -18,7 +18,7 @@ from notifications.signals import notify
 from accounts.permissions import IsProfileOwnerOrDuringRegistrationOrReadOnly
 from accounts.serializers import ProfileSerializer, ProfileListSerializer
 from accounts.forms import UpdateProfileImage
-from threads.utils import get_account, json_response
+from accounts.utils import get_account, json_response
 from threads.models import Thread, Civi, Activity
 from accounts.models import Profile
 from categories.models import Category
