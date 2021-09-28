@@ -1,7 +1,9 @@
 from django.core.mail import get_connection, EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.conf import settings
+from django.shortcuts import get_object_or_404 
 from django.core.mail import send_mail
+from accounts.models import Profile
 
 
 def send_email(subject, message, sender, recipient_list, html_message=None):
@@ -43,3 +45,16 @@ def send_mass_email(subject, contexts):
         messages.append(msg)
 
     connection.send_messages(messages)
+
+def get_account(user=None, pk=None, username=None):
+    """ gets author based on the user """
+    if user:
+        return get_object_or_404(Profile, user=user)
+    elif pk:
+        return get_object_or_404(Profile, pk=pk)
+    elif username:
+        return get_object_or_404(Profile, user__username=username)
+
+    else:
+        raise Http404
+
