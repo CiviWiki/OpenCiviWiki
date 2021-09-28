@@ -1,12 +1,8 @@
 from rest_framework import serializers
 
-<<<<<<< HEAD
 from accounts.forms import UpdateProfileImage
 from api.models import Civi, Thread, CiviImage, Activity
 from categories.models import Category
-=======
-from api.models import Civi, Thread, CiviImage, Activity
->>>>>>> f693e3c878920b2ff58c282b4f88f507b61bf985
 from accounts.models import Profile
 from accounts.serializers import ProfileListSerializer
 from categories.models import Category

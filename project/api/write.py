@@ -18,15 +18,10 @@ from django.core.files import File  # need this for image file handling
 from django.contrib.auth.decorators import login_required
 
 # civi packages
-<<<<<<< HEAD
 from accounts.forms import UpdateProfileImage
 from api.models import Thread
 from .models import Activity, Civi, CiviImage
 from categories.models import Category
-=======
-from api.models import Thread
-from .models import Activity, Civi, CiviImage
->>>>>>> f693e3c878920b2ff58c282b4f88f507b61bf985
 from accounts.models import Profile
 from core.custom_decorators import require_post_params
 from core.constants import US_STATES

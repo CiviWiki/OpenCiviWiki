@@ -3,10 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from api.models import Thread
-<<<<<<< HEAD
 from categories.models import Category
-=======
->>>>>>> f693e3c878920b2ff58c282b4f88f507b61bf985
 from api.serializers import ThreadSerializer, CategorySerializer
 from categories.models import Category
 
