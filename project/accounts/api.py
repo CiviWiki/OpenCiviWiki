@@ -18,12 +18,11 @@ from notifications.signals import notify
 from accounts.permissions import IsProfileOwnerOrDuringRegistrationOrReadOnly
 from accounts.serializers import ProfileSerializer, ProfileListSerializer
 from accounts.forms import UpdateProfileImage
-from api.utils import get_account
-from api.models import Thread, Civi, Activity
+from threads.utils import get_account, json_response
+from threads.models import Thread, Civi, Activity
 from accounts.models import Profile
 from categories.models import Category
-from api.utils import json_response
-from api.serializers import ThreadSerializer, CategorySerializer, CiviSerializer
+from threads.serializers import ThreadSerializer, CategorySerializer, CiviSerializer
 from core.custom_decorators import require_post_params
 
 
