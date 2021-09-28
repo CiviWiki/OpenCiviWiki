@@ -29,6 +29,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include('accounts.urls.urls')),
     path("api/", include('accounts.urls.api')),
+    path('api/v1/', include((CiviWikiRouter.urls, 'api'))),
     url(r"^api/", include(api)),
     url(
         "^inbox/notifications/",

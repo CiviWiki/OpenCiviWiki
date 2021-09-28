@@ -1,5 +1,9 @@
 from django.urls import path
+from core.router import CiviWikiRouter
 from accounts import api
+from accounts.api import ProfileViewSet
+
+CiviWikiRouter.register(r'accounts', ProfileViewSet)
 
 urlpatterns = [
     path('account_data/<str:username>/', api.get_user, name="get_user"),
