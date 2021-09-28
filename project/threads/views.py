@@ -6,7 +6,7 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 from .models import Thread
 from .serializers import ThreadSerializer, CategorySerializer
 from categories.models import Category
-from accounts.api import ProfilewViewSet
+from accounts.api import ProfileViewSet
 
 
 from .models import Thread, Civi, CiviImage
