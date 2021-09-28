@@ -6,8 +6,8 @@ Notifies users about new followers or replies.
 from django.db import models
 
 from accounts.models import Profile
-from .civi import Civi
-from .thread import Thread
+from api.models.civi import Civi
+from api.models.thread import Thread
 
 
 class Notification(models.Model):

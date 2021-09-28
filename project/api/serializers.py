@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from accounts.forms import UpdateProfileImage
 from api.models import Civi, Thread, CiviImage, Activity
 from accounts.models import Profile
 from accounts.serializers import ProfileListSerializer

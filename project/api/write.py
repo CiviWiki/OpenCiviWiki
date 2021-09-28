@@ -18,6 +18,7 @@ from django.core.files import File  # need this for image file handling
 from django.contrib.auth.decorators import login_required
 
 # civi packages
+from accounts.forms import UpdateProfileImage
 from api.models import Thread
 from .models import Activity, Civi, CiviImage
 from accounts.models import Profile
