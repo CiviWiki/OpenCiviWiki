@@ -21,7 +21,6 @@ from django.contrib.auth.decorators import login_required
 from accounts.forms import UpdateProfileImage
 from api.models import Thread
 from .models import Activity, Civi, CiviImage
-from categories.models import Category
 from accounts.models import Profile
 from core.custom_decorators import require_post_params
 from core.constants import US_STATES
