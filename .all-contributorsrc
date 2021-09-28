@@ -614,7 +614,9 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/25094157?v=4",
       "profile": "https://github.com/wassafshahzad",
       "contributions": [
-        "code"
+        "code",
+        "test",
+        "infra"
       ]
     },
     {
@@ -674,6 +676,15 @@
       "profile": "https://github.com/alanCalvillo-Wizeline",
       "contributions": [
         "review"
+      ]
+    },
+    {
+      "login": "anurag629",
+      "name": "Anurag verma",
+      "avatar_url": "https://avatars.githubusercontent.com/u/78868769?v=4",
+      "profile": "https://github.com/anurag629",
+      "contributions": [
+        "code"
       ]
     }
   ],

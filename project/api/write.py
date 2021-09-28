@@ -6,7 +6,6 @@ from notifications.signals import notify
 
 # django packages
 from django.db.models.query import F
-from django.contrib.auth import get_user_model
 from django.http import (
     JsonResponse,
     HttpResponse,
@@ -19,10 +18,15 @@ from django.core.files import File  # need this for image file handling
 from django.contrib.auth.decorators import login_required
 
 # civi packages
+<<<<<<< HEAD
 from accounts.forms import UpdateProfileImage
 from api.models import Thread
 from .models import Activity, Civi, CiviImage
 from categories.models import Category
+=======
+from api.models import Thread
+from .models import Activity, Civi, CiviImage
+>>>>>>> f693e3c878920b2ff58c282b4f88f507b61bf985
 from accounts.models import Profile
 from core.custom_decorators import require_post_params
 from core.constants import US_STATES
@@ -306,94 +310,6 @@ def uploadphoto(request):
 
 
 @login_required
-def editUser(request):
-    """
-    Edit Profile Model
-    """
-    request_data = request.POST
-    user = request.user
-    account = Profile.objects.get(user=user)
-
-    data = {
-        "first_name": request_data.get("first_name", account.first_name),
-        "last_name": request_data.get("last_name", account.last_name),
-        "about_me": request_data.get("about_me", account.about_me),
-    }
-
-    account.__dict__.update(data)
-
-    try:
-        account.save()
-    except Exception as e:
-        # print('EXCEPTION THROWN HERE!! ')
-        return HttpResponseServerError(reason=str(e))
-
-        account.refresh_from_db()
-
-    return JsonResponse(Profile.objects.summarize(account))
-
-
-@login_required
-def uploadProfileImage(request):
-    """ This function is used to allow users to upload profile photos """
-    if request.method == "POST":
-        form = UpdateProfileImage(request.POST, request.FILES)
-        if form.is_valid():
-            try:
-                account = Profile.objects.get(user=request.user)
-
-                # Clean up previous image
-                account.profile_image.delete()
-
-                # Upload new image and set as profile picture
-                account.profile_image = form.clean_profile_image()
-                try:
-                    account.save()
-                except Exception as e:
-                    response = {"message": str(e), "error": "MODEL_SAVE_ERROR"}
-                    return JsonResponse(response, status=400)
-
-                request.session["login_user_image"] = account.profile_image_thumb_url
-
-                response = {"profile_image": account.profile_image_url}
-                return JsonResponse(response, status=200)
-
-            except Profile.DoesNotExist:
-                response = {"message": f"Profile with user {request.user.username} does not exist",
-                            "error": "ACCOUNT_ERROR"}
-                return JsonResponse(response, status=400)
-            except Exception as e:
-                response = {"message": str(e), "error": "MODEL_ERROR"}
-                return JsonResponse(response, status=400)
-        else:
-            response = {"message": form.errors["profile_image"], "error": "FORM_ERROR"}
-            return JsonResponse(response, status=400)
-
-    else:
-        return HttpResponseForbidden("allowed only via POST")
-
-
-@login_required
-def clearProfileImage(request):
-    """ This function is used to delete a profile image """
-    if request.method == "POST":
-        try:
-            account = Profile.objects.get(user=request.user)
-
-            # Clean up previous image
-            account.profile_image.delete()
-            account.save()
-
-            return HttpResponse("Image Deleted")
-        except Profile.DoesNotExist:
-            return HttpResponseServerError(reason=f"Profile with id:{request.user.username} does not exist")
-        except Exception:
-            return HttpResponseServerError(reason=str("default"))
-    else:
-        return HttpResponseForbidden("allowed only via POST")
-
-
-@login_required
 def uploadCiviImage(request):
     """This function is used to upload an image for a Civi"""
     if request.method == "POST":
@@ -489,112 +405,3 @@ def uploadThreadImage(request):
             return HttpResponseServerError(reason=(str(e)))
     else:
         return HttpResponseForbidden("allowed only via POST")
-
-
-@login_required
-@require_post_params(params=["target"])
-def requestFollow(request):
-    """
-    USAGE:
-        Takes in user_id from current friend_requests list and joins accounts as friends.
-        Does not join accounts as friends unless the POST friend is a valid member of the friend request array.
-
-    Text POST:
-        friend
-
-    :return: (200, okay, list of friend information) (400, bad lookup) (500, error)
-    """
-    if request.user.username == request.POST.get("target", -1):
-        return HttpResponseBadRequest(reason="You cannot follow yourself, silly!")
-
-    User = get_user_model()
-
-    try:
-        account = Profile.objects.get(user=request.user)
-        target = User.objects.get(username=request.POST.get("target", -1))
-        target_account = Profile.objects.get(user=target)
-
-        account.following.add(target_account)
-        account.save()
-        target_account.followers.add(account)
-        target_account.save()
-        data = {"username": target.username, "follow_status": True}
-
-        notify.send(
-            request.user,  # Actor User
-            recipient=target,  # Target User
-            verb=u"is following you",  # Verb
-            target=target_account,  # Target Object
-            popup_string="{user} is now following you".format(user=account.full_name),
-            link="/{}/{}".format("profile", request.user.username),
-        )
-
-        return JsonResponse({"result": data})
-    except Profile.DoesNotExist as e:
-        return HttpResponseBadRequest(reason=str(e))
-    except Exception as e:
-        return HttpResponseServerError(reason=str(e))
-
-
-@login_required
-@require_post_params(params=["target"])
-def requestUnfollow(request):
-    """
-    USAGE:
-        Takes in user_id from current friend_requests list and joins accounts as friends.
-        Does not join accounts as friends unless the POST friend is a valid member of the friend request array.
-
-    Text POST:
-        friend
-
-    :return: (200, okay, list of friend information) (400, bad lookup) (500, error)
-    """
-
-    User = get_user_model()
-
-    try:
-        username = request.POST.get("target")
-        if username:
-            account = Profile.objects.get(user=request.user)
-            target = User.objects.get(username=username)
-            target_account = Profile.objects.get(user=target)
-
-            account.following.remove(target_account)
-            account.save()
-            target_account.followers.remove(account)
-            target_account.save()
-            return JsonResponse({"result": "Success"})
-        return HttpResponseBadRequest(reason=f"username cannot be empty ")
-
-    except User.DoesNotExist:
-        return HttpResponseBadRequest(reason=f"User with username {username} does not exist")
-    except Profile.DoesNotExist as e:
-        return HttpResponseBadRequest(reason=str(e))
-    except Exception as e:
-        return HttpResponseServerError(reason=str(e))
-
-
-@login_required
-def editUserCategories(request):
-    """
-    USAGE:
-        Edits list of categories for the user
-
-    """
-    try:
-        account = Profile.objects.get(user=request.user)
-        categories = [int(i) for i in request.POST.getlist("categories[]")]
-        account.categories.clear()
-        for category in categories:
-            account.categories.add(Category.objects.get(id=category))
-            account.save()
-
-        data = {
-            "user_categories": list(account.categories.values_list("id", flat=True))
-            or "all_categories"
-        }
-        return JsonResponse({"result": data})
-    except Profile.DoesNotExist as e:
-        return HttpResponseBadRequest(reason=str(e))
-    except Exception as e:
-        return HttpResponseServerError(reason=str(e))

@@ -1,7 +1,5 @@
 import json
 
-from django.conf import settings
-from django.contrib.auth.decorators import user_passes_test
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import F
 from django.http import HttpResponse, HttpResponseRedirect
@@ -9,10 +7,16 @@ from django.template.response import TemplateResponse
 from django.contrib.auth import get_user_model
 
 from api.models import Thread, Civi, Activity
+<<<<<<< HEAD
 from categories.models import Category
 from accounts.models import Profile
 from accounts.forms import ProfileEditForm
 from accounts.forms import UpdateProfileImage
+=======
+from accounts.models import Profile
+from accounts.forms import ProfileEditForm, UpdateProfileImage
+from categories.models import Category
+>>>>>>> f693e3c878920b2ff58c282b4f88f507b61bf985
 from core.constants import US_STATES
 from core.custom_decorators import login_required, full_profile
 
@@ -91,20 +95,6 @@ def user_profile(request, username=None):
             "readonly": True,
         }
         return TemplateResponse(request, "account.html", data)
-
-
-@login_required
-def user_setup(request):
-    profile = Profile.objects.get(user=request.user)
-    if profile.full_profile:
-        return HttpResponseRedirect("/")
-        # start temp rep rendering TODO: REMOVE THIS
-    else:
-        data = {
-            "username": request.user.username,
-            "email": request.user.email,
-        }
-        return TemplateResponse(request, "user-setup.html", data)
 
 
 @login_required
