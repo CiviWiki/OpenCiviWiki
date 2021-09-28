@@ -7,9 +7,9 @@ from django.template.response import TemplateResponse
 from django.contrib.auth import get_user_model
 
 from api.models import Thread, Civi, Activity
-from categories.models import Category
 from accounts.models import Profile
 from accounts.forms import ProfileEditForm, UpdateProfileImage
+from categories.models import Category
 from core.constants import US_STATES
 from core.custom_decorators import login_required, full_profile
 
