@@ -18,7 +18,7 @@ from .serializers import (
     CiviImageSerializer
 )
 
-from .utils import get_account
+from accounts.utils import get_account
 from .permissions import IsOwnerOrReadOnly
 
 class ThreadViewSet(ModelViewSet):
