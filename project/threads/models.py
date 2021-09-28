@@ -13,7 +13,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from accounts.models import Profile
 from taggit.managers import TaggableManager
-
+from categories.models import Category
 
 class Fact(models.Model):
     body = models.CharField(max_length=511)
