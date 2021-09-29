@@ -11,7 +11,6 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('taggit', '0003_taggeditem_add_unique_index'),
-        ('api', '0040_delete_invitation'),
         ('accounts', '0002_alter_user_first_name'),
     ]
 
