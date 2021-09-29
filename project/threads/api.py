@@ -24,7 +24,6 @@ from .utils import json_response
 from core.constants import US_STATES
 
 
-
 @login_required
 @require_post_params(params=["title", "summary", "category_id"])
 def new_thread(request):
@@ -171,7 +170,6 @@ def get_responses(request, thread_id, civi_id):
         return HttpResponseBadRequest(reason=f"Civi with id:{civi_id} does not exist")
     except Exception as e:
         return HttpResponseBadRequest(reason=str(e))
-
 
 
 @login_required
@@ -407,7 +405,6 @@ def edit_thread(request):
         "location": location,
     }
     return JsonResponse({"data": return_data})
-
 
 
 @login_required

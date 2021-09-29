@@ -6,7 +6,6 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 from .models import Thread
 from .serializers import ThreadSerializer, CategorySerializer
 from categories.models import Category
-from accounts.api import ProfileViewSet
 
 
 from .models import Thread, Civi, CiviImage
@@ -20,6 +19,7 @@ from .serializers import (
 
 from accounts.utils import get_account
 from .permissions import IsOwnerOrReadOnly
+
 
 class ThreadViewSet(ModelViewSet):
     queryset = Thread.objects.order_by("-created")
