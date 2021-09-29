@@ -7,8 +7,10 @@ from .api import (create_civi, delete_civi, edit_civi, edit_thread, get_civi,
 
 from .views import (
     ThreadViewSet, CategoryViewSet,
-    CiviViewSet, ProfileViewSet
+    CiviViewSet
 )
+from accounts.api import ProfileViewSet
+
 router = DefaultRouter(trailing_slash=False)
 router.register(r"threads", ThreadViewSet)
 router.register(r"categories", CategoryViewSet)
