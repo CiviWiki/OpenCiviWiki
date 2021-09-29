@@ -93,6 +93,7 @@ class ThreadViewSet(ModelViewSet):
         )
         return Response(serializer.data)
 
+
 class CiviViewSet(ModelViewSet):
     """ REST API viewset for Civis """
 
@@ -112,6 +113,7 @@ class CiviViewSet(ModelViewSet):
         civi_images = CiviImage.objects.filter(civi=pk)
         serializer = CiviImageSerializer(civi_images, many=True, read_only=True)
         return Response(serializer.data)
+
 
 class CategoryViewSet(ReadOnlyModelViewSet):
     """ REST API viewset for Categories """

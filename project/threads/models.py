@@ -6,7 +6,7 @@ from calendar import month_name
 
 from accounts.models import Profile
 from common.utils import PathAndRename
-from core.constants import CIVI_TYPES,US_STATES
+from core.constants import CIVI_TYPES, US_STATES
 from django.conf import settings
 from django.core.files.storage import default_storage
 from django.core.serializers.json import DjangoJSONEncoder
@@ -14,6 +14,7 @@ from django.db import models
 from accounts.models import Profile
 from taggit.managers import TaggableManager
 from categories.models import Category
+
 
 class Fact(models.Model):
     body = models.CharField(max_length=511)
@@ -382,6 +383,7 @@ class Civi(models.Model):
 
 image_upload_path = PathAndRename("")
 
+
 class Response(models.Model):
     author = models.ForeignKey(
         Profile, default=None, null=True, on_delete=models.PROTECT
@@ -469,6 +471,7 @@ class Activity(models.Model):
     def is_negative_vote(self):
         return self.activity_type.endswith("neg")
 
+
 class Rebuttal(models.Model):
     author = models.ForeignKey(
         Profile, default=None, null=True, on_delete=models.PROTECT
@@ -484,9 +487,9 @@ class Rebuttal(models.Model):
     votes_neutral = models.IntegerField(default=0)
     votes_pos = models.IntegerField(default=0)
     votes_vpos = models.IntegerField(default=0)
-
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     last_modified = models.DateTimeField(auto_now=True, blank=True, null=True)
+
 
 class Rationale(models.Model):
     title = models.CharField(max_length=127)
