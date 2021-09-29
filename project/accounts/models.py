@@ -6,7 +6,6 @@ from django.conf import settings
 from django.db import models
 from PIL import Image, ImageOps
 from django.core.files.uploadedfile import InMemoryUploadedFile
-
 from taggit.managers import TaggableManager
 
 from categories.models import Category

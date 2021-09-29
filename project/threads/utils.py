@@ -5,8 +5,6 @@ from decimal import Decimal
 from django.http import HttpResponse, Http404
 
 
-
-
 def json_custom_parser(obj):
     """
     A custom json parser to handle json.dumps calls properly for Decimal and Datetime data types.

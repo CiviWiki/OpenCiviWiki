@@ -503,3 +503,4 @@ def upload_thread_image(request):
             return HttpResponseServerError(reason=(str(e)))
     else:
         return HttpResponseForbidden("allowed only via POST")
+        
