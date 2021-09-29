@@ -20,7 +20,7 @@ from accounts.models import Profile
 from accounts.forms import UserRegistrationForm, ProfileEditForm
 from accounts.authentication import send_activation_email, account_activation_token
 from django.http import HttpResponseRedirect
-
+from accounts.api import ProfileViewSet
 
 class RegisterView(FormView):
     """
