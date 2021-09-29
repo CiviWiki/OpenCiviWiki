@@ -89,6 +89,7 @@ class SettingsView(LoginRequiredMixin, UpdateView):
     def get_object(self, queryset=None):
         return Profile.objects.get(user=self.request.user)
 
+
     def get_initial(self):
         profile = Profile.objects.get(user=self.request.user)
         self.initial.update({

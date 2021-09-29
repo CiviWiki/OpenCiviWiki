@@ -2,11 +2,11 @@ from django.conf.urls import include, url
 from rest_framework.routers import DefaultRouter
 
 from .api import (create_civi, delete_civi, edit_civi, edit_thread, get_civi,
-                  get_thread, rate_civi, upload_civi_image,new_thread, get_civis,
+                  get_thread, rate_civi, upload_civi_image, new_thread, get_civis,
                   get_responses, upload_thread_image)
 
 from .views import (
-    ThreadViewSet,CategoryViewSet,
+    ThreadViewSet, CategoryViewSet,
     CiviViewSet, ProfileViewSet
 )
 router = DefaultRouter(trailing_slash=False)
