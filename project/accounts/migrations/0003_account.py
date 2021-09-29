@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
                 ('full_account', models.BooleanField(default=False)),
                 ('profile_image', models.ImageField(blank=True, null=True, upload_to=accounts.models.PathAndRename(''))),
                 ('profile_image_thumb', models.ImageField(blank=True, null=True, upload_to=accounts.models.PathAndRename(''))),
-                ('categories', models.ManyToManyField(related_name='user_categories', to='api.Category')),
+                ('categories', models.ManyToManyField(related_name='user_categories', to='categories.Category')),
                 ('followers', models.ManyToManyField(related_name='follower', to='accounts.Account')),
                 ('following', models.ManyToManyField(related_name='followings', to='accounts.Account')),
                 ('tags', taggit.managers.TaggableManager(help_text='A comma-separated list of tags.', through='taggit.TaggedItem', to='taggit.Tag', verbose_name='Tags')),
