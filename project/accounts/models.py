@@ -31,7 +31,7 @@ WHITE_BG = (255, 255, 255)
 
 class ProfileManager(models.Manager):
     def summarize(self, profile):
-        from api.models.civi import Civi
+        from threads.models import Civi
 
         data = {
             "username": profile.user.username,
