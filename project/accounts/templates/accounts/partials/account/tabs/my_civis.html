@@ -3,13 +3,13 @@
 
 <div class="profile-civi-list col s12">
     <div class="row tab-title">
-        <div class="col s6 title-lato">{% trans "My Civi Activity" %} </div>
+        <div class="col s6 title-lato"><!--{% trans "My Civi Activity" %}-->{{ _("My Civi Activity") }} </div>
         <div class="sort-options col s2 push-s4 section">
-            <label>{% trans "View By:" %} </label>
+            <label><!--{% trans "View By:" %}--> {{ _("View By:") }} </label>
             <select class="browser-default">
-            <option value="1" selected>{% trans "Recent" %} </option>
-            <option value="2">{% trans "Popular" %} </option>
-            <option value="3">{% trans "Top" %} </option>
+            <option value="1" selected><!--{% trans "Recent" %}--> {{ _("Recent") }} </option>
+            <option value="2"><!--{% trans "Popular" %}-->{{ _("Popular") }} </option>
+            <option value="3"><!--{% trans "Top" %}--> {{ _("Top") }}</option>
             </select>
         </div>
     </div>
@@ -23,7 +23,7 @@
         <div class="section no-state">
             <div class="container">
                 <div class="section">
-                    <div class="center title-lato text">{% trans "No Civis" %} </div>
+                    <div class="center title-lato text"><!--{% trans "No Civis" %}-->{{ _("No Civics") }} </div>
                 </div>
             </div>
         </div>
