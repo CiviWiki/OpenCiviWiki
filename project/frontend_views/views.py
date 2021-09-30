@@ -7,16 +7,13 @@ from django.template.response import TemplateResponse
 from django.contrib.auth import get_user_model
 
 from api.models import Thread, Civi, Activity
-<<<<<<< HEAD
 from categories.models import Category
 from accounts.models import Profile
 from accounts.forms import ProfileEditForm
 from accounts.forms import UpdateProfileImage
-=======
 from accounts.models import Profile
 from accounts.forms import ProfileEditForm, UpdateProfileImage
 from categories.models import Category
->>>>>>> f693e3c878920b2ff58c282b4f88f507b61bf985
 from core.constants import US_STATES
 from core.custom_decorators import login_required, full_profile
 
