@@ -5,6 +5,10 @@ from accounts.forms import UpdateProfileImage
 from api.models import Civi, Thread, CiviImage, Activity
 from categories.models import Category
 from api.models import Civi, Thread, CiviImage, Activity
+from accounts.forms import UpdateProfileImage
+from api.models import Civi, Thread, CiviImage, Activity
+from categories.models import Category
+
 from accounts.models import Profile
 from accounts.serializers import ProfileListSerializer
 from categories.models import Category
