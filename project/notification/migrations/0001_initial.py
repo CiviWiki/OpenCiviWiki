@@ -10,7 +10,6 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('accounts', '0005_alter_profile_categories'),
-        ('api', '0043_delete_notification'),
     ]
 
     operations = [
@@ -23,8 +22,8 @@ class Migration(migrations.Migration):
                 ('created', models.DateTimeField(auto_now_add=True, null=True)),
                 ('last_modified', models.DateTimeField(auto_now=True, null=True)),
                 ('account', models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.PROTECT, to='accounts.profile')),
-                ('civi', models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.PROTECT, to='api.civi')),
-                ('thread', models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.PROTECT, to='api.thread')),
+                ('civi', models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.PROTECT, to='threads.Civi')),
+                ('thread', models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.PROTECT, to='threads.Thread')),
             ],
         ),
     ]

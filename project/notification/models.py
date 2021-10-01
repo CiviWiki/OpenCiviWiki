@@ -2,12 +2,10 @@
 Notification model
 Notifies users about new followers or replies.
 """
-
 from django.db import models
 
 from accounts.models import Profile
-from api.models.civi import Civi
-from api.models.thread import Thread
+from threads.models import Civi, Thread
 
 
 class Notification(models.Model):

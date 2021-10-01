@@ -6,7 +6,6 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0041_auto_20210906_0802'),
         ('taggit', '0003_taggeditem_add_unique_index'),
         ('accounts', '0003_account'),
     ]

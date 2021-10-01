@@ -20,7 +20,7 @@ from accounts.models import Profile
 from accounts.forms import UserRegistrationForm, ProfileEditForm
 from accounts.authentication import send_activation_email, account_activation_token
 from django.http import HttpResponseRedirect
-
+from accounts.api import ProfileViewSet
 
 class RegisterView(FormView):
     """
@@ -88,6 +88,7 @@ class SettingsView(LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         return Profile.objects.get(user=self.request.user)
+
 
     def get_initial(self):
         profile = Profile.objects.get(user=self.request.user)
