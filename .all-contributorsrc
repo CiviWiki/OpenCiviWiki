@@ -686,6 +686,24 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "znhv",
+      "name": "Boris Zhenikhov",
+      "avatar_url": "https://avatars.githubusercontent.com/u/14875990?v=4",
+      "profile": "https://github.com/znhv",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ssm0801",
+      "name": "Sudhanshu Motewar",
+      "avatar_url": "https://avatars.githubusercontent.com/u/46257802?v=4",
+      "profile": "https://github.com/ssm0801",
+      "contributions": [
+        "review"
+      ]
     }
   ],
   "contributorsPerLine": 7,
