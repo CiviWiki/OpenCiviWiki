@@ -704,6 +704,15 @@
       "contributions": [
         "review"
       ]
+    },
+    {
+      "login": "adityamittl",
+      "name": "Aditya Mittal",
+      "avatar_url": "https://avatars.githubusercontent.com/u/76921082?v=4",
+      "profile": "https://github.com/adityamittl",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
