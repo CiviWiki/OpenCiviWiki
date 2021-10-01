@@ -1,5 +1,5 @@
 from rest_framework.permissions import BasePermission, SAFE_METHODS
-from .utils import get_account
+from accounts.utils import get_account
 
 
 class IsOwnerOrReadOnly(BasePermission):

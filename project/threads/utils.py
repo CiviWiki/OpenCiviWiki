@@ -4,10 +4,6 @@ import collections
 from decimal import Decimal
 from django.http import HttpResponse, Http404
 
-from django.shortcuts import get_object_or_404
-
-from accounts.models import Profile
-
 
 def json_custom_parser(obj):
     """

@@ -6,7 +6,6 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 from .models import Thread
 from .serializers import ThreadSerializer, CategorySerializer
 from categories.models import Category
-from accounts.api import ProfileViewSet
 
 
 from .models import Thread, Civi, CiviImage
@@ -18,8 +17,9 @@ from .serializers import (
     CiviImageSerializer
 )
 
-from .utils import get_account
+from accounts.utils import get_account
 from .permissions import IsOwnerOrReadOnly
+
 
 class ThreadViewSet(ModelViewSet):
     queryset = Thread.objects.order_by("-created")
@@ -93,6 +93,7 @@ class ThreadViewSet(ModelViewSet):
         )
         return Response(serializer.data)
 
+
 class CiviViewSet(ModelViewSet):
     """ REST API viewset for Civis """
 
@@ -112,6 +113,7 @@ class CiviViewSet(ModelViewSet):
         civi_images = CiviImage.objects.filter(civi=pk)
         serializer = CiviImageSerializer(civi_images, many=True, read_only=True)
         return Response(serializer.data)
+
 
 class CategoryViewSet(ReadOnlyModelViewSet):
     """ REST API viewset for Categories """

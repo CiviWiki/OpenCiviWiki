@@ -20,7 +20,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.views.static import serve
 from django.views.generic.base import RedirectView
-
+from core.router import CiviWikiRouter
 from threads import urls as api
 from frontend_views import urls as frontend_views
 
@@ -29,6 +29,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include('accounts.urls.urls')),
     path("api/", include('accounts.urls.api')),
+    path('api/v1/', include((CiviWikiRouter.urls, 'api'))),
     url(r"^api/", include(api)),
     url(
         "^inbox/notifications/",
