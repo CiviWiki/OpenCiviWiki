@@ -1,7 +1,9 @@
-{% verbatim %}
+{% load i18n %}
+
+
 <div class="people scroll">
     <div class="row tab-title">
-        <div class="col s6 title-lato">{{this.model.get('followers').length}} Followers</div>
+        <div class="col s6 title-lato">{% translate "Followers" %}</div>
         <div class="input-field col s4 push-s2">
           <input id="search" type="text" class="validate">
           <label for="search">Search</label>
@@ -9,7 +11,9 @@
     </div>
     <!-- Populate Civi list -->
     <div class="row">
+        {% verbatim %}
         {{# if (this.model.get('followers').length > 0) { }}
+        {{this.model.get('followers').length}} Followers<p></p>
         {{# _.each(this.model.get('followers'), function (u) {}}
             <div class="col s12 m6">
             {{= cw.underscorePartial('user-chip-template', u)}}
@@ -19,11 +23,12 @@
         <div class="section no-state">
             <div class="container">
                 <div class="section">
-                    <div class="center title-lato grey-text">NO FOLLOWERS</div>
+                    <div class="center title-lato grey-text">No followers</div>
                 </div>
             </div>
         </div>
         {{# } }}
+        {% endverbatim %}
     </div>
 </div>
-{% endverbatim %}
+
