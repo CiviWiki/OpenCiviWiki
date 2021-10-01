@@ -164,4 +164,4 @@ class ProfileSetupView(LoginRequiredMixin, View):
                 "username": request.user.username,
                 "email": request.user.email,
             }
-            return TemplateResponse(request, "user-setup.html", data)
+            return TemplateResponse(request, "accounts/user-setup.html", data)
