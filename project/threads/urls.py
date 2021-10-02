@@ -1,4 +1,5 @@
-from django.conf.urls import include, path
+from django.conf.urls import include
+from django.urls import path
 from rest_framework.routers import DefaultRouter
 
 from .api import (create_civi, delete_civi, edit_civi, edit_thread, get_civi,
