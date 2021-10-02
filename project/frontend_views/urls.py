@@ -9,5 +9,5 @@ urlpatterns = [
     path("thread/<int:thread_id>/", views.issue_thread, name="issue thread"),
     path("profile/", views.user_profile, name="default_profile"),
     path("", views.base_view, name="base"),
-    path("thread/<int:thread_id>)/csv/", views.civi2csv, name="civi2csv"),
+    path("thread/<int:thread_id>/csv/", views.civi2csv, name="civi2csv"),
 ]
