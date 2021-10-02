@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>CiviWiki - {% block page_title %}{% endblock page_title %}</title>
+    <meta name="description" content="Building a Better Democracy for the Internet Age">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,600,700" rel="stylesheet">
+
+	 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	 <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+	 <link rel="shortcut icon" href="/favicon.ico">
+	 <meta name="msapplication-TileImage" content="/mstile-144x144.png">
+	 <meta name="msapplication-TileColor" content="#fcffff"> 
+	 <link type="text/css" rel="stylesheet" href="{% static "dependencies/materialize.min.css" %}">
+	 <link type="text/css" rel="stylesheet" href="{% static "dependencies/magicsuggest-min.css" %}">
+	 <script type="text/javascript" src="{% static "dependencies/jquery.min.js" %}"></script>
+	 <script type="text/javascript" src="{% static "dependencies/underscore.js" %}"></script>
+	 <script type="text/javascript" src="{% static "dependencies/backbone-min.js" %}"></script>
+	 <script type="text/javascript" src="{% static "dependencies/materialize.min.js" %}"></script>
+	 <script type="text/javascript" src="{% static "dependencies/magicsuggest-min.js" %}"></script>
+	 <script type="text/javascript" src="{% static "js/base.js" %}"></script>
+	 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  
+    {% block extra_css %}{% endblock extra_css %}
+</head>
+
+<body>
+    {% block content %}{% endblock content %}
+
+    {% block extra_js %}{% endblock extra_js %}
+</body>
+</html>
