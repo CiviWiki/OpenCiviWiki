@@ -107,7 +107,7 @@ else:
     AWS_QUERYSTRING_AUTH = False
 
 STATIC_URL = "/static/"
-STATICFILES_DIRS = (os.path.join(BASE_DIR, "threads/templates/static"),)
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "core/templates/static"),)
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # TODO: re-organize and simplify staticfiles settings
