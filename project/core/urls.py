@@ -21,6 +21,8 @@ from frontend_views import urls as frontend_views
 from threads import urls as threads
 
 from core.router import CiviWikiRouter
+from core.views.general_views import declaration, landing_view, how_it_works_view, about_view, support_us_view
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -36,3 +38,10 @@ urlpatterns = [
     path("", include(frontend_views))
 ]
 
+
+urlpatterns += [
+    path("about", about_view),
+    path("declaration", declaration),
+    path("how-it-works", how_it_works_view),
+    path("support-us", support_us_view)
+]
