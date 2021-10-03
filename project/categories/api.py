@@ -9,7 +9,7 @@ from categories.models import Category
 
 
 class CategoryViewSet(ReadOnlyModelViewSet):
-    """ REST API viewset for Categories """
+    """REST API viewset for Categories"""
 
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
