@@ -17,12 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from django.views.generic.base import RedirectView
-from frontend_views import urls as frontend_views
 from threads import urls as threads
 
 from core.router import CiviWikiRouter
 from core.views.general_views import (
-    declaration,
     landing_view,
     how_it_works_view,
     about_view,
@@ -52,13 +50,13 @@ urlpatterns = [
         "mstile-144x144.png",
         RedirectView.as_view(url="/static/favicon/mstile-144x144.png"),
     ),
-    path("", include(frontend_views)),
+    # path("", include(frontend_views)),
 ]
 
 
 urlpatterns += [
+    path("", landing_view),
     path("about", about_view),
-    path("declaration", declaration),
-    path("how-it-works", how_it_works_view),
-    path("support-us", support_us_view),
+    path("howitworks", how_it_works_view),
+    path("support_us", support_us_view),
 ]
