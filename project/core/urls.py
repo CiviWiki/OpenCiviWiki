@@ -21,21 +21,38 @@ from frontend_views import urls as frontend_views
 from threads import urls as threads
 
 from core.router import CiviWikiRouter
-from core.views.general_views import declaration, landing_view, how_it_works_view, about_view, support_us_view
+from core.views.general_views import (
+    declaration,
+    landing_view,
+    how_it_works_view,
+    about_view,
+    support_us_view,
+)
 
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", include('accounts.urls.urls')),
-    path("api/", include('accounts.urls.api')),
-    path('api/v1/', include((CiviWikiRouter.urls, 'api'))),
+    path("", include("accounts.urls.urls")),
+    path("api/", include("accounts.urls.api")),
+    path("api/v1/", include((CiviWikiRouter.urls, "api"))),
     path("api/", include(threads)),
-    path("inbox/notifications/", include("notifications.urls", namespace="notifications")),
+    path(
+        "inbox/notifications/", include("notifications.urls", namespace="notifications")
+    ),
     path("favicon.ico", RedirectView.as_view(url="/static/favicon/favicon.ico")),
-    path("favicon-32x32.png", RedirectView.as_view(url="/static/favicon/favicon-32x32.png")),
-    path("apple-touch-icon.png", RedirectView.as_view(url="/static/favicon/apple-touch-icon.png")),
-    path("mstile-144x144.png", RedirectView.as_view(url="/static/favicon/mstile-144x144.png")),
-    path("", include(frontend_views))
+    path(
+        "favicon-32x32.png",
+        RedirectView.as_view(url="/static/favicon/favicon-32x32.png"),
+    ),
+    path(
+        "apple-touch-icon.png",
+        RedirectView.as_view(url="/static/favicon/apple-touch-icon.png"),
+    ),
+    path(
+        "mstile-144x144.png",
+        RedirectView.as_view(url="/static/favicon/mstile-144x144.png"),
+    ),
+    path("", include(frontend_views)),
 ]
 
 
@@ -43,5 +60,5 @@ urlpatterns += [
     path("about", about_view),
     path("declaration", declaration),
     path("how-it-works", how_it_works_view),
-    path("support-us", support_us_view)
+    path("support-us", support_us_view),
 ]

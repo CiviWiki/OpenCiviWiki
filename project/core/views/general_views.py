@@ -1,5 +1,6 @@
 from django.template.response import TemplateResponse
 
+
 def declaration(request):
     return TemplateResponse(request, "declaration.html", {})
 

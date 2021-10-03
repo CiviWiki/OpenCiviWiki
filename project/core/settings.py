@@ -75,7 +75,8 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
-            os.path.join(BASE_DIR, "threads/templates/threads"), os.path.join(BASE_DIR, "accounts/templates/accounts")
+            os.path.join(BASE_DIR, "threads/templates/threads"),
+            os.path.join(BASE_DIR, "accounts/templates/accounts"),
         ],  # TODO: Add non-webapp template directory
         "APP_DIRS": True,
         "OPTIONS": {
@@ -158,38 +159,38 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "DEFAULT_RENDERER_CLASSES": DEFAULT_RENDERER_CLASSES,
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-    )
+        "rest_framework.authentication.BasicAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+    ),
 }
 
 # CORS Settings
 CORS_ORIGIN_ALLOW_ALL = True
 
 # Custom User model
-AUTH_USER_MODEL = 'accounts.User'
+AUTH_USER_MODEL = "accounts.User"
 
-DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 # Login Logout URLS
 LOGIN_URL = "login/"
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-        'OPTIONS': {
-            'min_length': 4,
-        }
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "OPTIONS": {
+            "min_length": 4,
+        },
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
