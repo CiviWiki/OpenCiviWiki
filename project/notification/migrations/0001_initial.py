@@ -9,21 +9,64 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('accounts', '0005_alter_profile_categories'),
+        ("accounts", "0005_alter_profile_categories"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Notification',
+            name="Notification",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('activity_type', models.CharField(choices=[('new_follower', 'New follower'), ('response_to_yout_civi', 'Response to your civi'), ('rebuttal_to_your_response', 'Rebuttal to your response')], default='new_follower', max_length=31)),
-                ('read', models.BooleanField(default=False)),
-                ('created', models.DateTimeField(auto_now_add=True, null=True)),
-                ('last_modified', models.DateTimeField(auto_now=True, null=True)),
-                ('account', models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.PROTECT, to='accounts.profile')),
-                ('civi', models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.PROTECT, to='threads.Civi')),
-                ('thread', models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.PROTECT, to='threads.Thread')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "activity_type",
+                    models.CharField(
+                        choices=[
+                            ("new_follower", "New follower"),
+                            ("response_to_yout_civi", "Response to your civi"),
+                            ("rebuttal_to_your_response", "Rebuttal to your response"),
+                        ],
+                        default="new_follower",
+                        max_length=31,
+                    ),
+                ),
+                ("read", models.BooleanField(default=False)),
+                ("created", models.DateTimeField(auto_now_add=True, null=True)),
+                ("last_modified", models.DateTimeField(auto_now=True, null=True)),
+                (
+                    "account",
+                    models.ForeignKey(
+                        default=None,
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        to="accounts.profile",
+                    ),
+                ),
+                (
+                    "civi",
+                    models.ForeignKey(
+                        default=None,
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        to="threads.Civi",
+                    ),
+                ),
+                (
+                    "thread",
+                    models.ForeignKey(
+                        default=None,
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        to="threads.Thread",
+                    ),
+                ),
             ],
         ),
     ]
