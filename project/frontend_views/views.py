@@ -18,14 +18,16 @@ def base_view(request):
     if not request.user.is_authenticated:
         return TemplateResponse(request, "static_templates/landing.html", {})
 
-    a = Profile.objects.get(user=request.user)
+    profile_filter = Profile.objects.get(user=request.user)
     if "login_user_image" not in request.session.keys():
-        request.session["login_user_image"] = a.profile_image_thumb_url
+        request.session["login_user_image"] = profile_filter.profile_image_thumb_url
 
     categories = [{"id": c.id, "name": c.name} for c in Category.objects.all()]
 
     all_categories = list(Category.objects.values_list("id", flat=True))
-    user_categories = list(a.categories.values_list("id", flat=True)) or all_categories
+    user_categories = (
+        list(profile_filter.categories.values_list("id", flat=True)) or all_categories
+    )
 
     feed_threads = [
         Thread.objects.summarize(t)
@@ -38,7 +40,7 @@ def base_view(request):
     )
     my_draft_threads = [
         Thread.objects.summarize(t)
-        for t in Thread.objects.filter(author_id=a.id)
+        for t in Thread.objects.filter(author_id=profile_filter.id)
         .exclude(is_draft=False)
         .order_by("-created")
     ]
@@ -62,7 +64,7 @@ def user_profile(request, username=None):
     User = get_user_model()
     if request.method == "GET":
         if not username:
-            return HttpResponseRedirect("/profile/{0}".format(request.user))
+            return HttpResponseRedirect(f"/profile/{request.user}")
         else:
             is_owner = username == request.user.username
             try:
@@ -97,27 +99,27 @@ def issue_thread(request, thread_id=None):
         return HttpResponseRedirect("/404")
 
     req_acct = Profile.objects.get(user=request.user)
-    t = Thread.objects.get(id=thread_id)
+    thread_filter = Thread.objects.get(id=thread_id)
     c_qs = Civi.objects.filter(thread_id=thread_id).exclude(c_type="response")
     c_scored = [c.dict_with_score(req_acct.id) for c in c_qs]
     civis = sorted(c_scored, key=lambda c: c["score"], reverse=True)
 
     # modify thread view count
-    t.num_civis = len(civis)
-    t.num_views = F("num_views") + 1
-    t.save()
-    t.refresh_from_db()
+    thread_filter.num_civis = len(civis)
+    thread_filter.num_views = F("num_views") + 1
+    thread_filter.save()
+    thread_filter.refresh_from_db()
 
     thread_wiki_data = {
         "thread_id": thread_id,
-        "title": t.title,
-        "summary": t.summary,
-        "image": t.image_url,
+        "title": thread_filter.title,
+        "summary": thread_filter.summary,
+        "image": thread_filter.image_url,
         "author": {
-            "username": t.author.user.username,
-            "profile_image": t.author.profile_image_url,
-            "first_name": t.author.first_name,
-            "last_name": t.author.last_name,
+            "username": thread_filter.author.user.username,
+            "profile_image": thread_filter.author.profile_image_url,
+            "first_name": thread_filter.author.first_name,
+            "last_name": thread_filter.author.last_name,
         },
         "contributors": [
             Profile.objects.chip_summarize(a)
@@ -125,22 +127,29 @@ def issue_thread(request, thread_id=None):
                 pk__in=civis.distinct("author").values_list("author", flat=True)
             )
         ],
-        "category": {"id": t.category.id, "name": t.category.name},
+        "category": {
+            "id": thread_filter.category.id,
+            "name": thread_filter.category.name,
+        },
         "categories": [{"id": c.id, "name": c.name} for c in Category.objects.all()],
         "states": sorted(US_STATES, key=lambda s: s[1]),
-        "created": t.created_date_str,
-        "level": t.level,
-        "state": t.state if t.level == "state" else "",
-        "location": t.level if not t.state else dict(US_STATES).get(t.state),
-        "num_civis": t.num_civis,
-        "num_views": t.num_views,
+        "created": thread_filter.created_date_str,
+        "level": thread_filter.level,
+        "state": thread_filter.state if thread_filter.level == "state" else "",
+        "location": thread_filter.level
+        if not thread_filter.state
+        else dict(US_STATES).get(thread_filter.state),
+        "num_civis": thread_filter.num_civis,
+        "num_views": thread_filter.num_views,
         "user_votes": [
             {
                 "civi_id": act.civi.id,
                 "activity_type": act.activity_type,
                 "c_type": act.civi.c_type,
             }
-            for act in Activity.objects.filter(thread=t.id, account=req_acct.id)
+            for act in Activity.objects.filter(
+                thread=thread_filter.id, account=req_acct.id
+            )
         ],
     }
     thread_body_data = {
@@ -149,7 +158,7 @@ def issue_thread(request, thread_id=None):
 
     data = {
         "thread_id": thread_id,
-        "is_draft": t.is_draft,
+        "is_draft": thread_filter.is_draft,
         "thread_wiki_data": json.dumps(thread_wiki_data),
         "thread_body_data": json.dumps(thread_body_data),
     }
@@ -180,9 +189,6 @@ def about_view(request):
 
 def support_us_view(request):
     return TemplateResponse(request, "static_templates/support_us.html", {})
-
-
-""" CSV export function. Thread ID goes in, CSV HTTP response attachment goes out. """
 
 
 @csrf_exempt
