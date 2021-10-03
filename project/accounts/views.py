@@ -19,10 +19,8 @@ from django.views import View
 from django.views.generic.edit import FormView, UpdateView
 
 from accounts.api import ProfileViewSet
-from accounts.authentication import (account_activation_token,
-                                     send_activation_email)
-from accounts.forms import (ProfileEditForm, UpdateProfileImage,
-                            UserRegistrationForm)
+from accounts.authentication import account_activation_token, send_activation_email
+from accounts.forms import ProfileEditForm, UpdateProfileImage, UserRegistrationForm
 from accounts.models import Profile
 
 
@@ -85,31 +83,32 @@ class PasswordResetCompleteView(auth_views.PasswordResetCompleteView):
 class SettingsView(LoginRequiredMixin, UpdateView):
     """A form view to edit Profile"""
 
-    login_url = 'accounts_login'
+    login_url = "accounts_login"
     form_class = ProfileEditForm
-    success_url = reverse_lazy('accounts_settings')
-    template_name = 'accounts/utils/update_settings.html'
+    success_url = reverse_lazy("accounts_settings")
+    template_name = "accounts/utils/update_settings.html"
 
     def get_object(self, queryset=None):
         return Profile.objects.get(user=self.request.user)
 
-
     def get_initial(self):
         profile = Profile.objects.get(user=self.request.user)
-        self.initial.update({
-            "username": profile.user.username,
-            "email": profile.user.email,
-            "first_name": profile.first_name or None,
-            "last_name": profile.last_name or None,
-            "about_me": profile.about_me or None,
-        })
+        self.initial.update(
+            {
+                "username": profile.user.username,
+                "email": profile.user.email,
+                "first_name": profile.first_name or None,
+                "last_name": profile.last_name or None,
+                "about_me": profile.about_me or None,
+            }
+        )
         return super(SettingsView, self).get_initial()
 
 
 class ProfileActivationView(View):
     """
-        This shows different views to the user when they are verifying
-        their account based on whether they are already verified or not.
+    This shows different views to the user when they are verifying
+    their account based on whether they are already verified or not.
     """
 
     def get(self, request, uidb64, token):
@@ -157,7 +156,7 @@ class ProfileActivationView(View):
 class ProfileSetupView(LoginRequiredMixin, View):
     """A view to make the user profile full_profile"""
 
-    login_url = 'accounts_login'
+    login_url = "accounts_login"
 
     def get(self, request):
         profile = Profile.objects.get(user=request.user)
@@ -170,6 +169,7 @@ class ProfileSetupView(LoginRequiredMixin, View):
                 "email": request.user.email,
             }
             return TemplateResponse(request, "accounts/user-setup.html", data)
+
 
 @login_required
 @full_profile

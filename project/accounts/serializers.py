@@ -5,7 +5,7 @@ from accounts.models import Profile
 
 
 class ProfileCommonSerializer(serializers.ModelSerializer):
-    """ Common serializer for specific profile serializers"""
+    """Common serializer for specific profile serializers"""
 
     username = serializers.ReadOnlyField(source="user.username")
     is_following = serializers.SerializerMethodField()

@@ -282,7 +282,7 @@ def edit_user(request):
 
 @login_required
 def upload_profile_image(request):
-    """ This function is used to allow users to upload profile photos """
+    """This function is used to allow users to upload profile photos"""
     if request.method == "POST":
         form = UpdateProfileImage(request.POST, request.FILES)
         if form.is_valid():
@@ -306,8 +306,10 @@ def upload_profile_image(request):
                 return JsonResponse(response, status=200)
 
             except Profile.DoesNotExist:
-                response = {"message": f"Profile with user {request.user.username} does not exist",
-                            "error": "ACCOUNT_ERROR"}
+                response = {
+                    "message": f"Profile with user {request.user.username} does not exist",
+                    "error": "ACCOUNT_ERROR",
+                }
                 return JsonResponse(response, status=400)
             except Exception as e:
                 response = {"message": str(e), "error": "MODEL_ERROR"}
@@ -322,7 +324,7 @@ def upload_profile_image(request):
 
 @login_required
 def clear_profile_image(request):
-    """ This function is used to delete a profile image """
+    """This function is used to delete a profile image"""
     if request.method == "POST":
         try:
             account = Profile.objects.get(user=request.user)
@@ -333,7 +335,9 @@ def clear_profile_image(request):
 
             return HttpResponse("Image Deleted")
         except Profile.DoesNotExist:
-            return HttpResponseServerError(reason=f"Profile with id:{request.user.username} does not exist")
+            return HttpResponseServerError(
+                reason=f"Profile with id:{request.user.username} does not exist"
+            )
         except Exception:
             return HttpResponseServerError(reason=str("default"))
     else:
@@ -372,7 +376,7 @@ def request_follow(request):
         notify.send(
             request.user,  # Actor User
             recipient=target,  # Target User
-            verb=u"is following you",  # Verb
+            verb="is following you",  # Verb
             target=target_account,  # Target Object
             popup_string="{user} is now following you".format(user=account.full_name),
             link="/{}/{}".format("profile", request.user.username),
@@ -416,7 +420,9 @@ def request_unfollow(request):
         return HttpResponseBadRequest(reason="username cannot be empty")
 
     except User.DoesNotExist:
-        return HttpResponseBadRequest(reason=f"User with username {username} does not exist")
+        return HttpResponseBadRequest(
+            reason=f"User with username {username} does not exist"
+        )
     except Profile.DoesNotExist as e:
         return HttpResponseBadRequest(reason=str(e))
     except Exception as e:

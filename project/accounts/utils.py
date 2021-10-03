@@ -8,10 +8,12 @@ from accounts.models import Profile
 
 
 def send_email(subject, message, sender, recipient_list, html_message=None):
-    """ A wrapper around Django's send email."""
+    """A wrapper around Django's send email."""
 
     # If DEBUG is True or no email host is configured, skip sending the email.
-    if (hasattr(settings, 'DEBUG') and settings.DEBUG) or not hasattr(settings, 'EMAIL_HOST'):
+    if (hasattr(settings, "DEBUG") and settings.DEBUG) or not hasattr(
+        settings, "EMAIL_HOST"
+    ):
         return 0
 
     return send_mail(
@@ -24,7 +26,7 @@ def send_email(subject, message, sender, recipient_list, html_message=None):
 
 
 def send_mass_email(subject, contexts):
-    """ Construct and send a multipart/alternative email """
+    """Construct and send a multipart/alternative email"""
 
     # Manually open connection to the SMTP server specified in settings.py
     connection = get_connection()  # uses SMTP server specified in settings.py
@@ -49,7 +51,7 @@ def send_mass_email(subject, contexts):
 
 
 def get_account(user=None, pk=None, username=None):
-    """ gets author based on the user """
+    """gets author based on the user"""
     if user:
         return get_object_or_404(Profile, user=user)
     elif pk:
