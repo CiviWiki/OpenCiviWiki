@@ -65,7 +65,8 @@ python manage.py collectstatic
 
 ### Populate initial data
 
-During the first setup, it's useful to import hardcoded initial entries. In this case, there are two fixtures:
+During the first setup, it's useful to import hardcoded initial entries. In this case,
+there are two [fixtures](https://docs.djangoproject.com/en/3.2/howto/initial-data/):
 
 * Sample threads, located in `project/data/sample_threads.json`
 * Sample categories, located in `project/data/categories.json`
