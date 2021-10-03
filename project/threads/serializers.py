@@ -71,6 +71,7 @@ class CiviSerializer(serializers.ModelSerializer):
 
 class CiviListSerializer(serializers.ModelSerializer):
     """ """
+
     author = ProfileListSerializer()
     type = serializers.CharField(source="c_type")
     created = serializers.ReadOnlyField(source="created_date_str")
@@ -82,6 +83,7 @@ class CiviListSerializer(serializers.ModelSerializer):
 
 class CategoryListSerializer(serializers.ModelSerializer):
     """ """
+
     class Meta:
         model = Category
         fields = ("id", "name")
@@ -89,6 +91,7 @@ class CategoryListSerializer(serializers.ModelSerializer):
 
 class CategorySerializer(serializers.ModelSerializer):
     """ """
+
     preferred = serializers.SerializerMethodField()
 
     class Meta:
@@ -114,6 +117,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class ThreadSerializer(serializers.ModelSerializer):
     """ """
+
     author = ProfileListSerializer(required=False)
     category = CategoryListSerializer()
 
@@ -152,6 +156,7 @@ class ThreadSerializer(serializers.ModelSerializer):
 
 class ThreadListSerializer(serializers.ModelSerializer):
     """ """
+
     author = ProfileListSerializer(required=False)
     category = CategoryListSerializer()
 
@@ -182,6 +187,7 @@ class ThreadListSerializer(serializers.ModelSerializer):
 
 class ThreadDetailSerializer(serializers.ModelSerializer):
     """ """
+
     author = ProfileListSerializer(required=False)
     category = CategoryListSerializer()
 

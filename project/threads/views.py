@@ -19,9 +19,14 @@ from threads.models import Activity, Civi, Thread
 
 from .models import Civi, CiviImage, Thread
 from .permissions import IsOwnerOrReadOnly
-from .serializers import (CategorySerializer, CiviImageSerializer,
-                          CiviSerializer, ThreadDetailSerializer,
-                          ThreadListSerializer, ThreadSerializer)
+from .serializers import (
+    CategorySerializer,
+    CiviImageSerializer,
+    CiviSerializer,
+    ThreadDetailSerializer,
+    ThreadListSerializer,
+    ThreadSerializer,
+)
 
 
 class ThreadViewSet(ModelViewSet):
@@ -98,7 +103,7 @@ class ThreadViewSet(ModelViewSet):
 
 
 class CiviViewSet(ModelViewSet):
-    """ REST API viewset for Civis """
+    """REST API viewset for Civis"""
 
     queryset = Civi.objects.all()
     serializer_class = CiviSerializer
@@ -119,7 +124,7 @@ class CiviViewSet(ModelViewSet):
 
 
 class CategoryViewSet(ReadOnlyModelViewSet):
-    """ REST API viewset for Categories """
+    """REST API viewset for Categories"""
 
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
@@ -130,6 +135,7 @@ class CategoryViewSet(ReadOnlyModelViewSet):
         category_threads = Thread.objects.filter_by_category_id(pk)
         serializer = ThreadSerializer(category_threads, many=True)
         return Response(serializer.data)
+
 
 def base_view(request):
     if not request.user.is_authenticated:
@@ -173,6 +179,8 @@ def base_view(request):
     }
 
     return TemplateResponse(request, "feed.html", {"data": json.dumps(data)})
+
+
 @login_required
 @full_profile
 def issue_thread(request, thread_id=None):
