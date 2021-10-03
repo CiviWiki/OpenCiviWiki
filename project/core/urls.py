@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import include, path
 from django.views.generic.base import RedirectView
 from threads import urls as threads
-
+from frontend_views import urls as frontend_views
 from core.router import CiviWikiRouter
 from core.views.general_views import (
     landing_view,
@@ -50,13 +50,13 @@ urlpatterns = [
         "mstile-144x144.png",
         RedirectView.as_view(url="/static/favicon/mstile-144x144.png"),
     ),
-    # path("", include(frontend_views)),
+    path("", include(frontend_views)),
 ]
 
 
-urlpatterns += [
-    path("", landing_view),
-    path("about", about_view),
-    path("howitworks", how_it_works_view),
-    path("support_us", support_us_view),
-]
+# urlpatterns += [
+#     path("", landing_view),
+#     path("about", about_view),
+#     path("howitworks", how_it_works_view),
+#     path("support_us", support_us_view),
+# ]
