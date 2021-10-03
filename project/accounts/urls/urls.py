@@ -2,6 +2,7 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 from accounts.views import (RegisterView, SettingsView, ProfileActivationView, PasswordResetView, PasswordResetDoneView,
                             PasswordResetConfirmView, PasswordResetCompleteView, ProfileSetupView)
+from accounts.views import user_profile
 
 urlpatterns = [
     path(
@@ -33,5 +34,11 @@ urlpatterns = [
         PasswordResetCompleteView.as_view(),
         name='accounts_password_reset_complete',
     ),
-    path('setup/', ProfileSetupView.as_view(), name="accounts_profile_setup"),
+    path('setup/', ProfileSetupView.as_view(), name="accounts_profile_set[]"),
+    path("profile/(?P<username>[a-zA-Z0-9-_]*)$", user_profile, name="profile"),
+    path("profile/rep/(?P<username>\d+)$", user_profile, name="profile"),
+    path("profile$", user_profile, name="default_profile"),
+
 ]
+
+
