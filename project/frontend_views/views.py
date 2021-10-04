@@ -16,7 +16,7 @@ from core.custom_decorators import login_required, full_profile
 
 def base_view(request):
     if not request.user.is_authenticated:
-        return TemplateResponse(request, "static_templates/landing.html", {})
+        return TemplateResponse(request, "landing.html", {})
 
     a = Profile.objects.get(user=request.user)
     if "login_user_image" not in request.session.keys():
@@ -167,19 +167,19 @@ def declaration(request):
 
 
 def landing_view(request):
-    return TemplateResponse(request, "static_templates/landing.html", {})
+    return TemplateResponse(request, "landing.html", {})
 
 
 def how_it_works_view(request):
-    return TemplateResponse(request, "static_templates/how_it_works.html", {})
+    return TemplateResponse(request, "how_it_works.html", {})
 
 
 def about_view(request):
-    return TemplateResponse(request, "static_templates/about.html", {})
+    return TemplateResponse(request, "about.html", {})
 
 
 def support_us_view(request):
-    return TemplateResponse(request, "static_templates/support_us.html", {})
+    return TemplateResponse(request, "support_us.html", {})
 
 
 """ CSV export function. Thread ID goes in, CSV HTTP response attachment goes out. """
