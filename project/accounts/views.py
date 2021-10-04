@@ -20,13 +20,12 @@ from accounts.models import Profile
 from accounts.forms import UserRegistrationForm, ProfileEditForm
 from accounts.authentication import send_activation_email, account_activation_token
 from django.http import HttpResponseRedirect
-from accounts.api import ProfileViewSet
+
 
 class RegisterView(FormView):
     """
     A form view that handles user registration.
     """
-
     template_name = "accounts/register/register.html"
     form_class = UserRegistrationForm
     success_url = "/"
@@ -89,7 +88,6 @@ class SettingsView(LoginRequiredMixin, UpdateView):
     def get_object(self, queryset=None):
         return Profile.objects.get(user=self.request.user)
 
-
     def get_initial(self):
         profile = Profile.objects.get(user=self.request.user)
         self.initial.update({
@@ -107,7 +105,6 @@ class ProfileActivationView(View):
         This shows different views to the user when they are verifying
         their account based on whether they are already verified or not.
     """
-
     def get(self, request, uidb64, token):
 
         User = get_user_model()

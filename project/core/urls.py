@@ -35,4 +35,3 @@ urlpatterns = [
     path("mstile-144x144.png", RedirectView.as_view(url="/static/favicon/mstile-144x144.png")),
     path("", include(frontend_views))
 ]
-
