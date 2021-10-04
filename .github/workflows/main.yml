@@ -34,6 +34,6 @@ jobs:
     - name: flake8 Lint
       uses: py-actions/flake8@v1
       with:
-        exclude: "projects/**/migrations,projects/**/tests"
+        exclude: "**/migrations/*.py,**/tests/*.py, **/tests.py"
         max-line-length: "120"
         path: "project"
