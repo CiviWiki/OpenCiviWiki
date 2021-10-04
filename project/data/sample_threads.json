@@ -1,201 +1,201 @@
 [{
-        "model": "api.thread",
-        "fields": {
-            "title": "Agriculture Subsidization ",
-            "summary": "The United States currently pays around $20 billion per year to farmers in direct subsidies as \"farm income stabilization\" via farm bills. These bills pre-date the economic turmoil of the Great Depression with the 1922 Grain Futures Act, the 1929 Agricultural Marketing Act, and the 1933 Agricultural Adjustment Act creating a tradition of government support. The beneficiaries of the subsidies have changed as agriculture in the United States has changed. In the 1930s, about 25% of the country's population resided on the nation's 6,000,000 small farms. By 1997, 157,000 large farms accounted for 72% of farm sales, with only 2% of the US population residing on small farms.   In 2006, the top 3 states receiving subsidies were Texas (10.4%), Iowa (9.0%), and Illinois (7.6%). United States Department of Agriculture (USDA) subsidies from farms in Iowa totaled $1,212,000,000 in 2006. From 2003 to 2005, the top 1% of beneficiaries received 17% of subsidy payments. In Texas, 72% of farms do not receive government subsidies. Of the close to USD$1.4 billion in subsidy payments to farms in Texas, roughly 18% of the farms receive a portion of the payments.Top states for direct payments were Iowa ($501 million), Illinois ($454 million), and Texas ($397 million). Direct payments of subsidies are limited to $40,000 per person or $80,000 per couple.  The subsidy programs give farmers extra money for their crops and guarantee a price floor. For instance, in the 2002 Farm Bill, for every bushel of wheat sold, farmers were paid an extra 52 cents and guaranteed a price of 3.86 from 2002-03 and 3.92 from 2004-2007. That is, if the price of wheat in 2002 was $3.80, farmers would get an extra 58å¢ per bushel (52å¢ plus the 6å¢ price difference).  Acknowledging  https://en.wikipedia.org/wiki/Agricultural_subsidy. ",
-            "category_id": "1",
-            "author_id": "2",
-            "created": "2016-10-09 20:25:20.365392+00"
-        }
-    },
-    {
-        "model": "api.thread",
-        "fields": {
-            "title": "Liquid Fluoride Thorium Reactors",
-            "summary": "Thorium-based nuclear power is nuclear reactor-based, fuelled primarily by the nuclear fission of the isotope uranium-233 produced from the fertile element thorium. According to proponents, a thorium fuel cycle offers several potential advantages over a uranium fuel cycle--including much greater abundance on Earth, superior physical and nuclear fuel properties, and reduced nuclear waste production. However, development of thorium power has significant start-up costs. Proponents also cite the lack of weaponization potential as an advantage of thorium, while critics say that development of breeder reactors in general (including thorium reactors, which are breeders by nature) increases proliferation concerns. Since about 2008, nuclear energy experts have become more interested in thorium to supply nuclear fuel in place of uranium to generate nuclear power. This renewed interest has been highlighted in a number of scientific conferences, the latest of which, ThEC13 [1] was held at CERN by iThEC and attracted over 200 scientists from 32 countries.  Acknowledgement: https://en.wikipedia.org/wiki/Thorium-based_nuclear_power",
-            "category_id": "2",
-            "author_id": "2",
-            "created": "2016-10-09 21:07:16.848433+00"
-        }
-    },
-    {
-        "model": "api.thread",
-        "fields": {
-            "title": "Subsidized Health Insurance",
-            "summary": "Under current federal law, subsidies for insurance premiums are given to individuals who buy a plan from an exchange and have a household income between 133% and 400% of the poverty line. Section 1401(36B) of PPACA explains that each subsidy will be provided as an advanceable, refundable tax credit and gives a formula for its calculation.   A refundable tax credit is a way to provide government benefits to individuals who may have no tax liability (such as the earned income tax credit). The formula was changed in the amendments (HR 4872) passed March 23, 2010, in section 1001. To qualify for the subsidy, the beneficiaries cannot be eligible for other acceptable coverage. The U.S. Department of Health and Human Services (HHS) and Internal Revenue Service (IRS) on May 23, 2012, issued joint final rules regarding implementation of the new state-based health insurance exchanges to cover how the exchanges will determine eligibility for uninsured individuals and employees of small businesses seeking to buy insurance on the exchanges, as well as how the exchanges will handle eligibility determinations for low-income individuals applying for newly expanded Medicaid benefits. Premium caps have been delayed for a year on group plans, to give employers time to arrange new accounting systems, but the caps are still planned to take effect on schedule for insurance plans on the exchanges.  Acknowledging: https://en.wikipedia.org/wiki/Health_insurance_marketplace",
-            "category_id": "3",
-            "author_id": "2",
-            "created": "2016-10-09 21:29:30.192618+00"
-        }
-    },
-    {
-        "model": "api.thread",
-        "fields": {
-            "title": "Police Use of Deadly Force",
-            "summary": "In the United States, the use of deadly force by sworn law enforcement officers is lawful when the officer reasonably believes the subject poses a significant threat of serious bodily injury or death to themselves or others. The use of deadly force by law enforcement is also lawful when used to prevent the escape of a fleeing felon when the officer believes escape would pose a significant threat of serious bodily injury or death to members of the public. Due to a number of highly publicized cases, the use of deadly force is under increased public scrutiny.   Acknowledging: https://en.wikipedia.org/wiki/Deadly_force",
-            "category_id": "4",
-            "author_id": "2",
-            "created": "2016-10-09 22:06:20.709848+00"
-        }
-    },
-    {
-        "model": "api.thread",
-        "fields": {
-            "title": "Balanced Budget Requirements ",
-            "summary": "A balanced budget amendment would require that a state cannot spend more than its income. It requires a balance between the projected receipts and expenditures of the government.  Balanced-budget provisions have been added to the constitutions of most U.S. states, the Basic Law of Germany, the Hong Kong Basic Law, Spain, Italy and the Swiss Constitution. It is often proposed that a balanced-budget rule should be added to the national United States Constitution. Most balanced-budget provisions make an exception for times of war, national emergency, or recession, or allow the legislature to suspend the rule by a supermajority vote.  Acknowledging: https://en.wikipedia.org/wiki/Balanced_budget_amendment",
-            "category_id": "5",
-            "author_id": "2",
-            "created": "2016-10-09 22:09:12.520864+00"
-        }
-    },
-    {
-        "model": "api.thread",
-        "fields": {
-            "title": "The Minimum Wage ",
-            "summary": "A minimum wage is the lowest remuneration that employers may legally pay to workers. Equivalently, it is the price floor below which workers may not sell their labor. Although minimum wage laws are in effect in many jurisdictions, differences of opinion exist about the benefits and drawbacks of a minimum wage. Supporters of the minimum wage say it increases the standard of living of workers, reduces poverty, reduces inequality, boosts morale and forces businesses to be more efficient. In contrast, opponents of the minimum wage say it increases poverty, increases unemployment (particularly among unskilled or inexperienced workers) and is damaging to businesses because excessively high minimum wages require businesses to raise the prices of their product or service to accommodate the extra expense of paying a higher wage.  Acknowledging: https://en.wikipedia.org/wiki/Minimum_wage",
-            "category_id": "6",
-            "author_id": "2",
-            "created": "2016-10-09 22:14:47.210195+00"
-        }
-    },
-    {
-        "model": "api.thread",
-        "fields": {
-            "title": "National Public Wifi",
-            "summary": "Municipal wireless network (Municipal Wi-Fi, Muni Wi-Fi or Muni-Fi) is a city-wide wireless network. This is usually done by providing municipal broadband via Wi-Fi to large parts or all of a municipal area by deploying a wireless mesh network. The typical deployment design uses hundreds of wireless access points deployed outdoors, often on poles. The operator of the network acts as a wireless internet service provider.  This article is a space to discuss the problems national public wifi would solve and potential problems with implementing such a system.   Acknowledging: https://en.wikipedia.org/wiki/Municipal_wireless_network#United_States",
-            "category_id": "13",
-            "author_id": "2",
-            "created": "2016-10-09 23:48:37.401324+00"
-        }
-    },
-    {
-        "model": "api.thread",
-        "fields": {
-            "title": "The Trans-Pacific Partnership Agreement ",
-            "summary": "The Trans-Pacific Partnership (TPP) or Trans-Pacific Partnership Agreement (TPPA) is a trade agreement among twelve of the Pacific Rim countries - notably not including China. The finalized proposal was signed on 4 February 2016 in Auckland, New Zealand, concluding seven years of negotiations. It is currently awaiting ratification to enter into force. The 30 chapters of the agreement aim to \"promote economic growth; support the creation and retention of jobs; enhance innovation, productivity, and competitiveness; raise living standards; reduce poverty in the signatories' countries; and promote transparency, good governance, and enhanced labor and environmental protections.\" The TPP contains measures to lower both non-tariff and tariff barriers to trade, and establish an investor-state dispute settlement mechanism.  The TPP began as an expansion of the Trans-Pacific Strategic Economic Partnership Agreement (TPSEP or P4) signed by Brunei, Chile, New Zealand, and Singapore in 2005. Beginning in 2008, additional countries joined the discussion for a broader agreement: Australia, Canada, Japan, Malaysia, Mexico, Peru, the United States, and Vietnam bringing the total number of countries participating in the negotiations to twelve. Current trade agreements between participating countries, such as the North American Free Trade Agreement, will be reduced to those provisions that do not conflict with the TPP or provide greater trade liberalization than the TPP. The United States government considers the TPP a companion agreement to the proposed Transatlantic Trade and Investment Partnership (TTIP), a broadly similar agreement between the U.S. and the European Union.  According to Politico, many expect Congress to vote on the bill either during the Summer of 2016 or in the lame-duck session after the 2016 elections. However, in August 2016, Senate Majority Leader Mitch McConnell (R-KY) stated that the vote will not occur that year but added, \"It will still be around. It can be massaged, changed, worked on during the next administration.\"  Acknowledging : https://en.wikipedia.org/wiki/Trans-Pacific_Partnership",
-            "category_id": "7",
-            "author_id": "2",
-            "created": "2016-10-09 22:31:29.938879+00"
-        }
-    },
-    {
-        "model": "api.thread",
-        "fields": {
-            "title": "The Common Core State Standards Initiative",
-            "summary": "The Common Core State Standards Initiative is an educational initiative in the United States that details what K-12 students should know in English language arts and mathematics at the end of each grade. The initiative is sponsored by the National Governors Association (NGA) and the Council of Chief State School Officers (CCSSO) and seeks to establish consistent educational standards across the states as well as ensure that students graduating from high school are prepared to enter credit-bearing courses at two- or four-year college programs or to enter the workforce.  Forty-two of the fifty U.S. states and the District of Columbia are members of the Common Core State Standards Initiative, with the states of Oklahoma, Texas, Virginia, Alaska, Nebraska, Indiana, and South Carolina not adopting the initiative at a state level.  Minnesota adopted the English Language Arts standards but not the Mathematics standards. Several states that initially adopted Common Core have since decided to repeal or replace it, namely Indiana, Oklahoma, and South Carolina.  The Common Core State Standards have drawn both support and adverse criticism from politicians, analysts, and commentators.   Acknowledging: https://en.wikipedia.org/wiki/Common_Core_State_Standards_Initiative",
-            "category_id": "8",
-            "author_id": "2",
-            "created": "2016-10-09 22:38:49.176202+00"
-        }
-    },
-    {
-        "model": "api.thread",
-        "fields": {
-            "title": "Military Use of Unmanned Areal Vehicles (A.K.A Drones) ",
-            "summary": "An unmanned aerial vehicle (UAV), commonly known as a drone, as an unmanned aircraft system (UAS), or by several other names, is an aircraft without a human pilot aboard. The flight of UAVs may operate with various degrees of autonomy: either under remote control by a human operator, or fully or intermittently autonomously, by onboard computers.  Compared to manned aircraft, UAVs are often preferred for missions that are too \"dull, dirty or dangerous\" for humans. American Predators and Reapers are made for counterterrorism operations and in war zones in which the enemy lacks sufficient firepower to shoot them down. They are not designed to withstand antiaircraft defenses or air-to-air combat. In September 2013, the chief of the US Air Combat Command stated that current UAVs were \"useless in a contested environment\" unless manned aircraft were there to protect them. A 2012 Congressional Research Service (CRS) report speculated that in the future, UAVs may be able to perform tasks beyond intelligence, surveillance, reconnaissance, and strikes; the CRS report listed air-to-air combat (\"a more difficult future task\") as possible future undertakings. The Department of Defense's Unmanned Systems Integrated Roadmap FY2013-2038 foresees a more important place for UAVs in combat. Issues include extended capabilities, human-UAV interaction, managing increased information flux, increased autonomy and developing UAV-specific munitions.[169] DARPA's project of systems of systems, or General Atomics work may augur future warfare scenarios, the latter disclosing Avenger swarms equipped with High Energy Liquid Laser Area Defense System (HELLADS).  Acknowledging: https://en.wikipedia.org/wiki/Unmanned_aerial_vehicle",
-            "category_id": "9",
-            "author_id": "2",
-            "created": "2016-10-09 23:12:49.050401+00"
-        }
-    },
-    {
-        "model": "api.thread",
-        "fields": {
-            "title": "Net Neutrality",
-            "summary": "Net neutrality is the principle that Internet service providers and governments regulating the Internet should treat all data on the Internet the same, not discriminating or charging differentially by user, content, website, platform, application, type of attached equipment, or mode of communication. The term was coined by Columbia University media law professor Tim Wu in 2003, as an extension of the longstanding concept of a common carrier, which was used to describe the role of telephone systems.  A widely cited example of a violation of net neutrality principles was when the Internet service provider Comcast was secretly slowing (colloquially called \"throttling\") uploads from peer-to-peer file sharing (P2P) applications using forged packets.[5] Research suggests that a combination of policy instruments will help realize the range of valued political and economic objectives central to the network neutrality debate. Combined with strong public opinion, this has led some governments to regulate broadband Internet services as a public utility, similar to the way electricity, gas, and water supply is regulated, along with limiting providers and regulating the options those providers can offer.  Acknowledging: https://en.wikipedia.org/wiki/Net_neutrality",
-            "category_id": "10",
-            "author_id": "2",
-            "created": "2016-10-09 23:14:58.587301+00"
-        }
-    },
-    {
-        "model": "api.thread",
-        "fields": {
-            "title": "Aberdeen Indiana Health Services ",
-            "summary": "A 2010 report by Senate Committee on Indian Affairs Chairman Byron Dorgan, D-N.D., found that the Aberdeen Area of the Indian Health Service(IHS) is in a \"chronic state of crisis.\" \"Serious management problems and a lack of oversight of this region have adversely affected the access and quality of health care provided to Native Americans in the Aberdeen Area, which serves 18 tribes in the states of North Dakota, South Dakota, Nebraska and Iowa,\" according to the report.  In 2013 the Indian Health Service was hit hard by sequestration funding cuts of $800 million, representing a substantial percentage of its budget.  Acknowledging: https://en.wikipedia.org/wiki/Indian_Health_Service",
-            "category_id": "11",
-            "author_id": "2",
-            "created": "2016-10-09 23:24:23.604539+00"
-        }
-    },
-    {
-        "model": "api.thread",
-        "fields": {
-            "title": "Undocumented Immigrant Amnesty ",
-            "summary": "Approximately 11 million undocumented immigrants are estimated to be living in the United States. Estimates from the Pew Hispanic Center show the number of undocumented immigrants has declined to 11.1 million in March 2009 from a peak of 12 million in March 2007. The majority of the illegal immigrants are from Mexico. Undocumented immigration has long been controversial.  In 2007, President George W. Bush called for Congress to endorse his guest worker proposal, stating that illegal immigrants took jobs that Americans would not take. The Pew Hispanic Center notes that while the number of legal immigrants arriving has not varied substantially since the 1980s, the number of illegal immigrants has increased dramatically and, since the mid-1990s, has surpassed the number of legal immigrants.   Acknowledging: https://en.wikipedia.org/wiki/Illegal_immigration",
-            "category_id": "12",
-            "author_id": "2",
-            "created": "2016-10-09 23:31:55.335799+00"
-        }
-    },
-    {
-        "model": "api.thread",
-        "fields": {
-            "title": "Crypto phones (Encrypted Cell Phones) Ban ",
-            "summary": "Crypto phones (Encrypted Cell Phones) are mobile telephones that provide security against eavesdropping and electronic surveillance.  The interception of telecommunications has become a major industry. Most of the world's intelligence agencies and many private organisations intercept telephone communications to obtain military, economic and political information. The price of simple mobile phone surveillance devices has become so low that many individuals can afford to use them.[1][2] Advances in technology have made it difficult to determine who is intercepting and recording private communications.  Crypto phones can protect calls from interception by using algorithms to encrypt the signals. The phones have a cryptographic chip that handles encryption and decryption. Two algorithms are programmed into the chip: A key-exchange algorithm for the key agreement protocol and a symmetric-key algorithm for voice encryption.  New York and California have moved to ban the use of crypto phones. This article is a space to discuss the potential problems with ready access to Crypto Phones and problems with banning them.   Acknowledging: https://en.wikipedia.org/wiki/Crypto_phone",
-            "category_id": "14",
-            "author_id": "2",
-            "created": "2016-10-09 23:54:27.443032+00"
-        }
-    },
-    {
-        "model": "api.thread",
-        "fields": {
-            "title": "Felony Disenfranchisement",
-            "summary": "Felony disenfranchisement is the exclusion from voting of people otherwise eligible to vote (known as disfranchisement) due to the conviction of a criminal offense, usually restricted to a more serious class of crimes: felonies. Jurisdictions vary as to whether they make such disfranchisement permanent, or restore suffrage after a person has served a sentence, or completed parole or probation.  Acknowledging: https://en.wikipedia.org/wiki/Felony_disenfranchisement",
-            "category_id": "15",
-            "author_id": "2",
-            "created": "2016-10-09 23:59:25.469474+00"
-        }
-    },
-    {
-        "model": "api.thread",
-        "fields": {
-            "title": "The Political Revolving Door - Legislators, Regulators, and Industry ",
-            "summary": "In politics, the \"revolving door\" is a movement of personnel between roles as legislators and regulators and the industries affected by the legislation and regulation  In some cases, the roles are performed in sequence but in certain circumstances may be performed at the same time. Political analysts claim that an unhealthy relationship can develop between the private sector and government, based on the granting of reciprocated privileges to the detriment of the nation and can lead to regulatory capture.  Governments hire industry professionals for their private sector experience, their influence within corporations that the government is attempting to regulate or do business with, and in order to gain political support (donations and endorsements) from private firms.  Industry, in turn, hires people out of government positions to gain personal access to government officials, seek favorable legislation/regulation and government contracts in exchange for high-paying employment offers, and get inside information on what is going on in government.  The lobbying industry is especially affected by the revolving door concept, as the main asset for a lobbyist is contacts with and influence on government officials. This industrial climate is attractive for ex-government officials. It can also mean substantial monetary rewards for the lobbying firms and government projects and contracts in the hundreds of millions for those they represent.  Acknowledging: https://en.wikipedia.org/wiki/Revolving_door_(politics)",
-            "category_id": "16",
-            "author_id": "2",
-            "created": "2016-10-10 00:02:43.691935+00"
-        }
-    },
-    {
-        "model": "api.thread",
-        "fields": {
-            "title": "The Third Gender Option",
-            "summary": "As of 2015, neither the federal government nor any of the states recognize a third gender option for transgender persons on passports, drivers licenses, and birth certificates. The option has been advocated for intersex and genderqueer (or non-binary transgender) people but remains available only in Australia, New Zealand, India, Nepal, Pakistan, Bangladesh, Germany, and Malta. Third genders have traditionally been acknowledged in a number of Native American cultures as \"two spirit\" people, in traditional Hawaiian culture as the m€ÅhÅÇ, and as the fa'afafine in American Samoa. Similarly, immigrants from traditional cultures that acknowledge a third gender would benefit from such a reform, including the muxe gender in southern Mexico and the hijra of south Asian cultures.  On June 10, 2016, an Oregon circuit court ruled that a resident, Jamie Shupe, could legally change their gender to non-binary. The Transgender Law Center believes this to be \"the first ruling of its kind in the U.S.\"  On September 26, 2016, intersex California resident Sara Kelly Keenan became the second person in the United States to legally change her gender to non-binary. Keenan, who uses she/her pronouns cited Shupe's case as inspiration for her petition. She identifies as intersex \"both as my medical reality and as my gender identification ... It never occurred to me that this was an option because I thought the gender change laws were strictly for transgender people\".  Acknowledging: https://en.wikipedia.org/wiki/Transgender_rights_in_the_United_States",
-            "category_id": "18",
-            "author_id": "2",
-            "created": "2016-10-10 00:08:13.702857+00"
-        }
-    },
-    {
-        "model": "api.thread",
-        "fields": {
-            "title": "The Gender Pay Gap",
-            "summary": "According to a report released by the American Association of University Women (AAUW), the gender pay gap--which had significantly narrowed since the 1970s--has slowly plateaued in recent years. Compiling data from the Census Bureau, the Department of Education and the Bureau of Labor Statistics, AAUW calculated the median salaries for full-time employment in all 50 states and the District of Columbia. In the U.S., the average woman is paid 23 percent less than the average man. Although down from a 2012 figure of 91 percent, Washington, D.C. maintains the smallest wage gap in the U.S., with the median woman earning 90 percent of the median man ($60,116 vs. $66,754). Also consistent with last year's results, Wyoming came in last with women taking home 64 percent of men's average earnings ($33,152 vs. $51,932). While it remains important to note that geography and local industry have a large influence on differing salaries, there are other major factors that come into play--namely education level, race/ethnicity and age. AAUW analyzed the pay gap by looking at full-time, year-round workers over the age of 15.  Acknowledging: https://en.wikipedia.org/wiki/Equal_pay_for_equal_work",
-            "category_id": "17",
-            "author_id": "2",
-            "created": "2016-10-10 00:10:46.351715+00"
-        }
-    },
-    {
-        "model": "api.thread",
-        "fields": {
-            "title": "Dependent Contractor Fair Labor Standard Act Coverage",
-            "summary": "A growing number of workers do not neatly fit the government's categorizations of independent contractors and statutory employees, and are increasingly being classified as dependent contractors. Some of these contingent workforce--independent contractors, temporary workers, and part-time workers, who work when and for how long they want, such as those who work for such companies as Uber, Handybook, Inc., and CrowdFlower--have filed lawsuits that argue that companies that substantially control workers' work and behaviors while working (such as at Handybook, Inc.: when to knock on customers' doors vs. ring the doorbells, and how to use the customers' bathrooms) should be covered by minimum-wage and overtime rules under the Fair Labor Standards Act, as well as receive other traditional employee protections. Wilma Liebman, former chairperson of the National Labor Relations Board, has observed that Canada and Germany have such protections in place for contingent workers. And UK Prime Minister David Cameron has appointed an overseer for freelance workers in that country, to determine how the government should support freelance workers.  Acknowledging: https://en.wikipedia.org/wiki/Independent_contractor",
-            "category_id": "19",
-            "author_id": "2",
-            "created": "2016-10-10 00:16:33.330198+00"
-        }
-    },
-    {
-        "model": "api.thread",
-        "fields": {
-            "title": "Bottom Trawling (Benthic Trawling)",
-            "summary": "Bottom trawling is trawling (towing a trawl, which is a fishing net) along the sea floor.  Benthic trawling is towing a net at the very bottom of the ocean and demersal trawling is towing a net just above the benthic zone.  Bottom trawling can be contrasted with midwater trawling (also known as pelagic trawling), where a net is towed higher in the water column. Midwater trawling catches pelagic fish such as anchovies, tuna, and mackerel, whereas bottom trawling targets both bottom-living fish (groundfish) and semi-pelagic species such as cod, squid, shrimp, and rockfish.  Bottom fishing has operated for over a century on heavily fished grounds such as the North Sea and Grand Banks. While overfishing has long been recognized as causing major ecological changes to the fish community on the Grand Banks, concern has been raised more recently about the damage which benthic trawling inflicts upon seabed communities. A species of particular concern is the slow growing, deep-water coral Lophelia pertusa. This species is home to a diverse community of deep sea organisms, but is easily damaged by fishing gear. On 17 November 2004, the United Nations General Assembly urged nations to consider temporary bans on high seas bottom trawling.  Acknowledging: https://en.wikipedia.org/wiki/Bottom_trawling",
-            "category_id": "21",
-            "author_id": "2",
-            "created": "2016-10-10 00:23:39.473486+00"
-        }
+    "model": "threads.thread",
+    "fields": {
+        "title": "Agriculture Subsidization ",
+        "summary": "The United States currently pays around $20 billion per year to farmers in direct subsidies as \"farm income stabilization\" via farm bills. These bills pre-date the economic turmoil of the Great Depression with the 1922 Grain Futures Act, the 1929 Agricultural Marketing Act, and the 1933 Agricultural Adjustment Act creating a tradition of government support. The beneficiaries of the subsidies have changed as agriculture in the United States has changed. In the 1930s, about 25% of the country's population resided on the nation's 6,000,000 small farms. By 1997, 157,000 large farms accounted for 72% of farm sales, with only 2% of the US population residing on small farms.   In 2006, the top 3 states receiving subsidies were Texas (10.4%), Iowa (9.0%), and Illinois (7.6%). United States Department of Agriculture (USDA) subsidies from farms in Iowa totaled $1,212,000,000 in 2006. From 2003 to 2005, the top 1% of beneficiaries received 17% of subsidy payments. In Texas, 72% of farms do not receive government subsidies. Of the close to USD$1.4 billion in subsidy payments to farms in Texas, roughly 18% of the farms receive a portion of the payments.Top states for direct payments were Iowa ($501 million), Illinois ($454 million), and Texas ($397 million). Direct payments of subsidies are limited to $40,000 per person or $80,000 per couple.  The subsidy programs give farmers extra money for their crops and guarantee a price floor. For instance, in the 2002 Farm Bill, for every bushel of wheat sold, farmers were paid an extra 52 cents and guaranteed a price of 3.86 from 2002-03 and 3.92 from 2004-2007. That is, if the price of wheat in 2002 was $3.80, farmers would get an extra 58å¢ per bushel (52å¢ plus the 6å¢ price difference).  Acknowledging  https://en.wikipedia.org/wiki/Agricultural_subsidy. ",
+        "category_id": "1",
+        "author_id": "1",
+        "created": "2016-10-09 20:25:20.365392+00"
     }
+},
+{
+    "model": "threads.thread",
+    "fields": {
+        "title": "Liquid Fluoride Thorium Reactors",
+        "summary": "Thorium-based nuclear power is nuclear reactor-based, fuelled primarily by the nuclear fission of the isotope uranium-233 produced from the fertile element thorium. According to proponents, a thorium fuel cycle offers several potential advantages over a uranium fuel cycle--including much greater abundance on Earth, superior physical and nuclear fuel properties, and reduced nuclear waste production. However, development of thorium power has significant start-up costs. Proponents also cite the lack of weaponization potential as an advantage of thorium, while critics say that development of breeder reactors in general (including thorium reactors, which are breeders by nature) increases proliferation concerns. Since about 2008, nuclear energy experts have become more interested in thorium to supply nuclear fuel in place of uranium to generate nuclear power. This renewed interest has been highlighted in a number of scientific conferences, the latest of which, ThEC13 [1] was held at CERN by iThEC and attracted over 200 scientists from 32 countries.  Acknowledgement: https://en.wikipedia.org/wiki/Thorium-based_nuclear_power",
+        "category_id": "2",
+        "author_id": "1",
+        "created": "2016-10-09 21:07:16.848433+00"
+    }
+},
+{
+    "model": "threads.thread",
+    "fields": {
+        "title": "Subsidized Health Insurance",
+        "summary": "Under current federal law, subsidies for insurance premiums are given to individuals who buy a plan from an exchange and have a household income between 133% and 400% of the poverty line. Section 1401(36B) of PPACA explains that each subsidy will be provided as an advanceable, refundable tax credit and gives a formula for its calculation.   A refundable tax credit is a way to provide government benefits to individuals who may have no tax liability (such as the earned income tax credit). The formula was changed in the amendments (HR 4872) passed March 23, 2010, in section 1001. To qualify for the subsidy, the beneficiaries cannot be eligible for other acceptable coverage. The U.S. Department of Health and Human Services (HHS) and Internal Revenue Service (IRS) on May 23, 2012, issued joint final rules regarding implementation of the new state-based health insurance exchanges to cover how the exchanges will determine eligibility for uninsured individuals and employees of small businesses seeking to buy insurance on the exchanges, as well as how the exchanges will handle eligibility determinations for low-income individuals applying for newly expanded Medicaid benefits. Premium caps have been delayed for a year on group plans, to give employers time to arrange new accounting systems, but the caps are still planned to take effect on schedule for insurance plans on the exchanges.  Acknowledging: https://en.wikipedia.org/wiki/Health_insurance_marketplace",
+        "category_id": "3",
+        "author_id": "1",
+        "created": "2016-10-09 21:29:30.192618+00"
+    }
+},
+{
+    "model": "threads.thread",
+    "fields": {
+        "title": "Police Use of Deadly Force",
+        "summary": "In the United States, the use of deadly force by sworn law enforcement officers is lawful when the officer reasonably believes the subject poses a significant threat of serious bodily injury or death to themselves or others. The use of deadly force by law enforcement is also lawful when used to prevent the escape of a fleeing felon when the officer believes escape would pose a significant threat of serious bodily injury or death to members of the public. Due to a number of highly publicized cases, the use of deadly force is under increased public scrutiny.   Acknowledging: https://en.wikipedia.org/wiki/Deadly_force",
+        "category_id": "4",
+        "author_id": "1",
+        "created": "2016-10-09 22:06:20.709848+00"
+    }
+},
+{
+    "model": "threads.thread",
+    "fields": {
+        "title": "Balanced Budget Requirements ",
+        "summary": "A balanced budget amendment would require that a state cannot spend more than its income. It requires a balance between the projected receipts and expenditures of the government.  Balanced-budget provisions have been added to the constitutions of most U.S. states, the Basic Law of Germany, the Hong Kong Basic Law, Spain, Italy and the Swiss Constitution. It is often proposed that a balanced-budget rule should be added to the national United States Constitution. Most balanced-budget provisions make an exception for times of war, national emergency, or recession, or allow the legislature to suspend the rule by a supermajority vote.  Acknowledging: https://en.wikipedia.org/wiki/Balanced_budget_amendment",
+        "category_id": "5",
+        "author_id": "1",
+        "created": "2016-10-09 22:09:12.520864+00"
+    }
+},
+{
+    "model": "threads.thread",
+    "fields": {
+        "title": "The Minimum Wage ",
+        "summary": "A minimum wage is the lowest remuneration that employers may legally pay to workers. Equivalently, it is the price floor below which workers may not sell their labor. Although minimum wage laws are in effect in many jurisdictions, differences of opinion exist about the benefits and drawbacks of a minimum wage. Supporters of the minimum wage say it increases the standard of living of workers, reduces poverty, reduces inequality, boosts morale and forces businesses to be more efficient. In contrast, opponents of the minimum wage say it increases poverty, increases unemployment (particularly among unskilled or inexperienced workers) and is damaging to businesses because excessively high minimum wages require businesses to raise the prices of their product or service to accommodate the extra expense of paying a higher wage.  Acknowledging: https://en.wikipedia.org/wiki/Minimum_wage",
+        "category_id": "6",
+        "author_id": "1",
+        "created": "2016-10-09 22:14:47.210195+00"
+    }
+},
+{
+    "model": "threads.thread",
+    "fields": {
+        "title": "National Public Wifi",
+        "summary": "Municipal wireless network (Municipal Wi-Fi, Muni Wi-Fi or Muni-Fi) is a city-wide wireless network. This is usually done by providing municipal broadband via Wi-Fi to large parts or all of a municipal area by deploying a wireless mesh network. The typical deployment design uses hundreds of wireless access points deployed outdoors, often on poles. The operator of the network acts as a wireless internet service provider.  This article is a space to discuss the problems national public wifi would solve and potential problems with implementing such a system.   Acknowledging: https://en.wikipedia.org/wiki/Municipal_wireless_network#United_States",
+        "category_id": "13",
+        "author_id": "1",
+        "created": "2016-10-09 23:48:37.401324+00"
+    }
+},
+{
+    "model": "threads.thread",
+    "fields": {
+        "title": "The Trans-Pacific Partnership Agreement ",
+        "summary": "The Trans-Pacific Partnership (TPP) or Trans-Pacific Partnership Agreement (TPPA) is a trade agreement among twelve of the Pacific Rim countries - notably not including China. The finalized proposal was signed on 4 February 2016 in Auckland, New Zealand, concluding seven years of negotiations. It is currently awaiting ratification to enter into force. The 30 chapters of the agreement aim to \"promote economic growth; support the creation and retention of jobs; enhance innovation, productivity, and competitiveness; raise living standards; reduce poverty in the signatories' countries; and promote transparency, good governance, and enhanced labor and environmental protections.\" The TPP contains measures to lower both non-tariff and tariff barriers to trade, and establish an investor-state dispute settlement mechanism.  The TPP began as an expansion of the Trans-Pacific Strategic Economic Partnership Agreement (TPSEP or P4) signed by Brunei, Chile, New Zealand, and Singapore in 2005. Beginning in 2008, additional countries joined the discussion for a broader agreement: Australia, Canada, Japan, Malaysia, Mexico, Peru, the United States, and Vietnam bringing the total number of countries participating in the negotiations to twelve. Current trade agreements between participating countries, such as the North American Free Trade Agreement, will be reduced to those provisions that do not conflict with the TPP or provide greater trade liberalization than the TPP. The United States government considers the TPP a companion agreement to the proposed Transatlantic Trade and Investment Partnership (TTIP), a broadly similar agreement between the U.S. and the European Union.  According to Politico, many expect Congress to vote on the bill either during the Summer of 2016 or in the lame-duck session after the 2016 elections. However, in August 2016, Senate Majority Leader Mitch McConnell (R-KY) stated that the vote will not occur that year but added, \"It will still be around. It can be massaged, changed, worked on during the next administration.\"  Acknowledging : https://en.wikipedia.org/wiki/Trans-Pacific_Partnership",
+        "category_id": "7",
+        "author_id": "1",
+        "created": "2016-10-09 22:31:29.938879+00"
+    }
+},
+{
+    "model": "threads.thread",
+    "fields": {
+        "title": "The Common Core State Standards Initiative",
+        "summary": "The Common Core State Standards Initiative is an educational initiative in the United States that details what K-12 students should know in English language arts and mathematics at the end of each grade. The initiative is sponsored by the National Governors Association (NGA) and the Council of Chief State School Officers (CCSSO) and seeks to establish consistent educational standards across the states as well as ensure that students graduating from high school are prepared to enter credit-bearing courses at two- or four-year college programs or to enter the workforce.  Forty-two of the fifty U.S. states and the District of Columbia are members of the Common Core State Standards Initiative, with the states of Oklahoma, Texas, Virginia, Alaska, Nebraska, Indiana, and South Carolina not adopting the initiative at a state level.  Minnesota adopted the English Language Arts standards but not the Mathematics standards. Several states that initially adopted Common Core have since decided to repeal or replace it, namely Indiana, Oklahoma, and South Carolina.  The Common Core State Standards have drawn both support and adverse criticism from politicians, analysts, and commentators.   Acknowledging: https://en.wikipedia.org/wiki/Common_Core_State_Standards_Initiative",
+        "category_id": "8",
+        "author_id": "1",
+        "created": "2016-10-09 22:38:49.176202+00"
+    }
+},
+{
+    "model": "threads.thread",
+    "fields": {
+        "title": "Military Use of Unmanned Areal Vehicles (A.K.A Drones) ",
+        "summary": "An unmanned aerial vehicle (UAV), commonly known as a drone, as an unmanned aircraft system (UAS), or by several other names, is an aircraft without a human pilot aboard. The flight of UAVs may operate with various degrees of autonomy: either under remote control by a human operator, or fully or intermittently autonomously, by onboard computers.  Compared to manned aircraft, UAVs are often preferred for missions that are too \"dull, dirty or dangerous\" for humans. American Predators and Reapers are made for counterterrorism operations and in war zones in which the enemy lacks sufficient firepower to shoot them down. They are not designed to withstand antiaircraft defenses or air-to-air combat. In September 2013, the chief of the US Air Combat Command stated that current UAVs were \"useless in a contested environment\" unless manned aircraft were there to protect them. A 2012 Congressional Research Service (CRS) report speculated that in the future, UAVs may be able to perform tasks beyond intelligence, surveillance, reconnaissance, and strikes; the CRS report listed air-to-air combat (\"a more difficult future task\") as possible future undertakings. The Department of Defense's Unmanned Systems Integrated Roadmap FY2013-2038 foresees a more important place for UAVs in combat. Issues include extended capabilities, human-UAV interaction, managing increased information flux, increased autonomy and developing UAV-specific munitions.[169] DARPA's project of systems of systems, or General Atomics work may augur future warfare scenarios, the latter disclosing Avenger swarms equipped with High Energy Liquid Laser Area Defense System (HELLADS).  Acknowledging: https://en.wikipedia.org/wiki/Unmanned_aerial_vehicle",
+        "category_id": "9",
+        "author_id": "1",
+        "created": "2016-10-09 23:12:49.050401+00"
+    }
+},
+{
+    "model": "threads.thread",
+    "fields": {
+        "title": "Net Neutrality",
+        "summary": "Net neutrality is the principle that Internet service providers and governments regulating the Internet should treat all data on the Internet the same, not discriminating or charging differentially by user, content, website, platform, application, type of attached equipment, or mode of communication. The term was coined by Columbia University media law professor Tim Wu in 2003, as an extension of the longstanding concept of a common carrier, which was used to describe the role of telephone systems.  A widely cited example of a violation of net neutrality principles was when the Internet service provider Comcast was secretly slowing (colloquially called \"throttling\") uploads from peer-to-peer file sharing (P2P) applications using forged packets.[5] Research suggests that a combination of policy instruments will help realize the range of valued political and economic objectives central to the network neutrality debate. Combined with strong public opinion, this has led some governments to regulate broadband Internet services as a public utility, similar to the way electricity, gas, and water supply is regulated, along with limiting providers and regulating the options those providers can offer.  Acknowledging: https://en.wikipedia.org/wiki/Net_neutrality",
+        "category_id": "10",
+        "author_id": "1",
+        "created": "2016-10-09 23:14:58.587301+00"
+    }
+},
+{
+    "model": "threads.thread",
+    "fields": {
+        "title": "Aberdeen Indiana Health Services ",
+        "summary": "A 2010 report by Senate Committee on Indian Affairs Chairman Byron Dorgan, D-N.D., found that the Aberdeen Area of the Indian Health Service(IHS) is in a \"chronic state of crisis.\" \"Serious management problems and a lack of oversight of this region have adversely affected the access and quality of health care provided to Native Americans in the Aberdeen Area, which serves 18 tribes in the states of North Dakota, South Dakota, Nebraska and Iowa,\" according to the report.  In 2013 the Indian Health Service was hit hard by sequestration funding cuts of $800 million, representing a substantial percentage of its budget.  Acknowledging: https://en.wikipedia.org/wiki/Indian_Health_Service",
+        "category_id": "11",
+        "author_id": "1",
+        "created": "2016-10-09 23:24:23.604539+00"
+    }
+},
+{
+    "model": "threads.thread",
+    "fields": {
+        "title": "Undocumented Immigrant Amnesty ",
+        "summary": "Approximately 11 million undocumented immigrants are estimated to be living in the United States. Estimates from the Pew Hispanic Center show the number of undocumented immigrants has declined to 11.1 million in March 2009 from a peak of 12 million in March 2007. The majority of the illegal immigrants are from Mexico. Undocumented immigration has long been controversial.  In 2007, President George W. Bush called for Congress to endorse his guest worker proposal, stating that illegal immigrants took jobs that Americans would not take. The Pew Hispanic Center notes that while the number of legal immigrants arriving has not varied substantially since the 1980s, the number of illegal immigrants has increased dramatically and, since the mid-1990s, has surpassed the number of legal immigrants.   Acknowledging: https://en.wikipedia.org/wiki/Illegal_immigration",
+        "category_id": "12",
+        "author_id": "1",
+        "created": "2016-10-09 23:31:55.335799+00"
+    }
+},
+{
+    "model": "threads.thread",
+    "fields": {
+        "title": "Crypto phones (Encrypted Cell Phones) Ban ",
+        "summary": "Crypto phones (Encrypted Cell Phones) are mobile telephones that provide security against eavesdropping and electronic surveillance.  The interception of telecommunications has become a major industry. Most of the world's intelligence agencies and many private organisations intercept telephone communications to obtain military, economic and political information. The price of simple mobile phone surveillance devices has become so low that many individuals can afford to use them.[1][2] Advances in technology have made it difficult to determine who is intercepting and recording private communications.  Crypto phones can protect calls from interception by using algorithms to encrypt the signals. The phones have a cryptographic chip that handles encryption and decryption. Two algorithms are programmed into the chip: A key-exchange algorithm for the key agreement protocol and a symmetric-key algorithm for voice encryption.  New York and California have moved to ban the use of crypto phones. This article is a space to discuss the potential problems with ready access to Crypto Phones and problems with banning them.   Acknowledging: https://en.wikipedia.org/wiki/Crypto_phone",
+        "category_id": "14",
+        "author_id": "1",
+        "created": "2016-10-09 23:54:27.443032+00"
+    }
+},
+{
+    "model": "threads.thread",
+    "fields": {
+        "title": "Felony Disenfranchisement",
+        "summary": "Felony disenfranchisement is the exclusion from voting of people otherwise eligible to vote (known as disfranchisement) due to the conviction of a criminal offense, usually restricted to a more serious class of crimes: felonies. Jurisdictions vary as to whether they make such disfranchisement permanent, or restore suffrage after a person has served a sentence, or completed parole or probation.  Acknowledging: https://en.wikipedia.org/wiki/Felony_disenfranchisement",
+        "category_id": "15",
+        "author_id": "1",
+        "created": "2016-10-09 23:59:25.469474+00"
+    }
+},
+{
+    "model": "threads.thread",
+    "fields": {
+        "title": "The Political Revolving Door - Legislators, Regulators, and Industry ",
+        "summary": "In politics, the \"revolving door\" is a movement of personnel between roles as legislators and regulators and the industries affected by the legislation and regulation  In some cases, the roles are performed in sequence but in certain circumstances may be performed at the same time. Political analysts claim that an unhealthy relationship can develop between the private sector and government, based on the granting of reciprocated privileges to the detriment of the nation and can lead to regulatory capture.  Governments hire industry professionals for their private sector experience, their influence within corporations that the government is attempting to regulate or do business with, and in order to gain political support (donations and endorsements) from private firms.  Industry, in turn, hires people out of government positions to gain personal access to government officials, seek favorable legislation/regulation and government contracts in exchange for high-paying employment offers, and get inside information on what is going on in government.  The lobbying industry is especially affected by the revolving door concept, as the main asset for a lobbyist is contacts with and influence on government officials. This industrial climate is attractive for ex-government officials. It can also mean substantial monetary rewards for the lobbying firms and government projects and contracts in the hundreds of millions for those they represent.  Acknowledging: https://en.wikipedia.org/wiki/Revolving_door_(politics)",
+        "category_id": "16",
+        "author_id": "1",
+        "created": "2016-10-10 00:02:43.691935+00"
+    }
+},
+{
+    "model": "threads.thread",
+    "fields": {
+        "title": "The Third Gender Option",
+        "summary": "As of 2015, neither the federal government nor any of the states recognize a third gender option for transgender persons on passports, drivers licenses, and birth certificates. The option has been advocated for intersex and genderqueer (or non-binary transgender) people but remains available only in Australia, New Zealand, India, Nepal, Pakistan, Bangladesh, Germany, and Malta. Third genders have traditionally been acknowledged in a number of Native American cultures as \"two spirit\" people, in traditional Hawaiian culture as the m€ÅhÅÇ, and as the fa'afafine in American Samoa. Similarly, immigrants from traditional cultures that acknowledge a third gender would benefit from such a reform, including the muxe gender in southern Mexico and the hijra of south Asian cultures.  On June 10, 2016, an Oregon circuit court ruled that a resident, Jamie Shupe, could legally change their gender to non-binary. The Transgender Law Center believes this to be \"the first ruling of its kind in the U.S.\"  On September 26, 2016, intersex California resident Sara Kelly Keenan became the second person in the United States to legally change her gender to non-binary. Keenan, who uses she/her pronouns cited Shupe's case as inspiration for her petition. She identifies as intersex \"both as my medical reality and as my gender identification ... It never occurred to me that this was an option because I thought the gender change laws were strictly for transgender people\".  Acknowledging: https://en.wikipedia.org/wiki/Transgender_rights_in_the_United_States",
+        "category_id": "18",
+        "author_id": "1",
+        "created": "2016-10-10 00:08:13.702857+00"
+    }
+},
+{
+    "model": "threads.thread",
+    "fields": {
+        "title": "The Gender Pay Gap",
+        "summary": "According to a report released by the American Association of University Women (AAUW), the gender pay gap--which had significantly narrowed since the 1970s--has slowly plateaued in recent years. Compiling data from the Census Bureau, the Department of Education and the Bureau of Labor Statistics, AAUW calculated the median salaries for full-time employment in all 50 states and the District of Columbia. In the U.S., the average woman is paid 23 percent less than the average man. Although down from a 2012 figure of 91 percent, Washington, D.C. maintains the smallest wage gap in the U.S., with the median woman earning 90 percent of the median man ($60,116 vs. $66,754). Also consistent with last year's results, Wyoming came in last with women taking home 64 percent of men's average earnings ($33,152 vs. $51,932). While it remains important to note that geography and local industry have a large influence on differing salaries, there are other major factors that come into play--namely education level, race/ethnicity and age. AAUW analyzed the pay gap by looking at full-time, year-round workers over the age of 15.  Acknowledging: https://en.wikipedia.org/wiki/Equal_pay_for_equal_work",
+        "category_id": "17",
+        "author_id": "1",
+        "created": "2016-10-10 00:10:46.351715+00"
+    }
+},
+{
+    "model": "threads.thread",
+    "fields": {
+        "title": "Dependent Contractor Fair Labor Standard Act Coverage",
+        "summary": "A growing number of workers do not neatly fit the government's categorizations of independent contractors and statutory employees, and are increasingly being classified as dependent contractors. Some of these contingent workforce--independent contractors, temporary workers, and part-time workers, who work when and for how long they want, such as those who work for such companies as Uber, Handybook, Inc., and CrowdFlower--have filed lawsuits that argue that companies that substantially control workers' work and behaviors while working (such as at Handybook, Inc.: when to knock on customers' doors vs. ring the doorbells, and how to use the customers' bathrooms) should be covered by minimum-wage and overtime rules under the Fair Labor Standards Act, as well as receive other traditional employee protections. Wilma Liebman, former chairperson of the National Labor Relations Board, has observed that Canada and Germany have such protections in place for contingent workers. And UK Prime Minister David Cameron has appointed an overseer for freelance workers in that country, to determine how the government should support freelance workers.  Acknowledging: https://en.wikipedia.org/wiki/Independent_contractor",
+        "category_id": "19",
+        "author_id": "1",
+        "created": "2016-10-10 00:16:33.330198+00"
+    }
+},
+{
+    "model": "threads.thread",
+    "fields": {
+        "title": "Bottom Trawling (Benthic Trawling)",
+        "summary": "Bottom trawling is trawling (towing a trawl, which is a fishing net) along the sea floor.  Benthic trawling is towing a net at the very bottom of the ocean and demersal trawling is towing a net just above the benthic zone.  Bottom trawling can be contrasted with midwater trawling (also known as pelagic trawling), where a net is towed higher in the water column. Midwater trawling catches pelagic fish such as anchovies, tuna, and mackerel, whereas bottom trawling targets both bottom-living fish (groundfish) and semi-pelagic species such as cod, squid, shrimp, and rockfish.  Bottom fishing has operated for over a century on heavily fished grounds such as the North Sea and Grand Banks. While overfishing has long been recognized as causing major ecological changes to the fish community on the Grand Banks, concern has been raised more recently about the damage which benthic trawling inflicts upon seabed communities. A species of particular concern is the slow growing, deep-water coral Lophelia pertusa. This species is home to a diverse community of deep sea organisms, but is easily damaged by fishing gear. On 17 November 2004, the United Nations General Assembly urged nations to consider temporary bans on high seas bottom trawling.  Acknowledging: https://en.wikipedia.org/wiki/Bottom_trawling",
+        "category_id": "21",
+        "author_id": "1",
+        "created": "2016-10-10 00:23:39.473486+00"
+    }
+}
 ]
