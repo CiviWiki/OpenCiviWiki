@@ -470,7 +470,7 @@ class Activity(models.Model):
     @property
     def is_negative_vote(self):
         return self.activity_type.endswith("neg")
-    
+
     class Meta:
         verbose_name_plural = "Activities"
 
