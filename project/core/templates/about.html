@@ -3,7 +3,8 @@
 {% load i18n %}
 
 {% block extra_css %}
-<link type="text/css" rel="stylesheet/less" href="{% static "less/about.less" %}"/>
+    <link type="text/css" rel="stylesheet/less" href="{% static "less/about.less" %}"/>
+    <script src="{% static "dependencies/less.min.js" type="text/javascript" %}"></script>
 {% endblock extra_css %}
     
 {% block page_title %}{% trans "About Us" %}{% endblock page_title %}

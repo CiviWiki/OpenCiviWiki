@@ -1,10 +1,11 @@
 {% extends "base.html" %}
-<!-- How it Works -->
 {% load static %}
 {% load i18n %}
 
+<!-- How it Works -->
 {% block extra_css %}
     <link type="text/css" rel="stylesheet/less" href="{% static "less/how_it_works.less" %}"/>
+    <script src="{% static "dependencies/less.min.js" type="text/javascript" %}"></script>
 {% endblock extra_css %}
 
 {% block backbone_template %}
@@ -44,7 +45,7 @@
     {% include "static_nav.html" %}
     <div id="howitworks"></div>
     {% include "static_footer.html" %}
-{% endblock backbone_template %}
+{% endblock content %}
 
 {% block extra_js %}
 <!-- Backbone Views File -->
