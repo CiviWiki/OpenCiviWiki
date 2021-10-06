@@ -3,8 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
-from .models import Thread
-from .serializers import ThreadSerializer, CategorySerializer
+from categories.serializers import CategorySerializer
 from categories.models import Category
 
 

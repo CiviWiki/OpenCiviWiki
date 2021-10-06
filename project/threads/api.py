@@ -7,7 +7,6 @@ from accounts.models import Profile
 from core.custom_decorators import require_post_params
 from django.core.files import File
 from django.forms.models import model_to_dict
-from django.http import HttpResponseBadRequest, JsonResponse
 from django.contrib.auth.decorators import login_required
 from .models import CiviImage
 from django.db.models.query import F
