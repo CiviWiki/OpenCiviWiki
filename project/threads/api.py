@@ -182,7 +182,7 @@ def create_civi(request):
     :return: (200, ok) (400, missing required parameter) (500, internal error)
     """
 
-    user=request.user
+    user = request.user
     thread_id = request.POST.get("thread_id")
     data = {
         "author": request.user,
