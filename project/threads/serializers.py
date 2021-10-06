@@ -1,8 +1,7 @@
 from rest_framework import serializers
-
+from django.contrib.auth import get_user_model
 from .models import Civi, Thread, CiviImage, Activity
-from accounts.models import Profile
-from accounts.serializers import ProfileListSerializer
+from accounts.serializers import UserListSerializer
 from categories.serializers import CategoryListSerializer
 from core.constants import CIVI_TYPES
 
@@ -19,7 +18,7 @@ class CiviImageSerializer(serializers.ModelSerializer):
 
 
 class CiviSerializer(serializers.ModelSerializer):
-    author = ProfileListSerializer()
+    author = UserListSerializer()
     type = serializers.ChoiceField(choices=CIVI_TYPES, source="c_type")
     images = serializers.SlugRelatedField(
         many=True, read_only=True, slug_field="image_url"
@@ -65,13 +64,12 @@ class CiviSerializer(serializers.ModelSerializer):
         if user.is_anonymous():
             return 0
         else:
-            account = Profile.objects.get(user=user)
-            return obj.score(account.id)
+            return obj.score(user.id)
 
 
 class CiviListSerializer(serializers.ModelSerializer):
     """ """
-    author = ProfileListSerializer()
+    author = UserListSerializer()
     type = serializers.CharField(source="c_type")
     created = serializers.ReadOnlyField(source="created_date_str")
 
@@ -82,7 +80,7 @@ class CiviListSerializer(serializers.ModelSerializer):
 
 class ThreadSerializer(serializers.ModelSerializer):
     """ """
-    author = ProfileListSerializer(required=False)
+    author = UserListSerializer(required=False)
     category = CategoryListSerializer()
 
     civis = serializers.HyperlinkedRelatedField(
@@ -120,7 +118,7 @@ class ThreadSerializer(serializers.ModelSerializer):
 
 class ThreadListSerializer(serializers.ModelSerializer):
     """ """
-    author = ProfileListSerializer(required=False)
+    author = UserListSerializer(required=False)
     category = CategoryListSerializer()
 
     created = serializers.ReadOnlyField()
@@ -150,7 +148,7 @@ class ThreadListSerializer(serializers.ModelSerializer):
 
 class ThreadDetailSerializer(serializers.ModelSerializer):
     """ """
-    author = ProfileListSerializer(required=False)
+    author = UserListSerializer(required=False)
     category = CategoryListSerializer()
 
     civis = CiviSerializer(many=True)
@@ -191,10 +189,10 @@ class ThreadDetailSerializer(serializers.ModelSerializer):
     def get_contributors(self, obj):
         """This function gets the list of contributors for Civiwiki"""
         issue_civis = Civi.objects.filter(thread__id=obj.id)
-        contributor_accounts = Profile.objects.filter(
+        contributor_users = get_user_model().objects.filter(
             pk__in=issue_civis.values("author").distinct()
         )
-        return ProfileListSerializer(contributor_accounts, many=True).data
+        return UserListSerializer(contributor_users, many=True).data
 
     def get_user_votes(self, obj):
         """This function gets the user votes"""
