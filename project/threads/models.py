@@ -4,14 +4,13 @@ import math
 import os
 from calendar import month_name
 
-from accounts.models import Profile
 from common.utils import PathAndRename
 from core.constants import CIVI_TYPES, US_STATES
 from django.conf import settings
 from django.core.files.storage import default_storage
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
-from accounts.models import Profile
+from django.contrib.auth import get_user_model
 from taggit.managers import TaggableManager
 from categories.models import Category
 
@@ -50,9 +49,9 @@ class ThreadManager(models.Manager):
             "image": thread.image_url,
         }
         author_data = {
-            "username": thread.author.user.username,
+            "username": thread.author.username,
             "full_name": thread.author.full_name,
-            "profile_image": thread.author.profile_image_url,
+            "profile_image": thread.author.profile.profile_image_url,
         }
         stats_data = {
             "num_views": thread.num_views,
@@ -74,7 +73,7 @@ image_upload_path = PathAndRename("")
 
 class Thread(models.Model):
     author = models.ForeignKey(
-        Profile, default=None, null=True, on_delete=models.PROTECT
+        get_user_model(), default=None, null=True, on_delete=models.PROTECT
     )
     category = models.ForeignKey(
         Category, default=None, null=True, on_delete=models.PROTECT
@@ -143,8 +142,8 @@ class CiviManager(models.Manager):
             "title": civi.title,
             "body": civi.body,
             "author": {
-                "username": civi.author.user.username,
-                "profile_image": civi.author.profile_image_url,
+                "username": civi.author.username,
+                "profile_image": civi.author.profile.profile_image_url,
                 "first_name": civi.author.first_name,
                 "last_name": civi.author.last_name,
             },
@@ -165,7 +164,7 @@ class CiviManager(models.Manager):
     def serialize_s(self, civi, filter=None):
         # Get profile profile image, or set to default image
         profile_image_or_default = (
-            civi.author.profile_image.url or "/media/profile/default.png"
+            civi.author.profile.profile_image.url or "/media/profile/default.png"
         )
 
         data = {
@@ -173,7 +172,7 @@ class CiviManager(models.Manager):
             "title": civi.title,
             "body": civi.body,
             "author": dict(
-                username=civi.author.user.username,
+                username=civi.author.username,
                 profile_image=profile_image_or_default,
                 first_name=civi.author.first_name,
                 last_name=civi.author.last_name,
@@ -203,7 +202,7 @@ class CiviManager(models.Manager):
 class Civi(models.Model):
     objects = CiviManager()
     author = models.ForeignKey(
-        Profile, related_name="civis", default=None, null=True, on_delete=models.PROTECT
+        get_user_model(), related_name="civis", default=None, null=True, on_delete=models.PROTECT
     )
     thread = models.ForeignKey(
         Thread, related_name="civis", default=None, null=True, on_delete=models.PROTECT
@@ -290,10 +289,10 @@ class Civi(models.Model):
         scores_sum = vneg_score + neg_score + pos_score + vpos_score
 
         if request_acct_id:
-            profile = Profile.objects.get(id=request_acct_id)
+            profile = get_user_model().objects.get(id=request_acct_id).profile
             scores_sum = (
                 1
-                if self.author in profile.following.all().values_list("id", flat=True)
+                if self.author.profile in profile.following.all().values_list("id", flat=True)
                 else 0
             )
         else:
@@ -358,9 +357,9 @@ class Civi(models.Model):
             "title": self.title,
             "body": self.body,
             "author": {
-                "username": self.author.user.username,
-                "profile_image": self.author.profile_image_url,
-                "profile_image_thumb_url": self.author.profile_image_thumb_url,
+                "username": self.author.username,
+                "profile_image": self.author.profile.profile_image_url,
+                "profile_image_thumb_url": self.author.profile.profile_image_thumb_url,
                 "first_name": self.author.first_name,
                 "last_name": self.author.last_name,
             },
@@ -386,7 +385,7 @@ image_upload_path = PathAndRename("")
 
 class Response(models.Model):
     author = models.ForeignKey(
-        Profile, default=None, null=True, on_delete=models.PROTECT
+        get_user_model(), default=None, null=True, on_delete=models.PROTECT
     )
     civi = models.ForeignKey(Civi, default=None, null=True, on_delete=models.PROTECT)
 
@@ -477,7 +476,7 @@ class Activity(models.Model):
 
 class Rebuttal(models.Model):
     author = models.ForeignKey(
-        Profile, default=None, null=True, on_delete=models.PROTECT
+        get_user_model(), default=None, null=True, on_delete=models.PROTECT
     )
     response = models.ForeignKey(
         Response, default=None, null=True, on_delete=models.PROTECT
