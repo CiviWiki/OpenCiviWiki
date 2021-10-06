@@ -1,6 +1,6 @@
 {% load i18n %}
 {% load static %}
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -32,7 +32,9 @@
 {% block backbone_template %}{% endblock backbone_template %}
 
 <body class="{% block body_class %}{% endblock body_class %}" id="{% block body_id %}{% endblock body_id %}">
+    {% include "static_nav.html" %}
     {% block content %}{% endblock content %}
+    {% include "static_footer.html" %}
 
     {% block extra_js %}{% endblock extra_js %}
 </body>
