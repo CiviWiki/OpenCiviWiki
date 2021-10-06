@@ -18,14 +18,14 @@ def base_view(request):
     if not request.user.is_authenticated:
         return TemplateResponse(request, "landing.html", {})
 
-    a = Profile.objects.get(user=request.user)
+    profile = Profile.objects.get(user=request.user)
     if "login_user_image" not in request.session.keys():
-        request.session["login_user_image"] = a.profile_image_thumb_url
+        request.session["login_user_image"] = profile.profile_image_thumb_url
 
     categories = [{"id": c.id, "name": c.name} for c in Category.objects.all()]
 
     all_categories = list(Category.objects.values_list("id", flat=True))
-    user_categories = list(a.categories.values_list("id", flat=True)) or all_categories
+    user_categories = list(profile.categories.values_list("id", flat=True)) or all_categories
 
     feed_threads = [
         Thread.objects.summarize(t)
@@ -38,7 +38,7 @@ def base_view(request):
     )
     my_draft_threads = [
         Thread.objects.summarize(t)
-        for t in Thread.objects.filter(author_id=a.id)
+        for t in Thread.objects.filter(author_id=request.user.id)
         .exclude(is_draft=False)
         .order_by("-created")
     ]
@@ -114,14 +114,14 @@ def issue_thread(request, thread_id=None):
         "summary": t.summary,
         "image": t.image_url,
         "author": {
-            "username": t.author.user.username,
-            "profile_image": t.author.profile_image_url,
+            "username": t.author.username,
+            "profile_image": t.author.profile.profile_image_url,
             "first_name": t.author.first_name,
             "last_name": t.author.last_name,
         },
         "contributors": [
-            Profile.objects.chip_summarize(a)
-            for a in Profile.objects.filter(
+            Profile.objects.chip_summarize(u.profile)
+            for u in get_user_model().objects.filter(
                 pk__in=civis.distinct("author").values_list("author", flat=True)
             )
         ],
