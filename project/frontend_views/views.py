@@ -67,7 +67,7 @@ def user_profile(request, username=None):
             is_owner = username == request.user.username
             try:
                 user = User.objects.get(username=username)
-                profile = user.profile_set.first()
+                profile = user.profile
             except User.DoesNotExist:
                 return HttpResponseRedirect("/404")
 
