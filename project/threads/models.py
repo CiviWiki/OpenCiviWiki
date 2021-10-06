@@ -194,9 +194,9 @@ class CiviManager(models.Manager):
             return json.dumps({filter: data[filter]})
         return data
 
-    def thread_sorted_by_score(self, civis_queryset, req_acct_id):
+    def thread_sorted_by_score(self, civis_queryset, requested_user_id):
         queryset = civis_queryset.order_by("-created")
-        return sorted(queryset.all(), key=lambda c: c.score(req_acct_id), reverse=True)
+        return sorted(queryset.all(), key=lambda c: c.score(requested_user_id), reverse=True)
 
 
 class Civi(models.Model):
@@ -262,7 +262,7 @@ class Civi(models.Model):
         d = self.created
         return "{0} {1}, {2}".format(month_name[d.month], d.day, d.year)
 
-    def score(self, request_acct_id=None):
+    def score(self, requested_user_id=None):
         # TODO: add docstring comment describing this score function in relatively plain English
         # include descriptions of all variables
 
@@ -288,8 +288,8 @@ class Civi(models.Model):
         # Sum up all of the scores
         scores_sum = vneg_score + neg_score + pos_score + vpos_score
 
-        if request_acct_id:
-            profile = get_user_model().objects.get(id=request_acct_id).profile
+        if requested_user_id:
+            profile = get_user_model().objects.get(id=requested_user_id).profile
             scores_sum = (
                 1
                 if self.author.profile in profile.following.all().values_list("id", flat=True)
@@ -349,7 +349,7 @@ class Civi(models.Model):
 
         return rank
 
-    def dict_with_score(self, req_acct_id=None):
+    def dict_with_score(self, requested_user_id=None):
         data = {
             "id": self.id,
             "thread_id": self.thread.id,
@@ -374,8 +374,8 @@ class Civi(models.Model):
                 {"id": img.id, "url": img.image_url} for img in self.images.all()
             ],
         }
-        if req_acct_id:
-            data["score"] = self.score(req_acct_id)
+        if requested_user_id:
+            data["score"] = self.score(requested_user_id)
 
         return data
 
