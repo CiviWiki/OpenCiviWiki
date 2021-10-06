@@ -10,6 +10,7 @@ from django.forms.models import model_to_dict
 from django.contrib.auth.decorators import login_required
 from .models import CiviImage
 from django.db.models.query import F
+from django.contrib.auth import get_user_model
 from django.http import (
     JsonResponse,
     HttpResponse,
@@ -34,7 +35,7 @@ def new_thread(request):
         - Title, Summary, Category, Author, Level, State
     """
     try:
-        author = Profile.objects.get(user=request.user)
+        author = request.user
         new_thread_data = dict(
             title=request.POST["title"],
             summary=request.POST["summary"],
@@ -80,9 +81,9 @@ def get_thread(request, thread_id):
             "summary": t.summary,
             "tags": t.tags.all().values(),
             "author": {
-                "username": t.author.user.username,
-                "profile_image": t.author.profile_image.url
-                if t.author.profile_image
+                "username": t.author.username,
+                "profile_image": t.author.profile.profile_image.url
+                if t.author.profile.profile_image
                 else "/media/profile/default.png",
                 "first_name": t.author.first_name,
                 "last_name": t.author.last_name,
@@ -90,8 +91,8 @@ def get_thread(request, thread_id):
             "category": model_to_dict(t.category),
             "created": t.created,
             "contributors": [
-                Profile.objects.chip_summarize(a)
-                for a in Profile.objects.filter(
+                Profile.objects.chip_summarize(u.profile)
+                for u in get_user_model().objects.filter(
                     pk__in=civis.distinct("author").values_list("author", flat=True)
                 )
             ],
@@ -150,14 +151,14 @@ def get_responses(request, thread_id, civi_id):
        This is used to get responses for a Civi
     """
     try:
-        req_acct = Profile.objects.get(user=request.user)
+        requested_user = request.user
         c_qs = Civi.objects.get(id=civi_id).responses.all()
         c_scored = []
         for res_civi in c_qs:
-            c_dict = res_civi.dict_with_score(req_acct.id)
+            c_dict = res_civi.dict_with_score(requested_user.id)
             c_rebuttal = res_civi.responses.all()
             if c_rebuttal:
-                c_dict["rebuttal"] = c_rebuttal[0].dict_with_score(req_acct.id)
+                c_dict["rebuttal"] = c_rebuttal[0].dict_with_score(requested_user.id)
             c_scored.append(c_dict)
 
         civis = sorted(c_scored, key=lambda c: c["score"], reverse=True)
@@ -181,10 +182,10 @@ def create_civi(request):
     :return: (200, ok) (400, missing required parameter) (500, internal error)
     """
 
-    a = Profile.objects.get(user=request.user)
+    user=request.user
     thread_id = request.POST.get("thread_id")
     data = {
-        "author": Profile.objects.get(user=request.user),
+        "author": request.user,
         "title": request.POST.get("title", ""),
         "body": request.POST.get("body", ""),
         "c_type": request.POST.get("c_type", ""),
@@ -206,44 +207,44 @@ def create_civi(request):
             parent_civi = Civi.objects.get(id=related_civi)
             parent_civi.responses.add(civi)
 
-            if parent_civi.author.user.username != request.user.username:
+            if parent_civi.author.username != request.user.username:
                 notify.send(
                     request.user,  # Actor User
-                    recipient=parent_civi.author.user,  # Target User
+                    recipient=parent_civi.author,  # Target User
                     verb=u"responded to your civi",  # Verb
                     action_object=civi,  # Action Object
                     target=civi.thread,  # Target Object
                     popup_string="{user} responded to your civi in {thread}".format(
-                        user=a.full_name, thread=civi.thread.title
+                        user=user.full_name, thread=civi.thread.title
                     ),
                     link="/{}/{}".format("thread", thread_id),
                 )
 
         else:  # not a reply, a regular civi
             c_qs = Civi.objects.filter(thread_id=thread_id)
-            accounts = Profile.objects.filter(
+            users = get_user_model().objects.filter(
                 pk__in=c_qs.values("author").distinct()
             )
             data = {
                 "command": "add",
-                "data": json.dumps(civi.dict_with_score(a.id)),
+                "data": json.dumps(civi.dict_with_score(user.id)),
             }
 
-            for act in accounts:
-                if act.user.username != request.user.username:
+            for u in users:
+                if u.username != request.user.username:
                     notify.send(
                         request.user,  # Actor User
-                        recipient=act.user,  # Target User
+                        recipient=u.user,  # Target User
                         verb=u"created a new civi",  # Verb
                         action_object=civi,  # Action Object
                         target=civi.thread,  # Target Object
                         popup_string="{user} created a new civi in the thread {thread}".format(
-                            user=a.full_name, thread=civi.thread.title
+                            user=user.full_name, thread=civi.thread.title
                         ),
                         link="/{}/{}".format("thread", thread_id),
                     )
 
-        return JsonResponse({"data": civi.dict_with_score(a.id)})
+        return JsonResponse({"data": civi.dict_with_score(user.id)})
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
 
@@ -305,7 +306,7 @@ def edit_civi(request):
     civi_type = request.POST.get("type", "")
 
     c = Civi.objects.get(id=civi_id)
-    if request.user.username != c.author.user.username:
+    if request.user.username != c.author.username:
         return HttpResponseBadRequest(reason="No Edit Rights")
 
     try:
@@ -327,8 +328,7 @@ def edit_civi(request):
                 civi_image = CiviImage.objects.get(id=image_id)
                 civi_image.delete()
 
-        a = Profile.objects.get(user=request.user)
-        return JsonResponse(c.dict_with_score(a.id))
+        return JsonResponse(c.dict_with_score(request.user.id))
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
 
@@ -339,7 +339,7 @@ def delete_civi(request):
     civi_id = request.POST.get("civi_id", "")
 
     c = Civi.objects.get(id=civi_id)
-    if request.user.username != c.author.user.username:
+    if request.user.username != c.author.username:
         return HttpResponseBadRequest(reason="No Edit Rights")
 
     try:
@@ -369,7 +369,7 @@ def edit_thread(request):
     try:
         req_edit_thread = Thread.objects.get(id=thread_id)
 
-        if request.user.username != req_edit_thread.author.user.username:
+        if request.user.username != req_edit_thread.author.username:
             return HttpResponseBadRequest("No Edit Rights")
 
         # set remaining parameters from request
