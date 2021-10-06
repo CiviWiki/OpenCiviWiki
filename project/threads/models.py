@@ -440,8 +440,8 @@ class ActivityManager(models.Manager):
 
 
 class Activity(models.Model):
-    account = models.ForeignKey(
-        Profile, default=None, null=True, on_delete=models.PROTECT
+    user = models.ForeignKey(
+        get_user_model(), default=None, null=True, on_delete=models.PROTECT
     )
     thread = models.ForeignKey(
         Thread, default=None, null=True, on_delete=models.PROTECT

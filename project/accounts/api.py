@@ -167,7 +167,7 @@ def get_profile(request, username):
 
         result["issues"] = []
         voted_solutions = Activity.objects.filter(
-            account=profile.id, civi__c_type="solution", activity_type__contains="pos"
+            user=user.id, civi__c_type="solution", activity_type__contains="pos"
         )
 
         solution_threads = voted_solutions.values("thread__id").distinct()

@@ -64,11 +64,11 @@ def get_thread(request, thread_id):
     try:
         t = Thread.objects.get(id=thread_id)
         civis = Civi.objects.filter(thread_id=thread_id)
-        req_a = Profile.objects.get(user=request.user)
+        requested_user = request.user
 
         # TODO: move order by to frontend or accept optional arg
         c = civis.order_by("-created")
-        c_scores = [ci.score(req_a.id) for ci in c]
+        c_scores = [ci.score(requested_user.id) for ci in c]
         c_data = [Civi.objects.serialize_s(ci) for ci in c]
 
         problems = []
@@ -101,9 +101,9 @@ def get_thread(request, thread_id):
                 {
                     "civi_id": act.civi.id,
                     "activity_type": act.activity_type,
-                    "acct": act.account.id,
+                    "user": act.user.id,
                 }
-                for act in Activity.objects.filter(thread=t.id, account=req_a.id)
+                for act in Activity.objects.filter(thread=t.id, user=requested_user.id)
             ],
         }
 
@@ -254,7 +254,7 @@ def rate_civi(request):
     """ Use this function to rate a Civi """
     civi_id = request.POST.get("civi_id", "")
     rating = request.POST.get("rating", "")
-    account = Profile.objects.get(user=request.user)
+    user = request.user
 
     voted_civi = Civi.objects.get(id=civi_id)
 
@@ -264,12 +264,12 @@ def rate_civi(request):
         )
 
     try:
-        prev_act = Activity.objects.get(civi=voted_civi, account=account)
+        prev_act = Activity.objects.get(civi=voted_civi, user=user)
     except Activity.DoesNotExist:
         prev_act = None
 
     activity_data = {
-        "account": account,
+        "user": user,
         "thread": voted_civi.thread,
         "civi": voted_civi,
     }

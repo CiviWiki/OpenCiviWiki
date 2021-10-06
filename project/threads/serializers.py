@@ -200,7 +200,7 @@ class ThreadDetailSerializer(serializers.ModelSerializer):
 
         if request and hasattr(request, "user"):
             user_activities = Activity.objects.filter(
-                thread=obj.id, account=request.user.id
+                thread=obj.id, user=request.user.id
             )
             return [
                 {
