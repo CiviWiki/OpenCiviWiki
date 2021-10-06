@@ -3,7 +3,7 @@ from rest_framework import serializers
 from .models import Civi, Thread, CiviImage, Activity
 from accounts.models import Profile
 from accounts.serializers import ProfileListSerializer
-from categories.models import Category
+from categories.serializers import CategoryListSerializer
 from core.constants import CIVI_TYPES
 
 WRITE_ONLY = {"write_only": True}
@@ -78,38 +78,6 @@ class CiviListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Civi
         fields = ("id", "thread", "type", "title", "body", "author", "created")
-
-
-class CategoryListSerializer(serializers.ModelSerializer):
-    """ """
-    class Meta:
-        model = Category
-        fields = ("id", "name")
-
-
-class CategorySerializer(serializers.ModelSerializer):
-    """ """
-    preferred = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Category
-        fields = ("id", "name", "preferred")
-
-    def get_preferred(self, obj):
-        user = None
-        request = self.context.get("request")
-
-        # Check for authenticated user
-        if request and hasattr(request, "user"):
-            user = request.user
-        else:
-            return True
-
-        if user.is_anonymous():
-            return True
-
-        account = Profile.objects.get(user=user)
-        return obj.id in account.categories.values_list("id", flat=True)
 
 
 class ThreadSerializer(serializers.ModelSerializer):
