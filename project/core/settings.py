@@ -29,7 +29,6 @@ INSTALLED_APPS = (
     "rest_framework",
     "accounts",
     "threads",
-    "frontend_views",
     "notifications",
     "corsheaders",
     "taggit",
