@@ -25,6 +25,7 @@ from threads import urls as threads
 from core.views.views import about_view, support_us_view, how_it_works_view
 from core.router import CiviWikiRouter
 
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("accounts.urls.urls")),
