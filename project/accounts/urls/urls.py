@@ -3,7 +3,10 @@ from django.contrib.auth import views as auth_views
 from accounts.views import (RegisterView, SettingsView, ProfileActivationView, PasswordResetView, PasswordResetDoneView,
                             PasswordResetConfirmView, PasswordResetCompleteView, ProfileSetupView, user_profile)
 
+from threads.views import base_view
+
 urlpatterns = [
+    path("", base_view),
     path(
         'login/',
         auth_views.LoginView.as_view(template_name='accounts/register/login.html'),
