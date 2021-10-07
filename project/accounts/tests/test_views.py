@@ -13,7 +13,7 @@ class BaseTestCase(TestCase):
         self.user = get_user_model().objects.create_user(username="newuser",
                                                          email="test@test.com",
                                                          password="password123")
-        self.profile = Profile.objects.create(user=self.user)
+        self.profile, created = Profile.objects.update_or_create(user=self.user)
 
 
 class LoginViewTests(BaseTestCase):
