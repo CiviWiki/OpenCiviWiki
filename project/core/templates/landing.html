@@ -1,16 +1,14 @@
-<!DOCTYPE HTML>
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}    
+
 <!-- Landing Page -->
-<html>
-<head>
-    {% load static %}
-    {% load i18n %}
-    {% include "base/links.html" %}
+{% block extra_css %}
     <link type="text/css" rel="stylesheet/less" href="{% static "less/landing.less" %}"/>
-    <script src="{% static "dependencies/less.min.js" %}" type="text/javascript"></script>
-</head>
+    <script src="{% static "dependencies/less.min.js" type="text/javascript" %}"></script>
+{% endblock extra_css %}
 
-<title>CiviWiki</title>
-
+{% block backbone_template %}
 <script id="landing-template" type="text/template">
 <header>
     <div class="landing-bg valign-wrapper full-height">
@@ -159,16 +157,16 @@
 </main>
 
 </script>
+{% endblock backbone_template %}
 
-<body>
-    {% include "static_nav.html" %}
+{% block content %}
     <div id="landing"></div>
-    {% include "static_footer.html" %}
-</body>
+{% endblock content %}
 
+{% block extra_js %}
 <!-- Backbone Views File -->
 <script src="{% static "js/static/landing_view.js" %}" type="text/javascript"></script>
 <script type="text/javascript">
     var landingView = new cw.LandingView();
 </script>
-</html>
+{% endblock extra_js %}

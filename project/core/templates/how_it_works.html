@@ -1,15 +1,14 @@
-<!DOCTYPE HTML>
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
 <!-- How it Works -->
-<head>
-    {% load static %}
-    {% include "base/links.html" %}
-    {% load i18n %}
+{% block extra_css %}
     <link type="text/css" rel="stylesheet/less" href="{% static "less/how_it_works.less" %}"/>
     <script src="{% static "dependencies/less.min.js" type="text/javascript" %}"></script>
-</head>
+{% endblock extra_css %}
 
-<title>CiviWiki</title>
-
+{% block backbone_template %}
 <script id="howitworks-template" type="text/template">
     <div class="content-header center">
         <div class="container section">
@@ -40,15 +39,16 @@
         </div>
     </div>
 </script>
+{% endblock backbone_template %}
 
-<body>
-    {% include "static_nav.html" %}
+{% block content %}
     <div id="howitworks"></div>
-    {% include "static_footer.html" %}
-</body>
+{% endblock content %}
 
+{% block extra_js %}
 <!-- Backbone Views File -->
 <script src="{% static "js/static/how_it_works_view.js" %}" type="text/javascript"></script>
 <script type="text/javascript">
     var howitworksView = new cw.HowItWorksView();
 </script>
+{% endblock extra_js %}
