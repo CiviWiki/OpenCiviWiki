@@ -7,7 +7,7 @@ from .api import (create_civi, delete_civi, edit_civi, edit_thread, get_civi,
                   get_civis, get_responses, get_thread, new_thread, rate_civi,
                   upload_civi_image, upload_thread_image)
 
-from .views import (CategoryViewSet, CiviViewSet, ThreadViewSet, base_view, civi2csv, issue_thread)
+from threads.views.views import (CategoryViewSet, CiviViewSet, ThreadViewSet, base_view, civi2csv, issue_thread)
 
 router = DefaultRouter(trailing_slash=False)
 router.register(r"threads", ThreadViewSet)

@@ -22,12 +22,13 @@ from django.views.generic.base import RedirectView
 from threads import urls as threads
 
 
-from core.views.views import about_view, support_us_view, how_it_works_view
+from threads.views.views import about_view, support_us_view, how_it_works_view , base_view 
 from core.router import CiviWikiRouter
 
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("", base_view ),
     path("", include("accounts.urls.urls")),
     path("api/", include("accounts.urls.api")),
     path("api/v1/", include((CiviWikiRouter.urls, "api"))),
