@@ -96,10 +96,9 @@ def issue_thread(request, thread_id=None):
     if not thread_id:
         return HttpResponseRedirect("/404")
 
-    requested_user = request.user
     t = Thread.objects.get(id=thread_id)
     c_qs = Civi.objects.filter(thread_id=thread_id).exclude(c_type="response")
-    c_scored = [c.dict_with_score(requested_user.id) for c in c_qs]
+    c_scored = [c.dict_with_score(request.user.id) for c in c_qs]
     civis = sorted(c_scored, key=lambda c: c["score"], reverse=True)
 
     # modify thread view count
@@ -140,7 +139,7 @@ def issue_thread(request, thread_id=None):
                 "activity_type": act.activity_type,
                 "c_type": act.civi.c_type,
             }
-            for act in Activity.objects.filter(thread=t.id, user=requested_user.id)
+            for act in Activity.objects.filter(thread=t.id, user=request.user.id)
         ],
     }
     thread_body_data = {
