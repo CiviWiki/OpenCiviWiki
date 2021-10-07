@@ -10,7 +10,6 @@ from threads.models import Thread, Civi, Activity
 from accounts.models import Profile
 from accounts.forms import ProfileEditForm, UpdateProfileImage
 from categories.models import Category
-from core.constants import US_STATES
 from core.custom_decorators import login_required, full_profile
 
 
