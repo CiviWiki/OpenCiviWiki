@@ -19,7 +19,6 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 from django.views.generic.base import RedirectView
-from frontend_views import urls as frontend_views
 from threads import urls as threads
 
 
@@ -49,7 +48,6 @@ urlpatterns = [
         "mstile-144x144.png",
         RedirectView.as_view(url="/static/favicon/mstile-144x144.png"),
     ),
-    path("", include(frontend_views)),
     path("about/", about_view, name="about"),
     path("support_us/", support_us_view, name="support us"),
     path("howitworks/", how_it_works_view, name="how it works"),
