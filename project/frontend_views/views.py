@@ -62,7 +62,7 @@ def user_profile(request, username=None):
     User = get_user_model()
     if request.method == "GET":
         if not username:
-            return HttpResponseRedirect("/profile/{0}".format(request.user))
+            return HttpResponseRedirect(f"/profile/{request.user}")
         else:
             is_owner = username == request.user.username
             try:
