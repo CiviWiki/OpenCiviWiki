@@ -1,16 +1,14 @@
+from accounts.api import ProfileViewSet
 from django.conf.urls import include
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 
 from .api import (create_civi, delete_civi, edit_civi, edit_thread, get_civi,
-                  get_thread, rate_civi, upload_civi_image, new_thread, get_civis,
-                  get_responses, upload_thread_image)
+                  get_civis, get_responses, get_thread, new_thread, rate_civi,
+                  upload_civi_image, upload_thread_image)
 
-from .views import (
-    ThreadViewSet, CategoryViewSet,
-    CiviViewSet
-)
-from accounts.api import ProfileViewSet
+from .views import (CategoryViewSet, CiviViewSet, ThreadViewSet, 
+                    base_view, civi2csv, issue_thread)
 
 router = DefaultRouter(trailing_slash=False)
 router.register(r"threads", ThreadViewSet)
@@ -39,4 +37,7 @@ urlpatterns += [
     path("delete_civi/", delete_civi, name="delete civi"),
     path("upload_images/", upload_civi_image, name="upload images"),
     path("upload_image/", upload_thread_image, name="upload image"),
+    path("thread/<int:thread_id>/", issue_thread, name="issue thread"),
+    path("", base_view, name="base"),
+    path("thread/<int:thread_id>/csv/", civi2csv, name="civi2csv"),
 ]
