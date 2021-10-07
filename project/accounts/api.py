@@ -114,7 +114,7 @@ class ProfileViewSet(ModelViewSet):
         Gets the preferred categories of the selected account
         /accounts/{username}/categories
         """
-        user = get_account(username=user__username).user
+        user = get_user_model().object(username=user__username)
         draft_threads = Thread.objects.filter(author=user).exclude(is_draft=False)
         serializer = ThreadSerializer(
             draft_threads, many=True, context={"request": request}
@@ -127,7 +127,7 @@ class ProfileViewSet(ModelViewSet):
         Gets the draft threads of the selected account
         /accounts/{username}/drafts
         """
-        user = get_account(username=user__username).user
+        user = get_user_model().objects.get(username=user__username)
         draft_threads = Thread.objects.filter(author=user, is_draft=False)
         serializer = ThreadSerializer(
             draft_threads, many=True, context={"request": request}

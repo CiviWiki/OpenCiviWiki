@@ -35,12 +35,11 @@ def new_thread(request):
         - Title, Summary, Category, Author, Level, State
     """
     try:
-        author = request.user
         new_thread_data = dict(
             title=request.POST["title"],
             summary=request.POST["summary"],
             category_id=request.POST["category_id"],
-            author=author,
+            author=request.user,
             level=request.POST["level"],
         )
         state = request.POST["state"]
@@ -65,11 +64,10 @@ def get_thread(request, thread_id):
     try:
         t = Thread.objects.get(id=thread_id)
         civis = Civi.objects.filter(thread_id=thread_id)
-        requested_user = request.user
 
         # TODO: move order by to frontend or accept optional arg
         c = civis.order_by("-created")
-        c_scores = [ci.score(requested_user.id) for ci in c]
+        c_scores = [ci.score(request.user.id) for ci in c]
         c_data = [Civi.objects.serialize_s(ci) for ci in c]
 
         problems = []
@@ -104,7 +102,7 @@ def get_thread(request, thread_id):
                     "activity_type": act.activity_type,
                     "user": act.user.id,
                 }
-                for act in Activity.objects.filter(thread=t.id, user=requested_user.id)
+                for act in Activity.objects.filter(thread=t.id, user=request.user.id)
             ],
         }
 
@@ -151,14 +149,13 @@ def get_responses(request, thread_id, civi_id):
        This is used to get responses for a Civi
     """
     try:
-        requested_user = request.user
         c_qs = Civi.objects.get(id=civi_id).responses.all()
         c_scored = []
         for res_civi in c_qs:
-            c_dict = res_civi.dict_with_score(requested_user.id)
+            c_dict = res_civi.dict_with_score(request.user.id)
             c_rebuttal = res_civi.responses.all()
             if c_rebuttal:
-                c_dict["rebuttal"] = c_rebuttal[0].dict_with_score(requested_user.id)
+                c_dict["rebuttal"] = c_rebuttal[0].dict_with_score(request.user.id)
             c_scored.append(c_dict)
 
         civis = sorted(c_scored, key=lambda c: c["score"], reverse=True)
@@ -182,7 +179,6 @@ def create_civi(request):
     :return: (200, ok) (400, missing required parameter) (500, internal error)
     """
 
-    user = request.user
     thread_id = request.POST.get("thread_id")
     data = {
         "author": request.user,
@@ -215,7 +211,7 @@ def create_civi(request):
                     action_object=civi,  # Action Object
                     target=civi.thread,  # Target Object
                     popup_string="{user} responded to your civi in {thread}".format(
-                        user=user.full_name, thread=civi.thread.title
+                        user=request.user.full_name, thread=civi.thread.title
                     ),
                     link="/{}/{}".format("thread", thread_id),
                 )
@@ -227,7 +223,7 @@ def create_civi(request):
             )
             data = {
                 "command": "add",
-                "data": json.dumps(civi.dict_with_score(user.id)),
+                "data": json.dumps(civi.dict_with_score(request.user.id)),
             }
 
             for u in users:
@@ -239,12 +235,12 @@ def create_civi(request):
                         action_object=civi,  # Action Object
                         target=civi.thread,  # Target Object
                         popup_string="{user} created a new civi in the thread {thread}".format(
-                            user=user.full_name, thread=civi.thread.title
+                            user=request.user.full_name, thread=civi.thread.title
                         ),
                         link="/{}/{}".format("thread", thread_id),
                     )
 
-        return JsonResponse({"data": civi.dict_with_score(user.id)})
+        return JsonResponse({"data": civi.dict_with_score(request.user.id)})
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
 
@@ -255,7 +251,6 @@ def rate_civi(request):
     """ Use this function to rate a Civi """
     civi_id = request.POST.get("civi_id", "")
     rating = request.POST.get("rating", "")
-    user = request.user
 
     voted_civi = Civi.objects.get(id=civi_id)
 
@@ -265,12 +260,12 @@ def rate_civi(request):
         )
 
     try:
-        prev_act = Activity.objects.get(civi=voted_civi, user=user)
+        prev_act = Activity.objects.get(civi=voted_civi, user=request.user)
     except Activity.DoesNotExist:
         prev_act = None
 
     activity_data = {
-        "user": user,
+        "user": request.user,
         "thread": voted_civi.thread,
         "civi": voted_civi,
     }
