@@ -1,5 +1,4 @@
 from rest_framework.permissions import BasePermission, SAFE_METHODS
-from accounts.utils import get_account
 
 
 class IsOwnerOrReadOnly(BasePermission):
@@ -7,5 +6,5 @@ class IsOwnerOrReadOnly(BasePermission):
 
     def has_object_permission(self, request, view, obj):
         return (request.method in SAFE_METHODS) or (
-            obj.author == get_account(user=request.user)
+            obj.author == request.user
         )

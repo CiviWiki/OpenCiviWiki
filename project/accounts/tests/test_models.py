@@ -8,7 +8,10 @@ class BaseTestCase(TestCase):
 
     def setUp(self) -> None:
         user = get_user_model().objects.create_user(username="testuser", email="test@test.com", password="password123")
-        self.test_profile = Profile.objects.create(user=user, first_name="Test", last_name="User", about_me="About Me")
+        self.test_profile, created = Profile.objects.update_or_create(user=user,
+                                                                      defaults={'first_name': "Test",
+                                                                                'last_name': "User",
+                                                                                'about_me': "About Me"})
 
 
 class ProfileModelTests(BaseTestCase):
@@ -72,3 +75,15 @@ class ProfileManagerTests(BaseTestCase):
         }
         self.assertEqual(
             Profile.objects.card_summarize(self.test_profile, Profile.objects.get(user=self.test_profile.user)), data)
+
+
+class UserModelTest(TestCase):
+    """A class to test Profile model"""
+
+    def test_user_create_func_creates_profile(self):
+        get_user_model().objects.create_user(username="testuser", email="test@test.com", password="password123")
+        self.assertEqual(Profile.objects.count(), 1)
+
+    def test_superuser_create_func_creates_profile(self):
+        get_user_model().objects.create_superuser(username="testuser", email="test@test.com", password="password123")
+        self.assertEqual(Profile.objects.count(), 1)

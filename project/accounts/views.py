@@ -20,7 +20,7 @@ from accounts.models import Profile
 from accounts.forms import UserRegistrationForm, ProfileEditForm
 from accounts.authentication import send_activation_email, account_activation_token
 from django.http import HttpResponseRedirect
-from accounts.api import ProfileViewSet
+
 
 class RegisterView(FormView):
     """
@@ -35,10 +35,7 @@ class RegisterView(FormView):
         username = form.cleaned_data["username"]
         password = form.cleaned_data["password"]
         email = form.cleaned_data["email"]
-
         user = get_user_model().objects.create_user(username, email, password)
-        Profile.objects.create(user=user)
-
         return user
 
     def _send_email(self, user):
