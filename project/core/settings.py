@@ -27,7 +27,7 @@ INSTALLED_APPS = (
     "storages",
     "core",  # TODO: consider removing this, if we can move the decorators, etc. to an actual app
     "rest_framework",
-    "accounts",
+    "accounts.apps.AccountsConfig",
     "threads",
     "frontend_views",
     "notifications",

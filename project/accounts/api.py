@@ -18,12 +18,10 @@ from notifications.signals import notify
 from accounts.permissions import IsProfileOwnerOrDuringRegistrationOrReadOnly
 from accounts.serializers import ProfileSerializer, ProfileListSerializer
 from accounts.forms import UpdateProfileImage
-from threads.utils import json_response
 from accounts.utils import get_account
 from threads.models import Thread, Civi, Activity
 from accounts.models import Profile
 from categories.models import Category
-from threads.serializers import ThreadSerializer, CategorySerializer, CiviSerializer
 from threads.utils import json_response
 from threads.serializers import ThreadSerializer, CiviSerializer
 from categories.serializers import CategorySerializer
@@ -116,8 +114,8 @@ class ProfileViewSet(ModelViewSet):
         Gets the preferred categories of the selected account
         /accounts/{username}/categories
         """
-        account = get_account(username=user__username)
-        draft_threads = Thread.objects.filter(author=account).exclude(is_draft=False)
+        user = get_user_model().objects.get(username=user__username)
+        draft_threads = Thread.objects.filter(author=user).exclude(is_draft=False)
         serializer = ThreadSerializer(
             draft_threads, many=True, context={"request": request}
         )
@@ -129,8 +127,8 @@ class ProfileViewSet(ModelViewSet):
         Gets the draft threads of the selected account
         /accounts/{username}/drafts
         """
-        account = get_account(username=user__username)
-        draft_threads = Thread.objects.filter(author=account, is_draft=False)
+        user = get_user_model().objects.get(username=user__username)
+        draft_threads = Thread.objects.filter(author=user, is_draft=False)
         serializer = ThreadSerializer(
             draft_threads, many=True, context={"request": request}
         )
@@ -169,7 +167,7 @@ def get_profile(request, username):
 
         result["issues"] = []
         voted_solutions = Activity.objects.filter(
-            account=profile.id, civi__c_type="solution", activity_type__contains="pos"
+            user=user.id, civi__c_type="solution", activity_type__contains="pos"
         )
 
         solution_threads = voted_solutions.values("thread__id").distinct()

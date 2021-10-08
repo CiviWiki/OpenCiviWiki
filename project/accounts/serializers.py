@@ -1,5 +1,5 @@
 from rest_framework import serializers
-
+from django.contrib.auth import get_user_model
 from accounts.forms import UpdateProfileImage
 from accounts.models import Profile
 
@@ -88,3 +88,25 @@ class ProfileListSerializer(ProfileCommonSerializer):
             "profile_image_thumb_url",
             "is_following",
         )
+
+
+class UserSerializer(serializers.ModelSerializer):
+    """
+    General serializer for a single model instance of a user
+    """
+
+    class Meta:
+        model = get_user_model()
+        fields = ("username", "first_name", "last_name", "email", "is_staff",)
+        read_only_fields = ('username', 'email', 'is_staff')
+
+
+class UserListSerializer(serializers.ModelSerializer):
+    """
+    Serializer for multiple user model instances
+    """
+
+    class Meta:
+        model = get_user_model()
+        fields = ("username", "first_name", "last_name",)
+        read_only_fields = ('username', 'first_name', 'last_name')

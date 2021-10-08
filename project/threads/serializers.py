@@ -1,9 +1,8 @@
 from rest_framework import serializers
-
+from django.contrib.auth import get_user_model
 from .models import Civi, Thread, CiviImage, Activity
-from accounts.models import Profile
-from accounts.serializers import ProfileListSerializer
-from categories.models import Category
+from accounts.serializers import UserListSerializer
+from categories.serializers import CategoryListSerializer
 from core.constants import CIVI_TYPES
 
 WRITE_ONLY = {"write_only": True}
@@ -19,7 +18,7 @@ class CiviImageSerializer(serializers.ModelSerializer):
 
 
 class CiviSerializer(serializers.ModelSerializer):
-    author = ProfileListSerializer()
+    author = UserListSerializer()
     type = serializers.ChoiceField(choices=CIVI_TYPES, source="c_type")
     images = serializers.SlugRelatedField(
         many=True, read_only=True, slug_field="image_url"
@@ -65,13 +64,12 @@ class CiviSerializer(serializers.ModelSerializer):
         if user.is_anonymous():
             return 0
         else:
-            account = Profile.objects.get(user=user)
-            return obj.score(account.id)
+            return obj.score(user.id)
 
 
 class CiviListSerializer(serializers.ModelSerializer):
     """ """
-    author = ProfileListSerializer()
+    author = UserListSerializer()
     type = serializers.CharField(source="c_type")
     created = serializers.ReadOnlyField(source="created_date_str")
 
@@ -80,41 +78,9 @@ class CiviListSerializer(serializers.ModelSerializer):
         fields = ("id", "thread", "type", "title", "body", "author", "created")
 
 
-class CategoryListSerializer(serializers.ModelSerializer):
-    """ """
-    class Meta:
-        model = Category
-        fields = ("id", "name")
-
-
-class CategorySerializer(serializers.ModelSerializer):
-    """ """
-    preferred = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Category
-        fields = ("id", "name", "preferred")
-
-    def get_preferred(self, obj):
-        user = None
-        request = self.context.get("request")
-
-        # Check for authenticated user
-        if request and hasattr(request, "user"):
-            user = request.user
-        else:
-            return True
-
-        if user.is_anonymous():
-            return True
-
-        account = Profile.objects.get(user=user)
-        return obj.id in account.categories.values_list("id", flat=True)
-
-
 class ThreadSerializer(serializers.ModelSerializer):
     """ """
-    author = ProfileListSerializer(required=False)
+    author = UserListSerializer(required=False)
     category = CategoryListSerializer()
 
     civis = serializers.HyperlinkedRelatedField(
@@ -152,7 +118,7 @@ class ThreadSerializer(serializers.ModelSerializer):
 
 class ThreadListSerializer(serializers.ModelSerializer):
     """ """
-    author = ProfileListSerializer(required=False)
+    author = UserListSerializer(required=False)
     category = CategoryListSerializer()
 
     created = serializers.ReadOnlyField()
@@ -182,7 +148,7 @@ class ThreadListSerializer(serializers.ModelSerializer):
 
 class ThreadDetailSerializer(serializers.ModelSerializer):
     """ """
-    author = ProfileListSerializer(required=False)
+    author = UserListSerializer(required=False)
     category = CategoryListSerializer()
 
     civis = CiviSerializer(many=True)
@@ -223,10 +189,10 @@ class ThreadDetailSerializer(serializers.ModelSerializer):
     def get_contributors(self, obj):
         """This function gets the list of contributors for Civiwiki"""
         issue_civis = Civi.objects.filter(thread__id=obj.id)
-        contributor_accounts = Profile.objects.filter(
+        contributor_users = get_user_model().objects.filter(
             pk__in=issue_civis.values("author").distinct()
         )
-        return ProfileListSerializer(contributor_accounts, many=True).data
+        return UserListSerializer(contributor_users, many=True).data
 
     def get_user_votes(self, obj):
         """This function gets the user votes"""
@@ -234,7 +200,7 @@ class ThreadDetailSerializer(serializers.ModelSerializer):
 
         if request and hasattr(request, "user"):
             user_activities = Activity.objects.filter(
-                thread=obj.id, account=request.user.id
+                thread=obj.id, user=request.user.id
             )
             return [
                 {

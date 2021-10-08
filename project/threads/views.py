@@ -3,8 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
-from .models import Thread
-from .serializers import ThreadSerializer, CategorySerializer
+from categories.serializers import CategorySerializer
 from categories.models import Category
 
 
@@ -17,7 +16,6 @@ from .serializers import (
     CiviImageSerializer
 )
 
-from accounts.utils import get_account
 from .permissions import IsOwnerOrReadOnly
 
 
@@ -41,7 +39,7 @@ class ThreadViewSet(ModelViewSet):
         return queryset
 
     def perform_create(self, serializer):
-        serializer.save(author=get_account(user=self.request.user))
+        serializer.save(author=self.request.user)
 
     @action(detail=True)
     def civis(self, request, pk=None):
@@ -86,8 +84,7 @@ class ThreadViewSet(ModelViewSet):
         Gets the drafts of the current authenticated user
         /threads/drafts
         """
-        account = get_account(username=self.request.user)
-        draft_threads = Thread.objects.filter(author=account, is_draft=True)
+        draft_threads = Thread.objects.filter(author=self.request.user, is_draft=True)
         serializer = ThreadListSerializer(
             draft_threads, many=True, context={"request": request}
         )
@@ -102,7 +99,7 @@ class CiviViewSet(ModelViewSet):
     permission_classes = (IsOwnerOrReadOnly,)
 
     def perform_create(self, serializer):
-        serializer.save(author=get_account(user=self.request.user))
+        serializer.save(author=self.request.user)
 
     @action(detail=True)
     def images(self, request, pk=None):
