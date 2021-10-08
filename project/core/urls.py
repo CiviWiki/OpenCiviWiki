@@ -32,8 +32,8 @@ urlpatterns = [
     path("", include("accounts.urls.urls")),
     path("api/", include("accounts.urls.api")),
     path("api/v1/", include((CiviWikiRouter.urls, "api"))),
-    path("api/", include("threads.urls.api")),
-    path("", include("threads.urls.urls")),
+    path("api/", include(threads.urls.api)),
+    path("", include(threads.urls.url)),
     path(
         "inbox/notifications/",
         include("notifications.urls", namespace="notifications"),
