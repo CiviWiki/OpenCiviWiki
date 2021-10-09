@@ -31,3 +31,6 @@ jobs:
       run: |
         cd project
         pytest -p no:warning
+    - name: flake8 Lint
+      run: flake8 project/ --exclude "**/migrations/*.py **/tests/*.py **/tests.py **/__init__.py" --max-line-length 120
+
