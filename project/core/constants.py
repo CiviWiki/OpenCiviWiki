@@ -10,4 +10,3 @@ CIVI_TYPES = (
     ("response", "Response"),
     ("rebuttal", "Rebuttal"),
 )
-

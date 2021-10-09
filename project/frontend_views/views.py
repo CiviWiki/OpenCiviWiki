@@ -42,7 +42,6 @@ def base_view(request):
         .order_by("-created")
     ]
 
- 
     data = {
         "categories": categories,
         "user_categories": user_categories,
