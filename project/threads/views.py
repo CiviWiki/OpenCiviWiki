@@ -3,8 +3,6 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
-from .models import Thread
-from .serializers import ThreadSerializer, CategorySerializer
 from categories.models import Category
 
 
@@ -14,7 +12,8 @@ from .serializers import (
     ThreadListSerializer,
     ThreadDetailSerializer,
     CiviSerializer,
-    CiviImageSerializer
+    CiviImageSerializer,
+    CategorySerializer
 )
 
 from accounts.utils import get_account

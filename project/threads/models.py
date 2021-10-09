@@ -4,7 +4,6 @@ import math
 import os
 from calendar import month_name
 
-from accounts.models import Profile
 from common.utils import PathAndRename
 from core.constants import CIVI_TYPES, US_STATES
 from django.conf import settings
@@ -273,7 +272,6 @@ class Civi(models.Model):
         pos_weight = 1
         vpos_weight = 2
 
-        owner_id = self.author
         post_time = self.created
         current_time = datetime.datetime.now()
 

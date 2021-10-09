@@ -113,7 +113,7 @@ class ProfileEditForm(forms.ModelForm):
             self.disable_fields()
 
     def disable_fields(self):
-        for _, field in self.fields.items():
+        for _, field in self.fields.items():  # noqa: F402
             field.disabled = True
 
     class Meta:
