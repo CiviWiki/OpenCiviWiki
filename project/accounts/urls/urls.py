@@ -1,9 +1,12 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from accounts.views import (RegisterView, SettingsView, ProfileActivationView, PasswordResetView, PasswordResetDoneView,
-                            PasswordResetConfirmView, PasswordResetCompleteView, ProfileSetupView)
+                            PasswordResetConfirmView, PasswordResetCompleteView, ProfileSetupView, user_profile)
+
+from threads.views.views import base_view
 
 urlpatterns = [
+    path("", base_view),
     path(
         'login/',
         auth_views.LoginView.as_view(template_name='accounts/register/login.html'),
@@ -34,4 +37,5 @@ urlpatterns = [
         name='accounts_password_reset_complete',
     ),
     path('setup/', ProfileSetupView.as_view(), name="accounts_profile_setup"),
+    path("profile/<str:username>/", user_profile, name="profile")
 ]
