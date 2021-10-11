@@ -117,10 +117,7 @@ class CiviViewSet(ModelViewSet):
         serializer = CiviImageSerializer(civi_images, many=True, read_only=True)
         return Response(serializer.data)
 
-
-
 """ CSV export function. Thread ID goes in, CSV HTTP response attachment goes out. """
-
 
 def base_view(request):
     if not request.user.is_authenticated:
