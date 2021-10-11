@@ -210,14 +210,8 @@ class Civi(models.Model):
 
     tags = TaggableManager()
 
-    linked_civis = models.ManyToManyField("self", related_name="links")
-    response_civis = models.ForeignKey(
-        "self",
-        related_name="responses",
-        default=None,
-        null=True,
-        on_delete=models.PROTECT,
-    )  # TODO: Probably remove this
+    linked_civis = models.ManyToManyField("self", related_name="links", blank=True)
+  
 
     title = models.CharField(max_length=255, blank=False, null=False)
     body = models.CharField(max_length=1023, blank=False, null=False)
