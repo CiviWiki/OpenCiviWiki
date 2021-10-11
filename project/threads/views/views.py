@@ -15,9 +15,13 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from threads.models import Activity, Civi, CiviImage, Thread
 from threads.permissions import IsOwnerOrReadOnly
-from threads.serializers import (CiviImageSerializer, CiviSerializer,
-                                 ThreadDetailSerializer, ThreadListSerializer,
-                                 ThreadSerializer)
+from threads.serializers import (
+    CiviImageSerializer,
+    CiviSerializer,
+    ThreadDetailSerializer,
+    ThreadListSerializer,
+    ThreadSerializer,
+)
 
 
 class ThreadViewSet(ModelViewSet):
@@ -134,7 +138,7 @@ class CategoryViewSet(ReadOnlyModelViewSet):
 def base_view(request):
     if not request.user.is_authenticated:
         return TemplateResponse(request, "landing.html", {})
-
+        #   return HttpResponseRedirect("/")
     Profile_filter = Profile.objects.get(user=request.user)
     if "login_user_image" not in request.session.keys():
         request.session["login_user_image"] = Profile_filter.profile_image_thumb_url
