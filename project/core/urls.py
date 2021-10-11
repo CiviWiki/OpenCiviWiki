@@ -22,17 +22,23 @@ from django.views.generic.base import RedirectView
 from threads import urls as threads
 
 
-from threads.views.views import about_view, support_us_view, how_it_works_view , base_view 
+from threads.views.views import (
+    about_view,
+    support_us_view,
+    how_it_works_view,
+    base_view,
+)
 from core.router import CiviWikiRouter
 
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", base_view ),
+    path("", base_view),
     path("", include("accounts.urls.urls")),
     path("api/", include("accounts.urls.api")),
     path("api/v1/", include((CiviWikiRouter.urls, "api"))),
-    path("api/", include(threads)),
+    path("api/", include("threads.urls.api")),
+    path("", include("threads.urls.urls")),
     path(
         "inbox/notifications/",
         include("notifications.urls", namespace="notifications"),
