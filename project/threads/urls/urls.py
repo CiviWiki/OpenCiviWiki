@@ -14,6 +14,6 @@ urlpatterns = [
     path("", base_view, name="base"),
     path("support_us/", support_us_view, name="support us"),
     path("howitworks/", how_it_works_view, name="how it works"),
-    path("declaration", declaration, name="declaration"),
-    path("create-group", create_group, name="create group"),
+    path("declaration/", declaration, name="declaration"),
+    path("create-group/", create_group, name="create group"),
 ]

@@ -6,7 +6,6 @@ from accounts.views import (RegisterView, SettingsView, ProfileActivationView, P
 from threads.views.views import base_view
 
 urlpatterns = [
-    path("", base_view),
     path(
         'login/',
         auth_views.LoginView.as_view(template_name='accounts/register/login.html'),

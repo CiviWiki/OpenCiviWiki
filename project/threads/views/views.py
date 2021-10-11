@@ -118,20 +118,6 @@ class CiviViewSet(ModelViewSet):
         return Response(serializer.data)
 
 
-class CategoryViewSet(ReadOnlyModelViewSet):
-    """REST API viewset for Categories"""
-
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
-    authentication_classes = ()
-
-    @action(detail=True)
-    def threads(self, request, pk=None):
-        category_threads = Thread.objects.filter_by_category_id(pk)
-        serializer = ThreadSerializer(category_threads, many=True)
-        return Response(serializer.data)
-
-
 """ CSV export function. Thread ID goes in, CSV HTTP response attachment goes out. """
 
 

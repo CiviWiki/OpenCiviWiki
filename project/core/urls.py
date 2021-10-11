@@ -28,7 +28,6 @@ from core.router import CiviWikiRouter
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", base_view),
     path("", include("accounts.urls.urls")),
     path("api/", include("accounts.urls.api")),
     path("api/v1/", include((CiviWikiRouter.urls, "api"))),
@@ -51,9 +50,6 @@ urlpatterns = [
         "mstile-144x144.png",
         RedirectView.as_view(url="/static/favicon/mstile-144x144.png"),
     ),
-    path("about/", about_view, name="about"),
-    path("support_us/", support_us_view, name="support us"),
-    path("howitworks/", how_it_works_view, name="how it works"),
 ]
 
 urlpatterns + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
