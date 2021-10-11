@@ -65,17 +65,42 @@ python manage.py collectstatic
 
 ### Populate initial data
 
-During the first setup, it's useful to import hardcoded initial entries. In this case,
-there are two [fixtures](https://docs.djangoproject.com/en/3.2/howto/initial-data/):
+During the first setup, it's useful to import hardcoded initial entries. In this case, there are two fixtures:
 
 * Sample threads, located in `project/data/sample_threads.json`
+  Example of values:
+
+```json
+    {
+        "model": "api.thread",
+        "fields": {
+            "title": "Liquid Fluoride Thorium Reactors",
+            "summary": "...",
+            "category_id": "2",
+            "author_id": "2",
+            "created": "2016-10-09 21:07:16.848433+00"
+        }
+    }
+```
+
 * Sample categories, located in `project/data/categories.json`
+  Example of values:
+
+```json
+    {
+        "fields": {
+            "name": "Agriculture"
+        },
+        "model": "categories.Category",
+        "pk": 0
+    }
+```
 
 Run the following commands to load fixtures:
 
 ```py
-python manage.py loaddata ./data/sample_threads.json
 python manage.py loaddata ./data/categories.json
+python manage.py loaddata ./data/sample_threads.json
 ```
 
 You can also import all of them in one batch:
