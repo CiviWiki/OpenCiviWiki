@@ -196,13 +196,19 @@ class CiviManager(models.Manager):
 
     def thread_sorted_by_score(self, civis_queryset, requested_user_id):
         queryset = civis_queryset.order_by("-created")
-        return sorted(queryset.all(), key=lambda c: c.score(requested_user_id), reverse=True)
+        return sorted(
+            queryset.all(), key=lambda c: c.score(requested_user_id), reverse=True
+        )
 
 
 class Civi(models.Model):
     objects = CiviManager()
     author = models.ForeignKey(
-        get_user_model(), related_name="civis", default=None, null=True, on_delete=models.PROTECT
+        get_user_model(),
+        related_name="civis",
+        default=None,
+        null=True,
+        on_delete=models.PROTECT,
     )
     thread = models.ForeignKey(
         Thread, related_name="civis", default=None, null=True, on_delete=models.PROTECT
@@ -210,14 +216,7 @@ class Civi(models.Model):
 
     tags = TaggableManager()
 
-    linked_civis = models.ManyToManyField("self", related_name="links")
-    response_civis = models.ForeignKey(
-        "self",
-        related_name="responses",
-        default=None,
-        null=True,
-        on_delete=models.PROTECT,
-    )  # TODO: Probably remove this
+    linked_civis = models.ManyToManyField("self", related_name="links", blank=True)
 
     title = models.CharField(max_length=255, blank=False, null=False)
     body = models.CharField(max_length=1023, blank=False, null=False)
@@ -292,7 +291,8 @@ class Civi(models.Model):
             profile = get_user_model().objects.get(id=requested_user_id).profile
             scores_sum = (
                 1
-                if self.author.profile in profile.following.all().values_list("id", flat=True)
+                if self.author.profile
+                in profile.following.all().values_list("id", flat=True)
                 else 0
             )
         else:
