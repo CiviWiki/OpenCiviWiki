@@ -722,6 +722,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "SimonDamberg",
+      "name": "Simon Damberg",
+      "avatar_url": "https://avatars.githubusercontent.com/u/49840909?v=4",
+      "profile": "https://github.com/SimonDamberg",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
