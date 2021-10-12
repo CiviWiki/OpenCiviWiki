@@ -3,7 +3,7 @@ from django.contrib.auth import views as auth_views
 from accounts.views import (RegisterView, SettingsView, ProfileActivationView, PasswordResetView, PasswordResetDoneView,
                             PasswordResetConfirmView, PasswordResetCompleteView, ProfileSetupView, user_profile)
 
-from threads.views.views import base_view
+from threads.views.from threads.views.views import about_view, support_us_view, how_it_works_view, base_view
 
 urlpatterns = [
     path(
