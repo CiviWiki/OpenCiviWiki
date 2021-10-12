@@ -17,7 +17,8 @@ from threads.api import (
     upload_thread_image,
 )
 
-from threads.views.views import ThreadViewSet, CategoryViewSet, CiviViewSet
+from threads.views.views import ThreadViewSet, CiviViewSet
+from categories.api import CategoryViewSet
 from accounts.api import ProfileViewSet
 
 router = DefaultRouter(trailing_slash=False)
