@@ -1,5 +1,3 @@
-import json
-
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import F
 from django.http import HttpResponse, HttpResponseRedirect
@@ -10,7 +8,6 @@ from threads.models import Thread, Civi, Activity
 from accounts.models import Profile
 from accounts.forms import ProfileEditForm, UpdateProfileImage
 from categories.models import Category
-from core.constants import US_STATES
 from core.custom_decorators import login_required, full_profile
 
 
@@ -123,7 +120,6 @@ def issue_thread(request, thread_id=None):
         ],
         "category": {"id": t.category.id, "name": t.category.name},
         "categories": [{"id": c.id, "name": c.name} for c in Category.objects.all()],
-        "states": sorted(US_STATES, key=lambda s: s[1]),
         "created": t.created_date_str,
         "num_civis": t.num_civis,
         "num_views": t.num_views,
