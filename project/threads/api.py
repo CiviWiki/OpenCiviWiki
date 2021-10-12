@@ -21,7 +21,6 @@ from django.http import (
 
 from .models import Activity, Civi, Thread
 from .utils import json_response
-from core.constants import US_STATES
 
 
 @login_required
