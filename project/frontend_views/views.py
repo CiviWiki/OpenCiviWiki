@@ -42,11 +42,8 @@ def base_view(request):
         .exclude(is_draft=False)
         .order_by("-created")
     ]
-
-    states = sorted(US_STATES, key=lambda s: s[1])
     data = {
         "categories": categories,
-        "states": states,
         "user_categories": user_categories,
         "threads": feed_threads,
         "trending": top5_threads,
@@ -128,9 +125,6 @@ def issue_thread(request, thread_id=None):
         "categories": [{"id": c.id, "name": c.name} for c in Category.objects.all()],
         "states": sorted(US_STATES, key=lambda s: s[1]),
         "created": t.created_date_str,
-        "level": t.level,
-        "state": t.state if t.level == "state" else "",
-        "location": t.level if not t.state else dict(US_STATES).get(t.state),
         "num_civis": t.num_civis,
         "num_views": t.num_views,
         "user_votes": [
