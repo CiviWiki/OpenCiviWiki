@@ -1,6 +1,6 @@
 -r base.txt # includes all dependencies in `base.txt`
 
 # dependencies only used in dev env
-coverage==6.0.1
+coverage==6.0.2
 flake8==4.0.1
 black==21.9b0
