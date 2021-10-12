@@ -19,17 +19,19 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 from django.views.generic.base import RedirectView
-from frontend_views import urls as frontend_views
 from threads import urls as threads
 
+
 from core.router import CiviWikiRouter
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("accounts.urls.urls")),
     path("api/", include("accounts.urls.api")),
     path("api/v1/", include((CiviWikiRouter.urls, "api"))),
-    path("api/", include(threads)),
+    path("api/", include("threads.urls.api")),
+    path("", include("threads.urls.urls")),
     path(
         "inbox/notifications/",
         include("notifications.urls", namespace="notifications"),
@@ -47,7 +49,6 @@ urlpatterns = [
         "mstile-144x144.png",
         RedirectView.as_view(url="/static/favicon/mstile-144x144.png"),
     ),
-    path("", include(frontend_views)),
 ]
 
 urlpatterns + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

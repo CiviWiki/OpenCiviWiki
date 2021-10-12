@@ -4,22 +4,25 @@ Class based views.
 This module will include views for the accounts app.
 """
 
+from core.custom_decorators import full_profile, login_required
 from django.conf import settings
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import FormView, UpdateView
-from django.views import View
+from django.contrib.auth import get_user_model, login
 from django.contrib.auth import views as auth_views
-from django.contrib.auth import login
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
+from django.http import HttpResponseRedirect
+from django.template.response import TemplateResponse
 from django.urls import reverse_lazy
-from django.contrib.auth import get_user_model
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
-from django.template.response import TemplateResponse
+from django.views import View
+from django.views.generic.edit import FormView, UpdateView
+
+from accounts.authentication import (account_activation_token,
+                                     send_activation_email)
+from accounts.forms import (ProfileEditForm, UpdateProfileImage,
+                            UserRegistrationForm)
 from accounts.models import Profile
-from accounts.forms import UserRegistrationForm, ProfileEditForm
-from accounts.authentication import send_activation_email, account_activation_token
-from django.http import HttpResponseRedirect
 
 
 class RegisterView(FormView):
@@ -78,31 +81,32 @@ class PasswordResetCompleteView(auth_views.PasswordResetCompleteView):
 class SettingsView(LoginRequiredMixin, UpdateView):
     """A form view to edit Profile"""
 
-    login_url = 'accounts_login'
+    login_url = "accounts_login"
     form_class = ProfileEditForm
-    success_url = reverse_lazy('accounts_settings')
-    template_name = 'accounts/utils/update_settings.html'
+    success_url = reverse_lazy("accounts_settings")
+    template_name = "accounts/utils/update_settings.html"
 
     def get_object(self, queryset=None):
         return Profile.objects.get(user=self.request.user)
 
-
     def get_initial(self):
         profile = Profile.objects.get(user=self.request.user)
-        self.initial.update({
-            "username": profile.user.username,
-            "email": profile.user.email,
-            "first_name": profile.first_name or None,
-            "last_name": profile.last_name or None,
-            "about_me": profile.about_me or None,
-        })
+        self.initial.update(
+            {
+                "username": profile.user.username,
+                "email": profile.user.email,
+                "first_name": profile.first_name or None,
+                "last_name": profile.last_name or None,
+                "about_me": profile.about_me or None,
+            }
+        )
         return super(SettingsView, self).get_initial()
 
 
 class ProfileActivationView(View):
     """
-        This shows different views to the user when they are verifying
-        their account based on whether they are already verified or not.
+    This shows different views to the user when they are verifying
+    their account based on whether they are already verified or not.
     """
 
     def get(self, request, uidb64, token):
@@ -150,7 +154,7 @@ class ProfileActivationView(View):
 class ProfileSetupView(LoginRequiredMixin, View):
     """A view to make the user profile full_profile"""
 
-    login_url = 'accounts_login'
+    login_url = "accounts_login"
 
     def get(self, request):
         profile = Profile.objects.get(user=request.user)
@@ -163,3 +167,37 @@ class ProfileSetupView(LoginRequiredMixin, View):
                 "email": request.user.email,
             }
             return TemplateResponse(request, "accounts/user-setup.html", data)
+
+
+@login_required
+@full_profile
+def user_profile(request, username=None):
+    User = get_user_model()
+    if request.method == "GET":
+        if not username:
+            return HttpResponseRedirect(f"/profile/{request.user}")
+        else:
+            is_owner = username == request.user.username
+            try:
+                user = User.objects.get(username=username)
+                profile = user.profile_set.first()
+            except User.DoesNotExist:
+                return HttpResponseRedirect("/404")
+
+        form = ProfileEditForm(
+            initial={
+                "username": user.username,
+                "email": user.email,
+                "first_name": profile.first_name or None,
+                "last_name": profile.last_name or None,
+                "about_me": profile.about_me or None,
+            },
+            readonly=True,
+        )
+        data = {
+            "username": user,
+            "profile_image_form": UpdateProfileImage,
+            "form": form if is_owner else None,
+            "readonly": True,
+        }
+        return TemplateResponse(request, "account.html", data)
