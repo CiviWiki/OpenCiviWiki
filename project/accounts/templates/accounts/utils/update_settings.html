@@ -1,16 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Settings</title>
-    {% load static %}
-    {% include "base/links.html" %}
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block page_title %}Settings{% endblock page_title %}
+{% block extra_css %}
     <link type="text/css" rel="stylesheet/less" href="{% static "less/utils.less" %}"/>
     <link type="text/css" rel="stylesheet/less" href="{% static "less/setup.less" %}"/>
     <script src="{% static "dependencies/less.min.js" type="text/javascript" %}"></script>
-</head>
+{% endblock extra_css %}
 
-<body>
+{% block content %}
     {% include "partials/utils/global_nav.html" %}
     <section style='display: flex;justify-content: center; padding-top: 20px;'>
         <div class="setting card" style="width: 75%;" >
@@ -20,4 +19,4 @@
         </div>
     </section>
 </body>
-</html>
+{% endblock content %}
