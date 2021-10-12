@@ -1,12 +1,12 @@
-<!doctype html>
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
 
-<head>
-    {% load static %}
-    {% include "base/links.html" %}
+{% block extra_css %}
     {% include "accounts/base/less_headers/account_less.html" %}
-</head>
+{% endblock extra_css %}
 
-
+{% block backbone_template %}
 <!-- Util Partials -->
 <script id="civi-template" type="text/template">
     {% include "accounts/partials/account/utils/account_civi.html" %}
@@ -57,14 +57,15 @@
 <script id="settings-template" type="text/template">
     {% include "accounts/partials/account/account_settings.html" %}
 </script>
+{% endblock backbone_template %}
 
-
-<body>
+{% block content %}
     {% include "partials/utils/global_nav.html" %}
 
     <div id="account"></div>
-</body>
+{% endblock content %}
 
+{% block extra_js %}
 <script type="text/javascript" src="{% static 'js/account.js' %}"></script>
 
 <script type="text/javascript">
@@ -82,3 +83,4 @@
     accountModel.fetch();
     accountView.render();
 </script>
+{% endblock extra_js %}

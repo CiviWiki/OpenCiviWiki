@@ -1,12 +1,12 @@
-<!doctype html>
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
 
-<head>
-    {% load static %}
-    {% include "base/links.html" %}
+{% block extra_css %}
     {% include "base/less_headers/feed_less.html" %}
-    {% load i18n %}
-</head>
+{% endblock extra_css %}
 
+{% block backbone_template %}
 <script id="feed-template" type="text/template">
     {% include "accounts/partials/feed/feed_base.html" %}
 </script>
@@ -23,14 +23,16 @@
 <script id="categories-template" type="text/template">
     {% include "accounts/partials/feed/categories.html" %}
 </script>
+{% endblock backbone_template %}
 
-<body>
+{% block content %}
     {% include "partials/utils/global_nav.html" %}
     <div id="feed">
 
     </div>
-</body>
+{% endblock content %}
 
+{% block extra_js %}
 <script type="text/javascript" src="{% static "js/feed.js" %}"></script>
 <script type="text/javascript">
     var username = '{{user.username}}',
@@ -50,5 +52,4 @@
             draft_threads: draftCollection
         });
 </script>
-
-</html>
+{% endblock extra_js %}

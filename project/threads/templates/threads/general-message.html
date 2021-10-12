@@ -1,13 +1,15 @@
-<!doctype html>
-<html>
-<head>
-    {% load static %}
-    {% include "base/links.html" %}
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block extra_css %}
     <link type="text/css" rel="stylesheet/less" href="{% static "less/base.less" %}"/>
     <script src="{% static "dependencies/less.min.js" type="text/javascript" %}"></script>
-    <title>{{ title }}</title>
-</head>
+{% endblock extra_css %}
 
+{% block page_title %}{{ title }}{% endblock page_title %}
+
+{% block backbone_template %}
 <script id="general-template" type="text/template">
     <div id="general-section" class="center container section">
         <div class="row">
@@ -28,15 +30,18 @@
         </div>
     </div>
 </script>
+{% endblock backbone_template %}
 
-<body id="general_wrapper">
+{% block body_id %}general_wrapper{% endblock body_id %}
+{% block content %}
     <div id="general">
     </div>
-</body>
+{% endblock content %}
 
+{% block extra_js %}
 <!-- Backbone Views File -->
 <script type="text/javascript" src="{% static "js/general_view.js" %}"></script>
 <script type="text/javascript">
     var generalView = new cw.GeneralView();
 </script>
-</html>
+{% endblock extra_js %}
