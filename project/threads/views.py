@@ -138,14 +138,14 @@ def base_view(request):
     ]
     top5_threads = list(
         Thread.objects.filter(is_draft=False)
-            .order_by("-num_views")[:5]
-            .values("id", "title")
+        .order_by("-num_views")[:5]
+        .values("id", "title")
     )
     my_draft_threads = [
         Thread.objects.summarize(t)
         for t in Thread.objects.filter(author_id=Profile_filter.id)
-            .exclude(is_draft=False)
-            .order_by("-created")
+        .exclude(is_draft=False)
+        .order_by("-created")
     ]
 
     states = sorted(US_STATES, key=lambda s: s[1])
