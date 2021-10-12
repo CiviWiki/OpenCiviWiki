@@ -22,8 +22,7 @@ from django.views.generic.base import RedirectView
 from threads import urls as threads
 
 
-from threads.views.views import about_view, support_us_view, how_it_works_view, base_view
-from core.router import CiviWikiRouter
+rom core.router import CiviWikiRouter
 
 
 urlpatterns = [
