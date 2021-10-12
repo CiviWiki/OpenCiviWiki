@@ -40,11 +40,7 @@ def new_thread(request):
             summary=request.POST["summary"],
             category_id=request.POST["category_id"],
             author=request.user,
-            level=request.POST["level"],
         )
-        state = request.POST["state"]
-        if state:
-            new_thread_data["state"] = state
 
         new_t = Thread(**new_thread_data)
         new_t.save()
@@ -349,7 +345,7 @@ def delete_civi(request):
 def edit_thread(request):
     """ Use this function to edit an existing thread """
     thread_id = request.POST.get("thread_id")
-    non_required_params = ["title", "summary", "category_id", "level", "state"]
+    non_required_params = ["title", "summary", "category_id"]
     is_draft = request.POST.get("is_draft", True)
 
     if not thread_id:
@@ -394,9 +390,6 @@ def edit_thread(request):
             "id": req_edit_thread.category.id,
             "name": req_edit_thread.category.name,
         },
-        "level": req_edit_thread.level,
-        "state": req_edit_thread.state if req_edit_thread.level == "state" else "",
-        "location": location,
     }
     return JsonResponse({"data": return_data})
 
