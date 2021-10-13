@@ -636,7 +636,8 @@
       "contributions": [
         "code",
         "projectManagement",
-        "doc"
+        "doc",
+        "bug"
       ]
     },
     {
