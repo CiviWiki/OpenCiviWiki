@@ -3,8 +3,8 @@ import json
 import math
 import os
 from calendar import month_name
-
 from common.utils import PathAndRename
+from core.constants import CIVI_TYPES
 from django.conf import settings
 from django.core.files.storage import default_storage
 from django.core.serializers.json import DjangoJSONEncoder
