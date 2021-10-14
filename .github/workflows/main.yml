@@ -32,5 +32,9 @@ jobs:
         cd project
         pytest -p no:warning
     - name: flake8 Lint
+      uses: py-actions/flake8@v1
+      with:
+        extended-ignore: "E203"
+        max-line-length: "88"
       run: flake8 project/ --exclude "**/migrations/*.py **/tests/*.py **/tests.py **/__init__.py" --max-line-length 120
 
