@@ -1,12 +1,12 @@
-<!doctype html>
-<html>
-<head>
-    {% load static %}
-    {% include "base/links.html" %}
-    {% include "base/less_headers/login_less.html" %}
-    <title>CiviWiki</title>
-</head>
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
 
+{% block extra_css %}
+    {% include "base/less_headers/login_less.html" %}
+{% endblock extra_css %}
+    
+{% block backbone_template %}
 <script id="entry-template" type="text/template">
     {% include "partials/login/entry_base.html" %}
 </script>
@@ -16,16 +16,18 @@
 <script id="register-template" type="text/template">
     {% include "partials/login/register_base.html" %}
 </script>
+{% endblock backbone_template %}
 
-<body>
+{% block content %}
     <div id="login"></div>
-</body>
+{% endblock content %}
 
+{% block extra_js %}
 <script type="text/javascript" src="{% static "js/login.js" %}"></script>
 <script type="text/javascript">
     // TODO: Var to initialize to register if routed,
     // TODO: pre-fil variable if routed from verification page
     var loginView = new cw.LoginView();
 </script>
+{% endblock extra_js %}
 
-</html>

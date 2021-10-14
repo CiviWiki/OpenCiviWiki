@@ -1,16 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Settings</title>
-    {% load static %}
-    {% load i18n %}
-    {% include "base/links.html" %}
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% block page_title %}Settings{% endblock page_title %}
+
+{% block extra_css %}
     <link type="text/css" rel="stylesheet/less" href="{% static "less/base.less" %}"/>
     <link type="text/css" rel="stylesheet/less" href="{% static "less/utils.less" %}"/>
     <script src="{% static "dependencies/less.min.js" type="text/javascript" %}"></script>
-</head>
+{% endblock extra_css %}
 
+{% block backbone_template %}
 <script id="rep-chip-template" type="text/template">
     {% verbatim %}
     <div class="rep bold-text purple-text chip">
@@ -65,12 +64,15 @@
         </div>
     </div>
 </script>
+{% endblock backbone_template %}
 
-<body class="grey lighten-4">
+{% block body_class %}grey lighten-4{% endblock body_class %}
+{% block content %}
     {% include "partials/utils/global_nav.html" %}
     <div id="settings"></div>
-</body>
+{% endblock content %}
 
+{% block extra_js %}
 <script type="text/javascript" src="{% static "js/settings.js" %}"></script>
 <script type="text/javascript">
     var data = {};
@@ -86,5 +88,4 @@
     userModel.fetch();
     settingsView.render();
 </script>
-
-</html>
+{% endblock extra_js %}

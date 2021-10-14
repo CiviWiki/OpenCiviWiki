@@ -1,11 +1,12 @@
-<!doctype html>
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
 
-<head>
-    {% load static %}
-    {% include "base/links.html" %}
+{% block extra_css %}
     {% include "base/less_headers/thread_less.html" %}
-</head>
+{% endblock extra_css %}
 
+{% block backbone_template %}
 <script id="thread-template" type="text/template">
     {% include "partials/thread/thread_base.html" %}
 </script>
@@ -55,12 +56,14 @@
 <script id="outline-template" type="text/template">
     {% include "partials/thread/thread_outline.html" %}
 </script>
+{% endblock backbone_template %}
 
-<body>
+{% block content %}
     {% include "partials/utils/global_nav.html" %}
     <div id="thread"></div>
-</body>
+{% endblock content %}
 
+{% block extra_js %}
 <script type="text/javascript" src="{% static "js/thread.js" %}"></script>
 <script type="text/javascript">
 
@@ -96,4 +99,4 @@
     //
     // if (cw.ws.readyState == WebSocket.OPEN) cw.ws.onopen();
 </script>
-</html>
+{% endblock extra_js %}

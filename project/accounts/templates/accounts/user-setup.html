@@ -1,11 +1,12 @@
-<!doctype html>
-<html>
-<head>
-    {% load static %}
-    {% include "base/links.html" %}
-    {% include "base/less_headers/setup_less.html" %}
-</head>
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
 
+{% block extra_css %}
+    {% include "base/less_headers/setup_less.html" %}
+{% endblock extra_css %}
+
+{% block backbone_template %}
 <script id="setup-base-template" type="text/template">
     {% include "partials/user-setup/user-setup-base.html" %}
 </script>
@@ -26,11 +27,13 @@
     </div>
     {% endverbatim %}
 </script>
+{% endblock backbone_template %}
 
-<body>
+{% block content %}
     <div id="user-setup"></div>
-</body>
+{% endblock content %}
 
+{% block extra_js %}
 <script type="text/javascript" src="{% static "js/user-setup.js" %}"></script>
 <script type="text/javascript">
     var accountUsername= "{{ username }}";
@@ -39,4 +42,4 @@
     var setupView = new cw.UserSetupView({model: accountModel});
     accountModel.fetch();
 </script>
-</html>
+{% endblock extra_js %}
