@@ -46,7 +46,9 @@ def new_thread(request):
 
         return JsonResponse({"data": "success", "thread_id": new_t.pk})
     except Profile.DoesNotExist:
-        return HttpResponseServerError(reason=f"Profile with user:{request.user.username} does not exist")
+        return HttpResponseServerError(
+            reason=f"Profile with user:{request.user.username} does not exist"
+        )
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
 
@@ -107,9 +109,13 @@ def get_thread(request, thread_id):
 
         return json_response(data)
     except Thread.DoesNotExist:
-        return HttpResponseBadRequest(reason=f"Thread with id:{thread_id} does not exist")
+        return HttpResponseBadRequest(
+            reason=f"Thread with id:{thread_id} does not exist"
+        )
     except Profile.DoesNotExist:
-        return HttpResponseBadRequest(reason=f"Profile with username:{request.user.username} does not exist")
+        return HttpResponseBadRequest(
+            reason=f"Profile with username:{request.user.username} does not exist"
+        )
     except Exception as e:
         return HttpResponseBadRequest(reason=str(e))
 
@@ -157,7 +163,9 @@ def get_responses(request, thread_id, civi_id):
 
         return JsonResponse(civis, safe=False)
     except Profile.DoesNotExist:
-        return HttpResponseBadRequest(reason=f"Profile with user:{request.user.username} does not exist")
+        return HttpResponseBadRequest(
+            reason=f"Profile with user:{request.user.username} does not exist"
+        )
     except Civi.DoesNotExist:
         return HttpResponseBadRequest(reason=f"Civi with id:{civi_id} does not exist")
     except Exception as e:
@@ -202,7 +210,7 @@ def create_civi(request):
                 notify.send(
                     request.user,  # Actor User
                     recipient=parent_civi.author,  # Target User
-                    verb=u"responded to your civi",  # Verb
+                    verb="responded to your civi",  # Verb
                     action_object=civi,  # Action Object
                     target=civi.thread,  # Target Object
                     popup_string="{user} responded to your civi in {thread}".format(
@@ -226,7 +234,7 @@ def create_civi(request):
                     notify.send(
                         request.user,  # Actor User
                         recipient=u.user,  # Target User
-                        verb=u"created a new civi",  # Verb
+                        verb="created a new civi",  # Verb
                         action_object=civi,  # Action Object
                         target=civi.thread,  # Target Object
                         popup_string="{user} created a new civi in the thread {thread}".format(
@@ -243,7 +251,7 @@ def create_civi(request):
 @login_required
 @require_post_params(params=["civi_id", "rating"])
 def rate_civi(request):
-    """ Use this function to rate a Civi """
+    """Use this function to rate a Civi"""
     civi_id = request.POST.get("civi_id", "")
     rating = request.POST.get("rating", "")
 
@@ -289,7 +297,7 @@ def rate_civi(request):
 
 @login_required
 def edit_civi(request):
-    """ Use this function to edit an existing Civi"""
+    """Use this function to edit an existing Civi"""
     civi_id = request.POST.get("civi_id", "")
     title = request.POST.get("title", "")
     body = request.POST.get("body", "")
@@ -325,7 +333,7 @@ def edit_civi(request):
 
 @login_required
 def delete_civi(request):
-    """ Use this function to delete an existing Civi """
+    """Use this function to delete an existing Civi"""
     civi_id = request.POST.get("civi_id", "")
 
     c = Civi.objects.get(id=civi_id)
@@ -342,9 +350,13 @@ def delete_civi(request):
 
 @login_required
 def edit_thread(request):
-    """ Use this function to edit an existing thread """
+    """Use this function to edit an existing thread"""
     thread_id = request.POST.get("thread_id")
-    non_required_params = ["title", "summary", "category_id",]
+    non_required_params = [
+        "title",
+        "summary",
+        "category_id",
+    ]
     is_draft = request.POST.get("is_draft", True)
 
     if not thread_id:
@@ -371,7 +383,9 @@ def edit_thread(request):
 
         req_edit_thread.save()
     except Thread.DoesNotExist:
-        return HttpResponseServerError(reason=f"Thread with id:{thread_id} does not exist")
+        return HttpResponseServerError(
+            reason=f"Thread with id:{thread_id} does not exist"
+        )
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
 
@@ -422,7 +436,9 @@ def upload_civi_image(request):
             return JsonResponse(data)
 
         except Civi.DoesNotExist:
-            return HttpResponseServerError(reason=f"Civi with id:{civi_id} does not exist")
+            return HttpResponseServerError(
+                reason=f"Civi with id:{civi_id} does not exist"
+            )
         except Exception as e:
             return HttpResponseServerError(
                 reason=(str(e) + civi_id + str(request.FILES))
@@ -478,7 +494,9 @@ def upload_thread_image(request):
             return JsonResponse(data)
 
         except Thread.DoesNotExist:
-            return HttpResponseServerError(reason=f"Thread with id:{thread_id} does not exist")
+            return HttpResponseServerError(
+                reason=f"Thread with id:{thread_id} does not exist"
+            )
         except Exception as e:
             return HttpResponseServerError(reason=(str(e)))
     else:
