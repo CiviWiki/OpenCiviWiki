@@ -113,8 +113,8 @@ class ProfileEditForm(forms.ModelForm):
             self.disable_fields()
 
     def disable_fields(self):
-        for _, field in self.fields.items():
-            field.disabled = True
+        for key, value in self.fields.items():
+            value.disabled = True
 
     class Meta:
         model = Profile
@@ -192,7 +192,8 @@ class UpdateProfileImage(forms.ModelForm):
 
     def clean_profile_image(self):
         """
-        This function is used to make sure that profile images follow Civiwiki standards.
+        This function is used to make sure that profile images
+        follow Civiwiki standards.
 
         Requirements:
             - Height cannot exceed 960px

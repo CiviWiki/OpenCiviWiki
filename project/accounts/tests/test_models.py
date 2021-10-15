@@ -7,11 +7,17 @@ class BaseTestCase(TestCase):
     """Base test class to set up test cases"""
 
     def setUp(self) -> None:
-        user = get_user_model().objects.create_user(username="testuser", email="test@test.com", password="password123")
-        self.test_profile, created = Profile.objects.update_or_create(user=user,
-                                                                      defaults={'first_name': "Test",
-                                                                                'last_name': "User",
-                                                                                'about_me': "About Me"})
+        user = get_user_model().objects.create_user(
+            username="testuser", email="test@test.com", password="password123"
+        )
+        self.test_profile, created = Profile.objects.update_or_create(
+            user=user,
+            defaults={
+                "first_name": "Test",
+                "last_name": "User",
+                "about_me": "About Me",
+            },
+        )
 
 
 class ProfileModelTests(BaseTestCase):
@@ -28,14 +34,19 @@ class ProfileModelTests(BaseTestCase):
     def test_profile_has_default_image_url(self):
         """Whether a profile has a default image"""
 
-        self.assertEqual(self.test_profile.profile_image_url, '/static/img/no_image_md.png')
+        self.assertEqual(
+            self.test_profile.profile_image_url, "/static/img/no_image_md.png"
+        )
 
 
 class ProfileManagerTests(BaseTestCase):
     """A class to test ProfileManager"""
 
     def test_profile_summarize_with_no_history_no_followers_no_following(self):
-        """Whether profile summarize is correct without history, followers, and followings"""
+        """
+        Test whether profile summarize is correct
+        without history, followers, and followings
+        """
 
         data = {
             "username": self.test_profile.user.username,
@@ -74,16 +85,24 @@ class ProfileManagerTests(BaseTestCase):
             "request_profile": self.test_profile.first_name,
         }
         self.assertEqual(
-            Profile.objects.card_summarize(self.test_profile, Profile.objects.get(user=self.test_profile.user)), data)
+            Profile.objects.card_summarize(
+                self.test_profile, Profile.objects.get(user=self.test_profile.user)
+            ),
+            data,
+        )
 
 
 class UserModelTest(TestCase):
     """A class to test Profile model"""
 
     def test_user_create_func_creates_profile(self):
-        get_user_model().objects.create_user(username="testuser", email="test@test.com", password="password123")
+        get_user_model().objects.create_user(
+            username="testuser", email="test@test.com", password="password123"
+        )
         self.assertEqual(Profile.objects.count(), 1)
 
     def test_superuser_create_func_creates_profile(self):
-        get_user_model().objects.create_superuser(username="testuser", email="test@test.com", password="password123")
+        get_user_model().objects.create_superuser(
+            username="testuser", email="test@test.com", password="password123"
+        )
         self.assertEqual(Profile.objects.count(), 1)

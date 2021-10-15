@@ -129,7 +129,7 @@ def base_view(request):
 
     all_categories = list(Category.objects.values_list("id", flat=True))
     user_categories = (
-            list(Profile_filter.categories.values_list("id", flat=True)) or all_categories
+        list(Profile_filter.categories.values_list("id", flat=True)) or all_categories
     )
 
     feed_threads = [

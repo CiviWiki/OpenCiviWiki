@@ -264,7 +264,8 @@ class Civi(models.Model):
         return "{0} {1}, {2}".format(month_name[d.month], d.day, d.year)
 
     def score(self, requested_user_id=None):
-        # TODO: add docstring comment describing this score function in relatively plain English
+        # TODO: add docstring comment describing this score function
+        # in relatively plain English
         # include descriptions of all variables
 
         # Weights for different vote types
@@ -273,7 +274,6 @@ class Civi(models.Model):
         pos_weight = 1
         vpos_weight = 2
 
-        owner_id = self.author
         post_time = self.created
         current_time = datetime.datetime.now()
 
