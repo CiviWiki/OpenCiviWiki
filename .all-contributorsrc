@@ -746,5 +746,7 @@
   "projectName": "OpenCiviWiki",
   "projectOwner": "CiviWiki",
   "repoType": "github",
-  "repoHost": "https://github.com"
+  "repoHost": "https://github.com",
+  "skipCi" true,
+  "contributorsSortAlphabetically": true
 }
