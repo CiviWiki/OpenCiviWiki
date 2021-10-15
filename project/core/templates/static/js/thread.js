@@ -1063,16 +1063,6 @@ cw.EditThreadView = BB.View.extend({
         this.$('.edit-thread-modal').closeModal();
     },
 
-    showStates: function () {
-        var level = this.$el.find('#thread-location').val();
-        if (level === "state") {
-            this.$('.edit-thread-state-selection').removeClass('hide');
-        } else {
-            this.$('.edit-thread-state-selection').addClass('hide');
-            this.$el.find('#thread-state').val('');
-        }
-    },
-
     cancelEdit: function () {
         this.parentView.threadWikiRender();
     },
@@ -1105,13 +1095,7 @@ cw.EditThreadView = BB.View.extend({
 
         var title = this.$el.find('#thread-title').val().trim();
         var summary = this.$el.find('#thread-body').val().trim();
-        var level = this.$el.find('#thread-location').val();
         var category_id = this.$el.find('#thread-category').val();
-        var state="";
-        
-        if (level === "state" ) {
-            state = this.$el.find('#thread-state').val();
-        }
 
         var thread_id = this.threadId;
         
@@ -1123,9 +1107,7 @@ cw.EditThreadView = BB.View.extend({
                     title: title,
                     summary: summary,
                     category_id: category_id,
-                    thread_id: thread_id,
-                    level: level,
-                    state: state
+                    thread_id: thread_id
                 },
                 success: function (response) {
                     var file = $('#thread_attachment_image').val();
@@ -1147,9 +1129,6 @@ cw.EditThreadView = BB.View.extend({
                                     _this.parentView.model.set('title', new_data.title);
                                     _this.parentView.model.set('summary', new_data.summary);
                                     _this.parentView.model.set('category', new_data.category);
-                                    _this.parentView.model.set('level', new_data.level);
-                                    _this.parentView.model.set('state', new_data.state);
-                                    _this.parentView.model.set('location', new_data.location);
                                     _this.parentView.model.set('image', response2.image);
                                     _this.parentView.threadWikiRender();
                                     _this.parentView.threadNavRender();
@@ -1183,9 +1162,6 @@ cw.EditThreadView = BB.View.extend({
                                     _this.parentView.model.set('title', new_data.title);
                                     _this.parentView.model.set('summary', new_data.summary);
                                     _this.parentView.model.set('category', new_data.category);
-                                    _this.parentView.model.set('level', new_data.level);
-                                    _this.parentView.model.set('state', new_data.state);
-                                    _this.parentView.model.set('location', new_data.location);
                                     _this.parentView.model.set('image', response2.image);
                                     _this.parentView.threadWikiRender();
                                     _this.parentView.threadNavRender();
@@ -1214,9 +1190,6 @@ cw.EditThreadView = BB.View.extend({
                                     _this.parentView.model.set('summary', new_data.summary);
                                     _this.parentView.model.set('category', new_data.category);
                                     _this.parentView.model.set('image', response2.image);
-                                    _this.parentView.model.set('level', new_data.level);
-                                    _this.parentView.model.set('state', new_data.state);
-                                    _this.parentView.model.set('location', new_data.location);
                                     _this.parentView.threadWikiRender();
                                     _this.parentView.threadNavRender();
                                 },
@@ -1237,9 +1210,6 @@ cw.EditThreadView = BB.View.extend({
                         _this.parentView.model.set('title', new_data.title);
                         _this.parentView.model.set('summary', new_data.summary);
                         _this.parentView.model.set('category',new_data.category);
-                        _this.parentView.model.set('level', new_data.level);
-                        _this.parentView.model.set('state', new_data.state);
-                        _this.parentView.model.set('location', new_data.location);
                         _this.parentView.threadWikiRender();
                         _this.parentView.threadNavRender();
                     }
@@ -2004,8 +1974,6 @@ cw.ThreadView = BB.View.extend({
                 summary: _this.model.attributes.summary,
                 // Why is categories an array, when only one category is ever chosen?
                 category_id: _this.model.attributes.categories[0].id,
-                level: _this.model.attributes.level,
-                state: _this.model.attributes.state,
                 is_draft: false,
             },
             success: function (response) {

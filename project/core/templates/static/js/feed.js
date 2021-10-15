@@ -233,26 +233,14 @@ cw.NewThreadView = BB.View.extend({
         this.$('#attachment_image_form').addClass('hide');
         this.$('#link-image-form').removeClass('hide');
     },
-    showStates: function () {
-        var level = this.$el.find('#thread-location').val();
-        if (level === "state") {
-            this.$('.new-thread-state-selection').removeClass('hide');
-        } else {
-            this.$('.new-thread-state-selection').addClass('hide');
-        }
-    },
 
     createThread: function () {
         var _this = this;
 
         var title = this.$el.find('#thread-title').val(),
             summary = this.$el.find('#thread-body').val(),
-            level = this.$el.find('#thread-location').val(),
-            category_id = this.$el.find('#thread-category').val(),
-            state="";
-        if (level === "state" ) {
-            state = this.$el.find('#thread-state').val();
-        }
+            category_id = this.$el.find('#thread-category').val();
+
         if (title && summary && category_id) {
             $.ajax({
                 url: '/api/new_thread/',
