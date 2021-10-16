@@ -31,7 +31,7 @@ def new_thread(request):
         Use this function when a user creates a new thread.
 
     Data needed to create new thread:
-        - Title, Summary, Category, Author, Level, State
+        - Title, Summary, Category, Author
     """
     try:
         new_thread_data = dict(
