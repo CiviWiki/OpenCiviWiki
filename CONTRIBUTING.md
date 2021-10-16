@@ -72,14 +72,6 @@ During the first setup, it's useful to import hardcoded initial entries. In this
   Example of values:
 
 ```json
-    {
-        "fields": {
-            "name": "Agriculture"
-        },
-        "model": "categories.Category",
-        "pk": 0
-    }
-```
 
 Run the following commands to load fixtures:
 
