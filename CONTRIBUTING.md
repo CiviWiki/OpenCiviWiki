@@ -68,21 +68,6 @@ python manage.py collectstatic
 During the first setup, it's useful to import hardcoded initial entries. In this case, there are two fixtures:
 
 * Sample threads, located in `project/data/sample_threads.json`
-  Example of values:
-
-```json
-    {
-        "model": "api.thread",
-        "fields": {
-            "title": "Liquid Fluoride Thorium Reactors",
-            "summary": "...",
-            "category_id": "2",
-            "author_id": "2",
-            "created": "2016-10-09 21:07:16.848433+00"
-        }
-    }
-```
-
 * Sample categories, located in `project/data/categories.json`
   Example of values:
 
