@@ -75,8 +75,8 @@ class ThreadViewSet(ModelViewSet):
         """
         limit = request.query_params.get("limit", 5)
         top_threads = Thread.objects.filter(is_draft=False).order_by("-num_views")[
-                      :limit
-                      ]
+            :limit
+        ]
         serializer = ThreadListSerializer(
             top_threads, many=True, context={"request": request}
         )
