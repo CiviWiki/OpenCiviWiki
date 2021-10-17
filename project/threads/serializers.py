@@ -69,6 +69,7 @@ class CiviSerializer(serializers.ModelSerializer):
 
 class CiviListSerializer(serializers.ModelSerializer):
     """ """
+
     author = UserListSerializer()
     type = serializers.CharField(source="c_type")
     created = serializers.ReadOnlyField(source="created_date_str")
@@ -80,6 +81,7 @@ class CiviListSerializer(serializers.ModelSerializer):
 
 class ThreadSerializer(serializers.ModelSerializer):
     """ """
+
     author = UserListSerializer(required=False)
     category = CategoryListSerializer()
 
@@ -116,6 +118,7 @@ class ThreadSerializer(serializers.ModelSerializer):
 
 class ThreadListSerializer(serializers.ModelSerializer):
     """ """
+
     author = UserListSerializer(required=False)
     category = CategoryListSerializer()
 
@@ -144,6 +147,7 @@ class ThreadListSerializer(serializers.ModelSerializer):
 
 class ThreadDetailSerializer(serializers.ModelSerializer):
     """ """
+
     author = UserListSerializer(required=False)
     category = CategoryListSerializer()
 

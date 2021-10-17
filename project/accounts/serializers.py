@@ -5,7 +5,7 @@ from accounts.models import Profile
 
 
 class ProfileCommonSerializer(serializers.ModelSerializer):
-    """ Common serializer for specific profile serializers"""
+    """Common serializer for specific profile serializers"""
 
     username = serializers.ReadOnlyField(source="user.username")
     is_following = serializers.SerializerMethodField()
@@ -100,8 +100,14 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = get_user_model()
-        fields = ("username", "first_name", "last_name", "email", "is_staff",)
-        read_only_fields = ('username', 'email', 'is_staff')
+        fields = (
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+            "is_staff",
+        )
+        read_only_fields = ("username", "email", "is_staff")
 
 
 class UserListSerializer(serializers.ModelSerializer):
@@ -111,5 +117,9 @@ class UserListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = get_user_model()
-        fields = ("username", "first_name", "last_name",)
-        read_only_fields = ('username', 'first_name', 'last_name')
+        fields = (
+            "username",
+            "first_name",
+            "last_name",
+        )
+        read_only_fields = ("username", "first_name", "last_name")

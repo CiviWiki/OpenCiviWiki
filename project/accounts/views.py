@@ -18,10 +18,8 @@ from django.utils.http import urlsafe_base64_decode
 from django.views import View
 from django.views.generic.edit import FormView, UpdateView
 
-from accounts.authentication import (account_activation_token,
-                                     send_activation_email)
-from accounts.forms import (ProfileEditForm, UpdateProfileImage,
-                            UserRegistrationForm)
+from accounts.authentication import account_activation_token, send_activation_email
+from accounts.forms import ProfileEditForm, UpdateProfileImage, UserRegistrationForm
 from accounts.models import Profile
 
 
