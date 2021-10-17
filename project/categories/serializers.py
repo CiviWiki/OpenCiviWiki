@@ -5,6 +5,7 @@ from accounts.models import Profile
 
 class CategoryListSerializer(serializers.ModelSerializer):
     """ """
+
     class Meta:
         model = Category
         fields = ("id", "name")
@@ -12,6 +13,7 @@ class CategoryListSerializer(serializers.ModelSerializer):
 
 class CategorySerializer(serializers.ModelSerializer):
     """ """
+
     preferred = serializers.SerializerMethodField()
 
     class Meta:

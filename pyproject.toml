@@ -1,0 +1,9 @@
+[tool.black]
+exclude = '''
+(
+    /(
+      | migrations
+    )/
+    | apps.py
+)
+'''

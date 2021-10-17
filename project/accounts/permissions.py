@@ -10,6 +10,7 @@ class IsProfileOwnerOrReadOnly(BasePermission):
 
 class IsProfileOwnerOrDuringRegistrationOrReadOnly(IsProfileOwnerOrReadOnly):
     """Check if request user is account owner or in the process of registering"""
+
     def has_object_permission(self, request, view, obj):
         if obj.full_profile:
             return super(
