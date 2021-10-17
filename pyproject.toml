@@ -1,6 +1,9 @@
 [tool.black]
 exclude = '''
-/(
-  | migrations
-)/
+(
+    /(
+      | migrations
+    )/
+    | apps.py
+)
 '''
