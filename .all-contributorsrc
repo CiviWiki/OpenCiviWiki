@@ -741,6 +741,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "LightFelicis",
+      "name": "Alicja Kluczek",
+      "avatar_url": "https://avatars.githubusercontent.com/u/21277176?v=4",
+      "profile": "https://github.com/LightFelicis",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
