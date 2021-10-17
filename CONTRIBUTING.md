@@ -63,12 +63,35 @@ Certain resources, such as CSS and JavaScript files, need to be served from a st
 python manage.py collectstatic
 ```
 
+
 ### Create super user
 You will need a super user in order to log in and manage CiviWiki:
 
 ```py
 python manage.py createsuperuser
 ```
+
+
+### Populate initial data
+
+During the first setup, it's useful to import hardcoded initial entries. In this case, there are two fixtures:
+
+* Sample threads, located in `project/data/sample_threads.json`
+* Sample categories, located in `project/data/categories.json`
+
+Run the following commands to load fixtures:
+
+```py
+python manage.py loaddata ./data/categories.json
+python manage.py loaddata ./data/sample_threads.json
+```
+
+You can also import all of them in one batch:
+
+```py
+python manage.py loaddata ./data/*.json
+```
+
 
 ### Run the server
 
