@@ -3,7 +3,6 @@ import json
 from accounts.models import Profile
 from accounts.utils import get_account
 from categories.models import Category
-from core.constants import US_STATES
 from core.custom_decorators import full_profile, login_required
 from django.db.models import F
 from django.http import HttpResponse, HttpResponseRedirect
@@ -148,10 +147,8 @@ def base_view(request):
         .order_by("-created")
     ]
 
-    states = sorted(US_STATES, key=lambda s: s[1])
     data = {
         "categories": categories,
-        "states": states,
         "user_categories": user_categories,
         "threads": feed_threads,
         "trending": top5_threads,
@@ -221,13 +218,7 @@ def issue_thread(request, thread_id=None):
             "name": Thread_filter.category.name,
         },
         "categories": [{"id": c.id, "name": c.name} for c in Category.objects.all()],
-        "states": sorted(US_STATES, key=lambda s: s[1]),
         "created": Thread_filter.created_date_str,
-        "level": Thread_filter.level,
-        "state": Thread_filter.state if Thread_filter.level == "state" else "",
-        "location": Thread_filter.level
-        if not Thread_filter.state
-        else dict(US_STATES).get(Thread_filter.state),
         "num_civis": Thread_filter.num_civis,
         "num_views": Thread_filter.num_views,
         "user_votes": [

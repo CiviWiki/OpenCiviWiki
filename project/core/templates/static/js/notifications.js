@@ -99,15 +99,3 @@ var render_notifications = function(data) {
         notificationsView.render();
     }
 };
-// var WS_SCHEME = window.location.protocol == "https:" ? "wss" : "ws";
-// var HOST = window.location.origin.replace(/^http/, WS_SCHEME);
-// cw.ws = new WebSocket(HOST);
-//
-// cw.ws.onopen = function() {
-//     ws.send("Boop!");
-// };
-// cw.ws.onmessage = function (event) {
-//     console.log('Received: ' + event.data);
-// };
-//
-// if (ws.readyState == WebSocket.OPEN) ws.onopen();

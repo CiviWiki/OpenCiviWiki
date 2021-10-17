@@ -82,21 +82,5 @@
         civis: civiCollection,
         is_draft: (thread_is_draft == 'True')
     });
-
-    // HACK: TEMP Websocket fun
-    // var WS_SCHEME = window.location.protocol == "https:" ? "wss" : "ws";
-    // var HOST = WS_SCHEME + '://' + window.location.host;
-    // cw.ws = new WebSocket(HOST + "/thread/"+threadId+"/");
-    //
-    // cw.ws.onopen = function() {
-    //     cw.ws.send("Boop!");
-    // };
-    // cw.ws.onmessage = function (event) {
-    //     data = JSON.parse(event.data);
-    //
-    //     console.log(data.command, data.data.title);
-    // };
-    //
-    // if (cw.ws.readyState == WebSocket.OPEN) cw.ws.onopen();
 </script>
 {% endblock extra_js %}

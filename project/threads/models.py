@@ -5,7 +5,7 @@ import os
 from calendar import month_name
 
 from common.utils import PathAndRename
-from core.constants import CIVI_TYPES, US_STATES
+from core.constants import CIVI_TYPES
 from django.conf import settings
 from django.core.files.storage import default_storage
 from django.core.serializers.json import DjangoJSONEncoder
@@ -43,9 +43,6 @@ class ThreadManager(models.Manager):
                 thread.created.year,
             ),
             "category_id": thread.category.id,
-            "location": thread.level
-            if not thread.state
-            else dict(US_STATES).get(thread.state),
             "image": thread.image_url,
         }
         author_data = {
@@ -85,13 +82,6 @@ class Thread(models.Model):
     title = models.CharField(max_length=127, blank=False, null=False)
     summary = models.CharField(max_length=4095, blank=False, null=False)
     image = models.ImageField(upload_to=image_upload_path, blank=True, null=True)
-
-    level_CHOICES = (
-        ("federal", "Federal"),
-        ("state", "State"),
-    )
-    level = models.CharField(max_length=31, default="federal", choices=level_CHOICES)
-    state = models.CharField(max_length=2, choices=US_STATES, blank=True)
 
     def __str__(self):
         return self.title
