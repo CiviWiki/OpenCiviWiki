@@ -74,8 +74,8 @@ class ThreadViewSet(ModelViewSet):
         """
         limit = request.query_params.get("limit", 5)
         top_threads = Thread.objects.filter(is_draft=False).order_by("-num_views")[
-                      :limit
-                      ]
+            :limit
+        ]
         serializer = ThreadListSerializer(
             top_threads, many=True, context={"request": request}
         )
@@ -128,7 +128,7 @@ def base_view(request):
 
     all_categories = list(Category.objects.values_list("id", flat=True))
     user_categories = (
-            list(Profile_filter.categories.values_list("id", flat=True)) or all_categories
+        list(Profile_filter.categories.values_list("id", flat=True)) or all_categories
     )
 
     feed_threads = [

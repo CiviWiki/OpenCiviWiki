@@ -14,10 +14,12 @@ class ProfileActivationTokenGenerator(PasswordResetTokenGenerator):
     key_salt = "django.contrib.auth.tokens.PasswordResetTokenGenerator"
 
     def _make_token_with_timestamp(self, user, timestamp, legacy=False):
-        """ Token function pulled from Django 1.11 """
+        """Token function pulled from Django 1.11"""
         ts_b36 = int_to_base36(timestamp)
 
-        hash_string = salted_hmac(self.key_salt, str(user.pk) + str(timestamp)).hexdigest()[::2]
+        hash_string = salted_hmac(
+            self.key_salt, str(user.pk) + str(timestamp)
+        ).hexdigest()[::2]
         return "%s-%s" % (ts_b36, hash_string)
 
 
@@ -48,5 +50,5 @@ def send_activation_email(user, domain):
         message=message,
         sender=sender,
         recipient_list=[user.email],
-        html_message=html_message
+        html_message=html_message,
     )

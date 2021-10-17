@@ -2,16 +2,17 @@ import json
 import datetime
 import collections
 from decimal import Decimal
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse
 
 
 def json_custom_parser(obj):
     """
-    A custom json parser to handle json.dumps calls properly for Decimal and Datetime data types.
+    A custom json parser to handle json.dumps calls properly
+    for Decimal and Datetime data types.
     """
     if isinstance(obj, Decimal):
         return str(obj)
-    elif not isinstance(obj, basestring) and isinstance(obj, collections.Iterable):
+    elif not isinstance(obj) and isinstance(obj, collections.Iterable):
         return list(obj)
     elif isinstance(obj, datetime.datetime) or isinstance(obj, datetime.date):
         dot_ix = 19  # 'YYYY-MM-DDTHH:MM:SS.mmmmmm+HH:MM'.find('.')

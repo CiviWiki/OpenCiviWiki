@@ -52,7 +52,10 @@ class ProfileSerializer(ProfileCommonSerializer):
         )
 
     def validate_profile_image(self, value):
-        """This function is used to validate the profile image before added to the user profile"""
+        """
+        This function is used to validate
+        the profile image before added to the user profile
+        """
         request = self.context["request"]
         validation_form = UpdateProfileImage(request.POST, request.FILES)
 
