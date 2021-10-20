@@ -9,16 +9,161 @@
 {% block backbone_template %}
 <!-- Util Partials -->
 <script id="civi-template" type="text/template">
-    {% include "accounts/partials/account/utils/account_civi.html" %}
+    {% verbatim %}
+    <div class="civi-card white" data-id="">
+        <div class="civi-header-account white">
+            <div class="civi-title-outer ">
+                <div class="civi-type gray-text">
+                    {{type}}
+                </div>
+                <div class="civi-title">
+                    {{title}}
+                </div>
+            </div>
+            <div class="right rating">
+                <div class="rating-box r-0">
+                    <div class="rating-score r-0">{{votes.votes_vneg}}</div>
+                    <div class="vote-icon strongly-disagree-icon double-icon r-0">
+                        <i class="material-icons double-icon-1">thumb_down</i>
+                        <i class="material-icons double-icon-2">thumb_down</i>
+                    </div>
+                </div>
+                <div class="rating-box r-1">
+                    <div class="rating-score r-1">{{votes.votes_neg}}</div>
+                    <div class="vote-icon disagree-icon r-1">
+                        <i class="material-icons">thumb_down</i>
+                    </div>
+                </div>
+                <div class="rating-box r-2">
+                        <div class="rating-score r-2">{{votes.votes_neutral}}</div>
+                    <div class="vote-icon neutral-icon r-2">
+                        <i class="material-icons">remove</i>
+                    </div>
+                </div>
+                <div class="rating-box r-3">
+                    <div class="rating-score r-3">{{votes.votes_pos}}</div>
+                    <div class="vote-icon agree-icon r-3">
+                        <i class="material-icons">thumb_up</i>
+                    </div>
+                </div>
+                <div class="rating-box r-4">
+                    <div class="rating-score r-4">{{votes.votes_vpos}}</div>
+                    <div class="vote-icon strongly-agree-icon double-icon r-4">
+                        <i class="material-icons double-icon-1">thumb_up</i>
+                        <i class="material-icons double-icon-2">thumb_up</i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="civi-body">
+            <div class="civi-body-inner">
+                {{body}}
+            </div>
+        </div>
+        <div class="civi-footer">
+            <div class="author-photo-holder">
+                <div class="author-photo white">
+                    <!-- <img src="{{author.profile.profile_image}}" height="34px"> -->
+                    <div class="author-photo transparent" style="background-image: url('{{author.profile.profile_image}}'); background-size: 34px;">
+
+                    </div>
+                </div>
+            </div>
+            <div class="author-info">
+                <div class="author-name purple-text bold-text">
+                    {{author.username}}
+                </div>
+                <div class="created gray-text">
+                    {{ created }}
+                </div>
+            </div>
+            <div class="right civi-footer-actions">
+                <a class="link-lato" href="/thread/{{thread_id}}">
+                    Go to context<i class="mini material-icons">launch</i>
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endverbatim %}
 </script>
 <script id="user-chip-template" type="text/template">
-    {% include "accounts/partials/account/utils/user_chip.html" %}
+    {% verbatim %}
+    <div class="user-chip chip white" >
+        <div class="user-chip-contents" id="userchip-{{username}}"  data-username="{{username}}">
+            <img src="{{profile_image}}" alt="Contact Person">
+            <a href="/profile/{{username}}">
+                <div class="name">{{first_name}} {{last_name}}</div>
+                <div class="light-gray-text atname">@{{username}}</div>
+            </a>
+        </div>
+    </div>
+    {% endverbatim %}
 </script>
 <script id="user-card-template" type="text/template">
-    {% include "accounts/partials/account/utils/user_card.html" %}
+    {% verbatim %}
+    <div class="user-card card" id="usercard-{{username}}" data-username="{{username}}">
+        <div class="top">
+            <div class="profile_image">
+                <div class="medium-image-cropper">
+                    <a href="/profile/{{username}}">
+                        <img src="{{profile_image}}" alt="profile image" class="responsive-img">
+                    </a>
+                </div>
+            </div>
+            <a href="/profile/{{username}}" class="name">
+                    {{first_name}} {{last_name}}
+                </a>
+            <div class="username">
+                <a href="/profile/{{username}}">
+                    @{{username}}
+                </a>
+            </div>
+        </div>
+        <div class="bottom">
+            <div class="about-me center-block">{{about_me}}</div>
+        </div>
+        {{# if (!isCurrentUser) { }}
+            {{# if (!follow_state) { }}
+                <div class="buttons row">
+                    <a class="waves-effect waves-light btn follow-btn col s12" data-userid="{{id}}" data-username="{{username}}" data-follow-state="{{follow_state}}">Follow</a>
+                </div>
+            {{# } else { }}
+                <div class="buttons row">
+                    <a class="waves-effect waves-light btn follow-btn col s12 btn-secondary unfollow-btn" data-userid="{{id}}" data-username="{{username}}" data-follow-state="{{follow_state}}"></a>
+                </div>
+            {{# } }}
+        {{# } }}
+    </div>
+    {% endverbatim %}
 </script>
 <script id="issue-template" type="text/template">
-    {% include "accounts/partials/account/utils/account_issue.html" %}
+    {% verbatim %}
+    <div class="card" id="issue-{{thread_id}}">
+        <div class="card-content">
+            <div class="category header-lato bold-text">{{category}} <span class="link-lato">{{solutions.length}} Solutions</span></div>
+            <div class="issue subtitle-lato">{{thread_title}}</div>
+    
+            <div class="right-align">
+    
+                <a href="/thread/{{thread_id}}" class="waves-effect waves-light  btn-flat btn-small link-lato"><i class="mini material-icons left">launch</i>Go to Thread</a>
+            </div>
+            <div class="left">
+                <button href="/thread/{{thread_id}}" class="waves-effect waves-light btn btn-small toggle-solutions" data-id="{{thread_id}}"><i class="mini material-icons left">assignment_turned_in</i><span class="button-text">Show Solutions</span></button>
+            </div>
+        </div>
+    </div>
+    <div class="solutions_list container hide" id="solutions-{{thread_id}}">
+        {{# _.each(solutions, function(solution){ }}
+            <div class="card">
+                <div class="card-content">
+                    <div class="bold-text"> {{ solution.user_vote }}</div>
+                    <div class="header-lato">{{ solution.title }} </div>
+                    <div class="civi-body">{{ solution.body }}</div>
+                </div>
+            </div>
+        {{# }); }}
+    </div>
+    {% endverbatim %}
 </script>
 <script id="rep-chip-template" type="text/template">
     {% verbatim %}
@@ -31,28 +176,261 @@
 
 <!-- account tab templates -->
 <script id="my-civis-template" type="text/template">
-    {% include "accounts/partials/account/tabs/my_civis.html" %}
+    <div class="profile-civi-list col s12">
+        <div class="row tab-title">
+            <div class="col s6 title-lato">{% translate "My Civi Activity" %} </div>
+            <div class="sort-options col s2 push-s4 section">
+                <label>{% translate "View By:" %} </label>
+                <select class="browser-default">
+                <option value="1" selected>{% translate "Recent" %} </option>
+                <option value="2">{% translate "Popular" %} </option>
+                <option value="3">{% translate "Top" %} </option>
+                </select>
+            </div>
+        </div>
+        <!-- Populate Civi list -->
+        <div class="row">
+            {% verbatim %}
+            {{# if (this.model.get('history').length > 0) { }}
+                {{# _.each(this.model.get('history'), function (c) { }}
+                    {{= cw.underscorePartial('civi-template', JSON.parse(c))}}
+                {{# }, this); }}
+            {{# } else { }}
+            <div class="section no-state">
+                <div class="container">
+                    <div class="section">
+                        <div class="center title-lato text">No activity</div>
+                    </div>
+                </div>
+            </div>
+            {{# } }}
+            {% endverbatim %}
+        </div>
+    </div>
 </script>
 <script id="followers-template" type="text/template">
-    {% include "accounts/partials/account/tabs/followers.html" %}
+    <div class="people scroll">
+        <div class="row tab-title">
+            <div class="col s6 title-lato">{% translate "Followers" %}</div>
+            <div class="input-field col s4 push-s2">
+              <input id="search" type="text" class="validate">
+              <label for="search">Search</label>
+            </div>
+        </div>
+        <!-- Populate Civi list -->
+        <div class="row">
+            {% verbatim %}
+            {{# if (this.model.get('followers').length > 0) { }}
+            {{this.model.get('followers').length}} Followers<p></p>
+            {{# _.each(this.model.get('followers'), function (u) {}}
+                <div class="col s12 m6">
+                {{= cw.underscorePartial('user-chip-template', u)}}
+                </div>
+            {{# }, this); }}
+            {{# } else { }}
+            <div class="section no-state">
+                <div class="container">
+                    <div class="section">
+                        <div class="center title-lato grey-text">No followers</div>
+                    </div>
+                </div>
+            </div>
+            {{# } }}
+            {% endverbatim %}
+        </div>
+    </div>    
 </script>
 <script id="following-template" type="text/template">
-    {% include "accounts/partials/account/tabs/following.html" %}
+    {% verbatim %}
+    <div class="people scroll">
+        <div class="row tab-title">
+            <div class="col s6 title-lato">{{this.model.get('following').length}} Following</div>
+            <div class="input-field col s4 push-s2">
+              <input id="search" type="text" class="validate">
+              <label for="search">Search</label>
+            </div>
+        </div>
+        <!-- Populate Civi list -->
+        <div class="row">
+            {{# if (this.model.get('following').length > 0) { }}
+            {{# _.each(this.model.get('following'), function (u) { }}
+                <div class="col s12 m6">
+                {{= cw.underscorePartial('user-chip-template', u)}}
+                </div>
+            {{# }, this); }}
+            {{# } else { }}
+            <div class="section no-state">
+                <div class="container">
+                    <div class="section">
+                        <div class="center title-lato grey-text">Not following any users</div>
+                    </div>
+                </div>
+            </div>
+            {{# } }}
+        </div>
+    </div>
+    {% endverbatim %}
 </script>
 <script id="my-issues-template" type="text/template">
-    {% include "accounts/partials/account/tabs/my_issues.html" %}
+    <div class="row  tab-title">
+        <div class="col s12 title-lato">{% translate "Issues I care about" %}</div>
+    </div>
+    <div class="row">
+        {% verbatim %}
+        {{# if (this.model.get('issues').length > 0) { }}
+        {{# _.each(this.model.get('issues'), function (i) { }}
+            {{= cw.underscorePartial('issue-template', i )}}
+        {{# }, this); }}
+        {{# } else { }}
+        <div class="section no-state">
+            <div class="container">
+                <div class="section">
+                    <div class="center title-lato grey-text">No issues found</div>
+                </div>
+            </div>
+        </div>
+        {{# } }}
+        {% endverbatim %}
+    </div>
 </script>
-
 
 <!-- account base templates -->
 <script id="account-template" type="text/template">
-    {% include "accounts/partials/account/account_base.html" %}
+    <div class="account-base">
+        <div class="row content">
+            <div class="col m2 push-m1 account-settings"></div>
+            <div class="col m8 push-m1 scroll-col">
+                <div class="row">
+                    <div class="row top-bar sub-nav">
+                        <div class="account-tabs">
+                            <ul class="tabs transparent left">
+                                <li class="tab"><a class="active" href="#civis">MY CIVIS</a></li>
+                                <li class="tab"><a href="#followers">FOLLOWERS</a></li>
+                                <li class="tab"><a href="#following">FOLLOWING</a></li>
+                                <li class="tab"><a href="#issues">MY ISSUES</a></li>
+                                {% if request.user.username == username|stringformat:"s" %}
+                                <li class="tab">
+                                    <a href="#settings">Settings</a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+    
+                    </div>
+                </div>
+                <div class="row">
+                    <div id="civis" class="col s12">
+                        <div class="center " style="margin-top:25%;">
+                            <div class="preloader-wrapper big active">
+                            <div class="spinner-layer spinner-blue-only">
+                              <div class="circle-clipper left">
+                                <div class="circle"></div>
+                              </div><div class="gap-patch">
+                                <div class="circle"></div>
+                              </div><div class="circle-clipper right">
+                                <div class="circle"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    <div id="followers" class="col s12"></div>
+                    <div id="following" class="col s12"></div>
+                    <div id="issues" class="col s12"></div>
+    
+                    {% if request.user.username == username|stringformat:"s" %}
+                    <div id="settings" class="col s12"></div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 </script>
 <script id="sidebar-template" type="text/template">
-    {% include "accounts/partials/account/account_sidebar.html" %}
+    {% verbatim %}
+    <div class="profile-image">
+        <div class="big-image-cropper z-depth-1">
+            <img class=" responsive-img " src={{this.model.get('profile_image')}}>
+        </div>
+    </div>
+    <div class="user-info section">
+        <div class="full-name">{{this.model.get('first_name')}} {{this.model.get('last_name')}}</div>
+        <div class="username">@{{username}}</div>
+    </div>
+    <div class="transparent">
+        <div class="card-content">
+            <div class="section">
+                <div class="section-title">ABOUT ME</div>
+                <div class="divider"></div>
+                <div class="about-me">{{this.model.get('about_me')}}</div>
+            </div>
+    {% endverbatim %}
+
+    {% if request.user.username != username|stringformat:"s" %}
+        <div class="profile-options">
+            <a class="waves-effect waves-light btn follow-btn" id="sidebar-follow-btn" data-username="{{username}}" data-follow-state="false">follow</a>
+        </div>
+    {% endif %}
+        </div>
+    </div>
 </script>
 <script id="settings-template" type="text/template">
-    {% include "accounts/partials/account/account_settings.html" %}
+    <div class="account-edit scroll-col">
+        <div class="section">
+            <div class="card">
+                <div class="card-content">
+                    <div class="step-title">
+                        <div class="section">
+                            <div class="title-lato center">
+                                Account Settings
+                            </div>
+                        </div>
+                        <div class="accent-line"></div>
+                        {{form.non_field_errors}}
+                        <form style="padding-top: 10px;" method="POST">
+                            {% csrf_token %}
+                            <div class='row'>
+                                <div class=" col s12 m6 ">
+                                    <span class='error'>{{form.first_name.errors}}</span>
+                                    {{form.first_name.label_tag}}
+                                    {{form.first_name}}
+                                </div>
+                                <div class=" col s12 m6 ">
+                                    <span class='error'>{{form.last_name.errors}}</span>
+                                    {{form.last_name.label_tag}}
+                                    {{form.last_name}}
+                                </div>
+                            </div>
+                            <div class='row'>
+                                <div class=" col s12 m6 ">
+                                    <span class='error'>{{form.username.errors}}</span>
+                                    {{form.username.label_tag}}
+                                    {{form.username}}
+                                </div>
+                                <div class=" col s12 m6 ">
+                                    <span class='error'>{{form.email.errors}}</span>
+                                    {{form.email.label_tag}}
+                                    {{form.email}}
+                                </div>
+                            </div>
+                            <div class='row'>
+                                <div class="col s24 m12">
+                                    <span> {{form.about_me.errors}}</span>
+                                    {{form.about_me.label_tag}}
+                                    {{form.about_me}}
+                                </div>
+                            </div>
+                            <div class="row center">
+                                {%if not readonly %}
+                                    <input class='btn' type='submit' value="Save Changes"></input>
+                                {% endif%}
+                                </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </script>
 {% endblock backbone_template %}
 
