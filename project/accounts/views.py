@@ -82,7 +82,7 @@ class SettingsView(LoginRequiredMixin, UpdateView):
     login_url = "accounts_login"
     form_class = ProfileEditForm
     success_url = reverse_lazy("accounts_settings")
-    template_name = "accounts/utils/update_settings.html"
+    template_name = "accounts/update_settings.html"
 
     def get_object(self, queryset=None):
         return Profile.objects.get(user=self.request.user)
