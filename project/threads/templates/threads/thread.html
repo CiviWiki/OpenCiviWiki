@@ -3,9 +3,9 @@
 {% load i18n %}
 
 {% block extra_css %}
-<link type="text/css" rel="stylesheet/less" href="{% static "less/base.less" %}"/>
-<link type="text/css" rel="stylesheet/less" href="{% static "less/utils.less" %}"/>
-<link type="text/css" rel="stylesheet/less" href="{% static "less/thread.less" %}"/>
+<link type="text/css" rel="stylesheet/less" href="{% static " less/base.less" %}" />
+<link type="text/css" rel="stylesheet/less" href="{% static " less/utils.less" %}" />
+<link type="text/css" rel="stylesheet/less" href="{% static " less/thread.less" %}" />
 {% endblock extra_css %}
 
 {% block backbone_template %}
@@ -34,7 +34,6 @@
                         <div class="wiki-stats light-gray-text">
                             <span class="wiki-stat">{{this.model.get('num_views')}} Views</span>
                             <span class="wiki-stat">{{this.model.get('num_civis')}} Civis</span>
-                            <!-- <span class="wiki-stat">{{this.model.get('num_responses')}} Responses</span> -->
                         </div>
                     </div>
                     <div class="wiki-image col s6">
@@ -50,7 +49,9 @@
                                 <div class="author-photo transparent" style="background-image: url('{{this.model.get('author').profile.profile_image}}'); background-size: 40px;"></div>
                             </div>
                             <div class="author-info">
-                                <a class="author-name bold-text" href="/profile/{{this.model.get('author').username}}">{{this.model.get('author').first_name}} {{this.model.get('author').last_name}}</a>
+                                <a class="author-name bold-text" href="/profile/{{this.model.get('author').username}}">
+                                    {{this.model.get('author').first_name}} {{this.model.get('author').last_name}}
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -75,7 +76,6 @@
                     <div class="col s6">
                         <div class="wiki-body-header">
                             <span class="wiki-header-category gray-text"><span class="black-text bold-text wiki-header-inner">Category:</span>{{this.model.get('category').name}}</span>
-                            <span class="wiki-header-category gray-text"><span class="black-text bold-text wiki-header-inner">Location:</span>{{this.model.get('location')}}</span>
                         </div>
                     </div>
                     <div class="col s4">
@@ -286,9 +286,6 @@
         <div class="nav-categories nav-item">
             <div id="thread-meta">
                 <div class="meta-item">
-                    <span class="thread-location">({{this.model.get('location')}})</span>
-                </div>
-                <div class="meta-item">
                     <span class="body-category">{{this.model.get('category').name}}</span>
                 </div>
 
@@ -439,7 +436,6 @@
                     <i class="mini material-icons edit-action edit-confirm hide">save</i>
                     <i class="mini material-icons edit-action edit-cancel hide">close</i>
                     {{# } }}
-                    <!-- <i class="mini material-icons">flag</i> -->
                 </div>
             </div>
         </div>
@@ -573,8 +569,6 @@
             </div>
             <div class="right civi-footer-actions">
                 <div>
-                    <!-- <i class="mini material-icons favorite">star_border</i> -->
-                    <!-- <i class="mini material-icons civi-grab-link">link</i> -->
                     {{# if (this.can_respond && !this.model.get('rebuttal') ){ }}
                     <span class="link-lato input" id="respond-button"><i class="mini material-icons">comment</i> RESPOND</span>
     
@@ -927,12 +921,12 @@
 {% endblock backbone_template %}
 
 {% block content %}
-    {% include "global_nav.html" %}
-    <div id="thread"></div>
+{% include "global_nav.html" %}
+<div id="thread"></div>
 {% endblock content %}
 
 {% block extra_js %}
-<script type="text/javascript" src="{% static "js/thread.js" %}"></script>
+<script type="text/javascript" src="{% static " js/thread.js" %}"></script>
 <script type="text/javascript">
 
     var username = '{{user.username}}',
@@ -941,8 +935,8 @@
         thread_body_data = JSON.parse('{{ thread_body_data|escapejs }}'),
         thread_wiki_data = JSON.parse('{{ thread_wiki_data|escapejs }}');
 
-    var threadModel = new cw.ThreadModel(thread_wiki_data, {threadId: threadId});
-    var civiCollection = new cw.CiviCollection(thread_body_data.civis, {threadId: threadId});
+    var threadModel = new cw.ThreadModel(thread_wiki_data, { threadId: threadId });
+    var civiCollection = new cw.CiviCollection(thread_body_data.civis, { threadId: threadId });
 
     var threadView = new cw.ThreadView({
         username: username,
