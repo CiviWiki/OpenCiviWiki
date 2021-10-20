@@ -3,7 +3,8 @@
 {% load i18n %}
 
 {% block extra_css %}
-    {% include "accounts/base/less_headers/login_less.html" %}
+<link type="text/css" rel="stylesheet/less" href="{% static "less/base.less" %}"/>
+<link type="text/css" rel="stylesheet/less" href="{% static "less/login.less" %}"/>
 {% endblock extra_css %}
 {% block page_title %}Account Recovery{% endblock page_title %}
 

@@ -82,7 +82,7 @@ class SettingsView(LoginRequiredMixin, UpdateView):
     login_url = "accounts_login"
     form_class = ProfileEditForm
     success_url = reverse_lazy("accounts_settings")
-    template_name = "accounts/utils/update_settings.html"
+    template_name = "accounts/update_settings.html"
 
     def get_object(self, queryset=None):
         return Profile.objects.get(user=self.request.user)
@@ -126,7 +126,6 @@ class ProfileActivationView(View):
                     "content": "You have already verified your email",
                     "link": redirect_link,
                 }
-                return TemplateResponse(request, "general-message.html", template_var)
             else:
                 profile.is_verified = True
                 profile.save()
@@ -137,7 +136,6 @@ class ProfileActivationView(View):
                     "content": "Thank you for verifying your email with CiviWiki",
                     "link": redirect_link,
                 }
-                return TemplateResponse(request, "general-message.html", template_var)
         else:
             # invalid link
             redirect_link = {"href": "/", "label": "Back to Main"}
@@ -146,7 +144,8 @@ class ProfileActivationView(View):
                 "content": "Email could not be verified",
                 "link": redirect_link,
             }
-            return TemplateResponse(request, "general-message.html", template_var)
+
+        return TemplateResponse(request, "general_message.html", template_var)
 
 
 class ProfileSetupView(LoginRequiredMixin, View):

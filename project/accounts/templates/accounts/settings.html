@@ -6,19 +6,9 @@
 {% block extra_css %}
     <link type="text/css" rel="stylesheet/less" href="{% static "less/base.less" %}"/>
     <link type="text/css" rel="stylesheet/less" href="{% static "less/utils.less" %}"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/less.js/2.5.1/less.min.js" integrity="sha512-0YpTMMSmmT3qN4UJF5ZLv5MPiwBMlOOHrIVgdBMGyNiEKoPEMGyih0WkHOEozdl0qDa5cgFEVoteWbI3Ybsxmw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {% endblock extra_css %}
 
 {% block backbone_template %}
-<script id="rep-chip-template" type="text/template">
-    {% verbatim %}
-    <div class="rep bold-text purple-text chip">
-        <img src="https://theunitedstates.io/images/congress/225x275/{{ rep.bioguide_id }}.jpg" alt="rep image">
-        <span>{{rep.title}} {{rep.first_name}} {{rep.last_name}} </span>
-    </div>
-    {% endverbatim %}
-</script>
-
 <script id="settings-personal" type="text/template">
 {% verbatim %}
     <div class="white-background-input-field input-field col s6">
@@ -68,7 +58,7 @@
 
 {% block body_class %}grey lighten-4{% endblock body_class %}
 {% block content %}
-    {% include "partials/utils/global_nav.html" %}
+    {% include "global_nav.html" %}
     <div id="settings"></div>
 {% endblock content %}
 

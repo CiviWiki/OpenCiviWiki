@@ -29,7 +29,6 @@ class LoginViewTests(BaseTestCase):
 
         self.assertEqual(self.response.status_code, 200)
         self.assertTemplateUsed(self.response, "accounts/register/login.html")
-        self.assertTemplateNotUsed(self.response, "accounts/login.html")
         self.assertContains(self.response, "Log In")
         self.assertNotContains(self.response, "Wrong Content!")
 
@@ -129,7 +128,7 @@ class SettingsViewTests(BaseTestCase):
     def test_template_name(self):
         """Whether the correct template is used"""
 
-        self.assertTemplateUsed(self.response, "accounts/utils/update_settings.html")
+        self.assertTemplateUsed(self.response, "accounts/update_settings.html")
 
     def test_contains_existing_data(self):
         """Whether the existing data is available"""
@@ -178,7 +177,7 @@ class ProfileActivationViewTests(TestCase):
         response = self.client.get(self.activation_link)
         self.profile.refresh_from_db()
         self.assertTrue(self.profile.is_verified)
-        self.assertTemplateUsed(response, "general-message.html")
+        self.assertTemplateUsed(response, "general_message.html")
         self.assertContains(response, "Email Verification Successful")
 
     def test_activation_link_with_a_verified_user(self):
@@ -186,7 +185,7 @@ class ProfileActivationViewTests(TestCase):
 
         self.client.get(self.activation_link)
         response = self.client.get(self.activation_link)
-        self.assertTemplateUsed(response, "general-message.html")
+        self.assertTemplateUsed(response, "general_message.html")
         self.assertContains(response, "Email Already Verified")
 
     def test_invalid_action_link(self):
@@ -195,5 +194,5 @@ class ProfileActivationViewTests(TestCase):
         invalid_link = self.activation_link[:-10] + "12345/"
         response = self.client.get(invalid_link)
         self.assertFalse(self.profile.is_verified)
-        self.assertTemplateUsed(response, "general-message.html")
+        self.assertTemplateUsed(response, "general_message.html")
         self.assertContains(response, "Email Verification Error")
