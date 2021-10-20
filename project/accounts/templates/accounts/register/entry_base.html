@@ -3,11 +3,18 @@
 {% load i18n %}
 
 {% block extra_css %}
-    {% include "accounts/base/less_headers/login_less.html" %}
+<link type="text/css" rel="stylesheet/less" href="{% static "less/base.less" %}"/>
+<link type="text/css" rel="stylesheet/less" href="{% static "less/login.less" %}"/>
 {% endblock extra_css %}
 
 {% block content %}
-{% include 'accounts/register/header.html' %}
+<div class="valign center">
+    <div class="logo center">
+        <object class="logo-img" type="image/svg+xml" data="{% static "img/logo-civiwiki-tree-white.svg" %}" height="64px"></object>
+        <span class="wordmark">CiviWiki</span>
+    </div>
+</div>
+
 <div class="entry-base center-align valign-wrapper">
     <div class="entry-forms">
         <div class="card wrapper z-depth-3">
