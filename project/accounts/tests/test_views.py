@@ -177,7 +177,7 @@ class ProfileActivationViewTests(TestCase):
         response = self.client.get(self.activation_link)
         self.profile.refresh_from_db()
         self.assertTrue(self.profile.is_verified)
-        self.assertTemplateUsed(response, "general-message.html")
+        self.assertTemplateUsed(response, "general_message.html")
         self.assertContains(response, "Email Verification Successful")
 
     def test_activation_link_with_a_verified_user(self):
@@ -185,7 +185,7 @@ class ProfileActivationViewTests(TestCase):
 
         self.client.get(self.activation_link)
         response = self.client.get(self.activation_link)
-        self.assertTemplateUsed(response, "general-message.html")
+        self.assertTemplateUsed(response, "general_message.html")
         self.assertContains(response, "Email Already Verified")
 
     def test_invalid_action_link(self):
@@ -194,5 +194,5 @@ class ProfileActivationViewTests(TestCase):
         invalid_link = self.activation_link[:-10] + "12345/"
         response = self.client.get(invalid_link)
         self.assertFalse(self.profile.is_verified)
-        self.assertTemplateUsed(response, "general-message.html")
+        self.assertTemplateUsed(response, "general_message.html")
         self.assertContains(response, "Email Verification Error")
