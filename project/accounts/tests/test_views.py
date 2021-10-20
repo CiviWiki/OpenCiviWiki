@@ -29,7 +29,6 @@ class LoginViewTests(BaseTestCase):
 
         self.assertEqual(self.response.status_code, 200)
         self.assertTemplateUsed(self.response, "accounts/register/login.html")
-        self.assertTemplateNotUsed(self.response, "accounts/login.html")
         self.assertContains(self.response, "Log In")
         self.assertNotContains(self.response, "Wrong Content!")
 
