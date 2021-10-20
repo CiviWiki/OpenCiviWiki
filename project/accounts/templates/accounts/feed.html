@@ -3,33 +3,249 @@
 {% load i18n %}
 
 {% block extra_css %}
-    {% include "base/less_headers/feed_less.html" %}
+<link type="text/css" rel="stylesheet/less" href="{% static "less/base.less" %}"/>
+<link type="text/css" rel="stylesheet/less" href="{% static "less/utils.less" %}"/>
+<link type="text/css" rel="stylesheet/less" href="{% static "less/feed.less" %}"/>
 {% endblock extra_css %}
 
 {% block backbone_template %}
 <script id="feed-template" type="text/template">
-    {% include "accounts/partials/feed/feed_base.html" %}
+    {% verbatim %}
+    <nav class="feed-nav">
+        <div class="nav-wrapper">
+            <div class="row">
+                <div class="col s10 m10 push-m1 l10 push-l1 nav-categories nav-item">
+                    <ul class="center-block" id="user-categories-list">
+                        <li class="category-all"><a class="category-item active" data-id="all" >All</a></li>
+                        {{# _.each(user_categories, function (c) {}}
+                            <li class="user-categories"><a class="category-item" data-id="{{ c.id }}" >{{ c.name }}</a></li>
+                        {{# }, user_categories); }}
+    
+                        <li class="dropdown-wrapper" ><a class="dropdown-button category-item" data-activates="categories-dropdown" data-beloworigin="true" data-constrainwidth="false" data-hover="true"  data-id="arrow"><i class="material-icons">arrow_drop_down</i></a></li>
+    
+                    </ul>
+                    <ul id="categories-dropdown" class="dropdown-content"></ul>
+    
+                </div>
+                <div class="col s2 m1 push-m1 l1 nav-item">
+                    <div class="category-button right">
+                        <button class="btn waves-effect waves-cw-blue btn-secondary" id="manage-categories">
+                            <i class="tiny material-icons left">label</i>
+                            <span class="hide-on-med-and-down">MANAGE</span>
+                        </button>
+                    </div>
+                </div>
+    
+            </div>
+        </div>
+    </nav>
+    <div class="content">
+        <div class="row">
+            <div class="col s12 m3 l2 push-l1">
+                <div class="row center">
+                    <div class="col s6 m12">
+                        <div class="new-thread-wrapper center-block">
+                            <div class="prompt">Can't find the issue that you're interested in?</div>
+                            <button class="new-thread btn waves-effect modal-trigger"><i class="material-icons left">note_add</i>New Thread</button>
+                        </div>
+                    </div>
+                    <div class="col s6 m12">
+                        <div class="issue-list center-block">
+                            <div class="section">
+                                <div class="list-title" id="trending-issues">
+                                    <i class="mini material-icons">trending_up</i>Trending Issues
+                                </div>
+                                <div class="divider"></div>
+                                <div class="list">
+                                    {{# _.each(trending, function (t) {}}
+                                        <div class="list-item left-align"><a class="list-text" href="thread/{{t.id}}">{{t.title}}</a></div>
+                                    {{# }, this); }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m9 l8 push-l1 scroll-col">
+                <div class="list" id="feed-list"></div>
+                {{# if (draft_threads.length > 0){ }}
+                <div class="section center">
+                    <div class="title-lato">Your Drafts ({{draft_threads.length}})</div>
+                </div>
+                <div class="row">
+                {{# _.each(draft_threads, function (t) {}}
+                    <div class="col s12">
+                    {{= cw.underscorePartial('thread-card-template', ({thread_data: t, categories: categories}))}}
+                    </div>
+                {{# }, this); }}
+                {{# } }}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <div class="new-thread-modal-holder"></div>
+    <div class="categories-modal-holder"></div>
+    {% endverbatim %}
 </script>
 
 <script id="new-thread-template" type="text/template">
-    {% include "accounts/partials/feed/new_thread.html" %}
+    {% verbatim %}
+    <div class="modal new-thread-modal">
+        <div class="modal-content">
+            <div class="new-thread-contention new-thread-container">
+                <div class="input-field white-background-input-field left-input-field">
+                    <input id="thread-title" type="text" length="120">
+                    <label for="thread-title">Title</label>
+                </div>
+            </div>
+            <div class="new-thread-body white-background-input-field new-thread-container">
+                <div class="input-field left-input-field">
+                    <textarea id="thread-body" type="text" class="materialize-textarea" length="4000"></textarea>
+                    <label for="thread-body">Summary</label>
+                </div>
+            </div>
+    
+            <div class="new-thread-category-selection white-background-input-field" id="new-thread-category-selection">
+                <div class="input-field left-input-field">
+                    <select id="thread-category">
+                        <option value="" disabled selected>Choose your category</option>
+                        {{# _.each(this.options.categories, function (c) { }}
+                            <option value="{{c.id}}">{{c.name}}</option>
+                        {{# }); }}
+                    </select>
+                </div>
+            </div>
+            <div class="white-background-input-field">
+    
+                <div class="image-upload-method">
+                    <div class="header-lato">Upload Image:</div>
+                    <button class="waves-effect waves-light btn" id="image-from-computer"><i class="material-icons left">file_upload</i>COMPUTER</button>
+                    <button class="waves-effect waves-light btn" id="image-from-link"><i class="material-icons left">insert_link</i>LINK</button>
+                </div>
+                <form method="post" enctype="multipart/form-data" id="attachment_image_form" class="hide">
+                    <div class="file-field input-field">
+                        <input class="upload-image btn waves-effect hide" type="submit" value="Upload"/>
+                        <div class="btn attachment-image-pick dark-blue-background">
+                            <span>Add an Image</span>
+                            <input id="id_attachment_image" name="attachment_image" type="file" accept="image/*">
+                        </div>
+                      <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text">
+                      </div>
+                    </div>
+                    <div class="file-preview"></div>
+                </form>
+                <input id="link-image-form" type="text" class="hide" placeholder="Paste your image link here..."/>
+            </div>
+        </div>
+    
+        <div class="modal-footer">
+            <button class="create-new-thread waves-effect btn">Add Thread</button>
+            <button class="cancel-new-thread waves-effect btn">Cancel</button>
+        </div>
+    </div>
+    {% endverbatim %}
 </script>
+
 <script id="thread-card-template" type="text/template">
-    {% include "accounts/partials/feed/thread_card.html" %}
+    {% verbatim %}
+    <div class="">
+        <div class="row issue-item">
+            <div class="thread-image col s3">
+                <div class="thread-image-wrapper">
+                    <!-- <div class="placeholder"><i class="material-icons">image</i></div> -->
+                    <img class="thread-image-thumb" src="{{ thread_data.thread.image }}">
+                </div>
+            </div>
+            <div class="content col s9">
+                <div class="thread-category">
+                    {{ thread_data.thread.category_name }}
+                </div>
+                <a href="thread/{{thread_data.thread.id}}">
+                <div class="thread-title">{{ thread_data.thread.title }}</div>
+                    <div class="thread-summary">{{ thread_data.thread.summary }}</div>
+                </a>
+                <div class="issue-stats">
+                    <div class="stat">
+                        <div class="number">{{ thread_data.stats.num_views }}</div>
+                        <div class="description">VIEWS</div>
+                    </div>
+                    <div class="vert-divider"></div>
+                    <div class="stat">
+                        <div class="number">{{ thread_data.stats.num_civis }}</div>
+                        <div class="description">CIVIS</div>
+                    </div>
+                    <div class="vert-divider"></div>
+                    <div class="stat">
+                        <div class="number">{{ thread_data.stats.num_solutions }}</div>
+                        <div class="description">SOLUTIONS</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endverbatim %}
+    
 </script>
+
 <script id="feed-list-template" type="text/template">
-    {% include "accounts/partials/feed/feed_list.html" %}
+    {% verbatim %}
+    {{# if (threads.length > 0) { }}
+    {{# _.each(threads, function (t) {}}
+        <div class="col s12">
+        {{= cw.underscorePartial('thread-card-template', ({thread_data: t}))}}
+        </div>
+    {{# }, this); }}
+    {{# } else { }}
+        <div class="section no-state">
+            <div class="container">
+                <div class="section">
+                    <div class="center title-lato grey-text">NO THREADS</div>
+                    <div class="section center">
+                        <div class="subtitle-lato grey-text section">Be the first to start a discussion in this category!</div>
+                        <button class="new-thread btn waves-effect modal-trigger"><i class="material-icons left">note_add</i>New Thread</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{# } }}
+    {% endverbatim %}
 </script>
+
 <script id="categories-template" type="text/template">
-    {% include "accounts/partials/feed/categories.html" %}
+    {% verbatim %}
+    <div class="modal categories-modal modal-fixed-footer">
+        <div class="modal-content">
+            <div class="title center">MY CATEGORIES</div>
+            <form id="user-category-form" action="#" class="container">
+                <div class="row">
+                    {{# _.each(categories, function (c) { }}
+                        <p class="col s12 m6 category-checkbox">
+                            {{# if (_.contains(user_categories, c.id)) { }}
+                                <input class="filled-in" type="checkbox" value="{{ c.id }}" id="category-{{ c.id }}" checked="checked"/>
+                            {{# } else { }}
+                                <input class="filled-in" type="checkbox" value="{{ c.id }}" id="category-{{ c.id }}"/>
+                            {{# } }}
+                            <label for="category-{{c.id}}">{{ c.name }}</label>
+                        </p>
+                    {{# }); }}
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="modal-action modal-close waves-effect waves-light waves-effect btn change-category" id="choose-category">Choose</button>
+            <button class="modal-action modal-close waves-effect waves-cw-blue btn-flat">Cancel</button>
+        </div>
+    </div>
+    {% endverbatim %}
 </script>
 {% endblock backbone_template %}
 
 {% block content %}
     {% include "partials/utils/global_nav.html" %}
-    <div id="feed">
-
-    </div>
+    <div id="feed"></div>
 {% endblock content %}
 
 {% block extra_js %}
