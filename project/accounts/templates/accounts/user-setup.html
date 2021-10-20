@@ -3,7 +3,9 @@
 {% load i18n %}
 
 {% block extra_css %}
-    {% include "base/less_headers/setup_less.html" %}
+<link type="text/css" rel="stylesheet/less" href="{% static "less/base.less" %}"/>
+<link type="text/css" rel="stylesheet/less" href="{% static "less/utils.less" %}"/>
+<link type="text/css" rel="stylesheet/less" href="{% static "less/setup.less" %}"/>
 {% endblock extra_css %}
 
 {% block backbone_template %}
