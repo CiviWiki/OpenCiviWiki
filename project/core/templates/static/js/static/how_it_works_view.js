@@ -1,5 +1,6 @@
 cw = cw || {};
-
+Materialize = M
+Materialize.AutoInit()
 cw.HowItWorksView = BB.View.extend({
     el: '#howitworks',
     howitworksTemplate: _.template($('#howitworks-template').html()),
@@ -14,8 +15,8 @@ cw.HowItWorksView = BB.View.extend({
     },
 
     setupStaticNav: function () {
-        $('.button-collapse').sideNav();
-        $('.collapsible').collapsible();
-        $('.sideNav').css('display', 'inherit');
+        // $('.button-collapse').sidenav();
+        // $('.collapsible').collapsible();
+        $('.sidenav').css('display', 'inherit');
     }
 });

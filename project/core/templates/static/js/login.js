@@ -1,5 +1,6 @@
 cw = cw || {};
-
+Materialize = M
+Materialize.AutoInit()
 cw.LoginView = BB.View.extend({
     el: '#login',
     entryTemplate: _.template($('#entry-template').html()),
@@ -65,14 +66,14 @@ cw.LoginView = BB.View.extend({
                 },
                 error: function (data) {
                     if (data.status === 400 && data.responseJSON) {
-                        Materialize.toast(data.responseJSON.message, 5000);
+                        Materialize.toast({html:data.responseJSON.message,displayLength: 5000});
                     } else {
-                        Materialize.toast(data.statusText, 5000);
+                        Materialize.toast({html:data.statusText,displayLength: 5000});
                     }
                 }
             });
         } else {
-            Materialize.toast('<span class="subtitle-lato white-text">Please input your username and password</span>', 5000);
+            Materialize.toast({html:'<span class="subtitle-lato white-text">Please input your username and password</span>',displayLength: 5000});
         }
     },
 
@@ -92,7 +93,7 @@ cw.LoginView = BB.View.extend({
             password = this.$el.find('#password').val();
 
         if (!email.is(':valid')) {
-            Materialize.toast('<span class="subtitle-lato white-text">Please enter a valid email</span>', 5000);
+            Materialize.toast({html:'<span class="subtitle-lato white-text">Please enter a valid email</span>',displayLength: 5000});
 
         } else if (password && username) {
             email = email.val();
@@ -111,18 +112,18 @@ cw.LoginView = BB.View.extend({
                 error: function (data) {
                     if (data.status === 400) {
                         _.each(data.responseJSON.errors, function(error){
-                            Materialize.toast(error, 5000);
+                            Materialize.toast({html:error,displayLength: 5000});
                         });
                     } else if (data.status === 500) {
-                        Materialize.toast('Internal Server Error', 5000);
+                        Materialize.toast({html:'Internal Server Error',displayLength: 5000});
                     } else {
-                        Materialize.toast(data.statusText, 5000);
+                        Materialize.toast({html:data.statusText,displayLength: 5000});
                     }
                 }
             });
 
         } else {
-            Materialize.toast('<span class="subtitle-lato white-text">Please fill all the fields</span>', 5000);
+            Materialize.toast({html:'<span class="subtitle-lato white-text">Please fill all the fields</span>',displayLength: 5000});
         }
     }
 });

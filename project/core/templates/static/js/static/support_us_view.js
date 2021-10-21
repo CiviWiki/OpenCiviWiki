@@ -1,5 +1,6 @@
 cw = cw || {};
-
+Materialize = M
+Materialize.AutoInit()
 cw.SupportusView = BB.View.extend({
     el: '#supportus',
     supportusTemplate: _.template($('#supportus-template').html()),
@@ -11,12 +12,14 @@ cw.SupportusView = BB.View.extend({
     render: function () {
         this.$el.empty().append(this.supportusTemplate());
         this.setupStaticNav();
-        $('.parallax').parallax();
+        // $('.parallax').parallax();
     },
 
     // Setup sidebar functionality
     setupStaticNav: function () {
-        $('.button-collapse').sideNav();
-        $('.collapsible').collapsible();
+        // $('.button-collapse').sidenav();
+        // $('.collapsible').collapsible();
+        $('.sidenav').css('display', 'inherit');
+
     }
 });

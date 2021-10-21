@@ -1,5 +1,6 @@
 cw = cw || {};
-
+Materialize = M
+Materialize.AutoInit()
 cw.AboutView = BB.View.extend({
     el: '#about',
     aboutTemplate: _.template($('#about-template').html()),
@@ -14,8 +15,8 @@ cw.AboutView = BB.View.extend({
     },
 
     setupStaticNav: function () {
-        $('.button-collapse').sideNav();
-        $('.collapsible').collapsible();
-        $('.sideNav').css('display', 'inherit');
+        // $('.sidenav').sidenav();
+        // $('.collapsible').collapsible();
+        $('.sidenav').css('display', 'inherit');
     }
 });

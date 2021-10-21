@@ -1,5 +1,6 @@
 cw = cw || {};
-
+Materialize = M
+Materialize.AutoInit()
 cw.ProfileCiviModel = BB.Model.extend({
     defaults: function() {
         return {

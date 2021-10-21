@@ -11,7 +11,7 @@
 
         <!-- Right Nav -->
         <div class="nav-menu right">
-            <div class="nav-menu-item button-icon" id="item-notifications">
+            <div data-target="notifications-modal" class="modal-trigger nav-menu-item button-icon" id="item-notifications">
                 <div id="notify-count-wrapper" class="hide">
                 {% live_notify_badge%}
                 </div>
@@ -36,10 +36,10 @@
     </div>
 </nav>
 <div class="notifications">
-    <div id="modal1" class="modal notifications-modal bottom-sheet">
-    <div class="modal-content">
-        <div class="container">
-            <h4>Notifications</h4>
+    <div id="notifications-modal" class="modal notifications-modal bottom-sheet">
+        <div class="modal-content">
+            <div class="container">
+                <h4>Notifications</h4>
 
             <div class="notifications-list"></div>
         </div>

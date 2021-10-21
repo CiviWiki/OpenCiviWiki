@@ -1,5 +1,6 @@
 cw = cw || {};
-
+Materialize = M
+Materialize.AutoInit()
 cw.GeneralView = BB.View.extend({
 
     el: '#general',

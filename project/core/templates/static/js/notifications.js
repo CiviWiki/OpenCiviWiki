@@ -1,4 +1,5 @@
 cw = cw || {};
+Materialize = M
 
 var notifications_data = [];
 cw.NotificationView =  BB.View.extend({
@@ -39,6 +40,10 @@ cw.NotificationView =  BB.View.extend({
 });
 var notificationsView = new cw.NotificationView();
 
+$( document ).ready(function() {
+    Materialize.AutoInit()    
+});
+
 $('#item-notifications').on('click', function () {
     $.ajax({
         type: "GET",
@@ -66,7 +71,7 @@ var render_notifications = function(data) {
         this.new_notifications = [];
         var notified = false;
         if (data.unread_list.length > 5 && !notificationsView.initialNotificationShown) {
-            Materialize.toast("You have " + data.unread_list.length +" new notifications", 5000);
+            Materialize.toast({html:"You have " + data.unread_list.length +" new notifications",displayLength: 5000});
             notificationsView.initialNotificationShown = true;
             notified = true;
         }
@@ -76,9 +81,9 @@ var render_notifications = function(data) {
             var json_Data = JSON.parse(n.data);
             if (!old_notification && !notified) {
                 if (json_Data !== null){
-                    Materialize.toast(json_Data.popup_string, 5000);
+                    Materialize.toast({html:json_Data.popup_string,displayLength: 5000});
                 } else {
-                    Materialize.toast("You have a new notification", 5000);
+                    Materialize.toast({html:"You have a new notification",displayLength: 5000});
                 }
             }
             json_Data = json_Data || {};

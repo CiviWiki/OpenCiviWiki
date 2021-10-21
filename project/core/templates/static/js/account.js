@@ -1,5 +1,6 @@
 cw = cw || {};
-
+Materialize = M
+Materialize.AutoInit()
 cw.AccountModel = BB.Model.extend({
     defaults: function() {
         return {
@@ -247,14 +248,14 @@ cw.AccountView = BB.View.extend({
                 type: 'POST',
                 data: apiData,
                 success: function () {
-                    Materialize.toast('You are now following user '+ apiData.target, 5000);
+                    Materialize.toast({html:'You are now following user '+ apiData.target,displayLength: 5000});
                     target.addClass("btn-secondary");
                     target.data("follow-state", true);
                     target.html("");
 
                 },
                 error: function () {
-                    Materialize.toast('Could not follow user '+ apiData.target, 5000);
+                    Materialize.toast({html:'Could not follow user '+ apiData.target,displayLength: 5000});
                 }
             });
         } else {
@@ -263,13 +264,13 @@ cw.AccountView = BB.View.extend({
                 type: 'POST',
                 data: apiData,
                 success: function () {
-                    Materialize.toast('You have unfollowed user '+ apiData.target, 5000);
+                    Materialize.toast({html:'You have unfollowed user '+ apiData.target,displayLength: 5000});
                     target.removeClass("btn-secondary");
                     target.html("FOLLOW");
                     target.data("follow-state", false);
                 },
                 error: function () {
-                    Materialize.toast('Could not unfollow user '+ apiData.target, 5000);
+                    Materialize.toast({html:'Could not unfollow user '+ apiData.target,displayLength: 5000});
                 }
             });
         }
@@ -294,7 +295,7 @@ cw.AccountView = BB.View.extend({
             type: 'POST',
             data: apiData,
             success: function () {
-                Materialize.toast('Saved!', 5000);
+                Materialize.toast({html:'Saved!',displayLength: 5000});
 
                 _this.isSave = true;
                 _this.model.fetch();
@@ -317,18 +318,18 @@ cw.AccountView = BB.View.extend({
             contentType: false,
             processData: false,
             success: function () {
-                Materialize.toast('Saved!', 5000);
+                Materialize.toast({html:'Saved!',displayLength: 5000});
 
                 _this.isSave = true;
                 _this.model.fetch();
             },
             error: function(data){
                 if (data.status === 400) {
-                    Materialize.toast(data.responseJSON.message, 5000, 'red');
+                    Materialize.toast({html:data.responseJSON.message, displayLength:5000, classes:'red'});
                 } else if (data.status === 500) {
-                    Materialize.toast('Internal Server Error', 5000, 'red');
+                    Materialize.toast({html:'Internal Server Error', displayLength: 5000,classes:'red'});
                 } else {
-                    Materialize.toast(data.statusText, 5000, 'red');
+                    Materialize.toast({html:data.statusText,displayLength:  5000, classes:'red'});
                 }
             },
 

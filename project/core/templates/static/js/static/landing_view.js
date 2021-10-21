@@ -1,5 +1,6 @@
 cw = cw || {};
-
+Materialize = M
+Materialize.AutoInit()
 cw.LandingView = BB.View.extend({
     el: '#landing',
     landingTemplate: _.template($('#landing-template').html()),
@@ -14,9 +15,12 @@ cw.LandingView = BB.View.extend({
         this.setupStaticNav();
     },
 
+    
     setupStaticNav: function () {
-        $('.button-collapse').sideNav();
-        $('.collapsible').collapsible();
-        $('.sideNav').css('display', 'inherit');
+        
+        // $('.sidenav').sidenav();
+        // $('.collapsible').collapsible();
+        $('.sidenav').css('display', 'inherit');
+        
     }
 });

@@ -92,130 +92,129 @@
 
 <script id="new-thread-template" type="text/template">
     {% verbatim %}
-    <div class="modal new-thread-modal">
-        <div class="modal-content">
-            <div class="new-thread-contention new-thread-container">
-                <div class="input-field white-background-input-field left-input-field">
-                    <input id="thread-title" type="text" length="120">
-                    <label for="thread-title">Title</label>
-                </div>
-            </div>
-            <div class="new-thread-body white-background-input-field new-thread-container">
-                <div class="input-field left-input-field">
-                    <textarea id="thread-body" type="text" class="materialize-textarea" length="4000"></textarea>
-                    <label for="thread-body">Summary</label>
-                </div>
-            </div>
-    
-            <div class="new-thread-category-selection white-background-input-field" id="new-thread-category-selection">
-                <div class="input-field left-input-field">
-                    <select id="thread-category">
-                        <option value="" disabled selected>Choose your category</option>
-                        {{# _.each(this.options.categories, function (c) { }}
-                            <option value="{{c.id}}">{{c.name}}</option>
-                        {{# }); }}
-                    </select>
-                </div>
-            </div>
-            <div class="white-background-input-field">
-    
-                <div class="image-upload-method">
-                    <div class="header-lato">Upload Image:</div>
-                    <button class="waves-effect waves-light btn" id="image-from-computer"><i class="material-icons left">file_upload</i>COMPUTER</button>
-                    <button class="waves-effect waves-light btn" id="image-from-link"><i class="material-icons left">insert_link</i>LINK</button>
-                </div>
-                <form method="post" enctype="multipart/form-data" id="attachment_image_form" class="hide">
-                    <div class="file-field input-field">
-                        <input class="upload-image btn waves-effect hide" type="submit" value="Upload"/>
-                        <div class="btn attachment-image-pick dark-blue-background">
-                            <span>Add an Image</span>
-                            <input id="id_attachment_image" name="attachment_image" type="file" accept="image/*">
-                        </div>
-                      <div class="file-path-wrapper">
-                        <input class="file-path validate" type="text">
-                      </div>
+        <div id="new-thread-modal" class="modal new-thread-modal">
+            <div class="modal-content">
+                <div class="new-thread-contention new-thread-container">
+                    <div class="input-field white-background-input-field left-input-field">
+                        <input id="thread-title" type="text" length="120">
+                        <label for="thread-title">Title</label>
                     </div>
-                    <div class="file-preview"></div>
-                </form>
-                <input id="link-image-form" type="text" class="hide" placeholder="Paste your image link here..."/>
+                </div>
+                <div class="new-thread-body white-background-input-field new-thread-container">
+                    <div class="input-field left-input-field">
+                        <textarea id="thread-body" type="text" class="materialize-textarea" length="4000"></textarea>
+                        <label for="thread-body">Summary</label>
+                    </div>
+                </div>
+
+                <div class="new-thread-category-selection white-background-input-field" id="new-thread-category-selection">
+                    <div class="input-field left-input-field">
+                        <select id="thread-category">
+                            <option value="" disabled selected>Choose your category</option>
+                            {{# _.each(this.options.categories, function (c) { }}
+                                <option value="{{c.id}}">{{c.name}}</option>
+                            {{# }); }}
+                        </select>
+                    </div>
+                </div>
+                <div class="white-background-input-field">
+
+                    <div class="image-upload-method">
+                        <div class="header-lato">Upload Image:</div>
+                        <button class="waves-effect waves-light btn" id="image-from-computer"><i class="material-icons left">file_upload</i>COMPUTER</button>
+                        <button class="waves-effect waves-light btn" id="image-from-link"><i class="material-icons left">insert_link</i>LINK</button>
+                    </div>
+                    <form method="post" enctype="multipart/form-data" id="attachment_image_form" class="hide">
+                        <div class="file-field input-field">
+                            <input class="upload-image btn waves-effect hide" type="submit" value="Upload"/>
+                            <div class="btn attachment-image-pick dark-blue-background">
+                                <span>Add an Image</span>
+                                <input id="id_attachment_image" name="attachment_image" type="file" accept="image/*">
+                            </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text">
+                        </div>
+                        </div>
+                        <div class="file-preview"></div>
+                    </form>
+                    <input id="link-image-form" type="text" class="hide" placeholder="Paste your image link here..."/>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="create-new-thread waves-effect btn">Add Thread</button>
+                <button class="cancel-new-thread waves-effect btn">Cancel</button>
             </div>
         </div>
-    
-        <div class="modal-footer">
-            <button class="create-new-thread waves-effect btn">Add Thread</button>
-            <button class="cancel-new-thread waves-effect btn">Cancel</button>
-        </div>
-    </div>
-    {% endverbatim %}
+        {% endverbatim %}
 </script>
-
 <script id="thread-card-template" type="text/template">
     {% verbatim %}
-    <div class="">
-        <div class="row issue-item">
-            <div class="thread-image col s3">
-                <div class="thread-image-wrapper">
-                    <img class="thread-image-thumb" src="{{ thread_data.thread.image }}">
-                </div>
-            </div>
-            <div class="content col s9">
-                <div class="thread-category">
-                    {{ thread_data.thread.category_name }}
-                </div>
-                <a href="thread/{{thread_data.thread.id}}">
-                <div class="thread-title">{{ thread_data.thread.title }}</div>
-                    <div class="thread-summary">{{ thread_data.thread.summary }}</div>
-                </a>
-                <div class="issue-stats">
-                    <div class="stat">
-                        <div class="number">{{ thread_data.stats.num_views }}</div>
-                        <div class="description">VIEWS</div>
+        <div class="">
+            <div class="row issue-item">
+                <div class="thread-image col s3">
+                    <div class="thread-image-wrapper">
+                        <!-- <div class="placeholder"><i class="material-icons">image</i></div> -->
+                        <img class="thread-image-thumb" src="{{ thread_data.thread.image }}">
                     </div>
-                    <div class="vert-divider"></div>
-                    <div class="stat">
-                        <div class="number">{{ thread_data.stats.num_civis }}</div>
-                        <div class="description">CIVIS</div>
+                </div>
+                <div class="content col s9">
+                    <div class="thread-category">
+                        {{ thread_data.thread.category_name }}
                     </div>
-                    <div class="vert-divider"></div>
-                    <div class="stat">
-                        <div class="number">{{ thread_data.stats.num_solutions }}</div>
-                        <div class="description">SOLUTIONS</div>
+                    <a href="thread/{{thread_data.thread.id}}">
+                    <div class="thread-title">{{ thread_data.thread.title }}</div>
+                        <div class="thread-summary">{{ thread_data.thread.summary }}</div>
+                    </a>
+                    <div class="issue-stats">
+                        <div class="stat">
+                            <div class="number">{{ thread_data.stats.num_views }}</div>
+                            <div class="description">VIEWS</div>
+                        </div>
+                        <div class="vert-divider"></div>
+                        <div class="stat">
+                            <div class="number">{{ thread_data.stats.num_civis }}</div>
+                            <div class="description">CIVIS</div>
+                        </div>
+                        <div class="vert-divider"></div>
+                        <div class="stat">
+                            <div class="number">{{ thread_data.stats.num_solutions }}</div>
+                            <div class="description">SOLUTIONS</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     {% endverbatim %}
-    
-</script>
 
+</script>
 <script id="feed-list-template" type="text/template">
     {% verbatim %}
-    {{# if (threads.length > 0) { }}
-    {{# _.each(threads, function (t) {}}
-        <div class="col s12">
-        {{= cw.underscorePartial('thread-card-template', ({thread_data: t}))}}
-        </div>
-    {{# }, this); }}
-    {{# } else { }}
-        <div class="section no-state">
-            <div class="container">
-                <div class="section">
-                    <div class="center title-lato grey-text">NO THREADS</div>
-                    <div class="section center">
-                        <div class="subtitle-lato grey-text section">Be the first to start a discussion in this category!</div>
-                        <button class="new-thread btn waves-effect modal-trigger"><i class="material-icons left">note_add</i>New Thread</button>
+        {{# if (threads.length > 0) { }}
+        {{# _.each(threads, function (t) {}}
+            <div class="col s12">
+            {{= cw.underscorePartial('thread-card-template', ({thread_data: t}))}}
+            </div>
+        {{# }, this); }}
+        {{# } else { }}
+            <div class="section no-state">
+                <div class="container">
+                    <div class="section">
+                        <div class="center title-lato grey-text">NO THREADS</div>
+                        <div class="section center">
+                            <div class="subtitle-lato grey-text section">Be the first to start a discussion in this category!</div>
+                            <button data-target="new-thread-modal" class="new-thread btn waves-effect modal-trigger"><i class="material-icons left">note_add</i>New Thread</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    {{# } }}
+        {{# } }}
     {% endverbatim %}
-</script>
 
+</script>
 <script id="categories-template" type="text/template">
     {% verbatim %}
-    <div class="modal categories-modal modal-fixed-footer">
+    <div id="categories-modal" class="modal categories-modal modal-fixed-footer">
         <div class="modal-content">
             <div class="title center">MY CATEGORIES</div>
             <form id="user-category-form" action="#" class="container">
@@ -239,6 +238,7 @@
         </div>
     </div>
     {% endverbatim %}
+
 </script>
 {% endblock backbone_template %}
 

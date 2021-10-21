@@ -1,5 +1,6 @@
 cw = cw || {};
-
+Materialize = M
+Materialize.AutoInit()
 cw.FeedThreadModel = BB.Model.extend({
     defaults: {
         thread: {
@@ -205,11 +206,11 @@ cw.NewThreadView = BB.View.extend({
     },
 
     show: function () {
-        this.$('.new-thread-modal').openModal();
+        this.$('#new-thread-modal').modal('open');
     },
 
     hide: function () {
-        this.$('.new-thread-modal').closeModal();
+        this.$('#new-thread-modal').modal('close');
     },
 
     events: {
@@ -263,12 +264,12 @@ cw.NewThreadView = BB.View.extend({
                                 url: '/api/upload_image/',
                                 type: 'POST',
                                 success: function () {
-                                    Materialize.toast('New thread created.', 5000);
+                                    Materialize.toast({html:'New thread created.',displayLength:5000});
                                     window.location = "thread/" + response.thread_id;
                                 },
                                 error: function(e){
-                                    Materialize.toast('ERROR: Image could not be uploaded', 5000);
-                                    Materialize.toast(e.statusText, 5000);
+                                    Materialize.toast({html:'ERROR: Image could not be uploaded.',displayLength:5000});
+                                    Materialize.toast({html:e.statusText, displayLength: 5000});
                                 },
                                 data: formData,
                                 cache: false,
@@ -278,7 +279,7 @@ cw.NewThreadView = BB.View.extend({
                         }
                     } else if (_this.imageMode==="link") {
                         var img_url = _this.$('#link-image-form').val().trim();
-                        console.log(_this.imageMode, img_url);
+                        // console.log(_this.imageMode, img_url);
                         if (img_url) {
                             $.ajax({
                                 url: '/api/upload_image/',
@@ -288,24 +289,24 @@ cw.NewThreadView = BB.View.extend({
                                     thread_id: response.thread_id
                                 },
                                 success: function () {
-                                    Materialize.toast('New thread created.', 5000);
+                                    Materialize.toast({html:'New thread created.',displayLength: 5000});
                                     window.location = "thread/" + response.thread_id;
                                 },
                                 error: function(e){
-                                    Materialize.toast('ERROR: Image could not be uploaded', 5000);
-                                    Materialize.toast(e.statusText, 5000);
+                                    Materialize.toast({html:'ERROR: Image could not be uploaded',displayLength: 5000});
+                                    Materialize.toast({html:e.statusText,displayLength: 5000});
                                 }
                             });
                         }
                     } else {
-                        Materialize.toast('New thread created.', 5000);
+                        Materialize.toast({html:'New thread created.',displayLength: 5000});
                         window.location = "thread/" + response.thread_id;
                     }
 
                 }
             });
         } else {
-            Materialize.toast('Please input all fields.', 5000);
+            Materialize.toast({html:'Please input all fields.', displayLength: 5000});
         }
     },
 });
@@ -329,11 +330,11 @@ cw.CategoriesView = BB.View.extend({
     },
 
     show: function () {
-        this.$('.categories-modal').openModal();
+        this.$('.categories-modal').modal('open');
     },
 
     hide: function () {
-        this.$('.categories-modal').closeModal();
+        this.$('.categories-modal').modal('close');
     },
 
     events: {
@@ -356,7 +357,7 @@ cw.CategoriesView = BB.View.extend({
                     'categories[]': selectedCategories,
                 },
                 success: function (response) {
-                    Materialize.toast('Categories Changed', 5000);
+                    Materialize.toast({html:'Categories Changed',displayLength: 5000});
                     _this.hide();
                     _this.user_categories = response.result.user_categories;
                     _this.mainView.setUserCategories(_this.user_categories);
@@ -365,7 +366,7 @@ cw.CategoriesView = BB.View.extend({
                 }
             });
         } else {
-            Materialize.toast('Please select at least one category', 5000);
+            Materialize.toast({html:'Please select at least one category',displayLength: 5000});
         }
     },
 });

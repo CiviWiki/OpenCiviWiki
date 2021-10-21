@@ -1,5 +1,6 @@
 cw = cw || {};
-
+Materialize = M
+Materialize.AutoInit()
 cw.UserModel = BB.Model.extend({
     defaults: function() {
         return {
@@ -73,7 +74,7 @@ cw.SettingsView = BB.View.extend({
             type: 'POST',
             data: apiData,
             success: function () {
-                Materialize.toast('Saved!', 5000);
+                Materialize.toast({html:'Saved!',displayLength: 5000});
 
                 _this.isSave = true;
                 _this.model.fetch();

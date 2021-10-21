@@ -1,5 +1,6 @@
 cw = cw || {};
-
+Materialize = M
+Materialize.AutoInit()
 cw.DEFAULTS = {
     types: ['problem', 'cause', 'solution'],
     types_plural: ['problems', 'causes', 'solutions'],
@@ -197,7 +198,7 @@ cw.CiviView =  BB.View.extend({
     addImageLinkInput: function(){
         var link_images = this.$('.civi-link-images').length;
         if (link_images > 20 ) {
-            Materialize.toast("Don't think you need any more...", 5000);
+            Materialize.toast({html:"Don't think you need any more...",displayLength: 5000});
         } else {
             this.$('.image-link-list').append('<input type="text" class="civi-link-images" placeholder="Paste your image link here..."/>');
         }
@@ -249,7 +250,7 @@ cw.CiviView =  BB.View.extend({
         var img_src = $(e.currentTarget).attr('src');
         var $modal = $('#civi-image-modal');
         $('#civi-image-big').attr('src', img_src);
-        $modal.openModal();
+        $modal.modal('open');
         e.stopPropagation();
     },
     clickFavorite: function (e) {
@@ -263,11 +264,11 @@ cw.CiviView =  BB.View.extend({
                     civi_id: this.model.id,
                 },
                 success: function (response) {
-                    Materialize.toast('Favorited Civi', 5000);
+                    Materialize.toast({html:'Favorited Civi',displayLength: 5000});
                     $this.text('star');
                 },
                 error: function(r){
-                    Materialize.toast('Could not favor the civi', 5000);
+                    Materialize.toast({html:'Could not favor the civi',displayLength: 5000});
                 }
             });
 
@@ -279,10 +280,10 @@ cw.CiviView =  BB.View.extend({
                     civi_id: this.model.id,
                 },
                 success: function (response) {
-                    Materialize.toast('Favorited Civi', 5000);
+                    Materialize.toast({html:'Favorited Civi',displayLength: 5000});
                 },
                 error: function(r){
-                    Materialize.toast('Could not favor the civi', 5000);
+                    Materialize.toast({html:'Could not favor the civi',displayLength: 5000});
                 }
             });
             $this.text('star_border');
@@ -291,7 +292,7 @@ cw.CiviView =  BB.View.extend({
 
     grabLink: function () {
         e.stopPropagation();
-        Materialize.toast('Civi link copied to clipboard.', 1500);
+        Materialize.toast({html:'Civi link copied to clipboard.',displayLength: 1500});
     },
 
     clickRating: function (e) {
@@ -311,7 +312,7 @@ cw.CiviView =  BB.View.extend({
                     rating: rating
                 },
                 success: function (response) {
-                    Materialize.toast('Voted!', 5000);
+                    Materialize.toast({html:'Voted!',displayLength: 5000});
 
                     var prev_votes = _this.parentView.model.get('user_votes');
                     var prev_vote = _.findWhere(prev_votes, {civi_id: civi_id});
@@ -336,7 +337,7 @@ cw.CiviView =  BB.View.extend({
 
                 },
                 error: function(r){
-                    Materialize.toast('Could not vote :(', 5000);
+                    Materialize.toast({html:'Could not vote :(',displayLength: 5000});
                 }
             });
         }
@@ -426,7 +427,7 @@ cw.CiviView =  BB.View.extend({
         var new_type = this.$("#civi-type-form input[type='radio']:checked").val();
 
         if (!new_body || !new_title){
-            Materialize.toast('Please do not leave fields blank', 5000);
+            Materialize.toast({html:'Please do not leave fields blank',displayLength: 5000});
             return;
         } else if (this.imageRemoveList.length===0 && this.attachmentCount===0 && (new_body == this.model.get('body') && new_title == this.model.get('title') && _.isEqual(links, this.model.get('links')) && new_type == this.model.get('type') )){
             this.closeEdit(e);
@@ -481,7 +482,7 @@ cw.CiviView =  BB.View.extend({
                             type: 'POST',
                             success: function (response2) {
 
-                                Materialize.toast('Saved.', 5000);
+                                Materialize.toast({html:'Saved.',displayLength: 5000});
 
                                 // Set the models with new data and rerender
                                 _this.model.set('title', new_title);
@@ -514,7 +515,7 @@ cw.CiviView =  BB.View.extend({
                                 }
                             },
                             error: function(e){
-                                Materialize.toast('Civi was edited but one or more images could not be uploaded', 5000);
+                                Materialize.toast({html:'Civi was edited but one or more images could not be uploaded',displayLength: 5000});
 
                                 // Set the models with new data and rerender
                                 _this.model.set('title', new_title);
@@ -553,7 +554,7 @@ cw.CiviView =  BB.View.extend({
                         });
 
                     } else {
-                        Materialize.toast('Saved', 5000);
+                        Materialize.toast({html:'Saved',displayLength: 5000});
 
                         // Clean up previous links
                         if (_this.model.get('type') != "response" && _this.model.get('type') != "rebuttal") {
@@ -600,7 +601,7 @@ cw.CiviView =  BB.View.extend({
 
                 },
                 error: function(r){
-                    Materialize.toast('Could not edit the civi', 5000);
+                    Materialize.toast({html:'Could not edit the civi',displayLength: 5000});
                     _this.closeEdit(e);
                     _this.render();
 
@@ -620,7 +621,7 @@ cw.CiviView =  BB.View.extend({
                 civi_id: this.model.id,
             },
             success: function (response) {
-                Materialize.toast('Deleted Civi succssfully', 5000);
+                Materialize.toast({html:'Deleted Civi succssfully',displayLength: 5000});
                 _.each(_this.model.get('links'), function(link){
                     var linked_civi = _this.civis.findWhere({id: link});
                     var prev_links =linked_civi.get('links');
@@ -636,7 +637,7 @@ cw.CiviView =  BB.View.extend({
 
             },
             error: function(r){
-                Materialize.toast('Could not delete the civi', 5000);
+                Materialize.toast({html:'Could not delete the civi',displayLength: 5000});
             }
         });
     }
@@ -681,7 +682,7 @@ cw.NewCiviView = BB.View.extend({
     addImageLinkInput: function(){
         var link_images = this.$('.civi-link-images').length;
         if (link_images > 20 ) {
-            Materialize.toast("Don't think you need any more...", 5000);
+            Materialize.toast({html:"Don't think you need any more...",displayLength: 5000});
         } else {
             this.$('.image-link-list').append('<input type="text" class="civi-link-images" placeholder="Paste your image link here..."/>');
         }
@@ -740,11 +741,11 @@ cw.NewCiviView = BB.View.extend({
         if (title && body && c_type) {
             if (links.length === 0) {
                 if (c_type === 'cause') {
-                    Materialize.toast('A CAUSE Civi must be linked to a PROBLEM Civi. If it is only linked to a solution it will not appear', 5000);
+                    Materialize.toast({html:'A CAUSE Civi must be linked to a PROBLEM Civi. If it is only linked to a solution it will not appear',displayLength: 5000});
                     this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
                     return;
                 } else if (c_type === 'solution') {
-                    Materialize.toast('A SOLUTION Civi must be linked to a CAUSE Civi', 5000);
+                    Materialize.toast({html:'A SOLUTION Civi must be linked to a CAUSE Civi',displayLength: 5000});
                     this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
                     return;
                 }
@@ -780,7 +781,7 @@ cw.NewCiviView = BB.View.extend({
                             type: 'POST',
                             success: function (response2) {
 
-                                Materialize.toast('New civi created.', 5000);
+                                Materialize.toast({html:'New civi created.',displayLength: 5000});
                                 new_civi.set('attachments', response2.attachments);
 
                                 // _this.hide();
@@ -795,7 +796,7 @@ cw.NewCiviView = BB.View.extend({
                                 $('body').css({overflow: 'hidden'});
                             },
                             error: function(e){
-                                Materialize.toast('Civi was created but one or more images could not be uploaded', 5000);
+                                Materialize.toast({html:'Civi was created but one or more images could not be uploaded',displayLength: 5000});
 
                                 // _this.hide();
                                 $('#thread-' + c_type + 's').append(new cw.CiviView({model: new_civi, can_edit: can_edit, parentView: _this.options.parentView}).el);
@@ -816,7 +817,7 @@ cw.NewCiviView = BB.View.extend({
 
                     } else {
                         // _this.hide();
-                        Materialize.toast('New civi created.', 5000);
+                        Materialize.toast({html:'New civi created.',displayLength: 5000});
                         $('#thread-' + c_type + 's').append(new cw.CiviView({model: new_civi, can_edit: can_edit, parentView: _this.options.parentView}).el);
                         _this.options.parentView.civis.add(new_civi);
 
@@ -841,12 +842,12 @@ cw.NewCiviView = BB.View.extend({
 
                 },
                 error: function (response) {
-                    Materialize.toast('Could not create Civi', 5000);
+                    Materialize.toast({html:'Could not create Civi',displayLength: 5000});
                     _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
                 }
             });
         } else {
-            Materialize.toast('Please input all fields.', 5000);
+            Materialize.toast({html:'Please input all fields.',displayLength: 5000});
             this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
         }
     },
@@ -903,7 +904,7 @@ cw.NewResponseView = BB.View.extend({
     addImageLinkInput: function(){
         var link_images = this.$('.civi-link-images').length;
         if (link_images > 20 ) {
-            Materialize.toast("Don't think you need any more...", 5000);
+            Materialize.toast({html:"Don't think you need any more...",displayLength: 5000});
         } else {
             this.$('.image-link-list').append('<input type="text" class="civi-link-images" placeholder="Paste your image link here..."/>');
         }
@@ -984,13 +985,13 @@ cw.NewResponseView = BB.View.extend({
                             url: '/api/upload_images/',
                             type: 'POST',
                             success: function (response2) {
-                                Materialize.toast('New response created.', 5000);
+                                Materialize.toast({html:'New response created.',displayLength: 5000});
                                 _this.options.parentView.responseCollection.fetch();
                                 _this.options.parentView.renderResponses();
                                 _this.$el.empty();
                             },
                             error: function(e){
-                                Materialize.toast('Response was created but images could not be uploaded', 5000);
+                                Materialize.toast({html:'Response was created but images could not be uploaded',displayLength: 5000});
                                 // _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
                                 _this.options.parentView.responseCollection.fetch();
                                 _this.options.parentView.renderResponses();
@@ -1002,19 +1003,19 @@ cw.NewResponseView = BB.View.extend({
                             processData: false
                         });
                     } else {
-                        Materialize.toast('New response created.', 5000);
+                        Materialize.toast({html:'New response created.',displayLength: 5000});
                         _this.options.parentView.responseCollection.fetch();
                         _this.options.parentView.renderResponses();
                         _this.$el.empty();
                     }
                 },
                 error: function(){
-                    Materialize.toast('Could not create response', 5000);
+                    Materialize.toast({html:'Could not create response',displayLength: 5000});
                     _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
                 }
             });
         } else {
-            Materialize.toast('Please input all fields.', 5000);
+            Materialize.toast({html:'Please input all fields.',displayLength: 5000});
             _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
         }
     }
@@ -1056,11 +1057,11 @@ cw.EditThreadView = BB.View.extend({
     },
 
     show: function () {
-        this.$('.edit-thread-modal').openModal();
+        this.$('.edit-thread-modal').modal('open');
     },
 
     hide: function () {
-        this.$('.edit-thread-modal').closeModal();
+        this.$('.edit-thread-modal').modal('close');
     },
 
     cancelEdit: function () {
@@ -1121,7 +1122,7 @@ cw.EditThreadView = BB.View.extend({
                                 url: '/api/upload_image/',
                                 type: 'POST',
                                 success: function (response2) {
-                                    Materialize.toast('Saved changes', 5000);
+                                    Materialize.toast({html:'Saved changes',displayLength: 5000});
                                     // _this.hide();
 
 
@@ -1135,8 +1136,8 @@ cw.EditThreadView = BB.View.extend({
 
                                 },
                                 error: function(e){
-                                    Materialize.toast('ERROR: Image could not be uploaded', 5000);
-                                    Materialize.toast(e.statusText, 5000);
+                                    Materialize.toast({html:'ERROR: Image could not be uploaded',displayLength: 5000});
+                                    Materialize.toast({html:e.statusText,displayLength: 5000});
                                     _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
                                 },
                                 data: formData,
@@ -1154,7 +1155,7 @@ cw.EditThreadView = BB.View.extend({
                                     thread_id: response.data.thread_id
                                 },
                                 success: function (response2) {
-                                    Materialize.toast('Saved changes', 5000);
+                                    Materialize.toast({html:'Saved changes',displayLength: 5000});
                                     _this.hide();
 
 
@@ -1167,8 +1168,8 @@ cw.EditThreadView = BB.View.extend({
                                     _this.parentView.threadNavRender();
                                 },
                                 error: function(e){
-                                    Materialize.toast('ERROR: Image could not be uploaded', 5000);
-                                    Materialize.toast(e.statusText, 5000);
+                                    Materialize.toast({html:'ERROR: Image could not be uploaded',displayLength: 5000});
+                                    Materialize.toast({html:e.statusText,displayLength: 5000});
                                     _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
                                 }
                             });
@@ -1182,7 +1183,7 @@ cw.EditThreadView = BB.View.extend({
                                     thread_id: response.data.thread_id
                                 },
                                 success: function (response2) {
-                                    Materialize.toast('Saved changes', 5000);
+                                    Materialize.toast({html:'Saved changes',displayLength: 5000});
                                     // _this.hide();
 
                                     new_data = response.data;
@@ -1194,15 +1195,15 @@ cw.EditThreadView = BB.View.extend({
                                     _this.parentView.threadNavRender();
                                 },
                                 error: function(e){
-                                    Materialize.toast('ERROR: Image could not be uploaded', 5000);
-                                    Materialize.toast(e.statusText, 5000);
+                                    Materialize.toast({html:'ERROR: Image could not be uploaded',displayLength: 5000});
+                                    Materialize.toast({html:e.statusText,displayLength: 5000});
                                     _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
                                 }
                             });
                         }
 
                     } else {
-                        Materialize.toast('Saved changes', 5000);
+                        Materialize.toast({html:'Saved changes',displayLength: 5000});
                         // _this.hide();
 
                         // New Data
@@ -1216,12 +1217,12 @@ cw.EditThreadView = BB.View.extend({
 
                 },
                 error: function() {
-                    Materialize.toast('Servor Error: Thread could not be edited', 5000);
+                    Materialize.toast({html:'Servor Error: Thread could not be edited',displayLength: 5000});
                     _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
                 }
             });
         } else {
-            Materialize.toast('Please input all fields.', 5000);
+            Materialize.toast({html:'Please input all fields.',displayLength: 5000});
             _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
         }
     },
@@ -1784,10 +1785,10 @@ cw.ThreadView = BB.View.extend({
             $this = _.isUndefined(e) ? this.$('.expand-nav') : $(e.target);
 
         if (!this.navExpanded) {
-            $('.civi-nav-wrapper').hide();
+            $('.civi-nav-wrapper').close();//TODO check this
             $this.removeClass('expanded');
         } else {
-            $('.civi-nav-wrapper').show();
+            $('.civi-nav-wrapper').open(); //TODO check this
             $this.addClass('expanded');
         }
         this.activateNav();
@@ -1978,17 +1979,17 @@ cw.ThreadView = BB.View.extend({
             },
             success: function (response) {
                 _this.is_draft = false
-                Materialize.toast('Thread is now public. Refreshing the page...', 5000);
+                Materialize.toast({html:'Thread is now public. Refreshing the page...',displayLength: 5000});
                 _this.$("#js-publish-btn").hide()
                 var reload_page = _.bind(location.reload, location);
                 _.delay(reload_page, 1000);
             },
             error: function (response) {
                 if (response.status === 403) {
-                    Materialize.toast('You do not have permission to publish the thread', 5000);
+                    Materialize.toast({html:'You do not have permission to publish the thread',displayLength: 5000});
                 }
                 else if (response.status === 500) {
-                    Materialize.toast('Server Error: Thread could not be published', 5000);
+                    Materialize.toast({html:'Server Error: Thread could not be published',displayLength: 5000});
                     _this.$(e.currentTarget).removeClass('disabled').attr('disabled', false);
                 }
             }

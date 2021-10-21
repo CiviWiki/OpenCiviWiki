@@ -1,4 +1,8 @@
 cw = {};
+
+Materialize = M
+
+
 BB = Backbone;
 
 _.templateSettings = {
@@ -6,6 +10,10 @@ _.templateSettings = {
     interpolate: /\{\{=(.+?)\}\}/g,
     escape: /\{\{(?!#|=)(.+?)\}\}/g
 };
+
+$( document ).ready(function() {
+    Materialize.AutoInit()
+});
 
 cw.underscorePartial = function (templateSelector, data) {
     return _.template($('#' + templateSelector).html())(data);
@@ -19,17 +27,25 @@ cw.checkForEnter = function (e) {
 };
 
 cw.materializeShit = function () {
-    Materialize.updateTextFields();
-    $('ul.tabs').tabs();
-    $('select').material_select();
+    $( document ).ready(function() {
+        Materialize.AutoInit()
+        
+        Materialize.updateTextFields();
+        //$('ul.tabs').tabs();
+        //$('select').formSelect();
+    
+    });
 };
 
 cw.initGlobalNav = function () {
+
     var $notifications = $('#item-notifications');
 
+    /* //replaced with trigger-button
     $notifications.on('click', function () {
-        $('.notifications-modal').openModal();
+        $('.notifications-modal').modal('open');
     });
+    */
 
     var $navMenuButton = $('#js-toggle-menu');
     $navMenuButton.on('click', function (event) {

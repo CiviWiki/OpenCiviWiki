@@ -20,8 +20,8 @@
         </ul>
         
         <!-- Side Nav for mobile view-->
-        <a href="{% url 'base' %}" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
-        <ul class="side-nav" id="nav-mobile">
+        <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <ul class="sidenav" id="nav-mobile">
             <li><a href="{% url 'accounts_login' %}">LOGIN / SIGN UP</a></li>
             <li><a class="dark-white-text menu-text" href="{% url 'base' %}">main</a></li>
             <li><a class="dark-white-text menu-text" href="{% url 'how_it_works' %}">{% trans "How CiviWiki Works" %} </a></li>

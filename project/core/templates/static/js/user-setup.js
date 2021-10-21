@@ -1,5 +1,6 @@
 cw = cw || {};
-
+Materialize = M
+Materialize.AutoInit()
 cw.AccountModel = BB.Model.extend({
   defaults: function() {
     return {
@@ -201,11 +202,11 @@ cw.UserSetupView = BB.View.extend({
         },
         error: function(data) {
           if (data.status_code === 400) {
-            Materialize.toast(data.message, 5000);
+            Materialize.toast({html:data.message,displayLength: 5000});
           } else if (data.status_code === 500) {
-            Materialize.toast("Internal Server Error", 5000);
+            Materialize.toast({html:"Internal Server Error",displayLength: 5000});
           } else {
-            Materialize.toast(data.statusText, 5000);
+            Materialize.toast({html:data.statusText,displayLength: 5000});
           }
         }
       });
@@ -233,15 +234,15 @@ cw.UserSetupView = BB.View.extend({
           }
         }
 
-        Materialize.toast("Image Uploaded!", 5000);
+        Materialize.toast({html:"Image Uploaded!",displayLength: 5000});
       },
       error: function(response) {
         if (response.status === 400) {
-          Materialize.toast(response.responseJSON.message, 5000, "red");
+          Materialize.toast({html:response.responseJSON.message, displayLength:5000,classes: "red"});
         } else if (response.status === 500) {
-          Materialize.toast("Internal Server Error", 5000, "red");
+          Materialize.toast({html:"Internal Server Error", displayLength:5000,classes: "red"});
         } else {
-          Materialize.toast(response.statusText, 5000, "red");
+          Materialize.toast({html:response.statusText, displayLength:5000,classes: "red"});
         }
 
         _this.$el.find(".loading").addClass("hide");
@@ -268,10 +269,10 @@ cw.UserSetupView = BB.View.extend({
         _this.$el.find(".loading").addClass("hide");
         _this.$el.find(".placeholder").removeClass("hide");
         _this.$el.find("#profile_image_form")[0].reset();
-        Materialize.toast(JSON.stringify(e), 5000);
+        Materialize.toast({html:JSON.stringify(e),displayLength: 5000});
       },
       error: function(e) {
-        Materialize.toast(JSON.stringify(e), 5000);
+        Materialize.toast({html:JSON.stringify(e),displayLength: 5000});
       }
     });
   }
