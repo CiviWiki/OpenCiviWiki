@@ -248,9 +248,7 @@ cw.NewThreadView = BB.View.extend({
                 data: {
                     title: title,
                     summary: summary,
-                    category_id: category_id,
-                    level: level,
-                    state: state
+                    category_id: category_id
                 },
                 success: function (response) {
                     if (_this.imageMode==="upload") {

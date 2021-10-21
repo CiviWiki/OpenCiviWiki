@@ -1035,12 +1035,6 @@ cw.EditThreadView = BB.View.extend({
     render: function () {
         this.$el.empty().append(this.template());
         this.$('#thread-image-forms').addClass('hide');
-
-        this.$('#thread-location').val(this.model.get('level'));
-        if (this.model.get('state')) {
-            this.$('.edit-thread-state-selection').removeClass('hide');
-            this.$('#thread-state').val(this.model.get('state'));
-        }
         cw.materializeShit();
     },
 
