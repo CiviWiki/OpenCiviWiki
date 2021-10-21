@@ -19,9 +19,11 @@ cw.checkForEnter = function (e) {
 };
 
 cw.materializeShit = function () {
+   $(document).ready(function() {
     Materialize.updateTextFields();
     $('ul.tabs').tabs();
     $('select').material_select();
+  });
 };
 
 cw.initGlobalNav = function () {
