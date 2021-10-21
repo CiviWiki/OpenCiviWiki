@@ -29,11 +29,11 @@ cw.checkForEnter = function (e) {
 cw.materializeShit = function () {
     $( document ).ready(function() {
         Materialize.AutoInit()
-        
         Materialize.updateTextFields();
+      /*replaced with AutoInit()
         //$('ul.tabs').tabs();
-        //$('select').formSelect();
-    
+        //$('select').formSelect();    
+      */  
     });
 };
 
