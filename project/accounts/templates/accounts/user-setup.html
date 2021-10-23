@@ -198,6 +198,7 @@
 {% endblock content %}
 
 {% block extra_js %}
+<script type="text/javascript" src="{% static "js/js.cookie.js" %}"></script>
 <script type="text/javascript" src="{% static "js/user-setup.js" %}"></script>
 <script type="text/javascript">
     var accountUsername= "{{ username }}";
