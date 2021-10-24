@@ -183,10 +183,13 @@ cw.UserSetupView = BB.View.extend({
     var about_me = this.model.get("about_me");
 
     if (first_name && last_name && about_me) {
+      var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
       $.ajax({
         type: "POST",
         url: "/api/edituser/",
         data: {
+          csrfmiddlewaretoken: csrftoken,
           full_profile: "True",
           about_me: about_me,
           first_name: first_name,
@@ -200,13 +203,7 @@ cw.UserSetupView = BB.View.extend({
           _this.nextStep();
         },
         error: function(data) {
-          if (data.status_code === 400) {
-            Materialize.toast(data.message, 5000);
-          } else if (data.status_code === 500) {
-            Materialize.toast("Internal Server Error", 5000);
-          } else {
-            Materialize.toast(data.statusText, 5000);
-          }
+          Materialize.toast(data.statusText, 5000);
         }
       });
     }

@@ -99,6 +99,8 @@
 
                                     <div class="white-background-input-field input-field">
                                         <form method="post" enctype="multipart/form-data" id="profile_image_form">
+                                            {% csrf_token %}
+
                                             <div class="file-field input-field">
                                                 <button class="upload-image btn waves-effect hide">Change</button>
                                                 <button class="cancel-image btn waves-effect hide"><i
@@ -198,7 +200,6 @@
 {% endblock content %}
 
 {% block extra_js %}
-<script type="text/javascript" src="{% static "js/js.cookie.js" %}"></script>
 <script type="text/javascript" src="{% static "js/user-setup.js" %}"></script>
 <script type="text/javascript">
     var accountUsername= "{{ username }}";
