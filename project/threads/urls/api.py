@@ -1,12 +1,6 @@
 from django.urls import path
-from core.router import CiviWikiRouter
-
 from threads import api
-from threads.views import ThreadViewSet, CiviViewSet
 
-
-CiviWikiRouter.register(r"threads", ThreadViewSet)
-CiviWikiRouter.register(r"civis", CiviViewSet)
 
 urlpatterns = [
     path("thread_data/<int:thread_id>/", api.get_thread, name="get thread"),
