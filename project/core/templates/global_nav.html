@@ -26,7 +26,7 @@
             <div class="dropdown-menu-wrapper hide" id="js-dropdown-menu">
                 <div class="dropdown-menu">
                     <a class="dropdown-item" href="/" id="my-feed">My Feed</a>
-                    <a class="dropdown-item" id="my-profile-button" href="/profile">My Profile</a>
+                    <a class="dropdown-item" id="my-profile-button" href="{% url 'profile' user.username %}">My Profile</a>
                     <div class="divider"></div>
                     <a class="dropdown-item" id="settings-dropdown" href="/settings">Settings</a>
                     <a class="dropdown-item" href="{% url 'accounts_logout' %}" id="logout">Sign Out</a>
