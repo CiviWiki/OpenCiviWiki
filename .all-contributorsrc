@@ -750,6 +750,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "silvarthur",
+      "name": "Arthur Silva",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5846343?v=4",
+      "profile": "https://github.com/silvarthur",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
