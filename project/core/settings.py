@@ -94,18 +94,6 @@ WSGI_APPLICATION = "core.wsgi.application"
 # Apex Contact for Production Errors
 ADMINS = [("Development Team", "dev@civiwiki.org")]
 
-# AWS S3 Setup
-if "AWS_STORAGE_BUCKET_NAME" not in os.environ:
-    MEDIA_URL = "/media/"
-    MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-else:
-    AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
-    AWS_S3_ACCESS_KEY_ID = os.getenv("AWS_S3_ACCESS_KEY_ID")
-    AWS_S3_SECRET_ACCESS_KEY = os.getenv("AWS_S3_SECRET_ACCESS_KEY")
-    DEFAULT_FILE_STORAGE = "storages.backends.s3boto.S3BotoStorage"
-    AWS_S3_SECURE_URLS = False
-    AWS_QUERYSTRING_AUTH = False
-
 STATIC_URL = "/static/"
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "core/templates/static"),)
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
