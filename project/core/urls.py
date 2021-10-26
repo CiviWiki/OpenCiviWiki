@@ -25,10 +25,10 @@ from core.router import CiviWikiRouter
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", include("accounts.urls.urls")),
+    path("api/v1/", include(CiviWikiRouter.urls)),
     path("api/", include("accounts.urls.api")),
-    path("api/v1/", include((CiviWikiRouter.urls, "api"))),
     path("api/", include("threads.urls.api")),
+    path("", include("accounts.urls.urls")),
     path("", include("threads.urls.urls")),
     path(
         "inbox/notifications/",
