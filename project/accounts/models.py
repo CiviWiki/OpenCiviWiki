@@ -18,6 +18,9 @@ class User(AbstractUser):
     needed in the future. Extending AbstractUser
     allows for adding new fields to the user model as needed.
     """
+    def full_name(self):
+        return self.first_name + self.last_name
+
 
     class Meta:
         db_table = "users"
