@@ -3,15 +3,9 @@
 {% load i18n %}
 
 {% block extra_css %}
-<<<<<<< HEAD
-<link type="text/css" rel="stylesheet/less" href="{% static "/less/base.less" %}" />
-<link type="text/css" rel="stylesheet/less" href="{% static "/less/utils.less" %}" />
-<link type="text/css" rel="stylesheet/less" href="{% static "/less/thread.less" %}" />
-=======
 <link type="text/css" rel="stylesheet/less" href="{% static "less/base.less" %}" />
 <link type="text/css" rel="stylesheet/less" href="{% static "less/utils.less" %}" />
 <link type="text/css" rel="stylesheet/less" href="{% static "less/thread.less" %}" />
->>>>>>> less-fixes
 {% endblock extra_css %}
 
 {% block backbone_template %}
@@ -932,7 +926,7 @@
 {% endblock content %}
 
 {% block extra_js %}
-<script type="text/javascript" src="{% static " js/thread.js" %}"></script>
+<script type="text/javascript" src="{% static "js/thread.js" %}"></script>
 <script type="text/javascript">
 
     var username = '{{user.username}}',
