@@ -23,7 +23,6 @@ class Fact(models.Model):
 
 
 class ThreadManager(models.Manager):
-    # TODO: move this to read.py, try to be more query operation specific here
     def summarize(self, thread):
         # Number of characters after which to truncate thread
         thread_truncate_length = 320
@@ -37,11 +36,9 @@ class ThreadManager(models.Manager):
             "id": thread.id,
             "title": thread.title,
             "summary": thread.summary[:thread_truncate_length] + (ellipsis_if_too_long),
-            "created": "{0} {1}, {2}".format(
-                month_name[thread.created.month],
-                thread.created.day,
-                thread.created.year,
-            ),
+            "created": f"""{month_name[thread.created.month]}
+                            {thread.created.day},
+                            {thread.created.year}""",
             "category_id": thread.category.id,
             "image": thread.image_url,
         }
@@ -114,7 +111,7 @@ class Thread(models.Model):
     @property
     def created_date_str(self):
         d = self.created
-        return "{0} {1}, {2}".format(month_name[d.month], d.day, d.year)
+        return f"{month_name[d.month]} {d.day}, {d.year}"
 
 
 class CiviManager(models.Manager):
@@ -123,7 +120,7 @@ class CiviManager(models.Manager):
             "id": civi.id,
             "type": civi.c_type,
             "title": civi.title,
-            "body": civi.body[0:150],
+            "body": civi.body[:150],
         }
 
     def serialize(self, civi, filter=None):
@@ -138,9 +135,9 @@ class CiviManager(models.Manager):
                 "last_name": civi.author.last_name,
             },
             "tags": [tag.title for tag in civi.tags.all()],
-            "created": "{0} {1}, {2}".format(
-                month_name[civi.created.month], civi.created.day, civi.created.year
-            ),
+            "created": f"""{month_name[civi.created.month]}
+                            {civi.created.day},
+                            {civi.created.year}""",
             "attachments": [],
             "votes": civi.votes,
             "id": civi.id,
@@ -168,9 +165,9 @@ class CiviManager(models.Manager):
                 last_name=civi.author.last_name,
             ),
             "tags": [h.title for h in civi.tags.all()],
-            "created": "{0} {1}, {2}".format(
-                month_name[civi.created.month], civi.created.day, civi.created.year
-            ),
+            "created": f"""{month_name[civi.created.month]}
+                            {civi.created.day},
+                            {civi.created.year}""",
             "attachments": [],
             "votes": civi.votes,
             "id": civi.id,
@@ -249,7 +246,7 @@ class Civi(models.Model):
     @property
     def created_date_str(self):
         d = self.created
-        return "{0} {1}, {2}".format(month_name[d.month], d.day, d.year)
+        return f"{month_name[d.month]} {d.day}, {d.year}"
 
     def score(self, requested_user_id=None):
         # TODO: add docstring comment describing this score function
@@ -368,9 +365,6 @@ class Civi(models.Model):
             data["score"] = self.score(requested_user_id)
 
         return data
-
-
-image_upload_path = PathAndRename("")
 
 
 class Response(models.Model):
