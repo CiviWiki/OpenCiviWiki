@@ -246,6 +246,7 @@ cw.NewThreadView = BB.View.extend({
                 url: '/api/new_thread/',
                 type: 'POST',
                 data: {
+                    csrfmiddlewaretoken: csrftoken,
                     title: title,
                     summary: summary,
                     category_id: category_id
