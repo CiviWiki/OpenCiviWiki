@@ -11,6 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from common.utils import check_database
 from threads.models import Activity, Civi, CiviImage, Thread
 from threads.permissions import IsOwnerOrReadOnly
 from threads.serializers import (
@@ -178,16 +179,18 @@ def civi2csv(request, thread_id):
     return response
 
 
+is_sqlite_running = check_database('sqlite')
+
+
 @login_required
 @full_profile
 def issue_thread(request, thread_id=None):
     if not thread_id:
         return HttpResponseRedirect("/404")
 
-    req_acct = Profile.objects.get(user=request.user)
     Thread_filter = Thread.objects.get(id=thread_id)
     c_qs = Civi.objects.filter(thread_id=thread_id).exclude(c_type="response")
-    c_scored = [c.dict_with_score(req_acct.id) for c in c_qs]
+    c_scored = [c.dict_with_score(request.user.id) for c in c_qs]
     civis = sorted(c_scored, key=lambda c: c["score"], reverse=True)
 
     # modify thread view count
@@ -212,6 +215,12 @@ def issue_thread(request, thread_id=None):
             for p in Profile.objects.filter(
                 pk__in=c_qs.distinct("author").values_list("author", flat=True)
             )
+        ] if not is_sqlite_running else
+        [
+            Profile.objects.chip_summarize(p)
+            for p in Profile.objects.filter(
+                pk__in=c_qs.values_list("author", flat=True).distinct()
+            )
         ],
         "category": {
             "id": Thread_filter.category.id,
@@ -228,7 +237,7 @@ def issue_thread(request, thread_id=None):
                 "c_type": act.civi.c_type,
             }
             for act in Activity.objects.filter(
-                thread=Thread_filter.id, account=req_acct.id
+                thread=Thread_filter.id, user=request.user.id
             )
         ],
     }

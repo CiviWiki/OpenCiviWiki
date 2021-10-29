@@ -1,6 +1,7 @@
 import os
 import uuid
 from django.utils.deconstruct import deconstructible
+from django.db import connections
 
 
 @deconstructible
@@ -13,3 +14,9 @@ class PathAndRename(object):
         new_filename = str(uuid.uuid4())
         filename = "{}.{}".format(new_filename, extension)
         return os.path.join(self.sub_path, filename)
+
+
+def check_database(database):
+    """Get the name of database engine running currently"""
+
+    return database == connections['default'].vendor

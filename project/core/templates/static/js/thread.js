@@ -1963,6 +1963,7 @@ cw.ThreadView = BB.View.extend({
             url: '/api/edit_thread/',
             type: 'POST',
             data: {
+                csrfmiddlewaretoken: csrftoken,
                 thread_id: _this.model.threadId,
                 title: _this.model.attributes.title,
                 summary: _this.model.attributes.summary,
