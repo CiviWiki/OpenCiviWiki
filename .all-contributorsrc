@@ -768,6 +768,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "shiv-aay",
+      "name": "Shivaay",
+      "avatar_url": "https://avatars.githubusercontent.com/u/58257395?v=4",
+      "profile": "https://github.com/shiv-aay",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
