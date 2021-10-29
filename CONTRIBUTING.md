@@ -45,14 +45,14 @@ To install all required modules, complete the following steps:
 python -m venv env
 ```
 3. Activate the virtual environment using:
-For Windows users:
-```
-.\env\Scripts\activate
-```
-For MacOS and *nix users:
-```
-source env/bin/activate
-```
+  * For Windows users:
+  ```
+  .\env\Scripts\activate
+  ```
+  * For MacOS and Linux users:
+  ```
+  source env/bin/activate
+  ```
 4. Use the following command in project dir:
 ```
 pip install -r requirements/dev.txt
