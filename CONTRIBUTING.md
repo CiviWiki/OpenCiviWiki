@@ -39,13 +39,28 @@ The following sections describe how to set up a development environment. Note, w
 
 To install all required modules, complete the following steps:
 
-1. make sure you are in the repository root directory
-2. create a Python 3.7+ virtual environment (named `env`)
-    * `python -m venv env`
-3. use the following command in project dir:
-    * `pip install -r requirements/dev.txt`
-4. change into project directory
-    * `cd project`
+1. Make sure you are in the repository root directory
+2. Create a Python 3.7+ virtual environment (named `env`)
+```
+python -m venv env
+```
+3. Activate the virtual environment using:
+  * For Windows users:
+  ```
+  .\env\Scripts\activate
+  ```
+  * For MacOS and Linux users:
+  ```
+  source env/bin/activate
+  ```
+4. Use the following command in project dir:
+```
+pip install -r requirements/dev.txt
+```
+5. Change into project directory
+```
+cd project
+```
 
 
 ### Run migrations
