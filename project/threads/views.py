@@ -208,9 +208,9 @@ def issue_thread(request, thread_id=None):
             "last_name": Thread_filter.author.last_name,
         },
         "contributors": [
-            Profile.objects.chip_summarize(a)
-            for a in Profile.objects.filter(
-                pk__in=civis.distinct("author").values_list("author", flat=True)
+            Profile.objects.chip_summarize(p)
+            for p in Profile.objects.filter(
+                pk__in=c_qs.distinct("author").values_list("author", flat=True)
             )
         ],
         "category": {
