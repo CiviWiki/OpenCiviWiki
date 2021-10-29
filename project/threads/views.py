@@ -202,8 +202,8 @@ def issue_thread(request, thread_id=None):
         "summary": Thread_filter.summary,
         "image": Thread_filter.image_url,
         "author": {
-            "username": Thread_filter.author.user.username,
-            "profile_image": Thread_filter.author.profile_image_url,
+            "username": Thread_filter.author.username,
+            "profile_image": Thread_filter.author.profile.profile_image_url,
             "first_name": Thread_filter.author.first_name,
             "last_name": Thread_filter.author.last_name,
         },
