@@ -45,6 +45,9 @@ body {
         font-weight: 300;
         &:hover {
             text-decoration:underline;
+            transition: font .3s;
+            font-weight: bold;
+            background-color: rgba(71, 50, 115, 0.5);
         }
     }
 
@@ -83,6 +86,14 @@ body {
        }
        background-color: darken(@dark-gray, 1%);
    }
+}
+.external-link-item a{ 
+    
+    &:hover {
+        color: @off-white !important;
+        transition: color 0.3s;
+    }
+
 }
 // EZ-Page Header w/ gradient // -----------------------------------------------
 .content-header {
