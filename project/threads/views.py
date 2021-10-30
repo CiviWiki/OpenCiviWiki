@@ -179,7 +179,7 @@ def civi2csv(request, thread_id):
     return response
 
 
-is_sqlite_running = check_database('sqlite')
+is_sqlite_running = check_database("sqlite")
 
 
 @login_required
@@ -215,8 +215,9 @@ def issue_thread(request, thread_id=None):
             for p in Profile.objects.filter(
                 pk__in=c_qs.distinct("author").values_list("author", flat=True)
             )
-        ] if not is_sqlite_running else
-        [
+        ]
+        if not is_sqlite_running
+        else [
             Profile.objects.chip_summarize(p)
             for p in Profile.objects.filter(
                 pk__in=c_qs.values_list("author", flat=True).distinct()

@@ -1,11 +1,9 @@
 import json
-import PIL
-import urllib
 
 from notifications.signals import notify
 from accounts.models import Profile
 from core.custom_decorators import require_post_params
-from django.core.files import File
+from common.utils import save_image_from_url
 from django.forms.models import model_to_dict
 from django.contrib.auth.decorators import login_required
 from .models import CiviImage
@@ -417,11 +415,8 @@ def upload_civi_image(request):
 
             if attachment_links:
                 for img_link in attachment_links:
-                    result = urllib.urlretrieve(img_link)
-                    img_file = File(open(result[0]))
-                    if check_image_with_pil(img_file):
-                        civi_image = CiviImage(title="", civi=c, image=img_file)
-                        civi_image.save()
+                    civi_image = CiviImage(title="", civi=c)
+                    save_image_from_url(civi_image, img_link)
 
             if len(request.FILES) != 0:
                 for image in request.FILES.getlist("attachment_image"):
@@ -447,15 +442,6 @@ def upload_civi_image(request):
         return HttpResponseForbidden("allowed only via POST")
 
 
-def check_image_with_pil(image_file):
-    """This function uses the PIL library to make sure the image format is supported"""
-    try:
-        PIL.Image.open(image_file)
-    except IOError:
-        return False
-    return True
-
-
 @login_required
 def upload_thread_image(request):
     """This function is used to upload an image to a thread"""
@@ -475,13 +461,8 @@ def upload_thread_image(request):
 
             elif img_link:
                 thread.image.delete()
-                result = urllib.urlretrieve(img_link)
-                img_file = File(open(result[0]))
-                if check_image_with_pil(img_file):
-                    thread.image = img_file
-                    thread.save()
-                # else:
-                #     return HttpResponseBadRequest("Invalid Image")
+                save_image_from_url(thread, img_link)
+
             else:
                 # Clean up previous image
                 thread.image.delete()
