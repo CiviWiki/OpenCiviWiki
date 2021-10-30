@@ -255,6 +255,14 @@ cw.NewThreadView = BB.View.extend({
                     if (_this.imageMode==="upload") {
                         var file = $('#id_attachment_image').val();
 
+                        $.ajaxSetup({
+                            beforeSend: function(xhr, settings) {
+                                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                                }
+                            }
+                        });
+
                         if (file) {
                             var formData = new FormData(_this.$('#attachment_image_form')[0]);
                             formData.set('thread_id', response.thread_id);
@@ -283,6 +291,7 @@ cw.NewThreadView = BB.View.extend({
                                 url: '/api/upload_image/',
                                 type: 'POST',
                                 data: {
+                                    csrfmiddlewaretoken: csrftoken,
                                     link: img_url,
                                     thread_id: response.thread_id
                                 },
