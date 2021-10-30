@@ -371,7 +371,7 @@ class Response(models.Model):
     author = models.ForeignKey(
         get_user_model(), default=None, null=True, on_delete=models.PROTECT
     )
-    civi = models.ForeignKey(Civi, default=None, null=True, on_delete=models.PROTECT)
+    civi = models.ForeignKey(Civi, default=None, null=True, on_delete=models.PROTECT, related_name='responses')
 
     title = models.CharField(max_length=127)
     body = models.TextField(max_length=2047)
