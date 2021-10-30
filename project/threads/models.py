@@ -62,9 +62,6 @@ class ThreadManager(models.Manager):
         return self.all().filter(category__in=categories)
 
 
-image_upload_path = PathAndRename("")
-
-
 class Thread(models.Model):
     author = models.ForeignKey(
         get_user_model(), default=None, null=True, on_delete=models.PROTECT
@@ -78,7 +75,9 @@ class Thread(models.Model):
 
     title = models.CharField(max_length=127, blank=False, null=False)
     summary = models.CharField(max_length=4095, blank=False, null=False)
-    image = models.ImageField(upload_to=image_upload_path, blank=True, null=True)
+    image = models.ImageField(
+        upload_to=PathAndRename("thread_uploads"), blank=True, null=True
+    )
 
     def __str__(self):
         return self.title
@@ -371,7 +370,13 @@ class Response(models.Model):
     author = models.ForeignKey(
         get_user_model(), default=None, null=True, on_delete=models.PROTECT
     )
-    civi = models.ForeignKey(Civi, default=None, null=True, on_delete=models.PROTECT, related_name='responses')
+    civi = models.ForeignKey(
+        Civi,
+        default=None,
+        null=True,
+        on_delete=models.PROTECT,
+        related_name="responses",
+    )
 
     title = models.CharField(max_length=127)
     body = models.TextField(max_length=2047)
@@ -395,7 +400,9 @@ class CiviImage(models.Model):
     objects = CiviImageManager()
     civi = models.ForeignKey(Civi, related_name="images", on_delete=models.PROTECT)
     title = models.CharField(max_length=255, null=True, blank=True)
-    image = models.ImageField(upload_to=image_upload_path, null=True, blank=True)
+    image = models.ImageField(
+        upload_to=PathAndRename("civi_uploads"), null=True, blank=True
+    )
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
     @property
