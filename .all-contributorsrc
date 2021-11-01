@@ -777,6 +777,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "guido97",
+      "name": "guido97",
+      "avatar_url": "https://avatars.githubusercontent.com/u/44304394?v=4",
+      "profile": "https://github.com/guido97",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
