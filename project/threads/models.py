@@ -23,7 +23,6 @@ class Fact(models.Model):
 
 
 class ThreadManager(models.Manager):
-    # TODO: move this to read.py, try to be more query operation specific here
     def summarize(self, thread):
         # Number of characters after which to truncate thread
         thread_truncate_length = 320
@@ -37,17 +36,15 @@ class ThreadManager(models.Manager):
             "id": thread.id,
             "title": thread.title,
             "summary": thread.summary[:thread_truncate_length] + (ellipsis_if_too_long),
-            "created": "{0} {1}, {2}".format(
-                month_name[thread.created.month],
-                thread.created.day,
-                thread.created.year,
-            ),
+            "created": f"""{month_name[thread.created.month]}
+                            {thread.created.day},
+                            {thread.created.year}""",
             "category_id": thread.category.id,
             "image": thread.image_url,
         }
         author_data = {
             "username": thread.author.username,
-            "full_name": thread.author.full_name,
+            "full_name": thread.author.profile.full_name,
             "profile_image": thread.author.profile.profile_image_url,
         }
         stats_data = {
@@ -65,9 +62,6 @@ class ThreadManager(models.Manager):
         return self.all().filter(category__in=categories)
 
 
-image_upload_path = PathAndRename("")
-
-
 class Thread(models.Model):
     author = models.ForeignKey(
         get_user_model(), default=None, null=True, on_delete=models.PROTECT
@@ -81,7 +75,9 @@ class Thread(models.Model):
 
     title = models.CharField(max_length=127, blank=False, null=False)
     summary = models.CharField(max_length=4095, blank=False, null=False)
-    image = models.ImageField(upload_to=image_upload_path, blank=True, null=True)
+    image = models.ImageField(
+        upload_to=PathAndRename("thread_uploads"), blank=True, null=True
+    )
 
     def __str__(self):
         return self.title
@@ -114,7 +110,7 @@ class Thread(models.Model):
     @property
     def created_date_str(self):
         d = self.created
-        return "{0} {1}, {2}".format(month_name[d.month], d.day, d.year)
+        return f"{month_name[d.month]} {d.day}, {d.year}"
 
 
 class CiviManager(models.Manager):
@@ -123,7 +119,7 @@ class CiviManager(models.Manager):
             "id": civi.id,
             "type": civi.c_type,
             "title": civi.title,
-            "body": civi.body[0:150],
+            "body": civi.body[:150],
         }
 
     def serialize(self, civi, filter=None):
@@ -138,9 +134,9 @@ class CiviManager(models.Manager):
                 "last_name": civi.author.last_name,
             },
             "tags": [tag.title for tag in civi.tags.all()],
-            "created": "{0} {1}, {2}".format(
-                month_name[civi.created.month], civi.created.day, civi.created.year
-            ),
+            "created": f"""{month_name[civi.created.month]}
+                            {civi.created.day},
+                            {civi.created.year}""",
             "attachments": [],
             "votes": civi.votes,
             "id": civi.id,
@@ -168,9 +164,9 @@ class CiviManager(models.Manager):
                 last_name=civi.author.last_name,
             ),
             "tags": [h.title for h in civi.tags.all()],
-            "created": "{0} {1}, {2}".format(
-                month_name[civi.created.month], civi.created.day, civi.created.year
-            ),
+            "created": f"""{month_name[civi.created.month]}
+                            {civi.created.day},
+                            {civi.created.year}""",
             "attachments": [],
             "votes": civi.votes,
             "id": civi.id,
@@ -249,7 +245,7 @@ class Civi(models.Model):
     @property
     def created_date_str(self):
         d = self.created
-        return "{0} {1}, {2}".format(month_name[d.month], d.day, d.year)
+        return f"{month_name[d.month]} {d.day}, {d.year}"
 
     def score(self, requested_user_id=None):
         # TODO: add docstring comment describing this score function
@@ -370,14 +366,17 @@ class Civi(models.Model):
         return data
 
 
-image_upload_path = PathAndRename("")
-
-
 class Response(models.Model):
     author = models.ForeignKey(
         get_user_model(), default=None, null=True, on_delete=models.PROTECT
     )
-    civi = models.ForeignKey(Civi, default=None, null=True, on_delete=models.PROTECT)
+    civi = models.ForeignKey(
+        Civi,
+        default=None,
+        null=True,
+        on_delete=models.PROTECT,
+        related_name="responses",
+    )
 
     title = models.CharField(max_length=127)
     body = models.TextField(max_length=2047)
@@ -401,7 +400,9 @@ class CiviImage(models.Model):
     objects = CiviImageManager()
     civi = models.ForeignKey(Civi, related_name="images", on_delete=models.PROTECT)
     title = models.CharField(max_length=255, null=True, blank=True)
-    image = models.ImageField(upload_to=image_upload_path, null=True, blank=True)
+    image = models.ImageField(
+        upload_to=PathAndRename("civi_uploads"), null=True, blank=True
+    )
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
     @property
