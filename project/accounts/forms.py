@@ -127,8 +127,8 @@ class ProfileEditForm(forms.ModelForm):
             "email",
         ]
 
-    first_name = forms.CharField(label="First Name", max_length=63, required=False)
-    last_name = forms.CharField(label="Last Name", max_length=63, required=False)
+    first_name = forms.CharField(label="First Name", max_length=63, required=True)
+    last_name = forms.CharField(label="Last Name", max_length=63, required=True)
     about_me = forms.CharField(label="About Me", max_length=511, required=False)
     email = forms.EmailField(label="Email", disabled=True)
     username = forms.CharField(label="Username", disabled=True)
