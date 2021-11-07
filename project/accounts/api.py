@@ -1,5 +1,4 @@
 from django.contrib.auth import get_user_model
-from django.forms.models import model_to_dict
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.http import (
@@ -11,13 +10,18 @@ from django.http import (
 )
 
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
 
 from notifications.signals import notify
 
 from accounts.permissions import IsProfileOwnerOrDuringRegistrationOrReadOnly
-from accounts.serializers import ProfileSerializer, ProfileListSerializer
+from accounts.serializers import (
+    ProfileSerializer,
+    ProfileListSerializer,
+    UserSerializer,
+)
 from accounts.forms import UpdateProfileImage
 from accounts.utils import get_account
 from threads.models import Thread, Civi, Activity
@@ -45,7 +49,6 @@ class ProfileViewSet(ModelViewSet):
     serializer_class = ProfileSerializer
     http_method_names = ["get", "head", "put", "patch"]
     permission_classes = (IsProfileOwnerOrDuringRegistrationOrReadOnly,)
-    authentication_classes = ()
 
     def list(self, request):
         """ """
@@ -129,12 +132,19 @@ class ProfileViewSet(ModelViewSet):
         /accounts/{username}/drafts
         """
         user = get_user_model().objects.get(username=user__username)
-        draft_threads = Thread.objects.filter(author=user, is_draft=False)
+        draft_threads = Thread.objects.filter(author=user, is_draft=True)
         serializer = ThreadSerializer(
             draft_threads, many=True, context={"request": request}
         )
         return Response(serializer.data)
 
+    def get_permissions(self):
+        if self.action in ["list"]:
+            self.permission_classes = [
+                IsAuthenticated,
+                IsProfileOwnerOrDuringRegistrationOrReadOnly,
+            ]
+        return super(ProfileViewSet, self).get_permissions()
 
 
 @api_view(["GET"])
