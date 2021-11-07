@@ -36,12 +36,12 @@ from core.custom_decorators import require_post_params
 class ProfileViewSet(ModelViewSet):
 
     """
-    REST API viewset for an Profile
+    REST API ViewSet for an Profile
     retrieve:
     Return the given user based a username.
 
     list:
-    Return a list of all the existing users. Only with privileged access.
+    Return a list of all the existing user profile. Only with privileged access.
     """
 
     queryset = Profile.objects.all()
@@ -71,7 +71,7 @@ class ProfileViewSet(ModelViewSet):
     @action(detail=True)
     def civis(self, request, user__username=None):
         """
-        Gets the civis of the selected account
+        Gets the civis of the selected user account
         /accounts/{username}/civis
         """
         user = get_object_or_404(get_user_model(), username=user__username)
@@ -82,7 +82,7 @@ class ProfileViewSet(ModelViewSet):
     @action(detail=True)
     def followers(self, request, user__username=None):
         """
-        Gets the followers of the selected account
+        Gets the followers of the selected user account
         /accounts/{username}/followers
         """
         profile = get_account(username=user__username)
@@ -93,7 +93,7 @@ class ProfileViewSet(ModelViewSet):
     @action(detail=True)
     def following(self, request, user__username=None):
         """
-        Gets the followings of the selected account
+        Gets the followings of the selected user account
         /accounts/{username}/following
         """
         profile = get_account(username=user__username)
@@ -104,7 +104,7 @@ class ProfileViewSet(ModelViewSet):
     @action(detail=True)
     def categories(self, request, user__username=None):
         """
-        Gets the preferred categories of the selected account
+        Gets the preferred categories of the selected user account
         /accounts/{username}/categories
         """
         profile = get_account(username=user__username)
@@ -115,8 +115,8 @@ class ProfileViewSet(ModelViewSet):
     @action(detail=True)
     def threads(self, request, user__username=None):
         """
-        Gets the preferred categories of the selected account
-        /accounts/{username}/categories
+        Gets the published threads of the selected user account
+        /accounts/{username}/threads
         """
         user = get_user_model().objects.get(username=user__username)
         published_threads = Thread.objects.filter(author=user, is_draft=False)
