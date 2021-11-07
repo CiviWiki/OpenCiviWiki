@@ -117,7 +117,7 @@ class ProfileActivationView(View):
             user = None
 
         if user is not None and account_activation_token.check_token(user, token):
-            profile = Profile.objects.get(user=user)
+            profile = user.profile
             if profile.is_verified:
                 redirect_link = {"href": "/", "label": "Back to Main"}
                 template_var = {

@@ -219,8 +219,8 @@ def get_card(request, username):
     """
 
     try:
-        user = User.objects.get(username=username)
-        profile = Profile.objects.get(user=user)
+        user = get_user_model().objects.get(username=username)
+        profile = user.profile
         result = Profile.objects.card_summarize(
             profile, Profile.objects.get(user=request.user)
         )
