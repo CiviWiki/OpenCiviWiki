@@ -148,10 +148,6 @@ class CiviManager(models.Manager):
         return json.dumps(data, cls=DjangoJSONEncoder)
 
     def serialize_s(self, civi, filter=None):
-        # Get profile profile image, or set to default image
-        profile_image_or_default = (
-            civi.author.profile.profile_image.url or "/media/profile/default.png"
-        )
 
         data = {
             "type": civi.c_type,
@@ -159,7 +155,7 @@ class CiviManager(models.Manager):
             "body": civi.body,
             "author": dict(
                 username=civi.author.username,
-                profile_image=profile_image_or_default,
+                profile_image=civi.author.profile.profile_image_url,
                 first_name=civi.author.first_name,
                 last_name=civi.author.last_name,
             ),
