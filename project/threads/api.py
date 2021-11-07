@@ -19,6 +19,7 @@ from django.http import (
 
 from .models import Activity, Civi, Thread
 from .utils import json_response
+from common.utils import check_database
 
 
 @login_required
@@ -51,6 +52,10 @@ def new_thread(request):
         return HttpResponseServerError(reason=str(e))
 
 
+is_sqlite_running = check_database("sqlite")
+
+
+@login_required
 def get_thread(request, thread_id):
     """
     USAGE:
@@ -64,10 +69,9 @@ def get_thread(request, thread_id):
         c = civis.order_by("-created")
         c_scores = [ci.score(request.user.id) for ci in c]
         c_data = [Civi.objects.serialize_s(ci) for ci in c]
-
         problems = []
         for idx, item in enumerate(c_data):
-            problems[idx]["score"] = c_scores[idx]
+            problems.append({"score": c_scores[idx]})
 
         data = {
             "title": thread.title,
@@ -84,6 +88,13 @@ def get_thread(request, thread_id):
                 Profile.objects.chip_summarize(user.profile)
                 for user in get_user_model().objects.filter(
                     pk__in=civis.distinct("author").values_list("author", flat=True)
+                )
+            ]
+            if not is_sqlite_running
+            else [
+                Profile.objects.chip_summarize(p)
+                for p in Profile.objects.filter(
+                    pk__in=civis.values_list("author", flat=True).distinct()
                 )
             ],
             "num_civis": thread.num_civis,
