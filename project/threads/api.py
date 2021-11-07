@@ -57,7 +57,7 @@ def get_thread(request, thread_id):
        This is used to get a requested thread
     """
     try:
-        t = Thread.objects.get(id=thread_id)
+        thread = Thread.objects.get(id=thread_id)
         civis = Civi.objects.filter(thread_id=thread_id)
 
         # TODO: move order by to frontend or accept optional arg
@@ -70,41 +70,39 @@ def get_thread(request, thread_id):
             problems[idx]["score"] = c_scores[idx]
 
         data = {
-            "title": t.title,
-            "summary": t.summary,
-            "tags": t.tags.all().values(),
+            "title": thread.title,
+            "summary": thread.summary,
             "author": {
-                "username": t.author.username,
-                "profile_image": t.author.profile.profile_image.url
-                if t.author.profile.profile_image
-                else "/media/profile/default.png",
-                "first_name": t.author.first_name,
-                "last_name": t.author.last_name,
+                "username": thread.author.username,
+                "profile_image": thread.author.profile.profile_image_url,
+                "first_name": thread.author.first_name,
+                "last_name": thread.author.last_name,
             },
-            "category": model_to_dict(t.category),
-            "created": t.created,
+            "category": model_to_dict(thread.category),
+            "created": thread.created_date_str,
             "contributors": [
-                Profile.objects.chip_summarize(u.profile)
-                for u in get_user_model().objects.filter(
+                Profile.objects.chip_summarize(user.profile)
+                for user in get_user_model().objects.filter(
                     pk__in=civis.distinct("author").values_list("author", flat=True)
                 )
             ],
-            "num_civis": t.num_civis,
-            "num_views": t.num_views,
+            "num_civis": thread.num_civis,
+            "num_views": thread.num_views,
             "votes": [
                 {
                     "civi_id": act.civi.id,
                     "activity_type": act.activity_type,
                     "user": act.user.id,
                 }
-                for act in Activity.objects.filter(thread=t.id, user=request.user.id)
+                for act in Activity.objects.filter(
+                    thread=thread.id, user=request.user.id
+                )
             ],
         }
 
         # modify thread view count
-        t.num_views = t.num_views + 1
-        t.save()
-
+        thread.num_views = thread.num_views + 1
+        thread.save()
         return json_response(data)
     except Thread.DoesNotExist:
         return HttpResponseBadRequest(

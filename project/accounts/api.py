@@ -50,19 +50,19 @@ class ProfileViewSet(ModelViewSet):
     def list(self, request):
         """ """
         if self.request.user.is_staff:
-            accounts = Profile.objects.all()
+            profiles = Profile.objects.all()
         else:
-            accounts = Profile.objects.filter(user=self.request.user)
-        serializer = ProfileListSerializer(accounts, many=True)
+            profiles = Profile.objects.filter(user=self.request.user)
+        serializer = ProfileListSerializer(profiles, many=True)
         return Response(serializer.data)
 
     def retrieve(self, request, user__username=None):
         """ """
-        account = get_account(username=user__username)
-        if self.request.user == account.user:
-            serializer = ProfileSerializer(account)
+        profile = get_account(username=user__username)
+        if self.request.user == profile.user:
+            serializer = ProfileSerializer(profile)
         else:
-            serializer = ProfileListSerializer(account)
+            serializer = ProfileListSerializer(profile)
         return Response(serializer.data)
 
     @action(detail=True)
@@ -82,9 +82,9 @@ class ProfileViewSet(ModelViewSet):
         Gets the followers of the selected account
         /accounts/{username}/followers
         """
-        account = get_account(username=user__username)
-        account_followers = account.followers.all()
-        serializer = ProfileListSerializer(account_followers, many=True)
+        profile = get_account(username=user__username)
+        followers = profile.followers.all()
+        serializer = ProfileListSerializer(followers, many=True)
         return Response(serializer.data)
 
     @action(detail=True)
@@ -93,9 +93,9 @@ class ProfileViewSet(ModelViewSet):
         Gets the followings of the selected account
         /accounts/{username}/following
         """
-        account = get_account(username=user__username)
-        account_followings = account.following.all()
-        serializer = ProfileListSerializer(account_followings, many=True)
+        profile = get_account(username=user__username)
+        followings = profile.following.all()
+        serializer = ProfileListSerializer(followings, many=True)
         return Response(serializer.data)
 
     @action(detail=True)
@@ -104,9 +104,9 @@ class ProfileViewSet(ModelViewSet):
         Gets the preferred categories of the selected account
         /accounts/{username}/categories
         """
-        account = get_account(username=user__username)
-        account_categories = account.categories
-        serializer = CategorySerializer(account_categories, many=True)
+        profile = get_account(username=user__username)
+        categories = profile.categories
+        serializer = CategorySerializer(categories, many=True)
         return Response(serializer.data)
 
     @action(detail=True)
@@ -116,9 +116,9 @@ class ProfileViewSet(ModelViewSet):
         /accounts/{username}/categories
         """
         user = get_user_model().objects.get(username=user__username)
-        draft_threads = Thread.objects.filter(author=user).exclude(is_draft=False)
+        published_threads = Thread.objects.filter(author=user, is_draft=False)
         serializer = ThreadSerializer(
-            draft_threads, many=True, context={"request": request}
+            published_threads, many=True, context={"request": request}
         )
         return Response(serializer.data)
 
@@ -171,9 +171,8 @@ def get_profile(request, username):
         )
 
         solution_threads = voted_solutions.values("thread__id").distinct()
-
         for thread_id in solution_threads:
-            t = Thread.objects.get(id=thread_id)
+            thread = Thread.objects.get(id=thread_id)
             solutions = []
             solution_civis = voted_solutions.filter(thread=thread_id).values_list(
                 "civi__id", flat=True
@@ -191,16 +190,16 @@ def get_profile(request, username):
                 solutions.append(solution_item)
 
             my_issue_item = {
-                "thread_id": t.id,
-                "thread_title": t.title,
-                "category": t.category.name,
+                "thread_id": thread.id,
+                "thread_title": thread.title,
+                "category": thread.category.name,
                 "solutions": solutions,
             }
             result["issues"].append(my_issue_item)
 
         if request.user.username != username:
-            ra = Profile.objects.get(user=request.user)
-            if username in ra.following.all():
+            requested_profile = Profile.objects.get(user=request.user)
+            if username in requested_profile.following.all():
                 result["follow_state"] = True
             else:
                 result["follow_state"] = False
@@ -255,27 +254,23 @@ def edit_user(request):
     """
     Edit Profile Model
     """
-    request_data = request.POST
-    user = request.user
-    account = Profile.objects.get(user=user)
 
+    profile = Profile.objects.get(user=request.user)
     data = {
-        "first_name": request_data.get("first_name", account.first_name),
-        "last_name": request_data.get("last_name", account.last_name),
-        "about_me": request_data.get("about_me", account.about_me),
+        "first_name": request.POST.get("first_name", profile.first_name),
+        "last_name": request.POST.get("last_name", profile.last_name),
+        "about_me": request.POST.get("about_me", profile.about_me),
     }
 
-    account.__dict__.update(data)
-
+    profile.__dict__.update(data)
     try:
-        account.save()
+        profile.save()
     except Exception as e:
-        # print('EXCEPTION THROWN HERE!! ')
         return HttpResponseServerError(reason=str(e))
 
-        account.refresh_from_db()
+    profile.refresh_from_db()
 
-    return JsonResponse(Profile.objects.summarize(account))
+    return JsonResponse(Profile.objects.summarize(profile))
 
 
 @login_required
@@ -431,18 +426,17 @@ def edit_user_categories(request):
     """
     USAGE:
         Edits list of categories for the user
-
     """
     try:
-        account = Profile.objects.get(user=request.user)
+        profile = Profile.objects.get(user=request.user)
         categories = [int(i) for i in request.POST.getlist("categories[]")]
-        account.categories.clear()
+        profile.categories.clear()
         for category in categories:
-            account.categories.add(Category.objects.get(id=category))
-            account.save()
+            profile.categories.add(Category.objects.get(id=category))
+            profile.save()
 
         data = {
-            "user_categories": list(account.categories.values_list("id", flat=True))
+            "user_categories": list(profile.categories.values_list("id", flat=True))
             or "all_categories"
         }
         return JsonResponse({"result": data})
