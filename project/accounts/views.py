@@ -109,12 +109,11 @@ class ProfileActivationView(View):
 
     def get(self, request, uidb64, token):
 
-        User = get_user_model()
         try:
             uid = force_str(urlsafe_base64_decode(uidb64))
-            user = User.objects.get(pk=uid)
+            user = get_user_model().objects.get(pk=uid)
 
-        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        except (TypeError, ValueError, OverflowError, get_user_model().DoesNotExist):
             user = None
 
         if user is not None and account_activation_token.check_token(user, token):
@@ -169,15 +168,14 @@ class ProfileSetupView(LoginRequiredMixin, View):
 @login_required
 @full_profile
 def user_profile(request, username=None):
-    User = get_user_model()
     if request.method == "GET":
         if not username:
             return HttpResponseRedirect(f"/profile/{request.user}")
         else:
             is_owner = username == request.user.username
             try:
-                user = User.objects.get(username=username)
-            except User.DoesNotExist:
+                user = get_user_model().objects.get(username=username)
+            except get_user_model().DoesNotExist:
                 return HttpResponseRedirect("/404")
 
         form = ProfileEditForm(

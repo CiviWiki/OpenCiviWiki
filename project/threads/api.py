@@ -38,14 +38,14 @@ def new_thread(request):
             category_id=request.POST["category_id"],
             author=request.user,
         )
-
         new_t = Thread(**new_thread_data)
         new_t.save()
 
         return JsonResponse({"data": "success", "thread_id": new_t.pk})
-    except Profile.DoesNotExist:
-        return HttpResponseServerError(
-            reason=f"Profile with user:{request.user.username} does not exist"
+    except get_user_model().DoesNotExist:
+        return JsonResponse(
+            {"error": f"User with username {request.user.username} not found"},
+            status=400,
         )
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
@@ -110,9 +110,10 @@ def get_thread(request, thread_id):
         return HttpResponseBadRequest(
             reason=f"Thread with id:{thread_id} does not exist"
         )
-    except Profile.DoesNotExist:
-        return HttpResponseBadRequest(
-            reason=f"Profile with username:{request.user.username} does not exist"
+    except get_user_model().DoesNotExist:
+        return JsonResponse(
+            {"error": f"User with username {request.user.username} not found"},
+            status=400,
         )
     except Exception as e:
         return HttpResponseBadRequest(reason=str(e))

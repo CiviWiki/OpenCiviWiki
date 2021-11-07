@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.forms.models import model_to_dict
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
 from django.http import (
     JsonResponse,
     HttpResponse,
@@ -70,9 +71,9 @@ class ProfileViewSet(ModelViewSet):
         Gets the civis of the selected account
         /accounts/{username}/civis
         """
-        account = get_account(username=user__username)
-        account_civis = account.civis
-        serializer = CiviSerializer(account_civis, many=True)
+        user = get_object_or_404(get_user_model(), username=user__username)
+        user_civis = user.civis
+        serializer = CiviSerializer(user_civis, many=True)
         return Response(serializer.data)
 
     @action(detail=True)
@@ -141,11 +142,13 @@ def get_user(request, username):
         This is used to get a user
     """
 
-    User = get_user_model()
-
     try:
-        user = User.objects.get(username=username)
-        profile = Profile.objects.get(user=user)
+        user = get_user_model().objects.get(username=username)
+        return JsonResponse(UserSerializer(user).data)
+    except get_user_model().DoesNotExist:
+        return JsonResponse(
+            {"error": f"User with username {username} not found"}, status=400
+        )
 
         return JsonResponse(model_to_dict(profile))
     except Profile.DoesNotExist as e:
@@ -158,13 +161,10 @@ def get_profile(request, username):
        This is used to get a user profile
     """
 
-    User = get_user_model()
-
     try:
-        user = User.objects.get(username=username)
-        profile = Profile.objects.get(user=user)
+        user = get_user_model().objects.get(username=username)
+        profile = user.profile
         result = Profile.objects.summarize(profile)
-
         result["issues"] = []
         voted_solutions = Activity.objects.filter(
             user=user.id, civi__c_type="solution", activity_type__contains="pos"
@@ -207,8 +207,10 @@ def get_profile(request, username):
 
         return JsonResponse(result)
 
-    except Profile.DoesNotExist as e:
-        return HttpResponseBadRequest(reason=str(e))
+    except get_user_model().DoesNotExist:
+        return JsonResponse(
+            {"error": f"User with username {username} not found"}, status=400
+        )
 
 
 def get_card(request, username):
@@ -217,8 +219,6 @@ def get_card(request, username):
         This is used to get a card
     """
 
-    User = get_user_model()
-
     try:
         user = User.objects.get(username=username)
         profile = Profile.objects.get(user=user)
@@ -226,10 +226,10 @@ def get_card(request, username):
             profile, Profile.objects.get(user=request.user)
         )
         return JsonResponse(result)
-    except User.DoesNotExist:
-        return HttpResponseBadRequest(reason=f"User with username {username} not found")
-    except Profile.DoesNotExist as e:
-        return HttpResponseBadRequest(reason=str(e))
+    except get_user_model().DoesNotExist:
+        return JsonResponse(
+            {"error": f"User with username {username} not found"}, status=400
+        )
     except Exception as e:
         return HttpResponseBadRequest(reason=str(e))
 
@@ -303,7 +303,7 @@ def upload_profile_image(request):
                 response = {"profile_image": account.profile_image_url}
                 return JsonResponse(response, status=200)
 
-            except Profile.DoesNotExist:
+            except get_user_model().DoesNotExist:
                 response = {
                     "message": f"{request.user.username} does not have profile",
                     "error": "ACCOUNT_ERROR",
@@ -332,7 +332,7 @@ def clear_profile_image(request):
             account.save()
 
             return HttpResponse("Image Deleted")
-        except Profile.DoesNotExist:
+        except get_user_model().DoesNotExist:
             return HttpResponseServerError(
                 reason=f"Profile with id:{request.user.username} does not exist"
             )
@@ -361,11 +361,9 @@ def request_follow(request):
     if request.user.username == request.POST.get("target", -1):
         return HttpResponseBadRequest(reason="You cannot follow yourself, silly!")
 
-    User = get_user_model()
-
     try:
         account = Profile.objects.get(user=request.user)
-        target = User.objects.get(username=request.POST.get("target", -1))
+        target = get_user_model().objects.get(username=request.POST.get("target", -1))
         target_account = Profile.objects.get(user=target)
 
         account.following.add(target_account)
@@ -384,7 +382,7 @@ def request_follow(request):
         )
 
         return JsonResponse({"result": data})
-    except Profile.DoesNotExist as e:
+    except get_user_model().DoesNotExist as e:
         return HttpResponseBadRequest(reason=str(e))
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
@@ -406,13 +404,11 @@ def request_unfollow(request):
     :return: (200, okay, list of friend information) (400, bad lookup) (500, error)
     """
 
-    User = get_user_model()
-
+    username = request.POST.get("target")
     try:
-        username = request.POST.get("target")
         if username:
             account = Profile.objects.get(user=request.user)
-            target = User.objects.get(username=username)
+            target = get_user_model().objects.get(username=username)
             target_account = Profile.objects.get(user=target)
 
             account.following.remove(target_account)
@@ -422,12 +418,10 @@ def request_unfollow(request):
             return JsonResponse({"result": "Success"})
         return HttpResponseBadRequest(reason="username cannot be empty")
 
-    except User.DoesNotExist:
+    except get_user_model().DoesNotExist:
         return HttpResponseBadRequest(
             reason=f"User with username {username} does not exist"
         )
-    except Profile.DoesNotExist as e:
-        return HttpResponseBadRequest(reason=str(e))
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
 
@@ -452,7 +446,7 @@ def edit_user_categories(request):
             or "all_categories"
         }
         return JsonResponse({"result": data})
-    except Profile.DoesNotExist as e:
+    except get_user_model().DoesNotExist as e:
         return HttpResponseBadRequest(reason=str(e))
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
