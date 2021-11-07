@@ -136,6 +136,8 @@ class ProfileViewSet(ModelViewSet):
         return Response(serializer.data)
 
 
+
+@api_view(["GET"])
 def get_user(request, username):
     """
     USAGE:
@@ -150,11 +152,8 @@ def get_user(request, username):
             {"error": f"User with username {username} not found"}, status=400
         )
 
-        return JsonResponse(model_to_dict(profile))
-    except Profile.DoesNotExist as e:
-        return HttpResponseBadRequest(reason=str(e))
 
-
+@api_view(["GET"])
 def get_profile(request, username):
     """
     USAGE:
@@ -212,6 +211,7 @@ def get_profile(request, username):
         )
 
 
+@api_view(["GET"])
 def get_card(request, username):
     """
     USAGE:
