@@ -1,16 +1,12 @@
 {% extends "base.html" %}
 {% load static %}
 {% load i18n %}
-{% block page_title %}Settings{% endblock page_title %}
+Settings
 
-{% block extra_css %}
     <link type="text/css" rel="stylesheet/less" href="{% static "less/base.less" %}"/>
     <link type="text/css" rel="stylesheet/less" href="{% static "less/utils.less" %}"/>
-{% endblock extra_css %}
 
-{% block backbone_template %}
 <script id="settings-personal" type="text/template">
-{% verbatim %}
     <div class="white-background-input-field input-field col s6">
         <input class="save-account" id="first_name" type="text" value="{{this.model.get('first_name')}}">
         <label for="first-name">{% trans "First Name" %} </label>
@@ -19,11 +15,9 @@
         <input class="save-account" id="last_name" type="text" value="{{this.model.get('last_name')}}">
         <label for="last-name">{% trans "Last Name" %}</label>
     </div>
-{% endverbatim %}
 </script>
 
 <script id="settings-base" type="text/template">
-{% verbatim %}
     <div class="subtitle-lato">{% trans "Personal" %} </div>
         <div class="white-background-input-field input-field col s12">
             <input id="email" type="text" class="validate" value="{{this.model.get('email')}}" disabled>
@@ -35,7 +29,6 @@
         </div>
         <div id="settings-1"></div>
     </div>
-{% endverbatim %}
 </script>
 
 <script id="settings-template" type="text/template">
@@ -54,7 +47,6 @@
         </div>
     </div>
 </script>
-{% endblock backbone_template %}
 
 {% block body_class %}grey lighten-4{% endblock body_class %}
 {% block content %}
