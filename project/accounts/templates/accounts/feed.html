@@ -250,6 +250,7 @@
 {% block extra_js %}
 <script type="text/javascript" src="{% static "js/feed.js" %}"></script>
 <script type="text/javascript">
+    var csrftoken = '{{ csrf_token }}';
     var username = '{{user.username}}',
         user_id = '{{user.id}}',
         data = JSON.parse('{{data|escapejs}}');

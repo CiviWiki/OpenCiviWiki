@@ -246,6 +246,7 @@ cw.NewThreadView = BB.View.extend({
                 url: '/api/new_thread/',
                 type: 'POST',
                 data: {
+                    csrfmiddlewaretoken: csrftoken,
                     title: title,
                     summary: summary,
                     category_id: category_id
@@ -253,6 +254,14 @@ cw.NewThreadView = BB.View.extend({
                 success: function (response) {
                     if (_this.imageMode==="upload") {
                         var file = $('#id_attachment_image').val();
+
+                        $.ajaxSetup({
+                            beforeSend: function(xhr, settings) {
+                                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                                }
+                            }
+                        });
 
                         if (file) {
                             var formData = new FormData(_this.$('#attachment_image_form')[0]);
@@ -282,6 +291,7 @@ cw.NewThreadView = BB.View.extend({
                                 url: '/api/upload_image/',
                                 type: 'POST',
                                 data: {
+                                    csrfmiddlewaretoken: csrftoken,
                                     link: img_url,
                                     thread_id: response.thread_id
                                 },

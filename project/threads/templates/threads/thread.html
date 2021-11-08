@@ -46,7 +46,7 @@
                     <div class="col s3">
                         <div class="wiki-author">
                             <div class="author-photo-holder">
-                                <div class="author-photo transparent" style="background-image: url('{{this.model.get('author').profile.profile_image}}'); background-size: 40px;"></div>
+                                <div class="author-photo transparent" style="background-image: url('{{this.model.get('author').profile_image}}'); background-size: 40px;"></div>
                             </div>
                             <div class="author-info">
                                 <a class="author-name bold-text" href="/profile/{{this.model.get('author').username}}">
@@ -180,7 +180,7 @@
                     <div class="col s3">
                         <div class="wiki-author">
                             <div class="author-photo-holder">
-                                <div class="author-photo transparent" style="background-image: url('{{this.model.get('author').profile.profile_image}}'); background-size: 40px;"></div>
+                                <div class="author-photo transparent" style="background-image: url('{{this.model.get('author').profile_image}}'); background-size: 40px;"></div>
                             </div>
                             <div class="author-info">
                                 <a class="author-name bold-text" href="/profile/{{this.model.get('author').username}}">{{this.model.get('author').first_name}} {{this.model.get('author').last_name}}</a>
@@ -555,7 +555,7 @@
         </div>
         <div class="civi-footer">
             <div class="author-photo-holder">
-                <div class="author-photo transparent" style="background-image: url('{{this.model.get('author').profile.profile_image}}'); background-size: 34px;">
+                <div class="author-photo transparent" style="background-image: url('{{this.model.get('author').profile_image}}'); background-size: 34px;">
     
                 </div>
             </div>
@@ -928,7 +928,7 @@
 {% block extra_js %}
 <script type="text/javascript" src="{% static " js/thread.js" %}"></script>
 <script type="text/javascript">
-
+    var csrftoken = '{{ csrf_token }}';
     var username = '{{user.username}}',
         threadId = '{{thread_id}}',
         thread_is_draft = '{{is_draft}}',

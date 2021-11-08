@@ -88,9 +88,6 @@ class ProfileManager(models.Manager):
         return [self.chip_summarize(following) for following in profile.following.all()]
 
 
-profile_upload_path = PathAndRename("")
-
-
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     first_name = models.CharField(max_length=63, blank=False)
@@ -114,10 +111,10 @@ class Profile(models.Model):
 
     objects = ProfileManager()
     profile_image = models.ImageField(
-        upload_to=profile_upload_path, blank=True, null=True
+        upload_to=PathAndRename("profile_uploads"), blank=True, null=True
     )
     profile_image_thumb = models.ImageField(
-        upload_to=profile_upload_path, blank=True, null=True
+        upload_to=PathAndRename("profile_uploads"), blank=True, null=True
     )
 
     @property

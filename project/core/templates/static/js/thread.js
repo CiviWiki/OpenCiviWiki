@@ -455,6 +455,15 @@ cw.CiviView =  BB.View.extend({
             if (this.imageRemoveList.length){
                 data.image_remove_list = this.imageRemoveList;
             }
+
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            });
+
             $.ajax({
                 url: '/api/edit_civi/',
                 type: 'POST',
@@ -475,6 +484,14 @@ cw.CiviView =  BB.View.extend({
                                 formData.append('attachment_links[]', img_link);
                             });
                         }
+
+                        $.ajaxSetup({
+                            beforeSend: function(xhr, settings) {
+                                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                                }
+                            }
+                        });
 
                         $.ajax({
                             url: '/api/upload_images/',
@@ -617,6 +634,7 @@ cw.CiviView =  BB.View.extend({
             url: '/api/delete_civi/',
             type: 'POST',
             data: {
+                csrfmiddlewaretoken: csrftoken,
                 civi_id: this.model.id,
             },
             success: function (response) {
@@ -753,6 +771,7 @@ cw.NewCiviView = BB.View.extend({
                 url: '/api/new_civi/',
                 type: 'POST',
                 data: {
+                    csrfmiddlewaretoken: csrftoken,
                     title: title,
                     body: body,
                     c_type: c_type,
@@ -774,6 +793,14 @@ cw.NewCiviView = BB.View.extend({
                                 formData.append('attachment_links[]', img_link);
                             });
                         }
+
+                        $.ajaxSetup({
+                            beforeSend: function(xhr, settings) {
+                                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                                }
+                            }
+                        });
 
                         $.ajax({
                             url: '/api/upload_images/',
@@ -980,6 +1007,15 @@ cw.NewResponseView = BB.View.extend({
                                 formData.append('attachment_links[]', img_link);
                             });
                         }
+
+                        $.ajaxSetup({
+                            beforeSend: function(xhr, settings) {
+                                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                                }
+                            }
+                        });
+
                         $.ajax({
                             url: '/api/upload_images/',
                             type: 'POST',
@@ -1111,6 +1147,15 @@ cw.EditThreadView = BB.View.extend({
                         if (_this.imageMode==="upload" && file){
                             var formData = new FormData(_this.$('#attachment_image_form')[0]);
                             formData.set('thread_id', response.data.thread_id);
+
+                            $.ajaxSetup({
+                                beforeSend: function(xhr, settings) {
+                                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                                    }
+                                }
+                            });
+
                             $.ajax({
                                 url: '/api/upload_image/',
                                 type: 'POST',
@@ -1144,6 +1189,7 @@ cw.EditThreadView = BB.View.extend({
                                 url: '/api/upload_image/',
                                 type: 'POST',
                                 data: {
+                                    csrfmiddlewaretoken: csrftoken,
                                     link: img_url,
                                     thread_id: response.data.thread_id
                                 },
@@ -1172,6 +1218,7 @@ cw.EditThreadView = BB.View.extend({
                                 url: '/api/upload_image/',
                                 type: 'POST',
                                 data: {
+                                    csrfmiddlewaretoken: csrftoken,
                                     remove: true,
                                     thread_id: response.data.thread_id
                                 },
@@ -1963,6 +2010,7 @@ cw.ThreadView = BB.View.extend({
             url: '/api/edit_thread/',
             type: 'POST',
             data: {
+                csrfmiddlewaretoken: csrftoken,
                 thread_id: _this.model.threadId,
                 title: _this.model.attributes.title,
                 summary: _this.model.attributes.summary,
