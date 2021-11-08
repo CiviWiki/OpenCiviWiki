@@ -7,7 +7,7 @@ Production settings file to select proper environment variables.
 import os
 
 # False if not in os.environ
-DEBUG = os.getenv("DEBUG", False)
+DEBUG = os.getenv("DEBUG", True)
 
 # defaults to second value if not found in os.environ
 DJANGO_HOST = os.getenv("DJANGO_HOST", "LOCALHOST")
@@ -115,6 +115,25 @@ else:
             "NAME": BASE_DIR + "/" + "db.sqlite3",
         }
     }
+    # DATABASES = {
+
+#     'default': {
+
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+
+#         'NAME': 'django_database',
+
+#         'USER': 'abhijithganesh',
+
+#         'PASSWORD': 'Ilikepuma1',
+
+#         'HOST': 'localhost',
+
+#         'PORT': '5432',
+
+#     }
+#
+# }
 
 # Email Backend Setup
 if "EMAIL_HOST" not in os.environ:
@@ -163,6 +182,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 LOGIN_URL = "login/"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
+MEDIA_URL = "/media/"
 
 AUTH_PASSWORD_VALIDATORS = [
     {

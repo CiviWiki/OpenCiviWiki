@@ -1,5 +1,5 @@
 *.pyc
-VirtualEnv
+VirtualEnviron
 */.DS_Store
 *.DS_Store
 .DS_Store

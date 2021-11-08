@@ -202,17 +202,17 @@ def issue_thread(request, thread_id=None):
         "summary": Thread_filter.summary,
         "image": Thread_filter.image_url,
         "author": {
-            "username": Thread_filter.author.user.username,
-            "profile_image": Thread_filter.author.profile_image_url,
+            "username": Thread_filter.author.username,
+            # "profile_image": Thread_filter.author.profile_image_url,
             "first_name": Thread_filter.author.first_name,
             "last_name": Thread_filter.author.last_name,
         },
-        "contributors": [
-            Profile.objects.chip_summarize(a)
-            for a in Profile.objects.filter(
-                pk__in=civis.distinct("author").values_list("author", flat=True)
-            )
-        ],
+        # "contributors": [
+        #     Profile.objects.chip_summarize(a)
+        #     for a in Profile.objects.filter(
+        #         pk__in=civis.distinct("author").values_list("author", flat=True)
+        #     )
+        # ],
         "category": {
             "id": Thread_filter.category.id,
             "name": Thread_filter.category.name,
@@ -221,16 +221,16 @@ def issue_thread(request, thread_id=None):
         "created": Thread_filter.created_date_str,
         "num_civis": Thread_filter.num_civis,
         "num_views": Thread_filter.num_views,
-        "user_votes": [
-            {
-                "civi_id": act.civi.id,
-                "activity_type": act.activity_type,
-                "c_type": act.civi.c_type,
-            }
-            for act in Activity.objects.filter(
-                thread=Thread_filter.id, account=req_acct.id
-            )
-        ],
+        # "user_votes": [
+        #     {
+        #         "civi_id": act.civi.id,
+        #         "activity_type": act.activity_type,
+        #         "c_type": act.civi.c_type,
+        #     }
+        #     for act in Activity.objects.filter(
+        #         thread=Thread_filter.id, account=req_acct.id
+        #     )
+        # ],
     }
     thread_body_data = {
         "civis": civis,

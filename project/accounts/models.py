@@ -120,11 +120,8 @@ class Profile(models.Model):
         upload_to=profile_upload_path, blank=True, null=True
     )
 
-    @property
     def full_name(self):
-        """Returns the person's full name."""
-
-        return f"{self.first_name} {self.last_name}"
+        return first_name+last_name   
 
     @property
     def profile_image_url(self):

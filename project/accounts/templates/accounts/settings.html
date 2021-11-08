@@ -1,43 +1,33 @@
 {% extends "base.html" %}
 {% load static %}
 {% load i18n %}
-{% block page_title %}Settings{% endblock page_title %}
-
-{% block extra_css %}
+Settings
     <link type="text/css" rel="stylesheet/less" href="{% static "less/base.less" %}"/>
     <link type="text/css" rel="stylesheet/less" href="{% static "less/utils.less" %}"/>
-{% endblock extra_css %}
-
-{% block backbone_template %}
 <script id="settings-personal" type="text/template">
-{% verbatim %}
     <div class="white-background-input-field input-field col s6">
-        <input class="save-account" id="first_name" type="text" value="{{this.model.get('first_name')}}">
+        <input class="save-account" id="first_name" type="text" value="{{'first_name'}}">
         <label for="first-name">{% trans "First Name" %} </label>
     </div>
     <div class="white-background-input-field input-field col s6">
-        <input class="save-account" id="last_name" type="text" value="{{this.model.get('last_name')}}">
-        <label for="last-name">{% trans "Last Name" %}</label>
+        <input class="save-account" id="last_name" type="text" value="{{'last_name'}}">
+        <label for="last-name">{% trans "Last Name") %}</label>
     </div>
-{% endverbatim %}
 </script>
-
 <script id="settings-base" type="text/template">
 {% verbatim %}
     <div class="subtitle-lato">{% trans "Personal" %} </div>
         <div class="white-background-input-field input-field col s12">
-            <input id="email" type="text" class="validate" value="{{this.model.get('email')}}" disabled>
+            <input id="email" type="text" class="validate" value="{{model.get('email')}}" disabled>
             <label for="email">{% trans "Email" %}</label>
         </div>
         <div class="white-background-input-field input-field col s12">
-            <input id="username" type="text" class="validate" value="{{this.model.get('username')}}" disabled>
+            <input id="username" type="text" class="validate" value="{{model.get('username')}}" disabled>
             <label for="username">{% trans "Username" %} </label>
         </div>
         <div id="settings-1"></div>
     </div>
-{% endverbatim %}
 </script>
-
 <script id="settings-template" type="text/template">
     <div class="container row">
         <div class="section row"></div>
@@ -54,15 +44,6 @@
         </div>
     </div>
 </script>
-{% endblock backbone_template %}
-
-{% block body_class %}grey lighten-4{% endblock body_class %}
-{% block content %}
-    {% include "global_nav.html" %}
-    <div id="settings"></div>
-{% endblock content %}
-
-{% block extra_js %}
 <script type="text/javascript" src="{% static "js/settings.js" %}"></script>
 <script type="text/javascript">
     var data = {};
@@ -78,4 +59,3 @@
     userModel.fetch();
     settingsView.render();
 </script>
-{% endblock extra_js %}
