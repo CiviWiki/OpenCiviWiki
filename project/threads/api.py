@@ -8,7 +8,6 @@ from core.custom_decorators import require_post_params
 from django.core.files import File
 from django.forms.models import model_to_dict
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
 from .models import CiviImage
 from django.db.models.query import F
 from django.contrib.auth import get_user_model
@@ -24,7 +23,6 @@ from .models import Activity, Civi, Thread
 from .utils import json_response
 
 
-@csrf_exempt
 @login_required
 @require_post_params(params=["title", "summary", "category_id"])
 def new_thread(request):

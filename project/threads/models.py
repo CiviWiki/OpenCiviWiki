@@ -47,7 +47,7 @@ class ThreadManager(models.Manager):
         }
         author_data = {
             "username": thread.author.username,
-            "full_name": thread.author.first_name + thread.author.last_name,
+            "full_name": thread.author.full_name,
             "profile_image": thread.author.profile.profile_image_url,
         }
         stats_data = {
