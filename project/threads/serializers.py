@@ -61,7 +61,7 @@ class CiviSerializer(serializers.ModelSerializer):
         else:
             return 0
 
-        if user.is_anonymous():
+        if not user.is_authenticated:
             return 0
         else:
             return obj.score(user.id)

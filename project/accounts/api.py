@@ -286,26 +286,27 @@ def edit_user(request):
 @login_required
 def upload_profile_image(request):
     """This function is used to allow users to upload profile photos"""
+
     if request.method == "POST":
         form = UpdateProfileImage(request.POST, request.FILES)
         if form.is_valid():
             try:
-                account = Profile.objects.get(user=request.user)
+                profile = Profile.objects.get(user=request.user)
 
                 # Clean up previous image
-                account.profile_image.delete()
+                profile.profile_image.delete()
 
                 # Upload new image and set as profile picture
-                account.profile_image = form.clean_profile_image()
+                profile.profile_image = form.clean_profile_image()
                 try:
-                    account.save()
+                    profile.save()
                 except Exception as e:
                     response = {"message": str(e), "error": "MODEL_SAVE_ERROR"}
                     return JsonResponse(response, status=400)
 
-                request.session["login_user_image"] = account.profile_image_thumb_url
+                request.session["login_user_image"] = profile.profile_image_thumb_url
 
-                response = {"profile_image": account.profile_image_url}
+                response = {"profile_image": profile.profile_image_url}
                 return JsonResponse(response, status=200)
 
             except get_user_model().DoesNotExist:
@@ -328,6 +329,7 @@ def upload_profile_image(request):
 @login_required
 def clear_profile_image(request):
     """This function is used to delete a profile image"""
+
     if request.method == "POST":
         try:
             account = Profile.objects.get(user=request.user)
@@ -363,12 +365,15 @@ def request_follow(request):
 
     :return: (200, okay, list of friend information) (400, bad lookup) (500, error)
     """
-    if request.user.username == request.POST.get("target", -1):
-        return HttpResponseBadRequest(reason="You cannot follow yourself, silly!")
+
+    target_username = request.POST.get("target", -1)
+    if request.user.username == target_username:
+        response = {"error": "You cannot follow yourself, silly!"}
+        return JsonResponse(response, status=400)
 
     try:
         account = Profile.objects.get(user=request.user)
-        target = get_user_model().objects.get(username=request.POST.get("target", -1))
+        target = get_user_model().objects.get(username=target_username)
         target_account = Profile.objects.get(user=target)
 
         account.following.add(target_account)
@@ -387,8 +392,10 @@ def request_follow(request):
         )
 
         return JsonResponse({"result": data})
-    except get_user_model().DoesNotExist as e:
-        return HttpResponseBadRequest(reason=str(e))
+    except get_user_model().DoesNotExist:
+        return JsonResponse(
+            {"error": f"User with username {target_username} not found"}, status=400
+        )
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
 
@@ -421,11 +428,11 @@ def request_unfollow(request):
             target_account.followers.remove(account)
             target_account.save()
             return JsonResponse({"result": "Success"})
-        return HttpResponseBadRequest(reason="username cannot be empty")
+        return JsonResponse({"error": "username cannot be empty"}, status=400)
 
     except get_user_model().DoesNotExist:
-        return HttpResponseBadRequest(
-            reason=f"User with username {username} does not exist"
+        return JsonResponse(
+            {"error": f"User with username {username} not found"}, status=400
         )
     except Exception as e:
         return HttpResponseServerError(reason=str(e))

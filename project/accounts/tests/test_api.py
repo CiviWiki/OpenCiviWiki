@@ -1,4 +1,6 @@
 import json
+from PIL import Image
+from django.core.files.temp import NamedTemporaryFile
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from rest_framework.test import APIClient
@@ -155,8 +157,8 @@ class GetUserTests(BaseTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(content["username"], self.user.username)
 
-    def test_nonexisting_user_account_data(self):
-        """Whether retrieving a nonexisting user raises 404"""
+    def test_nonexistent_user_account_data(self):
+        """Whether retrieving a nonexistent user raises 404"""
 
         self.client.login(username="newuser", password="password123")
         response = self.client.get(reverse("get_user", args=["newuser" + "not_exist"]))
@@ -177,8 +179,8 @@ class GetProfileTests(BaseTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(content["username"], self.user.username)
 
-    def test_nonexisting_user_profile_data(self):
-        """Whether retrieving a nonexisting user profile raises 404"""
+    def test_nonexistent_user_profile_data(self):
+        """Whether retrieving a nonexistent user profile raises 404"""
 
         self.client.login(username="newuser", password="password123")
         response = self.client.get(
@@ -207,8 +209,8 @@ class GetCardTests(BaseTestCase):
         self.assertEqual(content["username"], self.superuser.username)
         self.assertTrue(content["follow_state"])
 
-    def test_nonexisting_user_profile_data(self):
-        """Whether retrieving a nonexisting user card raises 404"""
+    def test_nonexistent_user_profile_data(self):
+        """Whether retrieving a nonexistent user card raises 404"""
 
         self.client.login(username="newuser", password="password123")
         response = self.client.get(reverse("get_card", args=["newuser" + "not_exist"]))
@@ -231,3 +233,131 @@ class EditUserTests(BaseTestCase):
         self.assertEqual(self.user.profile.first_name, "First")
         self.assertEqual(self.user.profile.last_name, "Last")
         self.assertEqual(self.user.profile.about_me, "About me")
+
+
+class UploadProfileImage(BaseTestCase):
+    """A class to test upload_profile_image function"""
+
+    def setUp(self) -> None:
+        super(UploadProfileImage, self).setUp()
+        self.client.login(username="newuser", password="password123")
+        self.url = reverse("upload_profile")
+        self.image = Image.new("RGB", size=(5, 5), color=(0, 0, 0))
+        self.file = NamedTemporaryFile(suffix=".jpg")
+        self.image.save(self.file)
+
+    def tearDown(self) -> None:
+        for profile in Profile.objects.all():
+            profile.profile_image.delete()
+            profile.profile_image_thumb.delete()
+
+    def test_upload_profile_image(self):
+        """Whether upload_profile_image function works as expected"""
+
+        with open(self.file.name, "rb") as image_file:
+            data = {"profile_image": image_file}
+            response = self.client.post(self.url, data=data)
+            content = json.loads(response.content)
+            self.user.profile.refresh_from_db()
+            self.assertEqual(
+                content.get("profile_image"), self.user.profile.profile_image_url
+            )
+            self.assertNotEqual(
+                self.user.profile.profile_image_url, "/static/img/no_image_md.png"
+            )
+            self.assertNotEqual(
+                self.user.profile.profile_image_thumb_url, "/static/img/no_image_md.png"
+            )
+
+    def test_upload_profile_image_with_invalid_extension(self):
+        """Whether upload_profile_image raises an error when non-image file is past"""
+
+        image = Image.new("RGB", size=(5, 5), color=(0, 0, 0))
+        file = NamedTemporaryFile(suffix=".pdf")
+        image.save(file)
+
+        with open(file.name, "rb") as image_file:
+            data = {"profile_image": image_file}
+            response = self.client.post(self.url, data=data)
+            content = json.loads(response.content)
+            self.assertEqual(content["error"], "FORM_ERROR")
+            self.user.profile.refresh_from_db()
+            self.assertEqual(
+                self.user.profile.profile_image_url, "/static/img/no_image_md.png"
+            )
+            self.assertEqual(
+                self.user.profile.profile_image_thumb_url, "/static/img/no_image_md.png"
+            )
+
+
+class RequestFollowTests(BaseTestCase):
+    """A class to test request_follow function"""
+
+    def test_request_follow(self):
+        """Whether request_follow function works as expected"""
+
+        self.client.login(username="newuser", password="password123")
+        number_of_followings = self.user.profile.following.count()
+        data = {"target": self.user2.username}
+        response = self.client.post(reverse("follow_user"), data=data)
+        content = json.loads(response.content)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(content.get("result").get("username"), self.user2.username)
+        self.assertTrue(content.get("result").get("follow_status"))
+        self.assertEqual(self.user.profile.following.count(), number_of_followings + 1)
+
+    def test_user_cannot_follow_itself(self):
+        """Whether a user trying to follow itself raises an error"""
+
+        self.client.login(username="newuser", password="password123")
+        data = {"target": self.user.username}
+        response = self.client.post(reverse("follow_user"), data=data)
+        content = json.loads(response.content)
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("You cannot follow yourself", content.get("error"))
+
+    def test_following_nonexistent_user_gives_error(self):
+        """Whether following a nonexistent user raises an error"""
+
+        self.client.login(username="newuser", password="password123")
+        data = {"target": "nonexistent"}
+        response = self.client.post(reverse("follow_user"), data=data)
+        content = json.loads(response.content)
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("not found", content.get("error"))
+
+
+class RequestUnfollowTests(BaseTestCase):
+    """A class to test request_unfollow function"""
+
+    def test_request_unfollow(self):
+        """Whether request_unfollow function works as expected"""
+
+        self.client.login(username="newuser", password="password123")
+        number_of_followings = self.user.profile.following.count()
+        data = {"target": self.superuser.username}
+        response = self.client.post(reverse("unfollow_user"), data=data)
+        content = json.loads(response.content)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(content.get("result"), "Success")
+        self.assertEqual(self.user.profile.following.count(), number_of_followings - 1)
+
+    def test_username_for_unfollowing_cannot_be_empty(self):
+        """Whether unfollowing an empty username raises an error"""
+
+        self.client.login(username="newuser", password="password123")
+        data = {"target": ""}
+        response = self.client.post(reverse("unfollow_user"), data=data)
+        content = json.loads(response.content)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(content.get("error"), "username cannot be empty")
+
+    def test_unfollowing_nonexistent_user_gives_error(self):
+        """Whether unfollowing an nonexistent user raises an error"""
+
+        self.client.login(username="newuser", password="password123")
+        data = {"target": "nonexistent"}
+        response = self.client.post(reverse("unfollow_user"), data=data)
+        content = json.loads(response.content)
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("not found", content.get("error"))

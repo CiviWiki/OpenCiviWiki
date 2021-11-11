@@ -13,7 +13,6 @@ class BaseTestCase(TestCase):
         self.user = get_user_model().objects.create_user(
             username="newuser", email="test@test.com", password="password123"
         )
-        self.profile, created = Profile.objects.update_or_create(user=self.user)
 
 
 class LoginViewTests(BaseTestCase):
@@ -118,9 +117,9 @@ class SettingsViewTests(BaseTestCase):
 
     def setUp(self) -> None:
         super(SettingsViewTests, self).setUp()
-        self.profile.first_name = "Gorkem"
-        self.profile.last_name = "Arslan"
-        self.profile.save()
+        self.user.profile.first_name = "Gorkem"
+        self.user.profile.last_name = "Arslan"
+        self.user.profile.save()
         self.client.login(username=self.user.username, password="password123")
         self.url = reverse("accounts_settings")
         self.response = self.client.get(self.url)
@@ -196,3 +195,24 @@ class ProfileActivationViewTests(TestCase):
         self.assertFalse(self.profile.is_verified)
         self.assertTemplateUsed(response, "general_message.html")
         self.assertContains(response, "Email Verification Error")
+
+
+class UserProfileView(BaseTestCase):
+    """A class to test user profile view"""
+
+    def setUp(self) -> None:
+        super(UserProfileView, self).setUp()
+        self.user.profile.first_name = "First"
+        self.user.profile.last_name = "Last"
+        self.user.profile.about_me = "About"
+        self.user.profile.save()
+
+    def test_get_user_profile(self):
+        """Whether user_profile function works as expected"""
+
+        self.client.login(username="newuser", password="password123")
+        response = self.client.get(reverse("profile", args=["newuser"]))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.user.username)
+        self.assertContains(response, self.user.email)
+        self.assertTemplateUsed(response, "account.html")
