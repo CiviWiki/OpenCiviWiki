@@ -7,6 +7,7 @@ from core.custom_decorators import full_profile, login_required
 from django.db.models import F
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template.response import TemplateResponse
+from django.views.generic import TemplateView
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -261,21 +262,21 @@ def create_group(request):
     return TemplateResponse(request, "newgroup.html", {})
 
 
-def declaration(request):
-    return TemplateResponse(request, "declaration.html", {})
+class DeclarationView(TemplateView):
+    template_name = "declaration.html"
 
 
-def landing_view(request):
-    return TemplateResponse(request, "landing.html", {})
+class LandingView(TemplateView):
+    template_name = "landing.html"
 
 
-def how_it_works_view(request):
-    return TemplateResponse(request, "how_it_works.html", {})
+class HowItWorksView(TemplateView):
+    template_name = "how_it_works.html"
 
 
-def about_view(request):
-    return TemplateResponse(request, "about.html", {})
+class AboutView(TemplateView):
+    template_name = "about.html"
 
 
-def support_us_view(request):
-    return TemplateResponse(request, "support_us.html", {})
+class SupportUsView(TemplateView):
+    template_name = "support_us.html"
