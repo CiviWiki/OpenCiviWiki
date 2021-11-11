@@ -387,8 +387,10 @@ def request_follow(request):
         )
 
         return JsonResponse({"result": data})
-    except get_user_model().DoesNotExist as e:
-        return HttpResponseBadRequest(reason=str(e))
+    except get_user_model().DoesNotExist:
+        return JsonResponse(
+            {"error": f"User with username {target_username} not found"}, status=400
+        )
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
 
@@ -421,11 +423,11 @@ def request_unfollow(request):
             target_account.followers.remove(account)
             target_account.save()
             return JsonResponse({"result": "Success"})
-        return HttpResponseBadRequest(reason="username cannot be empty")
+        return JsonResponse({"error": "username cannot be empty"}, status=400)
 
     except get_user_model().DoesNotExist:
-        return HttpResponseBadRequest(
-            reason=f"User with username {username} does not exist"
+        return JsonResponse(
+            {"error": f"User with username {username} not found"}, status=400
         )
     except Exception as e:
         return HttpResponseServerError(reason=str(e))

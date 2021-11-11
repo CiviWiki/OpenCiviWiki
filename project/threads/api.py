@@ -11,7 +11,6 @@ from django.db.models.query import F
 from django.contrib.auth import get_user_model
 from django.http import (
     JsonResponse,
-    HttpResponse,
     HttpResponseServerError,
     HttpResponseForbidden,
     HttpResponseBadRequest,
@@ -352,12 +351,11 @@ def delete_civi(request):
 
     c = Civi.objects.get(id=civi_id)
     if request.user.username != c.author.username:
-        return HttpResponseBadRequest(reason="No Edit Rights")
+        return JsonResponse({"error": "No Edit Rights"}, status=400)
 
     try:
         c.delete()
-
-        return HttpResponse("Success")
+        return JsonResponse({"result": "Success"})
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
 
@@ -374,7 +372,7 @@ def edit_thread(request):
     is_draft = request.POST.get("is_draft", True)
 
     if not thread_id:
-        return HttpResponseBadRequest(reason="Invalid Thread Reference")
+        return JsonResponse({"error": "Invalid Thread Reference"}, status=400)
 
     # for some reason this is not cast to boolean in the request
     if is_draft == "false":
@@ -397,8 +395,9 @@ def edit_thread(request):
 
         req_edit_thread.save()
     except Thread.DoesNotExist:
-        return HttpResponseServerError(
-            reason=f"Thread with id:{thread_id} does not exist"
+        return JsonResponse(
+            {"error": f"Thread with id:{thread_id} does not exist"},
+            status=400,
         )
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
