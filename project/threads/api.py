@@ -311,11 +311,11 @@ def edit_civi(request):
     body = request.POST.get("body", "")
     civi_type = request.POST.get("type", "")
 
-    c = Civi.objects.get(id=civi_id)
-    if request.user.username != c.author.username:
-        return HttpResponseBadRequest(reason="No Edit Rights")
-
     try:
+        c = Civi.objects.get(id=civi_id)
+        if request.user.username != c.author.username:
+            return HttpResponseBadRequest(reason="No Edit Rights")
+
         c.title = title
         c.body = body
         c.c_type = civi_type
@@ -335,6 +335,12 @@ def edit_civi(request):
                 civi_image.delete()
 
         return JsonResponse(c.dict_with_score(request.user.id))
+
+    except Civi.DoesNotExist:
+        return JsonResponse(
+            {"error": f"Civi with id:{civi_id} does not exist"},
+            status=400,
+        )
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
 

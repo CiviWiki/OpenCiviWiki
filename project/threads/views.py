@@ -6,6 +6,7 @@ from categories.models import Category
 from core.custom_decorators import full_profile, login_required
 from django.db.models import F
 from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.views.generic import TemplateView
 from django.views.decorators.csrf import csrf_exempt
@@ -89,8 +90,7 @@ class ThreadViewSet(ModelViewSet):
         Gets the drafts of the current authenticated user
         /threads/drafts
         """
-        account = get_account(username=self.request.user)
-        draft_threads = Thread.objects.filter(author=account, is_draft=True)
+        draft_threads = Thread.objects.filter(author=self.request.user, is_draft=True)
         serializer = ThreadListSerializer(
             draft_threads, many=True, context={"request": request}
         )
@@ -121,7 +121,7 @@ class CiviViewSet(ModelViewSet):
 def base_view(request):
     if not request.user.is_authenticated:
         return TemplateResponse(request, "landing.html", {})
-        #   return HttpResponseRedirect("/")
+
     Profile_filter = Profile.objects.get(user=request.user)
     if "login_user_image" not in request.session.keys():
         request.session["login_user_image"] = Profile_filter.profile_image_thumb_url
@@ -189,7 +189,7 @@ def issue_thread(request, thread_id=None):
     if not thread_id:
         return HttpResponseRedirect("/404")
 
-    Thread_filter = Thread.objects.get(id=thread_id)
+    Thread_filter = get_object_or_404(Thread, pk=thread_id)
     c_qs = Civi.objects.filter(thread_id=thread_id).exclude(c_type="response")
     c_scored = [c.dict_with_score(request.user.id) for c in c_qs]
     civis = sorted(c_scored, key=lambda c: c["score"], reverse=True)
