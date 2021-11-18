@@ -3,7 +3,7 @@ VirtualEnv
 */.DS_Store
 *.DS_Store
 .DS_Store
-media/
+#media/
 /project/staticfiles/*
 .idea
 .env
