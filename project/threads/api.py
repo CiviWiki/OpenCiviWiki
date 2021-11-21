@@ -11,7 +11,6 @@ from django.db.models.query import F
 from django.contrib.auth import get_user_model
 from django.http import (
     JsonResponse,
-    HttpResponse,
     HttpResponseServerError,
     HttpResponseForbidden,
     HttpResponseBadRequest,
@@ -19,6 +18,7 @@ from django.http import (
 
 from .models import Activity, Civi, Thread
 from .utils import json_response
+from common.utils import check_database
 
 
 @login_required
@@ -38,81 +38,90 @@ def new_thread(request):
             category_id=request.POST["category_id"],
             author=request.user,
         )
-
         new_t = Thread(**new_thread_data)
         new_t.save()
 
         return JsonResponse({"data": "success", "thread_id": new_t.pk})
-    except Profile.DoesNotExist:
-        return HttpResponseServerError(
-            reason=f"Profile with user:{request.user.username} does not exist"
+    except get_user_model().DoesNotExist:
+        return JsonResponse(
+            {"error": f"User with username {request.user.username} not found"},
+            status=400,
         )
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
 
 
+is_sqlite_running = check_database("sqlite")
+
+
+@login_required
 def get_thread(request, thread_id):
     """
     USAGE:
        This is used to get a requested thread
     """
     try:
-        t = Thread.objects.get(id=thread_id)
+        thread = Thread.objects.get(id=thread_id)
         civis = Civi.objects.filter(thread_id=thread_id)
 
         # TODO: move order by to frontend or accept optional arg
         c = civis.order_by("-created")
         c_scores = [ci.score(request.user.id) for ci in c]
         c_data = [Civi.objects.serialize_s(ci) for ci in c]
-
         problems = []
         for idx, item in enumerate(c_data):
-            problems[idx]["score"] = c_scores[idx]
+            problems.append({"score": c_scores[idx]})
 
         data = {
-            "title": t.title,
-            "summary": t.summary,
-            "tags": t.tags.all().values(),
+            "title": thread.title,
+            "summary": thread.summary,
             "author": {
-                "username": t.author.username,
-                "profile_image": t.author.profile.profile_image.url
-                if t.author.profile.profile_image
-                else "/media/profile/default.png",
-                "first_name": t.author.first_name,
-                "last_name": t.author.last_name,
+                "username": thread.author.username,
+                "profile_image": thread.author.profile.profile_image_url,
+                "first_name": thread.author.first_name,
+                "last_name": thread.author.last_name,
             },
-            "category": model_to_dict(t.category),
-            "created": t.created,
+            "category": model_to_dict(thread.category),
+            "created": thread.created_date_str,
             "contributors": [
-                Profile.objects.chip_summarize(u.profile)
-                for u in get_user_model().objects.filter(
+                Profile.objects.chip_summarize(user.profile)
+                for user in get_user_model().objects.filter(
                     pk__in=civis.distinct("author").values_list("author", flat=True)
                 )
+            ]
+            if not is_sqlite_running
+            else [
+                Profile.objects.chip_summarize(p)
+                for p in Profile.objects.filter(
+                    pk__in=civis.values_list("author", flat=True).distinct()
+                )
             ],
-            "num_civis": t.num_civis,
-            "num_views": t.num_views,
+            "num_civis": thread.num_civis,
+            "num_views": thread.num_views,
             "votes": [
                 {
                     "civi_id": act.civi.id,
                     "activity_type": act.activity_type,
                     "user": act.user.id,
                 }
-                for act in Activity.objects.filter(thread=t.id, user=request.user.id)
+                for act in Activity.objects.filter(
+                    thread=thread.id, user=request.user.id
+                )
             ],
         }
 
         # modify thread view count
-        t.num_views = t.num_views + 1
-        t.save()
-
+        thread.num_views = thread.num_views + 1
+        thread.save()
         return json_response(data)
     except Thread.DoesNotExist:
         return HttpResponseBadRequest(
             reason=f"Thread with id:{thread_id} does not exist"
         )
-    except Profile.DoesNotExist:
-        return HttpResponseBadRequest(
-            reason=f"Profile with username:{request.user.username} does not exist"
+    except get_user_model().DoesNotExist:
+        return JsonResponse(
+            {"error": f"User with username {request.user.username} not found"},
+            status=400,
         )
     except Exception as e:
         return HttpResponseBadRequest(reason=str(e))
@@ -301,11 +310,11 @@ def edit_civi(request):
     body = request.POST.get("body", "")
     civi_type = request.POST.get("type", "")
 
-    c = Civi.objects.get(id=civi_id)
-    if request.user.username != c.author.username:
-        return HttpResponseBadRequest(reason="No Edit Rights")
-
     try:
+        c = Civi.objects.get(id=civi_id)
+        if request.user.username != c.author.username:
+            return HttpResponseBadRequest(reason="No Edit Rights")
+
         c.title = title
         c.body = body
         c.c_type = civi_type
@@ -325,6 +334,12 @@ def edit_civi(request):
                 civi_image.delete()
 
         return JsonResponse(c.dict_with_score(request.user.id))
+
+    except Civi.DoesNotExist:
+        return JsonResponse(
+            {"error": f"Civi with id:{civi_id} does not exist"},
+            status=400,
+        )
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
 
@@ -336,12 +351,11 @@ def delete_civi(request):
 
     c = Civi.objects.get(id=civi_id)
     if request.user.username != c.author.username:
-        return HttpResponseBadRequest(reason="No Edit Rights")
+        return JsonResponse({"error": "No Edit Rights"}, status=400)
 
     try:
         c.delete()
-
-        return HttpResponse("Success")
+        return JsonResponse({"result": "Success"})
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
 
@@ -358,7 +372,7 @@ def edit_thread(request):
     is_draft = request.POST.get("is_draft", True)
 
     if not thread_id:
-        return HttpResponseBadRequest(reason="Invalid Thread Reference")
+        return JsonResponse({"error": "Invalid Thread Reference"}, status=400)
 
     # for some reason this is not cast to boolean in the request
     if is_draft == "false":
@@ -381,8 +395,9 @@ def edit_thread(request):
 
         req_edit_thread.save()
     except Thread.DoesNotExist:
-        return HttpResponseServerError(
-            reason=f"Thread with id:{thread_id} does not exist"
+        return JsonResponse(
+            {"error": f"Thread with id:{thread_id} does not exist"},
+            status=400,
         )
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
