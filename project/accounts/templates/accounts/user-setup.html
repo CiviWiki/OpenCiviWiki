@@ -8,7 +8,11 @@
 <link type="text/css" rel="stylesheet/less" href="{% static "less/setup.less" %}"/>
 {% endblock extra_css %}
 
-<script id="setup-base-template" type="text/template">
+
+{% block content %}
+    <div id="user-setup">
+    
+    <script id="setup-base-template" type="text/template">
     <main class="section">
         <div class="section container">
             <!-- TODO: Welcome screen -->
@@ -193,8 +197,8 @@
     </div>
 </script>
 
-{% block content %}
-    <div id="user-setup"></div>
+    
+    </div>
 {% endblock content %}
 
 {% block extra_js %}
