@@ -3,4 +3,4 @@
 # dependencies only used in test env
 mock==4.0.3
 aloe==0.1.19
-selenium==3.141.0
+selenium==4.1.0
