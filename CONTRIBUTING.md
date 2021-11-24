@@ -120,7 +120,7 @@ python manage.py runserver
 
 Execute unit tests by running the following command from within the `project` directory.
 
-```py
+```sh
 python manage.py test
 ```
 
