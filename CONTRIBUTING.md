@@ -118,11 +118,10 @@ python manage.py runserver
 
 # Run unit tests
 
-Instructions on how to run all test code:
+Execute unit tests by running the following command from within the `project` directory.
 
 ```py
-cd project && python manage.py test
-```
+python manage.py test
 
 ### Register initial user (optional)
 Once CiviWiki is running, visit the front page (probably something like http://localhost:8000). Once there, click 'log in/register', and then 'register new user'.
