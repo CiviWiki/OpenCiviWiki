@@ -786,6 +786,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "kevinjosephh",
+      "name": "Kevin Joseph",
+      "avatar_url": "https://avatars.githubusercontent.com/u/38029772?v=4",
+      "profile": "https://github.com/kevinjosephh",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
