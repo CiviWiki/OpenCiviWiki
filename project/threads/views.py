@@ -49,10 +49,7 @@ class ThreadViewSet(ModelViewSet):
 
     @action(detail=True)
     def civis(self, request, pk=None):
-        """
-        Gets the civis linked to the thread instance
-        /threads/{id}/civis
-        """
+        #Gets the civis linked to the thread instance /threads/{id}/civis
         thread_civis = Civi.objects.filter(thread=pk)
         serializer = CiviSerializer(thread_civis, many=True)
         return Response(serializer.data)
@@ -117,7 +114,6 @@ class CiviViewSet(ModelViewSet):
         serializer = CiviImageSerializer(civi_images, many=True, read_only=True)
         return Response(serializer.data)
 
-
 def base_view(request):
     if not request.user.is_authenticated:
         return TemplateResponse(request, "landing.html", {})
@@ -159,7 +155,6 @@ def base_view(request):
 
     return TemplateResponse(request, "feed.html", {"data": json.dumps(data)})
 
-
 @csrf_exempt
 def civi2csv(request, thread_id):
     """
@@ -179,9 +174,7 @@ def civi2csv(request, thread_id):
         writer.writerow(data)
     return response
 
-
 is_sqlite_running = check_database("sqlite")
-
 
 @login_required
 @full_profile
@@ -255,28 +248,22 @@ def issue_thread(request, thread_id=None):
     }
     return TemplateResponse(request, "thread.html", data)
 
-
 @login_required
 @full_profile
 def create_group(request):
     return TemplateResponse(request, "newgroup.html", {})
 
-
 class DeclarationView(TemplateView):
     template_name = "declaration.html"
-
 
 class LandingView(TemplateView):
     template_name = "landing.html"
 
-
 class HowItWorksView(TemplateView):
     template_name = "how_it_works.html"
 
-
 class AboutView(TemplateView):
     template_name = "about.html"
-
 
 class SupportUsView(TemplateView):
     template_name = "support_us.html"
