@@ -3,7 +3,7 @@ VirtualEnv
 */.DS_Store
 *.DS_Store
 .DS_Store
-media/
+/project/media/* 
 /project/staticfiles/*
 .idea
 .env
@@ -211,3 +211,6 @@ dmypy.json
 
 # keep staticfiles directory
 !project/staticfiles/.gitkeep
+
+#keep mediafiles directory
+!project/media/.gitkeep
