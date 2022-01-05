@@ -11,4 +11,4 @@ psycopg2-binary==2.9.2
 
 django-taggit==2.0.0
 Pillow==8.4.0
-requests==2.26.0
+requests==2.27.1
