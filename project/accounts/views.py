@@ -4,7 +4,7 @@ Class based views.
 This module will include views for the accounts app.
 """
 
-from core.custom_decorators import full_profile, login_required
+from core.custom_decorators import full_profile
 from django.conf import settings
 from django.contrib.auth import get_user_model, login
 from django.contrib.auth import views as auth_views
@@ -15,6 +15,7 @@ from django.template.response import TemplateResponse
 from django.urls import reverse_lazy
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
+from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic.edit import FormView, UpdateView
 
@@ -165,16 +166,18 @@ class ProfileSetupView(LoginRequiredMixin, View):
             return TemplateResponse(request, "accounts/user-setup.html", data)
 
 
-@login_required
-@full_profile
-def user_profile(request, username=None):
-    if request.method == "GET":
+class UserProfileView(LoginRequiredMixin, View):
+    """A view that shows profile for authorized users"""
+
+    @method_decorator(full_profile)
+    def get(self, request, username=None):
         if not username:
             return HttpResponseRedirect(f"/profile/{request.user}")
         else:
             is_owner = username == request.user.username
             try:
                 user = get_user_model().objects.get(username=username)
+
             except get_user_model().DoesNotExist:
                 return HttpResponseRedirect("/404")
 
