@@ -9,7 +9,7 @@ from accounts.views import (
     PasswordResetConfirmView,
     PasswordResetCompleteView,
     ProfileSetupView,
-    user_profile,
+    UserProfileView,
 )
 
 urlpatterns = [
@@ -22,7 +22,7 @@ urlpatterns = [
     path("register/", RegisterView.as_view(), name="accounts_register"),
     path("settings/", SettingsView.as_view(), name="accounts_settings"),
     path("setup/", ProfileSetupView.as_view(), name="accounts_profile_setup"),
-    path("profile/<str:username>/", user_profile, name="profile"),
+    path("profile/<str:username>/", UserProfileView.as_view(), name="profile"),
     path(
         "activate_account/<uidb64>/<token>/",
         ProfileActivationView.as_view(),
