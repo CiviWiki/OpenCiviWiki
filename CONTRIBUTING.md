@@ -40,7 +40,7 @@ The following sections describe how to set up a development environment. Note, w
 To install all required modules, complete the following steps:
 
 1. Make sure you are in the repository root directory
-2. Create a Python 3.7+ virtual environment (named `env`)
+2. Create a Python 3.10.1 virtual environment (named `env`)
 ```
 python -m venv env
 ```
