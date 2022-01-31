@@ -35,7 +35,7 @@ class LoginViewTests(BaseTestCase):
         """Whether login URL matches with the correct view"""
 
         view = resolve("/login/")
-        self.assertEqual(view.func.__name__, auth_views.LoginView.__name__)
+        self.assertEqual(view.func.view_class, auth_views.LoginView)
 
     def test_the_user_with_the_correct_credentials_login(self):
         """Whether a user with the correct credentials can login"""
@@ -77,7 +77,7 @@ class RegisterViewTests(TestCase):
         """Whether register URL matches with the correct view"""
 
         view = resolve("/register/")
-        self.assertEqual(view.func.__name__, RegisterView.__name__)
+        self.assertEqual(view.func.view_class, RegisterView)
 
     def test_register_view_creates_a_user_successfully(self):
         """Whether register view creates a new user with success"""
