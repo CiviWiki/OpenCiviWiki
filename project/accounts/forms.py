@@ -3,7 +3,7 @@ from django.core.files.images import get_image_dimensions
 from django import forms
 from django.forms.models import ModelForm
 from django.contrib.auth import get_user_model
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from .reserved_usernames import RESERVED_USERNAMES
 from accounts.models import Profile
 
