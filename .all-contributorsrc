@@ -795,6 +795,33 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "topguns837",
+      "name": "Arjun K Haridas",
+      "avatar_url": "https://avatars.githubusercontent.com/u/51917087?v=4",
+      "profile": "https://www.linkedin.com/in/arjun-k-haridas-9a5844207/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "morento101",
+      "name": "Yaroslav",
+      "avatar_url": "https://avatars.githubusercontent.com/u/80165970?v=4",
+      "profile": "https://github.com/morento101",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "jjoseph18",
+      "name": "jjoseph18",
+      "avatar_url": "https://avatars.githubusercontent.com/u/82232960?v=4",
+      "profile": "https://github.com/jjoseph18",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
