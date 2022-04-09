@@ -1,4 +1,4 @@
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.http import (
@@ -31,6 +31,7 @@ from threads.utils import json_response
 from threads.serializers import ThreadSerializer, CiviSerializer
 from categories.serializers import CategorySerializer
 from core.custom_decorators import require_post_params
+import hashlib
 
 
 class ProfileViewSet(ModelViewSet):
@@ -326,9 +327,10 @@ def upload_profile_image(request):
         return HttpResponseForbidden("allowed only via POST")
 
 
+@api_view(["DELETE"])
 @login_required
 def clear_profile_image(request):
-    """This function is used to delete a profile image"""
+    """This function is used to delete a user profile"""
 
     if request.method == "POST":
         try:
@@ -461,3 +463,42 @@ def edit_user_categories(request):
         return HttpResponseBadRequest(reason=str(e))
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
+
+
+@login_required
+def delete_user(request):
+    """
+    Delete User Information
+    """
+    try:
+        user = get_user_model().objects.get(id=request.user.id)
+        profile = Profile.objects.get(user=request.user)
+        # https://stackoverflow.com/questions/8609192/what-is-the-difference-between-null-true-and-blank-true-in-django
+        # Idiom is to set null fields as empty strings, feel free to change
+        data = {
+            "is_active": False,
+            "email": "",
+            "first_name": "",
+            "last_name": "",
+            "username": "deleted-" + hashlib.sha256(user.username.encode('utf-8')).hexdigest()
+        }
+        user.__dict__.update(data)
+        user.save()
+
+        data = {
+            "first_name": "",
+            "last_name": "",
+            "about_me": ""
+        }
+        profile.__dict__.update(data)
+        profile.save()
+    except get_user_model().DoesNotExist as e:
+        return HttpResponseBadRequest(reason=str(e))
+    except Exception as e:
+        return HttpResponseServerError(reason=str(e))
+
+    user.refresh_from_db()
+    profile.refresh_from_db()
+    logout(request)  # They use django.contrib.auth.login to login in views, so this should work
+
+    return JsonResponse({"result": "User successfully deleted."})
