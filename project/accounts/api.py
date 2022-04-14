@@ -480,10 +480,11 @@ def delete_user(request):
             "email": "",
             "first_name": "",
             "last_name": "",
-            "username": "[D-" + hashlib.sha256(user.username.encode('utf-8')).hexdigest() + "]"
+            "username": "[Deleted-" + str(user.id) + "]"
         }
         user.__dict__.update(data)
         user.save()
+        print(str(user.id))
 
         data = {
             "first_name": "",
