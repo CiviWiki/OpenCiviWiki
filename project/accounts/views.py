@@ -6,11 +6,12 @@ This module will include views for the accounts app.
 
 from core.custom_decorators import full_profile
 from django.conf import settings
-from django.contrib.auth import get_user_model, login
+from django.contrib.auth import get_user_model, login, logout
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import redirect
 from django.template.response import TemplateResponse
 from django.urls import reverse_lazy
 from django.utils.encoding import force_str
@@ -22,6 +23,8 @@ from django.views.generic.edit import FormView, UpdateView
 from accounts.authentication import account_activation_token, send_activation_email
 from accounts.forms import ProfileEditForm, UpdateProfileImage, UserRegistrationForm
 from accounts.models import Profile
+
+import requests
 
 
 class RegisterView(FormView):
@@ -100,6 +103,18 @@ class SettingsView(LoginRequiredMixin, UpdateView):
             }
         )
         return super(SettingsView, self).get_initial()
+
+    def post(self, request):
+        if request.method == 'POST' and request.POST.get("delete_user"):            
+            delete_url = reverse_lazy("delete_user")
+            
+            print("SELF.REQUEST", self.request)
+            print("REQUEST.POST", request.POST)
+            
+            requests.post("http://127.0.0.1:8000/api/deleteuser/", data=self.request)
+
+            logout(request)  # They use django.contrib.auth.login to login in views, so this should work
+            return redirect("/")
 
 
 class ProfileActivationView(View):

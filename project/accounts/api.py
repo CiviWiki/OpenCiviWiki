@@ -1,6 +1,6 @@
-from django.contrib.auth import get_user_model, logout
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404
 from django.http import (
     JsonResponse,
     HttpResponse,
@@ -500,8 +500,6 @@ def delete_user(request):
 
     user.refresh_from_db()
     profile.refresh_from_db()
-    logout(request)  # They use django.contrib.auth.login to login in views, so this should work
-    redirect("/")
 
     # TODO:
     # The REST infrastructure necessitates that we return a JSON response -- need to figure out 
