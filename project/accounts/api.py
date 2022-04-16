@@ -471,8 +471,8 @@ def delete_user(request):
     Delete User Information
     """
     try:
-        user = get_user_model().objects.get(id=request.user.id)
-        profile = Profile.objects.get(user=request.user)
+        user = get_user_model().objects.get(username=request.user.username)
+        profile = Profile.objects.get(user=user)
         # https://stackoverflow.com/questions/8609192/what-is-the-difference-between-null-true-and-blank-true-in-django
         # Idiom is to set null fields as empty strings, feel free to change
         data = {
@@ -484,7 +484,6 @@ def delete_user(request):
         }
         user.__dict__.update(data)
         user.save()
-        print(str(user.id))
 
         data = {
             "first_name": "",

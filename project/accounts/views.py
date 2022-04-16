@@ -104,18 +104,6 @@ class SettingsView(LoginRequiredMixin, UpdateView):
         )
         return super(SettingsView, self).get_initial()
 
-    def post(self, request):
-        if request.method == 'POST' and request.POST.get("delete_user"):            
-            delete_url = reverse_lazy("delete_user")
-            
-            print("SELF.REQUEST", self.request)
-            print("REQUEST.POST", request.POST)
-            
-            requests.post("http://127.0.0.1:8000/api/deleteuser/", data=self.request)
-
-            logout(request)  # They use django.contrib.auth.login to login in views, so this should work
-            return redirect("/")
-
 
 class ProfileActivationView(View):
     """
