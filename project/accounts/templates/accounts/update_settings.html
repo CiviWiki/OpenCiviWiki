@@ -69,28 +69,41 @@
                 <div class="row center">
                     <a href="#0" style="background-color: #ee6e73" class="cd-popup-trigger btn">DELETE ACCOUNT</a>
                 </div>
-                <form method="POST">
-                    {% csrf_token %}
+                {% csrf_token %}
 
-                    <div class="cd-popup" role="alert">
-                        <div class="cd-popup-container">
-                            <p>Are you sure you want to delete your account? You cannot undo this.</p>
+                <div class="cd-popup" role="alert">
+                    <div class="cd-popup-container">
+                        <p>Are you sure you want to delete your account? You cannot undo this.</p>
 
-                            <ul class="cd-buttons">
-                                <input type="hidden" id="delete_user" name="delete_user" value="delete_user">
-                                <li><input type="submit" value="Yes" class="cd-popup-yes" /></li>
-                                <li><a href="#0" class="cd-popup-no">No</a></li>
-                            </ul>
-                            <a href="#0" class="cd-popup-close img-replace"></a>
-                        </div> <!-- cd-popup-container -->
-                    </div> <!-- cd-popup -->
-                </form>
+                        <ul class="cd-buttons">
+                            <input type="hidden" id="delete_user" name="delete_user" value="delete_user">
+                            <li><input type="button" value="Yes" class="cd-popup-yes" /></li>
+                            <li><a href="#0" class="cd-popup-no">No</a></li>
+                        </ul>
+                        <a href="#0" class="cd-popup-close img-replace"></a>
+                    </div> <!-- cd-popup-container -->
+                </div> <!-- cd-popup -->
             </div>
         </div>
     </div>
 </section>
 </body>
 <script>
+    $('.cd-popup-yes').on('click', function () {
+        $.ajax({
+            type: "POST",
+            url: '/api/deleteuser',
+            data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
+            success: function (response) {
+                console.log('success');
+            },
+            error: function (response) {
+                console.log('error');
+            }
+        });
+    });
     // Confirmation dialog (HTML/CSS/JS) from https://codyhouse.co/gem/simple-confirmation-popup
     jQuery(document).ready(function ($) {
         //open popup
