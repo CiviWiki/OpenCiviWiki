@@ -1,4 +1,4 @@
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.http import (
@@ -500,7 +500,4 @@ def delete_user(request):
     user.refresh_from_db()
     profile.refresh_from_db()
 
-    # TODO:
-    # The REST infrastructure necessitates that we return a JSON response -- need to figure out 
-    # how to cue a redirect to the root/login/register page.
     return JsonResponse({"result": "User successfully deleted."})

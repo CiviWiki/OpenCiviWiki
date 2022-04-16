@@ -60,24 +60,17 @@
                         {% endif%}
                     </div>
                 </form>
-                <!-- <form style="padding-top: 10px;" data-method="DELETE" action="{% url 'delete_user' %}">
-                    <div class="row center">
-                        <input style="background-color: #ee6e73" class='btn' type='submit'
-                            value="Delete Account"></input>
-                    </div>
-                </form> -->
                 <div class="row center">
                     <a href="#0" style="background-color: #ee6e73" class="cd-popup-trigger btn">DELETE ACCOUNT</a>
                 </div>
-                {% csrf_token %}
-
                 <div class="cd-popup" role="alert">
                     <div class="cd-popup-container">
-                        <p>Are you sure you want to delete your account? You cannot undo this.</p>
+                        <p class="cd-popup-content">
+                            Are you sure you want to delete your account? You cannot undo this.
+                        </p>
 
                         <ul class="cd-buttons">
-                            <input type="hidden" id="delete_user" name="delete_user" value="delete_user">
-                            <li><input type="button" value="Yes" class="cd-popup-yes" /></li>
+                            <li><a href="#0" class="cd-popup-yes" />Yes</a></li>
                             <li><a href="#0" class="cd-popup-no">No</a></li>
                         </ul>
                         <a href="#0" class="cd-popup-close img-replace"></a>
@@ -97,6 +90,7 @@
                 csrfmiddlewaretoken: '{{ csrf_token }}',
             },
             success: function (response) {
+                window.location.assign("/");
                 console.log('success');
             },
             error: function (response) {
