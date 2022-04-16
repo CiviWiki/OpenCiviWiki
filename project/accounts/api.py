@@ -470,39 +470,37 @@ def delete_user(request):
     """
     Delete User Information
     """
-    print("delete user called")
-    # try:
-    #     user = get_user_model().objects.get(id=request.user.id)
-    #     profile = Profile.objects.get(user=request.user)
-    #     # https://stackoverflow.com/questions/8609192/what-is-the-difference-between-null-true-and-blank-true-in-django
-    #     # Idiom is to set null fields as empty strings, feel free to change
-    #     data = {
-    #         "is_active": False,
-    #         "email": "",
-    #         "first_name": "",
-    #         "last_name": "",
-    #         "username": "[Deleted-" + str(user.id) + "]"
-    #     }
-    #     user.__dict__.update(data)
-    #     user.save()
-    #     print(str(user.id))
+    try:
+        user = get_user_model().objects.get(username=request.user.username)
+        profile = Profile.objects.get(user=user)
+        # https://stackoverflow.com/questions/8609192/what-is-the-difference-between-null-true-and-blank-true-in-django
+        # Idiom is to set null fields as empty strings, feel free to change
+        data = {
+            "is_active": False,
+            "email": "",
+            "first_name": "",
+            "last_name": "",
+            "username": "[Deleted-" + str(user.id) + "]"
+        }
+        user.__dict__.update(data)
+        user.save()
 
-    #     data = {
-    #         "first_name": "",
-    #         "last_name": "",
-    #         "about_me": ""
-    #     }
-    #     profile.__dict__.update(data)
-    #     profile.save()
-    # except get_user_model().DoesNotExist as e:
-    #     return HttpResponseBadRequest(reason=str(e))
-    # except Exception as e:
-    #     return HttpResponseServerError(reason=str(e))
+        data = {
+            "first_name": "",
+            "last_name": "",
+            "about_me": ""
+        }
+        profile.__dict__.update(data)
+        profile.save()
+    except get_user_model().DoesNotExist as e:
+        return HttpResponseBadRequest(reason=str(e))
+    except Exception as e:
+        return HttpResponseServerError(reason=str(e))
 
-    # user.refresh_from_db()
-    # profile.refresh_from_db()
+    user.refresh_from_db()
+    profile.refresh_from_db()
 
-    # # TODO:
-    # # The REST infrastructure necessitates that we return a JSON response -- need to figure out 
-    # # how to cue a redirect to the root/login/register page.
+    # TODO:
+    # The REST infrastructure necessitates that we return a JSON response -- need to figure out 
+    # how to cue a redirect to the root/login/register page.
     return JsonResponse({"result": "User successfully deleted."})
