@@ -327,10 +327,9 @@ def upload_profile_image(request):
         return HttpResponseForbidden("allowed only via POST")
 
 
-@api_view(["DELETE"])
 @login_required
 def clear_profile_image(request):
-    """This function is used to delete a user profile"""
+    """This function is used to delete a profile image"""
 
     if request.method == "POST":
         try:
