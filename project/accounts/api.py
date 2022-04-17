@@ -1,4 +1,4 @@
-from django.contrib.auth import get_user_model, logout
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.http import (
@@ -31,7 +31,6 @@ from threads.utils import json_response
 from threads.serializers import ThreadSerializer, CiviSerializer
 from categories.serializers import CategorySerializer
 from core.custom_decorators import require_post_params
-import hashlib
 
 
 class ProfileViewSet(ModelViewSet):
@@ -470,10 +469,9 @@ def delete_user(request):
     Delete User Information
     """
     try:
-        user = get_user_model().objects.get(username=request.user.username)
+        user = get_user_model().objects.get(username=request.user.username)  # Get current user
         profile = Profile.objects.get(user=user)
-        # https://stackoverflow.com/questions/8609192/what-is-the-difference-between-null-true-and-blank-true-in-django
-        # Idiom is to set null fields as empty strings, feel free to change
+        # Expunge personally identifiable data in user obj, feel free to change
         data = {
             "is_active": False,
             "email": "",
@@ -482,9 +480,9 @@ def delete_user(request):
             "username": "[Deleted-" + str(user.id) + "]"
         }
         user.__dict__.update(data)
-        user.save()
+        user.save()  # Update into database
 
-        data = {
+        data = {  # Expunge personally identifiable data in profile obj
             "first_name": "",
             "last_name": "",
             "about_me": ""
@@ -496,7 +494,7 @@ def delete_user(request):
     except Exception as e:
         return HttpResponseServerError(reason=str(e))
 
-    user.refresh_from_db()
+    user.refresh_from_db()  # Make update viewable
     profile.refresh_from_db()
 
     return JsonResponse({"result": "User successfully deleted."})
