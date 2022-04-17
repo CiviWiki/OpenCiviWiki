@@ -469,7 +469,8 @@ def delete_user(request):
     Delete User Information
     """
     try:
-        user = get_user_model().objects.get(username=request.user.username)  # Get current user
+        # Get current user
+        user = get_user_model().objects.get(username=request.user.username)
         profile = Profile.objects.get(user=user)
         # Expunge personally identifiable data in user obj, feel free to change
         data = {
