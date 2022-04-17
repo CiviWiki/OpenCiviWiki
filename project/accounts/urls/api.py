@@ -7,6 +7,7 @@ urlpatterns = [
     path("account_card/<str:username>/", api.get_card, name="get_card"),
     path("feed/", api.get_feed, name="get_feed"),
     path("edituser/", api.edit_user, name="edit_user"),
+    path("deleteuser/", api.delete_user, name="delete_user"),
     path("upload_profile/", api.upload_profile_image, name="upload_profile"),
     path("clear_profile/", api.clear_profile_image, name="clear_profile"),
     path("follow/", api.request_follow, name="follow_user"),
