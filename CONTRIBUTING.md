@@ -2,7 +2,7 @@
 
 Thank you for your interest in contributing to CiviWiki. There are many ways to contribute, such as by sharing ideas, design, testing, community building, and development.
 
-The following sections outline some common ways to contribue ideas, feature requests, and code.
+The following sections outline some common practices to contribue ideas, feature requests, and code.
 
 ## Creating issues
 
