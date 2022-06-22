@@ -1,0 +1,15 @@
+
+version: '3'
+
+services:
+  web:
+    build: .
+    # command: bash -c "python project/manage.py makemigrations && python project/manage.py migrate && python project/manage.py runserver 0.0.0.0:8001"
+    command: >
+      bash -c "python project/manage.py migrate
+      && python project/manage.py runserver 0.0.0.0:8000"
+    container_name: civi_app_container
+    volumes:
+      - .:/civi_app
+    ports:
+      - "8000:8000"
