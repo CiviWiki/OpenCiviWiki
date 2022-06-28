@@ -3,4 +3,4 @@
 # dependencies only used in dev env
 coverage==6.3.2
 flake8==4.0.1
-black==22.1.0
+black==22.6.0
