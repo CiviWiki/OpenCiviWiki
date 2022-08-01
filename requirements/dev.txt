@@ -2,5 +2,5 @@
 
 # dependencies only used in dev env
 coverage==6.3.2
-flake8==4.0.1
+flake8==5.0.1
 black==22.6.0
