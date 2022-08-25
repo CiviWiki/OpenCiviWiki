@@ -11,6 +11,7 @@ Make sure to search beforehand to see if the issue has been previously reported.
 The issue tracker should not be used for personal support requests. Please direct those to our [live chat](https://riot.im/app/#/room/#CiviWiki:matrix.org)
 
 ### Bug Reports
+
 Please try to have as much detail as possible when creating a bug report.
 
 A good example should contain:
@@ -28,8 +29,8 @@ A good example should contain:
 A good bug report will help direct developers to solve the problem at hand without wasting time trying to figure out the problem in the first place.
 
 ### Feature requests/enhancements
-If you have a budding idea or a feature that requires a more community-involved discussion, consider having the development discussion on the [live chat](https://riot.im/app/#/room/#CiviWiki:matrix.org) or create a thread on [loomio](https://www.loomio.org/g/ET40tXUC/openciviwiki). This will allow for a well-thought-out issue that will more likely be in line with the goal of the project.
 
+If you have a budding idea or a feature that requires a more community-involved discussion, consider having the development discussion on the [live chat](https://riot.im/app/#/room/#CiviWiki:matrix.org) or create a thread on [loomio](https://www.loomio.org/g/ET40tXUC/openciviwiki). This will allow for a well-thought-out issue that will more likely be in line with the goal of the project.
 
 ## Development
 
@@ -37,31 +38,15 @@ The following sections describe how to set up a development environment. Note, w
 
 ### Install requirements
 
-To install all required modules, complete the following steps:
+We now use Poetry for Python package management. Please follow the [Poetry installation instructions](https://python-poetry.org/docs/#installation) before trying the following steps.
+
+To install all required modules, complete the following steps.
 
 1. Make sure you are in the repository root directory
-2. Create a Python 3.8+ virtual environment (named `env`)
-```
-python -m venv env
-```
-3. Activate the virtual environment using:
-  * For Windows users:
-  ```
-  .\env\Scripts\activate
-  ```
-  * For MacOS and Linux users:
-  ```
-  source env/bin/activate
-  ```
-4. Use the following command in project dir:
-```
-pip install -r requirements/dev.txt
-```
-5. Change into project directory
-```
-cd project
-```
+2. Initialize the virtual environment with Poetry: `poetry install`
+3. Change into project directory
 
+Now that you are in the project directory, you can continue the following sections of this guide.
 
 ### Run migrations
 
@@ -72,6 +57,7 @@ python manage.py migrate
 ```
 
 ### Collect static files
+
 Certain resources, such as CSS and JavaScript files, need to be served from a static directory. Run the following command to collect static files for Django to serve:
 
 ```py
@@ -80,12 +66,12 @@ python manage.py collectstatic
 
 
 ### Create super user
+
 You will need a super user in order to log in and manage CiviWiki:
 
 ```py
 python manage.py createsuperuser
 ```
-
 
 ### Populate initial data
 
@@ -107,7 +93,6 @@ You can also import all of them in one batch:
 python manage.py loaddata ./data/*.json
 ```
 
-
 ### Run the server
 
 Once you have installed the dependencies, run the server as follows:
@@ -125,9 +110,11 @@ python manage.py test
 ```
 
 ### Register initial user (optional)
+
 Once CiviWiki is running, visit the front page (probably something like http://localhost:8000). Once there, click 'log in/register', and then 'register new user'.
 
 ## Deployment
+
 The [deployment instructions for Heroku](https://github.com/CiviWiki/OpenCiviWiki/wiki/Deployment-instructions-for-Heroku) can be found in the wiki.
 
 ## Coding Conventions
@@ -135,6 +122,7 @@ The [deployment instructions for Heroku](https://github.com/CiviWiki/OpenCiviWik
 We strive to follow Django Coding Conventions. See https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/
 
 ## Compatible Versioning
+
 We use Compatibile Versioning in this project.
 
 Given a version number MAJOR.MINOR, increment the:
