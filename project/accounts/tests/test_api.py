@@ -238,22 +238,28 @@ class EditUserTests(BaseTestCase):
 class DeleteUserTests(BaseTestCase):
     def test_delete_user_removes_from_database(self):
         self.delete_dummy = get_user_model().objects.create_user(
-            username="s_delete", email="test@test.com", password="password123",
-            first_name="Bob", last_name="George"
+            username="s_delete",
+            email="test@test.com",
+            password="password123",
+            first_name="Bob",
+            last_name="George",
         )
         self.assertEqual(self.delete_dummy.first_name, "Bob")
         self.client.login(username="s_delete", password="password123")
         self.client.post(reverse("delete_user"))
         self.delete_dummy.refresh_from_db()
-        assert(self.delete_dummy.username.startswith("[Deleted-"))
+        assert self.delete_dummy.username.startswith("[Deleted-")
         self.assertEqual(self.delete_dummy.first_name, "")
         self.assertEqual(self.delete_dummy.last_name, "")
         self.client.logout()
 
     def test_delete_user_fails_if_not_logged_in(self):
         self.delete_dummy = get_user_model().objects.create_user(
-            username="f_delete", email="test@test.com", password="password123",
-            first_name="John", last_name="Smith"
+            username="f_delete",
+            email="test@test.com",
+            password="password123",
+            first_name="John",
+            last_name="Smith",
         )
         self.assertEqual(self.delete_dummy.first_name, "John")
         self.client.post(reverse("delete_user"))
@@ -264,16 +270,15 @@ class DeleteUserTests(BaseTestCase):
 
     def test_delete_user_removes_profile_information(self):
         self.delete_dummy = get_user_model().objects.create_user(
-            username="prof", email="test@test.com", password="password123",
-            first_name="Aerith", last_name="Sans"
+            username="prof",
+            email="test@test.com",
+            password="password123",
+            first_name="Aerith",
+            last_name="Sans",
         )
         self.client.login(username="prof", password="password123")
         self.dummy_profile = Profile.objects.get(user=self.delete_dummy)
-        data = {
-            "first_name": "Aerith",
-            "last_name": "Sans",
-            "about_me": "Dummy"
-        }
+        data = {"first_name": "Aerith", "last_name": "Sans", "about_me": "Dummy"}
         self.dummy_profile.__dict__.update(data)
 
         self.assertEqual(self.dummy_profile.first_name, "Aerith")
@@ -286,8 +291,11 @@ class DeleteUserTests(BaseTestCase):
 
     def test_delete_user_can_delete_reused_usernames(self):
         self.delete_dummy = get_user_model().objects.create_user(
-            username="imposter", email="test@test.com", password="password123",
-            first_name="Among", last_name="Us"
+            username="imposter",
+            email="test@test.com",
+            password="password123",
+            first_name="Among",
+            last_name="Us",
         )
         self.client.login(username="imposter", password="password123")
         self.assertEqual(self.delete_dummy.first_name, "Among")
@@ -296,15 +304,18 @@ class DeleteUserTests(BaseTestCase):
         self.client.logout()
 
         self.second_dummy = get_user_model().objects.create_user(
-            username="imposter", email="test@test.com", password="password123",
-            first_name="Tyler", last_name="One"
+            username="imposter",
+            email="test@test.com",
+            password="password123",
+            first_name="Tyler",
+            last_name="One",
         )
         self.client.login(username="imposter", password="password123")
         self.assertEqual(self.second_dummy.username, "imposter")
         self.assertEqual(self.second_dummy.first_name, "Tyler")
         self.client.post(reverse("delete_user"))
         self.second_dummy.refresh_from_db()
-        assert(self.second_dummy.username.startswith("[Deleted-"))
+        assert self.second_dummy.username.startswith("[Deleted-")
         self.assertEqual(self.second_dummy.first_name, "")
         self.assertEqual(self.second_dummy.last_name, "")
         self.client.logout()

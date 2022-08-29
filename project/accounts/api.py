@@ -478,7 +478,7 @@ def delete_user(request):
             "email": "",
             "first_name": "",
             "last_name": "",
-            "username": "[Deleted-" + str(user.id) + "]"
+            "username": "[Deleted-" + str(user.id) + "]",
         }
         user.__dict__.update(data)
         user.save()  # Update into database
@@ -486,7 +486,7 @@ def delete_user(request):
         data = {  # Expunge personally identifiable data in profile obj
             "first_name": "",
             "last_name": "",
-            "about_me": ""
+            "about_me": "",
         }
         profile.__dict__.update(data)
         profile.save()
