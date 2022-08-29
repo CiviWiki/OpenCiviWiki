@@ -211,7 +211,7 @@ class UpdateProfileImage(forms.ModelForm):
             max_width = 1280
             if w > max_width or h > max_height:
                 raise forms.ValidationError(
-                    u"Please use an image that is {w} x {h} pixels or smaller.".format(
+                    "Please use an image that is {w} x {h} pixels or smaller.".format(
                         w=max_width, h=max_height
                     )
                 )
@@ -219,7 +219,7 @@ class UpdateProfileImage(forms.ModelForm):
             # validate content type
             main, sub = profile_image.content_type.split("/")
             if not (main == "image" and sub in ["jpg", "jpeg", "pjpeg", "png"]):
-                raise forms.ValidationError(u"Please use a JPEG or PNG image.")
+                raise forms.ValidationError("Please use a JPEG or PNG image.")
 
             # validate file size
             if len(profile_image) > (2000 * 1024):

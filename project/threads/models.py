@@ -307,7 +307,7 @@ class Civi(models.Model):
             votes_total = votes["total"]
 
             # step3 - B  V^2+Y + F + (##/T) = Rank Value
-            rank = votes_total ** 2 + scores_sum + favorite + gravity / time_ago
+            rank = votes_total**2 + scores_sum + favorite + gravity / time_ago
         elif scores_sum < 0:
             # TODO: determine why we set votes total to two when votes['tota'] is <= 1
             # set votes total to 2 when votes['total'] is <= 1
