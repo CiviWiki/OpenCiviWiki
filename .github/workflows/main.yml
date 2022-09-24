@@ -45,14 +45,14 @@ jobs:
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --no-interaction --no-root
       - name: Run migrations
-        run: python project/manage.py migrate
+        run: poetry run python project/manage.py migrate
       - name: Run tests
         env:
           CIVIWIKI_LOCAL_NAME: True
           DJANGO_SETTINGS_MODULE: core.settings
         run: |
           cd project
-          pytest -p no:warning
+          poery run pytest -p no:warning
       - name: Lint
         uses: py-actions/flake8@v1
         with:
