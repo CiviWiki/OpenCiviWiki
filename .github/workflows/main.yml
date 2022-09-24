@@ -52,7 +52,7 @@ jobs:
           DJANGO_SETTINGS_MODULE: core.settings
         run: |
           cd project
-          poery run pytest -p no:warning
+          poetry run pytest -p no:warning
       - name: Lint
         uses: py-actions/flake8@v1
         with:
