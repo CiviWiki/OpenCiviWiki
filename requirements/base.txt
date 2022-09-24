@@ -1,6 +1,6 @@
 # common dependencies used for all environments
 Django==4.1.1
-django-cors-headers==3.11.0
+django-cors-headers==3.13.0
 django-extensions==3.2.1
 djangorestframework==3.13.1
 # django-notifications-hq==1.6.0
