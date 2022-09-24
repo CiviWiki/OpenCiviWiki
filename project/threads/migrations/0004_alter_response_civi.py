@@ -7,13 +7,19 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('threads', '0003_auto_20211015_0934'),
+        ("threads", "0003_auto_20211015_0934"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='response',
-            name='civi',
-            field=models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='responses', to='threads.civi'),
+            model_name="response",
+            name="civi",
+            field=models.ForeignKey(
+                default=None,
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="responses",
+                to="threads.civi",
+            ),
         ),
     ]

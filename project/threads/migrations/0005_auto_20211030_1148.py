@@ -7,18 +7,26 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('threads', '0004_alter_response_civi'),
+        ("threads", "0004_alter_response_civi"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='civiimage',
-            name='image',
-            field=models.ImageField(blank=True, null=True, upload_to=common.utils.PathAndRename('civi_uploads')),
+            model_name="civiimage",
+            name="image",
+            field=models.ImageField(
+                blank=True,
+                null=True,
+                upload_to=common.utils.PathAndRename("civi_uploads"),
+            ),
         ),
         migrations.AlterField(
-            model_name='thread',
-            name='image',
-            field=models.ImageField(blank=True, null=True, upload_to=common.utils.PathAndRename('thread_uploads')),
+            model_name="thread",
+            name="image",
+            field=models.ImageField(
+                blank=True,
+                null=True,
+                upload_to=common.utils.PathAndRename("thread_uploads"),
+            ),
         ),
     ]

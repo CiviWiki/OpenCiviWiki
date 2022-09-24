@@ -9,50 +9,80 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('threads', '0001_initial'),
+        ("threads", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='activity',
-            options={'verbose_name_plural': 'Activities'},
+            name="activity",
+            options={"verbose_name_plural": "Activities"},
         ),
         migrations.RemoveField(
-            model_name='activity',
-            name='account',
+            model_name="activity",
+            name="account",
         ),
         migrations.RemoveField(
-            model_name='civi',
-            name='response_civis',
+            model_name="civi",
+            name="response_civis",
         ),
         migrations.AddField(
-            model_name='activity',
-            name='user',
-            field=models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.PROTECT, to=settings.AUTH_USER_MODEL),
+            model_name="activity",
+            name="user",
+            field=models.ForeignKey(
+                default=None,
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AlterField(
-            model_name='civi',
-            name='author',
-            field=models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='civis', to=settings.AUTH_USER_MODEL),
+            model_name="civi",
+            name="author",
+            field=models.ForeignKey(
+                default=None,
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="civis",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AlterField(
-            model_name='civi',
-            name='linked_civis',
-            field=models.ManyToManyField(blank=True, related_name='_threads_civi_linked_civis_+', to='threads.Civi'),
+            model_name="civi",
+            name="linked_civis",
+            field=models.ManyToManyField(
+                blank=True,
+                related_name="_threads_civi_linked_civis_+",
+                to="threads.Civi",
+            ),
         ),
         migrations.AlterField(
-            model_name='rebuttal',
-            name='author',
-            field=models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.PROTECT, to=settings.AUTH_USER_MODEL),
+            model_name="rebuttal",
+            name="author",
+            field=models.ForeignKey(
+                default=None,
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AlterField(
-            model_name='response',
-            name='author',
-            field=models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.PROTECT, to=settings.AUTH_USER_MODEL),
+            model_name="response",
+            name="author",
+            field=models.ForeignKey(
+                default=None,
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AlterField(
-            model_name='thread',
-            name='author',
-            field=models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.PROTECT, to=settings.AUTH_USER_MODEL),
+            model_name="thread",
+            name="author",
+            field=models.ForeignKey(
+                default=None,
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]
