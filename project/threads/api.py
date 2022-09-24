@@ -69,7 +69,7 @@ def get_thread(request, thread_id):
         c_scores = [ci.score(request.user.id) for ci in c]
         c_data = [Civi.objects.serialize_s(ci) for ci in c]
         problems = []
-        for idx, item in enumerate(c_data):
+        for idx, _item in enumerate(c_data):
             problems.append({"score": c_scores[idx]})
 
         data = {

@@ -173,7 +173,7 @@ def civi2csv(request, thread_id):
     writer = csv.writer(response, delimiter=",")
     for card in Civi.objects.filter(thread_id=thread):
         data = []
-        for key, value in card.dict_with_score().items():
+        for _key, value in card.dict_with_score().items():
             if value:
                 data.append(value)
         writer.writerow(data)
