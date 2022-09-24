@@ -29,48 +29,6 @@ Join us on the following channels:
 
 See our [Contributing Guide](CONTRIBUTING.md) for instructions on how to contribute ideas, bug reports and code code.
 
-## Docker Installation 
-
-The code can also be run in a docker container using the `docker-compose.yml` file.
-
-- In the root directory, run the build command to create the docker image.
-
-```bash
-docker-compose build
-```
-- To create and start the containers run: 
-
-```bash
-docker-compose up -d
-```
-
-- Run migrations and other commands (required only for the first time running the project or if you make any changes in the models)
-
-```bash 
-# Check if there are any pending migrations
-docker-compose exec web python project/manage.py makemigrations
-
-# Run all pending migrations
-docker-compose exec web python project/manage.py migrate
-
-# Collect static files for django to serve 
-docker-compose exec web python project/manage.py collectstatic
-```
-
-- Create a superuser to log in and manage CiviWiki
-```bash
-docker-compose exec web python project/manage.py createsuperuser
-```
-
-- Populate the initial data (required only for the first setup)
-```bash 
-docker-compose exec web python project/manage.py  ./data/categories.json
-
-docker-compose exec web python project/manage.py  ./data/sample_threads.json
-```
-
-The server will automatically load at http://localhost:8000 after running the above commands. Once there, click 'log in/register', and then 'register new user'.
-
 ## Contributors
 
 Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
