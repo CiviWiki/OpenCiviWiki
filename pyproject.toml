@@ -1,13 +1,3 @@
-[tool.black]
-exclude = '''
-(
-    /(
-      | migrations
-    )/
-    | apps.py
-)
-'''
-
 [tool.poetry]
 name = "OpenCiviWiki"
 version = "1.0"
