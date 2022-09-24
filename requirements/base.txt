@@ -2,7 +2,7 @@
 Django==4.1.1
 django-cors-headers==3.13.0
 django-extensions==3.2.1
-djangorestframework==3.13.1
+djangorestframework==3.14.0
 # django-notifications-hq==1.6.0
 git+https://github.com/django-notifications/django-notifications.git@0fd3f42f71c19ae75348425686a2fe68ffe04fec
 django-storages==1.13.1
