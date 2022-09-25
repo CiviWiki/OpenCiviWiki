@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('threads', '0005_auto_20211030_1148'),
+        ("threads", "0005_auto_20211030_1148"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='civi',
-            name='linked_civis',
-            field=models.ManyToManyField(blank=True, related_name='links', to='threads.Civi'),
+            model_name="civi",
+            name="linked_civis",
+            field=models.ManyToManyField(
+                blank=True, related_name="links", to="threads.Civi"
+            ),
         ),
     ]

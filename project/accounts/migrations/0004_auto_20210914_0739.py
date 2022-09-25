@@ -6,18 +6,18 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('taggit', '0003_taggeditem_add_unique_index'),
-        ('accounts', '0003_account'),
+        ("taggit", "0003_taggeditem_add_unique_index"),
+        ("accounts", "0003_account"),
     ]
 
     operations = [
         migrations.RenameModel(
-            old_name='Account',
-            new_name='Profile',
+            old_name="Account",
+            new_name="Profile",
         ),
         migrations.RenameField(
-            model_name='profile',
-            old_name='full_account',
-            new_name='full_profile',
+            model_name="profile",
+            old_name="full_account",
+            new_name="full_profile",
         ),
     ]

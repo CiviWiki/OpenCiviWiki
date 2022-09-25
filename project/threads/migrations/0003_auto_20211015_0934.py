@@ -6,16 +6,16 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('threads', '0002_auto_20211012_2014'),
+        ("threads", "0002_auto_20211012_2014"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='thread',
-            name='level',
+            model_name="thread",
+            name="level",
         ),
         migrations.RemoveField(
-            model_name='thread',
-            name='state',
+            model_name="thread",
+            name="state",
         ),
     ]
