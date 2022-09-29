@@ -136,3 +136,16 @@ Additional labels for pre-release and build metadata are available as extensions
 Compatible Versioning ("ComVer") is SemVer where every PATCH number is 0 (zero). This way, ComVer is backwards compatible with SemVer.
 
 A ComVer release from 3.6 to 3.7 is just a SemVer release from 3.6.0 to 3.7.0. In other words, ComVer is safe to adopt since it is basically SemVer without ever issuing PATCH releases.
+
+### Editor
+
+This project provides an `.editorconfig` file, with some style options such as indent
+
+#### VS Code
+
+To use the `.editorconfig` file in VS Code install the [`EditorConfig for VS Code`](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig) extension. You can find more information [here]()
+
+#### Pycharm
+
+To use the `.editorconfig` file in Pycharm enable the [`EditorConfig`](https://plugins.jetbrains.com/plugin/7294-editorconfig) plugin. You find more information [here](https://www.jetbrains.com/help/idea/editorconfig.html)
+
