@@ -1,12 +1,25 @@
 # Welcome to Civiwiki
 
-[![ComVer](https://img.shields.io/badge/ComVer-compliant-brightgreen.svg)](https://github.com/staltz/comver)
-[![Maintainability](https://api.codeclimate.com/v1/badges/5241b4275cc2dffe90f2/maintainability)](https://codeclimate.com/github/CiviWiki/OpenCiviWiki/maintainability)
+![GitHub Discussions](https://img.shields.io/github/discussions/CiviWiki/OpenCiviWiki)
+![Matrix](https://img.shields.io/matrix/civi.wiki:matrix.org?server_fqdn=matrix.org)
+![GitHub Repo stars](https://img.shields.io/github/stars/CiviWiki/OpenCiviWiki?style=social)
+![GitHub labels](https://img.shields.io/github/labels/CiviWiki/OpenCiviWiki/help%20wanted)
+
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-85-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
+[![ComVer](https://img.shields.io/badge/ComVer-compliant-brightgreen.svg)](https://github.com/staltz/comver)
+[![Maintainability](https://api.codeclimate.com/v1/badges/5241b4275cc2dffe90f2/maintainability)](https://codeclimate.com/github/CiviWiki/OpenCiviWiki/maintainability)
+
 We are an open-source, non-profit community, working to develop a democratic engagement web system.
+
+## Join our community
+
+Join us on the following channels:
+
+* [discussions](https://github.com/CiviWiki/OpenCiviWiki/discussions) on GitHub
+* [chat](https://matrix.to/#/#civi.wiki:matrix.org) on Matrix
 
 ## Why CiviWiki?
 
@@ -14,16 +27,6 @@ We are an open-source, non-profit community, working to develop a democratic eng
 * **Personalized Policy Feed.** CiviWiki intelligently personalizes users' feed in two meaningful ways. First, the issues promoted to users' feed will be personalized to the user's expressed interests, and the timeliness of the issue. Second, the structure of the issue topics breaks policy positions into bite-sized contentions we call Civies. Each Civi is logically related to the rest of the topic. Based on the user's support, opposition, or neutrality to each Civi, CiviWiki promotes different relevant content.
 * **Citizen/Representative Engagement.** CiviWiki's core goal is to engage citizens and their representatives, with the goal of making government more accountable. CiviWiki will achieve this goal in two ways. First, CiviWiki will organize the user's policy profile and compare it to every political candidate in the user's district. This quick, detailed, comparison will help users make informed votes, and we believe increased voter confidence will increase voter turnout. Second, CiviWiki will collect anonymized user data and forward district-level statistics to representatives. With a critical mass of users, we believe timely district-level polling data will influence representatives' votes.
 
-## Contact info
-
-Contact us on Twitter to join the team.
-
-Join us on the following channels:
-
-* [development discussions](https://www.loomio.org/g/ET40tXUC/openciviwiki) on Loomio
-* [videos of our weekly planning meetings](https://archive.org/search.php?query=subject%3A%22CiviWiki%22&sort=-date) on Internet Archive
-* [live chat](https://riot.im/app/#/room/#CiviWiki:matrix.org) on Matrix
-* [@CiviWiki](https://twitter.com/civiwiki) on Twitter
 
 ## Contribute
 
