@@ -148,4 +148,3 @@ To use the `.editorconfig` file in VS Code install the [`EditorConfig for VS Cod
 #### Pycharm
 
 To use the `.editorconfig` file in Pycharm enable the [`EditorConfig`](https://plugins.jetbrains.com/plugin/7294-editorconfig) plugin. You find more information [here](https://www.jetbrains.com/help/idea/editorconfig.html)
-
