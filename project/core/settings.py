@@ -184,3 +184,21 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
+
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {"rich": {"datefmt": "[%X]"}},
+    "handlers": {
+        "console": {
+            "class": "rich.logging.RichHandler",
+            "formatter": "rich",
+            "level": "DEBUG",
+            # "filters": ["require_debug_true"],
+            "rich_tracebacks":True,
+            "tracebacks_show_locals":True
+        }
+    },
+    "loggers": {"django": {"handlers": ["console"]}},
+}
