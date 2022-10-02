@@ -34,9 +34,11 @@ INSTALLED_APPS = (
     "taggit",
     "categories",
     "notification",
+    "debug_toolbar",
 )
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -183,4 +185,8 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
+]
+
+INTERNAL_IPS = [
+    "127.0.0.1",
 ]
