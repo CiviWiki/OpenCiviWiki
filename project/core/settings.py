@@ -6,8 +6,8 @@ Production settings file to select proper environment variables.
 """
 import os
 
-# False if not in os.environ
-DEBUG = os.getenv("DEBUG", False)
+# True if not in os.environ
+DEBUG = os.getenv("DEBUG", True)
 
 # defaults to second value if not found in os.environ
 DJANGO_HOST = os.getenv("DJANGO_HOST", "LOCALHOST")
@@ -34,9 +34,11 @@ INSTALLED_APPS = (
     "taggit",
     "categories",
     "notification",
+    "debug_toolbar",
 )
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -47,6 +49,10 @@ MIDDLEWARE = [
     # 'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+]
+
+INTERNAL_IPS = [
+    '127.0.0.1',
 ]
 
 CSRF_USE_SESSIONS = (
