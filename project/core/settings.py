@@ -7,7 +7,7 @@ Production settings file to select proper environment variables.
 import os
 
 # True if not in os.environ
-DEBUG = os.getenv("DEBUG", True)
+DEBUG = os.getenv("DEBUG", False)
 
 # defaults to second value if not found in os.environ
 DJANGO_HOST = os.getenv("DJANGO_HOST", "LOCALHOST")
