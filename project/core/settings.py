@@ -34,9 +34,11 @@ INSTALLED_APPS = (
     "taggit",
     "categories",
     "notification",
+    "debug_toolbar",
 )
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -47,6 +49,10 @@ MIDDLEWARE = [
     # 'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+]
+
+INTERNAL_IPS = [
+    "127.0.0.1",
 ]
 
 CSRF_USE_SESSIONS = (
@@ -184,3 +190,20 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {"rich": {"datefmt": "[%X]"}},
+    "handlers": {
+        "console": {
+            "class": "rich.logging.RichHandler",
+            "formatter": "rich",
+            "level": "WARNING",
+            # "filters": ["require_debug_true"],
+            "rich_tracebacks": True,
+            "tracebacks_show_locals": True,
+        }
+    },
+    "loggers": {"django": {"handlers": ["console"]}},
+}
