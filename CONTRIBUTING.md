@@ -48,6 +48,14 @@ To install all required modules, complete the following steps.
 
 Now that you are in the project directory, you can continue the following sections of this guide.
 
+### Install pre-commit
+
+We use `pre-commit` to run code-quality checks before every commit. Install `pre-commit` in your local project by running the following command (from within the virtual environment.)
+
+```sh
+pre-commit install
+```
+
 ### Run migrations
 
 To create the (initial) database structure, run migrations as follows:
@@ -63,7 +71,6 @@ Certain resources, such as CSS and JavaScript files, need to be served from a st
 ```py
 python manage.py collectstatic
 ```
-
 
 ### Create super user
 
