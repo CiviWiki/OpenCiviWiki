@@ -195,8 +195,8 @@ LOGGING = {
             "formatter": "rich",
             "level": "WARNING",
             # "filters": ["require_debug_true"],
-            "rich_tracebacks":True,
-            "tracebacks_show_locals":True
+            "rich_tracebacks": True,
+            "tracebacks_show_locals": True,
         }
     },
     "loggers": {"django": {"handlers": ["console"]}},
