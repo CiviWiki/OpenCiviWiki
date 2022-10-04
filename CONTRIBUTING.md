@@ -139,7 +139,7 @@ A ComVer release from 3.6 to 3.7 is just a SemVer release from 3.6.0 to 3.7.0. I
 
 ### Editor
 
-This project provides an `.editorconfig` file, with some style options such as indent
+This project provides an `.editorconfig` file, with some style options such as indent.
 
 #### VS Code
 
