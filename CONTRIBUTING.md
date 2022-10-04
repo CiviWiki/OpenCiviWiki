@@ -40,17 +40,40 @@ The following sections describe how to set up a development environment. Note, w
 
 :warning: When contributing code, please make sure you claim any related issue before opening a pull request. You can claim an issue by adding a comment such as "I'd like to work on this issue." Then, we will be able to assign you to the issue, so other developers know which tasks have been claimed.
 
-### Install requirements
+### Install Poetry with .env support
 
 We now use Poetry for Python package management. Please follow the [Poetry installation instructions](https://python-poetry.org/docs/#installation) before trying the following steps.
 
-To install all required modules, complete the following steps.
+Once Poetry is installed, enable Poetry `.env` support by running the following command. This will ensure that environment variables defined in `.env` file are present when activating the project virtual environment.
+
+```sh
+poetry self add poetry-dotenv-plugin
+```
+
+### Install requirements
+
+Once Poetry is installed, complete the following steps to install all required modules.
 
 1. Make sure you are in the repository root directory
 2. Initialize the virtual environment with Poetry: `poetry install`
-3. Change into project directory
 
-Now that you are in the project directory, you can continue the following sections of this guide.
+### Activate virtual environment
+
+Whenever you want to develop the project, activate the virtual environment with the following command.
+
+```sh
+poetry shell
+```
+
+### Change into project directory
+
+Once you have installed the project dependencies and activated the virtual environment, change into the project directory.
+
+```sh
+cd project/
+```
+
+Once you are in the project directory, you can continue the following sections of this guide.
 
 ### Run migrations
 
