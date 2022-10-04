@@ -20,6 +20,7 @@ repos:
     rev: 5.10.1
     hooks:
       -  id: isort
+         name: isort (python)
 
   - repo: https://github.com/asottile/pyupgrade
     rev: v2.38.2
