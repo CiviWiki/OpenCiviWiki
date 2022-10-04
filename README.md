@@ -30,7 +30,7 @@ Join us on the following channels:
 
 ## Contribute
 
-See our [Contributing Guide](CONTRIBUTING.md) for instructions on how to contribute ideas, bug reports and code code.
+See our [Contributing Guide](CONTRIBUTING.md) for instructions on how to contribute ideas, bug reports, and code.
 
 ## Contributors
 
