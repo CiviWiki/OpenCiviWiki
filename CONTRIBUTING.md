@@ -32,25 +32,6 @@ A good bug report will help direct developers to solve the problem at hand witho
 
 If you have a budding idea or a feature that requires a more community-involved discussion, consider having the development discussion on the [live chat](https://riot.im/app/#/room/#CiviWiki:matrix.org) or create a thread on [loomio](https://www.loomio.org/g/ET40tXUC/openciviwiki). This will allow for a well-thought-out issue that will more likely be in line with the goal of the project.
 
-### Solve Conflicts with code 
- 
-Conflicts are happening quite often in the [poetry.lock](https://github.com/CiviWiki/OpenCiviWiki/blob/develop/poetry.lock) file. 
-Conflicts generally arise when two people have changed the same lines in a file. Here are steps for fixing conflicts in ```poetry.lock```. 
- 
-1. Check out the ```develop``` branch with ```git checkout develop``` 
- 
-2. Update the ```develop``` branch with ```git pull``` 
- 
-3. Check out your branch with ```git checkout my-branch``` 
- 
-4. Attempt to merge ```develop``` into your branch with ```git merge develop``` 
- 
-5. When conflicts are detected in ```poetry.lock```, delete the file 
- 
-6. Resolve any remaining conflicts 
- 
-7. Re-generate the ```poetry.lock``` with the command ```poetry lock```
- 
 ## Development
 
 The following sections describe how to set up a development environment. Note, we have tried to simplify our development set-up in order to reduce barriers to entry.
@@ -131,7 +112,28 @@ python manage.py test
 ### Register initial user (optional)
 
 Once CiviWiki is running, visit the front page (probably something like http://localhost:8000). Once there, click 'log in/register', and then 'register new user'.
-
+ 
+## Troubleshooting 
+ 
+### Solve Conflicts with poetry.lock  
+ 
+Conflicts are happening quite often in the [poetry.lock](https://github.com/CiviWiki/OpenCiviWiki/blob/develop/poetry.lock) file. 
+Conflicts generally arise when two people have changed the same lines in a file. Here are steps for fixing conflicts in ```poetry.lock```. 
+ 
+1. Check out the ```develop``` branch with ```git checkout develop``` 
+ 
+2. Update the ```develop``` branch with ```git pull``` 
+ 
+3. Check out your branch with ```git checkout my-branch``` 
+ 
+4. Attempt to merge ```develop``` into your branch with ```git merge develop``` 
+ 
+5. When conflicts are detected in ```poetry.lock```, delete the file 
+ 
+6. Resolve any remaining conflicts 
+ 
+7. Re-generate the ```poetry.lock``` with the command ```poetry lock``` 
+ 
 ## Deployment
 
 The [deployment instructions for Heroku](https://github.com/CiviWiki/OpenCiviWiki/wiki/Deployment-instructions-for-Heroku) can be found in the wiki.
