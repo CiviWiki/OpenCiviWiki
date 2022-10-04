@@ -49,7 +49,7 @@ urlpatterns = [
         RedirectView.as_view(url="/static/favicon/mstile-144x144.png"),
     ),
     re_path(r"^media/(?P<path>.*)$", serve, {"document_root": settings.MEDIA_ROOT}),
-    path('__debug__/', include('debug_toolbar.urls')),
+    path("__debug__/", include("debug_toolbar.urls")),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

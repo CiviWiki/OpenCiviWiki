@@ -52,7 +52,7 @@ MIDDLEWARE = [
 ]
 
 INTERNAL_IPS = [
-    '127.0.0.1',
+    "127.0.0.1",
 ]
 
 CSRF_USE_SESSIONS = (
