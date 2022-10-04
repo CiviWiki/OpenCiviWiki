@@ -829,7 +829,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/998807?v=4",
       "profile": "https://haseebmajid.dev",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -846,6 +847,15 @@
       "name": "daaavo",
       "avatar_url": "https://avatars.githubusercontent.com/u/108758198?v=4",
       "profile": "https://github.com/daaavo",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Ni3dzwi3dz",
+      "name": "Niedzwiedz",
+      "avatar_url": "https://avatars.githubusercontent.com/u/59344635?v=4",
+      "profile": "http://idzieniedzwiedz.pl",
       "contributions": [
         "code"
       ]

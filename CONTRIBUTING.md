@@ -67,6 +67,14 @@ To install all required modules, complete the following steps.
 
 Now that you are in the project directory, you can continue the following sections of this guide.
 
+### Install pre-commit
+
+We use `pre-commit` to run code-quality checks before every commit. Install `pre-commit` in your local project by running the following command (from within the virtual environment.)
+
+```sh
+pre-commit install
+```
+
 ### Run migrations
 
 To create the (initial) database structure, run migrations as follows:
@@ -82,7 +90,6 @@ Certain resources, such as CSS and JavaScript files, need to be served from a st
 ```py
 python manage.py collectstatic
 ```
-
 
 ### Create super user
 
@@ -155,3 +162,15 @@ Additional labels for pre-release and build metadata are available as extensions
 Compatible Versioning ("ComVer") is SemVer where every PATCH number is 0 (zero). This way, ComVer is backwards compatible with SemVer.
 
 A ComVer release from 3.6 to 3.7 is just a SemVer release from 3.6.0 to 3.7.0. In other words, ComVer is safe to adopt since it is basically SemVer without ever issuing PATCH releases.
+
+### Editor
+
+This project provides an `.editorconfig` file, with some style options such as indent.
+
+#### VS Code
+
+To use the `.editorconfig` file in VS Code, install the [`EditorConfig for VS Code`](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig) extension. See the [EditorConfig documentation](https://editorconfig.org/) for more information.
+
+#### Pycharm
+
+To use the `.editorconfig` file in Pycharm, enable the [`EditorConfig`](https://plugins.jetbrains.com/plugin/7294-editorconfig) plugin. See the [IntelliJ IDEA EditorConfig documentation](https://www.jetbrains.com/help/idea/editorconfig.html) for more information.
