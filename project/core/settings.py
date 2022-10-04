@@ -193,7 +193,7 @@ LOGGING = {
         "console": {
             "class": "rich.logging.RichHandler",
             "formatter": "rich",
-            "level": "DEBUG",
+            "level": "WARNING",
             # "filters": ["require_debug_true"],
             "rich_tracebacks":True,
             "tracebacks_show_locals":True
