@@ -36,6 +36,10 @@ If you have a budding idea or a feature that requires a more community-involved 
 
 The following sections describe how to set up a development environment. Note, we have tried to simplify our development set-up in order to reduce barriers to entry.
 
+### First, claim an issue
+
+:warning: When contributing code, please make sure you claim any related issue before opening a pull request. You can claim an issue by adding a comment such as "I'd like to work on this issue." Then, we will be able to assign you to the issue, so other developers know which tasks have been claimed.
+
 ### Install requirements
 
 We now use Poetry for Python package management. Please follow the [Poetry installation instructions](https://python-poetry.org/docs/#installation) before trying the following steps.
