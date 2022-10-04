@@ -143,7 +143,7 @@ This project provides an `.editorconfig` file, with some style options such as i
 
 #### VS Code
 
-To use the `.editorconfig` file in VS Code install the [`EditorConfig for VS Code`](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig) extension. You can find more information [here]()
+To use the `.editorconfig` file in VS Code, install the [`EditorConfig for VS Code`](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig) extension. See the [EditorConfig documentation](https://editorconfig.org/) for more information.
 
 #### Pycharm
 
