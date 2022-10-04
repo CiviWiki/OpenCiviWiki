@@ -27,6 +27,14 @@ flake8 = "^5.0.4"
 [tool.poetry.group.dev.dependencies]
 pytest-django = "^4.5.2"
 ipython = "^8.5.0"
+mypy = "^0.981"
+django-stubs = "^1.12.0"
+
+[tool.mypy]
+plugins = ["mypy_django_plugin.main"]
+
+[tool.django-stubs]
+django_settings_module = "myproject.settings"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
