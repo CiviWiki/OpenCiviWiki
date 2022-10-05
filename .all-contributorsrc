@@ -877,6 +877,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "mazen-r",
+      "name": "Mazen Ramadan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/73492002?v=4",
+      "profile": "http://www.linkedin.com/in/mazen-r",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
