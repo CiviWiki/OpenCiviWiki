@@ -44,7 +44,7 @@ cw.AccountView = BB.View.extend({
     myissuesTemplate: _.template($('#my-issues-template').html()),
 
     // Partials
-    userCardTemplate: _.template($('#user-card-template').html()),
+    userCardTemplate: _.template($('.user-card-template').html()),
 
 
     initialize: function (options) {
@@ -108,8 +108,6 @@ cw.AccountView = BB.View.extend({
         'click .follow-btn': 'followRequest',
         'submit #profile_image_form': 'handleFiles',
         'blur .save-account': 'saveAccount',
-        'mouseenter .user-chip-contents': 'showUserCard',
-        'mouseleave .user-chip-contents': 'hideUserCard',
         'click .toggle-solutions': 'toggleSolutions',
         'change .profile-image-pick': 'previewImage',
         'keypress .save-account': cw.checkForEnter,
@@ -142,84 +140,6 @@ cw.AccountView = BB.View.extend({
                 reader.readAsDataURL(uploaded_image);
             }
         }
-    },
-
-    showUserCard: function(e) {
-        var _this = this;
-        var username = e.currentTarget.dataset.username;
-        if (!$('#usercard-'+ username).hasClass('open')) {
-            clearTimeout(this.showTimeout);
-            this.showTimeout = setTimeout(function() {
-                $.ajax({
-                    type: 'POST',
-                    url: '/api/account_card/'+username,
-                    success: function (data) {
-                        data.isCurrentUser = false;
-                        if (current_user == data.username){
-                            data.isCurrentUser = true;
-                        }
-                        _this.$(e.currentTarget).parent().after(_this.userCardTemplate(data));
-                        // Hover Elements
-                        var target = _this.$(e.currentTarget),
-                            targetCard = _this.$('#usercard-'+ username);
-
-                        targetCard.stop().fadeIn("fast", function(){
-                            // Positions
-                            var pos = target.offset(),
-                            // Dimenions
-                                cardWidth = targetCard.width(),
-                                cardHeight = targetCard.height(),
-                                chipHeight = target.height(),
-                                documentHeight = $(window).height(),
-                                scroll = _this.$(".scroll-col").scrollTop(),
-                                top,left;
-
-                            if (target[0].getBoundingClientRect().top + cardHeight + chipHeight >= documentHeight) {
-                                top = pos.top + scroll - cardHeight - chipHeight -2;
-                            } else {
-                                top = pos.top + scroll + 25;
-                            }
-                            left = target.position().left + 20;
-
-                            // Determine placement of the hovercard
-                            targetCard.css({
-                                'top': top ,
-                                'left': left
-                            });
-                        }).addClass('open');
-                    },
-                    error: function () {
-                        // No card for you!
-                        return;
-                    }
-                });
-            }, 200);
-        }
-    },
-
-    hideUserCard: function(e) {
-        var _this = this,
-            username = e.currentTarget.dataset.username,
-            card = this.$('.user-card');
-        if (('timeout-'+username) in this){
-            clearTimeout(this['timeout-'+username]);
-        }
-        clearTimeout(this.showTimeout);
-        this['timeout-'+username] = setTimeout(function() {
-            card.fadeOut("fast",function(){$(this).remove();});
-        }, 200);
-        $('#usercard-'+ username).hover(function() {
-            if (('timeout-'+username) in _this){
-                clearTimeout(_this['timeout-'+username]);
-            }
-        }, function() {
-            if (('timeout-'+username) in _this){
-                clearTimeout(_this['timeout-'+username]);
-            }
-            _this['timeout-'+username] = setTimeout(function() {
-                card.fadeOut("fast",function(){$(this).remove();});
-            }, 100);
-        });
     },
 
     showRawRatings: function(e) {
@@ -302,7 +222,7 @@ cw.AccountView = BB.View.extend({
             }
         });
     },
-    
+
     handleFiles: function(e) {
         e.preventDefault();
 
