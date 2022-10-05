@@ -62,7 +62,7 @@
                                 <i class="mini material-icons edit">edit</i>
                                 <span class="edit-text">EDIT THREAD</span>
                             </div>
-    
+
                         </div>
                     </div>
                     {{# } }}
@@ -72,7 +72,7 @@
         <div class="wiki-body">
             <div class="container">
                 <div class="row">
-    
+
                     <div class="col s6">
                         <div class="wiki-body-header">
                             <span class="wiki-header-category gray-text"><span class="black-text bold-text wiki-header-inner">Category:</span>{{this.model.get('category').name}}</span>
@@ -80,8 +80,8 @@
                     </div>
                     <div class="col s4">
                         <div class="wiki-edit hide">
-    
-    
+
+
                         </div>
                     </div>
                 </div>
@@ -145,9 +145,9 @@
                 </div>
             </div>
         </div>
-    
+
     </div>
-    {% endverbatim %}    
+    {% endverbatim %}
 </script>
 <script id="edit-wiki-template" type="text/template">
     {% verbatim %}
@@ -164,7 +164,7 @@
                                 </div>
                             </div>
                         </div>
-    
+
                         <div class="wiki-stats light-gray-text">
                             <span class="wiki-stat">{{this.model.get('num_views')}} Views</span>
                             <span class="wiki-stat">{{this.model.get('num_civis')}} Civis</span>
@@ -194,7 +194,7 @@
                                 <i class="mini material-icons edit">edit</i>
                                 <span class="edit-text">EDIT THREAD</span>
                             </div>
-    
+
                         </div>
                     </div>
                     {{# } }}
@@ -274,7 +274,7 @@
                 </div>
             </div>
         </div>
-    
+
     </div>
     {% endverbatim %}
 </script>
@@ -336,7 +336,7 @@
                 <div class="civi-outline" id="civi-outline"></div>
             </div>
         </div>
-    
+
         <div class="row">
             <div class="col main-thread scroll-col" id="main-thread">
                 <div id="thread-problems"></div>
@@ -350,7 +350,7 @@
                 <div class="responses-padding scroll-padding"></div>
             </div>
         </div>
-    
+
         <div id="civi-image-modal" class="modal">
             <div class="modal-content center">
                 <img id="civi-image-big" src="/static/img/no_image_md.png" />
@@ -373,9 +373,9 @@
         <div class="section">
             <div id="new-response-box"></div>
         </div>
-    
+
     </div>
-    
+
     {{# if (this.responseCollection.length > 0) { }}
         <div id="response-list"></div>
     {{# } else { }}
@@ -391,7 +391,7 @@
     <div class="profile-button-outer">
         <a href="/profile/{{c.username}}" class="profile-button btn btn-large btn-floating profile-button transparent" style="background-image: url('{{c.profile_image}}'); background-size: 40px;"></a>
     </div>
-    {% endverbatim %}    
+    {% endverbatim %}
 </script>
 
 <script id="civi-template" type="text/template">
@@ -402,7 +402,7 @@
                 <div class="civi-type gray-text">{{this.model.get('type')}}</div>
                 <div class="civi-title ">
                     <span class="text-wrapper">{{this.model.get('title')}}</span>
-    
+
                     {{# if (this.can_edit) { }}
                     <div class="dark-background-input-field hide edit-wrapper edit-type">
                         <form action="#" id="civi-type-form" class="edit-civi-type">
@@ -428,11 +428,11 @@
             </div>
             <div class="col s2 no-pads civi-header-actions">
                 <div class="right">
-    
+
                     {{# if (this.can_edit) { }}
                     <i class="mini material-icons edit">edit</i>
                     <i class="mini material-icons delete">delete_forever</i>
-    
+
                     <i class="mini material-icons edit-action edit-confirm hide">save</i>
                     <i class="mini material-icons edit-action edit-cancel hide">close</i>
                     {{# } }}
@@ -460,7 +460,7 @@
                             <span class="gray-text">{{civi.get('title')}}</span>
                         </div>
                     {{# }, this); }}
-    
+
             </div>
             {{# } }}
             {{# if (this.model.get('attachments').length > 0) { }}
@@ -468,13 +468,13 @@
                 <div class="attachments-title gray-text">
                     ATTACHMENTS ({{this.model.get('attachments').length}})
                 </div>
-    
+
                     {{# _.each(this.model.get('attachments'), function(attachment){  }}
                         <div class="attachments-item">
                             <img class="civi-image-thumb" src="{{attachment.url}}" width="50px" height="40px"/>
                         </div>
                     {{# }, this); }}
-    
+
             </div>
             {{# } }}
             {{# if (this.can_edit) { }}
@@ -486,7 +486,7 @@
                         {{# _.each(this.model.get('attachments'), function(attachment){  }}
                             <div class="attachments-item delete-civi-image action-button" data-image-id="{{attachment.id}}">
                                 <div class="delete-image-overlay input"><i class="small material-icons">clear</i></div>
-    
+
                                 <img class="civi-image-thumb" src="{{attachment.url}}" width="50px" height="40px"/>
                             </div>
                         {{# }, this); }}
@@ -506,13 +506,13 @@
                                     <input class="file-path validate" type="text">
                                   </div>
                                 </div>
-    
+
                             </form>
                             <div class="image-link-list">
                                 <input type="text" class="civi-link-images" placeholder="Paste your image link here..."/>
                             </div>
                             <button class="waves-effect waves-teal btn-flat btn-small" id="add-image-link-input">+ Add Another Image Link</button>
-    
+
                             <div class="file-preview"></div>
                         </div>
                     </div>
@@ -556,7 +556,7 @@
         <div class="civi-footer">
             <div class="author-photo-holder">
                 <div class="author-photo transparent" style="background-image: url('{{this.model.get('author').profile_image}}'); background-size: 34px;">
-    
+
                 </div>
             </div>
             <div class="author-info">
@@ -571,13 +571,13 @@
                 <div>
                     {{# if (this.can_respond && !this.model.get('rebuttal') ){ }}
                     <span class="link-lato input" id="respond-button"><i class="mini material-icons">comment</i> RESPOND</span>
-    
+
                     {{# } }}
                 </div>
             </div>
         </div>
     </div>
-    {% endverbatim %}    
+    {% endverbatim %}
 </script>
 
 <script id="response-template" type="text/template">
@@ -608,13 +608,13 @@
                 <div class="attachments-title gray-text">
                     ATTACHMENTS ({{ attachments.length }})
                 </div>
-    
+
                     {{# _.each(attachments, function(attachment){  }}
                         <div class="attachments-item">
                             <img class="civi-image-thumb" src="{{attachment.url}}" width="50px" height="40px"/>
                         </div>
                     {{# }, this); }}
-    
+
             </div>
             {{# } }}
             <div class="rating">
@@ -645,7 +645,7 @@
         <div class="civi-footer">
             <div class="author-photo-holder">
                 <div class="author-photo transparent" style="background-image: url('{{author.profile.profile_image}}'); background-size: 34px;">
-    
+
                 </div>
             </div>
             <div class="author-info">
@@ -664,7 +664,7 @@
             </div>
         </div>
     </div>
-    {% endverbatim %}    
+    {% endverbatim %}
 </script>
 
 <script id="new-civi-template" type="text/template">
@@ -713,7 +713,7 @@
                             <input class="file-path validate" type="text">
                           </div>
                         </div>
-    
+
                     </form>
                     <div class="image-link-list">
                         <input type="text" class="civi-link-images" placeholder="Paste your image link here..."/>
@@ -769,7 +769,7 @@
                     <input type="text" class="civi-link-images" placeholder="Paste your image link here..."/>
                 </div>
                 <button class="waves-effect waves-teal btn-flat" id="add-image-link-input">+ Add Another Image Link</button>
-    
+
                 <div class="file-preview"></div>
             </div>
         </div>
@@ -838,7 +838,7 @@
                 <div class="use-previous-image action-button"><i class="mini material-icons edit">undo</i>USE PREVIOUS IMAGE</div>
             </div>
         </div>
-    
+
         <div class="modal-footer">
             <button class="edit-thread waves-effect btn">Save Edit</button>
             <button class="cancel-thread waves-effect btn-flat">Cancel</button>
