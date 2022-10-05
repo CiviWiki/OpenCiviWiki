@@ -2,11 +2,11 @@
 
 Thank you for your interest in contributing to CiviWiki. There are many ways to contribute, such as by sharing ideas, design, testing, community building, and development.
 
-The following sections outline some common ways to contribue ideas, feature requests, and code.
+The following sections outline common ways to contribute ideas, feature requests, and code.
 
 ## Creating issues
 
-Make sure to search beforehand to see if the issue has been previously reported.
+Make sure to search beforehand to see if the issue has been reported.
 
 The issue tracker should not be used for personal support requests. Please direct those to our [live chat](https://riot.im/app/#/room/#CiviWiki:matrix.org)
 
@@ -26,27 +26,54 @@ A good example should contain:
 
 5. (Optional)Potential solutions to the problem.
 
-A good bug report will help direct developers to solve the problem at hand without wasting time trying to figure out the problem in the first place.
+A good bug report will help developers solve the problem without wasting time trying to figure out the situation in the first place.
 
 ### Feature requests/enhancements
 
-If you have a budding idea or a feature that requires a more community-involved discussion, consider having the development discussion on the [live chat](https://riot.im/app/#/room/#CiviWiki:matrix.org) or create a thread on [loomio](https://www.loomio.org/g/ET40tXUC/openciviwiki). This will allow for a well-thought-out issue that will more likely be in line with the goal of the project.
+If you have a budding idea or a feature that requires a more community-involved discussion, consider having the development discussion on the [live chat](https://riot.im/app/#/room/#CiviWiki:matrix.org) or create a thread on [loomio](https://www.loomio.org/g/ET40tXUC/openciviwiki). This will allow for a well-thought-out issue that will more likely align with the project's goal.
 
 ## Development
 
-The following sections describe how to set up a development environment. Note, we have tried to simplify our development set-up in order to reduce barriers to entry.
+The following sections describe how to set up a development environment. Note we have tried to simplify our development setup to reduce barriers to entry.
 
-### Install requirements
+### First, claim an issue
+
+:warning: When contributing code, please make sure you claim any related issue before opening a pull request. You can claim an issue by adding a comment like "I'd like to work on this issue." Then, we will be able to assign you to the issue so other developers know which tasks have been claimed.
+
+### Install Poetry with .env support
 
 We now use Poetry for Python package management. Please follow the [Poetry installation instructions](https://python-poetry.org/docs/#installation) before trying the following steps.
 
-To install all required modules, complete the following steps.
+Once Poetry is installed, enable Poetry `.env` support by running the following command. This will set all variables defined in the `.env` file when activating the virtual environment.
+
+```sh
+poetry self add poetry-dotenv-plugin
+```
+
+### Install requirements
+
+Once Poetry is installed, complete the following steps to install all required modules.
 
 1. Make sure you are in the repository root directory
 2. Initialize the virtual environment with Poetry: `poetry install`
-3. Change into project directory
 
-Now that you are in the project directory, you can continue the following sections of this guide.
+### Activate virtual environment
+
+To develop the project, activate the virtual environment with the following command.
+
+```sh
+poetry shell
+```
+
+### Change into the project directory
+
+Once you have installed the project dependencies and activated the virtual environment, change into the project directory.
+
+```sh
+cd project/
+```
+
+Once you are in the project directory, you can continue the following sections of this guide.
 
 ### Install pre-commit
 
@@ -66,15 +93,15 @@ python manage.py migrate
 
 ### Collect static files
 
-Certain resources, such as CSS and JavaScript files, need to be served from a static directory. Run the following command to collect static files for Django to serve:
+Resources, such as CSS and JavaScript files, need to be served from a static directory. Run the following command to collect static files for Django to serve:
 
 ```py
 python manage.py collectstatic
 ```
 
-### Create super user
+### Create a super user
 
-You will need a super user in order to log in and manage CiviWiki:
+You will need a super user to log in and manage CiviWiki:
 
 ```py
 python manage.py createsuperuser
@@ -82,7 +109,7 @@ python manage.py createsuperuser
 
 ### Populate initial data
 
-During the first setup, it's useful to import hardcoded initial entries. In this case, there are two fixtures:
+During the first setup, it's helpful to import hardcoded initial entries. In this case, there are two fixtures:
 
 * Sample threads, located in `project/data/sample_threads.json`
 * Sample categories, located in `project/data/categories.json`
@@ -110,7 +137,7 @@ python manage.py runserver
 
 ### Run unit tests
 
-Execute unit tests by running the following command from within the `project` directory.
+Execute unit tests by running the following command within the `project` directory.
 
 ```sh
 python manage.py test
@@ -118,7 +145,7 @@ python manage.py test
 
 ### Register initial user (optional)
 
-Once CiviWiki is running, visit the front page (probably something like http://localhost:8000). Once there, click 'log in/register', and then 'register new user'.
+Once CiviWiki runs, visit the front page (probably something like http://localhost:8000). Once there, click "login/register" and then "register new user."
 
 ## Deployment
 
@@ -126,21 +153,21 @@ The [deployment instructions for Heroku](https://github.com/CiviWiki/OpenCiviWik
 
 ## Coding Conventions
 
-We strive to follow Django Coding Conventions. See https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/
+We strive to follow [Django Coding Conventions](https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/).
 
 ## Compatible Versioning
 
-We use Compatibile Versioning in this project.
+We use Compatible Versioning in this project.
 
 Given a version number MAJOR.MINOR, increment the:
 
-MAJOR version when you make backwards-incompatible updates of any kind
-MINOR version when you make 100% backwards-compatible updates
-Additional labels for pre-release and build metadata are available as extensions to the MAJOR.MINOR format.
+MAJOR version when you make backward-incompatible updates of any kind
+MINOR version when you make 100% backward-compatible updates
+Additional pre-release and build metadata labels are available as MAJOR extensions.MINOR format.
 
-### How is this different to SemVer?
+### How is this different from SemVer?
 
-Compatible Versioning ("ComVer") is SemVer where every PATCH number is 0 (zero). This way, ComVer is backwards compatible with SemVer.
+Compatible Versioning ("ComVer") is SemVer, where every PATCH number is 0 (zero). This way, ComVer is backward compatible with SemVer.
 
 A ComVer release from 3.6 to 3.7 is just a SemVer release from 3.6.0 to 3.7.0. In other words, ComVer is safe to adopt since it is basically SemVer without ever issuing PATCH releases.
 
