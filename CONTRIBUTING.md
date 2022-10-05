@@ -80,6 +80,7 @@ Once you are in the project directory, you can continue the following sections o
 We use `pre-commit` to run code-quality checks before every commit. Install `pre-commit` in your local project by running the following command (from within the virtual environment.)
 
 ```sh
+pip install pre-commit
 pre-commit install
 ```
 
