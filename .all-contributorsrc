@@ -868,6 +868,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "SethAngell",
+      "name": "Seth",
+      "avatar_url": "https://avatars.githubusercontent.com/u/24513605?v=4",
+      "profile": "http://sethangell.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
