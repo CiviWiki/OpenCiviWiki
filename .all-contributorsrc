@@ -829,7 +829,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/998807?v=4",
       "profile": "https://haseebmajid.dev",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -837,6 +838,24 @@
       "name": "Apoorva Kashyap",
       "avatar_url": "https://avatars.githubusercontent.com/u/30412013?v=4",
       "profile": "http://apoorvakashyap.github.io",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "daaavo",
+      "name": "daaavo",
+      "avatar_url": "https://avatars.githubusercontent.com/u/108758198?v=4",
+      "profile": "https://github.com/daaavo",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Ni3dzwi3dz",
+      "name": "Niedzwiedz",
+      "avatar_url": "https://avatars.githubusercontent.com/u/59344635?v=4",
+      "profile": "http://idzieniedzwiedz.pl",
       "contributions": [
         "code"
       ]
