@@ -926,7 +926,7 @@
 {% endblock content %}
 
 {% block extra_js %}
-<script type="text/javascript" src="{% static " js/thread.js" %}"></script>
+<script type="text/javascript" src="{% static 'js/thread.js' %}"></script>
 <script type="text/javascript">
     var csrftoken = '{{ csrf_token }}';
     var username = '{{user.username}}',
