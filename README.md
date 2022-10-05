@@ -6,7 +6,7 @@
 ![GitHub labels](https://img.shields.io/github/labels/CiviWiki/OpenCiviWiki/help%20wanted)
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-89-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-90-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![ComVer](https://img.shields.io/badge/ComVer-compliant-brightgreen.svg)](https://github.com/staltz/comver)
@@ -142,14 +142,15 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
     </tr>
     <tr>
       <td align="center"><a href="https://github.com/delta-plus"><img src="https://avatars0.githubusercontent.com/u/25730621?v=4?s=100" width="100px;" alt="delta-plus"/><br /><sub><b>delta-plus</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=delta-plus" title="Code">💻</a> <a href="https://github.com/CiviWiki/OpenCiviWiki/issues?q=author%3Adelta-plus" title="Bug reports">🐛</a> <a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=delta-plus" title="Documentation">📖</a> <a href="#ideas-delta-plus" title="Ideas, Planning, & Feedback">🤔</a> <a href="#question-delta-plus" title="Answering Questions">💬</a></td>
+      <td align="center"><a href="https://github.com/didiermichel"><img src="https://avatars.githubusercontent.com/u/9488079?v=4?s=100" width="100px;" alt="didiermichel"/><br /><sub><b>didiermichel</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=didiermichel" title="Documentation">📖</a></td>
       <td align="center"><a href="https://github.com/gorkemarslan"><img src="https://avatars.githubusercontent.com/u/16780927?v=4?s=100" width="100px;" alt="gorkemarslan"/><br /><sub><b>gorkemarslan</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=gorkemarslan" title="Code">💻</a> <a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=gorkemarslan" title="Tests">⚠️</a></td>
       <td align="center"><a href="https://github.com/gteti"><img src="https://avatars1.githubusercontent.com/u/51110452?v=4?s=100" width="100px;" alt="gteti"/><br /><sub><b>gteti</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=gteti" title="Documentation">📖</a></td>
       <td align="center"><a href="https://github.com/guido97"><img src="https://avatars.githubusercontent.com/u/44304394?v=4?s=100" width="100px;" alt="guido97"/><br /><sub><b>guido97</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=guido97" title="Code">💻</a></td>
       <td align="center"><a href="https://github.com/jgbmattos"><img src="https://avatars0.githubusercontent.com/u/10090364?v=4?s=100" width="100px;" alt="jgbmattos"/><br /><sub><b>jgbmattos</b></sub></a><br /><a href="#userTesting-jgbmattos" title="User Testing">📓</a></td>
       <td align="center"><a href="https://github.com/jjoseph18"><img src="https://avatars.githubusercontent.com/u/82232960?v=4?s=100" width="100px;" alt="jjoseph18"/><br /><sub><b>jjoseph18</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=jjoseph18" title="Documentation">📖</a></td>
-      <td align="center"><a href="https://github.com/max1204"><img src="https://avatars.githubusercontent.com/u/20409353?v=4?s=100" width="100px;" alt="max1204"/><br /><sub><b>max1204</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=max1204" title="Code">💻</a></td>
     </tr>
     <tr>
+      <td align="center"><a href="https://github.com/max1204"><img src="https://avatars.githubusercontent.com/u/20409353?v=4?s=100" width="100px;" alt="max1204"/><br /><sub><b>max1204</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=max1204" title="Code">💻</a></td>
       <td align="center"><a href="https://github.com/earthprelude"><img src="https://avatars.githubusercontent.com/u/75330343?v=4?s=100" width="100px;" alt="prelude"/><br /><sub><b>prelude</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=earthprelude" title="Code">💻</a></td>
       <td align="center"><a href="https://github.com/richifuentes"><img src="https://avatars2.githubusercontent.com/u/9931749?v=4?s=100" width="100px;" alt="richifuentes"/><br /><sub><b>richifuentes</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/issues?q=author%3Arichifuentes" title="Bug reports">🐛</a> <a href="#question-richifuentes" title="Answering Questions">💬</a> <a href="#ideas-richifuentes" title="Ideas, Planning, & Feedback">🤔</a></td>
       <td align="center"><a href="https://github.com/tberm"><img src="https://avatars.githubusercontent.com/u/49910363?v=4?s=100" width="100px;" alt="tberm"/><br /><sub><b>tberm</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=tberm" title="Code">💻</a></td>
