@@ -24,6 +24,7 @@ INSTALLED_APPS = (
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_extensions",
+    "django_linear_migrations",
     "storages",
     "core",
     "rest_framework",
@@ -73,7 +74,6 @@ if DJANGO_HOST != "LOCALHOST":
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
-USE_L10N = True
 USE_TZ = True
 
 TEMPLATES = [
