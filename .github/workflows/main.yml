@@ -43,6 +43,7 @@ jobs:
           DJANGO_SETTINGS_MODULE: core.settings
         run: |
           cd project
+          poetry run python manage.py collectstatic
           poetry run pytest -p no:warning
       - name: Lint
         uses: py-actions/flake8@v2
