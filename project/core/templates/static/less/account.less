@@ -14,6 +14,23 @@ body {
     z-index: 100; // FIXME: Temporary fix for now
 }
 
+.user-chip {
+  position: relative;
+}
+
+.user-card-template {
+  display: none;
+  position: absolute;
+  bottom: 10px;
+  left: 5px;
+  z-index: 3;
+}
+
+.user-chip:hover > .user-card-template,
+.user-card-template:hover {
+  display: block;
+}
+
 // CIRCULAR IMAGE CROPPERS =====================================================
 .big-image-cropper{
     border: 5px solid white;
@@ -24,6 +41,9 @@ body {
     border-radius: 50%;
 }
 .medium-image-cropper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border: 5px solid @barely-not-white;
     width: 100px;
     height: 100px;
