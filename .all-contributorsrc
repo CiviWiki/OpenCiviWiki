@@ -829,7 +829,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/998807?v=4",
       "profile": "https://haseebmajid.dev",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -839,6 +840,51 @@
       "profile": "http://apoorvakashyap.github.io",
       "contributions": [
         "code"
+      ]
+    },
+    {
+      "login": "daaavo",
+      "name": "daaavo",
+      "avatar_url": "https://avatars.githubusercontent.com/u/108758198?v=4",
+      "profile": "https://github.com/daaavo",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Ni3dzwi3dz",
+      "name": "Niedzwiedz",
+      "avatar_url": "https://avatars.githubusercontent.com/u/59344635?v=4",
+      "profile": "http://idzieniedzwiedz.pl",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "didiermichel",
+      "name": "didiermichel",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9488079?v=4",
+      "profile": "https://github.com/didiermichel",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "SethAngell",
+      "name": "Seth",
+      "avatar_url": "https://avatars.githubusercontent.com/u/24513605?v=4",
+      "profile": "http://sethangell.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "mazen-r",
+      "name": "Mazen Ramadan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/73492002?v=4",
+      "profile": "http://www.linkedin.com/in/mazen-r",
+      "contributions": [
+        "doc"
       ]
     }
   ],

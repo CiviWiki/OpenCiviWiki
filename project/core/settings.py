@@ -24,6 +24,7 @@ INSTALLED_APPS = (
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_extensions",
+    "django_linear_migrations",
     "storages",
     "core",
     "rest_framework",
@@ -34,9 +35,11 @@ INSTALLED_APPS = (
     "taggit",
     "categories",
     "notification",
+    "debug_toolbar",
 )
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -47,6 +50,10 @@ MIDDLEWARE = [
     # 'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+]
+
+INTERNAL_IPS = [
+    "127.0.0.1",
 ]
 
 CSRF_USE_SESSIONS = (
@@ -67,7 +74,6 @@ if DJANGO_HOST != "LOCALHOST":
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
-USE_L10N = True
 USE_TZ = True
 
 TEMPLATES = [
@@ -101,9 +107,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
 
-# TODO: re-organize and simplify staticfiles settings
-if "CIVIWIKI_LOCAL_NAME" not in os.environ:
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Use DATABASE_URL in production
 DATABASE_URL = os.getenv("DATABASE_URL")
@@ -184,3 +188,20 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {"rich": {"datefmt": "[%X]"}},
+    "handlers": {
+        "console": {
+            "class": "rich.logging.RichHandler",
+            "formatter": "rich",
+            "level": "WARNING",
+            # "filters": ["require_debug_true"],
+            "rich_tracebacks": True,
+            "tracebacks_show_locals": True,
+        }
+    },
+    "loggers": {"django": {"handlers": ["console"]}},
+}

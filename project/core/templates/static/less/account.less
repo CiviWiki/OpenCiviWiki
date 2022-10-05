@@ -14,16 +14,36 @@ body {
     z-index: 100; // FIXME: Temporary fix for now
 }
 
+.user-chip {
+  position: relative;
+}
+
+.user-card-template {
+  display: none;
+  position: absolute;
+  bottom: 10px;
+  left: 5px;
+  z-index: 3;
+}
+
+.user-chip:hover > .user-card-template,
+.user-card-template:hover {
+  display: block;
+}
+
 // CIRCULAR IMAGE CROPPERS =====================================================
 .big-image-cropper{
     border: 5px solid white;
-    width: 171px;
-    height: 171px;
+    width: fit-content;
+    height: auto;
     overflow: hidden;
     margin: 0 auto 0 auto;
     border-radius: 50%;
 }
 .medium-image-cropper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border: 5px solid @barely-not-white;
     width: 100px;
     height: 100px;
@@ -349,13 +369,11 @@ body {
                 border-radius: 32px;
 
             .user-chip-contents{
-                display: inline-block;
+                display: block;
             }
                 img {
                     height: 64px;
                     width: 64px;
-                    margin-top: -1px;
-                    margin-left: -12px;
                     border: 2px solid @barely-not-white;
                 }
                 .name {
@@ -378,6 +396,13 @@ body {
                 .atname {
                     line-height: 0px;
                     font-weight: 400;
+                }
+                .user-card {
+                    img {
+                        height: auto;
+                        width: auto;
+                        margin: 0;
+                    }
                 }
             }
         }

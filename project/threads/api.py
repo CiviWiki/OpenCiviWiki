@@ -240,12 +240,13 @@ def create_civi(request):
                 if u.username != request.user.username:
                     notify.send(
                         request.user,  # Actor User
-                        recipient=u.user,  # Target User
+                        recipient=u,  # Target User
                         verb="created a new civi",  # Verb
                         action_object=civi,  # Action Object
                         target=civi.thread,  # Target Object
                         popup_string="{user} created a new civi in {thread}".format(
-                            user=request.user.full_name, thread=civi.thread.title
+                            user=request.user.profile.full_name,
+                            thread=civi.thread.title,
                         ),
                         link="/{}/{}".format("thread", thread_id),
                     )
