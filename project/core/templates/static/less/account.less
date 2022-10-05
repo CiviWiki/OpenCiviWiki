@@ -369,13 +369,11 @@ body {
                 border-radius: 32px;
 
             .user-chip-contents{
-                display: inline-block;
+                display: block;
             }
                 img {
                     height: 64px;
                     width: 64px;
-                    margin-top: -1px;
-                    margin-left: -12px;
                     border: 2px solid @barely-not-white;
                 }
                 .name {
@@ -398,6 +396,13 @@ body {
                 .atname {
                     line-height: 0px;
                     font-weight: 400;
+                }
+                .user-card {
+                    img {
+                        height: auto;
+                        width: auto;
+                        margin: 0;
+                    }
                 }
             }
         }
