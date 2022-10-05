@@ -49,7 +49,7 @@ jobs:
         uses: py-actions/flake8@v2
         with:
           ignore: "E203,W503"
-          exclude: "**/migrations/*.py"
+          exclude: "**/migrations/*.py","*/makemigrations.py"
           max-line-length: "88"
           path: "project"
           plugins: "flake8-bugbear flake8-black"
