@@ -667,7 +667,8 @@
       "profile": "https://github.com/gorkemarslan",
       "contributions": [
         "code",
-        "test"
+        "test",
+        "infra"
       ]
     },
     {
@@ -903,5 +904,6 @@
   "projectOwner": "CiviWiki",
   "repoType": "github",
   "repoHost": "https://github.com",
-  "skipCi": true
+  "skipCi": true,
+  "commitConvention": "angular"
 }
