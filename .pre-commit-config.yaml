@@ -37,3 +37,10 @@ repos:
     rev: v0.13.1
     hooks:
       - id: curlylint
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v0.981 
+    hooks:
+      - id: mypy
+        args: [--no-strict-optional, --ignore-missing-imports]
+        
