@@ -52,5 +52,5 @@ jobs:
           ignore: "E203,W503"
           exclude: "**/migrations/*.py"
           max-line-length: "88"
-          path: "project"
+          path: "."
           plugins: "flake8-bugbear flake8-black"
