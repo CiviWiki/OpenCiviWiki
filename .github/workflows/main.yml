@@ -37,6 +37,8 @@ jobs:
         run: poetry install --no-interaction --no-root
       - name: Run migrations
         run: poetry run python project/manage.py migrate
+      - name: Collect static files
+        run: poetry run python project/manage.py collectstatic --no-input
       - name: Run tests
         env:
           CIVIWIKI_LOCAL_NAME: True
