@@ -1,36 +1,28 @@
-from django.contrib.auth import get_user_model
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404
-from django.http import (
-    JsonResponse,
-    HttpResponse,
-    HttpResponseServerError,
-    HttpResponseForbidden,
-    HttpResponseBadRequest,
-)
-
-from rest_framework.viewsets import ModelViewSet
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import action, api_view
-from rest_framework.response import Response
-
-from notifications.signals import notify
-
-from accounts.permissions import IsProfileOwnerOrDuringRegistrationOrReadOnly
-from accounts.serializers import (
-    ProfileSerializer,
-    ProfileListSerializer,
-    UserSerializer,
-)
 from accounts.forms import UpdateProfileImage
-from accounts.utils import get_account
-from threads.models import Thread, Civi, Activity
 from accounts.models import Profile
+from accounts.permissions import IsProfileOwnerOrDuringRegistrationOrReadOnly
+from accounts.serializers import ProfileListSerializer, ProfileSerializer
+from accounts.utils import get_account
 from categories.models import Category
-from threads.utils import json_response
-from threads.serializers import ThreadSerializer, CiviSerializer
 from categories.serializers import CategorySerializer
 from core.custom_decorators import require_post_params
+from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
+from django.http import (
+    HttpResponseBadRequest,
+    HttpResponseForbidden,
+    HttpResponseServerError,
+    JsonResponse,
+)
+from django.shortcuts import get_object_or_404
+from notifications.signals import notify
+from rest_framework.decorators import action, api_view
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
+from threads.models import Activity, Civi, Thread
+from threads.serializers import CiviSerializer, ThreadSerializer
+from threads.utils import json_response
 
 
 class ProfileViewSet(ModelViewSet):
@@ -147,20 +139,20 @@ class ProfileViewSet(ModelViewSet):
         return super(ProfileViewSet, self).get_permissions()
 
 
-@api_view(["GET"])
-def get_user(request, username):
-    """
-    USAGE:
-        This is used to get a user
-    """
+# @api_view(["GET"])
+# def get_user(request, username):
+#     """
+#     USAGE:
+#         This is used to get a user
+#     """
 
-    try:
-        user = get_user_model().objects.get(username=username)
-        return JsonResponse(UserSerializer(user).data)
-    except get_user_model().DoesNotExist:
-        return JsonResponse(
-            {"error": f"User with username {username} not found"}, status=400
-        )
+#     try:
+#         user = get_user_model().objects.get(username=username)
+#         return JsonResponse(UserSerializer(user).data)
+#     except get_user_model().DoesNotExist:
+#         return JsonResponse(
+#             {"error": f"User with username {username} not found"}, status=400
+#         )
 
 
 @api_view(["GET"])
@@ -221,26 +213,26 @@ def get_profile(request, username):
         )
 
 
-@api_view(["GET"])
-def get_card(request, username):
-    """
-    USAGE:
-        This is used to get a card
-    """
+# @api_view(["GET"])
+# def get_card(request, username):
+#     """
+#     USAGE:
+#         This is used to get a card
+#     """
 
-    try:
-        user = get_user_model().objects.get(username=username)
-        profile = user.profile
-        result = Profile.objects.card_summarize(
-            profile, Profile.objects.get(user=request.user)
-        )
-        return JsonResponse(result)
-    except get_user_model().DoesNotExist:
-        return JsonResponse(
-            {"error": f"User with username {username} not found"}, status=400
-        )
-    except Exception as e:
-        return HttpResponseBadRequest(reason=str(e))
+#     try:
+#         user = get_user_model().objects.get(username=username)
+#         profile = user.profile
+#         result = Profile.objects.card_summarize(
+#             profile, Profile.objects.get(user=request.user)
+#         )
+#         return JsonResponse(result)
+#     except get_user_model().DoesNotExist:
+#         return JsonResponse(
+#             {"error": f"User with username {username} not found"}, status=400
+#         )
+#     except Exception as e:
+#         return HttpResponseBadRequest(reason=str(e))
 
 
 def get_feed(request):
@@ -326,27 +318,27 @@ def upload_profile_image(request):
         return HttpResponseForbidden("allowed only via POST")
 
 
-@login_required
-def clear_profile_image(request):
-    """This function is used to delete a profile image"""
+# @login_required
+# def clear_profile_image(request):
+#     """This function is used to delete a profile image"""
 
-    if request.method == "POST":
-        try:
-            account = Profile.objects.get(user=request.user)
+#     if request.method == "POST":
+#         try:
+#             account = Profile.objects.get(user=request.user)
 
-            # Clean up previous image
-            account.profile_image.delete()
-            account.save()
+#             # Clean up previous image
+#             account.profile_image.delete()
+#             account.save()
 
-            return HttpResponse("Image Deleted")
-        except get_user_model().DoesNotExist:
-            return HttpResponseServerError(
-                reason=f"Profile with id:{request.user.username} does not exist"
-            )
-        except Exception:
-            return HttpResponseServerError(reason=str("default"))
-    else:
-        return HttpResponseForbidden("allowed only via POST")
+#             return HttpResponse("Image Deleted")
+#         except get_user_model().DoesNotExist:
+#             return HttpResponseServerError(
+#                 reason=f"Profile with id:{request.user.username} does not exist"
+#             )
+#         except Exception:
+#             return HttpResponseServerError(reason=str("default"))
+#     else:
+#         return HttpResponseForbidden("allowed only via POST")
 
 
 @login_required
@@ -463,39 +455,39 @@ def edit_user_categories(request):
         return HttpResponseServerError(reason=str(e))
 
 
-@login_required
-def delete_user(request):
-    """
-    Delete User Information
-    """
-    try:
-        # Get current user
-        user = get_user_model().objects.get(username=request.user.username)
-        profile = Profile.objects.get(user=user)
-        # Expunge personally identifiable data in user obj, feel free to change
-        data = {
-            "is_active": False,
-            "email": "",
-            "first_name": "",
-            "last_name": "",
-            "username": "[Deleted-" + str(user.id) + "]",
-        }
-        user.__dict__.update(data)
-        user.save()  # Update into database
+# @login_required
+# def delete_user(request):
+#     """
+#     Delete User Information
+#     """
+#     try:
+#         # Get current user
+#         user = get_user_model().objects.get(username=request.user.username)
+#         profile = Profile.objects.get(user=user)
+#         # Expunge personally identifiable data in user obj, feel free to change
+#         data = {
+#             "is_active": False,
+#             "email": "",
+#             "first_name": "",
+#             "last_name": "",
+#             "username": "[Deleted-" + str(user.id) + "]",
+#         }
+#         user.__dict__.update(data)
+#         user.save()  # Update into database
 
-        data = {  # Expunge personally identifiable data in profile obj
-            "first_name": "",
-            "last_name": "",
-            "about_me": "",
-        }
-        profile.__dict__.update(data)
-        profile.save()
-    except get_user_model().DoesNotExist as e:
-        return HttpResponseBadRequest(reason=str(e))
-    except Exception as e:
-        return HttpResponseServerError(reason=str(e))
+#         data = {  # Expunge personally identifiable data in profile obj
+#             "first_name": "",
+#             "last_name": "",
+#             "about_me": "",
+#         }
+#         profile.__dict__.update(data)
+#         profile.save()
+#     except get_user_model().DoesNotExist as e:
+#         return HttpResponseBadRequest(reason=str(e))
+#     except Exception as e:
+#         return HttpResponseServerError(reason=str(e))
 
-    user.refresh_from_db()  # Make update viewable
-    profile.refresh_from_db()
+#     user.refresh_from_db()  # Make update viewable
+#     profile.refresh_from_db()
 
-    return JsonResponse({"result": "User successfully deleted."})
+#     return JsonResponse({"result": "User successfully deleted."})
