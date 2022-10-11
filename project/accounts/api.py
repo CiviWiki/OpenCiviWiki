@@ -283,29 +283,6 @@ def upload_profile_image(request):
         return HttpResponseForbidden("allowed only via POST")
 
 
-# @login_required
-# def clear_profile_image(request):
-#     """This function is used to delete a profile image"""
-
-#     if request.method == "POST":
-#         try:
-#             account = Profile.objects.get(user=request.user)
-
-#             # Clean up previous image
-#             account.profile_image.delete()
-#             account.save()
-
-#             return HttpResponse("Image Deleted")
-#         except get_user_model().DoesNotExist:
-#             return HttpResponseServerError(
-#                 reason=f"Profile with id:{request.user.username} does not exist"
-#             )
-#         except Exception:
-#             return HttpResponseServerError(reason=str("default"))
-#     else:
-#         return HttpResponseForbidden("allowed only via POST")
-
-
 @login_required
 @require_post_params(params=["target"])
 def request_follow(request):
