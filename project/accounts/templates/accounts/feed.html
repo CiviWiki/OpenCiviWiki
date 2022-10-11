@@ -247,6 +247,7 @@
 {% endblock content %}
 
 {% block extra_js %}
+<!-- TODO: port feed.js to Python -->
 <script type="text/javascript" src="{% static "js/feed.js" %}"></script>
 <script type="text/javascript">
     var csrftoken = '{{ csrf_token }}';
