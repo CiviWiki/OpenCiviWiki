@@ -35,6 +35,9 @@ django-debug-toolbar = "^3.7.0"
 django-linear-migrations = "^2.5.1"
 pre-commit = "^2.20.0"
 
+[tool.isort]
+profile = "black"
+
 [tool.mypy]
 plugins = ["mypy_django_plugin.main"]
 
