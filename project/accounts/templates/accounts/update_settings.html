@@ -9,7 +9,6 @@
 {% endblock extra_css %}
 
 {% block content %}
-{% include "global_nav.html" %}
 <section style='display: flex;justify-content: center; padding-top: 20px;'>
     <div class="setting card" style="width: 75%;">
         <div class="card-content">
@@ -56,7 +55,7 @@
                     </div>
                     <div class="row center">
                         {%if not readonly %}
-                        <input class='btn' type='submit' value="Save Changes"></input>
+                        <button class='btn' type='submit' value="Save Changes"></button>
                         {% endif%}
                     </div>
                 </form>
@@ -70,7 +69,7 @@
                         </p>
 
                         <ul class="cd-buttons">
-                            <li><a href="#0" class="cd-popup-yes" />Yes</a></li>
+                            <li><a href="#0" class="cd-popup-yes">Yes</a></li>
                             <li><a href="#0" class="cd-popup-no">No</a></li>
                         </ul>
                         <a href="#0" class="cd-popup-close img-replace"></a>
@@ -80,6 +79,6 @@
         </div>
     </div>
 </section>
-</body>
+
 <script type="text/javascript" src="{% static 'js/update_settings.js' %}"></script>
 {% endblock content %}
