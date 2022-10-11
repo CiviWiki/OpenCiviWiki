@@ -139,22 +139,6 @@ class ProfileViewSet(ModelViewSet):
         return super(ProfileViewSet, self).get_permissions()
 
 
-# @api_view(["GET"])
-# def get_user(request, username):
-#     """
-#     USAGE:
-#         This is used to get a user
-#     """
-
-#     try:
-#         user = get_user_model().objects.get(username=username)
-#         return JsonResponse(UserSerializer(user).data)
-#     except get_user_model().DoesNotExist:
-#         return JsonResponse(
-#             {"error": f"User with username {username} not found"}, status=400
-#         )
-
-
 @api_view(["GET"])
 def get_profile(request, username):
     """
@@ -167,6 +151,9 @@ def get_profile(request, username):
         profile = user.profile
         result = Profile.objects.summarize(profile)
         result["issues"] = []
+
+        # TODO: move this to a property of the user
+        # lines from voted solutions through result issues append
         voted_solutions = Activity.objects.filter(
             user=user.id, civi__c_type="solution", activity_type__contains="pos"
         )
@@ -211,28 +198,6 @@ def get_profile(request, username):
         return JsonResponse(
             {"error": f"User with username {username} not found"}, status=400
         )
-
-
-# @api_view(["GET"])
-# def get_card(request, username):
-#     """
-#     USAGE:
-#         This is used to get a card
-#     """
-
-#     try:
-#         user = get_user_model().objects.get(username=username)
-#         profile = user.profile
-#         result = Profile.objects.card_summarize(
-#             profile, Profile.objects.get(user=request.user)
-#         )
-#         return JsonResponse(result)
-#     except get_user_model().DoesNotExist:
-#         return JsonResponse(
-#             {"error": f"User with username {username} not found"}, status=400
-#         )
-#     except Exception as e:
-#         return HttpResponseBadRequest(reason=str(e))
 
 
 def get_feed(request):

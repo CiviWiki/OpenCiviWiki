@@ -1,12 +1,13 @@
 import json
-from PIL import Image
-from django.core.files.temp import NamedTemporaryFile
-from django.contrib.auth import get_user_model
-from django.test import TestCase
-from rest_framework.test import APIClient
-from django.urls import reverse
+
 from accounts.models import Profile
 from categories.models import Category
+from django.contrib.auth import get_user_model
+from django.core.files.temp import NamedTemporaryFile
+from django.test import TestCase
+from django.urls import reverse
+from PIL import Image
+from rest_framework.test import APIClient
 from threads.models import Civi, Thread
 
 
@@ -162,58 +163,6 @@ class GetUserTests(BaseTestCase):
 
         self.client.login(username="newuser", password="password123")
         response = self.client.get(reverse("get_user", args=["newuser" + "not_exist"]))
-        content = json.loads(response.content)
-        self.assertEqual(response.status_code, 400)
-        self.assertIn("not found", content["error"])
-
-
-class GetProfileTests(BaseTestCase):
-    """A class to test get_profile function"""
-
-    def test_existing_user_profile_data(self):
-        """Whether a user profile is retrieved"""
-
-        self.client.login(username="newuser", password="password123")
-        response = self.client.get(reverse("get_profile", args=["newuser"]))
-        content = json.loads(response.content)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(content["username"], self.user.username)
-
-    def test_nonexistent_user_profile_data(self):
-        """Whether retrieving a nonexistent user profile raises 404"""
-
-        self.client.login(username="newuser", password="password123")
-        response = self.client.get(
-            reverse("get_profile", args=["newuser" + "not_exist"])
-        )
-        content = json.loads(response.content)
-        self.assertEqual(response.status_code, 400)
-        self.assertIn("not found", content["error"])
-
-
-class GetCardTests(BaseTestCase):
-    """A class to test get_card function"""
-
-    def test_existing_user_profile_data(self):
-        """Whether a user card is retrieved"""
-
-        self.client.login(username="newuser", password="password123")
-        response = self.client.get(reverse("get_card", args=["newuser"]))
-        content = json.loads(response.content)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(content["username"], self.user.username)
-        self.assertFalse(content["follow_state"])
-        response = self.client.get(reverse("get_card", args=["superuser"]))
-        content = json.loads(response.content)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(content["username"], self.superuser.username)
-        self.assertTrue(content["follow_state"])
-
-    def test_nonexistent_user_profile_data(self):
-        """Whether retrieving a nonexistent user card raises 404"""
-
-        self.client.login(username="newuser", password="password123")
-        response = self.client.get(reverse("get_card", args=["newuser" + "not_exist"]))
         content = json.loads(response.content)
         self.assertEqual(response.status_code, 400)
         self.assertIn("not found", content["error"])

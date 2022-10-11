@@ -2,9 +2,6 @@ from accounts import api
 from django.urls import path
 
 urlpatterns = [
-    # path("account_data/<str:username>/", api.get_user, name="get_user"),
-    path("account_profile/<str:username>/", api.get_profile, name="get_profile"),
-    # path("account_card/<str:username>/", api.get_card, name="get_card"),
     path("feed/", api.get_feed, name="get_feed"),
     path("edituser/", api.edit_user, name="edit_user"),
     path("deleteuser/", api.delete_user, name="delete_user"),
