@@ -1,0 +1,47 @@
+{% for issue in user.thread %}
+    <div class="card" id="issue-{{ issue.id }}">
+    <div class="card-content">
+        <div class="category header-lato bold-text">
+        {{ issue.category }}
+        <span class="link-lato">{{ issue.solutions.count }} Solutions</span>
+        </div>
+        <div class="issue subtitle-lato">{{ issue.title }}</div>
+
+        <div class="right-align">
+        <a
+            href="/thread/{{ issue.id }}"
+            class="waves-effect waves-light btn-flat btn-small link-lato"
+            ><i class="mini material-icons left">launch</i>Go to Thread
+        </a>
+        </div>
+        <div class="left">
+        <button
+            href="/thread/{{ issue.id }}"
+            class="waves-effect waves-light btn btn-small toggle-solutions"
+            data-id="{{ issue.id }}">
+            <i class="mini material-icons left">assignment_turned_in</i>
+            <span class="button-text">Show Solutions</span>
+        </button>
+        </div>
+    </div>
+    </div>
+    <div class="solutions_list container hide" id="solutions-{{ issue.id }}">
+    {% for solution in issue.solutions %}
+    <div class="card">
+        <div class="card-content">
+        <div class="bold-text">{{ solution.user_vote }}</div>
+        <div class="header-lato">{{ solution.title }}</div>
+        <div class="civi-body">{{ solution.body }}</div>
+        </div>
+    </div>
+    {% endfor %}
+    </div>
+    {% empty %}
+    <div class="section no-state">
+    <div class="container">
+        <div class="section">
+        <div class="center title-lato grey-text">No issues found</div>
+        </div>
+    </div>
+    </div>
+{% endfor %}
