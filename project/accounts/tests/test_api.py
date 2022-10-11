@@ -168,22 +168,6 @@ class GetUserTests(BaseTestCase):
         self.assertIn("not found", content["error"])
 
 
-class EditUserTests(BaseTestCase):
-    """A class to test edit_user function"""
-
-    def test_first_name_last_name_about_fields_can_be_editable(self):
-        """Whether first_name, last_name and about_me fields can be edited"""
-
-        self.client.login(username="newuser", password="password123")
-        data = {"first_name": "First", "last_name": "Last", "about_me": "About me"}
-        response = self.client.post(reverse("edit_user"), data=data)
-        self.user.profile.refresh_from_db()
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(self.user.profile.first_name, "First")
-        self.assertEqual(self.user.profile.last_name, "Last")
-        self.assertEqual(self.user.profile.about_me, "About me")
-
-
 class DeleteUserTests(BaseTestCase):
     def test_delete_user_removes_from_database(self):
         self.delete_dummy = get_user_model().objects.create_user(
