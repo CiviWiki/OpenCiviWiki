@@ -7,6 +7,7 @@ from accounts.views import (
     RegisterView,
     SettingsView,
     UserProfileView,
+    expunge_user,
 )
 from django.contrib.auth import views as auth_views
 from django.urls import path
@@ -46,4 +47,5 @@ urlpatterns = [
         PasswordResetCompleteView.as_view(),
         name="accounts_password_reset_complete",
     ),
+    path("accounts/expunge/", expunge_user, name="expunge_user"),
 ]

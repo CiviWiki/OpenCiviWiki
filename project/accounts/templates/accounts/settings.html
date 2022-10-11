@@ -60,23 +60,25 @@
                     </div>
                 </form>
                 <div class="row center">
-                    <a href="#0" style="background-color: #ee6e73" class="cd-popup-trigger btn">DELETE ACCOUNT</a>
+                    <button id="delete-account-button" style="background-color: #ee6e73" class="cd-popup-trigger btn">Expunge Account</button>
                 </div>
-                <div class="cd-popup" role="alert">
-                    <div class="cd-popup-container">
-                        <p class="cd-popup-content">
-                            Are you sure you want to delete your account? You cannot undo this.
-                        </p>
-
-                        <ul class="cd-buttons">
-                            <li><a href="#0" class="cd-popup-yes">Yes</a></li>
-                            <li><a href="#0" class="cd-popup-no">No</a></li>
-                        </ul>
-                        <a href="#0" class="cd-popup-close img-replace"></a>
-                    </div> <!-- cd-popup-container -->
-                </div> <!-- cd-popup -->
             </div>
         </div>
     </div>
 </section>
 {% endblock content %}
+
+{% block extra_js %}
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function(event) {
+        const button = document.getElementById('delete-account-button');
+        
+        button.addEventListener('click', (event) => {
+            // Confirm user intent before committing to expunge
+            if (window.confirm('Are you certain you want to expunge your information? This action is irreversible.')) {
+                window.window.location.href = '{% url "expunge_user" %}';
+            }
+        });
+    });
+    </script>
+{% endblock extra_js %}

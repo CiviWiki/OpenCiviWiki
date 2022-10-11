@@ -10,9 +10,10 @@ from accounts.models import Profile
 from django.conf import settings
 from django.contrib.auth import get_user_model, login
 from django.contrib.auth import views as auth_views
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
 from django.urls import reverse_lazy
 from django.utils.encoding import force_str
@@ -159,3 +160,37 @@ class UserProfileView(LoginRequiredMixin, View):
                 "user": user,
             },
         )
+
+
+@login_required
+def expunge_user(request):
+    """
+    Delete User Information
+    """
+
+    user_model = get_user_model()
+    user = get_object_or_404(user_model, username=request.user.username)
+
+    profile = get_object_or_404(Profile, user=user)
+
+    # Expunge personally identifiable data in user
+    expunged_user_data = {
+        "is_active": False,
+        "email": "",
+        "first_name": "",
+        "last_name": "",
+        "username": f"expunged-{ user.id }",
+    }
+    user.__dict__.update(expunged_user_data)
+    user.save()
+
+    # Expunge personally identifiable data in profile
+    expunged_profile_data = {
+        "first_name": "",
+        "last_name": "",
+        "about_me": "",
+    }
+    profile.__dict__.update(expunged_profile_data)
+    profile.save()
+
+    return redirect("/")
