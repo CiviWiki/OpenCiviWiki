@@ -455,39 +455,39 @@ def edit_user_categories(request):
         return HttpResponseServerError(reason=str(e))
 
 
-# @login_required
-# def delete_user(request):
-#     """
-#     Delete User Information
-#     """
-#     try:
-#         # Get current user
-#         user = get_user_model().objects.get(username=request.user.username)
-#         profile = Profile.objects.get(user=user)
-#         # Expunge personally identifiable data in user obj, feel free to change
-#         data = {
-#             "is_active": False,
-#             "email": "",
-#             "first_name": "",
-#             "last_name": "",
-#             "username": "[Deleted-" + str(user.id) + "]",
-#         }
-#         user.__dict__.update(data)
-#         user.save()  # Update into database
+@login_required
+def delete_user(request):
+    """
+    Delete User Information
+    """
+    try:
+        # Get current user
+        user = get_user_model().objects.get(username=request.user.username)
+        profile = Profile.objects.get(user=user)
+        # Expunge personally identifiable data in user obj, feel free to change
+        data = {
+            "is_active": False,
+            "email": "",
+            "first_name": "",
+            "last_name": "",
+            "username": "[Deleted-" + str(user.id) + "]",
+        }
+        user.__dict__.update(data)
+        user.save()  # Update into database
 
-#         data = {  # Expunge personally identifiable data in profile obj
-#             "first_name": "",
-#             "last_name": "",
-#             "about_me": "",
-#         }
-#         profile.__dict__.update(data)
-#         profile.save()
-#     except get_user_model().DoesNotExist as e:
-#         return HttpResponseBadRequest(reason=str(e))
-#     except Exception as e:
-#         return HttpResponseServerError(reason=str(e))
+        data = {  # Expunge personally identifiable data in profile obj
+            "first_name": "",
+            "last_name": "",
+            "about_me": "",
+        }
+        profile.__dict__.update(data)
+        profile.save()
+    except get_user_model().DoesNotExist as e:
+        return HttpResponseBadRequest(reason=str(e))
+    except Exception as e:
+        return HttpResponseServerError(reason=str(e))
 
-#     user.refresh_from_db()  # Make update viewable
-#     profile.refresh_from_db()
+    user.refresh_from_db()  # Make update viewable
+    profile.refresh_from_db()
 
-#     return JsonResponse({"result": "User successfully deleted."})
+    return JsonResponse({"result": "User successfully deleted."})
