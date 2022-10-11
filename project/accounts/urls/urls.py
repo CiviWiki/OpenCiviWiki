@@ -1,16 +1,15 @@
-from django.urls import path
-from django.contrib.auth import views as auth_views
 from accounts.views import (
+    PasswordResetCompleteView,
+    PasswordResetConfirmView,
+    PasswordResetDoneView,
+    PasswordResetView,
+    ProfileActivationView,
     RegisterView,
     SettingsView,
-    ProfileActivationView,
-    PasswordResetView,
-    PasswordResetDoneView,
-    PasswordResetConfirmView,
-    PasswordResetCompleteView,
-    ProfileSetupView,
     UserProfileView,
 )
+from django.contrib.auth import views as auth_views
+from django.urls import path
 
 urlpatterns = [
     path(
@@ -21,7 +20,6 @@ urlpatterns = [
     path("logout/", auth_views.LogoutView.as_view(), name="accounts_logout"),
     path("register/", RegisterView.as_view(), name="accounts_register"),
     path("settings/", SettingsView.as_view(), name="accounts_settings"),
-    path("setup/", ProfileSetupView.as_view(), name="accounts_profile_setup"),
     path("profile/<str:username>/", UserProfileView.as_view(), name="profile"),
     path(
         "activate_account/<uidb64>/<token>/",

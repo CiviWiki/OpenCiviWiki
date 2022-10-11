@@ -12,7 +12,6 @@ from django.contrib.auth import get_user_model, login
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
-from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.urls import reverse_lazy
@@ -144,24 +143,6 @@ class ProfileActivationView(View):
             }
 
         return TemplateResponse(request, "general_message.html", template_var)
-
-
-class ProfileSetupView(LoginRequiredMixin, View):
-    """A view to make the user profile full_profile"""
-
-    login_url = "accounts_login"
-
-    def get(self, request):
-        profile = Profile.objects.get(user=request.user)
-        if profile.full_profile:
-            return HttpResponseRedirect("/")
-            # start temp rep rendering TODO: REMOVE THIS
-        else:
-            data = {
-                "username": request.user.username,
-                "email": request.user.email,
-            }
-            return TemplateResponse(request, "accounts/user-setup.html", data)
 
 
 class UserProfileView(LoginRequiredMixin, View):
