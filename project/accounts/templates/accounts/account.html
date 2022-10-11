@@ -79,7 +79,7 @@
       <div class="full-name">
         {{ user.profile.first_name }} {{ user.profile.last_name }}
       </div>
-      <div class="username">@{{ username }}</div>
+      <div class="username">@{{ user.username }}</div>
     </div>
     <div class="transparent">
       <div class="card-content">
@@ -91,67 +91,15 @@
 
         {% if request.user.username != username|stringformat:"s" %}
         <div class="profile-options">
-          <a
-            class="waves-effect waves-light btn follow-btn"
-            id="sidebar-follow-btn"
-            >follow</a
-          >
+          <a class="waves-effect waves-light btn follow-btn" id="sidebar-follow-btn">
+            follow
+          </a>
         </div>
         {% endif %}
       </div>
     </div>
   </div>
-  <div id="settings-template">
-    <div class="account-edit scroll-col">
-      <div class="section">
-        <div class="card">
-          <div class="card-content">
-            <div class="step-title">
-              <div class="section">
-                <div class="title-lato center">Account Settings</div>
-              </div>
-              <div class="accent-line"></div>
-              {{form.non_field_errors}}
-              <form style="padding-top: 10px" method="POST">
-                {% csrf_token %}
-                <div class="row">
-                  <div class="col s12 m6">
-                    <span class="error">{{form.first_name.errors}}</span>
-                    {{form.first_name.label_tag}} {{form.first_name}}
-                  </div>
-                  <div class="col s12 m6">
-                    <span class="error">{{form.last_name.errors}}</span>
-                    {{form.last_name.label_tag}} {{form.last_name}}
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col s12 m6">
-                    <span class="error">{{form.username.errors}}</span>
-                    {{form.username.label_tag}} {{form.username}}
-                  </div>
-                  <div class="col s12 m6">
-                    <span class="error">{{form.email.errors}}</span>
-                    {{form.email.label_tag}} {{form.email}}
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col s24 m12">
-                    <span> {{form.about_me.errors}}</span>
-                    {{form.about_me.label_tag}} {{form.about_me}}
-                  </div>
-                </div>
-                <div class="row center">
-                  {%if not readonly %}
-                  <input class="btn" type="submit" value="Save Changes" />
-                  {% endif%}
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+
   <!-- account tab templates -->
   <div id="my-civis-template">
     <div class="profile-civi-list col s12">
@@ -321,9 +269,9 @@
                   <a
                     class="waves-effect waves-light btn follow-btn col s12"
                     data-userid="{{ follower.id }}"
-                    data-username="{{ follower.user.username }}"
-                    >Follow</a
-                  >
+                    data-username="{{ follower.user.username }}">
+                    Follow
+                  </a>
                 </div>
                 {% else %}
                 <div class="buttons row">
@@ -416,8 +364,9 @@
                     class="waves-effect waves-light btn follow-btn col s12"
                     data-userid="{{ following.id }}"
                     data-username="{{ following.user.username }}"
-                    >Follow</a
-                  >
+                    >
+                    Follow
+                  </a>
                 </div>
                 {% else %}
                 <div class="buttons row">
@@ -466,17 +415,16 @@
             <a
               href="/thread/{{ issue.id }}"
               class="waves-effect waves-light btn-flat btn-small link-lato"
-              ><i class="mini material-icons left">launch</i>Go to Thread</a
-            >
+              ><i class="mini material-icons left">launch</i>Go to Thread
+            </a>
           </div>
           <div class="left">
             <button
               href="/thread/{{ issue.id }}"
               class="waves-effect waves-light btn btn-small toggle-solutions"
-              data-id="{{ issue.id }}"
-            >
-              <i class="mini material-icons left">assignment_turned_in</i
-              ><span class="button-text">Show Solutions</span>
+              data-id="{{ issue.id }}">
+              <i class="mini material-icons left">assignment_turned_in</i>
+              <span class="button-text">Show Solutions</span>
             </button>
           </div>
         </div>

@@ -4,24 +4,22 @@ Class based views.
 This module will include views for the accounts app.
 """
 
-from core.custom_decorators import full_profile
+from accounts.authentication import account_activation_token, send_activation_email
+from accounts.forms import ProfileEditForm, UserRegistrationForm
+from accounts.models import Profile
 from django.conf import settings
 from django.contrib.auth import get_user_model, login
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.urls import reverse_lazy
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
-from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic.edit import FormView, UpdateView
-
-from accounts.authentication import account_activation_token, send_activation_email
-from accounts.forms import ProfileEditForm, UpdateProfileImage, UserRegistrationForm
-from accounts.models import Profile
 
 
 class RegisterView(FormView):
@@ -169,32 +167,14 @@ class ProfileSetupView(LoginRequiredMixin, View):
 class UserProfileView(LoginRequiredMixin, View):
     """A view that shows profile for authorized users"""
 
-    @method_decorator(full_profile)
     def get(self, request, username=None):
-        if not username:
-            return HttpResponseRedirect(f"/profile/{request.user}")
-        else:
-            is_owner = username == request.user.username
-            try:
-                user = get_user_model().objects.get(username=username)
+        user_model = get_user_model()
+        user = get_object_or_404(user_model, username=username)
 
-            except get_user_model().DoesNotExist:
-                return HttpResponseRedirect("/404")
-
-        form = ProfileEditForm(
-            initial={
-                "username": user.username,
-                "email": user.email,
-                "first_name": user.profile.first_name or None,
-                "last_name": user.profile.last_name or None,
-                "about_me": user.profile.about_me or None,
+        return TemplateResponse(
+            request,
+            "account.html",
+            {
+                "user": user,
             },
-            readonly=True,
         )
-        data = {
-            "username": user,
-            "profile_image_form": UpdateProfileImage,
-            "form": form if is_owner else None,
-            "readonly": True,
-        }
-        return TemplateResponse(request, "account.html", data)
