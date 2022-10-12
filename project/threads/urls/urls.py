@@ -4,7 +4,8 @@ from threads import views
 
 urlpatterns = [
     path("thread/<int:thread_id>/csv/", views.civi2csv, name="civi2csv"),
-    path("thread/<int:thread_id>/", views.issue_thread, name="issue_thread"),
+    # TODO remove path("thread/<int:thread_id>/", views.issue_thread, name="issue_thread"),
+    path("thread/<int:pk>/", views.ThreadDetailView.as_view(), name="issue_thread"),
     path("thread/", views.issue_thread, name="issue_thread"),
     path("about/", views.AboutView.as_view(), name="about"),
     path("support_us/", views.SupportUsView.as_view(), name="support_us"),
