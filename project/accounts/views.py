@@ -93,6 +93,7 @@ class SettingsView(LoginRequiredMixin, UpdateView):
                 "first_name": profile.first_name or None,
                 "last_name": profile.last_name or None,
                 "about_me": profile.about_me or None,
+                "profile_image": profile.profile_image or None,
             }
         )
         return super(SettingsView, self).get_initial()
