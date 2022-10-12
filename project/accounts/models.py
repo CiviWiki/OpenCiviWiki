@@ -10,7 +10,7 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
 from PIL import Image, ImageOps
 from taggit.managers import TaggableManager
-from threads.models import Activity, Civi, Thread
+from threads.models import Activity
 
 
 class User(AbstractUser):
@@ -29,6 +29,8 @@ class User(AbstractUser):
         TODO: add descriptive docstring and determine a good function name.
         TODO: see if this code can be more succinct and optimized.
         """
+        # Avoid circular dependencies
+        from threads.models import Civi, Thread
 
         issues = []
 
