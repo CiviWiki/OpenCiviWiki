@@ -465,7 +465,7 @@
             class="material-icons tiny civi-nav-state"
             id="civi-nav-state-{{ problem.id }}"
           ></i>
-          <div class="civi-nav-link" id="civi-nav-{{ problem.id }}">
+          <div class="civi-nav-link" id="civi-nav-problem-{{ problem.id }}">
             <span>{{ problem.title }}</span>
           </div>
         </div>
@@ -486,8 +486,8 @@
             class="material-icons tiny civi-nav-state"
             id="civi-nav-state-{{ cause.id }}"
           ></i>
-          <div class="civi-nav-link" id="civi-nav-{{ cause.id }}">
-            <span>{{ cause.id }}</span>
+          <div class="civi-nav-link" id="civi-nav-cause-{{ cause.id }}">
+            <span>{{ cause.title }}</span>
           </div>
         </div>
         {% endfor %}
@@ -506,7 +506,7 @@
         {% for solution in solutions %}
         <div class="solution-nav-indiv civi-nav-indiv">
           <i class="material-icons tiny civi-nav-state"></i>
-          <div class="civi-nav-link" id="civi-nav-{{ solution.id }}">
+          <div class="civi-nav-link" id="civi-nav-solution-{{ solution.id }}">
             <span>{{ solution.title }}</span>
           </div>
         </div>
@@ -521,7 +521,7 @@
           <div class="col main-thread scroll-col scrollbar" id="main-thread">
             <div id="thread-problems force-overflow">
               {% for civi in thread.civis.all %}
-                  <div class="civi-card" id="civi-{{ civi.id }}">
+                  <div class="civi-card" id="civi-{{ civi.c_type }}-{{ civi.id }}">
                       <div class="row civi-header civi-click">
                         <div class="col s10 no-pads civi-title-outer">
                           <div class="civi-type gray-text">{{ civi.c_type }}</div>
@@ -1042,11 +1042,17 @@
 
     const civiCardElements = document.getElementsByClassName("civi-card")
     civiCardElements[0]?.classList?.add("current");
+    let civiTypeIdArr = civiCardElements[0].id.split("-");
+    document.getElementById(`civi-nav-${civiTypeIdArr[1]}-${civiTypeIdArr[2]}`).classList.add("current");
 
     for(let i=0; i<civiCardElements.length; i++){
       civiCardElements[i].addEventListener("click", () => {
         document.getElementsByClassName("civi-card current")[0]?.classList?.remove("current");
+        document.getElementsByClassName("civi-nav-link current")[0]?.classList?.remove("current");
         civiCardElements[i].classList.add("current");
+
+        let civiTypeIdArr = civiCardElements[i].id.split("-");
+        document.getElementById(`civi-nav-${civiTypeIdArr[1]}-${civiTypeIdArr[2]}`).classList.add("current");
       })
     }
 
@@ -1058,6 +1064,33 @@
       document.getElementsByClassName("add-response")[0].style.display = "none";
       document.getElementsByClassName("new-civi-card")[1].style.display = "block";
     });
+
+    document.getElementsByClassName("expand-nav")[0].addEventListener("click", () => {
+      if(document.getElementsByClassName("expand-nav")[0].classList.contains("expanded")){
+        document.getElementsByClassName("expand-nav")[0].classList.remove("expanded")
+        document.getElementById("problem-nav").style.display = "none"
+        document.getElementById("cause-nav").style.display = "none"
+        document.getElementById("solution-nav").style.display = "none"
+      } else {
+        document.getElementsByClassName("expand-nav")[0].classList.add("expanded")
+        document.getElementById("problem-nav").style.display = "block"
+        document.getElementById("cause-nav").style.display = "block"
+        document.getElementById("solution-nav").style.display = "block"
+      }
+    });
+
+    const civiNavLinks = document.getElementsByClassName("civi-nav-link")
+
+    for(let i=0; i<civiNavLinks.length; i++){
+      civiNavLinks[i].addEventListener("click", () => {
+        location.href = '#' + civiNavLinks[i].id.replace('-nav', '');
+        document.getElementsByClassName("civi-nav-link current")[0]?.classList?.remove("current");
+        document.getElementsByClassName("civi-card current")[0]?.classList?.remove("current");
+        civiNavLinks[i].classList.add("current");
+        civiCardElements[i].classList.add("current");
+
+      })
+    }
 
 </script>
 <script type="text/javascript" src="{% static 'js/thread.js' %}"></script>
