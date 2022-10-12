@@ -1,15 +1,15 @@
-from django.contrib.auth.models import AbstractUser
-import os
 import io
-from django.core.files.storage import default_storage
-from django.conf import settings
-from django.db import models
-from PIL import Image, ImageOps
-from django.core.files.uploadedfile import InMemoryUploadedFile
-from taggit.managers import TaggableManager
+import os
 
 from categories.models import Category
 from common.utils import PathAndRename
+from django.conf import settings
+from django.contrib.auth.models import AbstractUser
+from django.core.files.storage import default_storage
+from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.db import models
+from PIL import Image, ImageOps
+from taggit.managers import TaggableManager
 
 
 class User(AbstractUser):
@@ -27,65 +27,6 @@ class User(AbstractUser):
 PROFILE_IMG_SIZE = (171, 171)
 PROFILE_IMG_THUMB_SIZE = (40, 40)
 WHITE_BG = (255, 255, 255)
-
-
-class ProfileManager(models.Manager):
-    def summarize(self, profile):
-        from threads.models import Civi
-
-        data = {
-            "username": profile.user.username,
-            "first_name": profile.first_name,
-            "last_name": profile.last_name,
-            "about_me": profile.about_me,
-            "history": [
-                Civi.objects.serialize(c)
-                for c in Civi.objects.filter(author_id=profile.id).order_by("-created")
-            ],
-            "profile_image": profile.profile_image_url,
-            "followers": self.followers(profile),
-            "following": self.following(profile),
-        }
-        return data
-
-    def chip_summarize(self, profile):
-        data = {
-            "username": profile.user.username,
-            "first_name": profile.first_name,
-            "last_name": profile.last_name,
-            "profile_image": profile.profile_image_url,
-        }
-        return data
-
-    def card_summarize(self, profile, request_profile):
-        # Length at which to truncate 'about me' text
-        about_me_truncate_length = 150
-
-        # If 'about me' text is longer than 150 characters... add elipsis (truncate)
-        ellipsis_if_too_long = (
-            "" if len(profile.about_me) <= about_me_truncate_length else "..."
-        )
-
-        data = {
-            "id": profile.user.id,
-            "username": profile.user.username,
-            "first_name": profile.first_name,
-            "last_name": profile.last_name,
-            "about_me": profile.about_me[:about_me_truncate_length]
-            + ellipsis_if_too_long,
-            "profile_image": profile.profile_image_url,
-            "follow_state": True
-            if profile in request_profile.following.all()
-            else False,
-            "request_profile": request_profile.first_name,
-        }
-        return data
-
-    def followers(self, profile):
-        return [self.chip_summarize(follower) for follower in profile.followers.all()]
-
-    def following(self, profile):
-        return [self.chip_summarize(following) for following in profile.following.all()]
 
 
 class Profile(models.Model):
@@ -109,7 +50,6 @@ class Profile(models.Model):
     is_verified = models.BooleanField(default=False)
     full_profile = models.BooleanField(default=False)
 
-    objects = ProfileManager()
     profile_image = models.ImageField(
         upload_to=PathAndRename("profile_uploads"), blank=True, null=True
     )
