@@ -613,7 +613,7 @@
                           </div>
                           {% for linked_civi in civi.linked_civis.all %}
                           <div class="link-item">
-                            <span class="bold-text link-lato">{{ linked_civi.type }}</span>
+                            <span class="bold-text link-lato">{{ linked_civi.c_type }}</span>
                             <span class="gray-text">{{ linked_civi.title }}</span>
                           </div>
                           {% endfor %}
@@ -733,18 +733,18 @@
                               class="rating-button vote vote_neutral"
                               data-rating="neutral"
                             >
-                              <span class="rate-value">{{ civi.votes.vote_neutral }}</span>
+                              <span class="rate-value">{{ civi.votes.votes_neutral }}</span>
                             </button>
                           </div>
                           <div class="rating-wrapper">
                             <button class="rating-button vote vote_pos" data-rating="pos">
-                              <span class="rate-value">{{ civi.votes.vote_pos }}</span>
+                              <span class="rate-value">{{ civi.votes.votes_pos }}</span>
                             </button>
                           </div>
                           <div class="rating-wrapper">
                             <div class="rating-name">AGREE</div>
                             <button class="rating-button vote vote_vpos" data-rating="vpos">
-                              <span class="rate-value">{{ civi.votes.vote_vpos }}</span>
+                              <span class="rate-value">{{ civi.votes.votes_vpos }}</span>
                             </button>
                           </div>
                           <div class="rating-center center-block"></div>
