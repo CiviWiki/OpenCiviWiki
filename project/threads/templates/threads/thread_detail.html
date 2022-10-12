@@ -518,8 +518,8 @@
         </div>
 
         <div class="row">
-          <div class="col main-thread scroll-col" id="main-thread">
-            <div id="thread-problems">
+          <div class="col main-thread scroll-col scrollbar" id="main-thread">
+            <div id="thread-problems force-overflow">
               {% for civi in thread.civis.all %}
                   <div class="civi-card" id="civi-{{ civi.id }}">
                       <div class="row civi-header civi-click">
