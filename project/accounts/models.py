@@ -10,6 +10,7 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
 from PIL import Image, ImageOps
 from taggit.managers import TaggableManager
+from threads.models import Activity, Civi, Thread
 
 
 class User(AbstractUser):
@@ -21,6 +22,55 @@ class User(AbstractUser):
 
     class Meta:
         db_table = "users"
+
+    @property
+    def issues(self):
+        """
+        TODO: add descriptive docstring and determine a good function name.
+        TODO: see if this code can be more succinct and optimized.
+        """
+
+        issues = []
+
+        voted_solutions = self.upvoted_solutions
+
+        solution_threads = voted_solutions.values("thread__id").distinct()
+        for thread_id in solution_threads:
+            thread = Thread.objects.get(id=thread_id)
+            solutions = []
+            solution_civis = voted_solutions.filter(thread=thread_id).values_list(
+                "civi__id", flat=True
+            )
+            for civi_id in solution_civis:
+                c = Civi.objects.get(id=civi_id)
+                vote = voted_solutions.get(civi__id=civi_id).activity_type
+                vote_types = {"vote_pos": "Agree", "vote_vpos": "Strongly Agree"}
+                solution_item = {
+                    "id": c.id,
+                    "title": c.title,
+                    "body": c.body,
+                    "user_vote": vote_types.get(vote),
+                }
+                solutions.append(solution_item)
+
+            my_issue_item = {
+                "thread_id": thread.id,
+                "thread_title": thread.title,
+                "category": thread.category.name,
+                "solutions": solutions,
+            }
+            issues.append(my_issue_item)
+
+        return issues
+
+    @property
+    def upvoted_solutions(self):
+        """
+        Return solutions that this user has given a positive vote.
+        """
+        return Activity.objects.filter(
+            user=self.id, civi__c_type="solution", activity_type__contains="pos"
+        )
 
 
 # Image manipulation constants

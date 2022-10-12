@@ -20,7 +20,7 @@ from rest_framework.decorators import action, api_view
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-from threads.models import Activity, Civi, Thread
+from threads.models import Thread
 from threads.serializers import CiviSerializer, ThreadSerializer
 from threads.utils import json_response
 
@@ -150,40 +150,7 @@ def get_profile(request, username):
         user = get_user_model().objects.get(username=username)
         profile = user.profile
         result = Profile.objects.summarize(profile)
-        result["issues"] = []
-
-        # TODO: move this to a property of the user
-        # lines from voted solutions through result issues append
-        voted_solutions = Activity.objects.filter(
-            user=user.id, civi__c_type="solution", activity_type__contains="pos"
-        )
-
-        solution_threads = voted_solutions.values("thread__id").distinct()
-        for thread_id in solution_threads:
-            thread = Thread.objects.get(id=thread_id)
-            solutions = []
-            solution_civis = voted_solutions.filter(thread=thread_id).values_list(
-                "civi__id", flat=True
-            )
-            for civi_id in solution_civis:
-                c = Civi.objects.get(id=civi_id)
-                vote = voted_solutions.get(civi__id=civi_id).activity_type
-                vote_types = {"vote_pos": "Agree", "vote_vpos": "Strongly Agree"}
-                solution_item = {
-                    "id": c.id,
-                    "title": c.title,
-                    "body": c.body,
-                    "user_vote": vote_types.get(vote),
-                }
-                solutions.append(solution_item)
-
-            my_issue_item = {
-                "thread_id": thread.id,
-                "thread_title": thread.title,
-                "category": thread.category.name,
-                "solutions": solutions,
-            }
-            result["issues"].append(my_issue_item)
+        result["issues"] = user.issues
 
         if request.user.username != username:
             requested_profile = Profile.objects.get(user=request.user)
