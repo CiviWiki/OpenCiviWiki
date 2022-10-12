@@ -10,7 +10,6 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
 from PIL import Image, ImageOps
 from taggit.managers import TaggableManager
-from threads.models import Activity
 
 
 class User(AbstractUser):
@@ -70,6 +69,9 @@ class User(AbstractUser):
         """
         Return solutions that this user has given a positive vote.
         """
+        # Avoid circular dependencies
+        from threads.models import Activity
+
         return Activity.objects.filter(
             user=self.id, civi__c_type="solution", activity_type__contains="pos"
         )
