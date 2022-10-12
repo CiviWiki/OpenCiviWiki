@@ -71,15 +71,6 @@ class ThreadViewSetTests(BaseTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 1)
 
-    def test_retrieving_thread_detail(self):
-        """Whether thread:id is retrieved"""
-
-        url = reverse("thread-detail", args=["1"])
-        response = self.client.get(url)
-        content = json.loads(response.content)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(content.get("title"), "Thread")
-
     def test_retrieving_civis(self):
         """Whether civi:id is retrieved"""
 
@@ -150,30 +141,23 @@ class BaseViewTests(BaseTestCase):
         self.assertNotContains(self.response, "Wrong Content!")
 
 
-class IssueThreadTests(BaseTestCase):
+class ThreadDetailTests(BaseTestCase):
     """A class to test issue_thread function"""
 
     def setUp(self) -> None:
-        super(IssueThreadTests, self).setUp()
+        super(ThreadDetailTests, self).setUp()
         self.client.login(username=self.user.username, password="password123")
 
     def test_nonexistent_threads_redirect_to_404_page(self):
         """Whether getting nonexistent threads redirects to 404 page"""
 
-        url = reverse("issue_thread", args=["12345"])
+        url = reverse("thread-detail", args=["12345"])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
-
-    def test_thread_having_none_id_redirects_to_404_page(self):
-        """Whether getting threads with empty id field redirects to 404 page"""
-
-        url = reverse("issue_thread", args=None)
-        response = self.client.get(url)
-        self.assertRedirects(response, "/404", status_code=302, target_status_code=404)
 
     def test_existing_threads(self):
         """Whether existing threads are retrieved as expected"""
 
-        url = reverse("issue_thread", args=["1"])
+        url = reverse("thread-detail", args=["1"])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
