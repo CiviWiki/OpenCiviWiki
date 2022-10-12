@@ -16,13 +16,12 @@ from django.http import (
 )
 from django.shortcuts import get_object_or_404
 from notifications.signals import notify
-from rest_framework.decorators import action, api_view
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from threads.models import Thread
 from threads.serializers import CiviSerializer, ThreadSerializer
-from threads.utils import json_response
 
 
 class ProfileViewSet(ModelViewSet):
@@ -137,50 +136,6 @@ class ProfileViewSet(ModelViewSet):
                 IsProfileOwnerOrDuringRegistrationOrReadOnly,
             ]
         return super(ProfileViewSet, self).get_permissions()
-
-
-@api_view(["GET"])
-def get_profile(request, username):
-    """
-    USAGE:
-       This is used to get a user profile
-    """
-
-    try:
-        user = get_user_model().objects.get(username=username)
-        profile = user.profile
-        result = Profile.objects.summarize(profile)
-        result["issues"] = user.issues
-
-        if request.user.username != username:
-            requested_profile = Profile.objects.get(user=request.user)
-            if username in requested_profile.following.all():
-                result["follow_state"] = True
-            else:
-                result["follow_state"] = False
-
-        return JsonResponse(result)
-
-    except get_user_model().DoesNotExist:
-        return JsonResponse(
-            {"error": f"User with username {username} not found"}, status=400
-        )
-
-
-def get_feed(request):
-    """
-    USAGE:
-       This is used to get a feed for a user
-    """
-    try:
-        feed_threads = [
-            Thread.objects.summarize(t) for t in Thread.objects.order_by("-created")
-        ]
-
-        return json_response(feed_threads)
-
-    except Exception as e:
-        return HttpResponseBadRequest(reason=str(e))
 
 
 @login_required
