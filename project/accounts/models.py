@@ -89,9 +89,6 @@ class Profile(models.Model):
 
         return "/static/img/no_image_md.png"
 
-    def __init__(self, *args, **kwargs):
-        super(Profile, self).__init__(*args, **kwargs)
-
     def save(self, *args, **kwargs):
         """Image crop/resize and thumbnail creation"""
 
