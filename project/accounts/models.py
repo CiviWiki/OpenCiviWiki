@@ -104,6 +104,12 @@ class Profile(models.Model):
         """
         Resizes and crops the user uploaded image and creates a thumbnail version of it
         """
+
+        # TODO: try to remove this resize_profile_image method
+        # or find a more simple way to acheive the goal(s)
+        # - less disk space?
+        # - desired shape?
+
         profile_image = Image.open(self.profile_image)
         # Resize image
         profile_image = ImageOps.fit(
