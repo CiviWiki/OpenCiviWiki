@@ -23,48 +23,6 @@ class User(AbstractUser):
         db_table = "users"
 
     @property
-    def issues(self):
-        """
-        TODO: add descriptive docstring and determine a good function name.
-        TODO: see if this code can be more succinct and optimized.
-        """
-        # Avoid circular dependencies
-        from threads.models import Civi, Thread
-
-        issues = []
-
-        voted_solutions = self.upvoted_solutions
-
-        solution_threads = voted_solutions.values("thread__id").distinct()
-        for thread_id in solution_threads:
-            thread = Thread.objects.get(id=thread_id)
-            solutions = []
-            solution_civis = voted_solutions.filter(thread=thread_id).values_list(
-                "civi__id", flat=True
-            )
-            for civi_id in solution_civis:
-                c = Civi.objects.get(id=civi_id)
-                vote = voted_solutions.get(civi__id=civi_id).activity_type
-                vote_types = {"vote_pos": "Agree", "vote_vpos": "Strongly Agree"}
-                solution_item = {
-                    "id": c.id,
-                    "title": c.title,
-                    "body": c.body,
-                    "user_vote": vote_types.get(vote),
-                }
-                solutions.append(solution_item)
-
-            my_issue_item = {
-                "thread_id": thread.id,
-                "thread_title": thread.title,
-                "category": thread.category.name,
-                "solutions": solutions,
-            }
-            issues.append(my_issue_item)
-
-        return issues
-
-    @property
     def upvoted_solutions(self):
         """
         Return solutions that this user has given a positive vote.
