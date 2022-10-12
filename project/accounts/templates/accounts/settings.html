@@ -20,7 +20,7 @@
                 </div>
                 <div class="accent-line"></div>
                 {{form.non_field_errors}}
-                <form style="padding-top: 10px;" method="POST">
+                <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class='row'>
                         <div class=" col s12 m6 ">
