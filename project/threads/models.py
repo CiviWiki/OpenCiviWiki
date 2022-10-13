@@ -102,8 +102,8 @@ class Thread(models.Model):
     is_draft = models.BooleanField(default=True)
 
     num_views = models.IntegerField(default=0)
-    num_civis = models.IntegerField(default=0)
-    num_solutions = models.IntegerField(default=0)
+    num_civis = models.IntegerField(default=0)  # TODO To be dropped
+    num_solutions = models.IntegerField(default=0)  # TODO To be dropped
 
     objects = ThreadManager()
 
@@ -137,6 +137,15 @@ class Thread(models.Model):
                 solution_list.append(solution_item)
 
         return solution_list
+
+    @property
+    def contributors(self):
+        return get_user_model().objects.filter(
+            pk__in=self.civis.order_by("-created")
+            .values_list("author", flat=True)
+            .order_by("author")
+            .distinct()
+        )
 
 
 class CiviManager(models.Manager):
@@ -207,6 +216,15 @@ class CiviManager(models.Manager):
         return sorted(
             queryset.all(), key=lambda c: c.score(requested_user_id), reverse=True
         )
+
+    def problems(self, thread_id):
+        return self.filter(thread__id=thread_id, c_type="problem")
+
+    def causes(self, thread_id):
+        return self.filter(thread__id=thread_id, c_type="cause")
+
+    def solutions(self, thread_id):
+        return self.filter(thread__id=thread_id, c_type="solution")
 
 
 class Civi(models.Model):
