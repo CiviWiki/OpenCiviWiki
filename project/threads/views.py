@@ -4,9 +4,7 @@ from accounts.models import Profile
 from accounts.utils import get_account
 from categories.models import Category
 from core.custom_decorators import full_profile, login_required
-from django.db.models import F
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404
+from django.http import HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.template.response import TemplateResponse
 from django.views.generic import TemplateView
@@ -15,8 +13,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-from common.utils import check_database
-from threads.models import Activity, Civi, CiviImage, Thread
+from threads.models import Civi, CiviImage, Thread
 from threads.permissions import IsOwnerOrReadOnly
 from threads.serializers import (
     CiviImageSerializer,
@@ -30,7 +27,7 @@ from threads.serializers import (
 class ThreadDetailView(LoginRequiredMixin, DetailView):
     model = Thread
     context_object_name = "thread"
-    template_name = "thread_detail.html"
+    template_name = "thread.html"
     login_url = "accounts_login"
 
     def get_context_data(self, **kwargs):
@@ -195,82 +192,6 @@ def civi2csv(request, thread_id):
                 data.append(value)
         writer.writerow(data)
     return response
-
-
-is_sqlite_running = check_database("sqlite")
-
-
-@login_required
-@full_profile
-def issue_thread(request, thread_id=None):
-    if not thread_id:
-        return HttpResponseRedirect("/404")
-
-    Thread_filter = get_object_or_404(Thread, pk=thread_id)
-    c_qs = Civi.objects.filter(thread_id=thread_id).exclude(c_type="response")
-    c_scored = [c.dict_with_score(request.user.id) for c in c_qs]
-    civis = sorted(c_scored, key=lambda c: c["score"], reverse=True)
-
-    # modify thread view count
-    Thread_filter.num_civis = len(civis)
-    Thread_filter.num_views = F("num_views") + 1
-    Thread_filter.save()
-    Thread_filter.refresh_from_db()
-
-    thread_wiki_data = {
-        "thread_id": thread_id,
-        "title": Thread_filter.title,
-        "summary": Thread_filter.summary,
-        "image": Thread_filter.image_url,
-        "author": {
-            "username": Thread_filter.author.username,
-            "profile_image": Thread_filter.author.profile.profile_image_url,
-            "first_name": Thread_filter.author.first_name,
-            "last_name": Thread_filter.author.last_name,
-        },
-        "contributors": [
-            Profile.objects.chip_summarize(p)
-            for p in Profile.objects.filter(
-                pk__in=c_qs.distinct("author").values_list("author", flat=True)
-            )
-        ]
-        if not is_sqlite_running
-        else [
-            Profile.objects.chip_summarize(p)
-            for p in Profile.objects.filter(
-                pk__in=c_qs.values_list("author", flat=True).distinct()
-            )
-        ],
-        "category": {
-            "id": Thread_filter.category.id,
-            "name": Thread_filter.category.name,
-        },
-        "categories": [{"id": c.id, "name": c.name} for c in Category.objects.all()],
-        "created": Thread_filter.created_date_str,
-        "num_civis": Thread_filter.num_civis,
-        "num_views": Thread_filter.num_views,
-        "user_votes": [
-            {
-                "civi_id": act.civi.id,
-                "activity_type": act.activity_type,
-                "c_type": act.civi.c_type,
-            }
-            for act in Activity.objects.filter(
-                thread=Thread_filter.id, user=request.user.id
-            )
-        ],
-    }
-    thread_body_data = {
-        "civis": civis,
-    }
-
-    data = {
-        "thread_id": thread_id,
-        "is_draft": Thread_filter.is_draft,
-        "thread_wiki_data": json.dumps(thread_wiki_data),
-        "thread_body_data": json.dumps(thread_body_data),
-    }
-    return TemplateResponse(request, "thread.html", data)
 
 
 @login_required
