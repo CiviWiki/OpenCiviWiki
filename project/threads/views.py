@@ -7,8 +7,10 @@ from core.custom_decorators import full_profile, login_required
 from django.db.models import F
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.template.response import TemplateResponse
 from django.views.generic import TemplateView
+from django.views.generic.detail import DetailView
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -23,6 +25,21 @@ from threads.serializers import (
     ThreadListSerializer,
     ThreadSerializer,
 )
+
+
+class ThreadDetailView(LoginRequiredMixin, DetailView):
+    model = Thread
+    context_object_name = "thread"
+    template_name = "thread_detail.html"
+    login_url = "accounts_login"
+
+    def get_context_data(self, **kwargs):
+        context = super(ThreadDetailView, self).get_context_data(**kwargs)
+        context["categories"] = Category.objects.all()
+        context["problems"] = Civi.objects.problems(thread_id=context["thread"].id)
+        context["causes"] = Civi.objects.causes(thread_id=context["thread"].id)
+        context["solutions"] = Civi.objects.solutions(thread_id=context["thread"].id)
+        return context
 
 
 class ThreadViewSet(ModelViewSet):
