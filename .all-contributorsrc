@@ -667,7 +667,8 @@
       "profile": "https://github.com/gorkemarslan",
       "contributions": [
         "code",
-        "test"
+        "test",
+        "infra"
       ]
     },
     {
@@ -866,7 +867,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/9488079?v=4",
       "profile": "https://github.com/didiermichel",
       "contributions": [
-        "doc"
+        "doc",
+        "infra"
       ]
     },
     {
@@ -903,5 +905,6 @@
   "projectOwner": "CiviWiki",
   "repoType": "github",
   "repoHost": "https://github.com",
-  "skipCi": true
+  "skipCi": true,
+  "commitConvention": "angular"
 }

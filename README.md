@@ -145,8 +145,8 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
       <td align="center"><a href="https://github.com/morento101"><img src="https://avatars.githubusercontent.com/u/80165970?v=4?s=100" width="100px;" alt="Yaroslav"/><br /><sub><b>Yaroslav</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=morento101" title="Code">💻</a></td>
       <td align="center"><a href="https://github.com/daaavo"><img src="https://avatars.githubusercontent.com/u/108758198?v=4?s=100" width="100px;" alt="daaavo"/><br /><sub><b>daaavo</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=daaavo" title="Code">💻</a></td>
       <td align="center"><a href="https://github.com/delta-plus"><img src="https://avatars0.githubusercontent.com/u/25730621?v=4?s=100" width="100px;" alt="delta-plus"/><br /><sub><b>delta-plus</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=delta-plus" title="Code">💻</a> <a href="https://github.com/CiviWiki/OpenCiviWiki/issues?q=author%3Adelta-plus" title="Bug reports">🐛</a> <a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=delta-plus" title="Documentation">📖</a> <a href="#ideas-delta-plus" title="Ideas, Planning, & Feedback">🤔</a> <a href="#question-delta-plus" title="Answering Questions">💬</a></td>
-      <td align="center"><a href="https://github.com/didiermichel"><img src="https://avatars.githubusercontent.com/u/9488079?v=4?s=100" width="100px;" alt="didiermichel"/><br /><sub><b>didiermichel</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=didiermichel" title="Documentation">📖</a></td>
-      <td align="center"><a href="https://github.com/gorkemarslan"><img src="https://avatars.githubusercontent.com/u/16780927?v=4?s=100" width="100px;" alt="gorkemarslan"/><br /><sub><b>gorkemarslan</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=gorkemarslan" title="Code">💻</a> <a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=gorkemarslan" title="Tests">⚠️</a></td>
+      <td align="center"><a href="https://github.com/didiermichel"><img src="https://avatars.githubusercontent.com/u/9488079?v=4?s=100" width="100px;" alt="didiermichel"/><br /><sub><b>didiermichel</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=didiermichel" title="Documentation">📖</a> <a href="#infra-didiermichel" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
+      <td align="center"><a href="https://github.com/gorkemarslan"><img src="https://avatars.githubusercontent.com/u/16780927?v=4?s=100" width="100px;" alt="gorkemarslan"/><br /><sub><b>gorkemarslan</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=gorkemarslan" title="Code">💻</a> <a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=gorkemarslan" title="Tests">⚠️</a> <a href="#infra-gorkemarslan" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
       <td align="center"><a href="https://github.com/gteti"><img src="https://avatars1.githubusercontent.com/u/51110452?v=4?s=100" width="100px;" alt="gteti"/><br /><sub><b>gteti</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=gteti" title="Documentation">📖</a></td>
     </tr>
     <tr>
@@ -163,9 +163,6 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
       <td align="center"><a href="https://github.com/wassafshahzad"><img src="https://avatars.githubusercontent.com/u/25094157?v=4?s=100" width="100px;" alt="wassaf shahzad"/><br /><sub><b>wassaf shahzad</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=wassafshahzad" title="Code">💻</a> <a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=wassafshahzad" title="Tests">⚠️</a> <a href="#infra-wassafshahzad" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
     </tr>
   </tbody>
-  <tfoot>
-    
-  </tfoot>
 </table>
 
 <!-- markdownlint-restore -->
