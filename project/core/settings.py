@@ -5,6 +5,9 @@ Darius Calliet May 12, 2016
 Production settings file to select proper environment variables.
 """
 import os
+import warnings
+
+warnings.simplefilter("ignore", category=DeprecationWarning)
 
 # False if not in os.environ
 DEBUG = os.getenv("DEBUG", False)
