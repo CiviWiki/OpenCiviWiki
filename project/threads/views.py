@@ -33,9 +33,6 @@ class ThreadDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(ThreadDetailView, self).get_context_data(**kwargs)
         context["categories"] = Category.objects.all()
-        context["problems"] = Civi.objects.problems(thread_id=context["thread"].id)
-        context["causes"] = Civi.objects.causes(thread_id=context["thread"].id)
-        context["solutions"] = Civi.objects.solutions(thread_id=context["thread"].id)
         return context
 
 

@@ -445,9 +445,9 @@
               <div class="problem-nav">
                 <div class="civi-nav-header">
                   <span class="civi-nav-title bold-text">Problem</span>
-                  {% if problems %}
+                  {% if thread.problem_civis %}
                   <span class="civi-nav-count right white-text"
-                    >{{ problems.count }}</span
+                    >{{ thread.problem_civis.count }}</span
                   >
                   {% endif %}
                 </div>
@@ -455,7 +455,7 @@
                   class="problem-nav-wrapper civi-nav-wrapper"
                   id="problem-nav"
                 >
-                  {% for problem in problems %}
+                  {% for problem in thread.problem_civis %}
                   <div class="problem-nav-indiv civi-nav-indiv">
                     <i
                       class="material-icons tiny civi-nav-state"
@@ -474,14 +474,14 @@
               <div class="cause-nav">
                 <div class="civi-nav-header">
                   <span class="civi-nav-title bold-text">Cause</span>
-                  {% if causes %}
+                  {% if thread.cause_civis %}
                   <span class="civi-nav-count right white-text"
-                    >{{ causes.count }}</span
+                    >{{ thread.cause_civis.count }}</span
                   >
                   {% endif %}
                 </div>
                 <div class="cause-nav-wrapper civi-nav-wrapper" id="cause-nav">
-                  {% for cause in causes %}
+                  {% for cause in thread.cause_civis %}
                   <div class="cause-nav-indiv civi-nav-indiv">
                     <i
                       class="material-icons tiny civi-nav-state"
@@ -500,9 +500,9 @@
               <div class="solution-nav">
                 <div class="civi-nav-header">
                   <span class="civi-nav-title bold-text">Solution</span>
-                  {% if solutions %}
+                  {% if thread.solution_civis %}
                   <span class="civi-nav-count right white-text"
-                    >{{ solutions.count }}</span
+                    >{{ thread.solution_civis.count }}</span
                   >
                   {% endif %}
                 </div>
@@ -510,7 +510,7 @@
                   class="solution-nav-wrapper civi-nav-wrapper"
                   id="solution-nav"
                 >
-                  {% for solution in solutions %}
+                  {% for solution in thread.solution_civis %}
                   <div class="solution-nav-indiv civi-nav-indiv">
                     <i class="material-icons tiny civi-nav-state"></i>
                     <div
