@@ -110,8 +110,8 @@ class Thread(models.Model):
     is_draft = models.BooleanField(default=True)
 
     num_views = models.IntegerField(default=0)
-    num_civis = models.IntegerField(default=0)
-    num_solutions = models.IntegerField(default=0)
+    num_civis = models.IntegerField(default=0)  # TODO To be dropped
+    num_solutions = models.IntegerField(default=0)  # TODO To be dropped
 
     objects = ThreadManager()
 
@@ -121,30 +121,25 @@ class Thread(models.Model):
         return f"{month_name[d.month]} {d.day}, {d.year}"
 
     @property
-    def solutions(self):
-        voted_solutions = Activity.objects.filter(
-            user=self.author.id, civi__c_type="solution", activity_type__contains="pos"
+    def contributors(self):
+        return get_user_model().objects.filter(
+            pk__in=self.civis.order_by("-created")
+            .values_list("author", flat=True)
+            .order_by("author")
+            .distinct()
         )
 
-        solution_list = []
-        solution_threads = voted_solutions.values("thread__id").distinct()
-        if self.id in solution_threads:
-            solution_civis = voted_solutions.filter(thread=self.id).values_list(
-                "civi__id", flat=True
-            )
-            for civi_id in solution_civis:
-                c = Civi.objects.get(id=civi_id)
-                vote = voted_solutions.get(civi__id=civi_id).activity_type
-                vote_types = {"vote_pos": "Agree", "vote_vpos": "Strongly Agree"}
-                solution_item = {
-                    "id": c.id,
-                    "title": c.title,
-                    "body": c.body,
-                    "user_vote": vote_types.get(vote),
-                }
-                solution_list.append(solution_item)
+    @property
+    def problem_civis(self):
+        return self.civis.filter(c_type="problem")
 
-        return solution_list
+    @property
+    def cause_civis(self):
+        return self.civis.filter(c_type="cause")
+
+    @property
+    def solution_civis(self):
+        return self.civis.filter(c_type="solution")
 
 
 class CiviManager(models.Manager):
