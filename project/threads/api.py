@@ -355,6 +355,11 @@ def delete_civi(request):
         return JsonResponse({"error": "No Edit Rights"}, status=400)
 
     try:
+        if c.c_type == "cause": # Funcionando, mas por algum motivo a UI n está sendo atualizada.
+            for cv in c.linked_civis.all():
+                if cv.c_type == "solution":
+                    cv.delete()
+
         c.delete()
         return JsonResponse({"result": "Success"})
     except Exception as e:

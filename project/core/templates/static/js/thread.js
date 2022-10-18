@@ -639,11 +639,17 @@ cw.CiviView =  BB.View.extend({
             },
             success: function (response) {
                 Materialize.toast('Deleted Civi succssfully', 5000);
+                
                 _.each(_this.model.get('links'), function(link){
                     var linked_civi = _this.civis.findWhere({id: link});
-                    var prev_links =linked_civi.get('links');
-                    new_links = _.without(prev_links, _this.model.id);
-                    linked_civi.set('links', new_links);
+
+                    if(linked_civi.attributes.type == 'solution') {
+                        _this.civis.remove(linked_civi)
+                    } else {
+                        var prev_links =linked_civi.get('links');
+                        new_links = _.without(prev_links, _this.model.id);
+                        linked_civi.set('links', new_links);
+                    }
                 });
 
                 _this.civis.remove(_this.model);
