@@ -126,7 +126,7 @@ class SettingsViewTests(BaseTestCase):
     def test_template_name(self):
         """Whether the correct template is used"""
 
-        self.assertTemplateUsed(self.response, "accounts/update_settings.html")
+        self.assertTemplateUsed(self.response, "accounts/settings.html")
 
     def test_contains_existing_data(self):
         """Whether the existing data is available"""
@@ -169,5 +169,4 @@ class UserProfileView(BaseTestCase):
         response = self.client.get(reverse("profile", args=["newuser"]))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.user.username)
-        self.assertContains(response, self.user.email)
         self.assertTemplateUsed(response, "account.html")
