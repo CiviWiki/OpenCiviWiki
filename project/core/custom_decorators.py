@@ -2,15 +2,15 @@ from functools import wraps
 
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
 
-"""
-USAGE:
-    @require_post_params(params=['we', 'are', 'required'])
-
-    returns a bad request if all required parameters are not present in the POST
-"""
-
 
 def require_post_params(params):
+    """
+    USAGE:
+        @require_post_params(params=['we', 'are', 'required'])
+
+        returns a bad request if all required parameters are not present in the POST
+    """
+
     def decorator(func):
         @wraps(func)
         def inner(request, *args, **kwargs):
