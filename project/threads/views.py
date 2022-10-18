@@ -3,7 +3,7 @@ import json
 from accounts.models import Profile
 from accounts.utils import get_account
 from categories.models import Category
-from core.custom_decorators import full_profile, login_required
+from core.custom_decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.template.response import TemplateResponse
@@ -192,7 +192,6 @@ def civi2csv(request, thread_id):
 
 
 @login_required
-@full_profile
 def create_group(request):
     return TemplateResponse(request, "newgroup.html", {})
 

@@ -55,7 +55,6 @@ class Profile(models.Model):
     following = models.ManyToManyField("self", related_name="followers")
 
     is_verified = models.BooleanField(default=False)
-    full_profile = models.BooleanField(default=False)
 
     profile_image = models.ImageField(
         upload_to=PathAndRename("profile_uploads"), blank=True, null=True
@@ -102,8 +101,6 @@ class Profile(models.Model):
         # New Profile image --
         if self.profile_image:
             self.resize_profile_image()
-
-        self.full_profile = self.is_full_profile()
 
         super(Profile, self).save(*args, **kwargs)
 
@@ -157,9 +154,3 @@ class Profile(models.Model):
             thumb_image.tell(),
             None,
         )
-
-    def is_full_profile(self):
-        if self.first_name and self.last_name:
-            return True
-        else:
-            return False
