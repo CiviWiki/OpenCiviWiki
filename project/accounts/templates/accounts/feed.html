@@ -16,7 +16,7 @@
                 <div class="col s10 m10 push-m1 l10 push-l1 nav-categories nav-item">
                     <ul class="center-block" id="user-categories-list">
                         <li class="category-all"><a class="category-item active" data-id="all" >All</a></li>
-                        {% for category in request.user.profile.categories %}
+                        {% for category in request.user.profile.categories.all %}
                             <li class="user-categories"><a class="category-item" data-id="{{ category.id }}" >{{ category.name }}</a></li>
                         {% endfor %}
     
