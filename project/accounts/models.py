@@ -55,7 +55,9 @@ class Profile(models.Model):
     )
     tags = TaggableManager()
 
-    following = models.ManyToManyField("self", related_name="followers")
+    following = models.ManyToManyField(
+        "self", related_name="followers", symmetrical=False
+    )
 
     is_verified = models.BooleanField(default=False)
 
