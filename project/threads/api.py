@@ -1,24 +1,22 @@
 import json
 
-from notifications.signals import notify
 from accounts.models import Profile
+from common.utils import check_database, save_image_from_url
 from core.custom_decorators import require_post_params
-from common.utils import save_image_from_url
-from django.forms.models import model_to_dict
-from django.contrib.auth.decorators import login_required
-from .models import CiviImage
-from django.db.models.query import F
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
+from django.db.models.query import F
+from django.forms.models import model_to_dict
 from django.http import (
-    JsonResponse,
-    HttpResponseServerError,
-    HttpResponseForbidden,
     HttpResponseBadRequest,
+    HttpResponseForbidden,
+    HttpResponseServerError,
+    JsonResponse,
 )
+from notifications.signals import notify
 
-from .models import Activity, Civi, Thread
+from .models import Activity, Civi, CiviImage, Thread
 from .utils import json_response
-from common.utils import check_database
 
 
 @login_required
@@ -84,15 +82,15 @@ def get_thread(request, thread_id):
             "category": model_to_dict(thread.category),
             "created": thread.created_date_str,
             "contributors": [
-                Profile.objects.chip_summarize(user.profile)
+                user.profile
                 for user in get_user_model().objects.filter(
                     pk__in=civis.distinct("author").values_list("author", flat=True)
                 )
             ]
             if not is_sqlite_running
             else [
-                Profile.objects.chip_summarize(p)
-                for p in Profile.objects.filter(
+                profile
+                for profile in Profile.objects.filter(
                     pk__in=civis.values_list("author", flat=True).distinct()
                 )
             ],
