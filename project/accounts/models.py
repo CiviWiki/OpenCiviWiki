@@ -34,6 +34,9 @@ class User(AbstractUser):
             user=self.id, civi__c_type="solution", activity_type__contains="pos"
         )
 
+    def __str__(self) -> str:
+        return self.username
+
 
 # Image manipulation constants
 PROFILE_IMG_SIZE = (171, 171)
@@ -62,6 +65,9 @@ class Profile(models.Model):
     profile_image_thumb = models.ImageField(
         upload_to=PathAndRename("profile_uploads"), blank=True, null=True
     )
+
+    def __str__(self):
+        return f"{self.user.username} profile"
 
     @property
     def full_name(self):
