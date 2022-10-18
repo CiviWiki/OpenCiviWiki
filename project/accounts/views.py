@@ -13,11 +13,34 @@ from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic.edit import FormView, UpdateView
+
+
+class ProfileFollow(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        following_profile = Profile.objects.get(user__username=kwargs["username"])
+
+        self.request.user.profile.following.add(following_profile)
+
+        redirect_to = reverse("profile", kwargs={"username": kwargs["username"]})
+
+        return HttpResponseRedirect(redirect_to)
+
+
+class ProfileUnfollow(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        following_profile = Profile.objects.get(user__username=kwargs["username"])
+
+        self.request.user.profile.following.remove(following_profile)
+
+        redirect_to = reverse("profile", kwargs={"username": kwargs["username"]})
+
+        return HttpResponseRedirect(redirect_to)
 
 
 class RegisterView(FormView):

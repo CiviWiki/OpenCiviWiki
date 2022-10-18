@@ -3,6 +3,8 @@ from accounts.views import (
     PasswordResetConfirmView,
     PasswordResetDoneView,
     PasswordResetView,
+    ProfileFollow,
+    ProfileUnfollow,
     RegisterView,
     SettingsView,
     UserProfileView,
@@ -21,6 +23,14 @@ urlpatterns = [
     path("register/", RegisterView.as_view(), name="accounts_register"),
     path("settings/", SettingsView.as_view(), name="accounts_settings"),
     path("profile/<str:username>/", UserProfileView.as_view(), name="profile"),
+    path(
+        "profile/<str:username>/follow", ProfileFollow.as_view(), name="profile-follow"
+    ),
+    path(
+        "profile/<str:username>/unfollow",
+        ProfileUnfollow.as_view(),
+        name="profile-unfollow",
+    ),
     path(
         "accounts/password_reset/",
         PasswordResetView.as_view(),
