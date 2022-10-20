@@ -15,33 +15,33 @@
       <div class="big-image-cropper z-depth-1">
         <img
           class="responsive-img"
-          src={{ user.profile.profile_image_url }}
+          src={{ profile.profile_image_url }}
         />
       </div>
     </div>
-    <!-- TODO: determine whether people should be able to follow themselves -->
-    {% if user.profile not in request.user.profile.following.all %}
-      <a href="{% url 'profile-follow' user.username %}" class="waves-effect waves-light btn follow-btn" id="sidebar-follow-btn">
+
+    {% if profile not in request.user.profile.following.all %}
+      <a href="{% url 'profile-follow' profile.user.username %}" class="waves-effect waves-light btn follow-btn" id="sidebar-follow-btn">
         follow
       </a>
     {% else %}
-        <a href="{% url 'profile-unfollow' user.username %}" class="waves-effect waves-light btn follow-btn" id="sidebar-follow-btn">
+        <a href="{% url 'profile-unfollow' profile.user.username %}" class="waves-effect waves-light btn follow-btn" id="sidebar-follow-btn">
           unfollow
         </a>
     {% endif %}
 
     <div class="user-info section">
       <div class="full-name">
-        {{ user.profile.first_name }} {{ user.profile.last_name }}
+        {{ profile.first_name }} {{ profile.last_name }}
       </div>
-      <div class="username">@{{ user.username }}</div>
+      <div class="username">@{{ username }}</div>
     </div>
     <div class="transparent">
       <div class="card-content">
         <div class="section">
           <div class="section-title">ABOUT ME</div>
           <div class="divider"></div>
-          <div class="about-me">{{ user.profile.about_me }}</div>
+          <div class="about-me">{{ profile.about_me }}</div>
         </div>
       </div>
     </div>

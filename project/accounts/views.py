@@ -126,14 +126,13 @@ class UserProfileView(LoginRequiredMixin, View):
     """A view that shows profile for authorized users"""
 
     def get(self, request, username=None):
-        user_model = get_user_model()
-        user = get_object_or_404(user_model, username=username)
+        profile = get_object_or_404(Profile, user__username=username)
 
         return TemplateResponse(
             request,
             "account.html",
             {
-                "user": user,
+                "profile": profile,
             },
         )
 
