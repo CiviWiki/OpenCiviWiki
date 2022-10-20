@@ -23,9 +23,13 @@ from django.views.generic.edit import FormView, UpdateView
 
 class ProfileFollow(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        following_profile = Profile.objects.get(user__username=kwargs["username"])
+        # Prevent users from following themselves.
+        if request.user.username == kwargs["username"]:
+            pass
+        else:
+            following_profile = Profile.objects.get(user__username=kwargs["username"])
 
-        self.request.user.profile.following.add(following_profile)
+            self.request.user.profile.following.add(following_profile)
 
         redirect_to = reverse("profile", kwargs={"username": kwargs["username"]})
 
@@ -34,9 +38,13 @@ class ProfileFollow(LoginRequiredMixin, View):
 
 class ProfileUnfollow(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        following_profile = Profile.objects.get(user__username=kwargs["username"])
+        # Prevent users from following themselves.
+        if request.user.username == kwargs["username"]:
+            pass
+        else:
+            following_profile = Profile.objects.get(user__username=kwargs["username"])
 
-        self.request.user.profile.following.remove(following_profile)
+            self.request.user.profile.following.remove(following_profile)
 
         redirect_to = reverse("profile", kwargs={"username": kwargs["username"]})
 
