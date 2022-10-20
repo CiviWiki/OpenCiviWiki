@@ -50,7 +50,6 @@ urlpatterns = [
     ),
     re_path(r"^media/(?P<path>.*)$", serve, {"document_root": settings.MEDIA_ROOT}),
     path("__debug__/", include("debug_toolbar.urls")),
-    path("__reload__/", include("django_browser_reload.urls")),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

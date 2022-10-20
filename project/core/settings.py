@@ -25,7 +25,6 @@ INSTALLED_APPS = (
     "django.contrib.staticfiles",
     "django_extensions",
     "django_linear_migrations",
-    "django_browser_reload",
     "storages",
     "core",
     "rest_framework",
@@ -51,7 +50,6 @@ MIDDLEWARE = [
     # 'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
 INTERNAL_IPS = [
