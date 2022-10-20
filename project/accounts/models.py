@@ -38,12 +38,6 @@ class User(AbstractUser):
         return self.username
 
 
-# Image manipulation constants
-PROFILE_IMG_SIZE = (171, 171)
-PROFILE_IMG_THUMB_SIZE = (40, 40)
-WHITE_BG = (255, 255, 255)
-
-
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     first_name = models.CharField(max_length=63, blank=False)
@@ -125,12 +119,19 @@ class Profile(models.Model):
         profile_image = Image.open(self.profile_image)
         # Resize image
         profile_image = ImageOps.fit(
-            profile_image, PROFILE_IMG_SIZE, Image.ANTIALIAS, centering=(0.5, 0.5)
+            profile_image,
+            settings.PROFILE_IMG["SIZE"],
+            Image.ANTIALIAS,
+            centering=(0.5, 0.5),
         )
 
         # Convert to JPG image format with white background
         if profile_image.mode not in ("L", "RGB"):
-            white_bg_img = Image.new("RGB", PROFILE_IMG_SIZE, WHITE_BG)
+            white_bg_img = Image.new(
+                "RGB",
+                settings.PROFILE_IMG["SIZE"],
+                settings.PROFILE_IMG["WHITE_BG"],
+            )
             white_bg_img.paste(profile_image, mask=profile_image.split()[3])
             profile_image = white_bg_img
 
@@ -149,7 +150,10 @@ class Profile(models.Model):
         # Make a Thumbnail Image for the new resized image
         thumb_image = profile_image.copy()
 
-        thumb_image.thumbnail(PROFILE_IMG_THUMB_SIZE, resample=Image.ANTIALIAS)
+        thumb_image.thumbnail(
+            settings.PROFILE_IMG["THUMB_SIZE"],
+            resample=Image.ANTIALIAS,
+        )
         tmp_thumb_file = io.BytesIO()
         thumb_image.save(tmp_thumb_file, "JPEG", quality=90)
         tmp_thumb_file.seek(0)
