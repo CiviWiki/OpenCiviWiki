@@ -3,6 +3,7 @@ from accounts.views import (
     PasswordResetConfirmView,
     PasswordResetDoneView,
     PasswordResetView,
+    ProfileActivationView,
     ProfileFollow,
     ProfileUnfollow,
     RegisterView,
@@ -22,6 +23,11 @@ urlpatterns = [
     path("logout/", auth_views.LogoutView.as_view(), name="accounts_logout"),
     path("register/", RegisterView.as_view(), name="accounts_register"),
     path("settings/", SettingsView.as_view(), name="accounts_settings"),
+    path(
+        "activate_account/<uidb64>/<token>/",
+        ProfileActivationView.as_view(),
+        name="accounts_activate",
+    ),
     path("profile/<str:username>/", UserProfileView.as_view(), name="profile"),
     path(
         "profile/<str:username>/follow", ProfileFollow.as_view(), name="profile-follow"

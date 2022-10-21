@@ -4,7 +4,7 @@ Class based views.
 This module will include views for the accounts app.
 """
 
-from accounts.authentication import send_activation_email
+from accounts.authentication import account_activation_token, send_activation_email
 from accounts.forms import ProfileEditForm, UserRegistrationForm
 from accounts.models import Profile
 from django.conf import settings
@@ -17,6 +17,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
 from django.urls import reverse, reverse_lazy
+from django.utils.encoding import force_str
+from django.utils.http import urlsafe_base64_decode
 from django.views import View
 from django.views.generic.edit import FormView, UpdateView
 
@@ -81,6 +83,47 @@ class RegisterView(FormView):
         self._login(user)
 
         return super(RegisterView, self).form_valid(form)
+
+
+class ProfileActivationView(View):
+    """
+    This shows different views to the user when they are verifying
+    their account based on whether they are already verified or not.
+    """
+
+    def get(self, request, uidb64, token):
+
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = get_user_model().objects.get(pk=uid)
+
+        except (TypeError, ValueError, OverflowError, get_user_model().DoesNotExist):
+            user = None
+
+        redirect_link = {"href": "/", "label": "Back to Main"}
+
+        template_var = {
+            "link": redirect_link,
+        }
+
+        if user is not None and account_activation_token.check_token(user, token):
+            profile = user.profile
+
+            if profile.is_verified:
+                template_var["title"] = "Email Already Verified"
+                template_var["content"] = "You have already verified your email."
+            else:
+                profile.is_verified = True
+                profile.save()
+
+                template_var["title"] = "Email Verification Successful"
+                template_var["content"] = "Thank you for verifying your email."
+        else:
+            # invalid link
+            template_var["title"] = "Email Verification Error"
+            template_var["content"] = "Email could not be verified"
+
+        return TemplateResponse(request, "general_message.html", template_var)
 
 
 class PasswordResetView(auth_views.PasswordResetView):
