@@ -4,15 +4,15 @@ import math
 import os
 from calendar import month_name
 
+from categories.models import Category
 from common.utils import PathAndRename
 from core.constants import CIVI_TYPES
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.core.files.storage import default_storage
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
-from django.contrib.auth import get_user_model
 from taggit.managers import TaggableManager
-from categories.models import Category
 
 
 class Fact(models.Model):
@@ -64,10 +64,18 @@ class ThreadManager(models.Manager):
 
 class Thread(models.Model):
     author = models.ForeignKey(
-        get_user_model(), default=None, null=True, on_delete=models.PROTECT
+        get_user_model(),
+        default=None,
+        null=True,
+        on_delete=models.PROTECT,
+        related_name="threads",
     )
     category = models.ForeignKey(
-        Category, default=None, null=True, on_delete=models.PROTECT
+        Category,
+        default=None,
+        null=True,
+        on_delete=models.PROTECT,
+        related_name="threads",
     )
     facts = models.ManyToManyField(Fact)
 
@@ -214,7 +222,11 @@ class Civi(models.Model):
         on_delete=models.PROTECT,
     )
     thread = models.ForeignKey(
-        Thread, related_name="civis", default=None, null=True, on_delete=models.PROTECT
+        Thread,
+        related_name="civis",
+        default=None,
+        null=True,
+        on_delete=models.PROTECT,
     )
 
     tags = TaggableManager()
@@ -385,7 +397,11 @@ class Civi(models.Model):
 
 class Response(models.Model):
     author = models.ForeignKey(
-        get_user_model(), default=None, null=True, on_delete=models.PROTECT
+        get_user_model(),
+        default=None,
+        null=True,
+        on_delete=models.PROTECT,
+        related_name="responses",
     )
     civi = models.ForeignKey(
         Civi,
@@ -415,7 +431,11 @@ class CiviImageManager(models.Manager):
 
 class CiviImage(models.Model):
     objects = CiviImageManager()
-    civi = models.ForeignKey(Civi, related_name="images", on_delete=models.PROTECT)
+    civi = models.ForeignKey(
+        Civi,
+        related_name="images",
+        on_delete=models.PROTECT,
+    )
     title = models.CharField(max_length=255, null=True, blank=True)
     image = models.ImageField(
         upload_to=PathAndRename("civi_uploads"), null=True, blank=True
@@ -448,12 +468,26 @@ class ActivityManager(models.Manager):
 
 class Activity(models.Model):
     user = models.ForeignKey(
-        get_user_model(), default=None, null=True, on_delete=models.PROTECT
+        get_user_model(),
+        default=None,
+        null=True,
+        on_delete=models.PROTECT,
+        related_name="activities",
     )
     thread = models.ForeignKey(
-        Thread, default=None, null=True, on_delete=models.PROTECT
+        Thread,
+        default=None,
+        null=True,
+        on_delete=models.PROTECT,
+        related_name="activities",
     )
-    civi = models.ForeignKey(Civi, default=None, null=True, on_delete=models.PROTECT)
+    civi = models.ForeignKey(
+        Civi,
+        default=None,
+        null=True,
+        on_delete=models.PROTECT,
+        related_name="activities",
+    )
 
     activity_CHOICES = (
         ("vote_vneg", "Vote Strongly Disagree"),
@@ -484,10 +518,18 @@ class Activity(models.Model):
 
 class Rebuttal(models.Model):
     author = models.ForeignKey(
-        get_user_model(), default=None, null=True, on_delete=models.PROTECT
+        get_user_model(),
+        default=None,
+        null=True,
+        on_delete=models.PROTECT,
+        related_name="rebuttals",
     )
     response = models.ForeignKey(
-        Response, default=None, null=True, on_delete=models.PROTECT
+        Response,
+        default=None,
+        null=True,
+        on_delete=models.PROTECT,
+        related_name="rebuttals",
     )
 
     body = models.TextField(max_length=1023)

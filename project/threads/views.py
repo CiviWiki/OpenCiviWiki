@@ -3,13 +3,13 @@ import json
 from accounts.models import Profile
 from accounts.utils import get_account
 from categories.models import Category
-from core.custom_decorators import full_profile, login_required
-from django.http import HttpResponse
+from core.custom_decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponse
 from django.template.response import TemplateResponse
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -192,7 +192,6 @@ def civi2csv(request, thread_id):
 
 
 @login_required
-@full_profile
 def create_group(request):
     return TemplateResponse(request, "newgroup.html", {})
 

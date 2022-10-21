@@ -34,11 +34,14 @@ django-debug-toolbar = "^3.7.0"
 django-linear-migrations = "^2.5.1"
 pre-commit = "^2.20.0"
 
+[tool.isort]
+profile = "black"
+
 [tool.mypy]
 plugins = ["mypy_django_plugin.main"]
 
 [tool.django-stubs]
-django_settings_module = "myproject.settings"
+django_settings_module = "project.core.settings"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

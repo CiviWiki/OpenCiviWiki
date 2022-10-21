@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+from core.router import CiviWikiRouter
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -21,15 +22,11 @@ from django.urls import include, path, re_path
 from django.views.generic.base import RedirectView
 from django.views.static import serve
 
-from core.router import CiviWikiRouter
-
-
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/v1/", include(CiviWikiRouter.urls)),
-    path("api/", include("accounts.urls.api")),
     path("api/", include("threads.urls.api")),
-    path("", include("accounts.urls.urls")),
+    path("", include("accounts.urls")),
     path("", include("threads.urls.urls")),
     path(
         "inbox/notifications/",

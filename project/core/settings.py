@@ -109,6 +109,12 @@ MEDIA_URL = "/media/"
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
+PROFILE_IMG = {
+    "SIZE": (171, 171),
+    "THUMB_SIZE": (40, 40),
+    "WHITE_BG": (255, 255, 255),
+}
+
 # Use DATABASE_URL in production
 DATABASE_URL = os.getenv("DATABASE_URL")
 

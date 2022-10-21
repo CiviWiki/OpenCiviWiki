@@ -1,16 +1,16 @@
 from functools import wraps
+
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
-from accounts.models import Profile
-
-"""
-USAGE:
-    @require_post_params(params=['we', 'are', 'required'])
-
-    returns a bad request if all required parameters are not present in the POST
-"""
 
 
 def require_post_params(params):
+    """
+    USAGE:
+        @require_post_params(params=['we', 'are', 'required'])
+
+        returns a bad request if all required parameters are not present in the POST
+    """
+
     def decorator(func):
         @wraps(func)
         def inner(request, *args, **kwargs):
@@ -23,17 +23,6 @@ def require_post_params(params):
         return inner
 
     return decorator
-
-
-def full_profile(func):
-    @wraps(func)
-    def inner(request, *args, **kwargs):
-        profile = Profile.objects.get(user=request.user)
-        if not profile.full_profile:
-            return HttpResponseRedirect("/setup")
-        return func(request, *args, **kwargs)
-
-    return inner
 
 
 def login_required(func):
