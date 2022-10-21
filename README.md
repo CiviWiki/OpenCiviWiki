@@ -1,7 +1,7 @@
 # Welcome to Civiwiki
 
 ![GitHub Discussions](https://img.shields.io/github/discussions/CiviWiki/OpenCiviWiki)
-![Matrix](https://img.shields.io/matrix/civi.wiki:matrix.org?server_fqdn=matrix.org)
+![Join our Matrix chat](https://img.shields.io/matrix/civiwiki:matrix.org?server_fqdn=matrix.org)
 ![GitHub Repo stars](https://img.shields.io/github/stars/CiviWiki/OpenCiviWiki?style=social)
 ![GitHub labels](https://img.shields.io/github/labels/CiviWiki/OpenCiviWiki/help%20wanted)
 
