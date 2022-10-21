@@ -1,3 +1,4 @@
+from accounts.models import Profile
 from accounts.views import RegisterView
 from django.contrib.auth import get_user_model
 from django.contrib.auth import views as auth_views
@@ -150,6 +151,50 @@ class SettingsViewTests(BaseTestCase):
             msg_prefix="",
             fetch_redirect_response=True,
         )
+
+
+class ProfileActivationViewTests(TestCase):
+    """A class to test profile activation view"""
+
+    def setUp(self) -> None:
+        self.response = self.client.post(
+            reverse("accounts_register"),
+            {
+                "username": "newuser",
+                "email": "newuser@email.com",
+                "password": "password123",
+            },
+        )
+        self.user = get_user_model().objects.get(username="newuser")
+        self.profile = Profile.objects.get(user=self.user)
+        self.activation_link = self.response.context[0]["link"]
+
+    def test_activation_link(self):
+        """Whether the activation link works as expected"""
+
+        self.assertFalse(self.profile.is_verified)
+        response = self.client.get(self.activation_link)
+        self.profile.refresh_from_db()
+        self.assertTrue(self.profile.is_verified)
+        self.assertTemplateUsed(response, "general_message.html")
+        self.assertContains(response, "Email Verification Successful")
+
+    def test_activation_link_with_a_verified_user(self):
+        """Whether a verified user is welcomed by already verified page"""
+
+        self.client.get(self.activation_link)
+        response = self.client.get(self.activation_link)
+        self.assertTemplateUsed(response, "general_message.html")
+        self.assertContains(response, "Email Already Verified")
+
+    def test_invalid_action_link(self):
+        """Whether a verified user is welcomed by verification error page"""
+
+        invalid_link = self.activation_link[:-10] + "12345/"
+        response = self.client.get(invalid_link)
+        self.assertFalse(self.profile.is_verified)
+        self.assertTemplateUsed(response, "general_message.html")
+        self.assertContains(response, "Email Verification Error")
 
 
 class UserProfileView(BaseTestCase):
