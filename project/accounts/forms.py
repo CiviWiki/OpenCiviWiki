@@ -110,6 +110,7 @@ class ProfileEditForm(forms.ModelForm):
 
     class Meta:
         model = Profile
+
         fields = [
             "first_name",
             "last_name",
@@ -117,7 +118,9 @@ class ProfileEditForm(forms.ModelForm):
             "profile_image",
             "username",
             "email",
+            "categories",
         ]
+        widgets = {"categories": forms.CheckboxSelectMultiple()}
 
     first_name = forms.CharField(label="First Name", max_length=63, required=False)
     last_name = forms.CharField(label="Last Name", max_length=63, required=False)
@@ -125,6 +128,11 @@ class ProfileEditForm(forms.ModelForm):
     email = forms.EmailField(label="Email", disabled=True)
     username = forms.CharField(label="Username", disabled=True)
     profile_image = forms.ImageField(required=False)
+    # categories = forms.ModelMultipleChoiceField(
+    #     queryset=Category.objects.all(),
+    #     required=False,
+    #     widget=forms.CheckboxSelectMultiple
+    # )
 
 
 class UpdatePassword(forms.ModelForm):

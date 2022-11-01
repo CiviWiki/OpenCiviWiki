@@ -68,9 +68,9 @@
                         </div>
                     </div>
                     <div class="row center">
-                        {%if not readonly %}
+                        {% if not readonly %}
                         <button class='btn' type='submit' value="Save Changes">Save Changes</button>
-                        {% endif%}
+                        {% endif %}
                     </div>
                 </form>
                 <div class="row center">
@@ -86,7 +86,7 @@
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function(event) {
         const button = document.getElementById('delete-account-button');
-        
+
         button.addEventListener('click', (event) => {
             // Confirm user intent before committing to expunge
             if (window.confirm('Are you certain you want to expunge your information? This action is irreversible.')) {

@@ -168,6 +168,7 @@ class SettingsView(LoginRequiredMixin, UpdateView):
                 "last_name": profile.last_name or None,
                 "about_me": profile.about_me or None,
                 "profile_image": profile.profile_image or None,
+                "categories": profile.categories.add() or None,
             }
         )
         return super(SettingsView, self).get_initial()
@@ -178,12 +179,14 @@ class UserProfileView(LoginRequiredMixin, View):
 
     def get(self, request, username=None):
         profile = get_object_or_404(Profile, user__username=username)
+        categories = profile.categories.all()
 
         return TemplateResponse(
             request,
             "account.html",
             {
                 "profile": profile,
+                "categories": categories,
             },
         )
 
