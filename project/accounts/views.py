@@ -188,6 +188,21 @@ class UserProfileView(LoginRequiredMixin, View):
         )
 
 
+class UserFollowing(LoginRequiredMixin, View):
+    """A view that shows list of users following user with given username"""
+
+    def get(self, request, username=None):
+        profile = get_object_or_404(Profile, user__username=username)
+
+        return TemplateResponse(
+            request,
+            "user_civis.html",
+            {
+                "profile": profile,
+            },
+        )
+
+
 @login_required
 def expunge_user(request):
     """
