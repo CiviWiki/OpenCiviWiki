@@ -179,14 +179,14 @@ class UserProfileView(LoginRequiredMixin, View):
 
     def get(self, request, username=None):
         profile = get_object_or_404(Profile, user__username=username)
-        categories = profile.categories.all()
+        # categories = profile.categories.all()
 
         return TemplateResponse(
             request,
             "account.html",
             {
                 "profile": profile,
-                "categories": categories,
+                # "categories": categories,
             },
         )
 

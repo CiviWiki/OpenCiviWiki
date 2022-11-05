@@ -10,75 +10,75 @@
 
 {% block content %}
 <section style='display: flex;justify-content: center; padding-top: 20px;'>
-    <div class="setting card" style="width: 75%;">
-        <div class="card-content">
-            <div class="step-title">
-                <div class="section">
-                    <div class="title-lato center">
-                        Account Settings
-                    </div>
-                </div>
-                <div class="accent-line"></div>
-                {{form.non_field_errors}}
-                <form method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div class='row'>
-                        <div class=" col s12 m6 ">
-                            <span class='error'>{{form.first_name.errors}}</span>
-                            {{form.first_name.label_tag}}
-                            {{form.first_name}}
-                        </div>
-                        <div class=" col s12 m6 ">
-                            <span class='error'>{{form.last_name.errors}}</span>
-                            {{form.last_name.label_tag}}
-                            {{form.last_name}}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class=" col s12 m6 ">
-                            <span class='error'>{{form.profile_image.errors}}</span>
-                            {{form.profile_image.label_tag}}
-                            {{form.profile_image}}
-                        </div>
-                    </div>
-                    <div class='row'>
-                        <div class=" col s12 m6 ">
-                            <span class='error'>{{form.username.errors}}</span>
-                            {{form.username.label_tag}}
-                            {{form.username}}
-                        </div>
-                        <div class=" col s12 m6 ">
-                            <span class='error'>{{form.email.errors}}</span>
-                            {{form.email.label_tag}}
-                            {{form.email}}
-                        </div>
-                    </div>
-                    <div class='row'>
-                        <div class="col s24 m12">
-                            <span> {{form.about_me.errors}}</span>
-                            {{form.about_me.label_tag}}
-                            {{form.about_me}}
-                        </div>
-                    </div>
-                    <div class='row'>
-                        <div class="col s24 m12">
-                            <span> {{form.categories.errors}}</span>
-                            {{form.categories.label_tag}}
-                            {{form.categories}}
-                        </div>
-                    </div>
-                    <div class="row center">
-                        {% if not readonly %}
-                        <button class='btn' type='submit' value="Save Changes">Save Changes</button>
-                        {% endif %}
-                    </div>
-                </form>
-                <div class="row center">
-                    <button id="delete-account-button" style="background-color: #ee6e73" class="cd-popup-trigger btn">Expunge Account</button>
-                </div>
-            </div>
+  <div class="setting card" style="width: 75%;">
+    <div class="card-content">
+      <div class="step-title">
+        <div class="section">
+          <div class="title-lato center">
+            Account Settings
+          </div>
         </div>
+        <div class="accent-line"></div>
+        {{form.non_field_errors}}
+        <form method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class='row'>
+            <div class=" col s12 m6 ">
+              <span class='error'>{{form.first_name.errors}}</span>
+              {{form.first_name.label_tag}}
+              {{form.first_name}}
+            </div>
+            <div class=" col s12 m6 ">
+              <span class='error'>{{form.last_name.errors}}</span>
+              {{form.last_name.label_tag}}
+              {{form.last_name}}
+            </div>
+          </div>
+          <div class="row">
+            <div class=" col s12 m6 ">
+              <span class='error'>{{form.profile_image.errors}}</span>
+              {{form.profile_image.label_tag}}
+              {{form.profile_image}}
+            </div>
+          </div>
+          <div class='row'>
+            <div class=" col s12 m6 ">
+              <span class='error'>{{form.username.errors}}</span>
+              {{form.username.label_tag}}
+              {{form.username}}
+            </div>
+            <div class=" col s12 m6 ">
+              <span class='error'>{{form.email.errors}}</span>
+              {{form.email.label_tag}}
+              {{form.email}}
+            </div>
+          </div>
+          <div class='row'>
+            <div class="col s24 m12">
+              <span> {{form.about_me.errors}}</span>
+              {{form.about_me.label_tag}}
+              {{form.about_me}}
+            </div>
+          </div>
+          <div class='row'>
+            <div class="col s12 m6">
+              {{form.categories.errors}}
+              {{form.categories.label_tag}}
+              {{form.categories}}
+            </div>
+          </div>
+          <div class="row center">
+            {% if not readonly %}
+            <button class='btn' type='submit' value="Save Changes">Save Changes</button>
+            {% endif %}
+          </div>
+        </form>
+        <div class="row center">
+          <button id="delete-account-button" style="background-color: #ee6e73" class="cd-popup-trigger btn">Expunge Account</button>
+        </div>
+      </div>
     </div>
+  </div>
 </section>
 {% endblock content %}
 

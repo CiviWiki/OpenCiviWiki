@@ -47,8 +47,12 @@
           <div class="about-me">{{ profile.about_me }}</div>
           <div class="divider"></div>
           <div class="section-title">CATEGORIES</div>
-          {% for category in categories %}
-          <div class="about-me">{{ category.name }}</div>
+          {% for category in profile.categories.all %}
+          {% if forloop.last %}
+          <p class="about-me">{{ category }}.</p>
+          {% else %}
+          <p class="about-me">{{ category }},</p>
+          {% endif %}
           {% endfor %}
         </div>
       </div>
