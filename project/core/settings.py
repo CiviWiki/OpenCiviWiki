@@ -198,16 +198,13 @@ AUTH_PASSWORD_VALIDATORS = [
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
-    "formatters": {"rich": {"datefmt": "[%X]"}},
     "handlers": {
         "console": {
-            "class": "rich.logging.RichHandler",
-            "formatter": "rich",
-            "level": "WARNING",
-            # "filters": ["require_debug_true"],
-            "rich_tracebacks": True,
-            "tracebacks_show_locals": True,
-        }
+            "class": "logging.StreamHandler",
+        },
     },
-    "loggers": {"django": {"handlers": ["console"]}},
+    "root": {
+        "handlers": ["console"],
+        "level": "WARNING",
+    },
 }
