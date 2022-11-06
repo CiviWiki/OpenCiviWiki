@@ -7,7 +7,7 @@
 ![GitHub labels](https://img.shields.io/github/labels/CiviWiki/OpenCiviWiki/help%20wanted)
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-95-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-96-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![ComVer](https://img.shields.io/badge/ComVer-compliant-brightgreen.svg)](https://github.com/staltz/comver)
@@ -163,6 +163,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
       <td align="center"><a href="https://github.com/tberm"><img src="https://avatars.githubusercontent.com/u/49910363?v=4?s=100" width="100px;" alt="tberm"/><br /><sub><b>tberm</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=tberm" title="Code">💻</a></td>
       <td align="center"><a href="https://github.com/terrencetuy"><img src="https://avatars3.githubusercontent.com/u/13714060?v=4?s=100" width="100px;" alt="terrencetuy"/><br /><sub><b>terrencetuy</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=terrencetuy" title="Code">💻</a></td>
       <td align="center"><a href="https://github.com/wassafshahzad"><img src="https://avatars.githubusercontent.com/u/25094157?v=4?s=100" width="100px;" alt="wassaf shahzad"/><br /><sub><b>wassaf shahzad</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=wassafshahzad" title="Code">💻</a> <a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=wassafshahzad" title="Tests">⚠️</a> <a href="#infra-wassafshahzad" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
+      <td align="center"><a href="https://github.com/werberger"><img src="https://avatars.githubusercontent.com/u/106753124?v=4?s=100" width="100px;" alt="werb"/><br /><sub><b>werb</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/issues?q=author%3Awerberger" title="Bug reports">🐛</a></td>
       <td align="center"><a href="https://www.facebook.com/zafar.hussain2000"><img src="https://avatars.githubusercontent.com/u/7498674?v=4?s=100" width="100px;" alt="zafar hussain"/><br /><sub><b>zafar hussain</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=zafar-hussain" title="Documentation">📖</a></td>
     </tr>
   </tbody>
