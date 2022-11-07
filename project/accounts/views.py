@@ -196,7 +196,7 @@ class UserFollowing(LoginRequiredMixin, View):
 
         return TemplateResponse(
             request,
-            "user_civis.html",
+            "profile_followers.html",
             {
                 "profile": profile,
             },
