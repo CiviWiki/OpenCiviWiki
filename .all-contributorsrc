@@ -915,6 +915,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "werberger",
+      "name": "werb",
+      "avatar_url": "https://avatars.githubusercontent.com/u/106753124?v=4",
+      "profile": "https://github.com/werberger",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
