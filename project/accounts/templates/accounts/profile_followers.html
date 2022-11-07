@@ -1,11 +1,12 @@
 {% extends "base.html" %}
-
-{% block extra-css%}{% endblock extra-css %}
+{% load i18n %}
 
 {% block content %}
   <div class="following-total">
     <div>
-      {{ profile.following.count }} Following
+      {% blocktranslate %}
+        {{ profile.following.count }} following
+      {% endblocktranslate %}
     </div>
   </div>
   {% for following in profile.following.all %}
@@ -14,12 +15,6 @@
         <div class="user-chip-contents">
           <a href="/profile/{{ following.user.username }}/">
             <img src="{{ following.profile_image_url }}" alt="{{ following.user.username }}">
-            <!--<div class="name">
-                {{ following.first_name}} {{ following.last_name }}
-            </div>
-            <div class="light-gray-text atname">
-                @{{ following.user.username }}
-            </div>-->
           </a>
         </div>
       </div>
@@ -29,7 +24,7 @@
       <div class="container">
         <div class="section">
           <div class="center title-lato grey-text">
-            Not following any users
+            {% translate "Not following any users" %}
           </div>
         </div>
       </div>
@@ -37,5 +32,3 @@
   {% endfor %}
 
 {% endblock content %}
-
-{% block extra-js %}{% endblock extra-js %}
