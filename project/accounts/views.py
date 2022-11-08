@@ -188,7 +188,7 @@ class UserProfileView(LoginRequiredMixin, View):
         )
 
 
-class UserFollowing(LoginRequiredMixin, View):
+class ProfileFollowing(LoginRequiredMixin, View):
     """A view that shows list of users following user with given username"""
 
     def get(self, request, username=None):
@@ -196,7 +196,7 @@ class UserFollowing(LoginRequiredMixin, View):
 
         return TemplateResponse(
             request,
-            "profile_followers.html",
+            "profile_following.html",
             {
                 "profile": profile,
             },

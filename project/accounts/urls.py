@@ -8,7 +8,7 @@ from accounts.views import (
     ProfileUnfollow,
     RegisterView,
     SettingsView,
-    UserFollowing,
+    ProfileFollowing,
     UserProfileView,
     expunge_user,
 )
@@ -40,7 +40,7 @@ urlpatterns = [
     ),
     path(
         "profile/<str:username>/following",
-        UserFollowing.as_view(),
+        ProfileFollowing.as_view(),
         name="profile-following",
     ),
     path(
