@@ -189,7 +189,7 @@ class UserProfileView(LoginRequiredMixin, View):
 
 
 class ProfileFollowing(LoginRequiredMixin, View):
-    """A view that shows list of users following user with given username"""
+    """A view that shows list of profiles that profile with given username is following"""
 
     def get(self, request, username=None):
         profile = get_object_or_404(Profile, user__username=username)
