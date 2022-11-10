@@ -224,7 +224,7 @@ class Civi(models.Model):
 
     tags = TaggableManager()
 
-    linked_civis = models.ManyToManyField("self", related_name="links", blank=True)
+    linked_civis = models.ManyToManyField("self", related_name="links", symmetrical=False, blank=True)
 
     title = models.CharField(max_length=255, blank=False, null=False)
     body = models.CharField(max_length=1023, blank=False, null=False)
