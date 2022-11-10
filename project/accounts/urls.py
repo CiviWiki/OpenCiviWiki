@@ -8,6 +8,7 @@ from accounts.views import (
     ProfileUnfollow,
     RegisterView,
     SettingsView,
+    UserFollowers,
     UserProfileView,
     expunge_user,
 )
@@ -31,6 +32,11 @@ urlpatterns = [
     path("profile/<str:username>/", UserProfileView.as_view(), name="profile"),
     path(
         "profile/<str:username>/follow", ProfileFollow.as_view(), name="profile-follow"
+    ),
+    path(
+        "profile/<str:username>/followers",
+        UserFollowers.as_view(),
+        name="user-followers",
     ),
     path(
         "profile/<str:username>/unfollow",
