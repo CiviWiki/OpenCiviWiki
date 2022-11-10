@@ -1,11 +1,13 @@
 import re
-from django.core.files.images import get_image_dimensions
-from django import forms
-from django.forms.models import ModelForm
-from django.contrib.auth import get_user_model
-from django.utils.translation import gettext_lazy as _
-from .reserved_usernames import RESERVED_USERNAMES
+
 from accounts.models import Profile
+from django import forms
+from django.contrib.auth import get_user_model
+from django.core.files.images import get_image_dimensions
+from django.forms.models import ModelForm
+from django.utils.translation import gettext_lazy as _
+
+from .reserved_usernames import RESERVED_USERNAMES
 
 
 class UserRegistrationForm(ModelForm):
@@ -105,16 +107,6 @@ class ProfileEditForm(forms.ModelForm):
     """
     Form for updating Profile data
     """
-
-    def __init__(self, *args, **kwargs):
-        readonly = kwargs.pop("readonly", False)
-        super(ProfileEditForm, self).__init__(*args, **kwargs)
-        if readonly:
-            self.disable_fields()
-
-    def disable_fields(self):
-        for _key, value in self.fields.items():
-            value.disabled = True
 
     class Meta:
         model = Profile

@@ -897,6 +897,33 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "zafar-hussain",
+      "name": "zafar hussain",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7498674?v=4",
+      "profile": "https://www.facebook.com/zafar.hussain2000",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "TimOsahenru",
+      "name": "Osahenru",
+      "avatar_url": "https://avatars.githubusercontent.com/u/93861430?v=4",
+      "profile": "https://github.com/TimOsahenru",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "werberger",
+      "name": "werb",
+      "avatar_url": "https://avatars.githubusercontent.com/u/106753124?v=4",
+      "profile": "https://github.com/werberger",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,

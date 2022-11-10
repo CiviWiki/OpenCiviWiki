@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-{% load i18n %}    
+{% load i18n %}
 
 <!-- Landing Page -->
 {% block extra_css %}
@@ -146,7 +146,7 @@
                         <h4 class="center ampersand">&</h4>
                     </div>
                     <div class="col s12 m5 center">
-                        <a class="btn btn-large " href="support_us">{% trans "Support Us" %}</a>
+                        <a class="btn btn-large " href="{% url 'support-us' %}">{% trans "Support Us" %}</a>
                     </div>
                 </div>
             </div>

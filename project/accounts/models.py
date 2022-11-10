@@ -1,15 +1,15 @@
-from django.contrib.auth.models import AbstractUser
-import os
 import io
-from django.core.files.storage import default_storage
-from django.conf import settings
-from django.db import models
-from PIL import Image, ImageOps
-from django.core.files.uploadedfile import InMemoryUploadedFile
-from taggit.managers import TaggableManager
+import os
 
 from categories.models import Category
 from common.utils import PathAndRename
+from django.conf import settings
+from django.contrib.auth.models import AbstractUser
+from django.core.files.storage import default_storage
+from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.db import models
+from PIL import Image, ImageOps
+from taggit.managers import TaggableManager
 
 
 class User(AbstractUser):
@@ -22,70 +22,20 @@ class User(AbstractUser):
     class Meta:
         db_table = "users"
 
+    @property
+    def upvoted_solutions(self):
+        """
+        Return solutions that this user has given a positive vote.
+        """
+        # Avoid circular dependencies
+        from threads.models import Activity
 
-# Image manipulation constants
-PROFILE_IMG_SIZE = (171, 171)
-PROFILE_IMG_THUMB_SIZE = (40, 40)
-WHITE_BG = (255, 255, 255)
-
-
-class ProfileManager(models.Manager):
-    def summarize(self, profile):
-        from threads.models import Civi
-
-        data = {
-            "username": profile.user.username,
-            "first_name": profile.first_name,
-            "last_name": profile.last_name,
-            "about_me": profile.about_me,
-            "history": [
-                Civi.objects.serialize(c)
-                for c in Civi.objects.filter(author_id=profile.id).order_by("-created")
-            ],
-            "profile_image": profile.profile_image_url,
-            "followers": self.followers(profile),
-            "following": self.following(profile),
-        }
-        return data
-
-    def chip_summarize(self, profile):
-        data = {
-            "username": profile.user.username,
-            "first_name": profile.first_name,
-            "last_name": profile.last_name,
-            "profile_image": profile.profile_image_url,
-        }
-        return data
-
-    def card_summarize(self, profile, request_profile):
-        # Length at which to truncate 'about me' text
-        about_me_truncate_length = 150
-
-        # If 'about me' text is longer than 150 characters... add elipsis (truncate)
-        ellipsis_if_too_long = (
-            "" if len(profile.about_me) <= about_me_truncate_length else "..."
+        return Activity.objects.filter(
+            user=self.id, civi__c_type="solution", activity_type__contains="pos"
         )
 
-        data = {
-            "id": profile.user.id,
-            "username": profile.user.username,
-            "first_name": profile.first_name,
-            "last_name": profile.last_name,
-            "about_me": profile.about_me[:about_me_truncate_length]
-            + ellipsis_if_too_long,
-            "profile_image": profile.profile_image_url,
-            "follow_state": True
-            if profile in request_profile.following.all()
-            else False,
-            "request_profile": request_profile.first_name,
-        }
-        return data
-
-    def followers(self, profile):
-        return [self.chip_summarize(follower) for follower in profile.followers.all()]
-
-    def following(self, profile):
-        return [self.chip_summarize(following) for following in profile.following.all()]
+    def __str__(self) -> str:
+        return self.username
 
 
 class Profile(models.Model):
@@ -99,23 +49,21 @@ class Profile(models.Model):
     )
     tags = TaggableManager()
 
-    followers = models.ManyToManyField(
-        "self", related_name="follower", symmetrical=False
-    )
     following = models.ManyToManyField(
-        "self", related_name="followings", symmetrical=False
+        "self", related_name="followers", symmetrical=False
     )
 
     is_verified = models.BooleanField(default=False)
-    full_profile = models.BooleanField(default=False)
 
-    objects = ProfileManager()
     profile_image = models.ImageField(
         upload_to=PathAndRename("profile_uploads"), blank=True, null=True
     )
     profile_image_thumb = models.ImageField(
         upload_to=PathAndRename("profile_uploads"), blank=True, null=True
     )
+
+    def __str__(self):
+        return f"{self.user.username} profile"
 
     @property
     def full_name(self):
@@ -149,9 +97,6 @@ class Profile(models.Model):
 
         return "/static/img/no_image_md.png"
 
-    def __init__(self, *args, **kwargs):
-        super(Profile, self).__init__(*args, **kwargs)
-
     def save(self, *args, **kwargs):
         """Image crop/resize and thumbnail creation"""
 
@@ -159,23 +104,34 @@ class Profile(models.Model):
         if self.profile_image:
             self.resize_profile_image()
 
-        self.full_profile = self.is_full_profile()
-
         super(Profile, self).save(*args, **kwargs)
 
     def resize_profile_image(self):
         """
         Resizes and crops the user uploaded image and creates a thumbnail version of it
         """
+
+        # TODO: try to remove this resize_profile_image method
+        # or find a more simple way to acheive the goal(s)
+        # - less disk space?
+        # - desired shape?
+
         profile_image = Image.open(self.profile_image)
         # Resize image
         profile_image = ImageOps.fit(
-            profile_image, PROFILE_IMG_SIZE, Image.ANTIALIAS, centering=(0.5, 0.5)
+            profile_image,
+            settings.PROFILE_IMG["SIZE"],
+            Image.ANTIALIAS,
+            centering=(0.5, 0.5),
         )
 
         # Convert to JPG image format with white background
         if profile_image.mode not in ("L", "RGB"):
-            white_bg_img = Image.new("RGB", PROFILE_IMG_SIZE, WHITE_BG)
+            white_bg_img = Image.new(
+                "RGB",
+                settings.PROFILE_IMG["SIZE"],
+                settings.PROFILE_IMG["WHITE_BG"],
+            )
             white_bg_img.paste(profile_image, mask=profile_image.split()[3])
             profile_image = white_bg_img
 
@@ -194,7 +150,10 @@ class Profile(models.Model):
         # Make a Thumbnail Image for the new resized image
         thumb_image = profile_image.copy()
 
-        thumb_image.thumbnail(PROFILE_IMG_THUMB_SIZE, resample=Image.ANTIALIAS)
+        thumb_image.thumbnail(
+            settings.PROFILE_IMG["THUMB_SIZE"],
+            resample=Image.ANTIALIAS,
+        )
         tmp_thumb_file = io.BytesIO()
         thumb_image.save(tmp_thumb_file, "JPEG", quality=90)
         tmp_thumb_file.seek(0)
@@ -207,9 +166,3 @@ class Profile(models.Model):
             thumb_image.tell(),
             None,
         )
-
-    def is_full_profile(self):
-        if self.first_name and self.last_name:
-            return True
-        else:
-            return False
