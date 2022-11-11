@@ -933,6 +933,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "wippo-devops",
+      "name": "wippo-devops",
+      "avatar_url": "https://avatars.githubusercontent.com/u/85387801?v=4",
+      "profile": "https://github.com/wippo-devops",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
