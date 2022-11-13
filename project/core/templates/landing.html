@@ -1,3 +1,4 @@
+{% load i18n %}
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -89,7 +90,7 @@
             <p class="video-text">
                 {% translate "Check out our short video describing CiviWiki..." %}
             </p>
-            <iframe width="640" height="480"" src="https://www.youtube.com/embed/Ll4VZv4a8bE" frameborder="0"
+            <iframe width="640" height="480" src="https://www.youtube.com/embed/Ll4VZv4a8bE" frameborder="0" 
                 allowfullscreen></iframe>
             <p class="small-text">{% translate "Video made by" %}
                 <a class="body-link" href="https://sheldonanim.com/" target="_blank">Jon Sheldon</a>
@@ -105,24 +106,31 @@
                     <td>
                         <h2 class="subtitle">{% translate "Democratically Contributed Media" %}</h2>
                         <div class="text">
-                            <p>{% translate "As the name CiviWiki implies, our core content will be contributed by volunteers on our
-                            Wiki." %}</p>
-                            <p>{% translate "Our topic format is modular." %}</p>
-                            <p>{% translate "The structure both allows a community of volunteers to collaborate on a single political issue,
-                            and reserves space for dissenting opinions." %}</p>
+                            <p>
+                                {% blocktranslate %}
+                                As the name CiviWiki implies, our core content will be contributed 
+                                by volunteers on our Wiki.
+                                Our topic format is modular.
+                                The structure both allows a community of volunteers to collaborate on a 
+                                single political issue, and reserves space for dissenting opinions.
+                                {% endblocktranslate %} 
+                            </p>
                         </div>
                     </td>
                 </tr>
                 <tr class="tr-why">
                     <td><h2 class="subtitle">{% translate "Personalized Policy Feed" %}</h2>
-                        <p>{% translate "CiviWiki intelligently personalizes users' feed in two meaningful ways." %}</p>
-                        <p>{% translate "First, the issues promoted to users' feed will be personalized to the user's expressed
-                        interests, and the timeliness of the issue." %}
+                        <p>
+                            {% blocktranslate %}
+                            CiviWiki intelligently personalizes users' feed in two meaningful ways.
+                            First, the issues promoted to users' feed will be personalized to the user's 
+                            expressed interests, and the timeliness of the issue.
+                            Second, the structure of the issue topics break policy positions into 
+                            bite-sized contentions we call Civies. Each Civi is logically related 
+                            to the rest of the topic. Based on the user's support, opposition, or 
+                            neutrality to each Civi, CiviWiki promotes different relevant content
+                            {% endblocktranslate %}
                         </p>
-                        <p>{% translate "Second, the structure of the issue topics break policy positions into bite-sized
-                        contentions we call Civies. Each Civi is logically related to the rest of the topic. Based on
-                        the user's support, opposition, or neutrality to each Civi, CiviWiki promotes different relevant
-                        content." %}</p>
                     </td>
                     <td>
                         <span class="icon">
@@ -140,7 +148,7 @@
             <a href="/login/">
                 <button class="ripple">{% translate "Register" %}</button></a>
                 &
-                <a href="/support_us/"><button class="ripple">{% translate "Support Us" %}</button>
+                <a href="/support_us/"><button class="ripple">{% translate "Support Us" %}</button></a>
         </div>
     </main>
     <footer>
@@ -169,5 +177,4 @@
         <span><a href="/">CiviWiki</a></span>
     </footer>
 </body>
-
 </html>
