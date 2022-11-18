@@ -13,20 +13,20 @@
 
         <!-- Right Nav -->
         <ul class="right hide-on-med-and-down">
-            <li><a class="dark-white-text menu-text" href="{% url 'how_it_works' %}">{% trans "How CiviWiki Works" %}</a></li>
+            <li><a class="dark-white-text menu-text" href="{% url 'how-it-works' %}">{% trans "How CiviWiki Works" %}</a></li>
             <li><a class="dark-white-text menu-text" href="{% url 'about' %}">{% trans "About Us" %}</a></li>
-            <li><a class="dark-white-text menu-text" href="{% url 'support_us' %}">{% trans "Support Us" %}</a></li>
+            <li><a class="dark-white-text menu-text" href="{% url 'support-us' %}">{% trans "Support Us" %}</a></li>
             <li><a href="{% url 'accounts_login' %}" class="waves-effect waves-light btn login-btn">{% trans "Login / Sign Up" %}</a></li>
         </ul>
-        
+
         <!-- Side Nav for mobile view-->
         <a href="{% url 'base' %}" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
         <ul class="side-nav" id="nav-mobile">
             <li><a href="{% url 'accounts_login' %}">LOGIN / SIGN UP</a></li>
             <li><a class="dark-white-text menu-text" href="{% url 'base' %}">main</a></li>
-            <li><a class="dark-white-text menu-text" href="{% url 'how_it_works' %}">{% trans "How CiviWiki Works" %} </a></li>
+            <li><a class="dark-white-text menu-text" href="{% url 'how-it-works' %}">{% trans "How CiviWiki Works" %} </a></li>
             <li><a class="dark-white-text menu-text" href="{% url 'about' %}">{% trans "About Us" %} </a></li>
-            <li><a class="dark-white-text menu-text" href="{% url 'support_us' %}">{% trans "Support Us" %}</a></li>
+            <li><a class="dark-white-text menu-text" href="{% url 'support-us' %}">{% trans "Support Us" %}</a></li>
         </ul>
     </div>
 </nav>

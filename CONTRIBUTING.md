@@ -65,6 +65,15 @@ To develop the project, activate the virtual environment with the following comm
 poetry shell
 ```
 
+### Install pre-commit
+
+We use `pre-commit` to run code-quality checks before every commit. Install `pre-commit` in your local project by running the following command (from within the virtual environment.)
+
+```sh
+pre-commit install
+```
+
+
 ### Change into the project directory
 
 Once you have installed the project dependencies and activated the virtual environment, change into the project directory.
@@ -74,14 +83,6 @@ cd project/
 ```
 
 Once you are in the project directory, you can continue the following sections of this guide.
-
-### Install pre-commit
-
-We use `pre-commit` to run code-quality checks before every commit. Install `pre-commit` in your local project by running the following command (from within the virtual environment.)
-
-```sh
-pre-commit install
-```
 
 ### Run migrations
 

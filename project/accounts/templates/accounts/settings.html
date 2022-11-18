@@ -1,81 +1,98 @@
 {% extends "base.html" %}
 {% load static %}
 {% load i18n %}
-{% block page_title %}Settings{% endblock page_title %}
 
+{% block page_title %}Settings{% endblock page_title %}
 {% block extra_css %}
-    <link type="text/css" rel="stylesheet/less" href="{% static "less/base.less" %}"/>
-    <link type="text/css" rel="stylesheet/less" href="{% static "less/utils.less" %}"/>
+<link type="text/css" rel="stylesheet/less" href="{% static 'less/utils.less' %}" />
+<link type="text/css" rel="stylesheet/less" href="{% static 'less/setup.less' %}" />
 {% endblock extra_css %}
 
-{% block backbone_template %}
-<script id="settings-personal" type="text/template">
-{% verbatim %}
-    <div class="white-background-input-field input-field col s6">
-        <input class="save-account" id="first_name" type="text" value="{{this.model.get('first_name')}}">
-        <label for="first-name">{% trans "First Name" %} </label>
-    </div>
-    <div class="white-background-input-field input-field col s6">
-        <input class="save-account" id="last_name" type="text" value="{{this.model.get('last_name')}}">
-        <label for="last-name">{% trans "Last Name" %}</label>
-    </div>
-{% endverbatim %}
-</script>
-
-<script id="settings-base" type="text/template">
-{% verbatim %}
-    <div class="subtitle-lato">{% trans "Personal" %} </div>
-        <div class="white-background-input-field input-field col s12">
-            <input id="email" type="text" class="validate" value="{{this.model.get('email')}}" disabled>
-            <label for="email">{% trans "Email" %}</label>
-        </div>
-        <div class="white-background-input-field input-field col s12">
-            <input id="username" type="text" class="validate" value="{{this.model.get('username')}}" disabled>
-            <label for="username">{% trans "Username" %} </label>
-        </div>
-        <div id="settings-1"></div>
-    </div>
-{% endverbatim %}
-</script>
-
-<script id="settings-template" type="text/template">
-    <div class="container row">
-        <div class="section row"></div>
-        <div class="z-depth-1 white">
-            <div class="container">
-                <div class="section center">
-                    <div class="title-lato">{% trans "My Settings" %} </div>
-
+{% block content %}
+<section style='display: flex;justify-content: center; padding-top: 20px;'>
+    <div class="setting card" style="width: 75%;">
+        <div class="card-content">
+            <div class="step-title">
+                <div class="section">
+                    <div class="title-lato center">
+                        Account Settings
+                    </div>
                 </div>
-                <div class="row">
-                    <div id="settings-el"></div>
+                <div class="accent-line"></div>
+                {{form.non_field_errors}}
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class='row'>
+                        <div class=" col s12 m6 ">
+                            <span class='error'>{{form.first_name.errors}}</span>
+                            {{form.first_name.label_tag}}
+                            {{form.first_name}}
+                        </div>
+                        <div class=" col s12 m6 ">
+                            <span class='error'>{{form.last_name.errors}}</span>
+                            {{form.last_name.label_tag}}
+                            {{form.last_name}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class=" col s12 m6 ">
+                            <span class='error'>{{form.profile_image.errors}}</span>
+                            {{form.profile_image.label_tag}}
+                            {{form.profile_image}}
+                        </div>
+                    </div>
+                    <div class='row'>
+                        <div class=" col s12 m6 ">
+                            <span class='error'>{{form.username.errors}}</span>
+                            {{form.username.label_tag}}
+                            {{form.username}}
+                        </div>
+                        <div class=" col s12 m6 ">
+                            <span class='error'>{{form.email.errors}}</span>
+                            {{form.email.label_tag}}
+                            {{form.email}}
+                        </div>
+                    </div>
+                    <div class='row'>
+                        <div class="col s24 m12">
+                            <span> {{form.about_me.errors}}</span>
+                            {{form.about_me.label_tag}}
+                            {{form.about_me}}
+                        </div>
+                    </div>
+                    <div class='row'>
+                        <div class="col s24 m12">
+                            <span> {{form.categories.errors}}</span>
+                            {{form.categories.label_tag}}
+                            {{form.categories}}
+                        </div>
+                    </div>
+                    <div class="row center">
+                        {%if not readonly %}
+                        <button class='btn' type='submit' value="Save Changes">Save Changes</button>
+                        {% endif%}
+                    </div>
+                </form>
+                <div class="row center">
+                    <button id="delete-account-button" style="background-color: #ee6e73" class="cd-popup-trigger btn">Expunge Account</button>
                 </div>
             </div>
         </div>
     </div>
-</script>
-{% endblock backbone_template %}
-
-{% block body_class %}grey lighten-4{% endblock body_class %}
-{% block content %}
-    {% include "global_nav.html" %}
-    <div id="settings"></div>
+</section>
 {% endblock content %}
 
 {% block extra_js %}
-<script type="text/javascript" src="{% static "js/settings.js" %}"></script>
 <script type="text/javascript">
-    var data = {};
-    data.username = '{{user.username}}';
-    data.email = '{{user.email}}';
-    data.user_id = '{{user.id}}';
-
-    var userModel = new cw.UserModel(data);
-    var settingsView = new cw.SettingsView({
-        model: userModel,
+    document.addEventListener('DOMContentLoaded', function(event) {
+        const button = document.getElementById('delete-account-button');
+        
+        button.addEventListener('click', (event) => {
+            // Confirm user intent before committing to expunge
+            if (window.confirm('Are you certain you want to expunge your information? This action is irreversible.')) {
+                window.window.location.href = '{% url "expunge_user" %}';
+            }
+        });
     });
-
-    userModel.fetch();
-    settingsView.render();
-</script>
+    </script>
 {% endblock extra_js %}

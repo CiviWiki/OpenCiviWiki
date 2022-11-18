@@ -4,24 +4,53 @@ Class based views.
 This module will include views for the accounts app.
 """
 
-from core.custom_decorators import full_profile
+from accounts.authentication import account_activation_token, send_activation_email
+from accounts.forms import ProfileEditForm, UserRegistrationForm
+from accounts.models import Profile
 from django.conf import settings
 from django.contrib.auth import get_user_model, login
 from django.contrib.auth import views as auth_views
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
-from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic.edit import FormView, UpdateView
 
-from accounts.authentication import account_activation_token, send_activation_email
-from accounts.forms import ProfileEditForm, UpdateProfileImage, UserRegistrationForm
-from accounts.models import Profile
+
+class ProfileFollow(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        # Prevent users from following themselves.
+        if request.user.username == kwargs["username"]:
+            pass
+        else:
+            following_profile = Profile.objects.get(user__username=kwargs["username"])
+
+            self.request.user.profile.following.add(following_profile)
+
+        redirect_to = reverse("profile", kwargs={"username": kwargs["username"]})
+
+        return HttpResponseRedirect(redirect_to)
+
+
+class ProfileUnfollow(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        # Prevent users from following themselves.
+        if request.user.username == kwargs["username"]:
+            pass
+        else:
+            following_profile = Profile.objects.get(user__username=kwargs["username"])
+
+            self.request.user.profile.following.remove(following_profile)
+
+        redirect_to = reverse("profile", kwargs={"username": kwargs["username"]})
+
+        return HttpResponseRedirect(redirect_to)
 
 
 class RegisterView(FormView):
@@ -56,6 +85,47 @@ class RegisterView(FormView):
         return super(RegisterView, self).form_valid(form)
 
 
+class ProfileActivationView(View):
+    """
+    This shows different views to the user when they are verifying
+    their account based on whether they are already verified or not.
+    """
+
+    def get(self, request, uidb64, token):
+
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = get_user_model().objects.get(pk=uid)
+
+        except (TypeError, ValueError, OverflowError, get_user_model().DoesNotExist):
+            user = None
+
+        redirect_link = {"href": "/", "label": "Back to Main"}
+
+        template_var = {
+            "link": redirect_link,
+        }
+
+        if user is not None and account_activation_token.check_token(user, token):
+            profile = user.profile
+
+            if profile.is_verified:
+                template_var["title"] = "Email Already Verified"
+                template_var["content"] = "You have already verified your email."
+            else:
+                profile.is_verified = True
+                profile.save()
+
+                template_var["title"] = "Email Verification Successful"
+                template_var["content"] = "Thank you for verifying your email."
+        else:
+            # invalid link
+            template_var["title"] = "Email Verification Error"
+            template_var["content"] = "Email could not be verified"
+
+        return TemplateResponse(request, "general_message.html", template_var)
+
+
 class PasswordResetView(auth_views.PasswordResetView):
     template_name = "accounts/users/password_reset.html"
     email_template_name = "accounts/users/password_reset_email.html"
@@ -83,7 +153,7 @@ class SettingsView(LoginRequiredMixin, UpdateView):
     login_url = "accounts_login"
     form_class = ProfileEditForm
     success_url = reverse_lazy("accounts_settings")
-    template_name = "accounts/update_settings.html"
+    template_name = "accounts/settings.html"
 
     def get_object(self, queryset=None):
         return Profile.objects.get(user=self.request.user)
@@ -97,104 +167,74 @@ class SettingsView(LoginRequiredMixin, UpdateView):
                 "first_name": profile.first_name or None,
                 "last_name": profile.last_name or None,
                 "about_me": profile.about_me or None,
+                "profile_image": profile.profile_image or None,
             }
         )
         return super(SettingsView, self).get_initial()
 
 
-class ProfileActivationView(View):
-    """
-    This shows different views to the user when they are verifying
-    their account based on whether they are already verified or not.
-    """
-
-    def get(self, request, uidb64, token):
-
-        try:
-            uid = force_str(urlsafe_base64_decode(uidb64))
-            user = get_user_model().objects.get(pk=uid)
-
-        except (TypeError, ValueError, OverflowError, get_user_model().DoesNotExist):
-            user = None
-
-        if user is not None and account_activation_token.check_token(user, token):
-            profile = user.profile
-            if profile.is_verified:
-                redirect_link = {"href": "/", "label": "Back to Main"}
-                template_var = {
-                    "title": "Email Already Verified",
-                    "content": "You have already verified your email",
-                    "link": redirect_link,
-                }
-            else:
-                profile.is_verified = True
-                profile.save()
-
-                redirect_link = {"href": "/", "label": "Back to Main"}
-                template_var = {
-                    "title": "Email Verification Successful",
-                    "content": "Thank you for verifying your email with CiviWiki",
-                    "link": redirect_link,
-                }
-        else:
-            # invalid link
-            redirect_link = {"href": "/", "label": "Back to Main"}
-            template_var = {
-                "title": "Email Verification Error",
-                "content": "Email could not be verified",
-                "link": redirect_link,
-            }
-
-        return TemplateResponse(request, "general_message.html", template_var)
-
-
-class ProfileSetupView(LoginRequiredMixin, View):
-    """A view to make the user profile full_profile"""
-
-    login_url = "accounts_login"
-
-    def get(self, request):
-        profile = Profile.objects.get(user=request.user)
-        if profile.full_profile:
-            return HttpResponseRedirect("/")
-            # start temp rep rendering TODO: REMOVE THIS
-        else:
-            data = {
-                "username": request.user.username,
-                "email": request.user.email,
-            }
-            return TemplateResponse(request, "accounts/user-setup.html", data)
-
-
 class UserProfileView(LoginRequiredMixin, View):
     """A view that shows profile for authorized users"""
 
-    @method_decorator(full_profile)
     def get(self, request, username=None):
-        if not username:
-            return HttpResponseRedirect(f"/profile/{request.user}")
-        else:
-            is_owner = username == request.user.username
-            try:
-                user = get_user_model().objects.get(username=username)
+        profile = get_object_or_404(Profile, user__username=username)
 
-            except get_user_model().DoesNotExist:
-                return HttpResponseRedirect("/404")
-
-        form = ProfileEditForm(
-            initial={
-                "username": user.username,
-                "email": user.email,
-                "first_name": user.profile.first_name or None,
-                "last_name": user.profile.last_name or None,
-                "about_me": user.profile.about_me or None,
+        return TemplateResponse(
+            request,
+            "account.html",
+            {
+                "profile": profile,
             },
-            readonly=True,
         )
-        data = {
-            "username": user,
-            "profile_image_form": UpdateProfileImage,
-            "form": form if is_owner else None,
-            "readonly": True,
-        }
-        return TemplateResponse(request, "account.html", data)
+
+
+class ProfileFollowing(LoginRequiredMixin, View):
+    """
+    A view that shows list of profiles
+    that profile with given username is following
+    """
+
+    def get(self, request, username=None):
+        profile = get_object_or_404(Profile, user__username=username)
+
+        return TemplateResponse(
+            request,
+            "profile_following.html",
+            {
+                "profile": profile,
+            },
+        )
+
+
+@login_required
+def expunge_user(request):
+    """
+    Delete User Information
+    """
+
+    user_model = get_user_model()
+    user = get_object_or_404(user_model, username=request.user.username)
+
+    profile = get_object_or_404(Profile, user=user)
+
+    # Expunge personally identifiable data in user
+    expunged_user_data = {
+        "is_active": False,
+        "email": "",
+        "first_name": "",
+        "last_name": "",
+        "username": f"expunged-{ user.id }",
+    }
+    user.__dict__.update(expunged_user_data)
+    user.save()
+
+    # Expunge personally identifiable data in profile
+    expunged_profile_data = {
+        "first_name": "",
+        "last_name": "",
+        "about_me": "",
+    }
+    profile.__dict__.update(expunged_profile_data)
+    profile.save()
+
+    return redirect("/")
