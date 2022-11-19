@@ -215,3 +215,30 @@ class UserProfileView(BaseTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.user.username)
         self.assertTemplateUsed(response, "account.html")
+
+
+class ProfileFollowing(BaseTestCase):
+    """A class to test user profiles following view"""
+
+    def setUp(self) -> None:
+        super(ProfileFollowing, self).setUp()
+
+        self.user2 = get_user_model().objects.create_user(
+            username="newuser2", email="test@test.com", password="password123"
+        )
+        self.user3 = get_user_model().objects.create_user(
+            username="newuser3", email="test@test.com", password="password123"
+        )
+
+        self.user.profile.following.add(self.user2.profile)
+        self.user.profile.following.add(self.user3.profile)
+
+    def test_get_user_profile(self):
+        """Whether user_profile function works as expected"""
+
+        self.client.login(username="newuser", password="password123")
+        response = self.client.get(reverse("profile-following", args=["newuser"]))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.user2.username)
+        self.assertContains(response, self.user3.username)
+        self.assertTemplateUsed(response, "profile_following.html")
