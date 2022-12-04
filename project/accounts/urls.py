@@ -10,6 +10,7 @@ from accounts.views import (
     SettingsView,
     ProfileFollowing,
     UserProfileView,
+    UserCivis,
     expunge_user,
 )
 from django.contrib.auth import views as auth_views
@@ -42,6 +43,11 @@ urlpatterns = [
         "profile/<str:username>/following",
         ProfileFollowing.as_view(),
         name="profile-following",
+    ),
+    path(
+        "profile/<str:username>/civis/",
+        UserCivis.as_view(),
+        name="user-civis",
     ),
     path(
         "accounts/password_reset/",
