@@ -206,6 +206,24 @@ class ProfileFollowing(LoginRequiredMixin, View):
         )
 
 
+class UserCivis(LoginRequiredMixin, View):
+    """
+    A view that shows list of civis
+    that profile with given username created
+    """
+
+    def get(self, request, username=None):
+        profile = get_object_or_404(Profile, user__username=username)
+
+        return TemplateResponse(
+            request,
+            "user_civis.html",
+            {
+                "profile": profile,
+            },
+        )
+
+
 @login_required
 def expunge_user(request):
     """
