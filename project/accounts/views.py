@@ -215,15 +215,12 @@ class UserCivis(LoginRequiredMixin, View):
     def get(self, request, username=None):
         profile = get_object_or_404(Profile, user__username=username)
         user = profile.user
-        civis = user.civis_set.all()
+        civis = user.civis.all()
 
         return TemplateResponse(
             request,
             "user_civis.html",
-            {
-                "profile": profile,
-                "civis" : civis
-            },
+            {"profile": profile, "civis": civis},
         )
 
 
