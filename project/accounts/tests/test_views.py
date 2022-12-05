@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth import views as auth_views
 from django.test import TestCase
 from django.urls import resolve, reverse
+from threads.models import Civi, Thread
 
 
 class BaseTestCase(TestCase):
@@ -215,3 +216,39 @@ class UserProfileView(BaseTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.user.username)
         self.assertTemplateUsed(response, "account.html")
+
+
+class UserProfileCivis(BaseTestCase):
+    """A class to test user profiles following view"""
+
+    def setUp(self) -> None:
+        super(UserProfileCivis, self).setUp()
+
+        self.user2 = get_user_model().objects.create_user(
+            username="newuser2", email="test2@test2.com", password="password123"
+        )
+
+        thread = Thread(
+            author=self.user2, title="test thread", summary="this is a test thread"
+        )
+        thread.save()
+        civi = Civi(author=self.user, thread=thread, title="test civi title")
+        civi.save()
+
+    def test_get_my_civis(self):
+        """Whether user_profile function works as expected"""
+
+        self.client.login(username="newuser", password="password123")
+        response = self.client.get(reverse("user-civis", args=["newuser"]))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "test civi title")
+        self.assertTemplateUsed(response, "user_civis.html")
+
+    def test_get_other_civis(self):
+        """Whether user_profile function works as expected"""
+
+        self.client.login(username="newuser2", password="password123")
+        response = self.client.get(reverse("user-civis", args=["newuser"]))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "test civi title")
+        self.assertTemplateUsed(response, "user_civis.html")
