@@ -7,7 +7,7 @@
 ![GitHub labels](https://img.shields.io/github/labels/CiviWiki/OpenCiviWiki/help%20wanted)
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-103-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-104-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![ComVer](https://img.shields.io/badge/ComVer-compliant-brightgreen.svg)](https://github.com/staltz/comver)
@@ -164,11 +164,12 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
       <td align="center"><a href="https://github.com/max1204"><img src="https://avatars.githubusercontent.com/u/20409353?v=4?s=100" width="100px;" alt="max1204"/><br /><sub><b>max1204</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=max1204" title="Code">💻</a></td>
       <td align="center"><a href="https://github.com/oppcatchera"><img src="https://avatars.githubusercontent.com/u/65623690?v=4?s=100" width="100px;" alt="oppcatchera"/><br /><sub><b>oppcatchera</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=oppcatchera" title="Code">💻</a></td>
       <td align="center"><a href="https://github.com/earthprelude"><img src="https://avatars.githubusercontent.com/u/75330343?v=4?s=100" width="100px;" alt="prelude"/><br /><sub><b>prelude</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=earthprelude" title="Code">💻</a></td>
+      <td align="center"><a href="https://github.com/rbatchu2"><img src="https://avatars.githubusercontent.com/u/112577508?v=4?s=100" width="100px;" alt="rbatchu2"/><br /><sub><b>rbatchu2</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=rbatchu2" title="Code">💻</a></td>
       <td align="center"><a href="https://github.com/rdhoge"><img src="https://avatars.githubusercontent.com/u/59403275?v=4?s=100" width="100px;" alt="rdhoge"/><br /><sub><b>rdhoge</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=rdhoge" title="Code">💻</a></td>
       <td align="center"><a href="https://github.com/richifuentes"><img src="https://avatars2.githubusercontent.com/u/9931749?v=4?s=100" width="100px;" alt="richifuentes"/><br /><sub><b>richifuentes</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/issues?q=author%3Arichifuentes" title="Bug reports">🐛</a> <a href="#question-richifuentes" title="Answering Questions">💬</a> <a href="#ideas-richifuentes" title="Ideas, Planning, & Feedback">🤔</a></td>
-      <td align="center"><a href="https://github.com/tberm"><img src="https://avatars.githubusercontent.com/u/49910363?v=4?s=100" width="100px;" alt="tberm"/><br /><sub><b>tberm</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=tberm" title="Code">💻</a></td>
     </tr>
     <tr>
+      <td align="center"><a href="https://github.com/tberm"><img src="https://avatars.githubusercontent.com/u/49910363?v=4?s=100" width="100px;" alt="tberm"/><br /><sub><b>tberm</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=tberm" title="Code">💻</a></td>
       <td align="center"><a href="https://github.com/terrencetuy"><img src="https://avatars3.githubusercontent.com/u/13714060?v=4?s=100" width="100px;" alt="terrencetuy"/><br /><sub><b>terrencetuy</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=terrencetuy" title="Code">💻</a></td>
       <td align="center"><a href="https://github.com/wassafshahzad"><img src="https://avatars.githubusercontent.com/u/25094157?v=4?s=100" width="100px;" alt="wassaf shahzad"/><br /><sub><b>wassaf shahzad</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=wassafshahzad" title="Code">💻</a> <a href="https://github.com/CiviWiki/OpenCiviWiki/commits?author=wassafshahzad" title="Tests">⚠️</a> <a href="#infra-wassafshahzad" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
       <td align="center"><a href="https://github.com/werberger"><img src="https://avatars.githubusercontent.com/u/106753124?v=4?s=100" width="100px;" alt="werb"/><br /><sub><b>werb</b></sub></a><br /><a href="https://github.com/CiviWiki/OpenCiviWiki/issues?q=author%3Awerberger" title="Bug reports">🐛</a></td>
