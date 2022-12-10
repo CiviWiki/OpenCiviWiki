@@ -2,27 +2,62 @@
 {% load i18n %}
 
 {% block content %}
-    {% for civi in civis %}
-        <div class="civi-card white" data-id="">
-            <div class="civi-header-account white">
-            <div class="civi-title-outer">
-                <div class="civi-type gray-text">{{ civi.c_type }}</div>
-                <div class="civi-title">{{ civi.title }}</div>
+    <div hidden> hahaha </div>
+    <div class="container" style="width: 60%;">
+    {% for thread, item in civiByThread.items %}
+    <div class="row">
+        <div class="thread_container" style="padding: 20px 20px 20px 20px;box-shadow: 10px 10px 30px rgb(0 0 0 / 10%); cursor: pointer;">
+            <div class="title">
+                <h5>{{thread.title}}</h5>
+                <h6 style="color: #808484">{{thread.author.first_name}} ({{thread.author.email}})</h6>
             </div>
+            <div class="content">
+                {{item.0.thread.summary}}
             </div>
-            <div class="civi-body">
-            <div class="civi-body-inner">{{ civi.body }}</div>
+            <div class="timestamp" style="text-align: right;">
+                ---- {{thread.created}}
+            </div>
+            <br>
+            <div class="civis" style="text-align: center;">
+                {% for civi in item.1 %}
+                <div class="civi-container" style="width: 80%; display: inline-block; border-radius: 10px; padding: 10px 10px 10px 10px; box-shadow: 10px 10px 30px rgb(0 0 0 / 10%);; text-align: left;">
+                    <span> <b>{{civi.title}}</b> </span>
+                    {% if civi.c_type == "problem" %}
+                        <span style="float: right; text-align:right; font-family:cursive; padding: 0px 4px 0px 4px; color: rgb(243, 243, 243); background-color:rgb(249, 170, 170);"> {{civi.c_type}} </span>
+                    {% endif %}
+                    {% if civi.c_type == "cause" %}
+                        <span style="float: right; text-align:right; font-family:cursive; padding: 0px 4px 0px 4px; color: rgb(243, 243, 243); background-color:rgb(243, 236, 24);"> {{civi.c_type}} </span>
+                    {% endif %}
+                    {% if civi.c_type == "solution" %}
+                        <span style="float: right; text-align:right; font-family:cursive; padding: 0px 4px 0px 4px; color: rgb(243, 243, 243); background-color:rgb(146, 243, 156);"> {{civi.c_type}} </span>
+                    {% endif %}
+                    {% if civi.c_type == "response" %}
+                        <span style="float: right; text-align:right; font-family:cursive; padding: 0px 4px 0px 4px; color: rgb(243, 243, 243); background-color:rgb(121, 240, 247);"> {{civi.c_type}} </span>
+                    {% endif %}
+                    {% if civi.c_type == "rebuttal" %}
+                        <span style="float: right; text-align:right; font-family:cursive; padding: 0px 4px 0px 4px; color: rgb(243, 243, 243); background-color:rgb(255, 165, 21);"> {{civi.c_type}} </span>
+                    {% endif %}
+                    <div> {{civi.body}} </div>
+                    <div style="text-align: right;">
+                        <span class="rating-score r-0">{{ civi.votes_vneg }}</span>
+                        <i class="material-icons double-icon-1" style="font-size: 12px;">thumb_down</i>
+                        <span class="rating-score r-0">{{ civi.votes_neg }}</span>
+                        <i class="material-icons" style="font-size: 13px;">thumb_down_off_alt</i>
+                        <span class="rating-score r-0">{{ civi.votes_neutral }}</span>
+                        <i class="material-icons" style="font-size: 13px;">remove</i>
+                        <span class="rating-score r-0">{{ civi.votes_pos }}</span>
+                        <i class="material-icons" style="font-size: 13px;">thumb_up_off_alt</i>
+                        <span class="rating-score r-0">{{ civi.votes_vpos }}</span>
+                        <i class="material-icons double-icon-1" style="font-size: 12px;">thumb_up</i>
+                        &nbsp;&nbsp;&nbsp;
+                    </div>
+                </div>
+                {% endfor %}
             </div>
         </div>
-        {% empty %}
-        <div class="section no-state">
-            <div class="container">
-            <div class="section">
-                <div class="center title-lato text">No activity</div>
-            </div>
-            </div>
-        </div>
-    {% endfor %}
+    </div>
 
+    {% endfor %}
+    </div>
 
 {% endblock content %}

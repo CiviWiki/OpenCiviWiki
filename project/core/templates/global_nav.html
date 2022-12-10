@@ -21,7 +21,7 @@
             {% if user.is_authenticated %}
                 <div class="nav-menu-item chip-menu-profile" id="js-toggle-menu">
                     <span class="label-username">{{ request.session.login_user_firstname }}</span>
-                    <img class="chip-image-profile" src="{{ user.profile.profile_image_url }}" alt="{{ request.user.username }}">
+                    <img class="chip-image-profile" src="{{ user.profile.profile_image_url }}" hidden = true alt="{{ request.user.username }}">
                     <i class="material-icons js-dropdown-icon">keyboard_arrow_down</i>
                     <i class="material-icons js-dropdown-icon hide">keyboard_arrow_up</i>
                 </div>
