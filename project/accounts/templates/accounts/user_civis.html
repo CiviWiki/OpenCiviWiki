@@ -8,7 +8,7 @@
     <div class="row">
         <div class="thread_container" style="padding: 20px 20px 20px 20px;box-shadow: 10px 10px 30px rgb(0 0 0 / 10%); cursor: pointer;">
             <div class="title">
-                <h5>{{thread.title}}</h5>
+                <a href="/thread/{{thread.id}}/"><h5>{{thread.title}}</h5></a>
                 <h6 style="color: #808484">{{thread.author.first_name}} ({{thread.author.email}})</h6>
             </div>
             <div class="content">
