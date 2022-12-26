@@ -22,15 +22,15 @@
 
     <!-- Prevent users from following themselves. -->
     {% if not profile == request.user.profile %}
-      {% if profile not in request.user.profile.following.all %}
-        <a href="{% url 'profile-follow' profile.user.username %}" class="waves-effect waves-light btn follow-btn" id="sidebar-follow-btn">
-          follow
-        </a>
-      {% else %}
-          <a href="{% url 'profile-unfollow' profile.user.username %}" class="waves-effect waves-light btn follow-btn" id="sidebar-follow-btn">
-            unfollow
-          </a>
-      {% endif %}
+    {% if profile not in request.user.profile.following.all %}
+    <a href="{% url 'profile-follow' profile.user.username %}" class="waves-effect waves-light btn follow-btn" id="sidebar-follow-btn">
+      follow
+    </a>
+    {% else %}
+    <a href="{% url 'profile-unfollow' profile.user.username %}" class="waves-effect waves-light btn follow-btn" id="sidebar-follow-btn">
+      unfollow
+    </a>
+    {% endif %}
     {% endif %}
 
     <div class="user-info section">
@@ -45,6 +45,15 @@
           <div class="section-title">ABOUT ME</div>
           <div class="divider"></div>
           <div class="about-me">{{ profile.about_me }}</div>
+          <div class="divider"></div>
+          <div class="section-title">CATEGORIES</div>
+          {% for category in profile.categories.all %}
+          {% if forloop.last %}
+          <p class="about-me">{{ category }}.</p>
+          {% else %}
+          <p class="about-me">{{ category }},</p>
+          {% endif %}
+          {% endfor %}
         </div>
       </div>
     </div>
