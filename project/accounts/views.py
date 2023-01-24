@@ -188,6 +188,22 @@ class UserProfileView(LoginRequiredMixin, View):
         )
 
 
+
+class UserFollowers(LoginRequiredMixin, View):
+    """A view that shows the followers for authorized users"""
+    
+    def get(self, request, username=None):
+        profile = get_object_or_404(Profile, user__username=username)
+
+        return TemplateResponse(
+            request,
+            "user_followers.html",
+            {
+                "profile": profile,
+            },
+        )
+
+
 class ProfileFollowing(LoginRequiredMixin, View):
     """
     A view that shows list of profiles
@@ -199,11 +215,14 @@ class ProfileFollowing(LoginRequiredMixin, View):
 
         return TemplateResponse(
             request,
+
             "profile_following.html",
+
             {
                 "profile": profile,
             },
         )
+
 
 
 class UserCivis(LoginRequiredMixin, View):
@@ -222,6 +241,7 @@ class UserCivis(LoginRequiredMixin, View):
             "user_civis.html",
             {"profile": profile, "civis": civis},
         )
+
 
 
 @login_required
