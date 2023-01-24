@@ -924,6 +924,78 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "darshanip",
+      "name": "Darshan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/36774606?v=4",
+      "profile": "https://github.com/darshanip",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "wippo-devops",
+      "name": "wippo-devops",
+      "avatar_url": "https://avatars.githubusercontent.com/u/85387801?v=4",
+      "profile": "https://github.com/wippo-devops",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "rdhoge",
+      "name": "rdhoge",
+      "avatar_url": "https://avatars.githubusercontent.com/u/59403275?v=4",
+      "profile": "https://github.com/rdhoge",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "oppcatchera",
+      "name": "oppcatchera",
+      "avatar_url": "https://avatars.githubusercontent.com/u/65623690?v=4",
+      "profile": "https://github.com/oppcatchera",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "riajots",
+      "name": "Ria Jotsinghani",
+      "avatar_url": "https://avatars.githubusercontent.com/u/36339406?v=4",
+      "profile": "https://github.com/riajots",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "audreyelim",
+      "name": "audreyelim",
+      "avatar_url": "https://avatars.githubusercontent.com/u/41016300?v=4",
+      "profile": "https://github.com/audreyelim",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "FredKhayat",
+      "name": "Frederic Khayat",
+      "avatar_url": "https://avatars.githubusercontent.com/u/61949371?v=4",
+      "profile": "https://github.com/FredKhayat",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "rbatchu2",
+      "name": "rbatchu2",
+      "avatar_url": "https://avatars.githubusercontent.com/u/112577508?v=4",
+      "profile": "https://github.com/rbatchu2",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
