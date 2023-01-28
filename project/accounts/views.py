@@ -280,8 +280,7 @@ class UserIssues(LoginRequiredMixin, View):
         civis = user.civis.all()
         followers = profile.followers.all()
 
-        return TemplateResponse
-        (
+        return TemplateResponse(
             request,
             "user_civis.html",
             {"profile": profile, "followers": followers, "civis": civis},
