@@ -21,6 +21,7 @@ from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from django.views import View
 from django.views.generic.edit import FormView, UpdateView
+from threads.models import Thread
 
 
 class ProfileFollow(LoginRequiredMixin, View):
@@ -236,10 +237,16 @@ class UserCivis(LoginRequiredMixin, View):
         user = profile.user
         civis = user.civis.all()
 
+        threads = {
+            civi.thread: [Thread.objects.summarize(civi.thread), []] for civi in civis
+        }
+        for civi in civis:
+            threads[civi.thread][1].append(civi)
+
         return TemplateResponse(
             request,
             "user_civis.html",
-            {"profile": profile, "civis": civis},
+            {"profile": profile, "civiByThread": threads},
         )
 
 
