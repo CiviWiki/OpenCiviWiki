@@ -5,13 +5,14 @@ from accounts.views import (
     PasswordResetView,
     ProfileActivationView,
     ProfileFollow,
+    ProfileFollowing,
     ProfileUnfollow,
     RegisterView,
     SettingsView,
-    UserFollowers,
-    ProfileFollowing,
-    UserProfileView,
     UserCivis,
+    UserFollowers,
+    UserIssues,
+    UserProfileView,
     expunge_user,
 )
 from django.contrib.auth import views as auth_views
@@ -54,6 +55,11 @@ urlpatterns = [
         "profile/<str:username>/civis/",
         UserCivis.as_view(),
         name="user-civis",
+    ),
+    path(
+        "profile/<str:username>/issues/",
+        UserIssues.as_view(),
+        name="user-issues",
     ),
     path(
         "accounts/password_reset/",
