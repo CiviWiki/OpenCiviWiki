@@ -13,13 +13,9 @@
   <div id="sidebar-template">
     <div class="profile-image">
       <div class="big-image-cropper z-depth-1">
-        <img
-          class="responsive-img"
-          src={{ profile.profile_image_url }}
-        />
+        <img class="responsive-img" src={{ profile.profile_image_url }}>
       </div>
     </div>
-
     <!-- Prevent users from following themselves. -->
     {% if not profile == request.user.profile %}
       {% if profile not in request.user.profile.following.all %}
