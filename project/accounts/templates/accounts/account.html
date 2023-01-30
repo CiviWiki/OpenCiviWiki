@@ -19,7 +19,6 @@
         />
       </div>
     </div>
-
     <!-- Prevent users from following themselves. -->
     {% if not profile == request.user.profile %}
       {% if profile not in request.user.profile.following.all %}
@@ -32,12 +31,20 @@
           </a>
       {% endif %}
     {% endif %}
-
     <div class="user-info section">
       <div class="full-name">
         {{ profile.first_name }} {{ profile.last_name }}
       </div>
       <div class="username">@{{ username }}</div>
+    </div>
+    <div class="categories">
+      <ul>
+        {%for categories in profile.categories.all%}
+        <li>
+          {{categories}}
+        </li>
+        {%endfor%}
+      </ul>
     </div>
     <div class="transparent">
       <div class="card-content">
