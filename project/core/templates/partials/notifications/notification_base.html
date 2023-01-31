@@ -1,15 +1,15 @@
-{% verbatim %}
-    {{# if (notification.length > 0) { }}
+{% block content %}
+    {% if notification.length > 0 %}
     <div class="container">
         <div class="section">
-        {{# _.each(notification, function (n) { }}
+        {% for notifications in notification %}
             <div class="col s12">
-            {{= cw.underscorePartial('notification-item-template', n)}}
-            </div>
-        {{# }, this); }}
+            <li>{{notifications}}</li>
+            </div> 
+        {% endfor %}
     </div>
     </div>
-    {{# } else { }}
+        {% else %}
         <div class="section no-state">
             <div class="container">
                 <div class="section">
@@ -17,5 +17,7 @@
                 </div>
             </div>
         </div>
-    {{# } }}
-{% endverbatim %}
+    {% endif %}
+{% endblock content %}
+
+
