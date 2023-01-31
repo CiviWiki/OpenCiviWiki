@@ -178,7 +178,6 @@ class UserProfileView(LoginRequiredMixin, View):
 
     def get(self, request, username=None):
         profile = get_object_or_404(Profile, user__username=username)
-
         return TemplateResponse(
             request,
             "account.html",
@@ -193,7 +192,6 @@ class UserFollowers(LoginRequiredMixin, View):
 
     def get(self, request, username=None):
         profile = get_object_or_404(Profile, user__username=username)
-
         return TemplateResponse(
             request,
             "user_followers.html",
