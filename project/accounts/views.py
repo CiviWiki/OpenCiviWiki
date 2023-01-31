@@ -269,3 +269,17 @@ def expunge_user(request):
     profile.save()
 
     return redirect("/")
+
+
+class UserIssues(LoginRequiredMixin, View):
+    def get(self, request, username=None):
+        profile = get_object_or_404(Profile, user__username=username)
+        user = profile.user
+        civis = user.civis.all()
+        followers = profile.followers.all()
+
+        return TemplateResponse(
+            request,
+            "user_civis.html",
+            {"profile": profile, "followers": followers, "civis": civis},
+        )
