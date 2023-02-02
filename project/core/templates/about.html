@@ -3,12 +3,12 @@
 {% load i18n %}
 
 {% block extra_css %}
-    <link type="text/css" rel="stylesheet/less" href="{% static "less/about.less" %}"/>
+<link type="text/css" rel="stylesheet/less" href="{% static " less/about.less" %}" />
 {% endblock extra_css %}
-    
+
 {% block page_title %}{% trans "About Us" %}{% endblock page_title %}
 
-{% block content %}
+
 <script id="about-template" type="text/template">
 <header>
     <div class="content-header center">
@@ -185,17 +185,17 @@
     </div>
     </main>
 </script>
-{% endblock content %}
+
 
 {% block content %}
 {% include "static_nav.html" %}
-    <div id="about"></div>
+<div id="about"></div>
 {% endblock content %}
 
-{% block content%}
+{% block extra_js%}
 <!-- Backbone Views File -->
-<script src="{% static "js/static/about_view.js" %}" type="text/javascript"></script>
+<script src="{% static " js/static/about_view.js" %}" type="text/javascript"></script>
 <script type="text/javascript">
     var aboutView = new cw.AboutView();
 </script>
-{% endblock content%}
+{% endblock extra_js%}

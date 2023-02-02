@@ -3,12 +3,12 @@
 {% load i18n %}
 
 {% block extra_css %}
-    <link type="text/css" rel="stylesheet/less" href="{% static "less/base.less" %}"/>
+<link type="text/css" rel="stylesheet/less" href="{% static " less/base.less" %}" />
 {% endblock extra_css %}
 
 {% block page_title %}{{ title }}{% endblock page_title %}
 
-{% block content%}
+
 <script id="general-template" type="text/template">
     <div id="general-section" class="center container section">
         <div class="row">
@@ -29,18 +29,18 @@
         </div>
     </div>
 </script>
-{% endblock content %}
+
 
 {% block body_id %}general_wrapper{% endblock body_id %}
 {% block content %}
-    <div id="general">
-    </div>
+<div id="general">
+</div>
 {% endblock content %}
 
-{% block content %}
+{% block extra_js%}
 <!-- Backbone Views File -->
-<script type="text/javascript" src="{% static "js/general_view.js" %}"></script>
+<script type="text/javascript" src="{% static " js/general_view.js" %}"></script>
 <script type="text/javascript">
     var generalView = new cw.GeneralView();
 </script>
-{% endblock content %}
+{% endblock extra_js%}
