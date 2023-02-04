@@ -1,6 +1,7 @@
 ﻿{% extends "base.html" %}
 {% load static %}
 {% load i18n %}
+{% block content %}
 
 {% block extra_css %}
 <link type="text/css" rel="stylesheet/less" href="{% static " less/about.less" %}" />
@@ -186,16 +187,11 @@
     </main>
 </script>
 
-
-{% block content %}
 {% include "static_nav.html" %}
 <div id="about"></div>
-{% endblock content %}
-
-{% block extra_js%}
-<!-- Backbone Views File -->
 <script src="{% static " js/static/about_view.js" %}" type="text/javascript"></script>
 <script type="text/javascript">
     var aboutView = new cw.AboutView();
 </script>
-{% endblock extra_js%}
+
+{% block content %}
