@@ -30,6 +30,7 @@ ipython = "^8.5.0"
 django-debug-toolbar = "^3.7.0"
 django-linear-migrations = "^2.5.1"
 pre-commit = "^2.20.0"
+factory-boy = "^3.2.1"
 
 [tool.isort]
 profile = "black"
