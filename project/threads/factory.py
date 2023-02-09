@@ -35,21 +35,21 @@ class ThreadFactory(factory.django.DjangoModelFactory):
             for fact in extracted:
                 self.facts.add(fact)
 
-    @factory.post_generation
-    def tags(self, create, extracted, **kwargs):
-        if not create:
-            return
-        if extracted:
-            for tag in extracted:
-                self.tags.add(tag)
+    # @factory.post_generation
+    # def tags(self, create, extracted, **kwargs):
+    #     if not create:
+    #         return
+    #     if extracted:
+    #         for tag in extracted:
+    #             self.tags.add(tag)
 
-    @factory.post_generation
-    def objects(self, create, extracted, **kwargs):
-        if not create:
-            return
-        if extracted:
-            for obje in extracted:
-                self.objects.add(obje)
+    # @factory.post_generation
+    # def objects(self, create, extracted, **kwargs):
+    #     if not create:
+    #         return
+    #     if extracted:
+    #         for obje in extracted:
+    #             self.objects.add(obje)
 
 
 class CiviFactory(factory.django.DjangoModelFactory):
