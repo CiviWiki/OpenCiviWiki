@@ -20,7 +20,7 @@ class ProfileFactory(factory.django.DjangoModelFactory):
     first_name = factory.Faker("lorem")
     last_name = factory.Faker("lorem")
     about_me = factory.Faker("lorem")
-    is_verified = factory.fuzzy.FuzzyChoice(choices=[False, False, False, False])
+    is_verified = factory.fuzzy.FuzzyChoice(choices=[False, False])
     profile_image = factory.Faker("image_url")
     profile_image_thumb = factory.Faker("image_url")
 
