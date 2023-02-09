@@ -35,6 +35,7 @@ class ThreadFactory(factory.django.DjangoModelFactory):
             for fact in extracted:
                 self.facts.add(fact)
 
+    @factory.post_generation
     def tags(self, create, extracted, **kwargs):
         if not create:
             return
@@ -42,6 +43,7 @@ class ThreadFactory(factory.django.DjangoModelFactory):
             for tag in extracted:
                 self.tags.add(tag)
 
+    @factory.post_generation
     def objects(self, create, extracted, **kwargs):
         if not create:
             return
@@ -64,25 +66,3 @@ class CiviFactory(factory.django.DjangoModelFactory):
     votes_neutral = 0
     votes_pos = 0
     votes_vpos = 0
-
-    @factory.post_generation
-    def linked_civis(self, create, extracted, **kwargs):
-        if not create:
-            return
-        if extracted:
-            for linked_civi in extracted:
-                self.linked_civis.add(linked_civi)
-
-    def tags(self, create, extracted, **kwargs):
-        if not create:
-            return
-        if extracted:
-            for tag in extracted:
-                self.tags.add(tag)
-
-    def objects(self, create, extracted, **kwargs):
-        if not create:
-            return
-        if extracted:
-            for obje in extracted:
-                self.objects.add(obje)
