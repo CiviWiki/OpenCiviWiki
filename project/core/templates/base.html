@@ -33,13 +33,13 @@
 
 </head>
 
-
-
 <body class="{% block body_class %}{% endblock body_class %}" id="{% block body_id %}{% endblock body_id %}">
+    
     {% include "global_nav.html" %}
     
     {% include "static_footer.html" %}
-
+    {%block content%}{%endblock content%}
     {% block extra_js %}{% endblock extra_js %}
+    
 </body>
 </html>
