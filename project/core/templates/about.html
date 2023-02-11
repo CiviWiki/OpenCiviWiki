@@ -1,15 +1,12 @@
 ﻿{% extends "base.html" %}
 {% load static %}
 {% load i18n %}
-{% block content %}
-
 {% block extra_css %}
 <link type="text/css" rel="stylesheet/less" href="{% static " less/about.less" %}" />
 {% endblock extra_css %}
 
 {% block page_title %}{% trans "About Us" %}{% endblock page_title %}
-
-
+{% block content %}
 <script id="about-template" type="text/template">
 <header>
     <div class="content-header center">
