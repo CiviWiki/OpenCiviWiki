@@ -14,4 +14,4 @@ class NotificationFactory(factory.django.DjangoModelFactory):
     thread = factory.SubFactory(ThreadFactory)
     civi = factory.SubFactory(CiviFactory)
     activity_type = factory.Faker("lorem")
-    read = factory.fuzzy.FuzzyChoice(choices=[True, True, True, False])
+    read = factory.fuzzy.FuzzyChoice(choices=[True, False])
