@@ -3,9 +3,9 @@
 {% load i18n %}
 
 {% block extra_css %}
-<link type="text/css" rel="stylesheet/less" href="{% static 'less/base.less' %}"/>
-<link type="text/css" rel="stylesheet/less" href="{% static 'less/utils.less' %}"/>
-<link type="text/css" rel="stylesheet/less" href="{% static 'less/account.less' %}"/>
+<link type="text/css" rel="stylesheet/less" href="{% static 'less/base.less' %}" />
+<link type="text/css" rel="stylesheet/less" href="{% static 'less/utils.less' %}" />
+<link type="text/css" rel="stylesheet/less" href="{% static 'less/account.less' %}" />
 {% endblock extra_css %}
 
 {% block content %}
@@ -13,31 +13,37 @@
   <div id="sidebar-template">
     <div class="profile-image">
       <div class="big-image-cropper z-depth-1">
-        <img
-          class="responsive-img"
-          src={{ profile.profile_image_url }}
-        />
+        <img class="responsive-img" src={{ profile.profile_image_url }} />
       </div>
     </div>
-
     <!-- Prevent users from following themselves. -->
     {% if not profile == request.user.profile %}
-      {% if profile not in request.user.profile.following.all %}
-        <a href="{% url 'profile-follow' profile.user.username %}" class="waves-effect waves-light btn follow-btn" id="sidebar-follow-btn">
-          follow
-        </a>
-      {% else %}
-          <a href="{% url 'profile-unfollow' profile.user.username %}" class="waves-effect waves-light btn follow-btn" id="sidebar-follow-btn">
-            unfollow
-          </a>
-      {% endif %}
+    {% if profile not in request.user.profile.following.all %}
+    <a href="{% url 'profile-follow' profile.user.username %}" class="waves-effect waves-light btn follow-btn"
+      id="sidebar-follow-btn">
+      follow
+    </a>
+    {% else %}
+    <a href="{% url 'profile-unfollow' profile.user.username %}" class="waves-effect waves-light btn follow-btn"
+      id="sidebar-follow-btn">
+      unfollow
+    </a>
     {% endif %}
-
+    {% endif %}
     <div class="user-info section">
       <div class="full-name">
         {{ profile.first_name }} {{ profile.last_name }}
       </div>
       <div class="username">@{{ username }}</div>
+    </div>
+    <div class="categories">
+      <ul>
+        {%for category in profile.categories.all%}
+        <li>
+          {{category}}
+        </li>
+        {%endfor%}
+      </ul>
     </div>
     <div class="transparent">
       <div class="card-content">

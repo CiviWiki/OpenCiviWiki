@@ -1,9 +1,8 @@
-{% verbatim %}
+
 <div class="notification-item">
     <span class="link-lato gray-text">{{time}}</span>
     <span class="header-lato">{{ popup_string }}</span>
-    {{# if (link) { }}
+    {%if link%}
     <a href="{{ link }}" class="link-lato">LINK</a>
-    {{# } }}
+    {%endif%}
 </div>
-{% endverbatim %}

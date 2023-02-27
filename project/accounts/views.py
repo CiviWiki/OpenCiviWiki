@@ -178,7 +178,6 @@ class UserProfileView(LoginRequiredMixin, View):
 
     def get(self, request, username=None):
         profile = get_object_or_404(Profile, user__username=username)
-
         return TemplateResponse(
             request,
             "account.html",
@@ -188,13 +187,11 @@ class UserProfileView(LoginRequiredMixin, View):
         )
 
 
-
 class UserFollowers(LoginRequiredMixin, View):
     """A view that shows the followers for authorized users"""
-    
+
     def get(self, request, username=None):
         profile = get_object_or_404(Profile, user__username=username)
-
         return TemplateResponse(
             request,
             "user_followers.html",
@@ -215,14 +212,11 @@ class ProfileFollowing(LoginRequiredMixin, View):
 
         return TemplateResponse(
             request,
-
             "profile_following.html",
-
             {
                 "profile": profile,
             },
         )
-
 
 
 class UserCivis(LoginRequiredMixin, View):
@@ -241,7 +235,6 @@ class UserCivis(LoginRequiredMixin, View):
             "user_civis.html",
             {"profile": profile, "civis": civis},
         )
-
 
 
 @login_required
@@ -276,3 +269,17 @@ def expunge_user(request):
     profile.save()
 
     return redirect("/")
+
+
+class UserIssues(LoginRequiredMixin, View):
+    def get(self, request, username=None):
+        profile = get_object_or_404(Profile, user__username=username)
+        user = profile.user
+        civis = user.civis.all()
+        followers = profile.followers.all()
+
+        return TemplateResponse(
+            request,
+            "user_civis.html",
+            {"profile": profile, "followers": followers, "civis": civis},
+        )
