@@ -36,6 +36,7 @@ INSTALLED_APPS = (
     "categories",
     "notification",
     "debug_toolbar",
+    "django_browser_reload",
 )
 
 MIDDLEWARE = [
@@ -50,6 +51,7 @@ MIDDLEWARE = [
     # 'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
 INTERNAL_IPS = [
