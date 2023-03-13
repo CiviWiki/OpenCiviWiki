@@ -1,7 +1,0 @@
-pycodestyle: # Valid if scanner.linter is pycodestyle
-  max-line-length: 120
-  statistics: True
-  exclude:
-    - migrations
-    - tests
-    - test_framework
