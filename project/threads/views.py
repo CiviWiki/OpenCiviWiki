@@ -1,10 +1,7 @@
-import json
-
 from accounts.models import Profile
 from accounts.utils import get_account
 from categories.models import Category
 from core.custom_decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.template.response import TemplateResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -24,14 +21,14 @@ from threads.serializers import (
 )
 
 
-class ThreadDetailView(LoginRequiredMixin, DetailView):
+class ThreadDetailView(DetailView):
     model = Thread
     context_object_name = "thread"
     template_name = "thread.html"
     login_url = "accounts_login"
 
     def get_context_data(self, **kwargs):
-        context = super(ThreadDetailView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context["categories"] = Category.objects.all()
         return context
 
@@ -130,35 +127,38 @@ class CiviViewSet(ModelViewSet):
 
 
 def base_view(request):
-    if not request.user.is_authenticated:
-        return TemplateResponse(request, "landing.html", {})
+    return TemplateResponse(request, "landing.html", {})
 
-    Profile_filter = Profile.objects.get(user=request.user)
-    if "login_user_image" not in request.session.keys():
-        request.session["login_user_image"] = Profile_filter.profile_image_thumb_url
 
-    categories = [{"id": c.id, "name": c.name} for c in Category.objects.all()]
-
+def feeds(request):
     all_categories = list(Category.objects.values_list("id", flat=True))
-    user_categories = (
-        list(Profile_filter.categories.values_list("id", flat=True)) or all_categories
-    )
-
+    categories = [{"id": c.id, "name": c.name} for c in Category.objects.all()]
     feed_threads = [
         Thread.objects.summarize(t)
-        for t in Thread.objects.exclude(is_draft=True).order_by("-created")
+        for t in Thread.objects.exclude(is_draft=False).order_by("-created")
     ]
     top5_threads = list(
         Thread.objects.filter(is_draft=False)
         .order_by("-num_views")[:5]
         .values("id", "title")
     )
-    my_draft_threads = [
-        Thread.objects.summarize(t)
-        for t in Thread.objects.filter(author_id=Profile_filter.id)
-        .exclude(is_draft=False)
-        .order_by("-created")
-    ]
+    if request.user.is_authenticated:
+        Profile_filter = Profile.objects.get(user=request.user)
+        if "login_user_image" not in request.session.keys():
+            request.session["login_user_image"] = Profile_filter.profile_image_thumb_url
+        my_draft_threads = [
+            Thread.objects.summarize(t)
+            for t in Thread.objects.filter(author_id=Profile_filter.id)
+            .exclude(is_draft=False)
+            .order_by("-created")
+        ]
+        user_categories = (
+            list(Profile_filter.categories.values_list("id", flat=True))
+            or all_categories
+        )
+    else:
+        my_draft_threads = []
+        user_categories = []
 
     data = {
         "categories": categories,
@@ -168,7 +168,7 @@ def base_view(request):
         "draft_threads": my_draft_threads,
     }
 
-    return TemplateResponse(request, "feed.html", {"data": json.dumps(data)})
+    return TemplateResponse(request, "feed.html", data)
 
 
 @csrf_exempt
