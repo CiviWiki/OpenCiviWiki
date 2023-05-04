@@ -1,9 +1,10 @@
 import json
+
+from categories.models import Category
 from django.contrib.auth import get_user_model
 from django.test import TestCase
-from rest_framework.test import APIClient
 from django.urls import reverse
-from categories.models import Category
+from rest_framework.test import APIClient
 from threads.models import Civi, Thread
 
 
@@ -53,7 +54,7 @@ class ThreadViewSetTests(BaseTestCase):
     """A class to test ThreadViewSet"""
 
     def setUp(self) -> None:
-        super(ThreadViewSetTests, self).setUp()
+        super().setUp()
         self.client = APIClient()
 
     def test_anonymous_user_can_list_threads(self):
@@ -111,41 +112,34 @@ class BaseViewTests(BaseTestCase):
     """A class to test base_view function"""
 
     def setUp(self) -> None:
-        super(BaseViewTests, self).setUp()
+        super().setUp()
         self.client.login(username=self.user.username, password="password123")
-        self.url = reverse("base")
-        self.response = self.client.get(self.url)
 
-    def test_anonymous_users_are_redirected_to_landing_page(self):
-        """Whether unauthenticated users are redirected to the landing page"""
-
+    def test_landing_page(self):
         self.client.logout()
-        self.response = self.client.get(self.url)
+        self.response = self.client.get(reverse("base"))
         self.assertEqual(self.response.status_code, 200)
-        self.assertTemplateUsed(self.response, "base.html")
         self.assertTemplateUsed(self.response, "landing.html")
-        self.assertTemplateUsed(self.response, "static_nav.html")
-        self.assertTemplateUsed(self.response, "static_footer.html")
         self.assertContains(self.response, "Why CiviWiki?")
         self.assertNotContains(self.response, "Wrong Content!")
 
-    def test_authenticated_users_are_redirected_to_feed_page(self):
-        """Whether authenticated users are redirected to the feed page"""
-
+    def test_anonymous_users_can_access_feed(self):
+        """Whether unauthenticated users can access feeds"""
+        self.client.logout()
+        self.response = self.client.get(reverse("feeds"))
         self.assertEqual(self.response.status_code, 200)
         self.assertTemplateUsed(self.response, "base.html")
         self.assertTemplateUsed(self.response, "feed.html")
         self.assertTemplateUsed(self.response, "global_nav.html")
         self.assertTemplateUsed(self.response, "static_footer.html")
-        self.assertContains(self.response, "Trending Issues")
-        self.assertNotContains(self.response, "Wrong Content!")
+        self.assertContains(self.response, "New Thread")
 
 
 class IssueThreadTests(BaseTestCase):
     """A class to test issue_thread function"""
 
     def setUp(self) -> None:
-        super(IssueThreadTests, self).setUp()
+        super().setUp()
         self.client.login(username=self.user.username, password="password123")
 
     def test_nonexistent_threads_redirect_to_404_page(self):
