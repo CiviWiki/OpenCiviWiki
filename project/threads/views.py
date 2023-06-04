@@ -4,12 +4,14 @@ from categories.models import Category
 from core.custom_decorators import login_required
 from django.http import HttpResponse
 from django.template.response import TemplateResponse
+from django.urls import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import TemplateView
+from django.views.generic import CreateView, DeleteView, TemplateView
 from django.views.generic.detail import DetailView
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from threads.forms import CiviForm
 from threads.models import Civi, CiviImage, Thread
 from threads.permissions import IsOwnerOrReadOnly
 from threads.serializers import (
@@ -30,6 +32,7 @@ class ThreadDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["categories"] = Category.objects.all()
+        context["form"] = CiviForm()
         return context
 
 
@@ -124,6 +127,44 @@ class CiviViewSet(ModelViewSet):
         civi_images = CiviImage.objects.filter(civi=pk)
         serializer = CiviImageSerializer(civi_images, many=True, read_only=True)
         return Response(serializer.data)
+
+
+class CiviDelete(DeleteView):
+    model = Civi
+    template_name = "thread.html"
+
+    def get_success_url(self):
+        return reverse_lazy(
+            "thread-detail", kwargs={"pk": self.kwargs.get("thread_id")}
+        )
+
+
+class CiviCreate(CreateView):
+    model = Civi
+    form_class = CiviForm
+    template_name = "thread.html"
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        data = self.request.POST.copy()
+        data["author"] = self.request.user
+        data["thread"] = Thread.objects.get(id=self.kwargs.get("thread_id"))
+        kwargs["data"] = data
+        return kwargs
+
+    # def form_invalid(self, form):
+    #     try:
+    #         return super().form_invalid(form)
+    #     except:
+    #         print(form.errors)
+    #         return reverse_lazy(
+    #             "thread-detail", kwargs={"pk": self.kwargs.get("thread_id")}
+    #         )
+
+    def get_success_url(self):
+        return reverse_lazy(
+            "thread-detail", kwargs={"pk": self.kwargs.get("thread_id")}
+        )
 
 
 def base_view(request):

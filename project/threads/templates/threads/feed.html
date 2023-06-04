@@ -48,7 +48,7 @@
                             {% if user.is_authenticated %}
                             <button class="new-thread btn waves-effect modal-trigger"><i class="material-icons left">note_add</i>New Thread</button>
                             {% else %}
-                            <a class="new-thread btn waves-effect modal-trigger" href="{% url 'accounts_login' %}"><i class="material-icons left">note_add</i>New Thread</a>
+                            <a class="new-thread btn waves-effect" href="{% url 'accounts_login' %}"><i class="material-icons left">note_add</i>New Thread</a>
                             {% endif %}
                         </div>
                     </div>
@@ -61,7 +61,9 @@
                                 <div class="divider"></div>
                                 <div class="list">
                                     {% for thread in trending %}
-                                        <div class="list-item left-align"><a class="list-text" href="{% url 'thread-detail' thread.id %}">{{thread.title}}</a></div>
+                                        <div class="list-item left-align">
+                                            <a class="list-text" href="{% url 'thread-detail' thread.id %}?next={% url 'feeds' %}">{{thread.title}}</a>
+                                        </div>
                                     {% endfor %}
                                 </div>
                             </div>
