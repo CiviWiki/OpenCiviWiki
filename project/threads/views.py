@@ -2,7 +2,8 @@ from accounts.models import Profile
 from accounts.utils import get_account
 from categories.models import Category
 from core.custom_decorators import login_required
-from django.http import HttpResponse
+from django.contrib import messages
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.urls import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
@@ -152,14 +153,11 @@ class CiviCreate(CreateView):
         kwargs["data"] = data
         return kwargs
 
-    # def form_invalid(self, form):
-    #     try:
-    #         return super().form_invalid(form)
-    #     except:
-    #         print(form.errors)
-    #         return reverse_lazy(
-    #             "thread-detail", kwargs={"pk": self.kwargs.get("thread_id")}
-    #         )
+    def form_invalid(self, form):
+        messages.error(self.request, form.errors)
+        return HttpResponseRedirect(
+            reverse_lazy("thread-detail", kwargs={"pk": self.kwargs.get("thread_id")})
+        )
 
     def get_success_url(self):
         return reverse_lazy(

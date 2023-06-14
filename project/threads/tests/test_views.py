@@ -2,6 +2,7 @@ import json
 
 from categories.models import Category
 from django.contrib.auth import get_user_model
+from django.contrib.messages import get_messages
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APIClient
@@ -155,3 +156,63 @@ class IssueThreadTests(BaseTestCase):
         url = reverse("thread-detail", args=["1"])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
+
+
+class CiviViewTests(BaseTestCase):
+    def setUp(self) -> None:
+        super().setUp()
+        self.client.login(username=self.user.username, password="password123")
+        self.civi = Civi.objects.create(
+            title="title",
+            body="body",
+            c_type="problem",
+            thread=Thread.objects.get(id=self.thread.id),
+            author=get_user_model().objects.get(id=self.user.id),
+        )
+
+    def test_create(self):
+        data = {
+            "title": "Civi Title",
+            "body": "Civi Body",
+            "c_type": "problem",
+        }
+        response = self.client.post(
+            reverse("civi-create", kwargs={"thread_id": self.thread.id}), data=data
+        )
+        civi = Civi.objects.get(title="Civi Title")
+        self.assertRedirects(
+            response,
+            expected_url=reverse("thread-detail", kwargs={"pk": self.thread.id}),
+            status_code=302,
+            target_status_code=200,
+        )
+        self.assertEqual(data["title"], civi.title)
+
+    def test_form_invalid(self):
+        data = {
+            "title": "Civi Title",
+            "body": "Civi Body",
+        }
+        response = self.client.post(
+            reverse("civi-create", kwargs={"thread_id": self.thread.id}), data=data
+        )
+        messages = list(get_messages(response.wsgi_request))
+        self.assertIn("error", str(messages[0]))
+        self.assertRedirects(
+            response,
+            expected_url=reverse("thread-detail", kwargs={"pk": self.thread.id}),
+            status_code=302,
+        )
+
+    def test_delete(self):
+        civi_id = self.civi.id
+        response = self.client.post(
+            reverse("civi-delete", kwargs={"thread_id": self.thread.id, "pk": civi_id})
+        )
+        self.assertRedirects(
+            response,
+            expected_url=reverse("thread-detail", kwargs={"pk": self.thread.id}),
+            status_code=302,
+            target_status_code=200,
+        )
+        self.assertFalse(Civi.objects.filter(pk=civi_id).exists())

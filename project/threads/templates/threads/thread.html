@@ -324,7 +324,7 @@
                     <span class="text">Add Civi</span>
                   </button>
                   {% else %}
-                  <a class="btn waves-effect"
+                  <a class="btn waves-effect purple-background"
                     href="{% url 'accounts_login' %}?next={% url 'thread-detail' thread.id %}">
                     <i class="material-icons left">note_add</i>
                     <span class="text">Add Civi</span>
@@ -626,7 +626,7 @@
                 <form action="{% url 'civi-create' thread.id %}" method="POST">
                   {% csrf_token %}
                   <div class="civi-types">
-                    <button class="btn btn-small waves-effect civi-type-button" value="problem" id="add-problem"
+                    <button class="btn btn-small waves-effect civi-type-button purple-background white-text" value="problem" id="add-problem"
                       data-type="problem" type="button">
                       PROBLEM
                     </button>
@@ -724,7 +724,7 @@
                     <div class="white-background-input-field">
                       <div class="header-lato">Upload Images:</div>
                       <div class="file-field input-field">
-                        <i class="upload-image btn waves-effect hide waves-input-wrapper" style=""><input
+                        <i class="upload-image btn waves-effect hide waves-input-wrapper"><input
                             class="waves-button-input" type="submit" value="Upload"></i>
                         <div class="btn attachment-image-pick dark-blue-background">
                           <span>Add Images</span>
