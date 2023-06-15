@@ -4,6 +4,8 @@ from .models import Civi
 
 
 class CiviForm(forms.ModelForm):
+    """Form for creating civis"""
+
     class Meta:
         model = Civi
         fields = ["author", "thread", "title", "body", "c_type"]

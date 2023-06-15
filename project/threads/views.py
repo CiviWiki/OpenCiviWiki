@@ -131,6 +131,8 @@ class CiviViewSet(ModelViewSet):
 
 
 class CiviDelete(DeleteView):
+    """View for deleting civis"""
+
     model = Civi
     template_name = "thread.html"
 
@@ -141,11 +143,17 @@ class CiviDelete(DeleteView):
 
 
 class CiviCreate(CreateView):
+    """View for creating civis"""
+
     model = Civi
     form_class = CiviForm
     template_name = "thread.html"
 
     def get_form_kwargs(self):
+        """
+        Modifies the request form data to set the author and thread
+        programmatically
+        """
         kwargs = super().get_form_kwargs()
         data = self.request.POST.copy()
         data["author"] = self.request.user

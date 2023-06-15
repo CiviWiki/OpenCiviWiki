@@ -159,6 +159,8 @@ class IssueThreadTests(BaseTestCase):
 
 
 class CiviViewTests(BaseTestCase):
+    """A class that tests the deletion and creation of civis"""
+
     def setUp(self) -> None:
         super().setUp()
         self.client.login(username=self.user.username, password="password123")
@@ -189,6 +191,10 @@ class CiviViewTests(BaseTestCase):
         self.assertEqual(data["title"], civi.title)
 
     def test_form_invalid(self):
+        """
+        Tests whether the form error has
+        been logged through messages
+        """
         data = {
             "title": "Civi Title",
             "body": "Civi Body",
