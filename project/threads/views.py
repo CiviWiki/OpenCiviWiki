@@ -164,7 +164,9 @@ class CiviCreate(CreateView):
     def form_invalid(self, form):
         messages.error(self.request, form.errors)
         return HttpResponseRedirect(
-            reverse_lazy("thread-detail", kwargs={"pk": self.kwargs.get("thread_id")})
+            reverse_lazy(
+                "thread-detail", kwargs={"pk": self.kwargs.get("thread_id")}
+            )  # noqa
         )
 
     def get_success_url(self):
