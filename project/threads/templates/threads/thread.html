@@ -707,6 +707,7 @@
             </div>
             <div class="new-civi-card" style="display: none">
               <div class="civi-body">
+                <div class="link-lato center">ADD RESPONSE</div>
                 <form action="{% url 'civi-create' thread.id %}" method="POST">
                   {% csrf_token %}
                   <div class="input-field">
@@ -745,7 +746,7 @@
                     </div>
                   </div>
                   <div class="civi-footer">
-                    <button class="waves-effect waves-light btn create-new-response" type="submit">add response</button>
+                    <button class="waves-effect waves-light btn create-new-response purple-background" type="submit">add response</button>
                     <button class="waves-effect waves-cw-blue btn-flat cancel-new-response"
                       type="button">Cancel</button>
                   </div>
