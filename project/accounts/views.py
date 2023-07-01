@@ -82,7 +82,7 @@ class RegisterView(FormView):
         self._send_email(user)
         self._login(user)
 
-        return super().form_valid(form)
+        return super(RegisterView, self).form_valid(form)
 
 
 class ProfileActivationView(View):
@@ -92,6 +92,7 @@ class ProfileActivationView(View):
     """
 
     def get(self, request, uidb64, token):
+
         try:
             uid = force_str(urlsafe_base64_decode(uidb64))
             user = get_user_model().objects.get(pk=uid)
@@ -169,7 +170,7 @@ class SettingsView(LoginRequiredMixin, UpdateView):
                 "profile_image": profile.profile_image or None,
             }
         )
-        return super().get_initial()
+        return super(SettingsView, self).get_initial()
 
 
 class UserProfileView(LoginRequiredMixin, View):
