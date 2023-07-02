@@ -37,6 +37,15 @@
         </div>
     </div>
 </nav>
+<div id="messages-container">
+    {% if messages %}
+    {% for message in messages %}
+    <div id="messages" class="{% if message.tags == 'error'%}card card-panel red lighten-1 dark-white-text {% endif %}bold-text">
+        {{message}}
+    </div>
+    {% endfor %}
+    {% endif %}
+</div>
 <div class="notifications">
     <div id="modal1" class="modal notifications-modal bottom-sheet">
     <div class="modal-content">
