@@ -37,8 +37,10 @@
     
     {% include "global_nav.html" %}
     
-    {% include "static_footer.html" %}
+    {% comment %} {% include "static_footer.html" %} {% endcomment %}
     {%block content%}{%endblock content%}
+    {% include "static_footer.html" %}
+
     {% block extra_js %}{% endblock extra_js %}
     
 </body>
