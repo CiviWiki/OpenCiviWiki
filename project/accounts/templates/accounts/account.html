@@ -13,7 +13,7 @@
   <div id="sidebar-template">
     <div class="profile-image">
       <div class="big-image-cropper z-depth-1">
-        <img class="responsive-img" src={{ profile.profile_image_url }} />
+        <img class="responsive-img" src="{{ profile.profile_image_url }}" />
       </div>
     </div>
     <!-- Prevent users from following themselves. -->
@@ -31,10 +31,12 @@
     {% endif %}
     {% endif %}
     <div class="user-info section">
-      <div class="full-name">
+      <div class="full-name center">
         {{ profile.first_name }} {{ profile.last_name }}
       </div>
-      <div class="username">@{{ username }}</div>
+      <div class="username center ">@{{ profile.user.username }}</div>
+    </div>
+    <div class="email center ">@{{ profile.user.email }}</div>
     </div>
     <div class="categories">
       <ul>
@@ -48,9 +50,9 @@
     <div class="transparent">
       <div class="card-content">
         <div class="section">
-          <div class="section-title">ABOUT ME</div>
+          <div class="section-title center">ABOUT ME</div>
           <div class="divider"></div>
-          <div class="about-me">{{ profile.about_me }}</div>
+          <div class="about-me center"><i>{{ profile.about_me }}</i></div>
         </div>
       </div>
     </div>
