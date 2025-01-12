@@ -3,6 +3,7 @@ import json
 import math
 import os
 from calendar import month_name
+from typing import Any, Dict, List, Tuple
 
 from categories.models import Category
 from common.utils import PathAndRename
@@ -236,6 +237,7 @@ class Civi(models.Model):
     title = models.CharField(max_length=255, blank=False, null=False)
     body = models.CharField(max_length=1023, blank=False, null=False)
 
+    # todo rename to civi_type??
     c_type = models.CharField(max_length=31, default="problem", choices=CIVI_TYPES)
 
     votes_vneg = models.IntegerField(default=0)
@@ -249,6 +251,34 @@ class Civi(models.Model):
 
     def __unicode__(self):
         return self.title
+
+    def __node__(self, with_score=False) -> Tuple[List[int], Dict[str, Any]]:
+        """
+        Documentation:
+        Add to a graph like this:
+        ```python
+        import networkx as nx
+        G = nx.DiGraph()
+        a_civi = Civi.objects.first()
+        node_args, node_kwargs = a_civi.__node__()
+        G.add_node(*node_args, **node_kwargs)
+        ```
+        Args:
+            with_score (bool, optional): Defaults to False.
+
+        Returns:
+            Tuple[List[int], Dict[str, Any]]: The args and kwargs to be sent to the nx graph `add_node` function
+        """
+        node_kwargs = {
+            'label':self.title,
+            'type':self.c_type
+        }
+        if with_score:
+            node_kwargs.update({"score":self.score(), "weight":self.__weight__()})
+        return [self.id], node_kwargs
+
+    def __weight__(self):
+        return 1 / (1 + self.score())
 
     def _get_votes(self):
         activity_votes = Activity.objects.filter(civi=self)
@@ -393,6 +423,57 @@ class Civi(models.Model):
             data["score"] = self.score(requested_user_id)
 
         return data
+
+
+class CiviLink(models.Model):
+    """Extend the existing model to support a graph structure
+     (i.e., Problem -> Causes -> Problem -> solved_by -> Solution),
+
+
+    Args:
+        models (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
+    RELATION_TYPE_CHOICES = (
+        ('causes', 'Causes'),
+        ('solves', 'Solves'),
+        ('related', 'Related'),  # Optional, for general relationships
+    )
+
+    from_civi = models.ForeignKey(Civi, on_delete=models.CASCADE, related_name='outgoing_links')
+    to_civi = models.ForeignKey(Civi, on_delete=models.CASCADE, related_name='incoming_links')
+    relation_type = models.CharField(max_length=50, choices=RELATION_TYPE_CHOICES)
+
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.from_civi.title} {self.get_relation_type_display()} {self.to_civi.title}"
+
+    def __edge__(self) -> Tuple[list, Dict[str, str]]:
+        """
+        Documentation:
+        Add to a graph like this:
+        ```python
+        import networkx as nx
+        G = nx.DiGraph()
+        a_link = CiviLink.objects.first()
+        edge_args, edge_kwargs = a_link.__edge__()
+        G.add_edge(*edge_args, **edge_kwargs)
+        ```
+
+        Returns:
+            Tuple[list, Dict[str, str]]: the first is the args, the second the kwargs to the nx graph `add_edge` function
+        """
+        # link.from_civi.id, link.to_civi.id, relation=link.relation_type
+        edge_kwargs = {
+            "relation":self.relation_type
+        }
+        edge_args = [self.from_civi.id, self.to_civi.id]
+        return edge_args, edge_kwargs
+
+
 
 
 class Response(models.Model):

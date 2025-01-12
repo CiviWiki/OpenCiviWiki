@@ -1,5 +1,10 @@
 from django.urls import path
 from threads import views
+from django.views.generic import TemplateView
+
+
+class GraphView(TemplateView):
+    template_name = "threads/graph.html"
 
 
 urlpatterns = [
@@ -10,5 +15,6 @@ urlpatterns = [
     path("howitworks/", views.HowItWorksView.as_view(), name="how-it-works"),
     path("declaration/", views.DeclarationView.as_view(), name="declaration"),
     path("create-group/", views.create_group, name="create-group"),
+    path("graph/", GraphView.as_view(), name="graphview"),
     path("", views.base_view, name="base"),
 ]
