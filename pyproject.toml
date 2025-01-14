@@ -26,7 +26,7 @@ flake8 = "^5.0.4"
 
 [tool.poetry.group.dev.dependencies]
 pytest-django = "^4.5.2"
-ipython = "^8.5.0"
+ipython = "^8.10.0"
 django-debug-toolbar = "^3.7.0"
 django-linear-migrations = "^2.5.1"
 pre-commit = "^2.20.0"
