@@ -40,6 +40,11 @@ body {
 }
 
 #thread {
+  [type="radio"]:not(:checked), [type="radio"]:checked {
+    position: relative;
+    opacity: 1;
+  }
+
   .thread-wiki-holder {
     display: none;
   }
@@ -200,7 +205,7 @@ body {
       }
     }
     .civi-type-button {
-      background-color: @dark-white !important;
+      background-color: @dark-white;
       color: @purple;
       margin-right: 4px;
       padding: 0 1rem;
@@ -406,9 +411,9 @@ body {
     margin-left: auto !important;
     margin-right: auto !important;
 
-    .btn {
-      background-color: @purple;
-    }
+    // .btn {
+    //   background-color: @purple;
+    // }
 
     .body-banner {
       display: inline-block;

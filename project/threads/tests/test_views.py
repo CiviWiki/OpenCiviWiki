@@ -1,9 +1,11 @@
 import json
-from django.contrib.auth import get_user_model
-from django.test import TestCase
-from rest_framework.test import APIClient
-from django.urls import reverse
+
 from categories.models import Category
+from django.contrib.auth import get_user_model
+from django.contrib.messages import get_messages
+from django.test import TestCase
+from django.urls import reverse
+from rest_framework.test import APIClient
 from threads.models import Civi, Thread
 
 
@@ -53,7 +55,7 @@ class ThreadViewSetTests(BaseTestCase):
     """A class to test ThreadViewSet"""
 
     def setUp(self) -> None:
-        super(ThreadViewSetTests, self).setUp()
+        super().setUp()
         self.client = APIClient()
 
     def test_anonymous_user_can_list_threads(self):
@@ -111,41 +113,34 @@ class BaseViewTests(BaseTestCase):
     """A class to test base_view function"""
 
     def setUp(self) -> None:
-        super(BaseViewTests, self).setUp()
+        super().setUp()
         self.client.login(username=self.user.username, password="password123")
-        self.url = reverse("base")
-        self.response = self.client.get(self.url)
 
-    def test_anonymous_users_are_redirected_to_landing_page(self):
-        """Whether unauthenticated users are redirected to the landing page"""
-
+    def test_landing_page(self):
         self.client.logout()
-        self.response = self.client.get(self.url)
+        self.response = self.client.get(reverse("base"))
         self.assertEqual(self.response.status_code, 200)
-        self.assertTemplateUsed(self.response, "base.html")
         self.assertTemplateUsed(self.response, "landing.html")
-        self.assertTemplateUsed(self.response, "static_nav.html")
-        self.assertTemplateUsed(self.response, "static_footer.html")
         self.assertContains(self.response, "Why CiviWiki?")
         self.assertNotContains(self.response, "Wrong Content!")
 
-    def test_authenticated_users_are_redirected_to_feed_page(self):
-        """Whether authenticated users are redirected to the feed page"""
-
+    def test_anonymous_users_can_access_feed(self):
+        """Whether unauthenticated users can access feeds"""
+        self.client.logout()
+        self.response = self.client.get(reverse("feeds"))
         self.assertEqual(self.response.status_code, 200)
         self.assertTemplateUsed(self.response, "base.html")
         self.assertTemplateUsed(self.response, "feed.html")
         self.assertTemplateUsed(self.response, "global_nav.html")
         self.assertTemplateUsed(self.response, "static_footer.html")
-        self.assertContains(self.response, "Trending Issues")
-        self.assertNotContains(self.response, "Wrong Content!")
+        self.assertContains(self.response, "New Thread")
 
 
 class IssueThreadTests(BaseTestCase):
     """A class to test issue_thread function"""
 
     def setUp(self) -> None:
-        super(IssueThreadTests, self).setUp()
+        super().setUp()
         self.client.login(username=self.user.username, password="password123")
 
     def test_nonexistent_threads_redirect_to_404_page(self):
@@ -161,3 +156,69 @@ class IssueThreadTests(BaseTestCase):
         url = reverse("thread-detail", args=["1"])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
+
+
+class CiviViewTests(BaseTestCase):
+    """A class that tests the deletion and creation of civis"""
+
+    def setUp(self) -> None:
+        super().setUp()
+        self.client.login(username=self.user.username, password="password123")
+        self.civi = Civi.objects.create(
+            title="title",
+            body="body",
+            c_type="problem",
+            thread=Thread.objects.get(id=self.thread.id),
+            author=get_user_model().objects.get(id=self.user.id),
+        )
+
+    def test_create(self):
+        data = {
+            "title": "Civi Title",
+            "body": "Civi Body",
+            "c_type": "problem",
+        }
+        response = self.client.post(
+            reverse("civi-create", kwargs={"thread_id": self.thread.id}), data=data
+        )
+        civi = Civi.objects.get(title="Civi Title")
+        self.assertRedirects(
+            response,
+            expected_url=reverse("thread-detail", kwargs={"pk": self.thread.id}),
+            status_code=302,
+            target_status_code=200,
+        )
+        self.assertEqual(data["title"], civi.title)
+
+    def test_form_invalid(self):
+        """
+        Tests whether the form error has
+        been logged through messages
+        """
+        data = {
+            "title": "Civi Title",
+            "body": "Civi Body",
+        }
+        response = self.client.post(
+            reverse("civi-create", kwargs={"thread_id": self.thread.id}), data=data
+        )
+        messages = list(get_messages(response.wsgi_request))
+        self.assertIn("error", str(messages[0]))
+        self.assertRedirects(
+            response,
+            expected_url=reverse("thread-detail", kwargs={"pk": self.thread.id}),
+            status_code=302,
+        )
+
+    def test_delete(self):
+        civi_id = self.civi.id
+        response = self.client.post(
+            reverse("civi-delete", kwargs={"thread_id": self.thread.id, "pk": civi_id})
+        )
+        self.assertRedirects(
+            response,
+            expected_url=reverse("thread-detail", kwargs={"pk": self.thread.id}),
+            status_code=302,
+            target_status_code=200,
+        )
+        self.assertFalse(Civi.objects.filter(pk=civi_id).exists())

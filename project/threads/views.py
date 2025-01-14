@@ -1,18 +1,18 @@
-import json
-
 from accounts.models import Profile
 from accounts.utils import get_account
 from categories.models import Category
 from core.custom_decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse
+from django.contrib import messages
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template.response import TemplateResponse
+from django.urls import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import TemplateView
+from django.views.generic import CreateView, DeleteView, TemplateView
 from django.views.generic.detail import DetailView
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from threads.forms import CiviForm
 from threads.models import Civi, CiviImage, Thread
 from threads.permissions import IsOwnerOrReadOnly
 from threads.serializers import (
@@ -24,15 +24,16 @@ from threads.serializers import (
 )
 
 
-class ThreadDetailView(LoginRequiredMixin, DetailView):
+class ThreadDetailView(DetailView):
     model = Thread
     context_object_name = "thread"
     template_name = "thread.html"
     login_url = "accounts_login"
 
     def get_context_data(self, **kwargs):
-        context = super(ThreadDetailView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context["categories"] = Category.objects.all()
+        context["form"] = CiviForm()
         return context
 
 
@@ -129,36 +130,84 @@ class CiviViewSet(ModelViewSet):
         return Response(serializer.data)
 
 
+class CiviDelete(DeleteView):
+    """View for deleting civis"""
+
+    model = Civi
+    template_name = "thread.html"
+
+    def get_success_url(self):
+        return reverse_lazy(
+            "thread-detail", kwargs={"pk": self.kwargs.get("thread_id")}
+        )
+
+
+class CiviCreate(CreateView):
+    """View for creating civis"""
+
+    model = Civi
+    form_class = CiviForm
+    template_name = "thread.html"
+
+    def get_form_kwargs(self):
+        """
+        Modifies the request form data to set the author and thread
+        programmatically
+        """
+        kwargs = super().get_form_kwargs()
+        data = self.request.POST.copy()
+        data["author"] = self.request.user
+        data["thread"] = Thread.objects.get(id=self.kwargs.get("thread_id"))
+        kwargs["data"] = data
+        return kwargs
+
+    def form_invalid(self, form):
+        messages.error(self.request, form.errors)
+        return HttpResponseRedirect(
+            reverse_lazy(
+                "thread-detail", kwargs={"pk": self.kwargs.get("thread_id")}
+            )  # noqa
+        )
+
+    def get_success_url(self):
+        return reverse_lazy(
+            "thread-detail", kwargs={"pk": self.kwargs.get("thread_id")}
+        )
+
+
 def base_view(request):
-    if not request.user.is_authenticated:
-        return TemplateResponse(request, "landing.html", {})
+    return TemplateResponse(request, "landing.html", {})
 
-    Profile_filter = Profile.objects.get(user=request.user)
-    if "login_user_image" not in request.session.keys():
-        request.session["login_user_image"] = Profile_filter.profile_image_thumb_url
 
-    categories = [{"id": c.id, "name": c.name} for c in Category.objects.all()]
-
+def feeds(request):
     all_categories = list(Category.objects.values_list("id", flat=True))
-    user_categories = (
-        list(Profile_filter.categories.values_list("id", flat=True)) or all_categories
-    )
-
+    categories = [{"id": c.id, "name": c.name} for c in Category.objects.all()]
     feed_threads = [
         Thread.objects.summarize(t)
-        for t in Thread.objects.exclude(is_draft=True).order_by("-created")
+        for t in Thread.objects.exclude(is_draft=False).order_by("-created")
     ]
     top5_threads = list(
         Thread.objects.filter(is_draft=False)
         .order_by("-num_views")[:5]
         .values("id", "title")
     )
-    my_draft_threads = [
-        Thread.objects.summarize(t)
-        for t in Thread.objects.filter(author_id=Profile_filter.id)
-        .exclude(is_draft=False)
-        .order_by("-created")
-    ]
+    if request.user.is_authenticated:
+        Profile_filter = Profile.objects.get(user=request.user)
+        if "login_user_image" not in request.session.keys():
+            request.session["login_user_image"] = Profile_filter.profile_image_thumb_url
+        my_draft_threads = [
+            Thread.objects.summarize(t)
+            for t in Thread.objects.filter(author_id=Profile_filter.id)
+            .exclude(is_draft=False)
+            .order_by("-created")
+        ]
+        user_categories = (
+            list(Profile_filter.categories.values_list("id", flat=True))
+            or all_categories
+        )
+    else:
+        my_draft_threads = []
+        user_categories = []
 
     data = {
         "categories": categories,
@@ -168,7 +217,7 @@ def base_view(request):
         "draft_threads": my_draft_threads,
     }
 
-    return TemplateResponse(request, "feed.html", {"data": json.dumps(data)})
+    return TemplateResponse(request, "feed.html", data)
 
 
 @csrf_exempt

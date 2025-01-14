@@ -20,7 +20,7 @@ class LoginViewTests(BaseTestCase):
     """A class to test login view"""
 
     def setUp(self) -> None:
-        super(LoginViewTests, self).setUp()
+        super().setUp()
         url = reverse("accounts_login")
         self.response = self.client.get(url)
 
@@ -48,7 +48,7 @@ class LoginViewTests(BaseTestCase):
 
         response = self.client.post(
             reverse("accounts_login"),
-            {"username": "newuser", "password": "password123"},
+            {"username": "newuser", "password": "password123", "next": reverse("base")},
         )
         self.assertRedirects(
             response,
@@ -117,7 +117,7 @@ class SettingsViewTests(BaseTestCase):
     """A class to test settings view"""
 
     def setUp(self) -> None:
-        super(SettingsViewTests, self).setUp()
+        super().setUp()
         self.user.profile.first_name = "Gorkem"
         self.user.profile.last_name = "Arslan"
         self.user.profile.save()
@@ -202,7 +202,7 @@ class UserProfileView(BaseTestCase):
     """A class to test user profile view"""
 
     def setUp(self) -> None:
-        super(UserProfileView, self).setUp()
+        super().setUp()
         self.user.profile.first_name = "First"
         self.user.profile.last_name = "Last"
         self.user.profile.about_me = "About"
@@ -222,7 +222,7 @@ class UserProfileCivis(BaseTestCase):
     """A class to test user profiles following view"""
 
     def setUp(self) -> None:
-        super(UserProfileCivis, self).setUp()
+        super().setUp()
 
         self.user2 = get_user_model().objects.create_user(
             username="newuser2", email="test2@test2.com", password="password123"

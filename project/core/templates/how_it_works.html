@@ -4,7 +4,7 @@
 
 <!-- How it Works -->
 {% block extra_css %}
-<link type="text/css" rel="stylesheet/less" href="{% static " less/how_it_works.less" %}" />
+<link type="text/css" rel="stylesheet/less" href="{% static "less/how_it_works.less" %}" />
 {% endblock extra_css %}
 {%block content%}
 <script id="howitworks-template" type="text/template">
@@ -40,7 +40,7 @@
 
 {% include "static_nav.html" %}
 <div id="howitworks"></div>
-<script src="{% static " js/static/how_it_works_view.js" %}" type="text/javascript"></script>
+<script src="{% static "js/static/how_it_works_view.js" %}" type="text/javascript"></script>
 <script type="text/javascript">
   var howitworksView = new cw.HowItWorksView();
 </script>
