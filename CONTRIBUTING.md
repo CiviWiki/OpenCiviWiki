@@ -24,7 +24,7 @@ A good example should contain:
 
 4. Any identified lines of code involved in the issue or other insight that may help resolve the issue. This can also include any relevant error logs.
 
-5. (Optional)Potential solutions to the problem.
+5. (Optional) Potential solutions to the problem.
 
 A good bug report will help developers solve the problem without wasting time trying to figure out the situation in the first place.
 
@@ -197,6 +197,6 @@ This project provides an `.editorconfig` file, with some style options such as i
 
 To use the `.editorconfig` file in VS Code, install the [`EditorConfig for VS Code`](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig) extension. See the [EditorConfig documentation](https://editorconfig.org/) for more information.
 
-#### Pycharm
+#### PyCharm
 
-To use the `.editorconfig` file in Pycharm, enable the [`EditorConfig`](https://plugins.jetbrains.com/plugin/7294-editorconfig) plugin. See the [IntelliJ IDEA EditorConfig documentation](https://www.jetbrains.com/help/idea/editorconfig.html) for more information.
+To use the `.editorconfig` file in PyCharm, enable the [`EditorConfig`](https://plugins.jetbrains.com/plugin/7294-editorconfig) plugin. See the [IntelliJ IDEA EditorConfig documentation](https://www.jetbrains.com/help/idea/editorconfig.html) for more information.
