@@ -118,6 +118,7 @@ During the first setup, it's helpful to import hardcoded initial entries. In thi
 Run the following commands to load fixtures:
 
 ```py
+python manage.py loaddata ./data/sample_users.json
 python manage.py loaddata ./data/categories.json
 python manage.py loaddata ./data/sample_threads.json
 ```
