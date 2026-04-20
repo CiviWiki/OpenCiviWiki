@@ -1,0 +1,18 @@
+[{
+    "model": "accounts.user",
+    "pk": 1,
+    "fields": {
+        "username": "sample_user",
+        "password": "!unusable_password",
+        "first_name": "Sample",
+        "last_name": "User",
+        "email": "sample@example.com",
+        "is_staff": false,
+        "is_active": true,
+        "is_superuser": false,
+        "date_joined": "2016-10-01T00:00:00Z",
+        "last_login": null,
+        "groups": [],
+        "user_permissions": []
+    }
+}]
