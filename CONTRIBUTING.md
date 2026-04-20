@@ -118,6 +118,7 @@ During the first setup, it's helpful to import hardcoded initial entries. In thi
 Run the following commands to load fixtures:
 
 ```py
+python manage.py loaddata ./data/user.json
 python manage.py loaddata ./data/categories.json
 python manage.py loaddata ./data/sample_threads.json
 ```
@@ -125,8 +126,10 @@ python manage.py loaddata ./data/sample_threads.json
 You can also import all of them in one batch:
 
 ```py
-python manage.py loaddata ./data/*.json
+python manage.py loaddata ./data/user.json ./data/categories.json ./data/sample_threads.json
 ```
+
+> **Note:** `user.json` must be loaded first, as `sample_threads.json` references a user with primary key 1. Loading fixtures out of order will result in an `IntegrityError`.
 
 ### Run the server
 
